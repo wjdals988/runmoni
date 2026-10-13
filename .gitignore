@@ -24,3 +24,6 @@ outputs/
 *.jks
 *.keystore
 signing.properties
+google-services.json
+*-firebase-adminsdk-*.json
+service-account*.json
