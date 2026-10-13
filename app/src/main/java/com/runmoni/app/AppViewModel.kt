@@ -186,7 +186,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val members = crews.filter { it.joined }.associate { it.id to api.members(it.id) }
         val presence = api.presence()
         val voice = health.optJSONObject("capabilities")?.optBoolean("voice") ?: false
-        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = true, serverStatus = "초대 지인 파일럿 · 성인 테스트", audio = it.audio.copy(status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
+        val voiceCrew = when {
+            selectedVoiceRoom.startsWith("crew:") -> crews.find { it.joined && it.id == selectedVoiceRoom.substringAfter(':') }
+            selectedVoiceRoom.startsWith("party:") -> parties.find { it.joined && it.id == selectedVoiceRoom.substringAfter(':') }?.let { party -> crews.find { it.joined && it.id == party.crewId } }
+            else -> null
+        }
+        if (selectedVoiceRoom.isNotBlank() && voiceCrew == null) {
+            stopLease(); audio.disconnect(); selectedVoiceRoom = ""
+        }
+        val canDj = voiceCrew?.let { it.isOwner || it.isDj } ?: false
+        if (!canDj && audio.status.value.musicSending) { audio.stopMusic(); stopLease() }
+        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = true, serverStatus = "초대 지인 파일럿 · 성인 테스트", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
     }
     override fun createCrew(input: NewCrew) = ignoreJob(work { api.createCrew(input); refreshNow() })
     override fun joinCrew(id: String) = ignoreJob(work { api.request("POST", "/v1/crews/$id/join"); refreshNow() })

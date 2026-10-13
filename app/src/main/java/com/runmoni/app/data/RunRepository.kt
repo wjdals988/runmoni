@@ -65,7 +65,7 @@ class RunRepository(context: Context) {
     suspend fun location(location: Location) = mutex.withLock {
         if (active.value.phase != RunPhase.RUNNING) return@withLock
         val time = location.time
-        if (time <= lastRecordedMillis || time > System.currentTimeMillis() + 30_000) return@withLock
+        if (time < (stored?.startedAtMillis ?: Long.MAX_VALUE) || time <= lastRecordedMillis || time > System.currentTimeMillis() + 30_000) return@withLock
         engine.tick(SystemClock.elapsedRealtime(), true)
         val point = engine.addPoint(TrackPoint(sequence++, location.latitude, location.longitude, location.accuracy, time))
         lastRecordedMillis = time

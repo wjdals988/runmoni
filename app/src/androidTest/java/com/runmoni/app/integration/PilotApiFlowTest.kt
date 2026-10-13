@@ -53,7 +53,7 @@ class PilotApiFlowTest {
             until { model.state.value.profile.name == "변경러너-$suffix" && !model.state.value.busy }
             assertFalse("Unconfigured voice must not fake a connection", model.state.value.audio.connected)
             scenario.onActivity { model.cancelParty(party.id) }
-            until { model.state.value.parties.any { it.id == party.id && it.cancelled } && !model.state.value.busy }
+            until { model.state.value.parties.none { it.id == party.id } && !model.state.value.busy }
         } finally {
             if (modelInitialized) {
                 scenario.onActivity { model.closeChat(); model.signOut() }

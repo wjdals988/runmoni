@@ -88,7 +88,7 @@ class RunmoniUiTest {
         compose.onNodeWithText("정밀 좌표", substring = true).assertIsDisplayed()
         compose.onNodeWithText("인터넷 전체에 공개되는 지도는 아니에요", substring = true).assertIsDisplayed()
         compose.onNodeWithText("15초마다", substring = true).assertIsDisplayed()
-        compose.onNodeWithText("45초", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("45초가 지나면 위치가 만료돼요", substring = true).assertIsDisplayed()
         compose.runOnIdle { assertTrue(actions.locationChanges.isEmpty()) }
         compose.onNodeWithTag("confirm_share_location").performClick()
         compose.onNodeWithTag("share_location").assertIsOn()

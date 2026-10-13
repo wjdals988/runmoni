@@ -39,6 +39,13 @@ class RecorderServiceTest {
             scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START) }
             until { app.runs.active.value.phase == RunPhase.RUNNING }
             runId = app.runs.active.value.id
+            Thread.sleep(500) // begin publishes state just before the service registers listeners.
+            manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, Location(LocationManager.GPS_PROVIDER).apply {
+                latitude = 37.5665; longitude = 126.978; accuracy = 5f
+                time = app.runs.active.value.startedAtMillis - 10000; elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
+            })
+            Thread.sleep(1100) // Respect the actual GPS request's 1-second delivery interval.
+            assertTrue("cached GPS predating run start must not poison sync", app.runs.active.value.points.isEmpty())
             fun emit(longitude: Double) {
                 manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, Location(LocationManager.GPS_PROVIDER).apply {
                     latitude = 37.5665; this.longitude = longitude; accuracy = 5f; speed = 2.2f

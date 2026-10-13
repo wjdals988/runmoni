@@ -58,7 +58,7 @@ class PilotClient(var baseUrl: String, var token: String = "") {
         return result.optInt("reward_points")
     }
     suspend fun createCrew(input: NewCrew) = request("POST", "/v1/crews", JSONObject().put("name", input.name).put("description", input.description).put("region", input.region).put("pace_label", input.paceLabel))
-    suspend fun createParty(input: NewParty) = request("POST", "/v1/parties", JSONObject().put("crew_id", input.crewId).put("title", input.title).put("kind", input.kind.name.lowercase()).put("starts_at_ms", input.startsAtMillis).put("meeting_point", input.meetingLabel).put("distance_km", input.distanceKm).put("pace_label", input.paceLabel).put("pace_min_per_km", 6.0).put("capacity", input.capacity).put("latitude", input.latitude ?: JSONObject.NULL).put("longitude", input.longitude ?: JSONObject.NULL))
+    suspend fun createParty(input: NewParty) = request("POST", "/v1/parties", JSONObject().put("crew_id", input.crewId).put("title", input.title).put("kind", input.kind.name.lowercase()).put("starts_at_ms", input.startsAtMillis).put("meeting_point", input.meetingLabel).put("distance_km", input.distanceKm).put("pace_label", input.paceLabel).put("capacity", input.capacity).put("latitude", input.latitude ?: JSONObject.NULL).put("longitude", input.longitude ?: JSONObject.NULL))
     companion object {
         fun JSONObject.items(): List<JSONObject> = optJSONArray("items")?.let { array -> (0 until array.length()).map { array.getJSONObject(it) } } ?: emptyList()
         fun JSONObject?.toAvatar() = AvatarStyle(this?.optInt("hair") ?: 0, this?.optInt("top") ?: 0, this?.optInt("bottom") ?: 0, this?.optInt("shoes") ?: 0, this?.optInt("accessory") ?: 0)
