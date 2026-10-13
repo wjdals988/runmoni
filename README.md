@@ -61,6 +61,8 @@ Copy-Item backend/.env.example backend/.env
 - [로컬 API 계약](backend/API.md)
 - [음성·음악 구성](docs/AUDIO.md)
 - [Supabase 이관 준비](supabase/README.md)
+- [Firebase 무료 프로젝트 준비 가이드](docs/FIREBASE_SETUP.md): 콘솔 설정 절차이며 SDK·원격 연동은 아직 없습니다.
+- [서명 APK 확인 기록](docs/RELEASE.md), [0.1.1-dev 릴리스 설명](docs/RELEASE_NOTES_0.1.1-dev.md)
 
 현재 개발 APK는 소규모 기능 검증용입니다. 대중 서비스 완료 버전으로 취급하지 않습니다.
 

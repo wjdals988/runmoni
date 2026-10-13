@@ -21,3 +21,16 @@
 5. 대시보드의 development preview 상태·제약·다운로드 메타데이터 확인.
 
 이번 프리뷰는 기존82개 자동 검증(JVM6/API23/bridge32/Android21)을 근거로 하며, Android21개는0.1.0-dev debug 실행에서 확인했습니다. 새서명 APK의 install/launch는별도확인하고 실제야외GPS/블루투스/음악앱캡처/2대송출 성공을추정하지않습니다.
+
+## 2026-10-13 서명 APK 확인 결과
+
+- `assembleRelease`, JVM 6개, `lintRelease` 통과. release lint는 오류 0개·경고 17개입니다.
+- 패키지 `com.runmoni.app`, 버전 `0.1.1-dev`, versionCode `2`, minSdk `29`, targetSdk `36`입니다.
+- APK 파일 `runmoni-0.1.1-dev.apk`: `200,693,280` bytes.
+- SHA-256: `25772671956108deed9bde887104d83b4b7eefdf7d2dbd5c7b4223d143db78de9`.
+- Android APK Signature Scheme v2 검증 통과, 서명자 1명, RSA 3072비트입니다.
+- 인증서 SHA-256: `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830`.
+- 전용 `Runmoni_API36` 에뮬레이터에서 기존 debug 앱을 제거한 뒤 설치 성공, cold launch `Status: ok`, 실행 프로세스를 확인했습니다. 앱 패키지 flags에 `DEBUGGABLE`이 없습니다.
+- 실제 휴대폰 설치·야외 러닝·2대 음성/DJ 송출은 0회입니다.
+
+원격 업로드 결과와 대시보드 반영은 게시 후 별도 기록합니다. Firebase 준비 가이드는 클라우드 연동 완료를 뜻하지 않습니다.
