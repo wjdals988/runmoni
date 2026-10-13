@@ -14,6 +14,8 @@ val localSettings = Properties().apply {
 fun configString(name: String, default: String = "") =
     (localSettings.getProperty(name) ?: System.getenv(name) ?: default)
         .replace("\\", "\\\\").replace("\"", "\\\"")
+val signingFile = rootProject.file(".secrets/signing.properties")
+val releaseSettings = Properties().apply { if (signingFile.exists()) signingFile.inputStream().use { load(it) } }
 
 android {
     namespace = "com.runmoni.app"
@@ -22,8 +24,8 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0-dev"
+        versionCode = 2
+        versionName = "0.1.1-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
         buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${configString("NAVER_MAP_CLIENT_ID")}\"")
@@ -35,8 +37,19 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
+    signingConfigs {
+        if (signingFile.exists()) create("runmoniRelease") {
+            storeFile = rootProject.file(releaseSettings.getProperty("storeFile"))
+            storePassword = releaseSettings.getProperty("storePassword")
+            keyAlias = releaseSettings.getProperty("keyAlias")
+            keyPassword = releaseSettings.getProperty("keyPassword")
+        }
+    }
     buildTypes {
-        getByName("release") { isMinifyEnabled = false }
+        getByName("release") {
+            isMinifyEnabled = false
+            if (signingFile.exists()) signingConfig = signingConfigs.getByName("runmoniRelease")
+        }
     }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
 }

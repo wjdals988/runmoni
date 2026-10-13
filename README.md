@@ -1,6 +1,6 @@
 # 런모니 / Runmoni
 
-Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 첫 개발 버전입니다. Android 앱 `0.1.0-dev`와 로컬 API `0.1.4`는 별도로 버전을 관리합니다.
+Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. Android 앱 `0.1.1-dev`(versionCode2)와 로컬 API `0.1.4`는 별도로 버전을 관리합니다. GitHub 릴리스 APK는 별도 개발 서명을 적용한 release build이며, 실제 휴대폰 검증은 아직 없습니다.
 
 ## 지금 구현한 범위
 
@@ -63,3 +63,15 @@ Copy-Item backend/.env.example backend/.env
 - [Supabase 이관 준비](supabase/README.md)
 
 현재 개발 APK는 소규모 기능 검증용입니다. 대중 서비스 완료 버전으로 취급하지 않습니다.
+
+## DB와 인터넷 운영 상태
+
+DB는 이미2종을 사용합니다. 휴대폰의 `runmoni-runs.db`(Room2개 테이블)는 개인 GPS·기록을 저장하고, FastAPI 서버의 SQLite(14개 테이블)는 계정·크루·파티·채팅·미니미 구매·위치를 저장합니다. 위치 공유는15초마다 사용자당 현재1행을 갱신하며45초 후 만료됩니다. GPS를1초당1점 받는다고 가정하면1시간3600점이지만 실제수신량 보장은 아닙니다.
+
+GitHub 소스/APK 공개와 대시보드 등록은 클라우드 운영을 시작하는 작업이 아닙니다. 현재 상시 외부 HTTPS API·공유 DB·LiveKit 서버는 배포하지 않았습니다. APK만 설치한 친구들이 곧바로 서로의 크루/위치를 공유할 수는 없습니다.
+
+기기 Room은 유지하고 서버는 Supabase Auth/PostgreSQL과 연결하는 경로를 우선 준비합니다. 기존 SQL을 실행하는 것 외에도 인증 교체·PostgreSQL adapter·기존 계정 이관·보상/정원 트랜잭션·RLS 실행 검증·HTTPS 배포가 필요합니다. Firebase Firestore도 대안이지만 두 DB를 동시에 주 저장소로 운영하지 않습니다. 음성/음악은 별도 LiveKit과 audio bridge가 맡습니다.
+
+## 릴리스 서명
+
+`scripts/build-release.ps1`은 `.secrets/signing.properties`가 있을 때만 서명 APK를 빌드합니다. 서명 키·비밀번호는 `.secrets/`에 보관하고 Git에서 제외합니다. 소유자는 이 폴더를 별도로 안전하게 백업해야 하며, 향후 업데이트는 같은 키를 사용해야 합니다. 첫0.1.0-dev 디버그 APK와 공개 서명 APK의 인증서는 다르므로 테스트 설치를 교체할 때는 기존 테스트 앱을 지우고 설치해야 합니다.

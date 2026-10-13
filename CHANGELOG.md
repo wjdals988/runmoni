@@ -1,5 +1,13 @@
 # 변경 이력
 
+## 0.1.1-dev — 2026-10-13 (GitHub 개발 프리뷰 게시)
+
+- versionCode2로 올리고 디버그 키와 다른 보관용 개발 서명을 release build에 적용.
+- 키/비밀번호/로컬 설정을 Git에서 제외하고 키 부재 시 릴리스 빌드를 중단하는 스크립트 추가.
+- Room2개/서버SQLite14개 테이블과未클라우드 운영 상태를 README에 명시.
+- GitHub 소스·APK prerelease, 대시보드 개발 프리뷰 등록을 위한 메타데이터 준비.
+- 개인GPS·서버 API·오디오의 기능 변경은 없으며 실기기/클라우드 미검증 경계를 유지.
+
 ## 0.1.0-dev — 2026-10-13 (첫 Android 개발 버전)
 
 - 빈 프로젝트에 Kotlin/Compose Android 앱·Room·foreground GPS 서비스를 구성.

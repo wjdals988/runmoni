@@ -20,3 +20,7 @@ outputs/
 .idea/
 *.iml
 **/.test-deps/
+.secrets/
+*.jks
+*.keystore
+signing.properties
