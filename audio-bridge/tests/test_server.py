@@ -33,6 +33,7 @@ class FakePublisher:
 
     def __init__(self, settings, lease):
         self.packets, self.closed, self.finished = [], False, False
+        self.published = threading.Event()
         self.instances.append(self)
 
     async def connect(self):
@@ -40,11 +41,14 @@ class FakePublisher:
 
     async def publish(self, packet):
         self.packets.append(packet)
+        self.published.set()
 
     async def finish(self):
         self.finished = True
 
     async def close(self):
+        # Native cleanup yields; cancellation must not skip this checkpoint.
+        await asyncio.sleep(0)
         self.closed = True
 
 
@@ -80,8 +84,7 @@ def test_separate_music_participant_path_and_cleanup():
             assert websocket.receive_json()["type"] == "ready"
             assert client.get("/health").json()["active_music_rooms"] == 1
             websocket.send_bytes(struct.pack(">q", 1_000_000) + b"opus-packet")
-            # The HTTP request lets the app loop process the queued frame without a timing sleep.
-            client.get("/health")
+            assert FakePublisher.instances[0].published.wait(2)
         assert client.get("/health").json()["active_music_rooms"] == 0
     assert FakePublisher.instances[0].closed is True
     assert FakePublisher.instances[0].packets == [b"opus-packet"]

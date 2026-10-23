@@ -75,8 +75,8 @@ class RunCreate(Model):
 
 
 class TrackPoint(Model):
-    seq: int = Field(ge=0)
-    segment: int = Field(default=0, ge=0)
+    seq: int = Field(ge=0, le=2**31 - 1)
+    segment: int = Field(default=0, ge=0, le=2**31 - 1)
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
     recorded_at_ms: int = Field(gt=0)

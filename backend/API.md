@@ -4,6 +4,15 @@ Local-only base URL: `http://127.0.0.1:8787`. Android emulator uses `http://10.0
 
 ## Authentication and profile
 
+Input boundaries: GPS `seq` and `segment` are integers in 0…2147483647;
+message `after_id` is in 0…9223372036854775807. Larger values return 422
+`invalid_request` before SQL execution. Calendar statistics return 422
+`invalid_stats_time` when the requested Seoul period cannot be represented
+(including an end boundary beyond year 9999). `period=all` ignores the anchor.
+Music capability/lease issuance requires both bridge secrets to contain at least
+32 characters, matching bridge admission. Configured capability is not proof
+that a remote audio server is reachable.
+
 - `GET /health`: `{status:"ok", version:"0.1.4", auth_mode:"invite_code_pilot", capabilities:{voice:false,music_broadcast:false}}` when audio credentials are unset.
 - `POST /v1/auth/pilot`: `{invite_code, nickname, adult_confirmed:true}` → `{access_token, token_type:"bearer", expires_at_ms, user:{id,nickname,mileage,avatar}}`. Explicit adult-attested invite-only pilot, NOT email OTP or verified identity. Nicknames unique. Existing nickname cannot be used to obtain another person's token. Persist the issued token on the device; lost-token recovery is operator-assisted in this pilot.
 - `DELETE /v1/auth/session`: revoke current bearer token.

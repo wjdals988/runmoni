@@ -48,6 +48,16 @@ class Settings:
     reward_daily_limit: int = 10000
     cors_origins: tuple[str, ...] = ("http://127.0.0.1:8787", "http://localhost:8787")
 
+    @property
+    def voice_configured(self):
+        return bool(self.livekit_url and self.livekit_api_key and self.livekit_api_secret)
+
+    @property
+    def music_configured(self):
+        # Match the bridge admission contract; non-empty short secrets are rejected there.
+        return bool(self.voice_configured and self.bridge_url and
+                    len(self.bridge_secret) >= 32 and len(self.bridge_control_secret) >= 32)
+
     @classmethod
     def from_env(cls):
         return cls(
@@ -81,6 +91,8 @@ def distance(a, b):
 
 
 def period_bounds(period, anchor_ms):
+    if period == "all":
+        return 0, 253402300799000
     dt = datetime.fromtimestamp(anchor_ms / 1000, SEOUL)
     if period == "day":
         start = dt.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -224,9 +236,8 @@ def create_app(settings=None, clock=None):
 
     @app.get("/health")
     def health():
-        voice = bool(settings.livekit_url and settings.livekit_api_key and settings.livekit_api_secret)
         return {"status": "ok", "version": VERSION, "auth_mode": "invite_code_pilot", "capabilities": {
-            "voice": voice, "music_broadcast": bool(voice and settings.bridge_url and settings.bridge_secret and settings.bridge_control_secret)}}
+            "voice": settings.voice_configured, "music_broadcast": settings.music_configured}}
 
     @app.post("/v1/auth/pilot")
     def login(body: PilotLogin, request: Request):
@@ -474,7 +485,7 @@ def create_app(settings=None, clock=None):
             return dict(c.execute("SELECT m.*,u.nickname FROM messages m JOIN users u ON u.id=m.sender_id WHERE m.id=?", (cursor.lastrowid,)).fetchone())
 
     @app.get("/v1/crews/{crew_id}/messages")
-    def crew_messages(crew_id: UUID, after_id: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100), user: dict = Depends(current_user)):
+    def crew_messages(crew_id: UUID, after_id: int = Query(0, ge=0, le=2**63 - 1), limit: int = Query(100, ge=1, le=100), user: dict = Depends(current_user)):
         return list_messages("crew", str(crew_id), user, after_id, limit)
 
     @app.post("/v1/crews/{crew_id}/messages")
@@ -482,7 +493,7 @@ def create_app(settings=None, clock=None):
         return send_message("crew", str(crew_id), body, user)
 
     @app.get("/v1/parties/{party_id}/messages")
-    def party_messages(party_id: UUID, after_id: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=100), user: dict = Depends(current_user)):
+    def party_messages(party_id: UUID, after_id: int = Query(0, ge=0, le=2**63 - 1), limit: int = Query(100, ge=1, le=100), user: dict = Depends(current_user)):
         return list_messages("party", str(party_id), user, after_id, limit)
 
     @app.post("/v1/parties/{party_id}/messages")
@@ -595,7 +606,10 @@ def create_app(settings=None, clock=None):
 
     @app.get("/v1/stats")
     def stats(period: Literal["day", "month", "year", "all"] = "month", anchor_ms: int | None = Query(default=None, ge=1, le=253402300798999), user: dict = Depends(current_user)):
-        start, end = period_bounds(period, anchor_ms or now())
+        try:
+            start, end = period_bounds(period, anchor_ms or now())
+        except (ValueError, OverflowError, OSError):
+            fail(422, "invalid_stats_time", "조회할 날짜 범위를 확인해 주세요.")
         with db() as c:
             row = c.execute("SELECT COALESCE(SUM(distance_m),0) distance_m,COALESCE(SUM(active_duration_s),0) active_duration_s,COUNT(*) run_count FROM runs WHERE user_id=? AND status='finalized' AND deleted_at_ms IS NULL AND started_at_ms>=? AND started_at_ms<?", (user["id"], start, end)).fetchone()
             return {"period": period, **dict(row), "mileage": mileage(c, user["id"])}
@@ -644,9 +658,7 @@ def create_app(settings=None, clock=None):
         return f"{body.scope_type}-{body.scope_id}", crew_id
 
     def require_audio(music=False):
-        ready = settings.livekit_url and settings.livekit_api_key and settings.livekit_api_secret
-        if music:
-            ready = ready and settings.bridge_url and settings.bridge_secret and settings.bridge_control_secret
+        ready = settings.music_configured if music else settings.voice_configured
         if not ready:
             fail(503, "capability_not_configured", "음성 또는 음악 방송 서버가 아직 설정되지 않았습니다.")
 

@@ -351,7 +351,7 @@ def test_voice_missing_credentials_not_fake_connected_and_roles(pilot):
 
 
 def test_audio_jwt_grants_lease_revoke_and_role_demotion(tmp_path):
-    settings = Settings(db_path=str(tmp_path / "audio.sqlite3"), pilot_invite="test-invite-code", livekit_url="wss://test.invalid", livekit_api_key="test-key", livekit_api_secret="test-secret-that-is-at-least-32-characters", bridge_url="wss://bridge.invalid/audio", bridge_secret="bridge-secret-that-is-at-least-32-characters", bridge_control_secret="control-secret")
+    settings = Settings(db_path=str(tmp_path / "audio.sqlite3"), pilot_invite="test-invite-code", livekit_url="wss://test.invalid", livekit_api_key="test-key", livekit_api_secret="test-secret-that-is-at-least-32-characters", bridge_url="wss://bridge.invalid/audio", bridge_secret="bridge-secret-that-is-at-least-32-characters", bridge_control_secret="control-secret-that-is-at-least-32-characters")
     app = create_app(settings)
     client = TestClient(app)
     login = client.post("/v1/auth/pilot", json={"invite_code": "test-invite-code", "nickname": "방송 리더", "adult_confirmed": True}).json()
@@ -372,7 +372,7 @@ def test_audio_jwt_grants_lease_revoke_and_role_demotion(tmp_path):
     assert music_claims["exp"] - music_claims["iat"] == 900
     assert client.post("/v1/music/lease", headers=h, json={**body, "pilot_test_acknowledged": True}).status_code == 409
     status_url = f"/v1/music/lease/{lease['lease_id']}/status"
-    control = {"Authorization": "Bearer control-secret"}
+    control = {"Authorization": f"Bearer {settings.bridge_control_secret}"}
     assert client.get(status_url).status_code == 401
     assert client.get(status_url, headers=control).json()["active"] is True
     assert client.delete(f"/v1/music/lease/{lease['lease_id']}", headers=h).status_code == 200
