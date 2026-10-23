@@ -11,6 +11,11 @@ Python 3.12 별도 venv로 backend lock/bridge requirements를 각각 설치했�
 - Android SDK가 없어 이번에는 Android 빌드·JVM·instrumentation을 재실행하지 않았다.
 - 신규 CI 설정은 YAML 구문을 확인했으며 원격 job 결과는 별도로 확인해야 한다.
 
+첫 GitHub CI에서 backend/SQL 통과, bridge 30/32 통과와 Android SDK setup 실패를 확인했다.
+ASGI 취소 중 정리를 보호하고 브리지 테스트의 패킷 처리 대기를 Event로 동기화한 뒤
+로컬 bridge 32개를 다시 통과했다. Android setup은 폐기된 `tools` 대신
+`platform-tools`를 요청하도록 수정했다. 최종 원격 결과는 PR checks에서 확인한다.
+
 수정 전 새 경계 테스트는 11개 실패/6개 통과로 결함을 재현했다.
 이번 결과에 과거 Android 테스트를 합산하지 않는다.
 남은 위험과 실행 순서는 [감사 문서](AUDIT_2026-10-23.md)와 [로드맵](ROADMAP.md)에 기록했다.

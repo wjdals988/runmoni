@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 import httpx
+import anyio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 
 from protocol import FreshAudioQueue, Lease, ProtocolError, parse_packet, validate_end, validate_start, verify_lease
@@ -225,16 +226,22 @@ def create_app(settings: Settings | None = None, publisher_factory=MusicPublishe
                 await websocket.send_json({"type": "error", "message": "audio_bridge_failed"})
                 await websocket.close(code=1011)
         finally:
-            for task in tasks:
-                task.cancel()
-            if tasks:
-                await asyncio.gather(*tasks, return_exceptions=True)
-            if publisher:
-                with contextlib.suppress(Exception):
-                    await publisher.close()
-            if room_reserved and lease:
-                async with admission_lock:
-                    active_rooms.discard(lease.room)
+            # ASGI cancellation must not interrupt native source/room cleanup.
+            # Bound shutdown, then release admission even if a publisher stalls.
+            with anyio.CancelScope(shield=True):
+                try:
+                    with anyio.move_on_after(5):
+                        for task in tasks:
+                            task.cancel()
+                        if tasks:
+                            await asyncio.gather(*tasks, return_exceptions=True)
+                        if publisher:
+                            with contextlib.suppress(Exception):
+                                await publisher.close()
+                finally:
+                    if room_reserved and lease:
+                        async with admission_lock:
+                            active_rooms.discard(lease.room)
 
     return app
 
