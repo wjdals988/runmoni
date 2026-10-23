@@ -57,6 +57,8 @@ Copy-Item backend/.env.example backend/.env
 
 - [검증 기록](docs/VALIDATION.md): 실행한 테스트와 미검증 항목
 - [구현 계획](docs/IMPLEMENTATION.md): 탭 책임·후속 순서·출시 조건
+- [2026-10-23 코드 감사](docs/AUDIT_2026-10-23.md): 결함 근거·이번 수정·출시 차단 항목
+- [개발 로드맵](docs/ROADMAP.md): 다음 작업 순서와 단계별 완료 조건
 - [변경 이력](CHANGELOG.md)
 - [로컬 API 계약](backend/API.md)
 - [음성·음악 구성](docs/AUDIO.md)
