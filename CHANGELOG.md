@@ -1,5 +1,16 @@
 # 변경 이력
 
+## 2026-10-24 — 순차 작업으로 GitHub·대시보드 게시 완료
+
+- 사용자 지시에 따라 로컬 작업을 한 번에 1개씩 진행. 에뮬레이터·대량 패키지 설치 없이 최신 개발 코드 `d98001c`를 `wjdals988/runmoni` main에 일반 푸시하고 로컬/원격 커밋 일치를 확인.
+- 대시보드 최신 원격 `3a2b35e`를 병합해 여긴얼마 2.5.4, 다른 프로젝트 8개 객체와 전체 배열 순서를 보존. `b5a9b76`을 `wjdals988/mydashboard` main에 일반 푸시.
+- 대시보드의 런모니 APK 다운로드·릴리스 링크·64자리 SHA-256·200,693,280bytes 정보를 반영. 총 프로젝트 9개, 다운로드 제공 6개. APK 파일 교체·태그 이동·200MB 재다운로드는 하지 않음.
+- 기존 필수 보안 검사를 통과하도록 Next.js·eslint-config-next를 16.3.8에서 16.4.3으로 맞추고 전이 Zod 잠금 버전을 4.3.6에서 4.6.7로 갱신. PC에서는 연결 1개·요청당 15초 제한의 잠금 정보 갱신만 실행(약 5초·1초). 다른 패키지 버전은 유지.
+- 로컬 카탈로그/업데이터 23/23 및 새 잠금 정보의 npm audit 취약점 0개 확인. [GitHub CI 40064465734](https://github.com/wjdals988/mydashboard/actions/runs/40064465734)에서 새 의존성 설치·audit·test·lint·build 전체 성공. CI 우회·권한 완화 없음.
+- 동일 `b5a9b76`의 Vercel 커밋 상태 success/Deployment has completed 확인. [실제 런모니 페이지](https://coldbrewventi.vercel.app/projects/runmoni) HTTP 200, 공개 APK/릴리스 앵커·버전·바이트 크기·체크섬 일치. APK HEAD HTTP 200·Content-Length 일치, APK 본문 다운로드 0bytes.
+- 페이지 검증은 연결 1개·본문 상한 1MiB·텍스트 읽기 128KiB/s 제한으로 순차 실행. 실제 페이지 HTML 98,791bytes(디코딩 후) 확인. Vercel 관리 API가 사용 불가여서 GitHub 배포 상태와 공개 페이지를 함께 대조했으며 런타임 오류 로그는 조회하지 않음.
+- 공개 APK는 `0.1.1-dev`, 최신 개발 소스는 Firebase 첫 단계가 있는 `0.1.2-dev`. 실제 Google 로그인·원격 백업·Rules 배포·실기기 검증 0건 경계 유지. 순차 작업 지침은 AGENTS.md에 기록.
+
 ## 2026-10-24 — GitHub APK 공개·Firebase 개발본 검증
 
 - 사용자 GitHub 인증 완료 후 기존 소스 이력 보존 커밋 `b72eec7`을 `wjdals988/runmoni` main에 게시.
