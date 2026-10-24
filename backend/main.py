@@ -29,9 +29,35 @@ from .models import (CrewCreate, CrewJoin, ItemPurchase, MessageCreate, MusicLea
 
 VERSION = "0.1.4"
 SEOUL = timezone(timedelta(hours=9))
-AVATAR_SLOTS = {"hair": "헤어", "top": "상의", "bottom": "하의", "shoes": "신발", "accessory": "액세서리"}
-CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost": [0, 500, 1000, 2000][variant], "slot": slot, "value": variant}
-             for slot, label in AVATAR_SLOTS.items() for variant in range(4)]
+AVATAR_SLOTS = {"hair": "헤어", "top": "상의", "bottom": "하의", "shoes": "신발", "accessory": "머리 장비",
+                "eyewear": "선글라스", "wrist": "워치", "waist": "러닝 벨트", "hydration": "수분 조끼",
+                "face": "얼굴", "socks": "양말", "headwear": "모자", "ear": "귀 장비", "costume": "특수 코스튬"}
+CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost": [0, 500, 1000, 2000, 500, 1000][variant], "slot": slot, "value": variant}
+             for slot, label in AVATAR_SLOTS.items() for variant in range(6 if slot in {"top", "bottom", "costume"} else 4)]
+
+
+def canonical_avatar(style):
+    result = {slot: style.get(slot, 0) or 0 for slot in AVATAR_SLOTS}
+    legacy = style.get("accessory", 0)
+    if style.get("headwear") is None:
+        result["headwear"] = {1: 3, 2: 1}.get(legacy, 0)
+    if style.get("ear") is None:
+        result["ear"] = 1 if legacy == 3 else 0
+    return result
+
+
+def migrated_owned(items):
+    result = set(items) | {f"{slot}:0" for slot in AVATAR_SLOTS}
+    for old, new in [("accessory:1", "headwear:3"), ("accessory:2", "headwear:1"), ("accessory:3", "ear:1")]:
+        if old in result:
+            result.add(new)
+    return sorted(result)
+
+
+def costume_covers(costume):
+    if costume in {1, 4, 5}:
+        return {"headwear", "top", "bottom", "socks", "shoes"}
+    return {"top", "bottom"} if costume in {2, 3} else set()
 LOG = logging.getLogger("runmoni")
 
 
@@ -167,8 +193,8 @@ def create_app(settings=None, clock=None):
     def profile(c, user_id):
         row = c.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
         style = json.loads(row["avatar"])
-        return {"id": row["id"], "nickname": row["nickname"], "mileage": mileage(c, user_id), "avatar": {slot: style.get(slot, 0) for slot in AVATAR_SLOTS},
-                "owned_items": sorted({f"{slot}:0" for slot in AVATAR_SLOTS} | {r[0] for r in c.execute("SELECT item_id FROM owned_items WHERE user_id=? ORDER BY item_id", (user_id,))})}
+        return {"id": row["id"], "nickname": row["nickname"], "mileage": mileage(c, user_id), "avatar": canonical_avatar(style),
+                "owned_items": migrated_owned(r[0] for r in c.execute("SELECT item_id FROM owned_items WHERE user_id=? ORDER BY item_id", (user_id,)))}
 
     def crew_member(c, crew_id, user_id):
         role = c.execute("SELECT role FROM crew_members WHERE crew_id=? AND user_id=?", (crew_id, user_id)).fetchone()
@@ -272,10 +298,25 @@ def create_app(settings=None, clock=None):
     def patch_me(body: ProfilePatch, user: dict = Depends(current_user)):
         with db(True) as c:
             if body.avatar:
-                for slot, variant in body.avatar.model_dump().items():
-                    if variant != 0 and c.execute("SELECT 1 FROM owned_items WHERE user_id=? AND item_id=?", (user["id"], f"{slot}:{variant}")).fetchone() is None:
+                changes = body.avatar.model_dump(exclude_unset=True)
+                owned = set(profile(c, user["id"])["owned_items"])
+                for slot, variant in changes.items():
+                    if variant is None:
+                        fail(422, "invalid_avatar", "아이템 번호를 선택해 주세요.")
+                    if f"{slot}:{variant}" not in owned:
                         fail(403, "item_not_owned", "보유한 꾸미기 아이템만 착용할 수 있습니다.")
-                c.execute("UPDATE users SET avatar=? WHERE id=?", (body.avatar.model_dump_json(), user["id"]))
+                # An older client that sends only five slots must preserve new equipment.
+                saved = c.execute("SELECT avatar FROM users WHERE id=?", (user["id"],)).fetchone()
+                style = canonical_avatar(json.loads(saved["avatar"]))
+                if "accessory" in changes:
+                    if "headwear" not in changes:
+                        changes["headwear"] = {1: 3, 2: 1}.get(changes["accessory"], 0)
+                    if "ear" not in changes:
+                        changes["ear"] = 1 if changes["accessory"] == 3 else 0
+                if "costume" not in changes and costume_covers(style["costume"]) & changes.keys():
+                    changes["costume"] = 0
+                style.update(changes)
+                c.execute("UPDATE users SET avatar=? WHERE id=?", (json.dumps(style), user["id"]))
             if body.nickname:
                 try:
                     c.execute("UPDATE users SET nickname=? WHERE id=?", (body.nickname, user["id"]))
@@ -293,7 +334,7 @@ def create_app(settings=None, clock=None):
         if item is None:
             fail(404, "item_not_found", "아이템을 찾을 수 없습니다.")
         with db(True) as c:
-            already = item["cost"] == 0 or c.execute("SELECT 1 FROM owned_items WHERE user_id=? AND item_id=?", (user["id"], item["id"])).fetchone() is not None
+            already = item["id"] in profile(c, user["id"])["owned_items"]
             if not already:
                 if mileage(c, user["id"]) < item["cost"]:
                     fail(409, "insufficient_mileage", "마일리지가 부족합니다.")
@@ -376,7 +417,7 @@ def create_app(settings=None, clock=None):
         with db() as c:
             crew_member(c, str(crew_id), user["id"])
             rows = c.execute("SELECT m.user_id,m.role,u.nickname,u.avatar FROM crew_members m JOIN users u ON u.id=m.user_id WHERE crew_id=?", (str(crew_id),)).fetchall()
-            return {"items": [{**dict(row), "avatar": {slot: json.loads(row["avatar"]).get(slot, 0) for slot in AVATAR_SLOTS}} for row in rows if not blocked(c, user["id"], row["user_id"])]}
+            return {"items": [{**dict(row), "avatar": canonical_avatar(json.loads(row["avatar"]))} for row in rows if not blocked(c, user["id"], row["user_id"])]}
 
     @app.patch("/v1/crews/{crew_id}/members/{user_id}")
     def set_role(crew_id: UUID, user_id: UUID, body: RolePatch, user: dict = Depends(current_user)):
@@ -625,7 +666,7 @@ def create_app(settings=None, clock=None):
         with db() as c:
             scope_access(c, scope_type, str(scope_id), user["id"], True)
             rows = c.execute("SELECT p.user_id,u.nickname,u.avatar,p.latitude,p.longitude,p.updated_at_ms,p.expires_at_ms,r.party_id FROM presence p JOIN users u ON u.id=p.user_id JOIN runs r ON r.id=p.run_id WHERE p.scope_type=? AND p.scope_id=? AND p.expires_at_ms>? AND r.status='active' AND r.deleted_at_ms IS NULL", (scope_type, scope_key, now())).fetchall()
-            return {"items": [{**dict(row), "avatar": {slot: json.loads(row["avatar"]).get(slot, 0) for slot in AVATAR_SLOTS}} for row in rows if not blocked(c, user["id"], row["user_id"])]}
+            return {"items": [{**dict(row), "avatar": canonical_avatar(json.loads(row["avatar"]))} for row in rows if not blocked(c, user["id"], row["user_id"])]}
 
     @app.delete("/v1/presence")
     def clear_presence(user: dict = Depends(current_user)):

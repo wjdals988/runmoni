@@ -16,10 +16,19 @@ class PilotLogin(Model):
 
 class Avatar(Model):
     hair: int = Field(default=0, ge=0, le=3)
-    top: int = Field(default=0, ge=0, le=3)
-    bottom: int = Field(default=0, ge=0, le=3)
+    top: int = Field(default=0, ge=0, le=5)
+    bottom: int = Field(default=0, ge=0, le=5)
     shoes: int = Field(default=0, ge=0, le=3)
     accessory: int = Field(default=0, ge=0, le=3)
+    eyewear: int = Field(default=0, ge=0, le=3)
+    wrist: int = Field(default=0, ge=0, le=3)
+    waist: int = Field(default=0, ge=0, le=3)
+    hydration: int = Field(default=0, ge=0, le=3)
+    face: int = Field(default=0, ge=0, le=3)
+    socks: int = Field(default=0, ge=0, le=3)
+    headwear: int | None = Field(default=None, ge=0, le=3)
+    ear: int | None = Field(default=None, ge=0, le=3)
+    costume: int = Field(default=0, ge=0, le=5)
 
 
 class ProfilePatch(Model):

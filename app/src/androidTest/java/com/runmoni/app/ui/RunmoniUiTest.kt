@@ -297,7 +297,7 @@ class RunmoniUiTest {
         }
     }
 
-    private class FakeActions(private val state: MutableState<AppState>) : AppActions {
+    internal class FakeActions(private val state: MutableState<AppState>) : AppActions {
         var starts = 0; var pauses = 0; var resumes = 0; var finishes = 0
         val exports = mutableListOf<String>()
         val deletions = mutableListOf<String>()
@@ -321,8 +321,8 @@ class RunmoniUiTest {
         override fun setVoiceGuidance(enabled: Boolean) { state.value = state.value.copy(voiceGuidance = enabled) }
         override fun setPublicLocation(enabled: Boolean) { locationChanges += enabled; state.value = state.value.copy(publicLocation = enabled) }
         override fun updateProfile(name: String) { state.value = state.value.copy(profile = state.value.profile.copy(name = name)) }
-        override fun equipItem(slot: String, variant: Int) { if (slot == "top") state.value = state.value.copy(profile = state.value.profile.copy(avatar = state.value.profile.avatar.copy(top = variant))) }
-        override fun buyItem(slot: String, variant: Int) { val price = listOf(0, 500, 1000, 2000)[variant]; purchases += "$slot:$variant"; val profile = state.value.profile; state.value = state.value.copy(profile = profile.copy(mileage = profile.mileage - price, ownedItems = profile.ownedItems + "$slot:$variant")) }
+        override fun equipItem(slot: String, variant: Int) { state.value = state.value.copy(profile = state.value.profile.copy(avatar = state.value.profile.avatar.withItem(slot, variant))) }
+        override fun buyItem(slot: String, variant: Int) { val price = AvatarCatalogue.price(variant); purchases += "$slot:$variant"; val profile = state.value.profile; state.value = state.value.copy(profile = profile.copy(mileage = profile.mileage - price, ownedItems = profile.ownedItems + "$slot:$variant")) }
         override fun deleteRun(id: String) { deletions += id; state.value = state.value.copy(records = state.value.records.filterNot { it.id == id }) }
         override fun exportRun(id: String) { exports += id }
         override fun configureServer(url: String) = Unit

@@ -445,7 +445,7 @@ private fun RecordRow(record: RunRecord, onClick: () -> Unit) {
 
 internal fun topColor(variant: Int): Color = when (variant % 4) { 1 -> RunmoniColors.Green; 2 -> Color(0xFF547FB3); 3 -> Color(0xFFD6AE48); else -> RunmoniColors.Coral }
 @Composable
-internal fun AvatarMini(avatar: AvatarStyle, modifier: Modifier, running: Boolean = false) = MiniMi(modifier, topColor(avatar.top), accessoryName(avatar.accessory), running, avatar.hair, avatar.bottom, avatar.shoes)
+internal fun AvatarMini(avatar: AvatarStyle, modifier: Modifier, running: Boolean = false, decorative: Boolean = false) = MiniMi(avatar, modifier, running, if (decorative) null else "나의 러닝 미니미")
 internal fun accessoryName(variant: Int) = when (variant) { 1 -> "headband"; 2 -> "cap"; 3 -> "headphones"; else -> "none" }
 internal fun distance(meters: Double) = String.format(Locale.KOREAN, "%.2f", meters / 1000)
 internal fun duration(millis: Long): String { val seconds = millis.coerceAtLeast(0) / 1000; return if (seconds >= 3600) "%d:%02d:%02d".format(seconds / 3600, seconds / 60 % 60, seconds % 60) else "%02d:%02d".format(seconds / 60, seconds % 60) }

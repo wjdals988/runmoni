@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class, androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 
 package com.runmoni.app.ui
 
@@ -15,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -231,29 +232,57 @@ internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions,
 @Composable
 internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -> Unit) {
     var slot by remember { mutableStateOf("top") }
-    val slots = listOf("hair" to "헤어", "top" to "상의", "bottom" to "하의", "shoes" to "신발", "accessory" to "액세서리")
-    FormDialog("나의 미니미 옷장", onDismiss, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
-        Box(Modifier.fillMaxWidth().height(184.dp).clip(RoundedCornerShape(22.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) { AvatarMini(profile.avatar, Modifier.size(165.dp)) }
-        Text("${profile.mileage} P", style = MaterialTheme.typography.titleLarge)
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            slots.forEach { (key, label) ->
-                TextButton(onClick = { slot = key }, contentPadding = PaddingValues(horizontal = 4.dp), colors = ButtonDefaults.textButtonColors(contentColor = if (slot == key) RunmoniColors.CoralInk else RunmoniColors.Muted)) {
-                    Text(label, style = MaterialTheme.typography.labelMedium)
-                }
+    var accessorySlot by remember { mutableStateOf("eyewear") }
+    var animate by remember { mutableStateOf(true) }
+    val slots = AvatarCatalogue.slots
+    val width = minOf(560.dp, (LocalConfiguration.current.screenWidthDp * 0.94f).dp)
+    AlertDialog(onDismissRequest = onDismiss, modifier = Modifier.width(width).testTag("form_dialog"),
+        properties = DialogProperties(usePlatformDefaultWidth = false), title = { Text("나의 미니미 옷장") },
+        confirmButton = { TextButton(onClick = onDismiss) { Text("닫기") } }, text = {
+        Column(Modifier.fillMaxWidth().heightIn(max = 480.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Box(Modifier.fillMaxWidth().height(144.dp).clip(RoundedCornerShape(22.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) {
+            AvatarMini(profile.avatar, Modifier.size(136.dp).testTag("closet_avatar_preview"), running = animate)
+        }
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("${profile.mileage} P", style = MaterialTheme.typography.titleLarge)
+            TextButton(onClick = { animate = !animate }, modifier = Modifier.heightIn(min = 48.dp).testTag("closet_animation")) { Text(if (animate) "달리기 멈춤" else "달리기 재생") }
+        }
+        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            AvatarCatalogue.tabs.forEach { (key, label) ->
+                FilterChip(selected = if (key == "accessories") slot in AvatarCatalogue.accessoryKeys else slot == key,
+                    onClick = { slot = if (key == "accessories") accessorySlot else key }, label = { Text(label) },
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("closet_slot_$key"))
             }
         }
-        val equipped = when (slot) { "hair" -> profile.avatar.hair; "top" -> profile.avatar.top; "bottom" -> profile.avatar.bottom; "shoes" -> profile.avatar.shoes; else -> profile.avatar.accessory }
-        (0..3).forEach { variant ->
-            val owned = "$slot:$variant" in profile.ownedItems
-            val price = when (variant) { 1 -> 500; 2 -> 1000; 3 -> 2000; else -> 0 }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Column(Modifier.weight(1f)) { Text(if (variant == 0) "기본 ${slots.first { it.first == slot }.second}" else "${slots.first { it.first == slot }.second} 스타일 $variant", style = MaterialTheme.typography.titleMedium); Text(if (owned) "보유 중" else "${price} P · 러닝 마일리지", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
-                if (equipped == variant) StatusPill("착용 중", RunmoniColors.Green)
-                else FilledTonalButton(onClick = { if (owned) actions.equipItem(slot, variant) else actions.buyItem(slot, variant) }, enabled = owned || profile.mileage >= price, modifier = Modifier.testTag("closet_${slot}_$variant")) { Text(if (owned) "착용" else "${price} P 구매") }
+        if (slot in AvatarCatalogue.accessoryKeys) FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            slots.filter { it.key in AvatarCatalogue.accessoryKeys }.forEach { item ->
+                FilterChip(selected = slot == item.key, onClick = { slot = item.key; accessorySlot = item.key }, label = { Text(item.label) },
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("closet_slot_${item.key}"))
             }
+        }
+        val covered = slot in AvatarCatalogue.coveredSlots(profile.avatar.costume)
+        if (profile.avatar.costume != 0) SmallNote(if (covered) "이 부위는 세트가 덮고 있어요. 일반 아이템을 착용하면 세트가 해제돼요." else "세트가 덮지 않는 얼굴·헤어·장비는 함께 바꿀 수 있어요.")
+        val equipped = profile.avatar.variantFor(slot)
+        slots.first { it.key == slot }.variants.indices.forEach { variant ->
+            val owned = "$slot:$variant" in profile.ownedItems
+            val price = AvatarCatalogue.price(variant)
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    AvatarMini(profile.avatar.withItem(slot, variant), Modifier.size(64.dp), decorative = true)
+                    Text(slots.first { it.key == slot }.variants[variant], style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                }
+                Text(if (owned) "보유 중" else "${price} P · 러닝 마일리지", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
+                if (equipped == variant && !covered) StatusPill("착용 중", RunmoniColors.Green)
+                else FilledTonalButton(onClick = { if (owned) actions.equipItem(slot, variant) else actions.buyItem(slot, variant) }, enabled = owned || profile.mileage >= price, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("closet_${slot}_$variant")) { Text(if (owned) "착용" else "${price} P 구매") }
+            }
+            HorizontalDivider(color = RunmoniColors.Line)
         }
         SmallNote("파일럿 옷장은 러닝 마일리지로 이용해요. 현금 결제와 유료 아이템 판매는 연결되어 있지 않아요.")
-    }
+        SmallNote("헤어와 옷은 성별 제한 없이 고를 수 있어요. 머리 장비·선글라스·워치·벨트·조끼를 함께 착용할 수 있어요.")
+        }
+        }
+    })
 }
 
 @Composable

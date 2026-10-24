@@ -23,10 +23,11 @@ class LocalWallet(context: Context) {
     private fun readUnsafe(): Profile = runCatching {
         val json = JSONObject(preferences.getString("localProfile", "{}")!!)
         val array = json.optJSONArray("owned")
-        Profile(json.optString("name", "러너"), with(PilotClient) { json.optJSONObject("avatar").toAvatar() }, json.optInt("mileage"), array?.let { (0 until it.length()).map { i -> it.getString(i) }.toSet() } ?: Profile().ownedItems)
+        Profile(json.optString("name", "러너"), with(PilotClient) { json.optJSONObject("avatar").toAvatar() }, json.optInt("mileage"),
+            com.runmoni.app.domain.AvatarCatalogue.migrateOwned(array?.let { (0 until it.length()).map { i -> it.getString(i) }.toSet() } ?: emptySet()))
     }.getOrDefault(Profile())
     private fun encode(profile: Profile) = JSONObject().put("name", profile.name).put("mileage", profile.mileage)
-        .put("avatar", JSONObject().put("hair", profile.avatar.hair).put("top", profile.avatar.top).put("bottom", profile.avatar.bottom).put("shoes", profile.avatar.shoes).put("accessory", profile.avatar.accessory))
+        .put("avatar", PilotClient.encodeAvatar(profile.avatar))
         .put("owned", JSONArray(profile.ownedItems.toList())).toString()
     companion object { private val lock = Any() }
 }

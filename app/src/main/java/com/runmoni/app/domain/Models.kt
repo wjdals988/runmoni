@@ -37,8 +37,14 @@ data class ActiveRun(
     val gpsStatus: String = "GPS 준비 전",
     val accuracyMeters: Float? = null,
 )
-data class AvatarStyle(val hair: Int = 0, val top: Int = 0, val bottom: Int = 0, val shoes: Int = 0, val accessory: Int = 0)
-data class Profile(val name: String = "러너", val avatar: AvatarStyle = AvatarStyle(), val mileage: Int = 0, val ownedItems: Set<String> = setOf("hair:0", "top:0", "bottom:0", "shoes:0", "accessory:0"))
+data class AvatarStyle(
+    val hair: Int = 0, val top: Int = 0, val bottom: Int = 0, val shoes: Int = 0,
+    val accessory: Int = 0, val eyewear: Int = 0, val wrist: Int = 0,
+    val waist: Int = 0, val hydration: Int = 0,
+    val face: Int = 0, val socks: Int = 0, val headwear: Int? = null,
+    val ear: Int? = null, val costume: Int = 0,
+)
+data class Profile(val name: String = "러너", val avatar: AvatarStyle = AvatarStyle(), val mileage: Int = 0, val ownedItems: Set<String> = AvatarCatalogue.defaultOwned)
 data class Crew(
     val id: String,
     val name: String,

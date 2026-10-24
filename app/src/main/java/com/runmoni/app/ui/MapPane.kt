@@ -3,8 +3,6 @@ package com.runmoni.app.ui
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Canvas as AndroidCanvas
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
@@ -197,24 +194,4 @@ private fun TrackPoint.validForRoute() = latitude.isFinite() && longitude.isFini
 
 internal fun LiveRunner.hasValidCoordinates() = latitude.isFinite() && longitude.isFinite() && latitude in -90.0..90.0 && longitude in -180.0..180.0
 
-private fun runnerBitmap(avatar: AvatarStyle): Bitmap {
-    val bitmap = Bitmap.createBitmap(84, 104, Bitmap.Config.ARGB_8888)
-    val canvas = AndroidCanvas(bitmap)
-    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    paint.color = android.graphics.Color.WHITE
-    canvas.drawCircle(42f, 45f, 38f, paint)
-    paint.color = when (avatar.bottom % 4) { 1 -> android.graphics.Color.rgb(83, 110, 97); 2 -> android.graphics.Color.rgb(124, 143, 172); 3 -> android.graphics.Color.rgb(197, 126, 104); else -> android.graphics.Color.rgb(25, 51, 64) }
-    canvas.drawRoundRect(27f, 66f, 57f, 87f, 8f, 8f, paint)
-    paint.color = topColor(avatar.top).toArgb()
-    canvas.drawRoundRect(24f, 46f, 60f, 70f, 8f, 8f, paint)
-    paint.color = android.graphics.Color.rgb(240, 194, 160)
-    canvas.drawCircle(42f, 31f, 19f, paint)
-    paint.color = android.graphics.Color.rgb(25, 51, 64)
-    canvas.drawCircle(35f, 31f, 2f, paint); canvas.drawCircle(49f, 31f, 2f, paint)
-    paint.color = when (avatar.hair % 4) { 1 -> android.graphics.Color.rgb(121, 88, 68); 2 -> android.graphics.Color.rgb(216, 172, 88); 3 -> android.graphics.Color.rgb(117, 99, 139); else -> android.graphics.Color.rgb(25, 51, 64) }
-    canvas.drawArc(24f, 9f, 60f, 39f, 180f, 180f, true, paint)
-    if (avatar.accessory == 1) { paint.color = android.graphics.Color.rgb(138, 191, 193); canvas.drawRoundRect(23f, 20f, 61f, 26f, 3f, 3f, paint) }
-    if (avatar.accessory == 2) { paint.color = topColor(avatar.top).toArgb(); canvas.drawArc(22f, 8f, 62f, 37f, 180f, 180f, true, paint); canvas.drawRoundRect(44f, 19f, 69f, 25f, 3f, 3f, paint) }
-    if (avatar.accessory == 3) { paint.color = android.graphics.Color.rgb(145, 184, 205); canvas.drawRoundRect(19f, 25f, 27f, 39f, 3f, 3f, paint); canvas.drawRoundRect(58f, 25f, 66f, 39f, 3f, 3f, paint) }
-    return bitmap
-}
+private fun runnerBitmap(avatar: AvatarStyle): Bitmap = avatarBitmap(avatar)

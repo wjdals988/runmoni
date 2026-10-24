@@ -114,12 +114,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant)) }
     })
     override fun buyItem(slot: String, variant: Int) = ignoreJob(work {
-        require(slot in setOf("hair", "top", "bottom", "shoes", "accessory") && variant in 0..3) { "올바른 아이템을 선택해 주세요." }
+        require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
         val item = "$slot:$variant"
         if (item in state.value.profile.ownedItems) return@work
         if (api.token.isNotBlank()) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
         else {
-            val cost = listOf(0, 500, 1000, 2000)[variant]
+            val cost = AvatarCatalogue.price(variant)
             mutateLocalProfile { current ->
                 if (item in current.ownedItems) current else {
                     require(current.mileage >= cost) { "마일리지가 부족합니다. 러닝 기록을 쌓아 주세요." }
@@ -274,8 +274,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private fun roomScope(room: String): JSONObject { val (scope, id) = room.split(":", limit = 2); return JSONObject().put("scope_type", scope).put("scope_id", id) }
     private fun readLocalProfile(): Profile = wallet.read()
     private fun mutateLocalProfile(transform: (Profile) -> Profile) { val profile = wallet.update(transform); mutableState.update { it.copy(profile = profile) } }
-    private fun AvatarStyle.toJson() = JSONObject().put("hair", hair).put("top", top).put("bottom", bottom).put("shoes", shoes).put("accessory", accessory)
-    private fun AvatarStyle.with(slot: String, variant: Int) = when (slot) { "hair" -> copy(hair = variant); "top" -> copy(top = variant); "bottom" -> copy(bottom = variant); "shoes" -> copy(shoes = variant); "accessory" -> copy(accessory = variant); else -> error("잘못된 아이템 슬롯") }
+    private fun AvatarStyle.toJson() = PilotClient.encodeAvatar(this)
+    private fun AvatarStyle.with(slot: String, variant: Int) = withItem(slot, variant)
     private fun ignoreJob(job: Job) = Unit
     override fun onCleared() { audio.close(); super.onCleared() }
 }

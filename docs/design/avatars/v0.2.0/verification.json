@@ -1,0 +1,50 @@
+{
+  "jvm": {
+    "total": 26,
+    "failed": 0,
+    "avatarTests": 6,
+    "neckCases": 1152
+  },
+  "avatarVersion": "0.2.0",
+  "lint": {
+    "errors": 0,
+    "warnings": 28
+  },
+  "androidUi": {
+    "avd": "Runmoni_API36",
+    "avatarTests": 3,
+    "failed": 0,
+    "gradleStopped": true,
+    "serial": "emulator-5558",
+    "physicalDeviceVerified": false,
+    "avdStopped": true,
+    "total": 20
+  },
+  "animation": {
+    "frameMillis": 90,
+    "cycleMillis": 720,
+    "frames": 8
+  },
+  "remotePublished": false,
+  "appVersionCode": 4,
+  "apk": {
+    "bytes": 231052197,
+    "kind": "local-debug-not-published",
+    "sha256": "affa2de9ffd6c1c0e81d2fe04edac70b144324c0abec7527a0e4f7b44cc3be2d",
+    "path": "outputs/runmoni-0.1.3-dev-avatar-0.2.0-debug.apk"
+  },
+  "date": "2026-10-25",
+  "appVersionName": "0.1.3-dev",
+  "backend": {
+    "total": 27,
+    "failed": 0,
+    "avatarTests": 4,
+    "remoteVerified": false
+  },
+  "ui": {
+    "internalSlots": 13,
+    "tabs": 9,
+    "accessorySubslots": 5,
+    "specialCostumes": 5
+  }
+}
