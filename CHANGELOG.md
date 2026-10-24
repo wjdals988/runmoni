@@ -10,6 +10,8 @@
 - 동일 `b5a9b76`의 Vercel 커밋 상태 success/Deployment has completed 확인. [실제 런모니 페이지](https://coldbrewventi.vercel.app/projects/runmoni) HTTP 200, 공개 APK/릴리스 앵커·버전·바이트 크기·체크섬 일치. APK HEAD HTTP 200·Content-Length 일치, APK 본문 다운로드 0bytes.
 - 페이지 검증은 연결 1개·본문 상한 1MiB·텍스트 읽기 128KiB/s 제한으로 순차 실행. 실제 페이지 HTML 98,791bytes(디코딩 후) 확인. Vercel 관리 API가 사용 불가여서 GitHub 배포 상태와 공개 페이지를 함께 대조했으며 런타임 오류 로그는 조회하지 않음.
 - 공개 APK는 `0.1.1-dev`, 최신 개발 소스는 Firebase 첫 단계가 있는 `0.1.2-dev`. 실제 Google 로그인·원격 백업·Rules 배포·실기기 검증 0건 경계 유지. 순차 작업 지침은 AGENTS.md에 기록.
+- 사용자 사후 확인에서 이번 순차 작업 중에도 PC 인터넷이 다시 느려졌다고 보고. 따라서 순차 실행·패키지 전체 설치 0회·에뮬레이터 0회만으로 지연이 방지되지 않았음을 기록. 증상 발생 중 CPU·전송량·보안 이벤트는 측정하지 않아 근본 원인 미확정.
+- 해당 보고 후 추가 네트워크 작업을 중단. 요청한 앱 코드 `d98001c`와 대시보드 `b5a9b76` 게시 및 실제 페이지 검증은 이미 완료했고, 이후의 완료·재발 기록 문서 커밋은 로컬에만 보존함.
 
 ## 2026-10-24 — GitHub APK 공개·Firebase 개발본 검증
 
