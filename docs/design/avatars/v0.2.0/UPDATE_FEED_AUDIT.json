@@ -1,0 +1,17 @@
+{
+  "checkedOn": "2026-10-25",
+  "source": "https://api.github.com/repos/wjdals988/runmoni/releases/tags/v0.1.1-dev",
+  "tag": "v0.1.1-dev",
+  "draft": false,
+  "prerelease": true,
+  "releaseId": 422003247,
+  "assetId": 669535512,
+  "assetBytes": 200693280,
+  "assetDigest": "sha256:25772671956108deed9bde887104d83b4b7eefd7d2dbd5c7b4223d143db78de9",
+  "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.1.1-dev/runmoni-0.1.1-dev.apk",
+  "localFeedMatches": true,
+  "apkBodyDownloaded": false,
+  "certificateReverifiedThisAudit": false,
+  "feedUrl": "https://raw.githubusercontent.com/wjdals988/runmoni/main/updates/android.json",
+  "feed404ObservedBeforePublication": true
+}

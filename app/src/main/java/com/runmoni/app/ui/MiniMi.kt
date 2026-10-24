@@ -30,6 +30,8 @@ internal fun MiniMi(
     running: Boolean = false,
     description: String? = "러닝 미니미",
     frameOverride: Int? = null,
+    // Internal verification observer. Production callers leave this null.
+    onFrameRendered: ((Int) -> Unit)? = null,
 ) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var frame by remember(running) { mutableIntStateOf(0) }
@@ -47,7 +49,8 @@ internal fun MiniMi(
     val frames = remember(avatar, running) {
         List(if (running) AvatarRasterizer.FRAME_COUNT else 1) { avatarBitmap(avatar, it, running).asImageBitmap() }
     }
-    val image = frames[Math.floorMod(frameOverride ?: frame, frames.size)]
+    val renderedFrame = Math.floorMod(frameOverride ?: frame, frames.size)
+    val image = frames[renderedFrame]
     val accessible = if (description == null) Modifier.clearAndSetSemantics { } else Modifier.semantics { contentDescription = description }
     Canvas(modifier.then(accessible)) {
         val scale = minOf(size.width / AvatarRasterizer.WIDTH, size.height / AvatarRasterizer.HEIGHT)
@@ -55,6 +58,7 @@ internal fun MiniMi(
         val height = (AvatarRasterizer.HEIGHT * scale).roundToInt().coerceAtLeast(1)
         drawImage(image, dstOffset = IntOffset(((size.width - width) / 2).roundToInt(), ((size.height - height) / 2).roundToInt()),
             dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
+        onFrameRendered?.invoke(renderedFrame)
     }
 }
 

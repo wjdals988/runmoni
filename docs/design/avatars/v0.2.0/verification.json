@@ -1,4 +1,33 @@
 {
+  "baselineCommit": "df2a856",
+  "baselineScope": "Original avatar integration; the preserved debug APK below predates the overnight suite.",
+  "overnightAudit": {
+    "date": "2026-10-25",
+    "debugBuildLog": "work/design-chat-screen-debug-build2-20261025.log",
+    "buildSeconds": 117,
+    "jvm": { "total": 28, "failed": 0, "avatarTests": 6, "appReleaseTests": 7 },
+    "lint": { "errors": 0, "warnings": 24 },
+    "androidUi": {
+      "total": 38,
+      "failed": 0,
+      "normal": 33,
+      "normalSeconds": 72.071,
+      "nativeLargeFont": 5,
+      "nativeLargeFontSeconds": 18.998,
+      "nativeWidthDp": 320,
+      "nativeFontScale": 2.0,
+      "avatarIntegrationTests": 3,
+      "realClockPlaybackTests": 4,
+      "logs": ["work/design-ui-final.log", "work/design-ui-native-large-final.log"],
+      "avd": "Runmoni_API36",
+      "serial": "emulator-5564",
+      "avdStoppedReportedByOwningSession": true,
+      "physicalDeviceVerified": false
+    },
+    "firstPass": { "total": 37, "failed": 3, "historyPreserved": true },
+    "signedReleaseVerificationPending": true,
+    "remoteBackendVerified": false
+  },
   "jvm": {
     "total": 26,
     "failed": 0,
