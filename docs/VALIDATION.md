@@ -2,6 +2,25 @@
 
 빌드 통과, 합성 GPS 검증, 실기기 야외 정확도, 실제 클라우드 오디오 송출은 각각 다른 증거입니다. 아래에는 수행한 것만 완료로 기록합니다.
 
+## 2026-10-24 추가 검증 — Firebase 개발 소스와 공개 APK
+
+| 대상 | 이번에 확인한 결과 | 확인 범위 |
+|---|---|---|
+| `0.1.2-dev` debug/test APK 온라인 빌드 | 성공, 4분 54초, 83개 Gradle 작업 | 작업자 1개, 29개 실행·54개 최신 상태 |
+| 동일 소스 오프라인 빌드 | 성공, 1분 26초, 83개 Gradle 작업 | 5개 실행·78개 최신 상태. 추가 다운로드 없이 재현 |
+| JVM 테스트 | 15/15, 실패·오류·건너뜀 0 | 기존 러닝 6개 + 신규 CloudRunSummary 9개. 실제 Google 인증은 수행하지 않음 |
+| 신규 APK UI instrumentation | 17/17, 실패 0, 78.299초 | 기존 UI 14 + Firebase 경계 3. 설정 없음·파일럿 위치 권한 분리·계정 변경 시 백업 재확인 |
+| debug lint | 오류 0개·경고 47개 | 경고를 숨기는 baseline을 추가하지 않음 |
+| 공개 `0.1.1-dev` APK | GitHub 게시, 로컬/API 크기·SHA-256 일치 | 200,693,280bytes, 서명 APK + 체크섬 파일 2개. 실제 보조 파일 다운로드 내용까지 대조 |
+
+온라인 빌드 중 Windows Gradle immutable transform 이동 오류가 재현됐습니다. 생성이 완료된 임시 변환 디렉터리와 목적지가 프로젝트 `work/gradle-home` 내부인지 확인하고, Java 프로세스가 없고 목적지도 없는 상태에서 해당 1개 디렉터리만 이동했습니다. 캐시 전체 삭제나 다른 프로젝트 프로세스 종료는 하지 않았습니다. 일부 권한 검토 시간 초과는 명령 미실행으로 구분했으며 빌드 실패로 집계하지 않았습니다.
+
+`0.1.2-dev`는 `.secrets/firebase/google-services.json`이 없어 **FIREBASE_ENABLED=false**로 빌드했습니다. 실제 프로젝트 설정을 넣은 빌드·Google 로그인·원격 CRUD·Rules 배포·실기기 검증은 **0건**입니다. 공개 `0.1.1-dev` APK에는 Firebase SDK가 없습니다. 과거 Firestore Emulator **89/89**는 로컬 Rules 검증이며 원격 인증 증거가 아닙니다.
+
+이번 로그는 Git에서 제외한 `work/firebase-build-online-20261024-recovered.log`, `work/firebase-build-offline-20261024.log`에 보관합니다. APK 게시 기록은 [RELEASE.md](RELEASE.md), Firebase 구현·설정 경계는 [FIREBASE_IMPLEMENTATION.md](FIREBASE_IMPLEMENTATION.md), [FIREBASE_SETUP.md](FIREBASE_SETUP.md)에 기록합니다.
+
+UI 로그는 `work/firebase-ui17-20261024.log`, 집계는 `work/firebase-validation-20261024.json`에 보관합니다. 테스트 후 전용 `Runmoni_API36` 1개만 이름 확인 후 종료했습니다. 실제 Google 로그인·원격 Firestore·야외 GPS 증거로 확대하지 않습니다.
+
 ## 진행 이력
 
 1. Gradle8.13/AGP8.11.1/Kotlin2.0.21/SDK36 의존성 구성.

@@ -27,10 +27,18 @@
 - `assembleRelease`, JVM 6개, `lintRelease` 통과. release lint는 오류 0개·경고 17개입니다.
 - 패키지 `com.runmoni.app`, 버전 `0.1.1-dev`, versionCode `2`, minSdk `29`, targetSdk `36`입니다.
 - APK 파일 `runmoni-0.1.1-dev.apk`: `200,693,280` bytes.
-- SHA-256: `25772671956108deed9bde887104d83b4b7eefdf7d2dbd5c7b4223d143db78de9`.
+- SHA-256: `25772671956108deed9bde887104d83b4b7eefd7d2dbd5c7b4223d143db78de9`.
 - Android APK Signature Scheme v2 검증 통과, 서명자 1명, RSA 3072비트입니다.
 - 인증서 SHA-256: `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830`.
 - 전용 `Runmoni_API36` 에뮬레이터에서 기존 debug 앱을 제거한 뒤 설치 성공, cold launch `Status: ok`, 실행 프로세스를 확인했습니다. 앱 패키지 flags에 `DEBUGGABLE`이 없습니다.
 - 실제 휴대폰 설치·야외 러닝·2대 음성/DJ 송출은 0회입니다.
 
-원격 업로드 결과와 대시보드 반영은 게시 후 별도 기록합니다. Firebase 준비 가이드는 클라우드 연동 완료를 뜻하지 않습니다.
+## 2026-10-24 GitHub 게시 결과
+
+- Git Credential Manager 인증 후 소스 이력 보존 커밋 `b72eec72a05108374b6a4605f7958dfc869b1df0`을 main에 게시했습니다.
+- [v0.1.1-dev 개발 프리릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev)를 공개했습니다. draft=false, prerelease=true이며 기존 APK 바이트와 서명은 유지했습니다.
+- [APK 다운로드](https://github.com/wjdals988/runmoni/releases/download/v0.1.1-dev/runmoni-0.1.1-dev.apk), JSON 메타데이터, `SHA256SUMS.txt` 3개 파일을 게시했습니다. GitHub API의 APK 크기·SHA-256이 로컬 파일과 일치합니다.
+- 체크섬을 문서에 옮길 때 생긴 1글자 오타를 파일에서 계산한 64자리 값으로 정정했습니다. 실제 APK는 변경하지 않았고 체크섬 파일 2개와 릴리스 설명만 수정했습니다.
+- 이 공개 APK에는 Firebase SDK가 없습니다. `0.1.2-dev` 개발 소스의 Google 로그인·요약 백업은 실제 설정 파일·Rules 배포·원격 로그인 검증 후 별도 APK로 공개해야 합니다.
+
+Firebase 준비 가이드는 클라우드 연동 완료를 뜻하지 않습니다. 대시보드 반영과 개발본 검증은 각각의 변경·검증 기록에서 구분합니다.

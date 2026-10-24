@@ -93,6 +93,7 @@ data class AppState(
     val messages: List<ChatMessage> = emptyList(),
     val liveRunners: List<LiveRunner> = emptyList(),
     val audio: AudioUiState = AudioUiState(),
+    val cloud: CloudAccountState = CloudAccountState(),
     val apiUrl: String = "http://127.0.0.1:8787",
     val serverConnected: Boolean = false,
     val signedIn: Boolean = false,

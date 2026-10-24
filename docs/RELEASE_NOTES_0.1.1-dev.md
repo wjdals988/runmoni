@@ -27,6 +27,8 @@ Android 10(API 29) 이상이 필요합니다. `0.1.0-dev` debug APK와 인증서
 | 버전 / versionCode | `0.1.1-dev` / `2` |
 | 파일 | `runmoni-0.1.1-dev.apk` |
 | 크기 | `200,693,280 bytes` |
-| SHA-256 | `25772671956108deed9bde887104d83b4b7eefdf7d2dbd5c7b4223d143db78de9` |
+| SHA-256 | `25772671956108deed9bde887104d83b4b7eefd7d2dbd5c7b4223d143db78de9` |
 
 소스, 로컬 서버 실행법과 검증 경계는 [README](https://github.com/wjdals988/runmoni/blob/main/README.md)를 확인해 주세요. 키·개인 러닝 기록·로컬 DB는 배포 파일에 포함하지 않습니다.
+
+2026-10-24: 공개 APK 바이트는 변경하지 않고, 체크섬 표기의 1글자 오타를 파일에서 계산한 64자리 값으로 정정했습니다. JSON 메타데이터와 `SHA256SUMS.txt`에도 같은 계산값을 적용했습니다.

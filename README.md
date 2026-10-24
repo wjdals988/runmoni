@@ -1,6 +1,6 @@
 # 런모니 / Runmoni
 
-Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. Android 앱 `0.1.1-dev`(versionCode2)와 로컬 API `0.1.4`는 별도로 버전을 관리합니다. GitHub 릴리스 APK는 별도 개발 서명을 적용한 release build이며, 실제 휴대폰 검증은 아직 없습니다.
+Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. 현재 개발 소스는 Android `0.1.2-dev`(versionCode 3), 로컬 API는 `0.1.4`입니다. 공개 다운로드는 [서명된 `0.1.1-dev` APK](https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev)이며, 이 APK에는 Firebase 기능이 없습니다. 실제 휴대폰 검증은 아직 없습니다.
 
 ## 지금 구현한 범위
 
@@ -12,6 +12,7 @@ Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티�
 | 위치 공유 | 초대 성인 파일럿에 정밀 위치를 명시 동의 후 공유, 15초 게시·45초 만료, 종료·재시작 시 공유 해제 | 일반 대중에게 공개하는 지도와 미성년자 서비스는 후속 단계 |
 | 음성·DJ 음악 | LiveKit 음성, 음악 별도 트랙·별도 음량, 자체 파일 재생, 6개 외부 음악 앱 캡처 요청, Opus bridge | 실제 서버·2대 기기 송출은 미검증. 외부 앱은 캡처를 거부할 수 있음 |
 | 나·꾸미기 | 일/월/년 기록, 5슬롯×4종=20종 조합 아이템, 기본 아이템 5종, 구매·장착 | 유료 결제 없음. 기기 지갑과 서버 지갑은 별개 |
+| Google 계정·요약 백업 | Firebase Auth/Firestore SDK, 별도 계정 세션, 선택한 기록 1건의 요약 백업, 최근 50건 서버 조회·요약 삭제 | Firebase 프로젝트·설정 파일·Rules 배포 필요. 실제 Google 로그인·원격 저장은 미검증. GPS 원본·마일리지 제외 |
 
 네트워크나 음악 실패로 GPS 기록을 멈추지 않는 구조입니다. OS 강제 종료 뒤에는 자동 연속 기록을 주장하지 않고, 저장된 지점부터 사용자 복구를 제공합니다. 빈 화면에 가짜 러너·가짜 GPS 기록을 넣지 않습니다.
 
@@ -30,6 +31,8 @@ JDK 17 이상(현재 JDK 21), Android SDK 36, Gradle 8.13이 필요합니다. `l
 
 ## 로컬 서버와 연결
 
+보안 제약(2026-10-24): `cloudflared` 및 이를 대체하는 외부 공개 터널을 사용하지 않습니다. 로컬·USB 연결을 기본으로 하며, 테스트를 위한 서버 외부 공개나 방화벽 예외를 추가하지 않습니다. 작업 지침은 `AGENTS.md`에 기록합니다.
+
 ```powershell
 python -m venv backend/.venv
 backend/.venv/Scripts/python.exe -m pip install -r backend/requirements.lock.txt
@@ -45,7 +48,7 @@ Copy-Item backend/.env.example backend/.env
 - 에뮬레이터: 위 reverse 또는 앱 주소 `http://10.0.2.2:8787`
 - HTTP는 위 루프백/에뮬레이터 주소에만 허용. 외부 서비스는 HTTPS 필요
 
-서버 없이 러닝 기록·기기 미니미·자체 파일 재생이 가능합니다. 클라우드 NAVER Maps·Supabase·LiveKit 프로젝트는 아직 생성하지 않았습니다. Supabase 파일은 후속 이관용 설계이고 현재 앱의 실제 저장소는 Room+SQLite API입니다.
+서버 없이 러닝 기록·기기 미니미·자체 파일 재생이 가능합니다. 공용 DB·로그인은 Firebase 무료 Spark로 결정했습니다. 현재 프로젝트 설정 파일은 없으며 원격 Firebase·지도·LiveKit을 배포하지 않았습니다. 개인 원본은 Room, 커뮤니티는 SQLite API에 남아 있고 Firebase 첫 단계는 본인 요약 백업입니다. 기존 Supabase 파일은 과거 검토 이력으로 보관하며 현재 연결하지 않습니다.
 
 ## 마일리지
 
@@ -61,7 +64,8 @@ Copy-Item backend/.env.example backend/.env
 - [로컬 API 계약](backend/API.md)
 - [음성·음악 구성](docs/AUDIO.md)
 - [Supabase 이관 준비](supabase/README.md)
-- [Firebase 무료 프로젝트 준비 가이드](docs/FIREBASE_SETUP.md): 콘솔 설정 절차이며 SDK·원격 연동은 아직 없습니다.
+- [Firebase 무료 프로젝트 준비 가이드](docs/FIREBASE_SETUP.md): Android 설정·Google 제공자·소유자 전용 Rules 준비.
+- [Firebase 첫 단계 구현과 검증 경계](docs/FIREBASE_IMPLEMENTATION.md), [Rules와 실제 Emulator 검증](firebase/README.md)
 - [서명 APK 확인 기록](docs/RELEASE.md), [0.1.1-dev 릴리스 설명](docs/RELEASE_NOTES_0.1.1-dev.md)
 
 현재 개발 APK는 소규모 기능 검증용입니다. 대중 서비스 완료 버전으로 취급하지 않습니다.
@@ -72,7 +76,7 @@ DB는 이미2종을 사용합니다. 휴대폰의 `runmoni-runs.db`(Room2개 테
 
 GitHub 소스/APK 공개와 대시보드 등록은 클라우드 운영을 시작하는 작업이 아닙니다. 현재 상시 외부 HTTPS API·공유 DB·LiveKit 서버는 배포하지 않았습니다. APK만 설치한 친구들이 곧바로 서로의 크루/위치를 공유할 수는 없습니다.
 
-기기 Room은 유지하고 서버는 Supabase Auth/PostgreSQL과 연결하는 경로를 우선 준비합니다. 기존 SQL을 실행하는 것 외에도 인증 교체·PostgreSQL adapter·기존 계정 이관·보상/정원 트랜잭션·RLS 실행 검증·HTTPS 배포가 필요합니다. Firebase Firestore도 대안이지만 두 DB를 동시에 주 저장소로 운영하지 않습니다. 음성/음악은 별도 LiveKit과 audio bridge가 맡습니다.
+기기 Room은 유지하고 공용 계정·DB의 목표는 Firebase Auth/Firestore입니다. 첫 단계는 독립 Google 로그인과 본인 기록 요약의 수동 백업입니다. Firebase 로그인은 기존 파일럿 세션이나 위치 공유 권한을 열지 않습니다. 요약은 자가 기록이며 보상 근거로 사용하지 않습니다. 크루·파티·차단·정원·DJ·보상을 이전하려면 현재 API의 43개 경로·87개 SQL 실행 지점에서 저장소를 분리하고 Firestore 트랜잭션과 Firebase 토큰 검증을 연결해야 합니다. 신뢰 가능한 HTTPS API와 음성/음악의 LiveKit·audio bridge 운영은 별도 작업입니다.
 
 ## 릴리스 서명
 

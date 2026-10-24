@@ -62,6 +62,7 @@ class MainActivity : ComponentActivity() {
                         else requestPermissions(request, listOf(Manifest.permission.RECORD_AUDIO) + notificationPermission())
                     }
                     UiRequest.PickMusic -> musicFile.launch(arrayOf("audio/*"))
+                    UiRequest.GoogleSignIn -> lifecycleScope.launch { model.googleSignIn(this@MainActivity) }
                     is UiRequest.ExternalCapture -> {
                         if (hasPermission(Manifest.permission.RECORD_AUDIO)) launchCapture(request.packageName)
                         else requestPermissions(request, listOf(Manifest.permission.RECORD_AUDIO) + notificationPermission())

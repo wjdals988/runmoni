@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null
+        && request.auth.uid is string
+        && request.auth.uid.size() > 0
+        && request.auth.uid.size() <= 128
+        && request.auth.uid == uid;
+    }
+
+    function isRunSummary(data, runId) {
+      let fields = [
+        'schemaVersion', 'runId', 'startedAtMillis', 'finishedAtMillis',
+        'activeDurationMillis', 'distanceMeters', 'pointCount', 'backupAt'
+      ];
+      return data.keys().hasAll(fields)
+        && data.keys().hasOnly(fields)
+        && data.schemaVersion is int
+        && data.schemaVersion == 1
+        && data.runId is string
+        && data.runId.matches('^[A-Za-z0-9_-]{1,128}$')
+        && data.runId == runId
+        && data.startedAtMillis is int
+        && data.startedAtMillis >= 0
+        && data.startedAtMillis <= 253402300799999
+        && data.finishedAtMillis is int
+        && data.finishedAtMillis > 0
+        && data.finishedAtMillis >= data.startedAtMillis
+        && data.finishedAtMillis <= 253402300799999
+        && data.activeDurationMillis is int
+        && data.activeDurationMillis >= 0
+        && data.activeDurationMillis <= data.finishedAtMillis - data.startedAtMillis
+        && data.distanceMeters is number
+        // Both comparisons reject NaN and +/-Infinity without trusting client checks.
+        && data.distanceMeters >= 0
+        && data.distanceMeters <= 10000000
+        && data.pointCount is int
+        && data.pointCount >= 0
+        && data.pointCount <= 1000000
+        && data.backupAt is timestamp
+        && data.backupAt == request.time;
+    }
+
+    match /users/{uid}/runSummaries/{runId} {
+      allow get, list: if isOwner(uid);
+      allow create, update: if isOwner(uid) && isRunSummary(request.resource.data, runId);
+      allow delete: if isOwner(uid);
+    }
+
+    // No profiles, crews, parties, presence, wallets, rewards, tracks or other paths.
+    // A later trusted API and its separately reviewed rules must authorize those features.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

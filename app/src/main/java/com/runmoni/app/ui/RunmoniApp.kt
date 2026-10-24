@@ -97,7 +97,7 @@ fun RunmoniApp(state: AppState, actions: AppActions) {
         if (settings) SettingsDialog(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true })
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (state.openedRoomId.isNotBlank()) ChatDialog(state, actions)
-        selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions) { selectedRecord = null } }
+        selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud) { selectedRecord = null } }
         state.error?.let { error -> AlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { Text(error) }, confirmButton = { TextButton(onClick = actions::dismissError) { Text("확인") } }) }
     }
 }

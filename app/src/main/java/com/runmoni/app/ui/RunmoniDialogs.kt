@@ -32,6 +32,7 @@ import java.time.format.DateTimeFormatter
 internal fun SettingsDialog(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit) {
     var url by remember(state.apiUrl) { mutableStateOf(state.apiUrl) }
     var name by remember(state.profile.name) { mutableStateOf(state.profile.name) }
+    var cloudHistory by remember(state.cloud.uid) { mutableStateOf(false) }
     FormDialog("계정 및 러닝 설정", onDismiss, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
         OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
         Button(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().testTag("save_profile")) { Text("이름 저장") }
@@ -47,7 +48,20 @@ internal fun SettingsDialog(state: AppState, actions: AppActions, onDismiss: () 
         ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
         LocationSharingToggle(state, actions)
         SmallNote("지도 공유는 초대받은 테스터에게만 제공돼요. 서버가 연결되지 않아도 본인 러닝은 기기에 저장돼요.")
+        HorizontalDivider()
+        Text("Google 계정 · 기록 요약 백업", style = MaterialTheme.typography.titleMedium)
+        Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
+        if (state.cloud.uid.isBlank()) {
+            Button(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.busy, modifier = Modifier.fillMaxWidth().testTag("google_sign_in")) { Text("Google로 로그인") }
+            if (!state.cloud.configured) SmallNote("클라우드 백업 연결을 준비 중이에요. 러닝 기록은 계속 기기에 저장할 수 있어요.")
+        } else {
+            Text(state.cloud.accountLabel, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cloud_account"))
+            OutlinedButton(onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().testTag("cloud_history")) { Text("백업한 기록 요약 보기") }
+            TextButton(onClick = actions::signOutGoogle, enabled = !state.cloud.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 계정 로그아웃") }
+        }
+        SmallNote("백업은 기록 상세에서 선택한 1건씩 진행해요. GPS 경로 원본과 마일리지는 백업하지 않아요. Google 로그인만으로 파일럿 크루나 위치 공유에 참여하지는 않아요.")
     }
+    if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
 }
 
 @Composable
@@ -170,8 +184,9 @@ internal fun ChatDialog(state: AppState, actions: AppActions) {
 }
 
 @Composable
-internal fun RecordDialog(record: RunRecord, actions: AppActions, onDismiss: () -> Unit) {
+internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAccountState = CloudAccountState(), onDismiss: () -> Unit) {
     var deleteConfirmation by remember { mutableStateOf(false) }
+    var backupConfirmation by remember(cloud.uid, record.id) { mutableStateOf(false) }
     FormDialog("나의 러닝 기록", onDismiss, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         Text("${distance(record.distanceMeters)} km", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.testTag("record_distance"))
@@ -184,9 +199,33 @@ internal fun RecordDialog(record: RunRecord, actions: AppActions, onDismiss: () 
             record.splits.forEach { split -> Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { Text("${split.kilometer} km"); Text(duration(split.durationMillis)) } }
         }
         OutlinedButton(onClick = { actions.exportRun(record.id) }, modifier = Modifier.fillMaxWidth().testTag("export_run")) { Text("GPX 경로 내보내기") }
+        if (cloud.uid.isNotBlank()) {
+            OutlinedButton(onClick = { backupConfirmation = true }, enabled = record.finishedAtMillis > 0 && !cloud.busy, modifier = Modifier.fillMaxWidth().testTag("backup_cloud_run")) { Text("이 기록 요약을 계정에 백업") }
+            SmallNote("백업 계정: ${cloud.accountLabel}\n${cloud.status}")
+        }
         TextButton(onClick = { deleteConfirmation = true }, modifier = Modifier.testTag("delete_run")) { Text("기록 삭제", color = MaterialTheme.colorScheme.error) }
     }
-    if (deleteConfirmation) AlertDialog(onDismissRequest = { deleteConfirmation = false }, title = { Text("이 기록을 삭제할까요?") }, text = { Text("삭제한 기기 기록은 복구할 수 없어요.") }, confirmButton = { TextButton(onClick = { actions.deleteRun(record.id); onDismiss() }, modifier = Modifier.testTag("confirm_delete_run")) { Text("삭제") } }, dismissButton = { TextButton(onClick = { deleteConfirmation = false }) { Text("취소") } })
+    if (backupConfirmation && cloud.uid.isNotBlank()) AlertDialog(onDismissRequest = { backupConfirmation = false }, title = { Text("이 계정에 기록 요약을 백업할까요?") }, text = { Text("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") }, confirmButton = { TextButton(onClick = { backupConfirmation = false; actions.backupCloudRun(record.id, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.testTag("confirm_cloud_backup")) { Text("이 계정에 백업") } }, dismissButton = { TextButton(onClick = { backupConfirmation = false }) { Text("취소") } })
+    if (deleteConfirmation) AlertDialog(onDismissRequest = { deleteConfirmation = false }, title = { Text("이 기록을 삭제할까요?") }, text = { Text("삭제한 기기 기록은 복구할 수 없어요. 클라우드에 백업한 요약은 계정 설정에서 별도로 삭제해 주세요.") }, confirmButton = { TextButton(onClick = { actions.deleteRun(record.id); onDismiss() }, modifier = Modifier.testTag("confirm_delete_run")) { Text("삭제") } }, dismissButton = { TextButton(onClick = { deleteConfirmation = false }) { Text("취소") } })
+}
+
+@Composable
+internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions, onDismiss: () -> Unit) {
+    var pendingDelete by remember(cloud.uid) { mutableStateOf<CloudRunSummary?>(null) }
+    FormDialog("백업한 기록 요약", onDismiss, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
+        Text(cloud.accountLabel, style = MaterialTheme.typography.titleMedium)
+        Text(cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        SmallNote("최근 50건의 자가 기록 요약이에요. 경로 원본은 이 기기에만 있어요. 요약으로 경로를 복구하거나 마일리지를 적립하지 않아요.")
+        OutlinedButton(onClick = { actions.refreshCloudSummaries(cloud.uid) }, enabled = !cloud.busy && cloud.uid.isNotBlank(), modifier = Modifier.testTag("refresh_cloud_summaries")) { Text("새로고침") }
+        if (cloud.summaries.isEmpty() && !cloud.busy) Text("표시할 백업 요약이 없어요.")
+        cloud.summaries.forEach { summary ->
+            Row(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) { Text(dateTime(summary.startedAtMillis)); Text("${distance(summary.distanceMeters)} km · ${duration(summary.activeDurationMillis)}", style = MaterialTheme.typography.bodyMedium) }
+                TextButton(onClick = { pendingDelete = summary }, enabled = !cloud.busy, modifier = Modifier.testTag("delete_cloud_${summary.runId}")) { Text("요약 삭제") }
+            }
+        }
+    }
+    pendingDelete?.let { summary -> AlertDialog(onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { Text("계정: ${cloud.accountLabel}\n선택한 클라우드 요약만 삭제해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(onClick = { pendingDelete = null }) { Text("취소") } }) }
 }
 
 @Composable

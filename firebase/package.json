@@ -1,0 +1,19 @@
+{
+  "name": "runmoni-firebase-rules",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "firebase emulators:exec --only firestore --project demo-runmoni --config firebase.json \"npm run test:rules\"",
+    "test:rules": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs",
+    "emulators": "firebase emulators:start --only auth,firestore --project demo-runmoni --config firebase.json"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0",
+    "firebase-tools": "15.33.0"
+  }
+}

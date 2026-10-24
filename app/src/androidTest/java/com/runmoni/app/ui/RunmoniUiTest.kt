@@ -260,6 +260,43 @@ class RunmoniUiTest {
         compose.runOnIdle { assertEquals("ui-invite-fixture" to "테스트 러너", actions.login) }
     }
 
+    @Test fun missingCloudConfigurationKeepsGoogleLoginDisabled() {
+        val state = mutableStateOf(AppState())
+        val actions = FakeActions(state)
+        compose.setContent { RunmoniApp(state.value, actions) }
+        compose.onNodeWithTag("settings_button").performClick()
+        compose.onNodeWithTag("google_sign_in").performScrollTo().assertIsNotEnabled()
+        compose.runOnIdle { assertEquals(false, state.value.signedIn); assertEquals(false, state.value.publicLocation) }
+    }
+
+    @Test fun cloudAccountDoesNotGrantPilotLocationAccess() {
+        val state = mutableStateOf(AppState(cloud = CloudAccountState(configured = true, uid = "cloud-a", accountLabel = "계정 A")))
+        val actions = FakeActions(state)
+        compose.setContent { RunmoniApp(state.value, actions) }
+        compose.onNodeWithTag("settings_button").performClick()
+        compose.onNodeWithTag("share_location").performScrollTo().assertIsNotEnabled()
+        compose.runOnIdle { assertEquals(false, state.value.signedIn); assertEquals(false, state.value.publicLocation); assertEquals(0, actions.locationChanges.size) }
+    }
+
+    @Test fun cloudBackupNeedsFreshConfirmationAfterAccountSwitch() {
+        val record = RunRecord("cloud-run-ui", 1000, 2000, distanceMeters = 100.0, activeDurationMillis = 1000)
+        val state = mutableStateOf(AppState(records = listOf(record), cloud = CloudAccountState(configured = true, uid = "cloud-a", accountLabel = "계정 A")))
+        val actions = FakeActions(state)
+        compose.setContent { RunmoniTheme { RecordDialog(record, actions, state.value.cloud) {} } }
+        compose.onNodeWithTag("backup_cloud_run").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_cloud_backup").assertExists()
+        compose.runOnIdle { state.value = state.value.copy(cloud = CloudAccountState(configured = true, uid = "cloud-b", accountLabel = "계정 B")) }
+        compose.onNodeWithTag("confirm_cloud_backup").assertDoesNotExist()
+        compose.runOnIdle { assertEquals(0, actions.cloudBackups.size) }
+        compose.onNodeWithTag("backup_cloud_run").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_cloud_backup").performClick()
+        compose.runOnIdle {
+            assertEquals(listOf("cloud-run-ui" to "cloud-b"), actions.cloudBackups)
+            assertEquals(false, state.value.records.first().synced)
+            assertEquals(0, state.value.profile.mileage)
+        }
+    }
+
     private class FakeActions(private val state: MutableState<AppState>) : AppActions {
         var starts = 0; var pauses = 0; var resumes = 0; var finishes = 0
         val exports = mutableListOf<String>()
@@ -273,6 +310,7 @@ class RunmoniUiTest {
         val djChanges = mutableListOf<Triple<String, String, Boolean>>()
         val musicPackages = mutableListOf<String>()
         var login: Pair<String, String>? = null
+        val cloudBackups = mutableListOf<Pair<String, String>>()
         override fun startRun() { starts++; state.value = state.value.copy(activeRun = ActiveRun(id = "ui-contract-run", phase = RunPhase.RUNNING, startedAtMillis = System.currentTimeMillis(), gpsStatus = "UI 상태 계약 테스트")) }
         override fun pauseRun() { pauses++; state.value = state.value.copy(activeRun = state.value.activeRun.copy(phase = RunPhase.PAUSED)) }
         override fun resumeRun() { resumes++; state.value = state.value.copy(activeRun = state.value.activeRun.copy(phase = RunPhase.RUNNING)) }
@@ -290,6 +328,11 @@ class RunmoniUiTest {
         override fun configureServer(url: String) = Unit
         override fun signIn(inviteCode: String, name: String) { login = inviteCode to name }
         override fun signOut() = Unit
+        override fun signInGoogle() = Unit
+        override fun signOutGoogle() = Unit
+        override fun backupCloudRun(runId: String, expectedUid: String) { cloudBackups += runId to expectedUid }
+        override fun refreshCloudSummaries(expectedUid: String) = Unit
+        override fun deleteCloudSummary(runId: String, expectedUid: String) = Unit
         override fun refreshCommunity() = Unit
         override fun createCrew(input: NewCrew) = Unit
         override fun joinCrew(id: String) = Unit

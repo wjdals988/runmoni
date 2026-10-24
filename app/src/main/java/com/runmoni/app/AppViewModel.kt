@@ -27,6 +27,7 @@ sealed interface UiRequest {
     data class RunPermission(val recover: Boolean) : UiRequest
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
+    data object GoogleSignIn : UiRequest
     data class ExternalCapture(val packageName: String) : UiRequest
     data class ShareFile(val uri: Uri) : UiRequest
 }
@@ -53,6 +54,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
         viewModelScope.launch { app.runs.active.collect { active -> mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) } } }
+        viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
         viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank()) wallet.read() else it.profile) } } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
             if (api.token.isBlank()) {
@@ -176,6 +178,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).apply()
         mutableState.update { it.copy(signedIn = false, serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
     })
+    override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
+    suspend fun googleSignIn(context: Context) {
+        try { app.cloud.signIn(context) } catch (failure: CancellationException) { throw failure }
+        catch (_: Exception) { permissionDenied("Google 로그인에 실패했습니다. 클라우드 연결 설정을 확인해 주세요.") }
+    }
+    override fun signOutGoogle() = ignoreJob(work { app.cloud.signOut(app) })
+    override fun backupCloudRun(runId: String, expectedUid: String) = ignoreJob(work {
+        val record = app.runs.record(runId) ?: error("기기 기록이 없습니다.")
+        app.cloud.backupRun(record, expectedUid)
+    })
+    override fun refreshCloudSummaries(expectedUid: String) = ignoreJob(work { app.cloud.refreshSummaries(expectedUid) })
+    override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work { app.cloud.deleteSummary(runId, expectedUid) })
     override fun refreshCommunity() = ignoreJob(work { refreshNow() })
     private suspend fun refreshNow() {
         val health = api.health()

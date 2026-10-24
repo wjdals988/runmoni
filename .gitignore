@@ -27,3 +27,8 @@ signing.properties
 google-services.json
 *-firebase-adminsdk-*.json
 service-account*.json
+serviceAccount*.json
+**/node_modules/
+.firebase/
+firebase/.cache/
+*-debug.log*
