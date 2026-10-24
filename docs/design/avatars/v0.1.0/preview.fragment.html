@@ -1,0 +1,87 @@
+<div id="runmoni-avatar-v010">
+  <style>
+    #runmoni-avatar-v010 { color:var(--foreground); font-family:inherit; }
+    #runmoni-avatar-v010 .runner-pair { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px; }
+    #runmoni-avatar-v010 canvas { display:block;width:100%;max-width:280px;height:auto;margin:0 auto;image-rendering:pixelated; }
+    #runmoni-avatar-v010 .runner-controls { display:grid;gap:10px; }
+    #runmoni-avatar-v010 label { display:grid;gap:4px; }
+    #runmoni-avatar-v010 .playback { display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:20px; }
+    @media(max-width:440px) { #runmoni-avatar-v010 .runner-pair { grid-template-columns:1fr;gap:20px; } }
+  </style>
+  <h3>나만의 러닝 캐릭터</h3>
+  <div class="runner-pair">
+    <section aria-label="남자 기본 시안">
+      <h4>남자 기본 시안</h4>
+      <canvas width="256" height="256" role="img" aria-label="선택한 헤어와 의상을 입고 달리는 첫 번째 캐릭터"></canvas>
+      <div class="runner-controls">
+        <label>헤어<select class="form-select" data-runner="0" data-slot="hair"><option value="0">쇼트 · 헤드밴드</option><option value="1">포니테일 · 바이저</option></select></label>
+        <label>러닝 세트<select class="form-select" data-runner="0" data-slot="outfit"><option value="0">코랄 싱글렛 · 쇼츠 · 민트 러닝화</option><option value="1">민트 반팔 · 타이츠 · 코랄 러닝화</option></select></label>
+      </div>
+    </section>
+    <section aria-label="여자 기본 시안">
+      <h4>여자 기본 시안</h4>
+      <canvas width="256" height="256" role="img" aria-label="선택한 헤어와 의상을 입고 달리는 두 번째 캐릭터"></canvas>
+      <div class="runner-controls">
+        <label>헤어<select class="form-select" data-runner="1" data-slot="hair"><option value="0">쇼트 · 헤드밴드</option><option value="1" selected>포니테일 · 바이저</option></select></label>
+        <label>러닝 세트<select class="form-select" data-runner="1" data-slot="outfit"><option value="0">코랄 싱글렛 · 쇼츠 · 민트 러닝화</option><option value="1" selected>민트 반팔 · 타이츠 · 코랄 러닝화</option></select></label>
+      </div>
+    </section>
+  </div>
+  <div class="playback">
+    <button class="btn" type="button" id="runmoni-run-toggle">일시정지</button>
+    <label>재생 속도<select class="form-select" id="runmoni-run-speed"><option value="120">보통</option><option value="180">느리게</option><option value="90">빠르게</option></select></label>
+    <span class="text-small">4프레임 반복 · 꾸미기 4조합</span>
+  </div>
+  <div class="text-small" id="runmoni-run-status" aria-live="polite">시안을 불러오는 중</div>
+  <script>
+    (()=>{
+      const root=document.getElementById('runmoni-avatar-v010');
+      const canvases=[...root.querySelectorAll('canvas')];
+      const state=[{hair:0,outfit:0},{hair:1,outfit:1}];
+      const img=new Image();
+      let frame=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,delay=120,last=0,ready=false;
+      const toggle=root.querySelector('#runmoni-run-toggle');
+      const status=root.querySelector('#runmoni-run-status');
+      function draw(){
+        if(!ready)return;
+        const cw=img.naturalWidth/4,ch=img.naturalHeight/2;
+        canvases.forEach((canvas,i)=>{
+          const ctx=canvas.getContext('2d');ctx.clearRect(0,0,256,256);ctx.imageSmoothingEnabled=false;
+          // Keep each generated outfit intact; separately exchange the head/hair.
+          // Independent tops/bottoms need hand-registered production layers.
+          const outfit=state[i].outfit,hair=state[i].hair;
+          ctx.drawImage(img,frame*cw,outfit*ch,cw,ch,0,0,256,256);
+          if(hair!==outfit){
+            const neck=[.49,.48];
+            ctx.clearRect(0,0,256,neck[outfit]*256);
+            ctx.drawImage(img,frame*cw,hair*ch,cw,neck[hair]*ch,0,0,256,neck[outfit]*256+1);
+          }
+        });
+        root.dataset.frame=String(frame);
+      }
+      function apply(){
+        root.querySelectorAll('select[data-slot]').forEach(s=>{s.value=String(state[Number(s.dataset.runner)][s.dataset.slot]);});
+        status.textContent='헤어와 러닝 세트는 성별 제한 없이 선택할 수 있어요.';
+        draw();
+      }
+      root.querySelectorAll('select[data-slot]').forEach(s=>s.addEventListener('change',()=>{
+        state[Number(s.dataset.runner)][s.dataset.slot]=Number(s.value);apply();
+        if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{avatarPreviewVersion:'0.1.0',runners:state},privateContent:null}).catch(()=>{});
+      }));
+      function restore(saved){
+        const values=saved?.modelContent?.runners;
+        if(Array.isArray(values)&&values.length===2)values.forEach((v,i)=>['hair','outfit'].forEach(k=>{if(v[k]===0||v[k]===1)state[i][k]=v[k];}));
+        apply();
+      }
+      img.onload=()=>{ready=true;root.dataset.ready='true';restore(window.openai?.widgetState);};
+      img.onerror=()=>{status.textContent='캐릭터 이미지를 불러오지 못했습니다.';status.setAttribute('role','alert');};
+      img.src='__ATLAS_DATA_URI__';
+      toggle.textContent=playing?'일시정지':'달리기 재생';toggle.setAttribute('aria-pressed',String(playing));
+      toggle.addEventListener('click',()=>{playing=!playing;toggle.textContent=playing?'일시정지':'달리기 재생';toggle.setAttribute('aria-pressed',String(playing));draw();});
+      root.querySelector('#runmoni-run-speed').addEventListener('change',e=>{delay=Number(e.target.value);});
+      window.addEventListener('openai:set_globals',e=>restore(e.detail?.globals?.widgetState));
+      function tick(t){if(playing&&ready&&t-last>=delay){frame=(frame+1)%4;last=t;draw();}requestAnimationFrame(tick);}
+      requestAnimationFrame(tick);
+    })();
+  </script>
+</div>
