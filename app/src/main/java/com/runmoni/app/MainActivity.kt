@@ -9,10 +9,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.runmoni.app.ui.RunmoniApp
+import com.runmoni.app.ui.rememberAppUpdates
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -47,7 +49,12 @@ class MainActivity : ComponentActivity() {
     private val capture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> model.captureResult(result.resultCode, result.data, capturePackage) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { val state by model.state.collectAsState(); RunmoniApp(state, model) }
+        enableEdgeToEdge()
+        setContent {
+            val state by model.state.collectAsState()
+            val updates = rememberAppUpdates()
+            RunmoniApp(state, model, updates.state, onCheckUpdates = { updates.check(force = true) })
+        }
         lifecycleScope.launch {
             model.requests.collect { request ->
                 when (request) {

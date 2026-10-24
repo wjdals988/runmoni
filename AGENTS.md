@@ -20,3 +20,12 @@
 ## 변경 이력
 
 - 기존 사용자 변경을 보존하고, 변경 목적·확인 결과·미확인 범위를 CHANGELOG.md에 기록한다.
+
+## 디자인 작업의 지속 기준 — 2026-10-25 사용자 지시
+
+- 모든 앱·웹·아이콘·설정·정보 화면 디자인 작업은 https://github.com/voltagent/awesome-design-md 를 참고하고, 실제 적용 기준은 이 저장소의 DESIGN.md에 기록한다. 제3자 분석을 해당 브랜드의 공식 규격이라고 표현하지 않는다.
+- 캐릭터·도트·레이어·애니메이션 작업은 https://github.com/aseprite/aseprite 를 참고한다. 참고만 한 작업을 실제 Aseprite 제작물로 표시하거나 원본·라이선스를 임의로 주장하지 않는다.
+- UI/UX·가독성·가시성, 작은 화면·큰 글씨·키보드·조작 영역을 확인하고 디자인 완료 시 실제 앱 스크린샷을 제공한다.
+- 버전은 설치 앱의 실제 versionName/versionCode에서 읽는다. 새 APK는 신뢰하는 저장소의 서명 릴리스 정보로 비교하고, 확인 실패를 최신 버전이라고 표시하지 않는다. 업데이트는 사용자 확인 후 다운로드 화면으로 이동한다.
+- 버전 변경 시 `bundledAppHistory`와 CHANGELOG를 함께 갱신한다. `updates/android.json`에는 GitHub에 APK·메타데이터를 게시하고 크기·해시·서명을 확인한 버전만 넣는다. 미게시 개발 빌드를 최신 공개 업데이트로 알리지 않는다.
+- 앱 의존성이 바뀌면 `scripts/export-license-coordinates.init.gradle`와 `scripts/generate-license-inventory.py`를 오프라인으로 순서대로 실행해 앱 고지 목록과 THIRD_PARTY_NOTICES.md를 갱신한다. SDK 별도 이용약관을 오픈소스 라이선스로 바꾸어 표시하지 않는다.

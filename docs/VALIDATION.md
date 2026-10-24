@@ -1,6 +1,24 @@
-# 검증 기록 — 2026-10-13
+# 검증 기록
 
 빌드 통과, 합성 GPS 검증, 실기기 야외 정확도, 실제 클라우드 오디오 송출은 각각 다른 증거입니다. 아래에는 수행한 것만 완료로 기록합니다.
+
+## 2026-10-25 — 디자인·앱 정보·설정 포함 서명 개발본
+
+| 대상 | 확인 결과 | 경계 |
+|---|---|---|
+| Firebase 설정 | 프로젝트·패키지·Web OAuth·release 인증서4/4 일치 | 실제 Google 로그인/원격 CRUD/Rules 원문 대조0회 |
+| 배치·상태 instrumentation | 38/38, 기본33개72.071초+native5개18.998초 | 글씨1/1.5/2·폭320/360/411, 실제320dp/systemfont2 별도. 반복 조건을 테스트 수로 중복 합산하지 않음 |
+| 실제 아바타 재생 | 4/4 | 실제0..7프레임 그리기/픽셀 변화·옷장 정지/재개·STOP/START·시스템애니메이션0/1. frameOverride 대체 없음 |
+| 업데이트 상태 | 7개 JVM+3개 제어+앱정보 화면 검증 | 수치code/채널/URL/서명메타,6h/30s/중복/실패복구,확인전외부실행0/후정확한링크1. 실제 파일 다운로드/설치 시험은 아님 |
+| 최종 release 빌드 | 2분27초,82작업(36실행/1캐시/45최신) | offline/작업자1, 그 전38개 이후 색상 역할만 정규화 |
+| JVM | 28/28,실패/오류/건너뜀0 | Engine6+Cloud9+Avatar6+AppRelease7 |
+| lint | debug0오류/24경고, 최종release0오류/20경고 | baseline으로 경고 숨기지 않음 |
+| 코드 색상 대비 | 9/9 | 최종 브랜드 불투명 토큰. 실제 햇빛/모든지도배경/모든합성색 검증 아님 |
+| 라이선스 고지 | 실제 runtime148개,POM이름누락0,bundled134286bytes | 오프라인 캐시에서 추출, SDK 별도약관 구분. 법적 준수 인증 아님 |
+
+38개 구성은 기존UI17+디자인2+Avatar통합3+실제재생4+앱정보4+업데이트제어3+nativeDialog4+nativeAbout1이다. 처음37개34통과/3실패 및 수정은 DESIGN_AUDIT에 남겼다. `work/design-ui-final.log`, `work/design-ui-native-large-final.log`, `work/design-chat-screen-debug-build2-20261025.log`, `work/design-information-release-build-20261025.log`를 보존했다.
+
+실제 release APK 설치·화면·원격 업데이트 피드 확인은 실행 후 아래에 별도 기록한다. Google 본인 로그인과 야외 GPS·햇빛 가시성·TalkBack 실사용·2대 음성/DJ는 미검증이다. 이전82개 또는 Rules89개를 이번 실계정 검증으로 합산하지 않는다.
 
 ## 2026-10-24 추가 검증 — Firebase 개발 소스와 공개 APK
 

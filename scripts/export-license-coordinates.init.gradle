@@ -1,0 +1,18 @@
+import groovy.json.JsonOutput
+
+gradle.projectsEvaluated {
+    def appProject = gradle.rootProject.findProject(':app')
+    appProject.tasks.register('exportRunmoniLicenseCoordinates') {
+        doLast {
+            def artifacts = appProject.configurations.releaseRuntimeClasspath.resolvedConfiguration.resolvedArtifacts
+            def entries = artifacts.collect { artifact ->
+                [group: artifact.moduleVersion.id.group, name: artifact.moduleVersion.id.name,
+                 version: artifact.moduleVersion.id.version, file: artifact.file.absolutePath]
+            }.unique { "${it.group}:${it.name}:${it.version}" }.sort { "${it.group}:${it.name}" }
+            def output = gradle.rootProject.file('work/license-coordinates.json')
+            output.parentFile.mkdirs()
+            output.setText(JsonOutput.prettyPrint(JsonOutput.toJson(entries)), 'UTF-8')
+            println("Exported ${entries.size()} release runtime artifact coordinates (no APK build).")
+        }
+    }
+}

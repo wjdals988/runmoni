@@ -2,13 +2,15 @@
 
 # Runmoni Firebase 설정 — 순서대로 따라하기
 
-기준일 **2026-10-24** · 문서 **0.2.1** · Android 패키지 **`com.runmoni.app`**
+기준일 **2026-10-25** · 문서 **0.3.0** · Android 패키지 **`com.runmoni.app`**
+
+대상 프로젝트는 **[`runmoni-3c08e`](https://console.firebase.google.com/u/0/project/runmoni-3c08e/overview)** 입니다. 사용자는 Spark 생성·Android/Google 로그인·Firestore/Rules 설정과 파일 저장을 완료했다고 알려주셨습니다. 로컬 파일에서 프로젝트 ID·패키지·Web OAuth·릴리스 인증서 정보의 일치를 확인했습니다. 콘솔 내부 설정과 실제 로그인·원격 CRUD를 직접 검증했다는 뜻은 아닙니다. 아래 1~7단계는 재설정과 문제 해결에도 사용할 수 있도록 남깁니다.
 
 | 구분 | 현재 확인 상태 |
 |---|---|
 | 기존 `0.1.1-dev` 서명 APK | Firebase 기능 없음 |
-| `0.1.2-dev` 개발본 | Auth·Firestore SDK **2개**와 Google 계정·요약 백업 코드 있음. 설정 없는 debug 빌드·JVM **15개** 통과. 실제 프로젝트를 넣은 빌드·실기기 검증 및 새 APK 공개는 별도 단계 |
-| 실제 Firebase 연결 | 설정 파일 없음. 실제 Google 로그인·원격 CRUD 검증 **0건**, 원격 Rules 배포 **0건** |
+| Firebase 개발 코드 | Auth·Firestore SDK **2개**와 Google 계정·요약 백업 코드 있음. 이전 `0.1.2-dev`는 설정 없는 빌드·JVM **15개**·UI **17개** 통과. 현재 디자인 개편은 `0.1.3-dev`이며 새 결과는 별도 검증 |
+| 실제 Firebase 연결 | 설정 파일 구조 검사 통과. Rules 게시 등 콘솔 설정은 사용자 완료 보고. 실제 Google 로그인·원격 CRUD·원격 Rules 직접 검증 **0건** |
 | 기존 저장소 | 개인 GPS는 Room, 크루·파티·채팅·위치·지갑은 로컬 FastAPI + SQLite **14개 테이블** 유지 |
 
 Supabase 파일은 이전 설계 이력입니다. 현재 선택은 Firebase이며, 기존 SQLite 계정과 Firebase 계정이 자동으로 합쳐지지는 않습니다.
@@ -73,9 +75,11 @@ C:\Users\USER\Documents\runmoni\.secrets\firebase\google-services.json
 4. 파일에는 Google 로그인용 **Web OAuth client 정보**도 있어야 합니다. 누락 오류가 나면 4단계 활성화·저장 후 파일을 다시 받습니다. [공식 최신 설정 파일 안내](https://firebase.google.com/docs/auth/android/google-signin).
 5. 완료하면 채팅에는 **프로젝트 ID와 “파일 저장 완료”만** 알려주세요. 파일 전체나 서비스계정 비밀키를 붙여넣을 필요가 없습니다. Android 설정 파일은 앱 식별 정보이고, 서비스계정 JSON의 `private_key`와는 다릅니다. 이번 단계에서 서비스계정 키는 생성하지 않습니다. [설정 정보와 API 키의 성격](https://firebase.google.com/docs/projects/api-keys).
 
+저장 후 개발 단계에서는 `scripts/check-firebase-config.ps1`로 프로젝트 ID·Android 패키지·Web OAuth·릴리스 인증서 포함 여부를 검사합니다. **2026-10-25 네 항목 모두 일치**했습니다. API 키나 파일 전체를 출력하지 않습니다. 앱 빌드도 `runmoni-3c08e`가 아닌 프로젝트 설정을 거부합니다. 이 검사는 원격 로그인·DB 권한·Rules 게시를 대신하지 않습니다.
+
 ## 여기까지 끝나면 다음에 할 일
 
-개발 단계에서 설정을 읽는 새 APK를 빌드하고, 실기기에서 **Google 로그인 → 완료 기록 1개 수동 백업 → 목록 조회 → 계정 전환 시 타인 기록 차단**을 확인합니다. Rules가 허용하는 원격 삭제도 별도로 검증합니다. 검증 결과를 기록한 뒤 새 APK 공개를 진행합니다. 기존 `0.1.1-dev` APK에 설정 파일만 넣어 기능이 추가되지는 않습니다.
+설정을 포함한 새 APK를 빌드하고, 실기기에서 **설정 → Google로 로그인 → 완료 기록 상세 → 이 기록 요약을 계정에 백업 → 백업한 기록 요약 보기**를 확인합니다. 이어서 계정 전환 시 이전 계정의 목록이 비워지고 타인 경로 접근이 거부되는지, 요약 삭제가 기기 기록을 지우지 않는지 검증합니다. 실기기에 설치할 파일은 위 SHA-1에 해당하는 보관용 release 키로 서명합니다. 기본 debug 키로 Google 로그인을 시험하려면 debug SHA-1도 콘솔에 별도 등록해야 합니다. 기존 `0.1.1-dev` APK에 설정 파일만 넣어 기능이 추가되지는 않습니다.
 
 백업 필드는 **8개**입니다: `schemaVersion`, `runId`, `startedAtMillis`, `finishedAtMillis`, `activeDurationMillis`, `distanceMeters`, `pointCount`, 서버 시각 `backupAt`. GPS 좌표·전체 경로·마일리지·보상·아이템은 보내지 않습니다. 요약을 읽어도 원본 GPS 경로가 복원되는 것은 아닙니다.
 
@@ -98,5 +102,6 @@ C:\Users\USER\Documents\runmoni\.secrets\firebase\google-services.json
 | 2026-10-13 | 0.1.0 | 무료 콘솔 준비 안내 작성. 당시 Firebase SDK 미추가 상태 기록 |
 | 2026-10-24 | 0.2.0 | Firebase 선택 확정, APK와 소스 구분, 콘솔 7단계·Rules 게시·실제 설정 경로로 수정. Gradle/초기화 코드와 공식 문서 확인. 이번 문서 작업의 원격 설정·배포·커밋·푸시는 **0건**; 실제 Google 로그인·원격 CRUD·새 APK 공개는 미확인 |
 | 2026-10-24 | 0.2.1 | 공개 APK의 인증서 지문 2개를 apksigner로 대조. Google 로그인·Spark·Firestore 한도·Storage/Functions 결제 조건을 공식 문서로 재확인. 설정 없는 debug 빌드·JVM 15개 통과와 실제 클라우드 검증 0건을 구분 |
+| 2026-10-25 | 0.3.0 | 사용자가 생성한 Spark 프로젝트 `runmoni-3c08e`로 대상을 고정. 남은 콘솔 2~7단계·설정 검사 스크립트·이전 개발본 검증과 현재 디자인 개편 버전을 구분. 원격 설정은 직접 확인하지 않음 |
 
 할루시네이션 확률: 정량 산정 불가. 현재 코드·공식 문서·과거 Emulator 검증과 실제 클라우드 미검증 범위를 구분했습니다.

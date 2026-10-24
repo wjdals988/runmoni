@@ -31,10 +31,10 @@ class RunmoniUiTest {
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         val screens = listOf(
             "nav_explore" to "함께 뛰는 곳",
-            "nav_run" to "가볍게, 출발",
+            "nav_run" to "오늘의 러닝",
             "nav_crew" to "함께라서, 더 멀리",
             "nav_me" to "나의 러닝 이야기",
-            "nav_home" to "안녕하세요, 러너 님",
+            "nav_home" to "오늘도, 나답게.",
         )
         screens.forEach { (tag, title) ->
             compose.onNodeWithTag(tag).performClick().assertIsSelected()
@@ -49,13 +49,13 @@ class RunmoniUiTest {
         val actions = FakeActions(state)
         compose.setContent { RunmoniApp(state.value, actions) }
         compose.onNodeWithTag("nav_run").performClick()
-        compose.onNodeWithTag("start_run").performScrollTo().performClick()
+        compose.onNodeWithTag("start_run").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(1, actions.starts) }
-        compose.onNodeWithTag("pause_run").performScrollTo().performClick()
+        compose.onNodeWithTag("pause_run").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(1, actions.pauses); assertEquals(RunPhase.PAUSED, state.value.activeRun.phase) }
-        compose.onNodeWithTag("resume_run").performScrollTo().performClick()
+        compose.onNodeWithTag("resume_run").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(1, actions.resumes) }
-        compose.onNodeWithTag("finish_run").performScrollTo().performClick()
+        compose.onNodeWithTag("finish_run").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(0, actions.finishes) }
         compose.onNodeWithTag("confirm_finish_run").performClick()
         compose.runOnIdle { assertEquals(1, actions.finishes); assertEquals(1, state.value.records.size) }
@@ -172,6 +172,7 @@ class RunmoniUiTest {
         compose.onNodeWithTag("party_capacity").performScrollTo().performTextClearance()
         compose.onNodeWithTag("party_capacity").performTextInput("21")
         compose.onNodeWithTag("confirm_create_party").assertIsNotEnabled()
+        compose.onNodeWithTag("party_capacity_support", useUnmergedTree = true).performScrollTo().assertTextEquals("정원은 2~20명으로 입력해 주세요")
         compose.onNodeWithTag("party_capacity").performTextClearance()
         compose.onNodeWithTag("party_capacity").performTextInput("1")
         compose.onNodeWithTag("confirm_create_party").assertIsNotEnabled()

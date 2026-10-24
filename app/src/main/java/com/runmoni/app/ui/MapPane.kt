@@ -3,6 +3,8 @@ package com.runmoni.app.ui
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Canvas as AndroidCanvas
+import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,10 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -55,13 +61,14 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
     val usablePoints = remember(points) { points.filter { it.validForRoute() } }
     val validRunners = remember(runners) { runners.filter { it.hasValidCoordinates() } }
     var authFailed by remember { mutableStateOf(false) }
+    val largeText = LocalDensity.current.fontScale >= 1.3f
     if (BuildConfig.NAVER_MAP_CLIENT_ID.isBlank() || authFailed) {
-        Box(modifier.background(RunmoniColors.Mint).testTag("route_canvas")) {
+        Box(modifier.background(RunmoniColors.Mint).testTag("route_canvas").semantics { contentDescription = if (usablePoints.isEmpty()) "아직 표시할 GPS 경로가 없습니다" else "GPS 경로 ${usablePoints.size}개 지점. 중단 구간은 연결하지 않습니다" }) {
             RouteCanvas(usablePoints, Modifier.fillMaxSize())
-            Text(if (authFailed) "내 GPS 경로 · 지도 인증 확인 필요" else "내 GPS 경로 · 지도 연결 준비 필요", Modifier.align(Alignment.TopStart).padding(14.dp), style = MaterialTheme.typography.labelMedium)
-            if (usablePoints.isEmpty()) Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
+            if (!largeText || usablePoints.isNotEmpty()) Text(if (authFailed) "GPS 경로 · 지도 인증 확인 필요" else "GPS 경로 · 지도 미연결", Modifier.align(Alignment.TopStart).padding(14.dp), style = MaterialTheme.typography.labelMedium)
+            if (usablePoints.isEmpty()) Column(Modifier.align(Alignment.Center).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(if (points.isEmpty()) "아직 달린 경로가 없어요" else "GPS 정확도를 확인하고 있어요", style = MaterialTheme.typography.titleMedium)
-                Text(if (points.isEmpty()) "러닝을 시작하면 실제 경로가 쌓여요" else "정확도 30m 이내의 좌표만 경로에 표시해요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                if (!largeText) Text(if (points.isEmpty()) "러닝을 시작하면 실제 경로가 쌓여요" else "정확도 30m 이내의 좌표만 경로에 표시해요", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
             }
         }
         return
@@ -124,7 +131,7 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
         usablePoints.groupBy { it.segment }.values.forEach { segment ->
             if (segment.size > 1) paths += PathOverlay().apply {
                 coords = segment.map { LatLng(it.latitude, it.longitude) }
-                color = android.graphics.Color.rgb(241, 109, 85)
+                color = RunmoniColors.Primary.toArgb()
                 width = 10
                 this.map = ready
             }
@@ -183,10 +190,10 @@ private fun RouteCanvas(points: List<TrackPoint>, modifier: Modifier) {
             val route = Path()
             segment.forEachIndexed { index, point -> val p = at(point); if (index == 0) route.moveTo(p.x, p.y) else route.lineTo(p.x, p.y) }
             drawPath(route, Color.White, style = Stroke(9.dp.toPx(), cap = StrokeCap.Round))
-            drawPath(route, RunmoniColors.Coral, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+            drawPath(route, RunmoniColors.Primary, style = Stroke(5.dp.toPx(), cap = StrokeCap.Round))
         }
         drawCircle(Color.White, 8.dp.toPx(), at(valid.last()))
-        drawCircle(RunmoniColors.Coral, 5.dp.toPx(), at(valid.last()))
+        drawCircle(RunmoniColors.Primary, 5.dp.toPx(), at(valid.last()))
     }
 }
 

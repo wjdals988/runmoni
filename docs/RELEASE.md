@@ -1,5 +1,14 @@
 # 서명 APK 개발 프리뷰 게시
 
+## 0.1.3-dev / versionCode4 — 로컬 서명 개발본, 2026-10-25
+
+- 파일 `runmoni-0.1.3-dev.apk`, 209,946,174bytes, minSdk29/targetSdk36, DEBUGGABLE=false.
+- SHA-256 `d8d64d076e6b19b75888dc7edc90d7a00015280f001e6b4c053bb66e109aa676`. 인증서 SHA-256 `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830`로 기존 공개0.1.1과 같다. apksigner APK v2 검증 성공.
+- 설정 포함 release Firebase 활성화·대상 runmoni-3c08e 일치. 빌드2분27초·JVM28/28·release lint0오류/20경고.
+- 레이아웃/상태38/38은 마지막 Material3 표면 색상만 바꾸기 전의 debug 검사다. 최종 release 화면은 별도로 확인한다.
+- 새 APK는 outputs에 로컬 보존했고 공개 GitHub 자산/대시보드 다운로드를 교체하지 않았다. updates/android.json도 기존 공개0.1.1-dev/code2만 알린다.
+- 실제 Google 로그인·원격 백업·실기기 야외 GPS0회. 본인 로그인은 FIREBASE_DEVICE_CHECK 절차로 후속 확인한다.
+
 ## 0.1.1-dev / versionCode2
 
 개인 러닝 기록·미니미와 로컬 서버 기반 크루 기능을 시험하는 개발 프리뷰입니다. GitHub 게시가 외부 서버·DB·지도·LiveKit 배포를 뜻하지 않습니다. Room2개 테이블과 로컬 서버SQLite14개 테이블은 이미 사용하며 Supabase는 미배포 이관 준비입니다.

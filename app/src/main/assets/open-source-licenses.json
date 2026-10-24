@@ -1,0 +1,890 @@
+[
+  {
+    "name": "androidx.activity:activity 1.9.3",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.activity:activity:1.9.3\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.activity:activity-compose 1.9.3",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.activity:activity-compose:1.9.3\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.activity:activity-ktx 1.9.3",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.activity:activity-ktx:1.9.3\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.annotation:annotation-experimental 1.4.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.annotation:annotation-experimental:1.4.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.annotation:annotation-jvm 1.9.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.annotation:annotation-jvm:1.9.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/annotation/annotation/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.appcompat:appcompat 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.appcompat:appcompat:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.appcompat:appcompat-resources 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.appcompat:appcompat-resources:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.arch.core:core-common 2.2.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.arch.core:core-common:2.2.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.arch.core:core-runtime 2.2.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.arch.core:core-runtime:2.2.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.autofill:autofill 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.autofill:autofill:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.browser:browser 1.4.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.browser:browser:1.4.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.collection:collection-jvm 1.4.2",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.collection:collection-jvm:1.4.2\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.collection:collection-ktx 1.4.2",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.collection:collection-ktx:1.4.2\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.animation:animation-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.animation:animation-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.animation:animation-core-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.animation:animation-core-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.foundation:foundation-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.foundation:foundation-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.foundation:foundation-layout-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.foundation:foundation-layout-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.material3:material3-android 1.3.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.material3:material3-android:1.3.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.material:material-icons-core-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.material:material-icons-core-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.material:material-icons-extended-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.material:material-icons-extended-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.material:material-ripple-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.material:material-ripple-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.runtime:runtime-android 1.7.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.runtime:runtime-android:1.7.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.runtime:runtime-saveable-android 1.7.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.runtime:runtime-saveable-android:1.7.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-geometry-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-geometry-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-graphics-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-graphics-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-text-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-text-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-tooling-preview-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-tooling-preview-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-unit-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-unit-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.compose.ui:ui-util-android 1.7.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.compose.ui:ui-util-android:1.7.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.concurrent:concurrent-futures 1.1.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.concurrent:concurrent-futures:1.1.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.core:core 1.16.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.core:core:1.16.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/core/core/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.core:core-ktx 1.16.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.core:core-ktx:1.16.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/core/core-ktx/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.core:core-viewtree 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.core:core-viewtree:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/core/core-viewtree/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.credentials:credentials 1.3.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.credentials:credentials:1.3.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/credentials/credentials/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.credentials:credentials-play-services-auth 1.3.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.credentials:credentials-play-services-auth:1.3.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nMETA-INF/androidx/credentials/credentials-play-services-auth/LICENSE.txt\nApache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS"
+  },
+  {
+    "name": "androidx.cursoradapter:cursoradapter 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.cursoradapter:cursoradapter:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.customview:customview 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.customview:customview:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.customview:customview-poolingcontainer 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.customview:customview-poolingcontainer:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.drawerlayout:drawerlayout 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.drawerlayout:drawerlayout:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.emoji2:emoji2 1.3.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.emoji2:emoji2:1.3.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.emoji2:emoji2-views-helper 1.3.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.emoji2:emoji2-views-helper:1.3.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.fragment:fragment 1.5.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.fragment:fragment:1.5.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.graphics:graphics-path 1.0.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.graphics:graphics-path:1.0.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.interpolator:interpolator 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.interpolator:interpolator:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-common-java8 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-common-java8:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-common-jvm 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-common-jvm:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-livedata 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-livedata:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-livedata-core 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-livedata-core:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-livedata-core-ktx 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-process 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-process:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-runtime-android 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-runtime-android:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-runtime-compose-android 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-runtime-compose-android:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-runtime-ktx-android 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-runtime-ktx-android:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-service 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-service:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-viewmodel 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-viewmodel:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-viewmodel-android 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-viewmodel-android:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-viewmodel-compose-android 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-viewmodel-compose-android:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-viewmodel-ktx 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.lifecycle:lifecycle-viewmodel-savedstate 2.8.7",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.7\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.loader:loader 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.loader:loader:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.localbroadcastmanager:localbroadcastmanager 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.profileinstaller:profileinstaller 1.3.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.profileinstaller:profileinstaller:1.3.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.recyclerview:recyclerview 1.3.2",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.recyclerview:recyclerview:1.3.2\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.resourceinspection:resourceinspection-annotation 1.0.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.resourceinspection:resourceinspection-annotation:1.0.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.room:room-common 2.6.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.room:room-common:2.6.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.room:room-ktx 2.6.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.room:room-ktx:2.6.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.room:room-runtime 2.6.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.room:room-runtime:2.6.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.savedstate:savedstate 1.2.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.savedstate:savedstate:1.2.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.savedstate:savedstate-ktx 1.2.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.savedstate:savedstate-ktx:1.2.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.sqlite:sqlite 2.4.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.sqlite:sqlite:2.4.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.sqlite:sqlite-framework 2.4.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.sqlite:sqlite-framework:2.4.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.startup:startup-runtime 1.1.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.startup:startup-runtime:1.1.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.swiperefreshlayout:swiperefreshlayout 1.1.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.tracing:tracing 1.2.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.tracing:tracing:1.2.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.vectordrawable:vectordrawable 1.1.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.vectordrawable:vectordrawable:1.1.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.vectordrawable:vectordrawable-animated 1.1.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.vectordrawable:vectordrawable-animated:1.1.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.versionedparcelable:versionedparcelable 1.1.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.versionedparcelable:versionedparcelable:1.1.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.viewpager:viewpager 1.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.viewpager:viewpager:1.0.0\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.work:work-runtime 2.9.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.work:work-runtime:2.9.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "androidx.work:work-runtime-ktx 2.9.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "androidx.work:work-runtime-ktx:2.9.1\n제공자: The Android Open Source Project\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.auth0.android:jwtdecode 2.0.2",
+    "license": "The MIT License (MIT)",
+    "url": "https://raw.githubusercontent.com/auth0/jwtdecode.android/master/LICENSE",
+    "notice": "com.auth0.android:jwtdecode:2.0.2\n제공자: Auth0, Luciano Balmaceda\nPOM 배포 메타데이터: The MIT License (MIT)\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.getkeepsafe.relinker:relinker 1.4.4",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.getkeepsafe.relinker:relinker:1.4.4\n제공자: KeepSafe Software, Inc.\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.github.davidliu:audioswitch 039a35aefab7747c557242fa216c9ea11743b604",
+    "license": "Apache 2.0",
+    "url": "https://github.com/twilio/audioswitch/blob/master/LICENSE.txt",
+    "notice": "com.github.davidliu:audioswitch:039a35aefab7747c557242fa216c9ea11743b604\n제공자: Twilio\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-auth 21.1.1",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-auth:21.1.1\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-auth-api-phone 18.0.2",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-auth-api-phone:18.0.2\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-auth-base 18.0.10",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-auth-base:18.0.10\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-base 18.3.0",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-base:18.3.0\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-basement 18.4.0",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-basement:18.4.0\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-fido 21.0.0",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-fido:21.0.0\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.gms:play-services-tasks 18.2.0",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.gms:play-services-tasks:18.2.0\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.libraries.identity.googleid:googleid 1.1.1",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.libraries.identity.googleid:googleid:1.1.1\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.play:core-common 2.0.3",
+    "license": "Play Core Software Development Kit Terms of Service",
+    "url": "https://developer.android.com/guide/playcore/license",
+    "notice": "com.google.android.play:core-common:2.0.3\nPOM 배포 메타데이터: Play Core Software Development Kit Terms of Service\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.play:integrity 1.3.0",
+    "license": "Play Integrity API Terms of Service",
+    "url": "https://developer.android.com/google/play/integrity/overview#tos",
+    "notice": "com.google.android.play:integrity:1.3.0\nPOM 배포 메타데이터: Play Integrity API Terms of Service\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android.recaptcha:recaptcha 18.6.1",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.android.recaptcha:recaptcha:18.6.1\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.android:annotations 4.1.1.4",
+    "license": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0",
+    "notice": "com.google.android:annotations:4.1.1.4\n제공자: The Android Open Source Projects\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.code.findbugs:jsr305 3.0.2",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.code.findbugs:jsr305:3.0.2\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.code.gson:gson 2.10.1",
+    "license": "Apache-2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.code.gson:gson:2.10.1\nPOM 배포 메타데이터: Apache-2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.dagger:dagger 2.46",
+    "license": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.dagger:dagger:2.46\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.errorprone:error_prone_annotations 2.26.0",
+    "license": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.errorprone:error_prone_annotations:2.26.0\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-annotations 16.2.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-annotations:16.2.0\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-appcheck-interop 17.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-appcheck-interop:17.0.0\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-auth 23.2.1",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.firebase:firebase-auth:23.2.1\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-auth-interop 20.0.0",
+    "license": "Android Software Development Kit License",
+    "url": "https://developer.android.com/studio/terms.html",
+    "notice": "com.google.firebase:firebase-auth-interop:20.0.0\nPOM 배포 메타데이터: Android Software Development Kit License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-common 21.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-common:21.0.0\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-common-ktx 21.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-common-ktx:21.0.0\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-components 18.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-components:18.0.0\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-database-collection 18.0.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-database-collection:18.0.1\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:firebase-firestore 25.1.4",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:firebase-firestore:25.1.4\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.firebase:protolite-well-known-types 18.0.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.firebase:protolite-well-known-types:18.0.1\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.guava:failureaccess 1.0.1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.guava:failureaccess:1.0.1\n제공자: Kevin Bourrillion\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.guava:guava 32.1.3-android",
+    "license": "Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.guava:guava:32.1.3-android\n제공자: Kevin Bourrillion\nPOM 배포 메타데이터: Apache License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.guava:listenablefuture 9999.0-empty-to-avoid-conflict-with-guava",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava\n제공자: Kevin Bourrillion\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.google.protobuf:protobuf-javalite 3.25.9",
+    "license": "BSD-3-Clause",
+    "url": "https://opensource.org/licenses/BSD-3-Clause",
+    "notice": "com.google.protobuf:protobuf-javalite:3.25.9\n제공자: Protocol Buffers\nPOM 배포 메타데이터: BSD-3-Clause\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.naver.maps:geometry 1.3.0",
+    "license": "NAVER Maps SDK 별도 이용약관",
+    "url": "https://navermaps.github.io/android-map-sdk/guide-ko/0.html",
+    "notice": "com.naver.maps:geometry:1.3.0\nPOM 배포 메타데이터: NAVER Maps SDK 별도 이용약관\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.naver.maps:map-sdk 3.24.0",
+    "license": "NAVER Maps SDK 별도 이용약관",
+    "url": "https://navermaps.github.io/android-map-sdk/guide-ko/0.html",
+    "notice": "com.naver.maps:map-sdk:3.24.0\nPOM 배포 메타데이터: NAVER Maps SDK 별도 이용약관\n\nassets/navermap-sdk/LICENSE\nCopyright © 2018-2026 NAVER Corp.\nAll rights reserved."
+  },
+  {
+    "name": "com.squareup.okhttp3:okhttp 4.12.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.squareup.okhttp3:okhttp:4.12.0\n제공자: Square, Inc.\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\nokhttp3/internal/publicsuffix/NOTICE\nNote that publicsuffixes.gz is compiled from The Public Suffix List:\nhttps://publicsuffix.org/list/public_suffix_list.dat\n\nIt is subject to the terms of the Mozilla Public License, v. 2.0:\nhttps://mozilla.org/MPL/2.0/"
+  },
+  {
+    "name": "com.squareup.okhttp3:okhttp-brotli 4.10.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.squareup.okhttp3:okhttp-brotli:4.10.0\n제공자: Square, Inc.\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.squareup.okio:okio-jvm 3.6.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "com.squareup.okio:okio-jvm:3.6.0\n제공자: Square, Inc.\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "com.vdurmont:semver4j 3.1.0",
+    "license": "The MIT License",
+    "url": "https://www.opensource.org/licenses/mit-license.php",
+    "notice": "com.vdurmont:semver4j:3.1.0\n제공자: Vincent DURMONT\nPOM 배포 메타데이터: The MIT License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.github.webrtc-sdk:android-prefixed 144.7559.14",
+    "license": "The 3-Clause BSD License",
+    "url": "https://opensource.org/license/bsd-3-clause/",
+    "notice": "io.github.webrtc-sdk:android-prefixed:144.7559.14\n제공자: webrtc-sdk\nPOM 배포 메타데이터: The 3-Clause BSD License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-android 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-android:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-api 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-api:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-context 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-context:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-core 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-core:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-okhttp 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-okhttp:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-protobuf-lite 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-protobuf-lite:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-stub 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-stub:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.grpc:grpc-util 1.62.2",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.grpc:grpc-util:1.62.2\n제공자: gRPC Contributors\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.livekit:livekit-android 2.29.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "io.livekit:livekit-android:2.29.0\n제공자: LiveKit\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.livekit:livekit-uniffi-android 0.1.12",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "io.livekit:livekit-uniffi-android:0.1.12\n제공자: LiveKit\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "io.perfmark:perfmark-api 0.26.0",
+    "license": "Apache 2.0",
+    "url": "https://opensource.org/licenses/Apache-2.0",
+    "notice": "io.perfmark:perfmark-api:0.26.0\n제공자: Carl Mastrangelo\nPOM 배포 메타데이터: Apache 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "javax.inject:javax.inject 1",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "javax.inject:javax.inject:1\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "javax.sip:android-jain-sip-ri 1.3.0-91",
+    "license": "Public Domain",
+    "url": "https://www.gnu.org/licenses/license-list.html#PublicDomain",
+    "notice": "javax.sip:android-jain-sip-ri:1.3.0-91\n제공자: Jean Deruelle, Vladimir Ralev, ranga\nPOM 배포 메타데이터: Public Domain\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "net.java.dev.jna:jna 5.19.1",
+    "license": "LGPL-2.1-or-later; Apache-2.0",
+    "url": "https://www.gnu.org/licenses/old-licenses/lgpl-2.1",
+    "notice": "net.java.dev.jna:jna:5.19.1\n제공자: Timothy Wall, Matthias Bläsing\nPOM 배포 메타데이터: LGPL-2.1-or-later; Apache-2.0\n\nclasses.jar/META-INF/LICENSE\nSPDX-License-Identifier: Apache-2.0 OR LGPL-2.1-or-later\n\nJava Native Access (JNA) is licensed under the LGPL, version 2.1\nor later, or (from version 4.0 onward) the Apache License,\nversion 2.0.\n\nYou can freely decide which license you want to apply to the project.\n\nYou may obtain a copy of the LGPL License at:\n\nhttp://www.gnu.org/licenses/licenses.html\n\nA copy is also included in the downloadable source code package\ncontaining JNA, in file \"LGPL2.1\", under the same directory\nas this file.\n\nYou may obtain a copy of the Apache License at:\n\nhttp://www.apache.org/licenses/\n\nA copy is also included in the downloadable source code package\ncontaining JNA, in file \"AL2.0\", under the same directory\nas this file.\n\nCommercial support may be available, please e-mail\ntwall[at]users[dot]sf[dot]net."
+  },
+  {
+    "name": "org.brotli:dec 0.1.2",
+    "license": "MIT License",
+    "url": "https://www.opensource.org/licenses/mit-license.php",
+    "notice": "org.brotli:dec:0.1.2\nPOM 배포 메타데이터: MIT License\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.checkerframework:checker-qual 3.37.0",
+    "license": "The MIT License",
+    "url": "https://opensource.org/licenses/MIT",
+    "notice": "org.checkerframework:checker-qual:3.37.0\n제공자: Michael Ernst, Suzanne Millstein\nPOM 배포 메타데이터: The MIT License\n\nMETA-INF/LICENSE.txt\nChecker Framework qualifiers\nCopyright 2004-present by the Checker Framework developers\n\nMIT License:\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE."
+  },
+  {
+    "name": "org.codehaus.mojo:animal-sniffer-annotations 1.23",
+    "license": "MIT license",
+    "url": "https://spdx.org/licenses/MIT.txt",
+    "notice": "org.codehaus.mojo:animal-sniffer-annotations:1.23\n제공자: Kohsuke Kaw, Stephen Connolly\nPOM 배포 메타데이터: MIT license\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlin:kotlin-stdlib 2.0.21",
+    "license": "The Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlin:kotlin-stdlib:2.0.21\n제공자: Kotlin Team\nPOM 배포 메타데이터: The Apache License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlin:kotlin-stdlib-jdk7 1.9.25",
+    "license": "The Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25\n제공자: Kotlin Team\nPOM 배포 메타데이터: The Apache License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlin:kotlin-stdlib-jdk8 1.9.10",
+    "license": "The Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10\n제공자: Kotlin Team\nPOM 배포 메타데이터: The Apache License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlinx:kotlinx-coroutines-android 1.9.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm 1.9.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.9.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlinx:kotlinx-coroutines-play-services 1.9.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm 1.5.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.5.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm 1.5.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.5.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jetbrains:annotations 23.0.0",
+    "license": "The Apache Software License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jetbrains:annotations:23.0.0\n제공자: JetBrains Team\nPOM 배포 메타데이터: The Apache Software License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  },
+  {
+    "name": "org.jspecify:jspecify 1.0.0",
+    "license": "The Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+    "notice": "org.jspecify:jspecify:1.0.0\n제공자: Kevin Bourrillion\nPOM 배포 메타데이터: The Apache License, Version 2.0\n\n이 아티팩트 안에 독립 LICENSE/NOTICE 텍스트가 없어 배포 메타데이터와 제공자 원문을 안내합니다."
+  }
+]

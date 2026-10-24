@@ -1,0 +1,19 @@
+{
+  "preview": {
+    "package": "com.runmoni.app",
+    "version": "0.1.1-dev",
+    "versionCode": 2,
+    "fileName": "runmoni-0.1.1-dev.apk",
+    "sizeBytes": 200693280,
+    "sha256": "25772671956108deed9bde887104d83b4b7eefd7d2dbd5c7b4223d143db78de9",
+    "certificateSha256": "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830",
+    "buildType": "release",
+    "signed": true,
+    "physicalDeviceTests": 0,
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.1.1-dev/runmoni-0.1.1-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev",
+    "notes": "첫 공개 서명 개발 프리뷰. 기기 러닝 기록·로컬 서버 기반 크루·파티. Firebase는 포함되지 않습니다."
+  },
+  "schemaVersion": 1,
+  "stable": null
+}

@@ -142,7 +142,7 @@ class RunTrackingService : Service(), LocationListener {
         val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val paused = state.phase == RunPhase.PAUSED
         val pause = PendingIntent.getService(this, 1, Intent(this, javaClass).setAction(if (paused) RESUME else PAUSE), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_runmoni).setContentTitle(if (paused) "런모니 · 일시정지" else "런모니 · 러닝 기록 중")
+        return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_stat_runmoni).setContentTitle(if (paused) "런모니 · 일시정지" else "런모니 · 러닝 기록 중")
             .setContentText(String.format(Locale.KOREA, "%.2f km · %d분", state.distanceMeters / 1000, state.activeDurationMillis / 60_000))
             .setContentIntent(open).setOngoing(true).addAction(0, if (paused) "재개" else "일시정지", pause).build()
     }

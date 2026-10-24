@@ -38,6 +38,7 @@ if (firebaseFile.exists()) {
     firebaseValues["FIREBASE_API_KEY"] = apiKey.orEmpty()
     firebaseValues["FIREBASE_WEB_CLIENT_ID"] = webClient.orEmpty()
     require(firebaseValues.values.all { it.isNotBlank() }) { "Firebase Android configuration is incomplete. Enable Google sign-in and download the updated google-services.json." }
+    require(firebaseValues["FIREBASE_PROJECT_ID"] == "runmoni-3c08e") { "Expected Firebase project runmoni-3c08e. Download this project's Android configuration." }
     require(firebaseValues["FIREBASE_PROJECT_ID"]!!.matches(Regex("[a-z][a-z0-9-]{4,28}[a-z0-9]"))) { "Firebase project_id format is invalid." }
     require(firebaseValues["FIREBASE_APP_ID"]!!.matches(Regex("1:[0-9]+:android:[A-Za-z0-9]+"))) { "Firebase Android application ID format is invalid." }
     require(firebaseValues["FIREBASE_API_KEY"]!!.matches(Regex("[A-Za-z0-9_-]{20,200}"))) { "Firebase Android API key format is invalid." }
@@ -51,8 +52,8 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.1.2-dev"
+        versionCode = 4
+        versionName = "0.1.3-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
         buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${configString("NAVER_MAP_CLIENT_ID")}\"")
