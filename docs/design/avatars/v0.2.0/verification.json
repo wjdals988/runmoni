@@ -25,7 +25,31 @@
       "physicalDeviceVerified": false
     },
     "firstPass": { "total": 37, "failed": 3, "historyPreserved": true },
-    "signedReleaseVerificationPending": true,
+    "signedReleaseVerificationPending": false,
+    "finalSignedRelease": {
+      "sourceCommit": "e757cb7a3065433a423f64c366d5943f068d8374",
+      "path": "outputs/runmoni-0.1.3-dev.apk",
+      "bytes": 209946174,
+      "sha256": "d8d64d076e6b19b75888dc7edc90d7a00015280f001e6b4c053bb66e109aa676",
+      "certificateSha256": "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830",
+      "apkV2Verified": true,
+      "debuggable": false,
+      "installedAndColdLaunched": true,
+      "coldLaunchMillis": 2201,
+      "screenshots": 16,
+      "screenshotDirectory": "outputs/design-review/20261025/release",
+      "nativeLargeFontProductVisible": true,
+      "releaseLintErrors": 0,
+      "releaseLintWarnings": 20,
+      "sourcePublished": true,
+      "apkPublished": false,
+      "publicFeedPcHttpStatus": 200,
+      "publicFeedPcBytes": 810,
+      "publicFeedAndroidVerified": false,
+      "googleLoginTests": 0,
+      "physicalDeviceTests": 0,
+      "avdStopped": true
+    },
     "remoteBackendVerified": false
   },
   "jvm": {

@@ -13,5 +13,21 @@
   "apkBodyDownloaded": false,
   "certificateReverifiedThisAudit": false,
   "feedUrl": "https://raw.githubusercontent.com/wjdals988/runmoni/main/updates/android.json",
-  "feed404ObservedBeforePublication": true
+  "feed404ObservedBeforePublication": true,
+  "postPublication": {
+    "sourceCommit": "e757cb7a3065433a423f64c366d5943f068d8374",
+    "githubConnectorReadSucceeded": true,
+    "pcHttpStatus": 200,
+    "pcRawBytes": 810,
+    "schemaVersion": 1,
+    "previewVersion": "0.1.1-dev",
+    "previewVersionCode": 2,
+    "androidAppReadSucceeded": false,
+    "androidRetryAlsoFailed": true,
+    "failureCauseConfirmed": false,
+    "apkBodyDownloaded": false,
+    "newSignedApkPublished": false,
+    "dashboardApkReplaced": false,
+    "log": "work/release-feed-recheck.log"
+  }
 }

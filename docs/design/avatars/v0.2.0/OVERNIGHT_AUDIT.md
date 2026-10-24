@@ -11,7 +11,7 @@
 | 작은 폭·큰 글씨에서 새 9탭/5개 장비 조작 | 갱신한 largeFontSettingsAndClosetKeepSingleCloseAndSelectableSlots | 최종320dp/fontScale2.0 그룹5/5 통과 | work/design-ui-native-large-final.log의 해당 테스트 STATUS_CODE 0과 최종 OK(5 tests) 확인. 9탭·5하위 슬롯 선택, 미리보기 bounds 고정, 세트→일반 상의 해제와 텍스트 overflow 검사 포함. 첫 실패 실행과 최종 통과를 구분 |
 | 실제 시간 기반 8프레임 재생 | 새 AvatarPlaybackTest 4개, frameOverride 없이 검사 | 최종4/4 통과 | work/design-ui-final.log: 정상8프레임 방문/캡처, 옷장 정지·재개, Lifecycle 중단·재개, 시스템 애니메이션0 정지·복원 통과. 실제 draw0 도달과 Compose 스케줄러 정착 후5회 캡처 동일성 확인 |
 | 과거 아이템과 서버 데이터 | backend/tests/test_avatar.py 등 전체27/27, 로컬 지갑 복원 계측 | 로컬 근거 확인됨 | 새 앱은 새 백엔드 필요. 이전 서버의 새 필드422 가능성 및 원격 게시 미검증 경계 유지 |
-| 앱 정보의 실제 업데이트 피드 | AppUpdateRepository의 고정 GitHub raw URL, 로컬 updates/android.json | 공개 경로 미완료 | GitHub 연결 도구로 main/updates/android.json 읽기 결과404. 로컬 미추적 피드는 기존 공개0.1.1-dev/code2만 포함. 기존 공개 APK 정보 대조 후 작은 피드 게시·원격 재읽기 필요. 새 미검증 APK를 피드에 올리는 요구가 아님 |
+| 앱 정보의 실제 업데이트 피드 | AppUpdateRepository의 고정 GitHub raw URL, updates/android.json | 피드 게시 확인·AVD 조회 미완료 | 최초404 이력을 보존. e757cb7 게시 후 연결 도구 및 PC 제한 GET HTTP200/810bytes 확인. 실제 AVD 앱은 재확인도 실패해 원인 미확정. 피드는 기존 공개0.1.1-dev/code2만 포함하며 새 로컬 APK를 공개본으로 알리지 않음 |
 
 ## 검토와 결정
 
@@ -43,3 +43,13 @@ JVM XML을 직접 합산해 28/28(AvatarArt6, AppRelease7, CloudRunSummary9, Run
 `docs/APP_INFORMATION_AND_COURSES.md`와 LocalWallet/AppViewModel/backend/CloudRunSummary를 대조해, 꾸미기 포인트는 현재 모드에 따라 기기/파일럿 지갑을 사용함, 1km=100P는 기본 환산이고 서버는 GPS 검증/일일 한도에 따라 제한함, 파일럿 원장·구매 중복 방지는 이미 존재하지만 Google UID와 두 지갑 연결은 별도임을 명확히 하도록 전달했다. 현재 Android 기록 모델은 고도/노면을 저장하지 않지만 백엔드에는 optional altitude_m가 있다는 구분도 전달했다. 앱 소스와 해당 문서는 검토 요청대로 직접 수정하지 않았다.
 
 코스 범위는 다른 채팅의 실제 사용자 답변으로 확인했다: “디자인·앱 정보·업데이트를 먼저 완성하고 코스는 설계 확정”. 따라서 코스 공개/브리핑 API를 이번 완료 조건으로 추가하지 않는다. 개인 코스 + 작성자가 공개에 동의한 코스만 탐색한다는 별도 사용자 선택도 유지한다.
+
+## 최종 서명본·화면 후속 확인
+
+코드 커밋 e757cb7a3065433a423f64c366d5943f068d8374는 GitHub main에 게시하고 원격 SHA를 대조했다. 로컬 `outputs/runmoni-0.1.3-dev.apk`는209,946,174bytes, SHA-256 `d8d64d076e6b19b75888dc7edc90d7a00015280f001e6b4c053bb66e109aa676`, 기존 공개 키와 같은 인증서로 APK v2 검증을 통과했다. 최종 release build2분27초·JVM28/28·lint0오류/20경고다. 이전38개 상태 검사는 마지막 표면 색상 역할 정규화 전이며 최종 색상은 실제 서명본 캡처로 확인했다.
+
+설치 후 실제 COLD 실행2,201ms, 일반/320dp·글씨200% 원본14장과 후속2장=16장을 `outputs/design-review/20261025/release`에 보존했다. 처음 큰 글씨 옷장 캡처만 보고 상품 조작 불가라고 판단한 검토 의견은 철회했다. 분류와 상품은 같은 스크롤 안에 있으며, 추가 스크롤 캡처에서 고정 미니미와 상품명·500P 가격·구매 버튼 전체가 동시에 보였다. 실제 잔액0P로 구매는 수행하지 않았다. 이 판단 정정 때문에 새 UI를 만들거나 APK를 다시 빌드하지 않았다.
+
+게시 후 PC에서 공개 raw 피드를 HTTP200/810bytes로 확인했지만 AVD 앱의 실제 조회는 초기 및 재확인 모두 실패했다. 공개 파일 존재와 Android HTTPS 성공을 구분하고 실패 안내를 보존했다. DNS 해석을 HTTPS 성공으로 확대하지 않았으며 프록시·방화벽·외부 터널 설정은 변경하지 않았다. 원인 미확정이다.
+
+Google 계정0개·로그인 버튼 활성화까지만 확인했다. 본인 로그인/원격 CRUD/실기기0회, 새 APK 공개/대시보드 APK 교체0회다. 공개 다운로드는0.1.1-dev/code2를 유지한다. 각 순차 작업 후 화면/글씨를 복원하고 전용 AVD를 이름 확인 후 종료했다. 전체 근거는 상위 VALIDATION/RELEASE/SCREENSHOT_REVIEW_20261025 문서와 verification.json의 finalSignedRelease에 기록했다.

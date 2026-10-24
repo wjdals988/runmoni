@@ -24,6 +24,8 @@ Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티�
 
 [디자인 기준](DESIGN.md) · [화면 감사](docs/DESIGN_AUDIT.md) · [앱 정보·코스 설계](docs/APP_INFORMATION_AND_COURSES.md). 코스 탐색·공개·파티 브리핑은 이번에는 설계 확정이며 실제 구현/배포는 후속입니다.
 
+최종 서명 APK의 실제 AVD 화면16장과 확인 경계는 [화면 확인 기록](docs/SCREENSHOT_REVIEW_20261025.md)에 정리했습니다. 배치·상태38/38과 JVM28/28을 통과했지만, AVD의 실제 공개 업데이트 피드 조회는 실패했으며 본인 Google 로그인·원격 백업은 아직0회입니다. PC에서 공개 피드를 읽은 결과와 앱의 원격 동작을 구분합니다.
+
 ## 빌드
 
 JDK 17 이상(현재 JDK 21), Android SDK 36, Gradle 8.13이 필요합니다. `local.properties`에 `sdk.dir`을 넣습니다. 지도는 선택 사항이며 `NAVER_MAP_CLIENT_ID`를 같은 파일 또는 환경변수로 넣습니다. 비밀 서버 키는 APK에 넣지 않습니다.

@@ -45,6 +45,10 @@
 
 native320dp/글씨200%에서는 9탭·액세서리5하위분류, 고정 미리보기, 세트→일반 상의 해제까지 확인했다. 시스템 키보드에 가리던 채팅은 다른 세션이 Activity 전체 화면으로 수정했고 같은 최종38개에 포함해 통과했다. 기록한 APK는 위의 최초 아바타 통합 debug 보존본이며, 최종 서명 release와 공개 피드는 다른 세션의 후속 검증 대상이다. 38개 fixture는 원격 서버·개인 Google 로그인·야외 GPS·실기기 검증을 포함하지 않는다.
 
+후속 최종 서명본은 코드 e757cb7 기준 `outputs/runmoni-0.1.3-dev.apk`(209,946,174bytes)이며 같은 release 인증서·APK v2·실제 AVD 설치/COLD 실행2,201ms를 확인했다. 일반/큰 글씨/후속 실제 화면16장과 최종 release lint0오류/20경고를 보존했다. 큰 글씨 상품 화면은 목록을 위로 스크롤하면 미니미·상품명·500P 가격·구매 버튼 전체가 함께 보이며, 초기 화면만 보고 조작 불가라고 판단했던 의견은 철회했다. 자세한 해시·로그·공개 경계는 verification.json의 overnightAudit.finalSignedRelease와 OVERNIGHT_AUDIT에 있다.
+
+소스와 작은 공개 피드는 GitHub에 게시했다. PC의 피드 GET은HTTP200/810bytes지만 AVD 앱 조회는 재확인도 실패해 실제 원격 업데이트 성공으로 표시하지 않는다. 새 서명 APK는 로컬 보존본, 공개 다운로드는 기존0.1.1-dev/code2다. 본인 Google 로그인·원격 백업·실기기0회이며 AVD는 확인 후 종료했다.
+
 ## 파일과 재현
 
 - 실제 화면: `native-screenshots/closet-running-gear.png`, `native-screenshots/closet-santa.png`.

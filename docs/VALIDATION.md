@@ -18,7 +18,18 @@
 
 38개 구성은 기존UI17+디자인2+Avatar통합3+실제재생4+앱정보4+업데이트제어3+nativeDialog4+nativeAbout1이다. 처음37개34통과/3실패 및 수정은 DESIGN_AUDIT에 남겼다. `work/design-ui-final.log`, `work/design-ui-native-large-final.log`, `work/design-chat-screen-debug-build2-20261025.log`, `work/design-information-release-build-20261025.log`를 보존했다.
 
-실제 release APK 설치·화면·원격 업데이트 피드 확인은 실행 후 아래에 별도 기록한다. Google 본인 로그인과 야외 GPS·햇빛 가시성·TalkBack 실사용·2대 음성/DJ는 미검증이다. 이전82개 또는 Rules89개를 이번 실계정 검증으로 합산하지 않는다.
+### 최종 서명 APK 설치·화면·공개 피드 확인
+
+- 코드 커밋 `e757cb7a3065433a423f64c366d5943f068d8374`를 GitHub main에 일반 푸시하고 원격 SHA 일치를 확인했다. 새 APK는 이 코드로 빌드한 로컬 개발본이며 GitHub 자산에 게시하지 않았다.
+- `outputs/runmoni-0.1.3-dev.apk`를 전용 Runmoni_API36에 설치하고 실제 MainActivity의 COLD 실행을 확인했다. Android 측 TotalTime 2,201ms, WaitTime 2,242ms이며 실기기 성능 측정은 아니다.
+- 최종 브랜드 색상으로 5탭·앱 정보·버전 이력·지원 링크·라이선스·마일리지·옷장·계정 설정 및 실제320dp/글씨200% 화면14장을 촬영했다. 피드 재확인과 큰 글씨 상품 스크롤 후 화면2장을 더해 원본 PNG는16장이다. [화면 확인 기록](SCREENSHOT_REVIEW_20261025.md).
+- 큰 글씨 옷장에는 분류와 상품이 같은 스크롤 영역에 있다. 초기 캡처만으로 조작 불가라고 판단한 검토 의견은 철회했다. 스크롤 후 미니미를 유지하면서 ‘민트 러닝 반팔’·500P 가격·구매 버튼 전체가 같은 화면에 보이는 것을 추가 캡처했다. 기기 잔액0P여서 버튼은 정상적으로 비활성화되며 실제 구매를 수행하지 않았다.
+- Google 계정0개, 설정 화면의 Google 로그인 버튼 활성화를 확인했다. 본인 로그인·원격 백업/조회/삭제·계정 전환은0회다.
+- 게시 후 고정 raw 피드를 GitHub 연결 도구와 PC의 제한된 GET으로 확인했다. PC 응답 HTTP200/810bytes, schema1·공개 preview0.1.1-dev/code2이며 APK 본문 다운로드0bytes다. 게시 전404 이력과 구분한다.
+- **AVD 앱의 실제 피드 조회는 초기 및 재확인 모두 실패했다.** DNS는 주소를 해석했지만 이것만으로 HTTPS 연결을 보장하지 않는다. PC GET 성공·테스트용 제어 상태 통과를 AVD의 실제 원격 조회 성공으로 표시하지 않는다. 앱은 실패/재확인을 표시하며 최신 버전이라고 단정하지 않았다. 원인은 미확정이며 프록시·방화벽·외부 터널 설정을 변경하지 않았다.
+- 각 순차 검증의 finally에서 화면 크기·글씨를 복원하고 이름을 확인해 AVD를 종료했다. 최종 연결 기기0대·emulator/qemu 프로세스0개를 확인한다. 로그인 대기용 AVD를 켜두지 않는다.
+
+로그: `work/release-review-execution.log`, `work/release-review-cold-launch.log`, `work/release-feed-recheck.log`, `work/release-wardrobe-review.log`. 요약은 `outputs/design-review/20261025/release-review.json`, `wardrobe-viewport.json`에 보존한다. Google 본인 로그인과 야외 GPS·햇빛 가시성·TalkBack 실사용·2대 음성/DJ는 미검증이다. 이전82개 또는 Rules89개를 이번 실계정 검증으로 합산하지 않는다.
 
 ## 2026-10-24 추가 검증 — Firebase 개발 소스와 공개 APK
 

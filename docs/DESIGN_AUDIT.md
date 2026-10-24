@@ -43,4 +43,6 @@ RunmoniApp, RunmoniTheme, RunmoniDialogs, MapPane, MiniMi의 정적 검토와 �
 
 원본 스크린샷은 `outputs/design-review/20261025/design-review`에 있다. `*-fixture-not-a-published-release`는 업데이트 알림용 합성 데이터이며 실제 게시 버전이 아니다. 최종 사용자용 스크린샷은 서명 release APK에서 별도로 캡처한다.
 
+최종 서명 release의 실제 원본16장은 `outputs/design-review/20261025/release`에 보존했다. [화면 확인 기록](SCREENSHOT_REVIEW_20261025.md)에서 일반/320dp·글씨200%와 피드 실패 상태를 구분한다. 초기 큰 글씨 옷장은 상품이 아래에 있어 검토 중 조작 불가라는 의견이 나왔으나, 소스상 분류와 상품은 함께 스크롤되며 후속 실제 캡처에서 상품명·가격·버튼 전체의 동시 가시성을 확인해 해당 판단을 철회했다. 새 분류 제어를 만들거나 검증된 앱을 불필요하게 재빌드하지 않았다.
+
 디자인의 선택 근거와 기준은 [DESIGN.md](../DESIGN.md), Firebase 콘솔 절차는 [FIREBASE_SETUP.md](FIREBASE_SETUP.md)를 확인한다.
