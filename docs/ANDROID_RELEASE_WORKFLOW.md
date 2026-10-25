@@ -20,7 +20,7 @@
 
 ## 계획·비공개 초안·공개
 
-Python은 기존 번들 런타임을 사용한다. 새 패키지를 설치하지 않는다. 아래 `<version>`은 `0.1.5-dev` 같은 개발 버전, `<commit>`은 실제 소스의 전체40자리 소문자 SHA로 바꾼다.
+Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. GitHub 메타데이터 API와 자산 업로드 모두 기존 native `curl.exe`를 사용하며 외부 Python HTTP 패키지를 설치하지 않는다. 이전 `httpx` 기반 실행은 현재 번들에서 모듈 누락으로 인증 조회·API 요청 전에 실패했으므로 이 native 어댑터로 대체했다. 아래 `<version>`은 `0.1.5-dev` 같은 개발 버전, `<commit>`은 실제 소스의 전체40자리 소문자 SHA로 바꾼다.
 
 ```powershell
 & '<bundled-python.exe>' scripts/publish_android_preview.py --version <version> --target <commit> --plan
@@ -44,7 +44,11 @@ Python은 기존 번들 런타임을 사용한다. 새 패키지를 설치하지
 & '<bundled-python.exe>' scripts/publish_android_preview.py --version <version> --target <commit> --publish --rate-kib 256
 ```
 
-GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰을 출력·파일 저장·프로세스 인수에 넣지 않는다. curl에는 stdin 설정으로만 전달한다. 첫 `-q`로 사용자 curlrc를 읽지 않고 CR/LF/따옴표/역슬래시가 있는 자격은 거부한다. 자식 프로세스의 Git/GCM trace·TLS key-log 환경변수를 제외하며 publisher 프로세스 안에서도 TLS key-log를 비활성화한다. 사용자 전역 설정은 변경하지 않는다. 오류 stderr/HTTP body 원문도 출력하지 않는다. 기존 인증이 없으면 자동 로그인창을 띄우지 않고 중단한다. HTTP API는 keep-alive를 남기지 않아 curl 업로드와 TCP 연결이 겹치지 않게 하고 한 파일씩 업로드한다. 업로드 기본 제한256KiB/s(약2.10Mbit/s), 200MiB의 이론적 최소시간은800초다. 이것이 실제 속도나 PC 전체 지연 해결을 보장하지 않는다. timeout은 파일 크기와 선택 속도로 계산하며 자동 반복 재시도는 없다.
+GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰을 출력·파일 저장·프로세스 인수에 넣지 않는다. curl에는 stdin 설정으로만 전달한다. 첫 `-q`로 사용자 curlrc를 읽지 않고 CR/LF/따옴표/역슬래시가 있는 자격은 거부한다. 자식 프로세스의 Git/GCM trace·TLS key-log 환경변수를 제외하고 사용자 전역 설정은 변경하지 않는다. 오류 stderr/HTTP body 원문도 출력하지 않는다. 기존 인증이 없으면 자동 로그인창을 띄우지 않고 중단한다.
+
+메타데이터용 `CurlApiAdapter`는 고정 저장소의 정해진 GET/POST/PATCH 경로만 허용한다. 각 요청은 native curl1개·HTTP1.1·연결30초·전체120초이며 redirect를 따라가지 않는다. curl의 크기 제한과 Python의 제한 읽기로 API 응답 본문을 최대1MiB로 제한하고 크기 초과 시 자식 curl을 종료한다. 결과는 HTTP status와 JSON object이며 API 오류는 status만 보고한다. 요청 JSON은 `ensure_ascii=True`로 직렬화하고 그 문자열을 다시 JSON의 따옴표/역슬래시 규칙으로 감싸 curl stdin config의 `data-binary`에 넣는다. 한국어·emoji·실제 개행/CR·quote·backslash와 문자 그대로의 `\n`을 JSON 의미대로 보존하며, 본문도 파일/argv로 보내지 않는다.
+
+메타데이터 요청마다 curl 프로세스가 끝나므로 유휴 API 소켓이 자산 업로드와 겹치지 않으며 한 번에1request·한 파일씩 처리한다. 업로드 기본 제한256KiB/s(약2.10Mbit/s), 200MiB의 이론적 최소시간은800초다. 이것이 실제 속도나 PC 전체 지연 해결을 보장하지 않는다. 업로드 timeout은 파일 크기와 선택 속도로 계산하며 자동 반복 재시도는 없다.
 
 원격 main·tag가 요청 commit과 다르면 중단하고 force/태그 이동을 하지 않는다. draft의 제목·본문과 예상 내용이 다르거나 계획 외 자산이 있으면 공개하지 않는다. draft에 APK·해시·metadata3개를 올리고 서버 digest·크기·다운로드URL을 재확인한 뒤에만 prerelease를 공개한다. `--stage-draft`로 준비한 3자산이 같으면 `--publish`는 다시 업로드하지 않고 재검증 후 공개 전환한다. 기존 uploaded asset이 다르면 삭제·덮어쓰기 없이 중단한다. 중단된 업로드의 `starter` 자산도 자동 삭제하지 않는다. 기존 공개 release가 불완전하면 자동 수리하지 않으며 APK 본문 원격 재다운로드는0회다. 공개 결과는 `work/published-release-<version>.json`에 기록한다.
 
@@ -58,4 +62,4 @@ GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰�
 & '<bundled-python.exe>' -m unittest discover -s scripts/tests -p test_publish_android_preview.py -v
 ```
 
-테스트의 APK 바이트는 작은 텍스트 fixture이며 실제 서명 APK로 취급하지 않는다. 경로/안정버전/축약SHA 거부, 버전code·패키지·해시·크기·서명선언·URL 핀, 체크섬 파일명, dirty 보존본 차단, 기본 plan의 credential/게시 미호출과 자산 재사용 경계를 검사한다. fake HTTP 제어 흐름은 공개 전 3자산 최신 검증·불일치 시 공개 차단과 `--stage-draft`의 공개 PATCH0회·동일 초안 재사용·기존 공개본 변경0회를 다룬다. 실행하지 않은 테스트를 통과했다고 기록하지 않는다.
+테스트의 APK 바이트는 작은 텍스트 fixture이며 실제 서명 APK로 취급하지 않는다. 경로/안정버전/축약SHA 거부, 버전code·패키지·해시·크기·서명선언·URL 핀, 체크섬 파일명, dirty 보존본 차단, 기본 plan의 credential/게시 미호출과 자산 재사용 경계를 검사한다. 제어 흐름 테스트는 자체 API 함수의 status/JSON 반환을 fake로 대체하며 외부 HTTP 모듈을 주입하지 않는다. 공개 전 3자산 최신 검증·불일치 시 공개 차단과 `--stage-draft`의 공개 PATCH0회·동일 초안 재사용·기존 공개본 변경0회를 다룬다. 별도 fake curl 검사는 ASCII JSON/config roundtrip, URL/메서드 제한, 응답1MiB 제한·자식 종료, 실패 시 raw 미출력을 다룬다. socket·subprocess 실행 차단을 유지하고 실제 curl/API 요청을 하지 않는다. 실행하지 않은 테스트를 통과했다고 기록하지 않는다.

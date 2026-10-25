@@ -6,7 +6,6 @@ import importlib.util
 import io
 import json
 from pathlib import Path
-import sys
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -108,13 +107,76 @@ class FakeGitHub:
         return asset
 
 
+class CapturedStdin(io.BytesIO):
+    def close(self):
+        if not self.closed:
+            self.saved = self.getvalue()
+        super().close()
+
+
+class BoundedStdout(io.BytesIO):
+    def __init__(self, payload):
+        super().__init__(payload)
+        self.read_sizes = []
+        self.bytes_read = 0
+
+    def read(self, size=-1):
+        self.read_sizes.append(size)
+        value = super().read(size)
+        self.bytes_read += len(value)
+        return value
+
+
+class FakeCurlProcess:
+    def __init__(self, payload, code=0):
+        self.stdin = CapturedStdin()
+        self.stdout = BoundedStdout(payload)
+        self.exit_code = code
+        self.returncode = None
+        self.killed = False
+
+    def wait(self, timeout=None):
+        if self.returncode is None:
+            self.returncode = self.exit_code
+        return self.returncode
+
+    def poll(self):
+        return self.returncode
+
+    def kill(self):
+        self.killed = True
+        self.returncode = -9
+
+
+def decode_curl_config_string(value):
+    """Test decoder for curl's documented double-quoted escape layer, not JSON."""
+    if len(value) < 2 or value[0] != '"' or value[-1] != '"':
+        raise AssertionError("Expected one quoted curl config value")
+    result = []
+    index = 1
+    escapes = {"\\": "\\", '"': '"', "n": "\n", "r": "\r", "t": "\t", "v": "\v"}
+    while index < len(value) - 1:
+        char = value[index]
+        if char == "\\":
+            index += 1
+            if index >= len(value) - 1 or value[index] not in escapes:
+                raise AssertionError("Unknown curl config escape")
+            char = escapes[value[index]]
+        elif char == '"':
+            raise AssertionError("Unescaped quote inside curl config value")
+        result.append(char)
+        index += 1
+    return "".join(result)
+
+
 class PreviewPublisherTest(unittest.TestCase):
     def setUp(self):
         # A future regression must fail the offline test instead of starting a
         # real request or credential helper while these fixtures are evaluated.
         for patcher in (mock.patch("socket.socket", side_effect=AssertionError("Offline test: no network")),
                         mock.patch("socket.create_connection", side_effect=AssertionError("Offline test: no connection")),
-                        mock.patch.object(publisher.subprocess, "run", side_effect=AssertionError("Offline test: no process"))):
+                        mock.patch.object(publisher.subprocess, "run", side_effect=AssertionError("Offline test: no process")),
+                        mock.patch.object(publisher.subprocess, "Popen", side_effect=AssertionError("Offline test: no child process"))):
             patcher.start()
             self.addCleanup(patcher.stop)
 
@@ -129,16 +191,18 @@ class PreviewPublisherTest(unittest.TestCase):
 
     @contextlib.contextmanager
     def transport(self, root, remote):
-        fake_httpx = SimpleNamespace(Client=lambda **_: remote, Timeout=lambda *_, **__: None,
-                                     Limits=lambda **values: values)
         real_validate = publisher.validate_remote_asset
 
         def validate(asset, local, version):
             real_validate(asset, local, version)
             remote.events.append(("validated", local["name"]))
 
-        with mock.patch.dict(sys.modules, {"httpx": fake_httpx}), \
-                mock.patch.dict(publisher.os.environ, {}, clear=False), \
+        def request(method, path, _token, *, json_body=None):
+            options = {"json": json_body} if json_body is not None else {}
+            response = remote.request(method, publisher.API + path, **options)
+            return response.status_code, response.json()
+
+        with mock.patch.object(publisher, "github_api_request", side_effect=request), \
                 mock.patch.object(publisher, "ROOT", root), \
                 mock.patch.object(publisher, "github_credential", return_value="gho_" + "x" * 32), \
                 mock.patch.object(publisher, "upload_asset", side_effect=remote.upload), \
@@ -415,6 +479,87 @@ class PreviewPublisherTest(unittest.TestCase):
             original = json.loads((root / "work" / f"staged-release-{VERSION}.json").read_text(encoding="utf-8"))
             self.assertTrue(original["draft"])
             self.assertFalse(original["publicReleaseConfirmed"])
+
+    def test_native_api_json_config_roundtrip_preserves_unicode_and_escapes_without_argv_secrets(self):
+        payload = {"name": "런모니 🏃", "body": '첫 줄\n다음 줄\r\n"quote"',
+                   "literal": r"\n", "path": r"C:\runner\new", "tab": "left\tright"}
+        token = "gho_" + "x" * 32
+        process = FakeCurlProcess(b'{"id":7}' + publisher.HTTP_STATUS_MARKER + b"201")
+        with mock.patch.object(publisher.subprocess, "Popen", return_value=process) as popen:
+            status, response = publisher.github_api_request("POST", "/releases", token, json_body=payload)
+        self.assertEqual((201, {"id": 7}), (status, response))
+        argv = popen.call_args.args[0]
+        options = popen.call_args.kwargs
+        config = process.stdin.saved.decode("ascii")
+        data_line = next(line for line in config.splitlines() if line.startswith("data-binary = "))
+        encoded = data_line.split(" = ", 1)[1]
+        serialized = decode_curl_config_string(encoded)
+        self.assertEqual(payload, json.loads(serialized))
+        self.assertEqual(json.dumps(json.dumps(payload, ensure_ascii=True, separators=(",", ":")), ensure_ascii=True), encoded)
+        self.assertNotIn("런모니", config)
+        self.assertNotIn(token, " ".join(argv))
+        self.assertNotIn("data-binary", " ".join(argv))
+        self.assertEqual(["curl.exe", "-q"], argv[:2])
+        self.assertIn("--http1.1", argv)
+        self.assertEqual("30", argv[argv.index("--connect-timeout") + 1])
+        self.assertEqual("120", argv[argv.index("--max-time") + 1])
+        self.assertEqual(str(publisher.MAX_API_RESPONSE_BYTES), argv[argv.index("--max-filesize") + 1])
+        self.assertEqual("0", argv[argv.index("--max-redirs") + 1])
+        self.assertNotIn("--location", argv)
+        self.assertEqual(publisher.subprocess.DEVNULL, options["stderr"])
+        popen.assert_called_once()
+
+    def test_native_api_rejects_unbounded_paths_and_methods_before_a_process(self):
+        cases = (("GET", "https://example.invalid/steal", None), ("GET", "/../other", None),
+                 ("GET", "/git/tags/" + "a" * 300, None),
+                 ("GET", "/releases/7?redirect=elsewhere", None), ("GET", "/git/ref/tags/v0.1.5", None),
+                 ("DELETE", "/releases/7", None), ("POST", "/releases/7", {}),
+                 ("PATCH", "/releases/7", None), ("GET", "", {"body": True}))
+        with mock.patch.object(publisher.subprocess, "Popen") as popen:
+            for method, path, body in cases:
+                with self.subTest(method=method, path=path), self.assertRaises(publisher.PublicationError):
+                    publisher.github_api_request(method, path, "gho_" + "x" * 32, json_body=body)
+            popen.assert_not_called()
+
+    def test_native_api_response_read_is_bounded_and_oversize_child_is_killed(self):
+        raw = b"x" * (publisher.MAX_API_RESPONSE_BYTES + 1) + publisher.HTTP_STATUS_MARKER + b"200"
+        process = FakeCurlProcess(raw)
+        with mock.patch.object(publisher.subprocess, "Popen", return_value=process), self.assertRaisesRegex(
+                publisher.PublicationError, "exceeded 1 MiB"):
+            publisher.github_api_request("GET", "", "gho_" + "x" * 32)
+        bound = publisher.MAX_API_RESPONSE_BYTES + len(publisher.HTTP_STATUS_MARKER) + 3 + 1
+        self.assertEqual([bound], process.stdout.read_sizes)
+        self.assertLessEqual(process.stdout.bytes_read, bound)
+        self.assertTrue(process.killed)
+        self.assertIsNotNone(process.returncode)
+
+    def test_native_api_curl_failure_and_malformed_json_never_expose_raw_data(self):
+        secret = b"private-response-and-secret-marker"
+        cases = ((22, secret + publisher.HTTP_STATUS_MARKER + b"403"),
+                 (0, secret + publisher.HTTP_STATUS_MARKER + b"200"),
+                 (0, secret), (0, b"[]" + publisher.HTTP_STATUS_MARKER + b"200"))
+        for code, raw in cases:
+            process = FakeCurlProcess(raw, code=code)
+            with self.subTest(code=code, raw_bytes=len(raw)), \
+                    mock.patch.object(publisher.subprocess, "Popen", return_value=process), \
+                    self.assertRaises(publisher.PublicationError) as caught:
+                publisher.github_api_request("GET", "", "gho_" + "x" * 32)
+            self.assertNotIn(secret.decode("ascii"), str(caught.exception))
+            self.assertNotIn("gho_", str(caught.exception))
+
+    def test_publish_rejects_redirect_status_without_echoing_metadata_body(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan)
+            with self.transport(root, remote), \
+                    mock.patch.object(publisher, "github_api_request", return_value=(302, {"message": "private-body"})), \
+                    self.assertRaisesRegex(publisher.PublicationError, "GitHub API returned 302") as caught:
+                publisher.publish(plan, stage_draft=True)
+            self.assertNotIn("private-body", str(caught.exception))
+            self.assertEqual([], remote.uploads)
+            self.assertEqual([], remote.publication_snapshots)
 
 
 if __name__ == "__main__":

@@ -21,6 +21,8 @@ API = f"https://api.github.com/repos/{REPO}"
 API_VERSION = "2026-03-10"  # Retain the version used by the existing uploader.
 CERTIFICATE = "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830"
 MAX_APK_BYTES = 512 * 1024 * 1024
+MAX_API_RESPONSE_BYTES = 1024 * 1024
+HTTP_STATUS_MARKER = b"RUNMONI_API_STATUS:"
 PREVIEW = re.compile(r"[0-9]+\.[0-9]+\.[0-9]+-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*")
 SHA256 = re.compile(r"[0-9a-fA-F]{64}")
 COMMIT = re.compile(r"[0-9a-f]{40}")
@@ -149,9 +151,132 @@ def github_credential():
     return validate_credential(token)
 
 
+def curl_config_quote(value):
+    """One curl-config double-quoted value; preserve JSON's own escape layer."""
+    return '"' + (value.replace("\\", "\\\\").replace('"', '\\"')
+                  .replace("\r", "\\r").replace("\n", "\\n")
+                  .replace("\t", "\\t").replace("\v", "\\v")) + '"'
+
+
+def validate_api_path(method, path, json_body):
+    if not isinstance(path, str) or len(path) > 256:
+        raise PublicationError("Unexpected GitHub metadata API path.")
+    release_id = re.fullmatch(r"/releases/[1-9][0-9]{0,19}", path) is not None
+    tag = None
+    for prefix in ("/git/ref/tags/v", "/releases/tags/v"):
+        if path.startswith(prefix):
+            tag = path[len(prefix):]
+            break
+    tag_path = tag is not None and len(tag) <= 64 and PREVIEW.fullmatch(tag) is not None
+    allowed = ((method == "GET" and (path in ("", "/git/ref/heads/main") or release_id or tag_path
+                                     or re.fullmatch(r"/git/tags/[0-9a-f]{40}", path)))
+               or (method == "POST" and path == "/releases")
+               or (method == "PATCH" and release_id))
+    if not allowed or (method == "GET" and json_body is not None):
+        raise PublicationError("Unexpected GitHub metadata API operation.")
+    if method in ("POST", "PATCH") and not isinstance(json_body, dict):
+        raise PublicationError("GitHub metadata mutation requires a JSON object.")
+
+
+def parse_api_output(raw):
+    if not isinstance(raw, bytes):
+        raise PublicationError("Native curl API output was not binary data.")
+    body, marker, status = raw.rpartition(HTTP_STATUS_MARKER)
+    if not marker or not re.fullmatch(rb"[1-5][0-9]{2}", status):
+        raise PublicationError("Native curl API status was not confirmed.")
+    if len(body) > MAX_API_RESPONSE_BYTES:
+        raise PublicationError("GitHub metadata response exceeded 1 MiB.")
+    try:
+        payload = json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
+        raise PublicationError("GitHub metadata response was not valid bounded JSON.") from None
+    if not isinstance(payload, dict):
+        raise PublicationError("GitHub metadata response must be a JSON object.")
+    return int(status), payload
+
+
+def github_api_request(method, path, token, *, json_body=None):
+    """One bounded native-curl metadata request; no redirects or HTTP package."""
+    validate_api_path(method, path, json_body)
+    validate_credential(token)
+    lines = [f"header = {curl_config_quote('Authorization: Bearer ' + token)}",
+             'header = "Accept: application/vnd.github+json"',
+             f'header = "X-GitHub-Api-Version: {API_VERSION}"',
+             'header = "User-Agent: Runmoni-preview-publisher"']
+    if json_body is not None:
+        # ASCII JSON avoids the Windows locale encoding. Curl then unquotes only
+        # its config layer, leaving JSON's \n/\u/quote/backslash escapes intact.
+        try:
+            serialized = json.dumps(json_body, ensure_ascii=True, allow_nan=False, separators=(",", ":"))
+        except (TypeError, ValueError, RecursionError):
+            raise PublicationError("GitHub metadata body could not be serialized as ASCII JSON.") from None
+        lines += ['header = "Content-Type: application/json"',
+                  "data-binary = " + json.dumps(serialized, ensure_ascii=True)]
+    config = ("\n".join(lines) + "\n").encode("ascii")
+    arguments = ["curl.exe", "-q", "--silent", "--show-error", "--http1.1", "--proto", "=https",
+                 "--connect-timeout", "30", "--max-time", "120", "--max-filesize", str(MAX_API_RESPONSE_BYTES),
+                 "--max-redirs", "0", "--request", method, "--config", "-",
+                 "--write-out", HTTP_STATUS_MARKER.decode("ascii") + "%{http_code}", API + path]
+    process = None
+    try:
+        process = subprocess.Popen(arguments, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                   stderr=subprocess.DEVNULL, env=child_process_env())
+        process.stdin.write(config)
+        process.stdin.close()
+        # Python enforces the body bound even if curl cannot reject a chunked
+        # response using Content-Length. Never accumulate arbitrary stdout.
+        bound = MAX_API_RESPONSE_BYTES + len(HTTP_STATUS_MARKER) + 3
+        raw = process.stdout.read(bound + 1)
+        if len(raw) > bound:
+            raise PublicationError("GitHub metadata response exceeded 1 MiB.")
+        code = process.wait(timeout=125)
+        if code:
+            raise PublicationError(f"Native curl API request failed (curl {code}); raw details omitted.")
+        return parse_api_output(raw)
+    except subprocess.TimeoutExpired:
+        raise PublicationError("Native curl API request exceeded its completion bound; raw details omitted.") from None
+    except (OSError, BrokenPipeError):
+        raise PublicationError("Native curl API transport failed; raw details omitted.") from None
+    finally:
+        if process is not None:
+            if process.poll() is None:
+                process.kill()
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    pass
+            for stream in (process.stdin, process.stdout):
+                if stream is not None:
+                    try:
+                        stream.close()
+                    except OSError:
+                        pass
+
+
+class CurlApiAdapter:
+    """Sequential requests use completed curl processes, so no idle API socket remains."""
+    def __init__(self, token):
+        self._token = validate_credential(token)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self._token = ""
+        return False
+
+    def request(self, method, path, **options):
+        if set(options) - {"json"}:
+            raise PublicationError("Unexpected GitHub API request option.")
+        return github_api_request(method, path, self._token, json_body=options.get("json"))
+
+
 def upload_asset(upload_url, local, token, rate_kib):
     # Authorization travels only through curl's stdin, not argv, a file or logs.
     validate_credential(token)
+    print(json.dumps({"phase": "uploading_asset", "asset": local["name"],
+                      "bytes": local["size"], "rateKiBPerSecond": rate_kib}),
+          file=sys.stderr, flush=True)
     config = (f'header = "Authorization: Bearer {token}"\n'
               'header = "Accept: application/vnd.github+json"\n'
               f'header = "X-GitHub-Api-Version: {API_VERSION}"\n')
@@ -170,22 +295,15 @@ def upload_asset(upload_url, local, token, rate_kib):
 def publish(plan, *, stage_draft=False):
     if not plan["localMetadataReady"]:
         raise PublicationError("Local plan has publication blockers; no credential or network was used.")
-    # Python's TLS context can otherwise honor this key-log variable. This only
-    # changes this one publisher process, never the user's persistent settings.
-    os.environ.pop("SSLKEYLOGFILE", None)
-    import httpx  # Existing bundled dependency; only imported on an explicit transfer path.
     token = github_credential()
-    headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
-               "X-GitHub-Api-Version": API_VERSION, "User-Agent": "Runmoni-preview-publisher"}
-    with httpx.Client(headers=headers, timeout=httpx.Timeout(120, connect=30), follow_redirects=False,
-                      http2=False, limits=httpx.Limits(max_connections=1, max_keepalive_connections=0)) as client:
+    with CurlApiAdapter(token) as client:
         def api(method, path, optional=False, **kwargs):
-            response = client.request(method, API + path, **kwargs)
-            if optional and response.status_code == 404:
+            status, payload = client.request(method, path, **kwargs)
+            if optional and status == 404:
                 return None
-            if not 200 <= response.status_code < 300:
-                raise PublicationError(f"GitHub API returned {response.status_code}; raw response omitted.")
-            return response.json()
+            if not 200 <= status < 300:
+                raise PublicationError(f"GitHub API returned {status}; raw response omitted.")
+            return payload
 
         def check_target(require_tag=False):
             if api("GET", "/git/ref/heads/main")["object"]["sha"] != plan["targetCommit"]:
