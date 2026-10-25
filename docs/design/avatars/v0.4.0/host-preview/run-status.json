@@ -1,0 +1,7 @@
+{
+  "runId": "1adad9d2fc85463f89ece25ab509b6e1",
+  "status": "passed",
+  "updatedAtUtc": "2026-10-25T12:32:00.4323890Z",
+  "surface": "HOST Java2D compatibility preview; NOT Android capture",
+  "message": "Host checks completed. Android rasterization/playback/device behavior remains unverified."
+}

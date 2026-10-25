@@ -1,0 +1,5 @@
+# Reproducible large host images remain local. Keep bounded checks/provenance.
+*/
+*.png
+*.gif
+index.html

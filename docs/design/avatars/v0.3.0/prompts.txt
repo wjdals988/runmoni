@@ -1,0 +1,10 @@
+Mode: built-in image_gen, reference-based edit, transparent_background=true.
+Reference: user-quality-reference.png (the user's approved visual quality).
+
+Preserve the two exact runner identities, head-to-body proportions, large dark eyes with white highlights, friendly small smile, layered shaded hair pixel clusters, warm shaded skin, navy outline and detailed running shoes. Do not simplify into flat geometric pixel figures or rectangular doll eyes.
+Create exactly two rows by eight columns of full-body run poses, wide2048x768 canvas, equal cells, transparent margins. Male row: blue-black short hair, coral singlet with white trim, navy shorts with white stripe, white ankle socks, mint running shoes. Female row: brown ponytail with teal tie, mint short-sleeve tee, navy tights with white stripe, coral running shoes.
+Fixed screen-right three-quarter side camera; turn torso toward the running direction. Slight forward lean, elbows around90degrees, arms swing forward/back close to the ribcage. Near arm and near leg counter-swing. Far arm partly occluded by torso, never a floating hand. No dance, punching, jumping-jack or lateral arm spread.
+Eight chronological poses: near-leg contact, compression, passing, push-off/flight, opposite-leg contact, opposite compression, opposite passing, opposite push-off/flight leading back to first. Consistent face, size, perspective, clothing details, baseline and outline. Gentle head bob and ponytail follow-through. All feet/hair/hands inside cells.
+Crisp intentional pixel clusters with rich highlights/shading, no blur, halos or muddy artifacts. True transparent alpha outside sprites. No text, labels, scene, ground shadows, grid, UI, hats, logos, added equipment or costumes in this motion sheet.
+
+Result is a visual proposal. Prompt intent is not proof of exact cycle continuity, identity-perfect layers or production readiness.

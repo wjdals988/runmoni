@@ -1,0 +1,347 @@
+{
+  "surface": "HOST Java2D compatibility preview; NOT Android capture",
+  "exportedAtUtc": "2026-10-25T12:32:00.3668567Z",
+  "javaHome": "C:/Program Files/Java/jdk-21",
+  "kotlinCompiler": "2.0.21",
+  "buildDirectory": "C:\\Users\\USER\\Documents\\runmoni\\work\\avatar-host-preview\\20261025-213136-4be5cee4",
+  "sourceSha256": [
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\java\\com\\runmoni\\app\\domain\\Models.kt",
+      "sha256": "5782f0b57ef80878d514419fc3e8f8db3882ede8c16ddd064eadf343b6457875"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\java\\com\\runmoni\\app\\domain\\AvatarCatalogue.kt",
+      "sha256": "bcd9ebe95cbd25b2e2bf92907a385cf3908fdb653a727c9615b3a8ab1b522ba5"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\java\\com\\runmoni\\app\\avatar\\AvatarArtRepository.kt",
+      "sha256": "9f46886b6a876c82ea2bd49e3cd108fa7368b9c490dad2761f4d44e301f22ab5"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\java\\com\\runmoni\\app\\avatar\\AvatarSpriteRenderer.kt",
+      "sha256": "6c5c391a45aea705c805a275a28b0fc982e8dac8596c34a2340e72faa2f5c558"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\manifest.json",
+      "sha256": "fddcff84a253058242ae63fe613e7efb62a23783e3766db36af19288a668bafd"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\export-parts-preview.ps1",
+      "sha256": "d37c34004570ec59dd1b8e19f0d6421890e8e2462765eeb0855ed4e5e76341ec"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\content\\Context.java",
+      "sha256": "3d94a75cd6128c3b45f33fb20c5aa6a3f7702d83613e1aecfbc02e6bc22fff7f"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\content\\res\\AssetManager.java",
+      "sha256": "880a261285456c3c74a0c57593dd4d9d867056241997c5d9553579cbc04d3448"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\Bitmap.java",
+      "sha256": "84cf45c341aa2580ef866f85c40ddbe095a84bf8065d978c31495e6138c1b909"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\BitmapFactory.java",
+      "sha256": "2539f25eee085ab9bd30358f8fcf31a4320e47af37c6ea9885517d4c16236682"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\Canvas.java",
+      "sha256": "8da49a635de6ee1b08d020caec9c920bb79ac686764345386830fc245b2ee095"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\Color.java",
+      "sha256": "ad5e7bf2c861e9d66f6a33db54dd618101b41206a375ce51892fc4874f03008a"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\Paint.java",
+      "sha256": "c65474725ca046835103e55cea9d1bc4b20c2fa3b18dd894dcfc433685be57ce"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\Path.java",
+      "sha256": "3b1e460abe2b1126329db9e7727c971ee395d838c9abfd862b3b0b095e44d181"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\graphics\\RectF.java",
+      "sha256": "1a409ab8d5050839f50c7a89ce919b4de7b717bc49e8f37b86e7a858aa873a24"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\android\\util\\LruCache.java",
+      "sha256": "deb09fc4d977fa2d1b15fcb81ce3b96e26f2d0ea6242e6231122cc690338e7b8"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\HostPreview.kt",
+      "sha256": "2aa739969dc56f9c46fecf58b68e7a054e981177c2e8e71b035f50e677ee81ad"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\org\\json\\JSONArray.java",
+      "sha256": "7f4c6fad8d8a35f5a9a7cf2ff378a2659f405dcf795c0ecf7b08a575342fba81"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\org\\json\\JSONObject.java",
+      "sha256": "1ed71b3ecc52549f5ff0f9e51826b31be9639d4a24e6806346b0951ac7583698"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\org\\json\\JsonParser.java",
+      "sha256": "0254c7d66867074a816405aaa4f991f541fb66e10c25ff41fef49f0df30209a2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\scripts\\avatar\\host-preview\\PreviewImages.java",
+      "sha256": "c33077e1da1e5065339f39fe1aaf4ab8d75f8305b28b4491af9eb769ff2e266f"
+    }
+  ],
+  "artworkSha256": [
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_0.png",
+      "sha256": "3486723c87fa610cef62d32169a19cbb94a96de29fdb28fbea55f1b8711690ec"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_1.png",
+      "sha256": "315bd7a164b54575bea34f8834781faf3dcc6c59aa3b175192574c2e5c0ff2d4"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_2.png",
+      "sha256": "15f5d86e539e6b926296b2e24db666bcffa0b666e0db7dc8bcd858b40decca24"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_3.png",
+      "sha256": "5ba8541c54d5f98406e7ea914bea287fefac4c61b938e084325c828e4fe3f769"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_4.png",
+      "sha256": "b9f15194f9b87c8e8b941fb7b9114072bfbd8a15a6157647964bf8dcb105b733"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\bottom_5.png",
+      "sha256": "bcb96c20f371d00e31049bbb677b27408652a05b166792419c476211c8e31359"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_forearm.png",
+      "sha256": "122dc7e63ca91256ed05a3d23419431088aa4153e03237dbe5e1715bf02a2016"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_hood_front.png",
+      "sha256": "d7290d8f3ca5821ce77075986f63cb55baa4f37d87fafb01be56f23d44b50678"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_joint.png",
+      "sha256": "32e1a5feed9b78b60979abde67759a55d70b190699dedb3094291677587003eb"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_pelvis.png",
+      "sha256": "124322e7bfec19b6d0fe0a653c04e5ae165ed68050b2f2b9e5f53f26af040b0e"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_shin.png",
+      "sha256": "c095c42db1e8eebf99f25c1fde2fb09cffafb0edf94bfd4c642595fe8c1851b2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_shoe.png",
+      "sha256": "54f6d70d72ddf93c22dc3a7df04d69730923be564dce2c3c635590b87c1f7f69"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_thigh.png",
+      "sha256": "6f76d7cc05b5d3f55ede6d109791e6f03a24ad4323c5e34a0bdfd3935f277ed2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_torso.png",
+      "sha256": "f73703da0a2c79408bdaba4e3c4b72d15bd1778d5717e426814ed48ee441fa86"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_1_upper_arm.png",
+      "sha256": "e23651e83878fd2d40f080bba43e03fb84cd64b57bd26c3bf3cebea132b68bfc"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_2_pelvis.png",
+      "sha256": "6f2a1ffeae5b35cc3f4a79d656075d3cbdbc4aaaade5821ba563424aa7613e11"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_2_torso.png",
+      "sha256": "cfc6a697f833dd8bbb859e7f871c85734f881c5fd8a6a94be1310a5a127e6faf"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_3_pelvis.png",
+      "sha256": "dc3b85f2b5022ff4f22209b2cf68cc0011576d420f776a8837d8cc574f0ac83f"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_3_torso.png",
+      "sha256": "91899c266e1fb4edc82e5efb1756eb8286329e9aa597fee055911ff525fa0793"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_forearm.png",
+      "sha256": "c9252a8a3f3620d5c79c9c9d64c5c797bd2b4c20bcb0a072aeee467ce049cc5a"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_hood_front.png",
+      "sha256": "c332dee188500abc450bd38d4fd9094db49a3a2199bbfdefcc9fd5f0d5264392"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_joint.png",
+      "sha256": "ef63b3daa82c46464bcb51639440a7004d0ed7d147aae9357d1df575cd9caf31"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_pelvis.png",
+      "sha256": "5c0756d350169abda1e8014967955ce3bf1deaa351d79d6b6ab8d3eb306ac714"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_shin.png",
+      "sha256": "d1f12c8275ad5f848c810c4dcbdd6eef546a489c1f39d70fe6b35ab7d5ab241b"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_shoe.png",
+      "sha256": "181924991402bcdf9b84b66d04fb905df6c5d106217d1c07be00b398135c54da"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_thigh.png",
+      "sha256": "4bc96d7c7df0e548e98f8c2c8388ad059d510a5789bf7b1a79f885d2d81ed6aa"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_torso.png",
+      "sha256": "a001ed54a1ef5a2a7c79358f4317a597c21d219efae2fa2ed1b890d43ebba08f"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_4_upper_arm.png",
+      "sha256": "3f429395622439f11222453f55981588e0f102a886e7a1ef9764c84a47a11317"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_forearm.png",
+      "sha256": "ee9673eb32a596650017534adc447c35b66bb3d766bafc76c8b6423b7f382f46"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_hood_front.png",
+      "sha256": "83de174d042d97941b331b7fa832d8debe1701a3dff2bcdf686a761359e81593"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_joint.png",
+      "sha256": "8472a28061cfc836f15fdefcb738cc6d3509ab7fef940b34d1f23f03a57e593d"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_pelvis.png",
+      "sha256": "92f73cbdd6048b634b6435c9d456fea6af656c33268636f6d9c55e7abe96f67b"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_shin.png",
+      "sha256": "92b1ea85b8deed3907f08354868abdfedb86d49babe00a3b4bd88a046c5ec4ee"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_shoe.png",
+      "sha256": "0272355ba42aa39016450764f8b872ca8094e1ba73887751fac49150d177fe32"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_thigh.png",
+      "sha256": "874dc67b1720721f1f02df51da206bace8f3a2db6f897ef5e67a7345c183400c"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_torso.png",
+      "sha256": "c49adf58bd25d0c2660bfa1ca8fa943c73cb2c2f8a1d6e4c271671a7f1f9f9fb"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\costume_5_upper_arm.png",
+      "sha256": "8e9bb12abc9a6605f9fb267e51a94b9c9501c0d9b17c4767afdad12ed8c57ad9"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_0_back.png",
+      "sha256": "b5395dc65f124256a8a56f5bbd45b41e0a893d090ff083046fa81ccddfa34ea2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_0_front.png",
+      "sha256": "dc2065f05d32198f67a8bd079a352b5e448cba491baca175babc7410bdfb86cb"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_1_back.png",
+      "sha256": "3b2333e1dbcead6ca452a8c8efb2f5879a2a5ec78f8dff1a20a2960cfde7fdd3"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_1_front.png",
+      "sha256": "6ece2477d4fa1d7d1a49e4209766e899569c8ce0e9bc738dd02f422b97ef4558"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_2_back.png",
+      "sha256": "eea5253b1f4be394c86fbe918cb339096157fd8baea43520b57e32eeb6eae61e"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_2_front.png",
+      "sha256": "70358711b24db06039207012dee9af8fa6353898c90e82b507d467fb7928916e"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_3_back.png",
+      "sha256": "dd064d26d1f3b3da1e48f356820dad2da54c97cab39218dfb76ce400376d0d20"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\hair_3_front.png",
+      "sha256": "5d336c8ef495563c4bf6143a302582da447e1afe14e73fbf96566afe53290ac2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\head_0.png",
+      "sha256": "d3dbffcb7834ffd4eac35b2d23dd5d2b294940c16b6c6ccddad35ff40fe6fb47"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\head_1.png",
+      "sha256": "ce79c061e05ab90b05cf0789dc90a217e29c26a511746c111c3c75b85809c93a"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\head_2.png",
+      "sha256": "429afd052e7a3b05745805c15a81f67b15ad91ec68a3abb020a5c94ef928ef5d"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\head_3.png",
+      "sha256": "7a8aa06d7f1869154f32d0a5162a673f5fe108aa8a080465cbb74e080fe13301"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\joint_skin.png",
+      "sha256": "49ea59bfa6aee70b0ee68231599fe0e6eb4ea054fc53a8fc783c79695b232d5e"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\shoe_base.png",
+      "sha256": "a755f92773ec462c032f2c24cbf5a5ea523ea13fd0597518230d9a32c7a6099f"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_forearm.png",
+      "sha256": "72acf8377130e23ed4eee2eb0e1033e5779f23dedb490d210fc20ece999bd640"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_pelvis.png",
+      "sha256": "a55586d5388f220c35a3c3b749b05ec55ec0557c8780e48699d8bd8c64309e71"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_shin.png",
+      "sha256": "4e992105911f4d2311fae64690614f145019c7469ae90d5327ff130b649a630d"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_thigh.png",
+      "sha256": "d37a6f422dd220dfd6abc6b2c28d89fb68b68eb9a545dec163ed49768f487bf2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_torso.png",
+      "sha256": "7c7a449f36f0b2973f297af0f944b8ae78071e66039f4d05195a5a4c112d94a9"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\skin_upper_arm.png",
+      "sha256": "39978188e09feaa010026a41ae9d45205144a7af6b32bcfc08ff5aca8780ceb2"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_0.png",
+      "sha256": "68de54198c2a70688c24aaa6507eeb505cdb66fdaef4d01829f5d4ddbb25cda3"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_1.png",
+      "sha256": "6d4550eb5a5bde1ac4ff5d8804e057ef1d0ee42163a80e446a6c762829e83b00"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_2.png",
+      "sha256": "c739958916243bd0ecf0a7aa16bd5f69e79f3e687b18bd9cbcbd0b547190ba62"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_3.png",
+      "sha256": "3acca304819e90a2bce8fd7a2b5a868f1ecd4ffb7f39c60f9b872225fa6b8fd9"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_4.png",
+      "sha256": "32e5b2e3306e5d993b050822988a07770c6b5113dbdff7ffc558c1c25cf39d30"
+    },
+    {
+      "path": "C:\\Users\\USER\\Documents\\runmoni\\app\\src\\main\\assets\\avatars\\v0.4.0\\top_5.png",
+      "sha256": "69a39247de3ab1dafa82eedb2cd1317f97ddac2e0967809650720c92759b1128"
+    }
+  ]
+}

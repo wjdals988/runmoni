@@ -1,0 +1,812 @@
+{
+  "canvas": [
+    256,
+    384
+  ],
+  "frameMillis": 90,
+  "skinPalette": [
+    "#a34e2b",
+    "#c76532",
+    "#ea8a3c",
+    "#ffab50",
+    "#ffc56e",
+    "#ffdb99"
+  ],
+  "palettes": {
+    "coral": [
+      "#92273d",
+      "#ca3e52",
+      "#ef5b66",
+      "#ff887d",
+      "#ffb7a0"
+    ],
+    "mint": [
+      "#086d71",
+      "#10a69d",
+      "#29cdb7",
+      "#64e6cd",
+      "#aff6df"
+    ],
+    "blue": [
+      "#173c7e",
+      "#255dab",
+      "#3783cf",
+      "#64ace7",
+      "#a2d7f7"
+    ],
+    "yellow": [
+      "#a36916",
+      "#d99b21",
+      "#f6c739",
+      "#ffe16a",
+      "#fff1a2"
+    ],
+    "navy": [
+      "#11182d",
+      "#1a2947",
+      "#283d63",
+      "#3b5379",
+      "#56749a"
+    ],
+    "green": [
+      "#0b302c",
+      "#164c40",
+      "#286956",
+      "#448970",
+      "#72ad8e"
+    ],
+    "pink": [
+      "#a52d5a",
+      "#d74e7c",
+      "#f5779d",
+      "#ffadc0",
+      "#ffdae0"
+    ],
+    "santa": [
+      "#8b182b",
+      "#bb2534",
+      "#e43a42",
+      "#ff6460",
+      "#ff9e87"
+    ],
+    "bear": [
+      "#713d27",
+      "#9e5935",
+      "#bf7b47",
+      "#d79d62",
+      "#edc08b"
+    ],
+    "gold": [
+      "#926118",
+      "#bd871b",
+      "#e8af28",
+      "#ffd34c",
+      "#ffeb92"
+    ],
+    "black": [
+      "#101522",
+      "#1c2332",
+      "#30394a",
+      "#4b5668",
+      "#758196"
+    ],
+    "socks": [
+      "#8b9ca6",
+      "#b5c5ca",
+      "#dae5e4",
+      "#edf4ef",
+      "#fffaf1"
+    ]
+  },
+  "tops": [
+    {
+      "part": "top_0",
+      "palette": "coral",
+      "upperArmCoverage": 0,
+      "forearmCoverage": 0
+    },
+    {
+      "part": "top_1",
+      "palette": "mint",
+      "upperArmCoverage": 0.32,
+      "forearmCoverage": 0
+    },
+    {
+      "part": "top_2",
+      "palette": "blue",
+      "upperArmCoverage": 1,
+      "forearmCoverage": 1
+    },
+    {
+      "part": "top_3",
+      "palette": "yellow",
+      "upperArmCoverage": 1,
+      "forearmCoverage": 1
+    },
+    {
+      "part": "top_4",
+      "palette": "pink",
+      "upperArmCoverage": 0,
+      "forearmCoverage": 0
+    },
+    {
+      "part": "top_5",
+      "palette": "mint",
+      "upperArmCoverage": 0.28,
+      "forearmCoverage": 0
+    }
+  ],
+  "bottoms": [
+    {
+      "part": "bottom_0",
+      "palette": "navy",
+      "thighCoverage": 0.3,
+      "shinCoverage": 0
+    },
+    {
+      "part": "bottom_1",
+      "palette": "navy",
+      "thighCoverage": 1,
+      "shinCoverage": 1
+    },
+    {
+      "part": "bottom_2",
+      "palette": "green",
+      "thighCoverage": 0.3,
+      "shinCoverage": 0
+    },
+    {
+      "part": "bottom_3",
+      "palette": "coral",
+      "thighCoverage": 0.3,
+      "shinCoverage": 0
+    },
+    {
+      "part": "bottom_4",
+      "palette": "navy",
+      "thighCoverage": 0.72,
+      "shinCoverage": 0
+    },
+    {
+      "part": "bottom_5",
+      "palette": "navy",
+      "thighCoverage": 0.2,
+      "shinCoverage": 0
+    }
+  ],
+  "shoes": [
+    {
+      "part": "shoe_base",
+      "palette": null
+    },
+    {
+      "part": "shoe_base",
+      "palette": "coral"
+    },
+    {
+      "part": "shoe_base",
+      "palette": "blue"
+    },
+    {
+      "part": "shoe_base",
+      "palette": "yellow"
+    }
+  ],
+  "costumes": [
+    null,
+    {
+      "torso": "costume_1_torso",
+      "pelvis": "costume_1_pelvis",
+      "hoodFront": "costume_1_hood_front",
+      "shoePart": "costume_1_shoe",
+      "palette": "santa",
+      "upperArmCoverage": 1,
+      "forearmCoverage": 1,
+      "thighCoverage": 1,
+      "shinCoverage": 1,
+      "shoePalette": null,
+      "covers": [
+        "headwear",
+        "top",
+        "bottom",
+        "socks",
+        "shoes"
+      ],
+      "upperArmPart": "costume_1_upper_arm",
+      "forearmPart": "costume_1_forearm",
+      "thighPart": "costume_1_thigh",
+      "shinPart": "costume_1_shin",
+      "jointPart": "costume_1_joint"
+    },
+    {
+      "torso": "costume_2_torso",
+      "pelvis": "costume_2_pelvis",
+      "palette": "navy",
+      "upperArmCoverage": 0,
+      "forearmCoverage": 0,
+      "thighCoverage": 0,
+      "shinCoverage": 0,
+      "shoePalette": null,
+      "covers": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "torso": "costume_3_torso",
+      "pelvis": "costume_3_pelvis",
+      "palette": "coral",
+      "upperArmCoverage": 0,
+      "forearmCoverage": 0,
+      "thighCoverage": 0,
+      "shinCoverage": 0,
+      "shoePalette": null,
+      "covers": [
+        "top",
+        "bottom"
+      ]
+    },
+    {
+      "torso": "costume_4_torso",
+      "pelvis": "costume_4_pelvis",
+      "shoePart": "costume_4_shoe",
+      "palette": "bear",
+      "upperArmCoverage": 1,
+      "forearmCoverage": 1,
+      "thighCoverage": 1,
+      "shinCoverage": 1,
+      "shoePalette": null,
+      "covers": [
+        "headwear",
+        "top",
+        "bottom",
+        "socks",
+        "shoes"
+      ],
+      "hoodBack": "costume_4_hood_front",
+      "upperArmPart": "costume_4_upper_arm",
+      "forearmPart": "costume_4_forearm",
+      "thighPart": "costume_4_thigh",
+      "shinPart": "costume_4_shin",
+      "jointPart": "costume_4_joint"
+    },
+    {
+      "torso": "costume_5_torso",
+      "pelvis": "costume_5_pelvis",
+      "shoePart": "costume_5_shoe",
+      "palette": "gold",
+      "upperArmCoverage": 1,
+      "forearmCoverage": 1,
+      "thighCoverage": 1,
+      "shinCoverage": 1,
+      "shoePalette": null,
+      "covers": [
+        "headwear",
+        "top",
+        "bottom",
+        "socks",
+        "shoes"
+      ],
+      "hoodBack": "costume_5_hood_front",
+      "upperArmPart": "costume_5_upper_arm",
+      "forearmPart": "costume_5_forearm",
+      "thighPart": "costume_5_thigh",
+      "shinPart": "costume_5_shin",
+      "jointPart": "costume_5_joint"
+    }
+  ],
+  "parts": {
+    "head_0": {
+      "file": "head_0.png",
+      "pivot": [
+        73,
+        131
+      ]
+    },
+    "head_1": {
+      "file": "head_1.png",
+      "pivot": [
+        73,
+        131
+      ]
+    },
+    "head_2": {
+      "file": "head_2.png",
+      "pivot": [
+        73,
+        131
+      ]
+    },
+    "head_3": {
+      "file": "head_3.png",
+      "pivot": [
+        73,
+        131
+      ]
+    },
+    "hair_0_front": {
+      "file": "hair_0_front.png",
+      "pivot": [
+        127,
+        164
+      ]
+    },
+    "hair_1_front": {
+      "file": "hair_1_front.png",
+      "pivot": [
+        118,
+        160
+      ]
+    },
+    "hair_2_front": {
+      "file": "hair_2_front.png",
+      "pivot": [
+        119,
+        171
+      ]
+    },
+    "hair_3_front": {
+      "file": "hair_3_front.png",
+      "pivot": [
+        118,
+        161
+      ]
+    },
+    "hair_0_back": {
+      "file": "hair_0_back.png",
+      "pivot": [
+        73,
+        115
+      ]
+    },
+    "hair_1_back": {
+      "file": "hair_1_back.png",
+      "pivot": [
+        72,
+        113
+      ]
+    },
+    "hair_2_back": {
+      "file": "hair_2_back.png",
+      "pivot": [
+        127,
+        172
+      ]
+    },
+    "hair_3_back": {
+      "file": "hair_3_back.png",
+      "pivot": [
+        83,
+        116
+      ]
+    },
+    "top_0": {
+      "file": "top_0.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "top_1": {
+      "file": "top_1.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "top_2": {
+      "file": "top_2.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "top_3": {
+      "file": "top_3.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "top_4": {
+      "file": "top_4.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "top_5": {
+      "file": "top_5.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "skin_torso": {
+      "file": "skin_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "skin_pelvis": {
+      "file": "skin_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_0": {
+      "file": "bottom_0.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_1": {
+      "file": "bottom_1.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_2": {
+      "file": "bottom_2.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_3": {
+      "file": "bottom_3.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_4": {
+      "file": "bottom_4.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "bottom_5": {
+      "file": "bottom_5.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "skin_upper_arm": {
+      "file": "skin_upper_arm.png",
+      "pivot": [
+        11,
+        5
+      ],
+      "tip": [
+        11,
+        45
+      ]
+    },
+    "skin_forearm": {
+      "file": "skin_forearm.png",
+      "pivot": [
+        12,
+        4
+      ],
+      "tip": [
+        12,
+        38
+      ]
+    },
+    "skin_thigh": {
+      "file": "skin_thigh.png",
+      "pivot": [
+        13,
+        4
+      ],
+      "tip": [
+        13,
+        54
+      ]
+    },
+    "skin_shin": {
+      "file": "skin_shin.png",
+      "pivot": [
+        10,
+        4
+      ],
+      "tip": [
+        10,
+        61
+      ]
+    },
+    "joint_skin": {
+      "file": "joint_skin.png",
+      "pivot": [
+        11,
+        11
+      ]
+    },
+    "shoe_base": {
+      "file": "shoe_base.png",
+      "pivot": [
+        18,
+        13
+      ],
+      "sourcePalette": [
+        "#075b60",
+        "#0b9897",
+        "#14bdad",
+        "#41ddc6",
+        "#93eed7"
+      ]
+    },
+    "costume_1_torso": {
+      "file": "costume_1_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "costume_1_hood_front": {
+      "file": "costume_1_hood_front.png",
+      "pivot": [
+        98,
+        163
+      ]
+    },
+    "costume_1_shoe": {
+      "file": "costume_1_shoe.png",
+      "pivot": [
+        18,
+        13
+      ]
+    },
+    "costume_2_torso": {
+      "file": "costume_2_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "costume_2_pelvis": {
+      "file": "costume_2_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "costume_3_torso": {
+      "file": "costume_3_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "costume_3_pelvis": {
+      "file": "costume_3_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "costume_4_torso": {
+      "file": "costume_4_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "costume_4_hood_front": {
+      "file": "costume_4_hood_front.png",
+      "pivot": [
+        106,
+        174
+      ]
+    },
+    "costume_4_shoe": {
+      "file": "costume_4_shoe.png",
+      "pivot": [
+        18,
+        13
+      ]
+    },
+    "costume_5_torso": {
+      "file": "costume_5_torso.png",
+      "pivot": [
+        44,
+        6
+      ]
+    },
+    "costume_5_hood_front": {
+      "file": "costume_5_hood_front.png",
+      "pivot": [
+        106,
+        174
+      ]
+    },
+    "costume_5_shoe": {
+      "file": "costume_5_shoe.png",
+      "pivot": [
+        18,
+        13
+      ]
+    },
+    "costume_1_upper_arm": {
+      "file": "costume_1_upper_arm.png",
+      "pivot": [
+        13,
+        6
+      ],
+      "tip": [
+        13,
+        46
+      ]
+    },
+    "costume_1_forearm": {
+      "file": "costume_1_forearm.png",
+      "pivot": [
+        12,
+        5
+      ],
+      "tip": [
+        12,
+        39
+      ]
+    },
+    "costume_1_thigh": {
+      "file": "costume_1_thigh.png",
+      "pivot": [
+        15,
+        5
+      ],
+      "tip": [
+        15,
+        55
+      ]
+    },
+    "costume_1_shin": {
+      "file": "costume_1_shin.png",
+      "pivot": [
+        13,
+        5
+      ],
+      "tip": [
+        13,
+        62
+      ]
+    },
+    "costume_1_pelvis": {
+      "file": "costume_1_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "costume_1_joint": {
+      "file": "costume_1_joint.png",
+      "pivot": [
+        11,
+        11
+      ]
+    },
+    "costume_4_upper_arm": {
+      "file": "costume_4_upper_arm.png",
+      "pivot": [
+        13,
+        6
+      ],
+      "tip": [
+        13,
+        46
+      ]
+    },
+    "costume_4_forearm": {
+      "file": "costume_4_forearm.png",
+      "pivot": [
+        12,
+        5
+      ],
+      "tip": [
+        12,
+        39
+      ]
+    },
+    "costume_4_thigh": {
+      "file": "costume_4_thigh.png",
+      "pivot": [
+        15,
+        5
+      ],
+      "tip": [
+        15,
+        55
+      ]
+    },
+    "costume_4_shin": {
+      "file": "costume_4_shin.png",
+      "pivot": [
+        13,
+        5
+      ],
+      "tip": [
+        13,
+        62
+      ]
+    },
+    "costume_4_pelvis": {
+      "file": "costume_4_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "costume_4_joint": {
+      "file": "costume_4_joint.png",
+      "pivot": [
+        11,
+        11
+      ]
+    },
+    "costume_5_upper_arm": {
+      "file": "costume_5_upper_arm.png",
+      "pivot": [
+        13,
+        6
+      ],
+      "tip": [
+        13,
+        46
+      ]
+    },
+    "costume_5_forearm": {
+      "file": "costume_5_forearm.png",
+      "pivot": [
+        12,
+        5
+      ],
+      "tip": [
+        12,
+        39
+      ]
+    },
+    "costume_5_thigh": {
+      "file": "costume_5_thigh.png",
+      "pivot": [
+        15,
+        5
+      ],
+      "tip": [
+        15,
+        55
+      ]
+    },
+    "costume_5_shin": {
+      "file": "costume_5_shin.png",
+      "pivot": [
+        13,
+        5
+      ],
+      "tip": [
+        13,
+        62
+      ]
+    },
+    "costume_5_pelvis": {
+      "file": "costume_5_pelvis.png",
+      "pivot": [
+        33,
+        7
+      ]
+    },
+    "costume_5_joint": {
+      "file": "costume_5_joint.png",
+      "pivot": [
+        11,
+        11
+      ]
+    }
+  }
+}

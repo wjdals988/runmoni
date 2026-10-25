@@ -15,6 +15,25 @@
 - 최종 서명 APK 설치·실행, 계정0개 상태에서 Google 로그인 버튼 활성화: 확인. 로그인 자체를 수행한 증거는 아니다.
 - 이번 전용 AVD에서는 공개 GitHub raw 피드의 앱 조회가 재확인도 실패했다. PC의 HTTP200 확인과 AVD 네트워크는 구분한다. 본인 로그인 전에 AVD의 네트워크부터 확인하고, 연결이 안 되면 비밀번호를 반복 입력하거나 프록시·방화벽을 임의 변경하지 않는다. 실제 Firebase 연결 실패 원인이 확인된 것은 아니다.
 
+## AVD 제외 후 공식 API 기본 설정 확인 — 2026-10-25
+
+작업 PC에서 기존 Android client 설정을 메모리로 읽어 Google 공식 endpoint에 최대2개의 작은 요청만 보냈다. 사용자 식별자·비밀번호·ID토큰은 보내지 않았고 Google 로그인·계정 생성·DB 쓰기는0회다. API키는 명령행 인수/로그에 넣지 않았으며 반환된 OAuth URI와 sessionId도 출력·저장하지 않았다.
+
+| 검사 | 관측 결과 | 한계 |
+|---|---|---|
+| `GET /v1/projects` | HTTP200·본문146bytes. `androidPackageName`, 실제 release `sha1Cert`, Web `clientId`, `firebaseAppId` 검증 인수를 포함. 프로젝트 일치·기본 authDomain 존재 확인 | 공개 client 설정 검사이며 비공개 콘솔 전체/Rules 조회가 아님 |
+| `POST /v1/accounts:createAuthUri` | HTTP200·본문851bytes. provider `google.com`, Google HTTPS 인증 host, 로컬 Web client 일치 | URI 생성만 수행했으며 URI 방문·사용자 인증·토큰 교환은0회 |
+
+2개 요청 전체프로세스2.093초, 정제된 결과는 `outputs/validation/mobile-reset-20261025/firebase-public-readiness.json`에 보존했다. 숫자는 응답 본문의 UTF8 길이이며 TLS/HTTP 헤더를 포함한 전체 전송량이 아니다. 기본 등록/제공자 준비 상태는 서버 검사에 통과했지만 실제 Android Google 로그인·Firestore 원격CRUD 성공은 여전히0회다. 이전 AVD 실패의 근본 원인이나 해결을 확정하지 않는다.
+
+근거: [공개 설정 및 앱 식별자 검증 인수](https://docs.cloud.google.com/identity-platform/docs/reference/rest/v1/TopLevel/getProjects), [제공자 인증 URI 생성](https://docs.cloud.google.com/identity-platform/docs/reference/rest/v1/accounts/createAuthUri).
+
+추가로 Firestore 공식 REST endpoint에 인증 없는 GET을 1회 보냈다. 실제 사용자 UID 대신 새 임의 경로의 `runSummaries` 목록을 `pageSize=1`로 요청했으며 로그인·계정 생성·DB 쓰기는 0회다. curl 종료 코드 35, HTTP 상태 0, 응답 본문 0bytes, 요청 프로세스 0.141초로 TLS 연결 단계에서 끝났다. 따라서 익명 접근 거부나 원격 Rules 일치 여부를 확인한 검사가 아니다. 원문 응답·임의 경로·API키는 기록하지 않았고 정제된 결과만 `outputs/validation/mobile-reset-20261025/firestore-anonymous-boundary.json`에 보존했다. 반복 요청이나 보안·프록시 설정 변경은 하지 않았다.
+
+[Firestore REST 공식 문서](https://firebase.google.com/docs/firestore/use-rest-api)는 미인증 요청에 Security Rules가 적용된다고 설명한다. 이번 요청은 그 판단 결과를 받지 못했으므로 앞선 Auth API 2건의 HTTP 200과도 구분한다. 실제 로그인 후 서버 조회·백업·삭제 검증은 계속 남아 있다.
+
+후속 재확인은 요청 의미·endpoint·클라이언트 헤더·10초 상한을 유지하고 작업 샌드박스 밖의 호스트 실행으로 1회만 수행했다. 새로운 임의 경로를 사용했으며 HTTP 403 `PERMISSION_DENIED`·표준 `Missing or insufficient permissions.` 응답(본문127bytes·0.343초)을 받았다. 해당 익명 목록 요청이 거부된 것은 확인했지만 원격 Rules 전체가 로컬 파일과 같거나 인증된 사용자의 CRUD가 성공했다는 증거는 아니다. 초기 TLS 실패 결과를 덮어쓰지 않고 별도 `firestore-anonymous-boundary-host.json`에 기록했다. 실행 환경이 다른 2회 관측만으로 이전 AVD/PC 인터넷 지연의 원인을 확정하지 않는다. 로그인·계정 생성·DB 쓰기·네트워크/보안 설정 변경은 계속 0회다.
+
 ## 사용자가 진행하는 순서
 
 현재는 AVD를 제외한다. 아래 도우미 설명은 이력이며 사용자가 AVD를 다시 허용한 경우에만 적용한다. 검증된 서명 APK 준비 후 `.\scripts\open-firebase-check.ps1`로 로그인용 **가시적** 전용 AVD 창을 열 수 있다. 기존 AVD가 실행 중이면 새 창을 중복 실행하지 않는다. 앱을 자동 삭제하거나 비밀번호·토큰을 읽지 않으며, Google 로그인은 사용자가 화면에서 직접 한다. 이 스크립트를 준비했다는 사실은 실제 로그인이 끝났다는 뜻이 아니다.

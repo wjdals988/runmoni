@@ -2,6 +2,8 @@
 
 0.1.4는 Google 버튼에서 계정 추가를 지원하고 고정 오류코드로 단계를 구분한다. 실제 Google/Firebase 인증·원격 CRUD 성공은0회이며 최신 사용자 지시로 AVD 검증은 제외한다. 상세 절차·결과는 [기기 검증](FIREBASE_DEVICE_CHECK.md)과 [현재 검증 기록](VALIDATION.md)에 분리한다.
 
+AVD 제외 후 공식 client API의 공개 설정 및 Google 인증URI 생성2건은HTTP200/200을 확인했다. Android패키지/release SHA1/Webclient/FirebaseAppId 검증 인수와 반환Webclient 일치는 통과했지만 실제 사용자 인증·원격CRUD 검증을 대신하지 않는다. 비밀번호·사용자식별자·토큰은 보내지 않았고 API키·OAuth상태·원문응답은 기록하지 않았다.
+
 사용자가 무료 Spark를 선택했습니다. 공용 계정·DB의 목표는 Firebase Auth/Firestore입니다. 이번 변경은 Google 계정 세션과 본인 러닝 요약 백업의 코드·로컬 검증이며 원격 크루 DB 전환 완료가 아닙니다.
 
 ## 구현 경계

@@ -1,0 +1,1311 @@
+{
+  "manifest": {
+    "canvas": [
+      256,
+      384
+    ],
+    "frameMillis": 90,
+    "skinPalette": [
+      "#a34e2b",
+      "#c76532",
+      "#ea8a3c",
+      "#ffab50",
+      "#ffc56e",
+      "#ffdb99"
+    ],
+    "palettes": {
+      "coral": [
+        "#92273d",
+        "#ca3e52",
+        "#ef5b66",
+        "#ff887d",
+        "#ffb7a0"
+      ],
+      "mint": [
+        "#086d71",
+        "#10a69d",
+        "#29cdb7",
+        "#64e6cd",
+        "#aff6df"
+      ],
+      "blue": [
+        "#173c7e",
+        "#255dab",
+        "#3783cf",
+        "#64ace7",
+        "#a2d7f7"
+      ],
+      "yellow": [
+        "#a36916",
+        "#d99b21",
+        "#f6c739",
+        "#ffe16a",
+        "#fff1a2"
+      ],
+      "navy": [
+        "#11182d",
+        "#1a2947",
+        "#283d63",
+        "#3b5379",
+        "#56749a"
+      ],
+      "green": [
+        "#0b302c",
+        "#164c40",
+        "#286956",
+        "#448970",
+        "#72ad8e"
+      ],
+      "pink": [
+        "#a52d5a",
+        "#d74e7c",
+        "#f5779d",
+        "#ffadc0",
+        "#ffdae0"
+      ],
+      "santa": [
+        "#8b182b",
+        "#bb2534",
+        "#e43a42",
+        "#ff6460",
+        "#ff9e87"
+      ],
+      "bear": [
+        "#713d27",
+        "#9e5935",
+        "#bf7b47",
+        "#d79d62",
+        "#edc08b"
+      ],
+      "gold": [
+        "#926118",
+        "#bd871b",
+        "#e8af28",
+        "#ffd34c",
+        "#ffeb92"
+      ],
+      "black": [
+        "#101522",
+        "#1c2332",
+        "#30394a",
+        "#4b5668",
+        "#758196"
+      ],
+      "socks": [
+        "#8b9ca6",
+        "#b5c5ca",
+        "#dae5e4",
+        "#edf4ef",
+        "#fffaf1"
+      ]
+    },
+    "tops": [
+      {
+        "part": "top_0",
+        "palette": "coral",
+        "upperArmCoverage": 0,
+        "forearmCoverage": 0
+      },
+      {
+        "part": "top_1",
+        "palette": "mint",
+        "upperArmCoverage": 0.32,
+        "forearmCoverage": 0
+      },
+      {
+        "part": "top_2",
+        "palette": "blue",
+        "upperArmCoverage": 1,
+        "forearmCoverage": 1
+      },
+      {
+        "part": "top_3",
+        "palette": "yellow",
+        "upperArmCoverage": 1,
+        "forearmCoverage": 1
+      },
+      {
+        "part": "top_4",
+        "palette": "pink",
+        "upperArmCoverage": 0,
+        "forearmCoverage": 0
+      },
+      {
+        "part": "top_5",
+        "palette": "mint",
+        "upperArmCoverage": 0.28,
+        "forearmCoverage": 0
+      }
+    ],
+    "bottoms": [
+      {
+        "part": "bottom_0",
+        "palette": "navy",
+        "thighCoverage": 0.3,
+        "shinCoverage": 0
+      },
+      {
+        "part": "bottom_1",
+        "palette": "navy",
+        "thighCoverage": 1,
+        "shinCoverage": 1
+      },
+      {
+        "part": "bottom_2",
+        "palette": "green",
+        "thighCoverage": 0.3,
+        "shinCoverage": 0
+      },
+      {
+        "part": "bottom_3",
+        "palette": "coral",
+        "thighCoverage": 0.3,
+        "shinCoverage": 0
+      },
+      {
+        "part": "bottom_4",
+        "palette": "navy",
+        "thighCoverage": 0.72,
+        "shinCoverage": 0
+      },
+      {
+        "part": "bottom_5",
+        "palette": "navy",
+        "thighCoverage": 0.2,
+        "shinCoverage": 0
+      }
+    ],
+    "shoes": [
+      {
+        "part": "shoe_base",
+        "palette": null
+      },
+      {
+        "part": "shoe_base",
+        "palette": "coral"
+      },
+      {
+        "part": "shoe_base",
+        "palette": "blue"
+      },
+      {
+        "part": "shoe_base",
+        "palette": "yellow"
+      }
+    ],
+    "costumes": [
+      null,
+      {
+        "torso": "costume_1_torso",
+        "pelvis": "costume_1_pelvis",
+        "hoodFront": "costume_1_hood_front",
+        "shoePart": "costume_1_shoe",
+        "palette": "santa",
+        "upperArmCoverage": 1,
+        "forearmCoverage": 1,
+        "thighCoverage": 1,
+        "shinCoverage": 1,
+        "shoePalette": null,
+        "covers": [
+          "headwear",
+          "top",
+          "bottom",
+          "socks",
+          "shoes"
+        ],
+        "upperArmPart": "costume_1_upper_arm",
+        "forearmPart": "costume_1_forearm",
+        "thighPart": "costume_1_thigh",
+        "shinPart": "costume_1_shin",
+        "jointPart": "costume_1_joint"
+      },
+      {
+        "torso": "costume_2_torso",
+        "pelvis": "costume_2_pelvis",
+        "palette": "navy",
+        "upperArmCoverage": 0,
+        "forearmCoverage": 0,
+        "thighCoverage": 0,
+        "shinCoverage": 0,
+        "shoePalette": null,
+        "covers": [
+          "top",
+          "bottom"
+        ]
+      },
+      {
+        "torso": "costume_3_torso",
+        "pelvis": "costume_3_pelvis",
+        "palette": "coral",
+        "upperArmCoverage": 0,
+        "forearmCoverage": 0,
+        "thighCoverage": 0,
+        "shinCoverage": 0,
+        "shoePalette": null,
+        "covers": [
+          "top",
+          "bottom"
+        ]
+      },
+      {
+        "torso": "costume_4_torso",
+        "pelvis": "costume_4_pelvis",
+        "shoePart": "costume_4_shoe",
+        "palette": "bear",
+        "upperArmCoverage": 1,
+        "forearmCoverage": 1,
+        "thighCoverage": 1,
+        "shinCoverage": 1,
+        "shoePalette": null,
+        "covers": [
+          "headwear",
+          "top",
+          "bottom",
+          "socks",
+          "shoes"
+        ],
+        "hoodBack": "costume_4_hood_front",
+        "upperArmPart": "costume_4_upper_arm",
+        "forearmPart": "costume_4_forearm",
+        "thighPart": "costume_4_thigh",
+        "shinPart": "costume_4_shin",
+        "jointPart": "costume_4_joint"
+      },
+      {
+        "torso": "costume_5_torso",
+        "pelvis": "costume_5_pelvis",
+        "shoePart": "costume_5_shoe",
+        "palette": "gold",
+        "upperArmCoverage": 1,
+        "forearmCoverage": 1,
+        "thighCoverage": 1,
+        "shinCoverage": 1,
+        "shoePalette": null,
+        "covers": [
+          "headwear",
+          "top",
+          "bottom",
+          "socks",
+          "shoes"
+        ],
+        "hoodBack": "costume_5_hood_front",
+        "upperArmPart": "costume_5_upper_arm",
+        "forearmPart": "costume_5_forearm",
+        "thighPart": "costume_5_thigh",
+        "shinPart": "costume_5_shin",
+        "jointPart": "costume_5_joint"
+      }
+    ]
+  },
+  "sheets": [
+    {
+      "file": "base-parts-art-source.png",
+      "columns": 4,
+      "rows": 3,
+      "parts": [
+        {
+          "id": "head_0",
+          "cell": 0,
+          "size": [
+            147,
+            135
+          ],
+          "pivot": [
+            73,
+            131
+          ]
+        },
+        {
+          "id": "head_1",
+          "cell": 1,
+          "size": [
+            147,
+            135
+          ],
+          "pivot": [
+            73,
+            131
+          ]
+        },
+        {
+          "id": "head_2",
+          "cell": 2,
+          "size": [
+            147,
+            135
+          ],
+          "pivot": [
+            73,
+            131
+          ]
+        },
+        {
+          "id": "head_3",
+          "cell": 3,
+          "size": [
+            147,
+            135
+          ],
+          "pivot": [
+            73,
+            131
+          ]
+        }
+      ]
+    },
+    {
+      "file": "hair-parts-v2-art-source.png",
+      "columns": 4,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "hair_0_front",
+          "cell": 0,
+          "size": [
+            190,
+            150
+          ],
+          "pivot": [
+            127,
+            164
+          ]
+        },
+        {
+          "id": "hair_1_front",
+          "cell": 1,
+          "size": [
+            180,
+            145
+          ],
+          "pivot": [
+            118,
+            160
+          ]
+        },
+        {
+          "id": "hair_2_front",
+          "cell": 2,
+          "size": [
+            180,
+            145
+          ],
+          "pivot": [
+            119,
+            171
+          ]
+        },
+        {
+          "id": "hair_3_front",
+          "cell": 3,
+          "size": [
+            177,
+            125
+          ],
+          "pivot": [
+            118,
+            161
+          ]
+        },
+        {
+          "id": "hair_0_back",
+          "cell": 4,
+          "size": [
+            90,
+            95
+          ],
+          "pivot": [
+            73,
+            115
+          ]
+        },
+        {
+          "id": "hair_1_back",
+          "cell": 5,
+          "size": [
+            85,
+            90
+          ],
+          "pivot": [
+            72,
+            113
+          ]
+        },
+        {
+          "id": "hair_2_back",
+          "cell": 6,
+          "size": [
+            134,
+            120
+          ],
+          "pivot": [
+            127,
+            172
+          ]
+        },
+        {
+          "id": "hair_3_back",
+          "cell": 7,
+          "size": [
+            100,
+            104
+          ],
+          "pivot": [
+            83,
+            116
+          ]
+        }
+      ]
+    },
+    {
+      "file": "top-parts-art-source.png",
+      "columns": 4,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "top_0",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "top_1",
+          "cell": 1,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "top_2",
+          "cell": 2,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "top_3",
+          "cell": 3,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "top_4",
+          "cell": 4,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "top_5",
+          "cell": 5,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "skin_torso",
+          "cell": 6,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ]
+        },
+        {
+          "id": "skin_pelvis",
+          "cell": 7,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "bottom-parts-art-source.png",
+      "columns": 3,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "bottom_0",
+          "cell": 0,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "bottom_1",
+          "cell": 1,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "bottom_2",
+          "cell": 2,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "bottom_3",
+          "cell": 3,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "bottom_4",
+          "cell": 4,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "bottom_5",
+          "cell": 5,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "limb-parts-v2-art-source.png",
+      "columns": 3,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "skin_upper_arm",
+          "cell": 0,
+          "size": [
+            22,
+            50
+          ],
+          "pivot": [
+            11,
+            5
+          ],
+          "tip": [
+            11,
+            45
+          ]
+        },
+        {
+          "id": "skin_forearm",
+          "cell": 1,
+          "size": [
+            25,
+            48
+          ],
+          "pivot": [
+            12,
+            4
+          ],
+          "tip": [
+            12,
+            38
+          ]
+        },
+        {
+          "id": "skin_thigh",
+          "cell": 2,
+          "size": [
+            27,
+            58
+          ],
+          "pivot": [
+            13,
+            4
+          ],
+          "tip": [
+            13,
+            54
+          ]
+        },
+        {
+          "id": "skin_shin",
+          "cell": 3,
+          "size": [
+            21,
+            65
+          ],
+          "pivot": [
+            10,
+            4
+          ],
+          "tip": [
+            10,
+            61
+          ]
+        },
+        {
+          "id": "joint_skin",
+          "cell": 4,
+          "size": [
+            22,
+            22
+          ],
+          "pivot": [
+            11,
+            11
+          ]
+        },
+        {
+          "id": "shoe_base",
+          "cell": 5,
+          "size": [
+            61,
+            31
+          ],
+          "pivot": [
+            18,
+            13
+          ],
+          "sourcePalette": [
+            "#075b60",
+            "#0b9897",
+            "#14bdad",
+            "#41ddc6",
+            "#93eed7"
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-1-art-source.png",
+      "columns": 2,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_1_torso",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ],
+          "region": [
+            0,
+            0,
+            1.05,
+            1.2
+          ]
+        },
+        {
+          "id": "costume_1_hood_front",
+          "cell": 2,
+          "size": [
+            174,
+            102
+          ],
+          "pivot": [
+            98,
+            163
+          ],
+          "region": [
+            0,
+            0.2,
+            1.05,
+            1
+          ]
+        },
+        {
+          "id": "costume_1_shoe",
+          "cell": 3,
+          "size": [
+            61,
+            31
+          ],
+          "pivot": [
+            18,
+            13
+          ],
+          "region": [
+            0.12,
+            0.3,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-2-art-source.png",
+      "columns": 2,
+      "rows": 1,
+      "parts": [
+        {
+          "id": "costume_2_torso",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ],
+          "region": [
+            0,
+            0,
+            1.05,
+            1
+          ]
+        },
+        {
+          "id": "costume_2_pelvis",
+          "cell": 1,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-3-art-source.png",
+      "columns": 2,
+      "rows": 1,
+      "parts": [
+        {
+          "id": "costume_3_torso",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ],
+          "region": [
+            0,
+            0,
+            1.06,
+            1
+          ]
+        },
+        {
+          "id": "costume_3_pelvis",
+          "cell": 1,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ],
+          "region": [
+            0.06,
+            0,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-4-art-source.png",
+      "columns": 2,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_4_torso",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ],
+          "region": [
+            0,
+            0,
+            1.05,
+            1.06
+          ]
+        },
+        {
+          "id": "costume_4_hood_front",
+          "cell": 2,
+          "size": [
+            205,
+            190
+          ],
+          "pivot": [
+            106,
+            174
+          ],
+          "region": [
+            0,
+            0.1,
+            1.05,
+            1
+          ]
+        },
+        {
+          "id": "costume_4_shoe",
+          "cell": 3,
+          "size": [
+            61,
+            31
+          ],
+          "pivot": [
+            18,
+            13
+          ],
+          "region": [
+            0.12,
+            0.3,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-5-art-source.png",
+      "columns": 2,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_5_torso",
+          "cell": 0,
+          "size": [
+            80,
+            84
+          ],
+          "pivot": [
+            44,
+            6
+          ],
+          "region": [
+            0,
+            0,
+            1.05,
+            1
+          ]
+        },
+        {
+          "id": "costume_5_hood_front",
+          "cell": 2,
+          "size": [
+            205,
+            190
+          ],
+          "pivot": [
+            106,
+            174
+          ],
+          "region": [
+            0,
+            0.05,
+            1,
+            1
+          ]
+        },
+        {
+          "id": "costume_5_shoe",
+          "cell": 3,
+          "size": [
+            61,
+            31
+          ],
+          "pivot": [
+            18,
+            13
+          ],
+          "region": [
+            0.12,
+            0.3,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-1-fabric-art-source.png",
+      "columns": 3,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_1_upper_arm",
+          "cell": 0,
+          "size": [
+            26,
+            52
+          ],
+          "pivot": [
+            13,
+            6
+          ],
+          "tip": [
+            13,
+            46
+          ]
+        },
+        {
+          "id": "costume_1_forearm",
+          "cell": 1,
+          "size": [
+            25,
+            40
+          ],
+          "pivot": [
+            12,
+            5
+          ],
+          "tip": [
+            12,
+            39
+          ]
+        },
+        {
+          "id": "costume_1_thigh",
+          "cell": 2,
+          "size": [
+            31,
+            60
+          ],
+          "pivot": [
+            15,
+            5
+          ],
+          "tip": [
+            15,
+            55
+          ]
+        },
+        {
+          "id": "costume_1_shin",
+          "cell": 3,
+          "size": [
+            27,
+            65
+          ],
+          "pivot": [
+            13,
+            5
+          ],
+          "tip": [
+            13,
+            62
+          ]
+        },
+        {
+          "id": "costume_1_pelvis",
+          "cell": 4,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "costume_1_joint",
+          "cell": 5,
+          "size": [
+            22,
+            22
+          ],
+          "pivot": [
+            11,
+            11
+          ],
+          "region": [
+            0.18,
+            0.12,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-4-fabric-art-source.png",
+      "columns": 3,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_4_upper_arm",
+          "cell": 0,
+          "size": [
+            26,
+            52
+          ],
+          "pivot": [
+            13,
+            6
+          ],
+          "tip": [
+            13,
+            46
+          ]
+        },
+        {
+          "id": "costume_4_forearm",
+          "cell": 1,
+          "size": [
+            25,
+            40
+          ],
+          "pivot": [
+            12,
+            5
+          ],
+          "tip": [
+            12,
+            39
+          ]
+        },
+        {
+          "id": "costume_4_thigh",
+          "cell": 2,
+          "size": [
+            31,
+            60
+          ],
+          "pivot": [
+            15,
+            5
+          ],
+          "tip": [
+            15,
+            55
+          ]
+        },
+        {
+          "id": "costume_4_shin",
+          "cell": 3,
+          "size": [
+            27,
+            65
+          ],
+          "pivot": [
+            13,
+            5
+          ],
+          "tip": [
+            13,
+            62
+          ]
+        },
+        {
+          "id": "costume_4_pelvis",
+          "cell": 4,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "costume_4_joint",
+          "cell": 5,
+          "size": [
+            22,
+            22
+          ],
+          "pivot": [
+            11,
+            11
+          ],
+          "region": [
+            0.18,
+            0.12,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "file": "costume-5-fabric-art-source.png",
+      "columns": 3,
+      "rows": 2,
+      "parts": [
+        {
+          "id": "costume_5_upper_arm",
+          "cell": 0,
+          "size": [
+            26,
+            52
+          ],
+          "pivot": [
+            13,
+            6
+          ],
+          "tip": [
+            13,
+            46
+          ]
+        },
+        {
+          "id": "costume_5_forearm",
+          "cell": 1,
+          "size": [
+            25,
+            40
+          ],
+          "pivot": [
+            12,
+            5
+          ],
+          "tip": [
+            12,
+            39
+          ]
+        },
+        {
+          "id": "costume_5_thigh",
+          "cell": 2,
+          "size": [
+            31,
+            60
+          ],
+          "pivot": [
+            15,
+            5
+          ],
+          "tip": [
+            15,
+            55
+          ]
+        },
+        {
+          "id": "costume_5_shin",
+          "cell": 3,
+          "size": [
+            27,
+            65
+          ],
+          "pivot": [
+            13,
+            5
+          ],
+          "tip": [
+            13,
+            62
+          ]
+        },
+        {
+          "id": "costume_5_pelvis",
+          "cell": 4,
+          "size": [
+            65,
+            34
+          ],
+          "pivot": [
+            33,
+            7
+          ]
+        },
+        {
+          "id": "costume_5_joint",
+          "cell": 5,
+          "size": [
+            22,
+            22
+          ],
+          "pivot": [
+            11,
+            11
+          ],
+          "region": [
+            0.18,
+            0.12,
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "aliases": {}
+}

@@ -1,0 +1,23 @@
+{
+  "surface": "HOST Java2D compatibility preview; NOT Android capture",
+  "productionKotlinSourcesCompiledUnchanged": true,
+  "distinctNearWristPoses": 8, "distinctFarWristPoses": 8,
+  "boneLengthChecks": 64, "distinctFramesPerClip": 8,
+  "wrapJointChecks": 4, "wrapDistanceEpsilonPx": 0.01,
+  "frameAtBoundaryChecks": {"minus1":0,"at719":7,"at720":0},
+  "minimumWristHorizontalExcursionPx": 50, "visiblyChangingSlotVariantOneChecks": 13,
+  "savedIntegerNormalizationChecks": 52,
+  "faceCheeksMouthRoi": [151,149,185,165], "faceRoiHairCostumeChecks": 24,
+  "faceRoiSourceHeadAlphaMinimum": 253, "faceRoiMinimumMaskPixels": 100,
+  "faceRoiActualMaskPixels": 468, "faceRoiAllowedRgbChannelDelta": 3,
+  "faceRoiToleranceReason": "Head alpha 254 can composite over different hair backgrounds with minor RGB variation; opaque foreground remains checked",
+  "runningClips": 7, "runningPngFrames": 56,
+  "catalogueRecipes": 58, "alphaConnectivityChecks": 56,
+  "detachedComponentFrameChecks": 56, "componentConnectivity": 8,
+  "componentAlphaMinimum": 16, "ignoredDetachedComponentAreaAtMost": 24,
+  "largestDetachedComponentPixels": 0,
+  "framesWithCanvasBoundaryContact": 0,
+  "boundaryMetricLimitation": "Contact and foreground bounds are reported, not treated as proof of clipping or an automatic failure",
+  "alphaConnectivityLimitation": "Opaque head-to-chest component only, not skin continuity or visual seam quality",
+  "unverified": ["Android rasterization", "Compose playback", "lifecycle", "physical device", "visual acceptance"]
+}

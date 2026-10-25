@@ -1,0 +1,524 @@
+{
+  "kind": "static PNG and manifest checks; not Android or visual-quality certification",
+  "parts": 63,
+  "totalPngBytes": 752541,
+  "frameCount": 8,
+  "frameMillis": 90,
+  "cycleMillis": 720,
+  "manifestSha256": "fddcff84a253058242ae63fe613e7efb62a23783e3766db36af19288a668bafd",
+  "checks": [
+    "recipe completeness",
+    "PNG alpha/background",
+    "finite pivots",
+    "four normalized bone lengths",
+    "local asset paths",
+    "palette references",
+    "garment coverage ranges"
+  ],
+  "details": {
+    "head_0": {
+      "width": 147,
+      "height": 135,
+      "foregroundPixels": 14796,
+      "transparentPixels": 3555,
+      "bytes": 32280,
+      "sha256": "d3dbffcb7834ffd4eac35b2d23dd5d2b294940c16b6c6ccddad35ff40fe6fb47"
+    },
+    "head_1": {
+      "width": 147,
+      "height": 135,
+      "foregroundPixels": 14614,
+      "transparentPixels": 3779,
+      "bytes": 31335,
+      "sha256": "ce79c061e05ab90b05cf0789dc90a217e29c26a511746c111c3c75b85809c93a"
+    },
+    "head_2": {
+      "width": 147,
+      "height": 135,
+      "foregroundPixels": 14753,
+      "transparentPixels": 3653,
+      "bytes": 32526,
+      "sha256": "429afd052e7a3b05745805c15a81f67b15ad91ec68a3abb020a5c94ef928ef5d"
+    },
+    "head_3": {
+      "width": 147,
+      "height": 135,
+      "foregroundPixels": 14586,
+      "transparentPixels": 3835,
+      "bytes": 31514,
+      "sha256": "7a8aa06d7f1869154f32d0a5162a673f5fe108aa8a080465cbb74e080fe13301"
+    },
+    "hair_0_front": {
+      "width": 190,
+      "height": 150,
+      "foregroundPixels": 14859,
+      "transparentPixels": 12532,
+      "bytes": 27532,
+      "sha256": "dc2065f05d32198f67a8bd079a352b5e448cba491baca175babc7410bdfb86cb"
+    },
+    "hair_1_front": {
+      "width": 180,
+      "height": 145,
+      "foregroundPixels": 13949,
+      "transparentPixels": 11126,
+      "bytes": 32668,
+      "sha256": "6ece2477d4fa1d7d1a49e4209766e899569c8ce0e9bc738dd02f422b97ef4558"
+    },
+    "hair_2_front": {
+      "width": 180,
+      "height": 145,
+      "foregroundPixels": 13711,
+      "transparentPixels": 11369,
+      "bytes": 33303,
+      "sha256": "70358711b24db06039207012dee9af8fa6353898c90e82b507d467fb7928916e"
+    },
+    "hair_3_front": {
+      "width": 177,
+      "height": 125,
+      "foregroundPixels": 12429,
+      "transparentPixels": 8773,
+      "bytes": 30955,
+      "sha256": "5d336c8ef495563c4bf6143a302582da447e1afe14e73fbf96566afe53290ac2"
+    },
+    "hair_0_back": {
+      "width": 90,
+      "height": 95,
+      "foregroundPixels": 5697,
+      "transparentPixels": 2507,
+      "bytes": 12178,
+      "sha256": "b5395dc65f124256a8a56f5bbd45b41e0a893d090ff083046fa81ccddfa34ea2"
+    },
+    "hair_1_back": {
+      "width": 85,
+      "height": 90,
+      "foregroundPixels": 4627,
+      "transparentPixels": 2762,
+      "bytes": 11731,
+      "sha256": "3b2333e1dbcead6ca452a8c8efb2f5879a2a5ec78f8dff1a20a2960cfde7fdd3"
+    },
+    "hair_2_back": {
+      "width": 134,
+      "height": 120,
+      "foregroundPixels": 9092,
+      "transparentPixels": 6471,
+      "bytes": 21340,
+      "sha256": "eea5253b1f4be394c86fbe918cb339096157fd8baea43520b57e32eeb6eae61e"
+    },
+    "hair_3_back": {
+      "width": 100,
+      "height": 104,
+      "foregroundPixels": 7929,
+      "transparentPixels": 2205,
+      "bytes": 17921,
+      "sha256": "dd064d26d1f3b3da1e48f356820dad2da54c97cab39218dfb76ce400376d0d20"
+    },
+    "top_0": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4861,
+      "transparentPixels": 1617,
+      "bytes": 12629,
+      "sha256": "68de54198c2a70688c24aaa6507eeb505cdb66fdaef4d01829f5d4ddbb25cda3"
+    },
+    "top_1": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4800,
+      "transparentPixels": 1711,
+      "bytes": 13380,
+      "sha256": "6d4550eb5a5bde1ac4ff5d8804e057ef1d0ee42163a80e446a6c762829e83b00"
+    },
+    "top_2": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4797,
+      "transparentPixels": 1646,
+      "bytes": 12861,
+      "sha256": "c739958916243bd0ecf0a7aa16bd5f69e79f3e687b18bd9cbcbd0b547190ba62"
+    },
+    "top_3": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4865,
+      "transparentPixels": 1656,
+      "bytes": 13594,
+      "sha256": "3acca304819e90a2bce8fd7a2b5a868f1ecd4ffb7f39c60f9b872225fa6b8fd9"
+    },
+    "top_4": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4832,
+      "transparentPixels": 1620,
+      "bytes": 13015,
+      "sha256": "32e5b2e3306e5d993b050822988a07770c6b5113dbdff7ffc558c1c25cf39d30"
+    },
+    "top_5": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4823,
+      "transparentPixels": 1620,
+      "bytes": 12973,
+      "sha256": "69a39247de3ab1dafa82eedb2cd1317f97ddac2e0967809650720c92759b1128"
+    },
+    "skin_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4822,
+      "transparentPixels": 1636,
+      "bytes": 10876,
+      "sha256": "7c7a449f36f0b2973f297af0f944b8ae78071e66039f4d05195a5a4c112d94a9"
+    },
+    "skin_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1779,
+      "transparentPixels": 323,
+      "bytes": 4546,
+      "sha256": "a55586d5388f220c35a3c3b749b05ec55ec0557c8780e48699d8bd8c64309e71"
+    },
+    "bottom_0": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1481,
+      "transparentPixels": 606,
+      "bytes": 4022,
+      "sha256": "3486723c87fa610cef62d32169a19cbb94a96de29fdb28fbea55f1b8711690ec"
+    },
+    "bottom_1": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1598,
+      "transparentPixels": 507,
+      "bytes": 4028,
+      "sha256": "315bd7a164b54575bea34f8834781faf3dcc6c59aa3b175192574c2e5c0ff2d4"
+    },
+    "bottom_2": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1536,
+      "transparentPixels": 534,
+      "bytes": 4416,
+      "sha256": "15f5d86e539e6b926296b2e24db666bcffa0b666e0db7dc8bcd858b40decca24"
+    },
+    "bottom_3": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1475,
+      "transparentPixels": 587,
+      "bytes": 4483,
+      "sha256": "5ba8541c54d5f98406e7ea914bea287fefac4c61b938e084325c828e4fe3f769"
+    },
+    "bottom_4": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1315,
+      "transparentPixels": 792,
+      "bytes": 3563,
+      "sha256": "b9f15194f9b87c8e8b941fb7b9114072bfbd8a15a6157647964bf8dcb105b733"
+    },
+    "bottom_5": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1441,
+      "transparentPixels": 645,
+      "bytes": 4023,
+      "sha256": "bcb96c20f371d00e31049bbb677b27408652a05b166792419c476211c8e31359"
+    },
+    "skin_upper_arm": {
+      "width": 22,
+      "height": 50,
+      "foregroundPixels": 838,
+      "transparentPixels": 172,
+      "bytes": 2373,
+      "sha256": "39978188e09feaa010026a41ae9d45205144a7af6b32bcfc08ff5aca8780ceb2"
+    },
+    "skin_forearm": {
+      "width": 25,
+      "height": 48,
+      "foregroundPixels": 850,
+      "transparentPixels": 262,
+      "bytes": 2528,
+      "sha256": "72acf8377130e23ed4eee2eb0e1033e5779f23dedb490d210fc20ece999bd640"
+    },
+    "skin_thigh": {
+      "width": 27,
+      "height": 58,
+      "foregroundPixels": 1185,
+      "transparentPixels": 296,
+      "bytes": 3172,
+      "sha256": "d37a6f422dd220dfd6abc6b2c28d89fb68b68eb9a545dec163ed49768f487bf2"
+    },
+    "skin_shin": {
+      "width": 21,
+      "height": 65,
+      "foregroundPixels": 1058,
+      "transparentPixels": 229,
+      "bytes": 2840,
+      "sha256": "4e992105911f4d2311fae64690614f145019c7469ae90d5327ff130b649a630d"
+    },
+    "joint_skin": {
+      "width": 22,
+      "height": 22,
+      "foregroundPixels": 385,
+      "transparentPixels": 75,
+      "bytes": 1172,
+      "sha256": "49ea59bfa6aee70b0ee68231599fe0e6eb4ea054fc53a8fc783c79695b232d5e"
+    },
+    "shoe_base": {
+      "width": 61,
+      "height": 31,
+      "foregroundPixels": 1124,
+      "transparentPixels": 660,
+      "bytes": 3528,
+      "sha256": "a755f92773ec462c032f2c24cbf5a5ea523ea13fd0597518230d9a32c7a6099f"
+    },
+    "costume_1_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4700,
+      "transparentPixels": 1812,
+      "bytes": 13426,
+      "sha256": "f73703da0a2c79408bdaba4e3c4b72d15bd1778d5717e426814ed48ee441fa86"
+    },
+    "costume_1_hood_front": {
+      "width": 174,
+      "height": 102,
+      "foregroundPixels": 10508,
+      "transparentPixels": 6386,
+      "bytes": 25985,
+      "sha256": "d7290d8f3ca5821ce77075986f63cb55baa4f37d87fafb01be56f23d44b50678"
+    },
+    "costume_1_shoe": {
+      "width": 61,
+      "height": 31,
+      "foregroundPixels": 1140,
+      "transparentPixels": 667,
+      "bytes": 3642,
+      "sha256": "54f6d70d72ddf93c22dc3a7df04d69730923be564dce2c3c635590b87c1f7f69"
+    },
+    "costume_2_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4790,
+      "transparentPixels": 1863,
+      "bytes": 11946,
+      "sha256": "cfc6a697f833dd8bbb859e7f871c85734f881c5fd8a6a94be1310a5a127e6faf"
+    },
+    "costume_2_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1840,
+      "transparentPixels": 327,
+      "bytes": 4908,
+      "sha256": "6f2a1ffeae5b35cc3f4a79d656075d3cbdbc4aaaade5821ba563424aa7613e11"
+    },
+    "costume_3_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4587,
+      "transparentPixels": 2038,
+      "bytes": 11637,
+      "sha256": "91899c266e1fb4edc82e5efb1756eb8286329e9aa597fee055911ff525fa0793"
+    },
+    "costume_3_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1780,
+      "transparentPixels": 387,
+      "bytes": 4938,
+      "sha256": "dc3b85f2b5022ff4f22209b2cf68cc0011576d420f776a8837d8cc574f0ac83f"
+    },
+    "costume_4_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4731,
+      "transparentPixels": 1793,
+      "bytes": 13682,
+      "sha256": "a001ed54a1ef5a2a7c79358f4317a597c21d219efae2fa2ed1b890d43ebba08f"
+    },
+    "costume_4_hood_front": {
+      "width": 205,
+      "height": 190,
+      "foregroundPixels": 25784,
+      "transparentPixels": 11326,
+      "bytes": 71239,
+      "sha256": "c332dee188500abc450bd38d4fd9094db49a3a2199bbfdefcc9fd5f0d5264392"
+    },
+    "costume_4_shoe": {
+      "width": 61,
+      "height": 31,
+      "foregroundPixels": 1227,
+      "transparentPixels": 579,
+      "bytes": 4216,
+      "sha256": "181924991402bcdf9b84b66d04fb905df6c5d106217d1c07be00b398135c54da"
+    },
+    "costume_5_torso": {
+      "width": 80,
+      "height": 84,
+      "foregroundPixels": 4876,
+      "transparentPixels": 1674,
+      "bytes": 13017,
+      "sha256": "c49adf58bd25d0c2660bfa1ca8fa943c73cb2c2f8a1d6e4c271671a7f1f9f9fb"
+    },
+    "costume_5_hood_front": {
+      "width": 205,
+      "height": 190,
+      "foregroundPixels": 26077,
+      "transparentPixels": 11002,
+      "bytes": 64529,
+      "sha256": "83de174d042d97941b331b7fa832d8debe1701a3dff2bcdf686a761359e81593"
+    },
+    "costume_5_shoe": {
+      "width": 61,
+      "height": 31,
+      "foregroundPixels": 1192,
+      "transparentPixels": 625,
+      "bytes": 3737,
+      "sha256": "0272355ba42aa39016450764f8b872ca8094e1ba73887751fac49150d177fe32"
+    },
+    "costume_1_upper_arm": {
+      "width": 26,
+      "height": 52,
+      "foregroundPixels": 786,
+      "transparentPixels": 501,
+      "bytes": 2623,
+      "sha256": "e23651e83878fd2d40f080bba43e03fb84cd64b57bd26c3bf3cebea132b68bfc"
+    },
+    "costume_1_forearm": {
+      "width": 25,
+      "height": 40,
+      "foregroundPixels": 604,
+      "transparentPixels": 326,
+      "bytes": 2024,
+      "sha256": "122dc7e63ca91256ed05a3d23419431088aa4153e03237dbe5e1715bf02a2016"
+    },
+    "costume_1_thigh": {
+      "width": 31,
+      "height": 60,
+      "foregroundPixels": 1471,
+      "transparentPixels": 311,
+      "bytes": 4464,
+      "sha256": "6f76d7cc05b5d3f55ede6d109791e6f03a24ad4323c5e34a0bdfd3935f277ed2"
+    },
+    "costume_1_shin": {
+      "width": 27,
+      "height": 65,
+      "foregroundPixels": 1005,
+      "transparentPixels": 652,
+      "bytes": 3299,
+      "sha256": "c095c42db1e8eebf99f25c1fde2fb09cffafb0edf94bfd4c642595fe8c1851b2"
+    },
+    "costume_1_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1816,
+      "transparentPixels": 311,
+      "bytes": 5360,
+      "sha256": "124322e7bfec19b6d0fe0a653c04e5ae165ed68050b2f2b9e5f53f26af040b0e"
+    },
+    "costume_1_joint": {
+      "width": 22,
+      "height": 22,
+      "foregroundPixels": 374,
+      "transparentPixels": 90,
+      "bytes": 1296,
+      "sha256": "32e1a5feed9b78b60979abde67759a55d70b190699dedb3094291677587003eb"
+    },
+    "costume_4_upper_arm": {
+      "width": 26,
+      "height": 52,
+      "foregroundPixels": 765,
+      "transparentPixels": 525,
+      "bytes": 2915,
+      "sha256": "3f429395622439f11222453f55981588e0f102a886e7a1ef9764c84a47a11317"
+    },
+    "costume_4_forearm": {
+      "width": 25,
+      "height": 40,
+      "foregroundPixels": 514,
+      "transparentPixels": 446,
+      "bytes": 2051,
+      "sha256": "c9252a8a3f3620d5c79c9c9d64c5c797bd2b4c20bcb0a072aeee467ce049cc5a"
+    },
+    "costume_4_thigh": {
+      "width": 31,
+      "height": 60,
+      "foregroundPixels": 1214,
+      "transparentPixels": 569,
+      "bytes": 4359,
+      "sha256": "4bc96d7c7df0e548e98f8c2c8388ad059d510a5789bf7b1a79f885d2d81ed6aa"
+    },
+    "costume_4_shin": {
+      "width": 27,
+      "height": 65,
+      "foregroundPixels": 794,
+      "transparentPixels": 903,
+      "bytes": 3021,
+      "sha256": "d1f12c8275ad5f848c810c4dcbdd6eef546a489c1f39d70fe6b35ab7d5ab241b"
+    },
+    "costume_4_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1759,
+      "transparentPixels": 388,
+      "bytes": 5988,
+      "sha256": "5c0756d350169abda1e8014967955ce3bf1deaa351d79d6b6ab8d3eb306ac714"
+    },
+    "costume_4_joint": {
+      "width": 22,
+      "height": 22,
+      "foregroundPixels": 388,
+      "transparentPixels": 79,
+      "bytes": 1512,
+      "sha256": "ef63b3daa82c46464bcb51639440a7004d0ed7d147aae9357d1df575cd9caf31"
+    },
+    "costume_5_upper_arm": {
+      "width": 26,
+      "height": 52,
+      "foregroundPixels": 728,
+      "transparentPixels": 549,
+      "bytes": 2424,
+      "sha256": "8e9bb12abc9a6605f9fb267e51a94b9c9501c0d9b17c4767afdad12ed8c57ad9"
+    },
+    "costume_5_forearm": {
+      "width": 25,
+      "height": 40,
+      "foregroundPixels": 567,
+      "transparentPixels": 388,
+      "bytes": 1925,
+      "sha256": "ee9673eb32a596650017534adc447c35b66bb3d766bafc76c8b6423b7f382f46"
+    },
+    "costume_5_thigh": {
+      "width": 31,
+      "height": 60,
+      "foregroundPixels": 1417,
+      "transparentPixels": 362,
+      "bytes": 4290,
+      "sha256": "874dc67b1720721f1f02df51da206bace8f3a2db6f897ef5e67a7345c183400c"
+    },
+    "costume_5_shin": {
+      "width": 27,
+      "height": 65,
+      "foregroundPixels": 755,
+      "transparentPixels": 935,
+      "bytes": 2521,
+      "sha256": "92b1ea85b8deed3907f08354868abdfedb86d49babe00a3b4bd88a046c5ec4ee"
+    },
+    "costume_5_pelvis": {
+      "width": 65,
+      "height": 34,
+      "foregroundPixels": 1687,
+      "transparentPixels": 415,
+      "bytes": 4925,
+      "sha256": "92f73cbdd6048b634b6435c9d456fea6af656c33268636f6d9c55e7abe96f67b"
+    },
+    "costume_5_joint": {
+      "width": 22,
+      "height": 22,
+      "foregroundPixels": 382,
+      "transparentPixels": 79,
+      "bytes": 1337,
+      "sha256": "8472a28061cfc836f15fdefcb738cc6d3509ab7fef940b34d1f23f03a57e593d"
+    }
+  }
+}

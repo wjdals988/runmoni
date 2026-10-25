@@ -1,0 +1,1334 @@
+{
+  "tool": "built-in image_gen artwork; mechanical alpha-bound crop and nearest-neighbour resize",
+  "sources": {
+    "base-parts-art-source.png": {
+      "sha256": "23b41e0450c0597cda7f91db59387b46e963f7cde112150e2305acd2c23d638e",
+      "width": 1448,
+      "height": 1086
+    },
+    "hair-parts-v2-art-source.png": {
+      "sha256": "79964e4a1b4c5e6378ec1705560c256dc4c338b0f037a89271bc2f7989a66742",
+      "width": 1774,
+      "height": 887
+    },
+    "top-parts-art-source.png": {
+      "sha256": "7e95901547222bb46ba32826d1ed6bfb0db4c2963edb97f4f802035372024fa3",
+      "width": 1774,
+      "height": 887
+    },
+    "bottom-parts-art-source.png": {
+      "sha256": "3cde48daeeea6b09931b26ac1df91e9572934d60acb74152fca4655103ff5050",
+      "width": 1536,
+      "height": 1024
+    },
+    "limb-parts-v2-art-source.png": {
+      "sha256": "9a7f08968d3b0d80e429d28c7a73a6d0c4e8cb657dabae5a077780c1c06d41b0",
+      "width": 1536,
+      "height": 1024
+    },
+    "costume-1-art-source.png": {
+      "sha256": "1d1cbcbf1a3d827353a24db0ad8f82dd58e2fd1411b5cf3f486b5ab6010cbd81",
+      "width": 1254,
+      "height": 1254
+    },
+    "costume-2-art-source.png": {
+      "sha256": "295696a4b8c9121e22781ffd7a87435204e41163a146d7f50f304e0e2b876294",
+      "width": 1774,
+      "height": 887
+    },
+    "costume-3-art-source.png": {
+      "sha256": "d1930a7aa56b48caa29f79ee842790168aebbbe1299bfa12e330fce4e7234200",
+      "width": 1774,
+      "height": 887
+    },
+    "costume-4-art-source.png": {
+      "sha256": "4f857a0e7832667322ebf7d03ebef1b952b34f678ea72acada0ff34650a2b1f5",
+      "width": 1254,
+      "height": 1254
+    },
+    "costume-5-art-source.png": {
+      "sha256": "40e2d734265c43a31a040df9716c7fcfb24f4d6f680cfc1e55b830430f6fac46",
+      "width": 1254,
+      "height": 1254
+    },
+    "costume-1-fabric-art-source.png": {
+      "sha256": "fbaca1d69f1e0626d396430853e38a6fcb7d149b5be154635a8f02bffeda5dac",
+      "width": 1536,
+      "height": 1024
+    },
+    "costume-4-fabric-art-source.png": {
+      "sha256": "b97381bb40b5b9fffd0a67a34ea413322fb40f1865f8c56f7c9b5ae09b2760af",
+      "width": 1536,
+      "height": 1024
+    },
+    "costume-5-fabric-art-source.png": {
+      "sha256": "b400f34b6a6601233ece0c68630212c8dc10e61474dc5184b639d4e7772e305a",
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "parts": {
+    "head_0": {
+      "source": "base-parts-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        51,
+        69,
+        307,
+        356
+      ],
+      "size": [
+        147,
+        135
+      ],
+      "pivot": [
+        73,
+        131
+      ],
+      "sha256": "d3dbffcb7834ffd4eac35b2d23dd5d2b294940c16b6c6ccddad35ff40fe6fb47",
+      "bytes": 32280
+    },
+    "head_1": {
+      "source": "base-parts-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        421,
+        65,
+        678,
+        356
+      ],
+      "size": [
+        147,
+        135
+      ],
+      "pivot": [
+        73,
+        131
+      ],
+      "sha256": "ce79c061e05ab90b05cf0789dc90a217e29c26a511746c111c3c75b85809c93a",
+      "bytes": 31335
+    },
+    "head_2": {
+      "source": "base-parts-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        775,
+        65,
+        1031,
+        356
+      ],
+      "size": [
+        147,
+        135
+      ],
+      "pivot": [
+        73,
+        131
+      ],
+      "sha256": "429afd052e7a3b05745805c15a81f67b15ad91ec68a3abb020a5c94ef928ef5d",
+      "bytes": 32526
+    },
+    "head_3": {
+      "source": "base-parts-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        1146,
+        65,
+        1404,
+        356
+      ],
+      "size": [
+        147,
+        135
+      ],
+      "pivot": [
+        73,
+        131
+      ],
+      "sha256": "7a8aa06d7f1869154f32d0a5162a673f5fe108aa8a080465cbb74e080fe13301",
+      "bytes": 31514
+    },
+    "hair_0_front": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        30,
+        85,
+        436,
+        415
+      ],
+      "size": [
+        190,
+        150
+      ],
+      "pivot": [
+        127,
+        164
+      ],
+      "sha256": "dc2065f05d32198f67a8bd079a352b5e448cba491baca175babc7410bdfb86cb",
+      "bytes": 27532
+    },
+    "hair_1_front": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        473,
+        96,
+        854,
+        400
+      ],
+      "size": [
+        180,
+        145
+      ],
+      "pivot": [
+        118,
+        160
+      ],
+      "sha256": "6ece2477d4fa1d7d1a49e4209766e899569c8ce0e9bc738dd02f422b97ef4558",
+      "bytes": 32668
+    },
+    "hair_2_front": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        912,
+        91,
+        1291,
+        420
+      ],
+      "size": [
+        180,
+        145
+      ],
+      "pivot": [
+        119,
+        171
+      ],
+      "sha256": "70358711b24db06039207012dee9af8fa6353898c90e82b507d467fb7928916e",
+      "bytes": 33303
+    },
+    "hair_3_front": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        1338,
+        112,
+        1746,
+        435
+      ],
+      "size": [
+        177,
+        125
+      ],
+      "pivot": [
+        118,
+        161
+      ],
+      "sha256": "5d336c8ef495563c4bf6143a302582da447e1afe14e73fbf96566afe53290ac2",
+      "bytes": 30955
+    },
+    "hair_0_back": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        56,
+        498,
+        408,
+        803
+      ],
+      "size": [
+        90,
+        95
+      ],
+      "pivot": [
+        73,
+        115
+      ],
+      "sha256": "b5395dc65f124256a8a56f5bbd45b41e0a893d090ff083046fa81ccddfa34ea2",
+      "bytes": 12178
+    },
+    "hair_1_back": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        474,
+        501,
+        887,
+        804
+      ],
+      "size": [
+        85,
+        90
+      ],
+      "pivot": [
+        72,
+        113
+      ],
+      "sha256": "3b2333e1dbcead6ca452a8c8efb2f5879a2a5ec78f8dff1a20a2960cfde7fdd3",
+      "bytes": 11731
+    },
+    "hair_2_back": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 6,
+      "alphaBounds": [
+        887,
+        473,
+        1278,
+        804
+      ],
+      "size": [
+        134,
+        120
+      ],
+      "pivot": [
+        127,
+        172
+      ],
+      "sha256": "eea5253b1f4be394c86fbe918cb339096157fd8baea43520b57e32eeb6eae61e",
+      "bytes": 21340
+    },
+    "hair_3_back": {
+      "source": "hair-parts-v2-art-source.png",
+      "cell": 7,
+      "alphaBounds": [
+        1355,
+        517,
+        1723,
+        797
+      ],
+      "size": [
+        100,
+        104
+      ],
+      "pivot": [
+        83,
+        116
+      ],
+      "sha256": "dd064d26d1f3b3da1e48f356820dad2da54c97cab39218dfb76ce400376d0d20",
+      "bytes": 17921
+    },
+    "top_0": {
+      "source": "top-parts-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        69,
+        81,
+        380,
+        434
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "68de54198c2a70688c24aaa6507eeb505cdb66fdaef4d01829f5d4ddbb25cda3",
+      "bytes": 12629
+    },
+    "top_1": {
+      "source": "top-parts-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        512,
+        81,
+        834,
+        434
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "6d4550eb5a5bde1ac4ff5d8804e057ef1d0ee42163a80e446a6c762829e83b00",
+      "bytes": 13380
+    },
+    "top_2": {
+      "source": "top-parts-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        953,
+        81,
+        1278,
+        434
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "c739958916243bd0ecf0a7aa16bd5f69e79f3e687b18bd9cbcbd0b547190ba62",
+      "bytes": 12861
+    },
+    "top_3": {
+      "source": "top-parts-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        1395,
+        74,
+        1722,
+        438
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "3acca304819e90a2bce8fd7a2b5a868f1ecd4ffb7f39c60f9b872225fa6b8fd9",
+      "bytes": 13594
+    },
+    "top_4": {
+      "source": "top-parts-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        67,
+        482,
+        387,
+        847
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "32e5b2e3306e5d993b050822988a07770c6b5113dbdff7ffc558c1c25cf39d30",
+      "bytes": 13015
+    },
+    "top_5": {
+      "source": "top-parts-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        511,
+        482,
+        833,
+        847
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "69a39247de3ab1dafa82eedb2cd1317f97ddac2e0967809650720c92759b1128",
+      "bytes": 12973
+    },
+    "skin_torso": {
+      "source": "top-parts-art-source.png",
+      "cell": 6,
+      "alphaBounds": [
+        953,
+        482,
+        1276,
+        847
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "7c7a449f36f0b2973f297af0f944b8ae78071e66039f4d05195a5a4c112d94a9",
+      "bytes": 10876
+    },
+    "skin_pelvis": {
+      "source": "top-parts-art-source.png",
+      "cell": 7,
+      "alphaBounds": [
+        1406,
+        639,
+        1731,
+        855
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "a55586d5388f220c35a3c3b749b05ec55ec0557c8780e48699d8bd8c64309e71",
+      "bytes": 4546
+    },
+    "bottom_0": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        47,
+        148,
+        506,
+        455
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "3486723c87fa610cef62d32169a19cbb94a96de29fdb28fbea55f1b8711690ec",
+      "bytes": 4022
+    },
+    "bottom_1": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        603,
+        122,
+        996,
+        489
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "315bd7a164b54575bea34f8834781faf3dcc6c59aa3b175192574c2e5c0ff2d4",
+      "bytes": 4028
+    },
+    "bottom_2": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        1066,
+        147,
+        1516,
+        455
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "15f5d86e539e6b926296b2e24db666bcffa0b666e0db7dc8bcd858b40decca24",
+      "bytes": 4416
+    },
+    "bottom_3": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        43,
+        587,
+        512,
+        915
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "5ba8541c54d5f98406e7ea914bea287fefac4c61b938e084325c828e4fe3f769",
+      "bytes": 4483
+    },
+    "bottom_4": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        512,
+        557,
+        1018,
+        940
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "b9f15194f9b87c8e8b941fb7b9114072bfbd8a15a6157647964bf8dcb105b733",
+      "bytes": 3563
+    },
+    "bottom_5": {
+      "source": "bottom-parts-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        1053,
+        591,
+        1513,
+        915
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "bcb96c20f371d00e31049bbb677b27408652a05b166792419c476211c8e31359",
+      "bytes": 4023
+    },
+    "skin_upper_arm": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        202,
+        97,
+        366,
+        463
+      ],
+      "size": [
+        22,
+        50
+      ],
+      "pivot": [
+        11,
+        5
+      ],
+      "sha256": "39978188e09feaa010026a41ae9d45205144a7af6b32bcfc08ff5aca8780ceb2",
+      "bytes": 2373
+    },
+    "skin_forearm": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        709,
+        111,
+        856,
+        508
+      ],
+      "size": [
+        25,
+        48
+      ],
+      "pivot": [
+        12,
+        4
+      ],
+      "sha256": "72acf8377130e23ed4eee2eb0e1033e5779f23dedb490d210fc20ece999bd640",
+      "bytes": 2528
+    },
+    "skin_thigh": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        1181,
+        83,
+        1368,
+        482
+      ],
+      "size": [
+        27,
+        58
+      ],
+      "pivot": [
+        13,
+        4
+      ],
+      "sha256": "d37a6f422dd220dfd6abc6b2c28d89fb68b68eb9a545dec163ed49768f487bf2",
+      "bytes": 3172
+    },
+    "skin_shin": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        202,
+        553,
+        342,
+        941
+      ],
+      "size": [
+        21,
+        65
+      ],
+      "pivot": [
+        10,
+        4
+      ],
+      "sha256": "4e992105911f4d2311fae64690614f145019c7469ae90d5327ff130b649a630d",
+      "bytes": 2840
+    },
+    "joint_skin": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        694,
+        708,
+        842,
+        858
+      ],
+      "size": [
+        22,
+        22
+      ],
+      "pivot": [
+        11,
+        11
+      ],
+      "sha256": "49ea59bfa6aee70b0ee68231599fe0e6eb4ea054fc53a8fc783c79695b232d5e",
+      "bytes": 1172
+    },
+    "shoe_base": {
+      "source": "limb-parts-v2-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        1066,
+        681,
+        1453,
+        917
+      ],
+      "size": [
+        61,
+        31
+      ],
+      "pivot": [
+        18,
+        13
+      ],
+      "sha256": "a755f92773ec462c032f2c24cbf5a5ea523ea13fd0597518230d9a32c7a6099f",
+      "bytes": 3528
+    },
+    "costume_1_torso": {
+      "source": "costume-1-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        71,
+        122,
+        658,
+        731
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "f73703da0a2c79408bdaba4e3c4b72d15bd1778d5717e426814ed48ee441fa86",
+      "bytes": 13426
+    },
+    "costume_1_hood_front": {
+      "source": "costume-1-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        59,
+        789,
+        647,
+        1143
+      ],
+      "size": [
+        174,
+        102
+      ],
+      "pivot": [
+        98,
+        163
+      ],
+      "sha256": "d7290d8f3ca5821ce77075986f63cb55baa4f37d87fafb01be56f23d44b50678",
+      "bytes": 25985
+    },
+    "costume_1_shoe": {
+      "source": "costume-1-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        747,
+        878,
+        1178,
+        1156
+      ],
+      "size": [
+        61,
+        31
+      ],
+      "pivot": [
+        18,
+        13
+      ],
+      "sha256": "54f6d70d72ddf93c22dc3a7df04d69730923be564dce2c3c635590b87c1f7f69",
+      "bytes": 3642
+    },
+    "costume_2_torso": {
+      "source": "costume-2-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        245,
+        109,
+        849,
+        803
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "cfc6a697f833dd8bbb859e7f871c85734f881c5fd8a6a94be1310a5a127e6faf",
+      "bytes": 11946
+    },
+    "costume_2_pelvis": {
+      "source": "costume-2-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        958,
+        464,
+        1523,
+        824
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "6f2a1ffeae5b35cc3f4a79d656075d3cbdbc4aaaade5821ba563424aa7613e11",
+      "bytes": 4908
+    },
+    "costume_3_torso": {
+      "source": "costume-3-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        340,
+        134,
+        940,
+        799
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "91899c266e1fb4edc82e5efb1756eb8286329e9aa597fee055911ff525fa0793",
+      "bytes": 11637
+    },
+    "costume_3_pelvis": {
+      "source": "costume-3-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        940,
+        465,
+        1501,
+        825
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "dc3b85f2b5022ff4f22209b2cf68cc0011576d420f776a8837d8cc574f0ac83f",
+      "bytes": 4938
+    },
+    "costume_4_torso": {
+      "source": "costume-4-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        74,
+        74,
+        643,
+        665
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "a001ed54a1ef5a2a7c79358f4317a597c21d219efae2fa2ed1b890d43ebba08f",
+      "bytes": 13682
+    },
+    "costume_4_hood_front": {
+      "source": "costume-4-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        104,
+        703,
+        658,
+        1201
+      ],
+      "size": [
+        205,
+        190
+      ],
+      "pivot": [
+        106,
+        174
+      ],
+      "sha256": "c332dee188500abc450bd38d4fd9094db49a3a2199bbfdefcc9fd5f0d5264392",
+      "bytes": 71239
+    },
+    "costume_4_shoe": {
+      "source": "costume-4-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        744,
+        881,
+        1192,
+        1175
+      ],
+      "size": [
+        61,
+        31
+      ],
+      "pivot": [
+        18,
+        13
+      ],
+      "sha256": "181924991402bcdf9b84b66d04fb905df6c5d106217d1c07be00b398135c54da",
+      "bytes": 4216
+    },
+    "costume_5_torso": {
+      "source": "costume-5-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        93,
+        61,
+        622,
+        627
+      ],
+      "size": [
+        80,
+        84
+      ],
+      "pivot": [
+        44,
+        6
+      ],
+      "sha256": "c49adf58bd25d0c2660bfa1ca8fa943c73cb2c2f8a1d6e4c271671a7f1f9f9fb",
+      "bytes": 13017
+    },
+    "costume_5_hood_front": {
+      "source": "costume-5-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        125,
+        685,
+        608,
+        1215
+      ],
+      "size": [
+        205,
+        190
+      ],
+      "pivot": [
+        106,
+        174
+      ],
+      "sha256": "83de174d042d97941b331b7fa832d8debe1701a3dff2bcdf686a761359e81593",
+      "bytes": 64529
+    },
+    "costume_5_shoe": {
+      "source": "costume-5-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        724,
+        868,
+        1204,
+        1173
+      ],
+      "size": [
+        61,
+        31
+      ],
+      "pivot": [
+        18,
+        13
+      ],
+      "sha256": "0272355ba42aa39016450764f8b872ca8094e1ba73887751fac49150d177fe32",
+      "bytes": 3737
+    },
+    "costume_1_upper_arm": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        133,
+        56,
+        500,
+        512
+      ],
+      "size": [
+        26,
+        52
+      ],
+      "pivot": [
+        13,
+        6
+      ],
+      "sha256": "e23651e83878fd2d40f080bba43e03fb84cd64b57bd26c3bf3cebea132b68bfc",
+      "bytes": 2623
+    },
+    "costume_1_forearm": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        642,
+        99,
+        938,
+        476
+      ],
+      "size": [
+        25,
+        40
+      ],
+      "pivot": [
+        12,
+        5
+      ],
+      "sha256": "122dc7e63ca91256ed05a3d23419431088aa4153e03237dbe5e1715bf02a2016",
+      "bytes": 2024
+    },
+    "costume_1_thigh": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        1125,
+        72,
+        1449,
+        501
+      ],
+      "size": [
+        31,
+        60
+      ],
+      "pivot": [
+        15,
+        5
+      ],
+      "sha256": "6f76d7cc05b5d3f55ede6d109791e6f03a24ad4323c5e34a0bdfd3935f277ed2",
+      "bytes": 4464
+    },
+    "costume_1_shin": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        132,
+        512,
+        417,
+        970
+      ],
+      "size": [
+        27,
+        65
+      ],
+      "pivot": [
+        13,
+        5
+      ],
+      "sha256": "c095c42db1e8eebf99f25c1fde2fb09cffafb0edf94bfd4c642595fe8c1851b2",
+      "bytes": 3299
+    },
+    "costume_1_pelvis": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        539,
+        582,
+        1024,
+        958
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "124322e7bfec19b6d0fe0a653c04e5ae165ed68050b2f2b9e5f53f26af040b0e",
+      "bytes": 5360
+    },
+    "costume_1_joint": {
+      "source": "costume-1-fabric-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        1202,
+        663,
+        1426,
+        887
+      ],
+      "size": [
+        22,
+        22
+      ],
+      "pivot": [
+        11,
+        11
+      ],
+      "sha256": "32e1a5feed9b78b60979abde67759a55d70b190699dedb3094291677587003eb",
+      "bytes": 1296
+    },
+    "costume_4_upper_arm": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        126,
+        55,
+        458,
+        500
+      ],
+      "size": [
+        26,
+        52
+      ],
+      "pivot": [
+        13,
+        6
+      ],
+      "sha256": "3f429395622439f11222453f55981588e0f102a886e7a1ef9764c84a47a11317",
+      "bytes": 2915
+    },
+    "costume_4_forearm": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        607,
+        96,
+        963,
+        480
+      ],
+      "size": [
+        25,
+        40
+      ],
+      "pivot": [
+        12,
+        5
+      ],
+      "sha256": "c9252a8a3f3620d5c79c9c9d64c5c797bd2b4c20bcb0a072aeee467ce049cc5a",
+      "bytes": 2051
+    },
+    "costume_4_thigh": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        1121,
+        33,
+        1468,
+        512
+      ],
+      "size": [
+        31,
+        60
+      ],
+      "pivot": [
+        15,
+        5
+      ],
+      "sha256": "4bc96d7c7df0e548e98f8c2c8388ad059d510a5789bf7b1a79f885d2d81ed6aa",
+      "bytes": 4359
+    },
+    "costume_4_shin": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        113,
+        527,
+        512,
+        971
+      ],
+      "size": [
+        27,
+        65
+      ],
+      "pivot": [
+        13,
+        5
+      ],
+      "sha256": "d1f12c8275ad5f848c810c4dcbdd6eef546a489c1f39d70fe6b35ab7d5ab241b",
+      "bytes": 3021
+    },
+    "costume_4_pelvis": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        512,
+        574,
+        1024,
+        947
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "5c0756d350169abda1e8014967955ce3bf1deaa351d79d6b6ab8d3eb306ac714",
+      "bytes": 5988
+    },
+    "costume_4_joint": {
+      "source": "costume-4-fabric-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        1147,
+        624,
+        1441,
+        915
+      ],
+      "size": [
+        22,
+        22
+      ],
+      "pivot": [
+        11,
+        11
+      ],
+      "sha256": "ef63b3daa82c46464bcb51639440a7004d0ed7d147aae9357d1df575cd9caf31",
+      "bytes": 1512
+    },
+    "costume_5_upper_arm": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 0,
+      "alphaBounds": [
+        104,
+        16,
+        472,
+        502
+      ],
+      "size": [
+        26,
+        52
+      ],
+      "pivot": [
+        13,
+        6
+      ],
+      "sha256": "8e9bb12abc9a6605f9fb267e51a94b9c9501c0d9b17c4767afdad12ed8c57ad9",
+      "bytes": 2424
+    },
+    "costume_5_forearm": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 1,
+      "alphaBounds": [
+        630,
+        26,
+        954,
+        460
+      ],
+      "size": [
+        25,
+        40
+      ],
+      "pivot": [
+        12,
+        5
+      ],
+      "sha256": "ee9673eb32a596650017534adc447c35b66bb3d766bafc76c8b6423b7f382f46",
+      "bytes": 1925
+    },
+    "costume_5_thigh": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 2,
+      "alphaBounds": [
+        1150,
+        16,
+        1449,
+        496
+      ],
+      "size": [
+        31,
+        60
+      ],
+      "pivot": [
+        15,
+        5
+      ],
+      "sha256": "874dc67b1720721f1f02df51da206bace8f3a2db6f897ef5e67a7345c183400c",
+      "bytes": 4290
+    },
+    "costume_5_shin": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 3,
+      "alphaBounds": [
+        143,
+        524,
+        512,
+        968
+      ],
+      "size": [
+        27,
+        65
+      ],
+      "pivot": [
+        13,
+        5
+      ],
+      "sha256": "92b1ea85b8deed3907f08354868abdfedb86d49babe00a3b4bd88a046c5ec4ee",
+      "bytes": 2521
+    },
+    "costume_5_pelvis": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 4,
+      "alphaBounds": [
+        512,
+        544,
+        1024,
+        972
+      ],
+      "size": [
+        65,
+        34
+      ],
+      "pivot": [
+        33,
+        7
+      ],
+      "sha256": "92f73cbdd6048b634b6435c9d456fea6af656c33268636f6d9c55e7abe96f67b",
+      "bytes": 4925
+    },
+    "costume_5_joint": {
+      "source": "costume-5-fabric-art-source.png",
+      "cell": 5,
+      "alphaBounds": [
+        1184,
+        638,
+        1415,
+        868
+      ],
+      "size": [
+        22,
+        22
+      ],
+      "pivot": [
+        11,
+        11
+      ],
+      "sha256": "8472a28061cfc836f15fdefcb738cc6d3509ab7fef940b34d1f23f03a57e593d",
+      "bytes": 1337
+    }
+  },
+  "totalPngBytes": 752541,
+  "partCount": 63
+}

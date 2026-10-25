@@ -42,13 +42,18 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
-    AppVersionEntry("0.1.4-dev", "2026-10-25", "개발 프리뷰", listOf(
+    AppVersionEntry("0.1.5-dev", "2026-10-25", "개발 프리뷰", listOf(
+        "미니미를 원화 부품으로 구성해 얼굴과 체형을 유지하며 꾸밀 수 있게 바꿨어요.",
+        "양팔과 다리가 함께 움직이는 달리기와 특수 세트 표현을 개선했어요.",
+        "Google 계정 선택과 인증 응답 오류의 설명을 더 정확하게 바꿨어요.",
+    )),
+    AppVersionEntry("0.1.4-dev", "2026-10-25", "로컬 검증본", listOf(
         "홈을 러닝 시작 중심으로 정리하고 중복 통계 카드를 줄였어요.",
         "설정을 전체 화면으로 옮기고 제목·설명·탭 글자 크기를 조정했어요.",
         "크루와 내 기록 화면을 간결하게 정리하고 달리는 모습의 새 아이콘을 적용했어요.",
         "Google 버튼에서 계정 추가를 지원하고 로그인 오류 단계를 구분해요.",
     )),
-    AppVersionEntry("0.1.3-dev", "2026-10-25", "개발 프리뷰", listOf(
+    AppVersionEntry("0.1.3-dev", "2026-10-25", "로컬 검증본", listOf(
         "5개 탭의 색상·글자·간격을 정리하고 큰 글씨 배치를 개선했어요.",
         "러닝 시작·일시정지·재개·종료 버튼을 하단에 고정했어요.",
         "Google 계정과 기록 요약 백업을 연결하고 설정을 정리했어요.",

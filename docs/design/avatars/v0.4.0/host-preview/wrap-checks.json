@@ -1,0 +1,6 @@
+[
+{"joint":"nearWrist","wrapDistancePx":9.633171,"maximumOtherAdjacentDistancePx":29.319975,"epsilonPx":0.01},
+{"joint":"nearAnkle","wrapDistancePx":16.03122,"maximumOtherAdjacentDistancePx":45.35416,"epsilonPx":0.01},
+{"joint":"farWrist","wrapDistancePx":7.749797,"maximumOtherAdjacentDistancePx":29.319963,"epsilonPx":0.01},
+{"joint":"farAnkle","wrapDistancePx":21.84033,"maximumOtherAdjacentDistancePx":45.35416,"epsilonPx":0.01}
+]

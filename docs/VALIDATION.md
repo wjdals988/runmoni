@@ -2,6 +2,16 @@
 
 빌드 통과, 합성 GPS 검증, 실기기 야외 정확도, 실제 클라우드 오디오 송출은 각각 다른 증거입니다. 아래에는 수행한 것만 완료로 기록합니다.
 
+## 2026-10-25 — AVD 제외 후 설정·게시 도구 검증
+
+- 공식 Firebase public project-config GET와 Google provider createAuthUri POST가 각각HTTP200. Android패키지/release SHA1/Webclient/FirebaseAppId 인수를 포함한 서버 검사, 프로젝트·기본authDomain·Google반환provider·GoogleHTTPS host·Webclient일치 확인. 본문146+851bytes, 전체프로세스2.093초. 사용자식별자전송/로그인/계정생성/DB쓰기0, 원문API응답/OAuth상태/API키저장0. 비공개콘솔/Rules/Android실인증/Firestore원격CRUD는 여전히미검증.
+- `scripts/publish_android_preview.py`와 새 offline검사14/14·0.085초. 기본plan의 네트워크/GCM/하위프로세스 호출 차단, 경로·코드·패키지·크기·해시·서명선언/URL핀/기존자산 재사용, 3자산 검증후 public PATCH1회·digest/main 불일치/불완전 공개본 변경0을 fake transport로 확인. 이 fixture는 실제서명APK/실제GitHub게시/실기기검증이 아님.
+- 새 통합1.5/code6 소스는 준비 중이다. 기존1.4의 JVM30/30·UI38/38 결과를 새 AndroidCanvas 캐릭터의 런타임 검증으로 합산하지 않는다. AVD는 재실행하지 않았다.
+- Firestore 공식 REST 익명 GET 1회는 curl35·HTTP0·본문0bytes·0.141초로 TLS 단계에서 종료했다. 실제UID/로그인/계정생성/DB쓰기0. 새 임의 경로만 사용했고 원문/임의경로/API키저장0. 익명 접근 거부·원격Rules·인증 후CRUD 검증은 성립하지 않았다. 반복 전송·프록시/보안 설정 변경 없이 중단했다.
+- 공개 게이트 전 구체적인 검토본을 준비하도록 `--stage-draft`를 추가했다. 확장한 fake transport 검사 18/18·0.134초: 기본 plan 무전송, 최신 3자산 검증, 초안 모드의 공개 PATCH0회, 동일 초안 재사용, 기존 공개본 변경0회, 초안→공개 시 재업로드0회를 확인했다. 실제 GitHub 초안 업로드·공개 전환 검증은 아직 수행하지 않았다.
+- 대시보드 로컬 JSON을 Git HEAD와 대조해 총9개 프로젝트 중 런모니 `description`/`updatedAt` 2개 필드만 변경, APK 메타데이터·다른8개 프로젝트 불변을 확인했다. 다운로드 교체·원격 푸시·Vercel 배포 성공과 구분한다.
+- Firestore GET의 실행 환경을 작업 샌드박스 밖 호스트로 바꾼 후속1회는 HTTP403/PERMISSION_DENIED/표준권한거부문구·본문127bytes·0.343초였다. 임의 미사용 경로의 익명 목록 요청 거부만 관측했으며 실제UID·계정생성·DB쓰기·보안설정변경0. 초기TLS실패와별도보존, 원격Rules전체/인증후CRUD/AVD인터넷원인검증은아님.
+
 ## 2026-10-25 — 0.1.4-dev 모바일 재구성·기기 설정·Google 버튼
 
 - 전용 AVD 실측 font_scale2.0,1080×2400,density420,Google계정0개. 글씨100%·화면/density 기본값 복원과 sync 후 종료. 앱 전역 글꼴배율 제한 없음.

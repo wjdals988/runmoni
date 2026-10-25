@@ -1,0 +1,38 @@
+{
+  "surface": "Production Kotlin via host Java2D, NOT an Android capture",
+  "hostRunId": "1adad9d2fc85463f89ece25ab509b6e1",
+  "outputs": [
+    {
+      "file": "running-pair.gif",
+      "width": 512,
+      "height": 384,
+      "clips": [
+        "male",
+        "female"
+      ],
+      "frames": 8,
+      "frameMillis": 90,
+      "cycleMillis": 720,
+      "bytes": 420922,
+      "sha256": "4fc0d546ce123b431d7c18d5a0d08a161ffb8306e71d4fd3adabd5a2ea7eec1f"
+    },
+    {
+      "file": "special-sets.gif",
+      "width": 768,
+      "height": 768,
+      "clips": [
+        "male",
+        "costume_1",
+        "costume_2",
+        "costume_3",
+        "costume_4",
+        "costume_5"
+      ],
+      "frames": 8,
+      "frameMillis": 90,
+      "cycleMillis": 720,
+      "bytes": 1279246,
+      "sha256": "a6213b6be8eeea2bbf83604277013e2738d2c18b2799172b663e14df431fda80"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "sourceWidth": 2048,
+  "sourceHeight": 768,
+  "cellWidth": 256,
+  "cellHeight": 384,
+  "frames": 8,
+  "uniquePixelFrames": 8,
+  "frameMillis": 90,
+  "cycleMillis": 720,
+  "loop": 0,
+  "bytes": 468101,
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "frameHashes": [
+    "7563ca1c0976afda44181a858a59a61469a85a36eeda6d98357db47b1a2522c5",
+    "a92bf666609406f52a07209d3fcf4b4202872a6774184802b2e230849dc364c6",
+    "8281b96a593750a7c599bf634ec42053ddbf7025cdcab7ffb1ed68f7db9b7f35",
+    "9d8e535b9ce78b79a137310f4d5bcd55e2b836820ef935251f4b7253d15db28d",
+    "f95afe4b69463961531ee8c0ee47a96dca1a98d04169460a04245ca675cf6c7e",
+    "e0e3f6aca6581d25df9cb70734c83753da63e6a429bf3b2ad70769c4b23194ce",
+    "6328a6f7df846b0501f261cf63645f75c597e748127fd77337621c6d3999a3ca",
+    "f96f0f82450437f7a6f63b9866f9e48d5099f53e417cc62b19640359436d05f9"
+  ],
+  "stage": "raw visual motion proposal, mechanical grid extraction only; not a production-ready aligned sprite or Android capture",
+  "appIntegrated": false
+}

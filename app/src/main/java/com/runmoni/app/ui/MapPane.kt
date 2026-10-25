@@ -3,8 +3,6 @@ package com.runmoni.app.ui
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.graphics.Canvas as AndroidCanvas
-import android.graphics.Paint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -53,7 +51,6 @@ import com.naver.maps.map.overlay.PathOverlay
 import com.runmoni.app.BuildConfig
 import com.runmoni.app.domain.LiveRunner
 import com.runmoni.app.domain.TrackPoint
-import com.runmoni.app.domain.AvatarStyle
 import kotlin.math.cos
 
 @Composable
@@ -140,8 +137,8 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
         validRunners.forEach { runner ->
             markers += Marker().apply {
                 position = LatLng(runner.latitude, runner.longitude)
-                icon = OverlayImage.fromBitmap(runnerBitmap(runner.avatar))
-                width = 42; height = 52
+                icon = OverlayImage.fromBitmap(Bitmap.createScaledBitmap(avatarBitmap(context, runner.avatar), 84, 126, false))
+                width = 42; height = 63
                 captionText = if (runner.memberCount > 1) "${runner.name} · ${runner.memberCount}명" else runner.name
                 this.map = ready
             }
@@ -200,5 +197,3 @@ private fun RouteCanvas(points: List<TrackPoint>, modifier: Modifier) {
 private fun TrackPoint.validForRoute() = latitude.isFinite() && longitude.isFinite() && latitude in -90.0..90.0 && longitude in -180.0..180.0 && accuracyMeters.isFinite() && accuracyMeters in 0f..30f
 
 internal fun LiveRunner.hasValidCoordinates() = latitude.isFinite() && longitude.isFinite() && latitude in -90.0..90.0 && longitude in -180.0..180.0
-
-private fun runnerBitmap(avatar: AvatarStyle): Bitmap = avatarBitmap(avatar)
