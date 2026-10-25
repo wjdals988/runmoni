@@ -15,6 +15,7 @@
 - 소스3eacfed clean에서 실제Android컴파일·서명APK1.5/code6 확보:210775779bytes/SHA256 fad6755cbd2d35f3ac4f553d0ce24fb0345a1359ef4469d391317e52c521cfa7,기존인증서/APKv2/non-debuggable/min29/target36 일치. ZIP내PNG63개모두소스해시일치+manifest fddcff84a253058242ae63fe613e7efb62a23783e3766db36af19288a668bafd 일치. Firebase설정활성·프로젝트일치,실제로그인/CRUD0.
 - SDK36 실물누락23초/BuildTools35 링크누락14.533초의환경중단을보존. 공식플랫폼1개65878410bytes를256KiB/s단일연결252.125초로받아체크섬검증·프로젝트내복구,전역SDK변경0. 컴파일/JVM148.479초 뒤 자체local.properties escape1건·수정후stale lint분석20.544초를찾아분석3개만재계산,최종70.525초/82작업4실행78최신 성공. JVM30/30·lint0오류26경고,baseline/기준완화0. 실패/성공근거를분리하고 AVD/실기기0회 유지.
 - 실제APK plan차단0·네트워크/GCM0,대시보드검사15/15·247.1497ms. 공개APK/피드/다운로드는1.1 유지,소스게시·비공개draft는후속진행으로구분한다.
+- 문서만커밋해도AGP의APK내장version-control-info가새commit으로갱신되어해시가변함을ZIP항목비교로확인했다. 최초3e 후보/metadata/체크섬을outputs/snapshots/3eacfed에보존하며 최종후보는깨끗한최종commit/동일app tree/실제서명/내장revision을재대조한다. 위fad6755해시를최종공개다운로드해시로오인하지않도록검증스냅샷과배포sidecar의역할을명시했다.
 
 ## 아바타 원화 0.4.0 — 2026-10-25 (승인 품질의 부품·실제 천 의상·공통 달리기 통합)
 

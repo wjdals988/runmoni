@@ -2,7 +2,9 @@
 
 빌드 통과, 합성 GPS 검증, 실기기 야외 정확도, 실제 클라우드 오디오 송출은 각각 다른 증거입니다. 아래에는 수행한 것만 완료로 기록합니다.
 
-## 2026-10-25 — 0.1.5-dev 원화 통합 서명 APK
+## 2026-10-25 — 0.1.5-dev 원화 통합 서명 APK 검증 스냅샷
+
+아래 APK 해시는 명시한 최초 소스 `3eacfed`의 검증본이다. AGP는 APK의 `META-INF/version-control-info.textproto`에 실제 소스 commit을 넣으므로, app tree가 같아도 최종 문서 commit 뒤 재패키징하면 APK 서명·해시가 달라질 수 있다. 최초 후보는 로컬 `outputs/snapshots/3eacfed`에 보존했다. 최종 게시 대상은 깨끗한 최종 commit으로 assemble·서명·내장 revision·63개 원화를 다시 대조하며, 정확한 배포 해시는 릴리스의 버전별 metadata와 SHA256SUMS를 기준으로 한다. 미게시 후보를 공개 피드에 넣지 않는다.
 
 - 깨끗한 소스 `3eacfed7c7dc6f93e7ad0b657b116595fc9a4c14`에서 새 렌더러를 실제 Android 대상으로 컴파일·패키징했다. APK는 `0.1.5-dev/code6`, `com.runmoni.app`, min29/target36, non-debuggable, **210,775,779bytes**, SHA256 `fad6755cbd2d35f3ac4f553d0ce24fb0345a1359ef4469d391317e52c521cfa7`이다.
 - `apksigner verify`의 APKv2 통과와 기존 인증서 SHA256 `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830` 일치를 직접 확인했다. 인증서 일치는 실제 휴대폰 업데이트·기록 보존 성공을 대신하지 않는다.
