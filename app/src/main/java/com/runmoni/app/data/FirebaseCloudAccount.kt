@@ -1,16 +1,26 @@
 package com.runmoni.app.data
 
 import android.content.Context
+import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
+import androidx.credentials.exceptions.GetCredentialProviderConfigurationException
+import androidx.credentials.exceptions.GetCredentialUnsupportedException
+import androidx.credentials.exceptions.GetCredentialInterruptedException
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.Timestamp
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -145,21 +155,21 @@ class FirebaseCloudAccount(context: Context) {
                 mutableState.value = mutableState.value.copy(busy = true, summaries = emptyList(), status = "백업할 Google 계정을 선택해 주세요")
             }
         }
+        var stage = "ACCOUNT_PICKER"
         try {
-            val googleOption = GetGoogleIdOption.Builder()
-                .setServerClientId(BuildConfig.FIREBASE_WEB_CLIENT_ID)
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
-                .build()
+            // Explicit button flow also supports adding an account on an empty device.
+            val googleOption = GetSignInWithGoogleOption.Builder(BuildConfig.FIREBASE_WEB_CLIENT_ID).build()
             val request = GetCredentialRequest.Builder().addCredentialOption(googleOption).build()
             if (!isCurrentLogin(ticket)) return
             // The account picker is interactive; only the network Task has a 15-second timeout.
             val result = CredentialManager.create(context).getCredential(context, request)
             if (!isCurrentLogin(ticket)) return
+            stage = "GOOGLE_TOKEN"
             val credential = result.credential
             require(credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)
             val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
             if (!isCurrentLogin(ticket)) return
+            stage = "FIREBASE_AUTH"
             val user = withTimeout(NETWORK_TIMEOUT_MILLIS) {
                 firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(googleCredential.idToken, null)).await().user
             } ?: error("Missing authenticated account")
@@ -181,8 +191,29 @@ class FirebaseCloudAccount(context: Context) {
         } catch (cancelled: CancellationException) {
             failLogin(ticket, "Google 계정 연결을 취소했습니다")
             throw cancelled
-        } catch (_: Exception) {
-            failLogin(ticket, "Google 계정에 연결하지 못했습니다 · Firebase 설정과 네트워크를 확인해 주세요")
+        } catch (failure: Exception) {
+            val issue = when (failure) {
+                is NoCredentialException -> "G01"
+                is GetCredentialProviderConfigurationException -> "G02"
+                is GetCredentialUnsupportedException -> "G03"
+                is GetCredentialInterruptedException -> "G04"
+                is GetCredentialException -> "G05"
+                is GoogleIdTokenParsingException -> "G06"
+                is FirebaseNetworkException -> "F01"
+                is FirebaseTooManyRequestsException -> "F02"
+                is FirebaseAuthException -> when (failure.errorCode) {
+                    "ERROR_NETWORK_REQUEST_FAILED" -> "F01"
+                    "ERROR_OPERATION_NOT_ALLOWED" -> "F03"
+                    "ERROR_APP_NOT_AUTHORIZED", "ERROR_INVALID_API_KEY" -> "F04"
+                    "ERROR_INVALID_CREDENTIAL", "ERROR_INVALID_CUSTOM_TOKEN", "ERROR_CUSTOM_TOKEN_MISMATCH" -> "F05"
+                    "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> "F06"
+                    else -> "F09"
+                }
+                else -> if (stage == "GOOGLE_TOKEN") "G06" else "G09"
+            }
+            // Never log a Throwable, provider payload, email, UID, or token.
+            Log.w("RunmoniCloud", "sign_in_failed stage=$stage issue=$issue")
+            failLogin(ticket, cloudSignInFailureMessage(issue))
         }
     }
 

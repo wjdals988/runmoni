@@ -83,7 +83,7 @@ class AppInformationTest : RunmoniDesignTestBase() {
         val icon = context.packageManager.getApplicationIcon(context.packageName)
         val bitmap = Bitmap.createBitmap(256, 256, Bitmap.Config.ARGB_8888)
         icon.setBounds(0, 0, 256, 256); icon.draw(android.graphics.Canvas(bitmap))
-        val directory = File(context.getExternalFilesDir(null), "design-review").apply { mkdirs() }
+        val directory = File(context.cacheDir, "design-review").apply { mkdirs() }
         File(directory, "launcher-icon.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 

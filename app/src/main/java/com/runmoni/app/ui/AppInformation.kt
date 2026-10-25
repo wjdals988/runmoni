@@ -99,8 +99,7 @@ fun rememberAppUpdates(): AppUpdateController {
 
 @Composable
 internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag: String = "app_version") {
-    Card(onClick = onClick, modifier = Modifier.fillMaxWidth().testTag(tag), colors = CardDefaults.cardColors(containerColor = RunmoniColors.Paper)) {
-        Row(Modifier.padding(20.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().clickable(onClick = onClick).testTag(tag).heightIn(min = 64.dp).padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
             BadgedBox(badge = {
                 if (updates.updateAvailable) Badge(Modifier.testTag("${tag}_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" }, containerColor = MaterialTheme.colorScheme.error)
             }) { Icon(Icons.Outlined.Info, null, Modifier.size(28.dp)) }
@@ -110,7 +109,6 @@ internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag:
             }
             Icon(Icons.Outlined.ChevronRight, null, Modifier.size(24.dp))
         }
-    }
 }
 
 @Composable

@@ -38,28 +38,38 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import androidx.activity.compose.BackHandler
 
 @Composable
-internal fun SettingsDialog(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}) {
+internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}) {
     var url by remember(state.apiUrl) { mutableStateOf(state.apiUrl) }
     var name by remember(state.profile.name) { mutableStateOf(state.profile.name) }
     var cloudHistory by remember(state.cloud.uid) { mutableStateOf(false) }
     var connectionDetails by remember { mutableStateOf(false) }
-    FormDialog("계정 및 러닝 설정", onDismiss, dismissLabel = null, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
-        OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
-        Button(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().testTag("save_profile")) { Text("이름 저장") }
-        HorizontalDivider()
-        Text("Google 계정 · 기록 요약 백업", style = MaterialTheme.typography.titleMedium)
+    BackHandler(onBack = onDismiss)
+    Surface(Modifier.fillMaxSize().testTag("settings_screen"), color = RunmoniColors.Paper) {
+    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
+        Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("설정", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+            TextButton(onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp)) { Text("닫기") }
+        }
+        HorizontalDivider(color = RunmoniColors.Line)
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text("Google 계정", style = MaterialTheme.typography.titleMedium)
         Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
         if (state.cloud.uid.isBlank()) {
-            Button(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.busy, modifier = Modifier.fillMaxWidth().testTag("google_sign_in")) { Text("Google로 로그인") }
+            OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.busy, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
             if (!state.cloud.configured) SmallNote("클라우드 백업 연결을 준비 중이에요. 러닝 기록은 계속 기기에 저장할 수 있어요.")
         } else {
             Text(state.cloud.accountLabel, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cloud_account"))
             OutlinedButton(onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().testTag("cloud_history")) { Text("백업한 기록 요약 보기") }
             TextButton(onClick = actions::signOutGoogle, enabled = !state.cloud.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 계정 로그아웃") }
         }
-        SmallNote("백업은 기록 상세에서 선택한 1건씩 진행해요. GPS 경로 원본과 마일리지는 백업하지 않아요. Google 로그인만으로 파일럿 크루나 위치 공유에 참여하지는 않아요.")
+        SmallNote("기록 상세에서 요약을 1건씩 백업해요. GPS 경로·마일리지는 포함하지 않아요.")
+        HorizontalDivider()
+        Text("내 프로필", style = MaterialTheme.typography.titleMedium)
+        OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
+        OutlinedButton(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("save_profile")) { Text("이름 저장") }
         HorizontalDivider()
         Text("러닝과 위치", style = MaterialTheme.typography.titleMedium)
         ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
@@ -67,7 +77,9 @@ internal fun SettingsDialog(state: AppState, actions: AppActions, onDismiss: () 
         LocationSharingToggle(state, actions)
         HorizontalDivider()
         Text("초대 파일럿 · 크루 연결", style = MaterialTheme.typography.titleMedium)
+        StatusPill(if (state.serverConnected && state.signedIn) "파일럿 연결됨" else if (state.serverConnected) "로그인 필요" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
         Text(if (state.signedIn) "초대 파일럿 로그인됨" else "크루·파티 테스트에는 별도 초대가 필요해요", style = MaterialTheme.typography.bodyMedium)
+        SmallNote("Google 계정과 별도로 연결하며 위치 공유는 직접 켜야 해요.")
         Text(state.serverStatus, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         if (state.signedIn) OutlinedButton(onClick = actions::signOut, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text("파일럿 로그아웃") }
         else OutlinedButton(onClick = onSignIn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("초대코드로 로그인") }
@@ -79,6 +91,8 @@ internal fun SettingsDialog(state: AppState, actions: AppActions, onDismiss: () 
         }
         HorizontalDivider()
         OutlinedButton(onClick = onAppInformation, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings_app_information")) { Icon(Icons.Outlined.Info, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("앱 정보 · 버전 · 지원") }
+        }
+    }
     }
     if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
 }

@@ -1,5 +1,13 @@
 # 최종 서명 APK 화면 확인 — 2026-10-25
 
+## 후속 0.1.4-dev — 모바일 위계 재구성
+
+새 로컬 서명본 code5, SHA256 `aaddecd9436c2357d7973f513085553961da3624ccb6d81d4a789184dda8d829`,209946142bytes. `outputs/design-review/20261025/mobile-reset`의 home/explore/run/crew/me/settings/app-information/version-history 8장은 실제 설치된 non-debuggable 서명APK의 ADB screencap이다. launcher-icon.png1개는 같은 앱 리소스를 Android Drawable에서 내보낸256×256PNG이며 화면 캡처 수에 합산하지 않는다. 글씨100%,1080×2400,density420. 이미지 합성 목업 없음.
+
+홈의 주간통계/빈파티/연결상태카드 제거·시작1개, 러닝시작전 지도우선, 크루단일빈상태, 슬림프로필과 하단버전행, 전체화면설정, 달리는 사람 아이콘을 확인했다. 지도SDK 미연결 상태를 가짜 지도로 꾸미지 않았다. 새 캐릭터 원화는 별도 채팅 진행 중으로 이번 APK에 포함되지 않는다. 배치38개 통과는 실제 러닝/GPS/실인증 또는 사용자 취향 승인을 대신하지 않는다.
+
+## 이전 0.1.3-dev — 비교 기준
+
 설치본은 `0.1.3-dev`/code4, 패키지 `com.runmoni.app`, 코드 `e757cb7a3065433a423f64c366d5943f068d8374`다. 실제 ADB screencap 원본을 보존했으며 합성 목업·편집 이미지가 아니다. APK SHA-256은 `d8d64d076e6b19b75888dc7edc90d7a00015280f001e6b4c053bb66e109aa676`이다.
 
 원본 폴더는 작업 PC의 `outputs/design-review/20261025/release/`다. outputs는 Git 제외 산출물이며 아래 파일이 GitHub 저장소에도 올라가 있다는 뜻은 아니다.

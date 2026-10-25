@@ -1,4 +1,4 @@
-param([string]$Serial = 'emulator-5564', [string]$AdbPath = 'adb')
+param([string]$Serial = 'emulator-5564', [string]$AdbPath = 'adb', [string]$AppApk = 'app/build/outputs/apk/debug/app-debug.apk', [string]$TestApk = 'app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
 $avdName = (& $AdbPath -s $Serial emu avd name) -join "`n"
@@ -20,8 +20,8 @@ function Invoke-UiPass([string]$Classes, [int]$Expected, [string]$LogPath) {
 Invoke-AdbChecked @('shell', 'svc', 'wifi', 'disable')
 Invoke-AdbChecked @('shell', 'svc', 'data', 'disable')
 Invoke-AdbChecked @('shell', 'cmd', 'connectivity', 'airplane-mode', 'enable')
-Invoke-AdbChecked @('install', '-r', 'app/build/outputs/apk/debug/app-debug.apk')
-Invoke-AdbChecked @('install', '-r', 'app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
+Invoke-AdbChecked @('install', '-r', $AppApk)
+Invoke-AdbChecked @('install', '-r', $TestApk)
 $passErrors = [System.Collections.Generic.List[string]]::new()
 try {
     Invoke-AdbChecked @('shell', 'wm', 'size', 'reset')
@@ -41,6 +41,12 @@ try {
     Invoke-AdbChecked @('shell', 'wm', 'size', 'reset')
     Invoke-AdbChecked @('shell', 'settings', 'put', 'system', 'font_scale', '1.0')
     Invoke-AdbChecked @('shell', 'settings', 'put', 'secure', 'show_ime_with_hard_keyboard', '0')
+    $restoredFont = ((& $AdbPath -s $Serial shell settings get system font_scale) -join '').Trim()
+    if ($restoredFont -ne '1.0') { throw 'Dedicated AVD font reset did not complete.' }
+    # SettingsProvider persistence is asynchronous; caller must not kill the AVD
+    # before the restored baseline reaches its on-disk settings.
+    Start-Sleep -Seconds 2
+    Invoke-AdbChecked @('shell', 'sync')
 }
 if ($passErrors.Count -gt 0) { throw ($passErrors -join "`n") }
 Write-Output 'UI/controller fixtures: 38 passed. The caller must close the verified project AVD after review.'

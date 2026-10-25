@@ -1,4 +1,6 @@
-# Firebase 첫 단계 — 0.1.3-dev / 2026-10-25
+# Firebase 첫 단계 — 0.1.4-dev / 2026-10-25
+
+0.1.4는 Google 버튼에서 계정 추가를 지원하고 고정 오류코드로 단계를 구분한다. 실제 Google/Firebase 인증·원격 CRUD 성공은0회이며 최신 사용자 지시로 AVD 검증은 제외한다. 상세 절차·결과는 [기기 검증](FIREBASE_DEVICE_CHECK.md)과 [현재 검증 기록](VALIDATION.md)에 분리한다.
 
 사용자가 무료 Spark를 선택했습니다. 공용 계정·DB의 목표는 Firebase Auth/Firestore입니다. 이번 변경은 Google 계정 세션과 본인 러닝 요약 백업의 코드·로컬 검증이며 원격 크루 DB 전환 완료가 아닙니다.
 

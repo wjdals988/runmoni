@@ -67,7 +67,7 @@ abstract class RunmoniDesignTestBase {
                 val dy = bottom - it.size.height
                 if (it.hasVisualOverflow) {
                     val target = InstrumentationRegistry.getInstrumentation().targetContext
-                    File(target.getExternalFilesDir(null), "design-review").apply { mkdirs() }
+                    File(target.cacheDir, "design-review").apply { mkdirs() }
                         .resolve("text-metrics.txt").appendText("$context: ${it.layoutInput.text.text}; size=${it.size}; paragraph=${it.multiParagraph.width}x${it.multiParagraph.height}; lines=$left..$right/$bottom; delta=$dx,$dy; maxLines=${it.multiParagraph.didExceedMaxLines}\n")
                 }
                 assertTrue("Text overflow in $context: ${it.layoutInput.text.text}; lines=$left..$right/$bottom; size=${it.size}; maxLines=${it.multiParagraph.didExceedMaxLines}", left >= -1f && dx <= 1f && dy <= 1f && !it.multiParagraph.didExceedMaxLines)
@@ -77,7 +77,7 @@ abstract class RunmoniDesignTestBase {
 
     protected fun capture(name: String) {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(target.getExternalFilesDir(null), "design-review").apply { mkdirs() }
+        val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
         val roots = compose.onAllNodes(isRoot())
         val forms = compose.onAllNodesWithTag("form_dialog")
         val chats = compose.onAllNodesWithTag("chat_dialog")
@@ -95,7 +95,7 @@ abstract class RunmoniDesignTestBase {
 
     protected fun captureDevice(name: String) {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
-        val directory = File(target.getExternalFilesDir(null), "design-review").apply { mkdirs() }
+        val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
         assertTrue(UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).takeScreenshot(File(directory, "$name.png")))
     }
 }
@@ -109,6 +109,7 @@ class RunmoniDesignTest : RunmoniDesignTestBase() {
         val actions = RunmoniUiTest.FakeActions(state)
         compose.setContent { ViewportBox(viewport.value) { RunmoniApp(state.value, actions) } }
         compose.onNodeWithTag("nav_run").performClick()
+        compose.onNodeWithTag("run_options").performScrollTo().performClick()
         capture("running-active-fixture-360-100")
         for (width in listOf(320, 360, 411)) for (scale in listOf(1f, 1.5f, 2f)) {
             compose.runOnIdle { viewport.value = Viewport(width, scale) }
@@ -229,7 +230,7 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
                     inputBounds.height() >= inputHeight - 1 && sendBounds.height() >= sendHeight - 1
             }
         } finally {
-            val directory = File(InstrumentationRegistry.getInstrumentation().targetContext.getExternalFilesDir(null), "design-review").apply { mkdirs() }
+            val directory = File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review").apply { mkdirs() }
             File(directory, "chat-keyboard-geometry.txt").writeText(geometry)
             capture("chat-input-default")
             captureDevice("chat-ime-system-200")

@@ -30,17 +30,19 @@ class RunmoniUiTest {
         val state = mutableStateOf(AppState())
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         val screens = listOf(
-            "nav_explore" to "함께 뛰는 곳",
+            "nav_explore" to "모임 검색",
             "nav_run" to "오늘의 러닝",
-            "nav_crew" to "함께라서, 더 멀리",
-            "nav_me" to "나의 러닝 이야기",
+            "nav_crew" to "내 크루",
+            "nav_me" to "미니미 꾸미기",
             "nav_home" to "오늘도, 나답게.",
         )
         screens.forEach { (tag, title) ->
             compose.onNodeWithTag(tag).performClick().assertIsSelected()
             compose.onNodeWithText(title).assertIsDisplayed()
         }
-        compose.onNodeWithTag("backend_status").assertIsDisplayed()
+        // Connection diagnostics live in settings rather than every tab header.
+        compose.onNodeWithTag("settings_button").performClick()
+        compose.onNodeWithTag("backend_status").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("기기 기록 모드").assertIsDisplayed()
     }
 
