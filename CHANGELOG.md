@@ -5,13 +5,16 @@
 - 다음 앱 버전을1.5/code6으로 구분하고 bundledAppHistory를 함께 갱신. 기존1.4/code5의 실제 검증 APK·화면·해시를 보존하며 새 원화의 검증으로 합산하지 않음. 공개 피드와 대시보드 다운로드는 아직 기존0.1.1-dev.
 - G05의 ‘선택창을 열지 못함’을 ‘계정 선택을 완료하지 못함’, F05의 ‘응답 미수신’을 ‘응답 확인 실패’로 정정. 원문 예외·토큰·UID·이메일을 노출하지 않는 고정 코드 정책 유지.
 - 별도 캐릭터 채팅에서256×384 PNG 부품과 공통 관절 렌더링을 통합. 손상/범위밖 저장값의 require예외로 홈 종료가 가능한 P2후보1개는 렌더입력 floorMod 정상화로 수정. 동결된production5개+baseline2개 최종읽기리뷰에서 확정P1/P2회귀0개. 수명주기/비활성애니메이션/그리기관찰자/유한캐시/지도비율 유지이며 실제Android재생·성능검증과구분.
-- AVD 제외 지시를 유지하며 원화 제작·전처리·소스 작성만 순차 진행. 새 통합본의 빌드·서명·실제 Android 화면·실기기·실제 Firebase 인증·게시 결과는 아직 없고 후속 항목에만 기록.
+- AVD 제외 지시를 유지하며 원화 제작·전처리·빌드·검사를 순차 진행. 실제 Android 신규 원화 화면·실기기·실제 Firebase 인증은 미확인이다. 빌드·서명과 게시 상태는 후속 항목에 구분해 기록.
 - AVD 없이 공식 Firebase client API2건을 순차점검해HTTP200/200(본문146+851bytes,전체2.093초) 확인. 프로젝트와Android패키지/release SHA1/Webclient/FirebaseAppId 검증 인수·기본authDomain·Google provider/HTTPS host/Webclient일치 통과. 사용자식별자/로그인/계정생성/DB쓰기0,API키/OAuth상태/원문응답기록0. 실제Android로그인·Firestore원격CRUD·비공개콘솔/Rules검증과구분.
 - 기존성공한게시흐름을명시버전·대상commit으로일반화한publisher 작성. 기본plan은로컬사실만확인하고명시publish만draft3자산검증후개발prerelease공개,자동삭제/덮어쓰기없음. curl -q·stdin인증·trace환경제거·단일연결·기본256KiB/s제한. offline14/14·0.085초로 실패시공개변경0과정상3자산검증뒤PATCH1회 검증. 실제GitHub자산업로드/대시보드교체0이며최종실서명/실기기검증을대신하지않음.
 - 추가 Firestore 공식REST 익명GET1건은 curl35/HTTP0/본문0bytes/0.141초로 TLS단계종료. 실제UID·로그인·계정생성·DB쓰기0, 익명거부/원격Rules/인증후CRUD검증성립0. 정제결과만보존하고 반복전송·프록시/보안설정변경없음. 공개APK교체 절차의 실기기 설치/로그인/변경기능 smoke는 미충족이므로 소스·서명APK·비공개draft 준비를 우선하고 공개피드/대시보드는 기존게시본 유지.
 - 게시 도구에 `--stage-draft`를 추가해3자산 최신검증 후에도 공개PATCH0회로 종료하고 별도초안receipt 저장. 확장 fake검사18/18·0.134초: 동일초안재사용·freshdigest불일치차단·기존공개본변경0·후속공개재업로드0 확인. 실제원격초안업로드는 아직0. 릴리스설명초안과 실기기후속검증을 문서화.
 - 대시보드의오래된소스설명 갱신준비. GitHEAD와JSON대조: 9개중런모니description/updatedAt2필드만변경,APK metadata와다른8개프로젝트불변. 아직원격푸시/실제배포완료로표시하지않음.
 - Firestore후속1회는동일한공식GET·헤더·상한을유지하고샌드박스밖호스트실행으로대조: HTTP403/PERMISSION_DENIED/표준권한거부·본문127bytes·0.343초. 임의미사용경로의익명접근거부관측만확인하고최초TLS실패별도보존. 실제UID/로그인/계정생성/DB쓰기/보안설정변경0,원격Rules전체·인증후CRUD·이전AVD/PC지연원인확정아님.
+- 소스3eacfed clean에서 실제Android컴파일·서명APK1.5/code6 확보:210775779bytes/SHA256 fad6755cbd2d35f3ac4f553d0ce24fb0345a1359ef4469d391317e52c521cfa7,기존인증서/APKv2/non-debuggable/min29/target36 일치. ZIP내PNG63개모두소스해시일치+manifest fddcff84a253058242ae63fe613e7efb62a23783e3766db36af19288a668bafd 일치. Firebase설정활성·프로젝트일치,실제로그인/CRUD0.
+- SDK36 실물누락23초/BuildTools35 링크누락14.533초의환경중단을보존. 공식플랫폼1개65878410bytes를256KiB/s단일연결252.125초로받아체크섬검증·프로젝트내복구,전역SDK변경0. 컴파일/JVM148.479초 뒤 자체local.properties escape1건·수정후stale lint분석20.544초를찾아분석3개만재계산,최종70.525초/82작업4실행78최신 성공. JVM30/30·lint0오류26경고,baseline/기준완화0. 실패/성공근거를분리하고 AVD/실기기0회 유지.
+- 실제APK plan차단0·네트워크/GCM0,대시보드검사15/15·247.1497ms. 공개APK/피드/다운로드는1.1 유지,소스게시·비공개draft는후속진행으로구분한다.
 
 ## 아바타 원화 0.4.0 — 2026-10-25 (승인 품질의 부품·실제 천 의상·공통 달리기 통합)
 

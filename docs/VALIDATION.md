@@ -2,11 +2,22 @@
 
 빌드 통과, 합성 GPS 검증, 실기기 야외 정확도, 실제 클라우드 오디오 송출은 각각 다른 증거입니다. 아래에는 수행한 것만 완료로 기록합니다.
 
+## 2026-10-25 — 0.1.5-dev 원화 통합 서명 APK
+
+- 깨끗한 소스 `3eacfed7c7dc6f93e7ad0b657b116595fc9a4c14`에서 새 렌더러를 실제 Android 대상으로 컴파일·패키징했다. APK는 `0.1.5-dev/code6`, `com.runmoni.app`, min29/target36, non-debuggable, **210,775,779bytes**, SHA256 `fad6755cbd2d35f3ac4f553d0ce24fb0345a1359ef4469d391317e52c521cfa7`이다.
+- `apksigner verify`의 APKv2 통과와 기존 인증서 SHA256 `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830` 일치를 직접 확인했다. 인증서 일치는 실제 휴대폰 업데이트·기록 보존 성공을 대신하지 않는다.
+- APK ZIP의 `assets/avatars/v0.4.0`는 PNG63개+manifest 총64개다. PNG63개 전부 소스 SHA256과 일치, manifest SHA256 `fddcff84a253058242ae63fe613e7efb62a23783e3766db36af19288a668bafd` 일치다. release BuildConfig의 Firebase 활성화·기대 프로젝트 일치도 확인했다. 실제 계정 인증·원격 CRUD는 여전히0회다.
+- 새 소스의 JVM은5개 suite·30/30이며 실패/오류/건너뜀0이다. 최종 lint는 오류0·경고26: UseKtx21,ApplySharedPref2,ModifierParameter1,DataExtractionRules1,ObsoleteSdkInt1. 기준 완화나 baseline 추가 없이 재분석했다.
+- 환경 실패 이력: 기존 SDK에36 플랫폼 실물이 없어 첫 빌드는 컴파일 전23초에 중단했다. 공식 메타데이터의 `platform-36_r02.zip` 65,878,410bytes/SHA1 `2c1a80dd4d9f7d0e6dd336ec603d9b5c55a6f576`을 단일 연결·최대256KiB/s로252.125초에 받았고 체크섬 확인 후 `work/sdk36-local`에 추출했다. 전역 SDK 파일 변경0, 기존 Build Tools35/36·라이선스는 로컬 링크로 재사용했다. 빌드도구35 연결 전14.533초 중단도 별도 로그로 보존했다.
+- 새 컴파일·APK·JVM이 실행된148.479초 검사에서는 직접 작성한 `local.properties` 드라이브 콜론 이스케이프1건으로 lint가 실패했다. 수정 후20.544초 검사가 이전 `UP-TO-DATE` 분석을 재사용한 것을 확인하고, 해당 lint 분석/보고서3개만 임시 로컬 init으로 재계산했다. 최종 **70.525초·82작업(4실행/78최신)**에 성공했다. 다운로드·AVD·다른 빌드와 겹치지 않았으며 전체 실패 로그를 `work`에 보존했다.
+- 별도 게시 도구18/18·0.134초, 실제 로컬 APK plan 차단사유0·네트워크/GCM0회. 대시보드 기존 검사15/15·247.1497ms 통과와9개 중 런모니 설명/날짜2필드만 변경을 확인했다. 실제 GitHub 초안 업로드·공개 전환·대시보드 배포는 이 검사에 포함하지 않았다.
+- 실제 Android 신규 렌더러 재생·성능·휴대폰 설치/업데이트·Google 로그인·원격 백업은 미확인이다. 이전0.1.4의 UI38/38과 실제 화면8장을 신규 원화의 런타임 증거로 합산하지 않는다. AVD는 실행하지 않았다.
+
 ## 2026-10-25 — AVD 제외 후 설정·게시 도구 검증
 
 - 공식 Firebase public project-config GET와 Google provider createAuthUri POST가 각각HTTP200. Android패키지/release SHA1/Webclient/FirebaseAppId 인수를 포함한 서버 검사, 프로젝트·기본authDomain·Google반환provider·GoogleHTTPS host·Webclient일치 확인. 본문146+851bytes, 전체프로세스2.093초. 사용자식별자전송/로그인/계정생성/DB쓰기0, 원문API응답/OAuth상태/API키저장0. 비공개콘솔/Rules/Android실인증/Firestore원격CRUD는 여전히미검증.
 - `scripts/publish_android_preview.py`와 새 offline검사14/14·0.085초. 기본plan의 네트워크/GCM/하위프로세스 호출 차단, 경로·코드·패키지·크기·해시·서명선언/URL핀/기존자산 재사용, 3자산 검증후 public PATCH1회·digest/main 불일치/불완전 공개본 변경0을 fake transport로 확인. 이 fixture는 실제서명APK/실제GitHub게시/실기기검증이 아님.
-- 새 통합1.5/code6 소스는 준비 중이다. 기존1.4의 JVM30/30·UI38/38 결과를 새 AndroidCanvas 캐릭터의 런타임 검증으로 합산하지 않는다. AVD는 재실행하지 않았다.
+- 당시 새 통합1.5/code6 소스는 준비 중이었다. 후속 서명 APK 결과는 위 항목에 별도로 기록했다. 기존1.4의 JVM30/30·UI38/38 결과를 새 AndroidCanvas 캐릭터의 런타임 검증으로 합산하지 않는다. AVD는 재실행하지 않았다.
 - Firestore 공식 REST 익명 GET 1회는 curl35·HTTP0·본문0bytes·0.141초로 TLS 단계에서 종료했다. 실제UID/로그인/계정생성/DB쓰기0. 새 임의 경로만 사용했고 원문/임의경로/API키저장0. 익명 접근 거부·원격Rules·인증 후CRUD 검증은 성립하지 않았다. 반복 전송·프록시/보안 설정 변경 없이 중단했다.
 - 공개 게이트 전 구체적인 검토본을 준비하도록 `--stage-draft`를 추가했다. 확장한 fake transport 검사 18/18·0.134초: 기본 plan 무전송, 최신 3자산 검증, 초안 모드의 공개 PATCH0회, 동일 초안 재사용, 기존 공개본 변경0회, 초안→공개 시 재업로드0회를 확인했다. 실제 GitHub 초안 업로드·공개 전환 검증은 아직 수행하지 않았다.
 - 대시보드 로컬 JSON을 Git HEAD와 대조해 총9개 프로젝트 중 런모니 `description`/`updatedAt` 2개 필드만 변경, APK 메타데이터·다른8개 프로젝트 불변을 확인했다. 다운로드 교체·원격 푸시·Vercel 배포 성공과 구분한다.

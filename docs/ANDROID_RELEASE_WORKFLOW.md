@@ -14,7 +14,7 @@
    - `outputs/runmoni-<version>.metadata.json`: `version`, 정수 `versionCode`, `fileName`, `packageName`, 정수 `sizeBytes`, `sha256`, `signed: true`, `certificateSha256`, 실제 빌드 `sourceRevision`, `sourceDirty: false`
    - `docs/RELEASE_NOTES_<version>.md`: 실제 변경과 실기기·클라우드 등 미검증 범위
 
-공개 sidecar는 APK 사실을 담는다. `publiclyReleased: false`, `sourcePublicationConfirmed`, `validatedSourceCommit` 같은 가변 게시 상태를 억지로 true로 바꾸지 말고 최종 sidecar에서 제외한다. 현재 `0.1.4-dev` 보존본은 dirty build/검증 commit 정보를 갖고 있으며 새 공개 대상으로 간주하지 않는다. 예상 `0.1.5-dev`도 파일·검증이 실제로 준비되기 전에는 존재한다고 표시하지 않는다.
+공개 sidecar는 APK 사실을 담는다. `publiclyReleased: false`, `sourcePublicationConfirmed`, `validatedSourceCommit` 같은 가변 게시 상태를 억지로 true로 바꾸지 말고 최종 sidecar에서 제외한다. `0.1.4-dev` 보존본은 dirty build/검증 commit 정보를 갖고 있으며 새 공개 대상으로 간주하지 않는다. `0.1.5-dev`는 로컬 서명·실제 APK 검사와 plan을 마쳤고, 원격 초안·공개 상태는 별도 확인한다. 최종 문서 커밋 후 같은 app tree의 assemble을 재확인해 sidecar의 출처를 깨끗한 최종 commit으로 고정한다.
 
 대시보드 저장소의 `docs/release-automation.md`는 교체 APK 게시 전에 실제 기기의 설치/업데이트·실행·로그인·변경 기능 smoke 검증을 요구한다. 현재 실기기와 Firebase 실인증0회는 이 게이트 통과가 아니다. 아래 도구의 로컬 plan 성공·서명 선언·서버 digest 확인도 이 검증을 대체하지 않는다. 최종 공개 판단은 실제 아티팩트와 위 검증 근거가 준비된 뒤 담당자가 수행하며, 이 도구에는 이 요건을 우회하는 승인 옵션이 없다.
 

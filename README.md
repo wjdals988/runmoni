@@ -1,6 +1,6 @@
 # 런모니 / Runmoni
 
-Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. 현재 개발 소스는 Android `0.1.4-dev`(versionCode 5), 로컬 API는 `0.1.4`입니다. 새 서명 APK는 작업 PC의 outputs 폴더에 준비했으며 실제 로그인 검증 전 개발본입니다. 공개 다운로드는 [서명된 `0.1.1-dev` APK](https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev)이며, 이 APK에는 Firebase 기능이 없습니다. 새 소스는 [DESIGN.md](DESIGN.md)를 기준으로 UI를 개편하고 로컬 Firebase 설정을 읽습니다. 실제 휴대폰 검증은 아직 없습니다.
+Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. 현재 Android 개발 소스와 로컬 서명 APK는 `0.1.5-dev`(versionCode 6), 로컬 API는 `0.1.4`입니다. 원화 미니미 63개 부품과 8프레임 달리기를 통합했고 JVM30/30·lint0오류/26경고를 확인했습니다. 공개 다운로드는 [서명된 `0.1.1-dev` APK](https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev)이며, 이 APK에는 Firebase 기능이 없습니다. 새 소스는 [DESIGN.md](DESIGN.md)를 기준으로 UI를 개편하고 로컬 Firebase 설정을 읽습니다. 새 캐릭터의 실제 Android 재생·휴대폰·Google 로그인·원격 백업은 아직 검증하지 않았습니다.
 
 ## 지금 구현한 범위
 
@@ -25,6 +25,8 @@ Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티�
 [디자인 기준](DESIGN.md) · [화면 감사](docs/DESIGN_AUDIT.md) · [앱 정보·코스 설계](docs/APP_INFORMATION_AND_COURSES.md). 코스 탐색·공개·파티 브리핑은 이번에는 설계 확정이며 실제 구현/배포는 후속입니다.
 
 0.1.4 서명 APK의 실제 화면8장·아이콘1개와 이전1.3 화면16장은 [화면 확인 기록](docs/SCREENSHOT_REVIEW_20261025.md)에 정리했습니다. 배치·상태38/38과 JVM30/30을 통과했지만 본인 Google/Firebase 로그인·원격 백업 성공은 아직0회입니다. 새 Google 버튼은 기기 계정 추가 화면까지 열었으나 사용자가 Google시스템 오류를 보고했습니다. 이후 사용자 지시로 AVD를 제외하며 PC 브라우저 지연의 원인을 해결됐다고 표현하지 않습니다. [네트워크 진단 경계](docs/UPDATE_NETWORK_DIAGNOSIS.md).
+
+0.1.5의 [새 미니미 GIF·검사 근거](docs/design/avatars/v0.4.0/README.md)는 실제 Kotlin 렌더러를 호스트 Java2D로 실행한 결과입니다. 실제 Android 캡처로 표시하지 않습니다. 최종 APK의 PNG63개와 manifest 해시·서명·버전 직접 확인 결과는 [검증 기록](docs/VALIDATION.md)에 남겼습니다. 실기기 공개 전 검증이 남아 있어 공개 APK·업데이트 피드·대시보드 다운로드는 이전 버전을 유지합니다.
 
 ## 빌드
 
