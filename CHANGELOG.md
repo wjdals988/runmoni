@@ -7,6 +7,7 @@
 - awesome-design-md Nike 제3자 분석의 제한된 강조와 Aseprite 공식 RGBA/프레임/cel/팔레트 문서를 재확인해 DESIGN과 우선순위에 반영. 매 작업 묶음의 커밋·푸시·PR·검증·대시보드 단계 기록을 AGENTS에 추가. Aseprite 실행·58종 원화 완성으로 표시하지 않음.
 - 전체 debug/test APK 빌드·JVM30통과·lint오류0/경고57. Android 기본9개 및 실제 시스템320dp/font2에서2개 통과. 설치 버전0.1.6-dev/code7과 실제 MainActivity 확인, fontScale/애니메이션1.0·기본480×854 복원, 앱 crash 버퍼0바이트·전용 PID10348 종료. [실제 UI fixture와 원시 로그](docs/UPDATE_REVIEW_20261027.md)는 합성 새 버전 상태이며 원격 새 릴리스 게시 성공으로 표시하지 않음.
 - 새 APK 게시 차단: 기존 릴리스 키가 클라우드에 없고 GitHub Actions 서명 설정 목록 조회도403(접근 불가). 대시보드 규약은 같은 인증서의 non-debuggable APK·증가 버전·실제 기기 smoke·자산 digest 확인 후 다운로드 연결을 요구. debug APK로 공개 링크를 대체하지 않음. 앱 기능/소스 PR과 APK 게시 상태를 구분.
+- 구현 커밋4113bb9를 원격 브랜치에 푸시하고 [앱 PR2](https://github.com/wjdals988/runmoni/pull/2) 및 [대시보드 소개 정정 PR9](https://github.com/wjdals988/mydashboard/pull/9)를 초안으로 생성·작업에 첨부. 깨끗한 구현 커밋의 재빌드와 테스트한 APK 바이트 동일성을 확인하고 로컬 테스트 APK/metadata에 출처 고정. 대시보드 Node23개·원격CI(Test/lint/build)·Vercel preview 성공, 다른 프로젝트/공개 APK 불변 비교. main 병합·정식 APK 업로드·운영 다운로드 교체는 수행하지 않음.
 
 ## 2026-10-27 전체 앱 실행·잘못된 홈 미니미 복구
 
