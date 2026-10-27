@@ -1,0 +1,27 @@
+[
+  {
+    "screen": "explore",
+    "expectedText": "모임 검색",
+    "present": true
+  },
+  {
+    "screen": "run",
+    "expectedText": "오늘의 러닝",
+    "present": true
+  },
+  {
+    "screen": "crew",
+    "expectedText": "내 크루",
+    "present": true
+  },
+  {
+    "screen": "me",
+    "expectedText": "미니미 꾸미기",
+    "present": true
+  },
+  {
+    "screen": "home",
+    "expectedText": "오늘도, 나답게.",
+    "present": true
+  }
+]

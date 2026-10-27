@@ -1,0 +1,80 @@
+{
+  "installedVersion": [
+    "versionCode=7 minSdk=29 targetSdk=36",
+    "versionName=0.1.6-dev"
+  ],
+  "resumedActivity": [
+    "mResumedActivity: ActivityRecord{57553d5 u0 com.runmoni.app/.MainActivity t54}"
+  ],
+  "nativeSettings": {
+    "wmSize": "Physical size: 480x854\nOverride size: 320x854",
+    "fontScale": "2.0"
+  },
+  "restoredFontScale": "1.0",
+  "restoredAnimationScale": "1.0",
+  "restoredWmSize": "Physical size: 480x854",
+  "appCrashBufferBytes": 0,
+  "versionName": "0.1.6-dev",
+  "versionCode": 7,
+  "buildType": "debug local TEST key; not public release",
+  "worktreeBaseCommit": "effc3d444443659c599c6a8b8898df30e390cb8a",
+  "sourceDirtyWhenBuilt": true,
+  "android": {
+    "normalPassed": 9,
+    "normalFailed": 0,
+    "nativePassed": 2,
+    "nativeFailed": 0,
+    "fixturesUseSyntheticRelease": true,
+    "realUpdateFeedSuccessVerified": false
+  },
+  "jvm": {
+    "tests": 30,
+    "failures": 0
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 57
+  },
+  "ownedEmulatorStopped": 10348,
+  "activeEmulatorsAfterStop": 0,
+  "existingSigned015SourceRevisionUnchanged": "75c39ca900b140cfb02c1a47807a5955c8b8db7f",
+  "testedDebugApk": {
+    "sha256": "07f5d880cc0227c2f45933dc2c9338e926a9e82937aee183a3511a9be3486e6f",
+    "bytes": 236794116,
+    "productionUpdateCompatible": false
+  },
+  "evidence": {
+    "prompt-320-font2-fixture.png": {
+      "sha256": "46dca5bee2931a43672b9488953a38d62d144120116dfb6e80085860d64cbee3",
+      "bytes": 41609
+    },
+    "settings-320-font2-fixture.png": {
+      "sha256": "7d420487f2263a7168f455ca9629c80d923a3b97916b6a421c8084a914b15f09",
+      "bytes": 56674
+    },
+    "android-loaded-package-icon.png": {
+      "sha256": "a42053126517c052649af1f05b687a7a59e62f293c93a5c4a5fbea3acbd6b5c8",
+      "bytes": 5632
+    },
+    "about-320-font2-fixture.png": {
+      "sha256": "d0018243e3582c01f9f9bcebc8337e029b197051bbe10c389f105bb6f749fcc9",
+      "bytes": 33775
+    },
+    "home-update-fixture.png": {
+      "sha256": "7bef256e258ec43d45b3834d25705b00c1ee16c04481ef856f7774ae26dc6346",
+      "bytes": 48271
+    },
+    "settings-update-fixture.png": {
+      "sha256": "bdb64d505605892b3f724d8fd074bc02b530735c1e7b74b624c1c60af6e12851",
+      "bytes": 52906
+    },
+    "home-320-font2-fixture.png": {
+      "sha256": "d19007acbd1b373c4e7a562d478b551591df8b6134b569f53004dae328c51731",
+      "bytes": 37347
+    },
+    "about-normal-fixture.png": {
+      "sha256": "c27493d59341155bc9b421e8b8b25da83ef246b303e914846fdb77fdc92dba24",
+      "bytes": 44711
+    }
+  }
+}

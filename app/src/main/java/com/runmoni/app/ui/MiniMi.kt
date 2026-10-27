@@ -17,14 +17,16 @@ import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
-import com.runmoni.app.avatar.AvatarArtRepository
-import com.runmoni.app.avatar.AvatarSpriteRenderer
+import com.runmoni.app.avatar.ApprovedAvatarRenderer
 import com.runmoni.app.domain.AvatarStyle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-/** Original PNG parts with a shared face/neck/body rig for independent equipment. */
+/** Approved whole-frame sprites shared by the app; no reconstructed body parts. */
 @Composable
 internal fun MiniMi(
     avatar: AvatarStyle,
@@ -43,36 +45,51 @@ internal fun MiniMi(
         if (running && frameOverride == null) lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             val started = android.os.SystemClock.uptimeMillis()
             while (isActive) {
-                frame = if (ValueAnimator.areAnimatorsEnabled()) AvatarSpriteRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started) else 0
-                delay(AvatarSpriteRenderer.MILLIS.toLong())
+                frame = if (ValueAnimator.areAnimatorsEnabled()) ApprovedAvatarRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started) else 0
+                delay(ApprovedAvatarRenderer.MILLIS.toLong())
             }
         }
     }
-    // Eight 256x384 frames per visible animated avatar; no work during each draw.
-    val frames = remember(context, avatar, running) {
-        List(if (running) AvatarSpriteRenderer.FRAMES else 1) { avatarBitmap(context, avatar, it, running).asImageBitmap() }
+    // Asset decoding/cropping must not block the first home screen on the UI thread.
+    // Publish the genuine first frame, then the complete clip. A changed selection
+    // gets its own state, so an old outfit is never presented as a new one.
+    val frames by key(context, avatar, running) {
+        produceState(initialValue = emptyList<androidx.compose.ui.graphics.ImageBitmap>()) {
+            val first = withContext(Dispatchers.Default) { avatarBitmap(context, avatar, 0, running).asImageBitmap() }
+            value = listOf(first)
+            if (running) {
+                val rest = withContext(Dispatchers.Default) {
+                    (1 until ApprovedAvatarRenderer.FRAMES).map {
+                        ensureActive()
+                        avatarBitmap(context, avatar, it, true).asImageBitmap()
+                    }
+                }
+                value = listOf(first) + rest
+            }
+        }
     }
-    val renderedFrame = Math.floorMod(frameOverride ?: frame, frames.size)
-    val image = frames[renderedFrame]
+    val renderedFrame = if (frames.isEmpty()) 0 else Math.floorMod(frameOverride ?: frame, frames.size)
+    val image = frames.getOrNull(renderedFrame)
     val accessible = if (description == null) Modifier.clearAndSetSemantics { } else Modifier.semantics { contentDescription = description }
     Canvas(modifier.then(accessible)) {
-        val scale = minOf(size.width / AvatarSpriteRenderer.WIDTH, size.height / AvatarSpriteRenderer.HEIGHT)
-        val width = (AvatarSpriteRenderer.WIDTH * scale).roundToInt().coerceAtLeast(1)
-        val height = (AvatarSpriteRenderer.HEIGHT * scale).roundToInt().coerceAtLeast(1)
+        if (image == null) return@Canvas
+        val scale = minOf(size.width / ApprovedAvatarRenderer.WIDTH, size.height / ApprovedAvatarRenderer.HEIGHT)
+        val width = (ApprovedAvatarRenderer.WIDTH * scale).roundToInt().coerceAtLeast(1)
+        val height = (ApprovedAvatarRenderer.HEIGHT * scale).roundToInt().coerceAtLeast(1)
         drawImage(image, dstOffset = IntOffset(((size.width - width) / 2).roundToInt(), ((size.height - height) / 2).roundToInt()),
             dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
         onFrameRendered?.invoke(renderedFrame)
     }
 }
 
-/** Shared by Compose and the map marker; equipment remains visible in both. */
-internal fun avatarBitmap(context: Context, avatar: AvatarStyle, frame: Int = 0, running: Boolean = false): Bitmap =
-    AvatarArtRuntime.renderer(context).render(avatar, frame, running)
+/** Same approved base in Compose and map markers. Saved equipment is never rewritten. */
+internal fun avatarBitmap(context: Context, @Suppress("UNUSED_PARAMETER") avatar: AvatarStyle, frame: Int = 0, running: Boolean = false): Bitmap =
+    AvatarArtRuntime.renderer(context).render(frame, running)
 
 /** One application asset repository/cache shared by Compose and map markers. */
 private object AvatarArtRuntime {
-    @Volatile private var shared: AvatarSpriteRenderer? = null
-    fun renderer(context: Context): AvatarSpriteRenderer = shared ?: synchronized(this) {
-        shared ?: AvatarSpriteRenderer(AvatarArtRepository(context.applicationContext)).also { shared = it }
+    @Volatile private var shared: ApprovedAvatarRenderer? = null
+    fun renderer(context: Context): ApprovedAvatarRenderer = shared ?: synchronized(this) {
+        shared ?: ApprovedAvatarRenderer(context.applicationContext).also { shared = it }
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
+import com.runmoni.app.avatar.AvatarArtwork
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -78,7 +79,14 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                         Column(Modifier.weight(1f)) {
                             Text(if (tab == 0) "runmoni" else tabs[tab], fontSize = 22.sp, fontWeight = FontWeight.Bold, letterSpacing = if (tab == 0) (-0.8).sp else 0.sp)
                         }
-                        IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) { Icon(Icons.Outlined.Settings, "계정 및 러닝 설정") }
+                        IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
+                            BadgedBox(badge = {
+                                if (updates.updateAvailable) Badge(
+                                    Modifier.testTag("settings_update_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" },
+                                    containerColor = MaterialTheme.colorScheme.error,
+                                )
+                            }) { Icon(Icons.Outlined.Settings, "계정 및 러닝 설정") }
+                        }
                     }
                     if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
                 }
@@ -108,7 +116,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 }
             }
         }
-        if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true }, onAppInformation = { settings = false; appInformation = true })
+        if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true }, onAppInformation = { settings = false; appInformation = true }, updates = updates)
         if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable)
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (chatOpen) ChatScreen(state, actions)
@@ -133,6 +141,7 @@ private fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, o
             Box(Modifier.width(if (largeText) 120.dp else 180.dp).height(if (largeText) 48.dp else 108.dp).clip(RoundedCornerShape(54.dp)).background(RunmoniColors.PrimarySoft))
             AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 54.dp else 136.dp).height(if (largeText) 64.dp else 164.dp), running = true, decorative = true)
         }
+        if (!AvatarArtwork.styleReady(state.profile.avatar)) SmallNote("기본 러닝복을 표시하고 있어요. 저장된 꾸미기 선택은 보관돼요.")
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = onRun, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("home_start_run")) {
                 Icon(Icons.Outlined.PlayArrow, null, Modifier.size(22.dp)); Spacer(Modifier.width(8.dp))
@@ -166,7 +175,7 @@ private fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> 
     ScreenContent {
         MapPane(state.activeRun.points.ifEmpty { state.records.maxByOrNull { it.startedAtMillis }?.points.orEmpty() }, visibleRunners, Modifier.fillMaxWidth().height(280.dp).clip(RoundedCornerShape(20.dp)))
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            listOf("파티", "크루", "러너").forEachIndexed { index, name -> FilterChip(selected = layer == index, onClick = { layer = index }, label = { Text(name) }, modifier = Modifier.heightIn(min = 48.dp)) }
+            listOf("파티", "크루", "러너").forEachIndexed { index, name -> FilterChip(selected = layer == index, onClick = { layer = index }, label = { Text(name) }, modifier = Modifier.heightIn(min = 48.dp).testTag("explore_layer_$index")) }
             IconButton(onClick = actions::refreshCommunity, enabled = !state.busy, modifier = Modifier.size(48.dp).testTag("refresh_community")) { Icon(Icons.Outlined.Refresh, "모임 새로고침") }
         }
         OutlinedTextField(value = query, onValueChange = { query = it }, modifier = Modifier.fillMaxWidth(), singleLine = true, label = { Text("모임 검색") }, leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text("이름, 지역, 페이스로 찾기") }, shape = RoundedCornerShape(16.dp))
@@ -175,12 +184,12 @@ private fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> 
             0 -> {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("전체", "현장", "원격").forEachIndexed { index, label -> FilterChip(selected = kindFilter == index, onClick = { kindFilter = index }, label = { Text(label) }, modifier = Modifier.heightIn(min = 48.dp)) } }
                 val parties = state.parties.filter { !it.cancelled && (kindFilter == 0 || if (kindFilter == 1) it.kind == PartyKind.LOCAL else it.kind == PartyKind.REMOTE) && (query.isBlank() || "${it.title} ${it.meetingLabel} ${it.paceLabel}".contains(query, true)) }
-                if (parties.isEmpty()) EmptyCard("표시할 러닝 파티가 없어요", "연결된 서버의 실제 모집 일정이 여기에 표시돼요")
+                if (parties.isEmpty() && state.serverConnected && state.signedIn) EmptyCard("표시할 러닝 파티가 없어요", "연결된 서버의 실제 모집 일정이 여기에 표시돼요")
                 parties.sortedBy { it.startsAtMillis }.forEach { party -> PartySummary(party) { selectedParty = party } }
             }
             1 -> {
                 val crews = state.crews.filter { query.isBlank() || "${it.name} ${it.region} ${it.paceLabel}".contains(query, true) }
-                if (crews.isEmpty()) EmptyCard("아직 만날 크루가 없어요", "크루를 만들거나, 초대 파일럿에 연결해 주세요")
+                if (crews.isEmpty() && state.serverConnected && state.signedIn) EmptyCard("아직 만날 크루가 없어요", "크루를 만들거나, 초대 파일럿에 연결해 주세요")
                 crews.forEach { crew -> CrewCard(crew, onJoin = { if (state.signedIn) actions.joinCrew(crew.id) else onSignIn() }) }
             }
             2 -> {
@@ -342,6 +351,7 @@ private fun ProfileScreen(state: AppState, actions: AppActions, onRecord: (RunRe
                     }
                 }
                 FilledTonalButton(onClick = { closet = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
+                if (!AvatarArtwork.styleReady(state.profile.avatar)) SmallNote("기존 선택은 보관 중이에요. 현재는 기본 러닝복을 표시해요.")
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("일별", "월별", "연도별").forEachIndexed { index, label -> FilterChip(selected = period == index, onClick = { period = index }, label = { Text(label) }, modifier = Modifier.heightIn(min = 48.dp).testTag("history_period_$index")) } }

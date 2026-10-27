@@ -1,0 +1,34 @@
+{
+  "mode": "real com.runmoni.app UI/foreground service/Room flow on emulator; no GPS injected; not a real outdoor run",
+  "steps": [
+    {
+      "step": "location-permission",
+      "grantedThroughSystemUI": true
+    },
+    {
+      "step": "recording",
+      "expectedText": "러닝 기록 중",
+      "observed": true
+    },
+    {
+      "step": "paused",
+      "expectedText": "잠시 쉬는 중",
+      "observed": true
+    },
+    {
+      "step": "resumed",
+      "expectedText": "러닝 기록 중",
+      "observed": true
+    },
+    {
+      "step": "finish-confirmation",
+      "expectedText": "오늘의 러닝을 마칠까요?",
+      "observed": true
+    },
+    {
+      "step": "record-saved",
+      "expectedText": "기기에 저장됨",
+      "observed": true
+    }
+  ]
+}

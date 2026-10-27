@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "status": "unapproved-review-only",
+  "sourceSha256": "bc95bd8fcfb7e0dbddf302ee0fee5828990c3c251c0bbd59d45be64fbb89fb34",
+  "approvedRunningSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "maskSha256": "c1bdc154e9ed851683ecc955518f327a208389cb30af9ec460237720bfb38ad6",
+  "encoding": "RGBA: red=garment ID 1..3, green=shade 0..255 along five-color ramp, blue=0, alpha=255; alpha=0 protects source",
+  "garments": {
+    "1": "boardshorts",
+    "2": "bikini top",
+    "3": "bikini bottom"
+  },
+  "maskedPixelCounts": {
+    "1": 23007,
+    "2": 7805,
+    "3": 3212
+  },
+  "polygons": {
+    "1": [
+      [
+        297,
+        602
+      ],
+      [
+        467,
+        627
+      ],
+      [
+        506,
+        754
+      ],
+      [
+        402,
+        817
+      ],
+      [
+        333,
+        783
+      ],
+      [
+        221,
+        763
+      ],
+      [
+        238,
+        716
+      ]
+    ],
+    "2": [
+      [
+        1084,
+        475
+      ],
+      [
+        1125,
+        478
+      ],
+      [
+        1150,
+        531
+      ],
+      [
+        1182,
+        554
+      ],
+      [
+        1195,
+        517
+      ],
+      [
+        1236,
+        553
+      ],
+      [
+        1240,
+        600
+      ],
+      [
+        1208,
+        626
+      ],
+      [
+        1071,
+        626
+      ],
+      [
+        1058,
+        573
+      ],
+      [
+        1087,
+        552
+      ]
+    ],
+    "3": [
+      [
+        1034,
+        641
+      ],
+      [
+        1094,
+        651
+      ],
+      [
+        1150,
+        670
+      ],
+      [
+        1185,
+        671
+      ],
+      [
+        1180,
+        715
+      ],
+      [
+        1157,
+        741
+      ],
+      [
+        1107,
+        703
+      ],
+      [
+        1071,
+        694
+      ],
+      [
+        1017,
+        693
+      ]
+    ]
+  },
+  "authoring": "Conservative hand-delimited polygons with fixed fabric constraints; not whole-image hue replacement",
+  "limitations": [
+    "Unmasked fabric/antialiased trim retains original color",
+    "Swimwear has one pose, not eight frames",
+    "Color invariance does not establish identity with the approved running reference",
+    "No Aseprite source or Android capture is implied"
+  ]
+}

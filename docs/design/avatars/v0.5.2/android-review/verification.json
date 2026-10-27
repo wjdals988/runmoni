@@ -1,0 +1,55 @@
+{
+  "surface": "Actual Android 29 emulator; separate avatar review APK, not complete Runmoni app",
+  "package": "com.runmoni.avatarreview",
+  "versionName": "review-local",
+  "versionCode": 1,
+  "emulator": "Runmoni_Cloud_29",
+  "acceleration": "TCG software; no /dev/kvm",
+  "emulatorVersion": "37.3.5.0",
+  "systemApi": 29,
+  "guestRamMiB": 2048,
+  "guestCores": 2,
+  "secondBootMilliseconds": 107392,
+  "drawCallbackFramesObserved": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "savedColors": {
+    "shorts": 3,
+    "top": 1,
+    "bottom": 4
+  },
+  "preferenceRestoreAfterForceStop": "passed; checked chip semantics verified",
+  "sourceSnapshot": {
+    "app/src/main/java/com/runmoni/app/avatar/GarmentPalette.java": "44031ccb70a81501eb5d0f7395d04e7cc400941fde33b9e242a8b757b6bcba87",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarReferenceReview.kt": "304ccfb8fb6d745c81e206923427245dc43930eb7602adda65445db4b606e806",
+    "app/src/main/java/com/runmoni/app/ui/AvatarReferenceDialog.kt": "51edcd570b613fe1f9f335066206797385d4cc5f49789ea86d219b96fca24563",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniTheme.kt": "92a6372c07a48fe1999493c00ecd2aabbe1a9f2ba07a57233c52a32792fc64ad"
+  },
+  "apkBytes": 28362307,
+  "apkSha256": "bbf4410440f75b5a088dacf2d51c989f92525726811192fa1c3370b06b1dcc48",
+  "checks": {
+    "install": "passed",
+    "resumedActivity": "com.runmoni.avatarreview/.ReviewActivity",
+    "motionDrawCallbacks": "0..7 observed",
+    "480dpFont2": "captured",
+    "320dpFont2": "captured with reachable save button and scroll",
+    "finalAndroidCrashBuffer": "empty",
+    "warmLaunchStatus": "ok; existing activity reused",
+    "coldLaunchTiming": "am start -W timed out on some launches; later PID/resumed activity/screens verified"
+  },
+  "limitations": [
+    "System UI ANR observed once during software emulation; Wait recovered; no smoothness/performance claim",
+    "Cold launch wait result was sometimes timeout or attributed to Launcher; status alone was not used as app-success evidence",
+    "Raw render logs demonstrate draw callbacks, not measured displayed FPS",
+    "Artwork still unapproved; all 58 wardrobe assets not restored",
+    "Complete com.runmoni.app APK, Google login, outdoor GPS and live audio not validated"
+  ],
+  "emulatorStopped": true
+}

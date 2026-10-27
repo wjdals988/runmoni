@@ -22,6 +22,44 @@ private fun newerReleaseFixture(): AppUpdateUiState {
 }
 
 class AppInformationTest : RunmoniDesignTestBase() {
+    @Test fun topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation() {
+        val state = mutableStateOf(AppState())
+        compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), newerReleaseFixture()) }
+        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        captureDevice("home-update-dot-fixture-not-a-published-release")
+        // The same global entry point must work from every tab.
+        listOf("explore", "run", "crew", "me", "home").forEach {
+            compose.onNodeWithTag("nav_$it").performClick()
+            compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        }
+        compose.onNodeWithTag("settings_button").performClick()
+        compose.onNodeWithTag("settings_app_update").assertIsDisplayed()
+        captureDevice("settings-update-notice-fixture-not-a-published-release")
+        compose.onNodeWithTag("settings_app_update").performClick()
+        compose.onNodeWithTag("confirm_download_update").assertIsDisplayed()
+        compose.onNodeWithTag("cancel_app_update").performClick()
+        compose.onNodeWithTag("close_app_information").performClick()
+        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+    }
+
+    @Test fun topRightDotRequiresATrustedNewerReleaseAndTracksStateChanges() {
+        val state = mutableStateOf(AppState())
+        val updates = mutableStateOf(AppUpdateUiState())
+        compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), updates.value) }
+        fun noDot() = compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertDoesNotExist()
+        noDot()
+        val trusted = newerReleaseFixture().release!!
+        for (release in listOf(trusted.copy(versionCode = BuildConfig.VERSION_CODE.toLong()),
+            trusted.copy(versionCode = 1), trusted.copy(certificateSha256 = "b".repeat(64)))) {
+            compose.runOnIdle { updates.value = AppUpdateUiState(release = release) }; noDot()
+        }
+        compose.runOnIdle { updates.value = AppUpdateUiState(error = "연결 후 다시 확인해 주세요") }; noDot()
+        // A last verified newer release stays useful when rechecking fails.
+        compose.runOnIdle { updates.value = AppUpdateUiState(release = trusted, error = "다시 확인하지 못했어요") }
+        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        compose.runOnIdle { updates.value = AppUpdateUiState(release = trusted.copy(versionCode = BuildConfig.VERSION_CODE.toLong())) }; noDot()
+    }
+
     @Test fun fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls() {
         val state = mutableStateOf(AppState(signedIn = true, serverConnected = true, crews = listOf(
             Crew("first", "첫 크루", "", joined = true, isOwner = true),
