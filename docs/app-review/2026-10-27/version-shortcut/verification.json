@@ -1,0 +1,71 @@
+{
+  "versionName": "0.1.6-dev",
+  "versionCode": 7,
+  "implementationCommit": "3a51c24adc8f1d38a28d571d7cb31f6caeab2e82",
+  "appTreeMatchesImplementationCommit": true,
+  "worktreeHasDocumentationChanges": true,
+  "buildType": "debug local TEST key; not public release",
+  "apk": {
+    "bytes": 237835371,
+    "sha256": "57e7617a791e2a8cf86e7e85e4793ca65a297abd10ff17578f45a3b50c549bf8"
+  },
+  "android": {
+    "normalPassed": 11,
+    "normalFailed": 0,
+    "nativePassed": 3,
+    "nativeFailed": 0,
+    "nativePhysicalWidthPx": 320,
+    "nativeFontScale": 2.0,
+    "releaseStateIsSynthetic": true,
+    "externalLinkObserverAsserts": {
+      "beforeConfirmation": 0,
+      "afterCancel": 0,
+      "afterExplicitDownloadChoice": 1,
+      "targetIsExactTrustedApkUrl": true
+    },
+    "actualRemoteApkDownloadTested": false
+  },
+  "jvm": {
+    "tests": 30,
+    "failures": 0
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 57
+  },
+  "limitations": {
+    "installedApkChecksumVerified": false,
+    "installedApkChecksumAttempt": "Timed out at45seconds under TCG; not counted as a successful check",
+    "latestCrashBufferRead": false,
+    "resumedActivityAfterLatestTestsRechecked": false,
+    "restorationCommandsSucceededBeforeChecksumAttempt": [
+      "wm size reset",
+      "font_scale1.0",
+      "animator_duration_scale1.0"
+    ],
+    "restoredValuesRequeried": false,
+    "initialNativeHomeScreenshotExcludedBecauseAvatarNotPainted": true,
+    "bootReadyGuardRejectedFirstAttemptBefore126207msBootCompletion": true
+  },
+  "ownedEmulatorStopped": 12966,
+  "activeEmulatorsAfterStop": 0,
+  "existing015ApkSourceRevisionUnchanged": "75c39ca900b140cfb02c1a47807a5955c8b8db7f",
+  "evidence": {
+    "home-normal-fixture.png": {
+      "sha256": "ec1f482ffcadf5e55047837f8ccb20a4616c72ded9a177b9646b9146909202a1",
+      "bytes": 49791
+    },
+    "about-320-font2-fixture.png": {
+      "sha256": "d0018243e3582c01f9f9bcebc8337e029b197051bbe10c389f105bb6f749fcc9",
+      "bytes": 33775
+    },
+    "confirmation-normal-fixture.png": {
+      "sha256": "3f4f34be6e6f6bf0da147a319dbdc9ace9be8671cd035fec4840a01d98343eed",
+      "bytes": 45595
+    },
+    "confirmation-320-font2-fixture.png": {
+      "sha256": "7d48d9d85940daa7b25fc3fe36cfa2d12f7a411c0e421e95412bd56c236a2dbe",
+      "bytes": 50192
+    }
+  }
+}
