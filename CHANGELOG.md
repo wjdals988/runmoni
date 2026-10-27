@@ -3,6 +3,7 @@
 ## 0.1.6-dev / versionCode7 — 2026-10-27, 미게시
 
 - 서명키 질문과 ‘앱 업로드까지’ 요청에 따라 Linux release 빌드/실제 APK 검사 도구와 수동 GitHub Actions workflow 추가. 기존 인증서만 허용하고 unsigned 후보는 별도 경로, 서명본은 APK·metadata·체크섬을 생성. 초안 업로드는 원격 main/tag·3자산 서버 digest 검증 뒤 비공개로 종료. 기존 게시 도구의 Windows/Linux curl 선택과 주입 GitHub 인증 재사용을 지원. 최초 실제 인증 확인은 프록시 placeholder를 raw token 형태로 제한해 실패했으며, 헤더 안전성 검사를 유지하는 수정 뒤 저장소 GET HTTP200·push권한 확인. 비밀값 출력·추출0, 실제 게시/서명은 별도 결과로 구분.
+- `e7bec3e` clean에서 새 도구의 오프라인 release 빌드3분38초·JVM30/30·release lint오류0/경고27 통과. unsigned 실제 APK0.1.6/code7·218,120,150bytes·SHA256 `db47d0f8b7899caef51031c1cdb31852fd34a91e99dff5abfed5bbde0e78b5e3`, non-debuggable/내장revision/승인원화SHA 일치. apksigner가 unsigned를 거부하고 키 없는 서명 명령이 Gradle 전에 중단함을 확인. 게시/서명 경계 오프라인32개·actionlint1.7.12 통과. GitHub Environment 생성도403으로 외부 설정 차단을 확인했고 임의키·unsigned 업로드·공개피드/대시보드 교체0. [검증 기록](CLOUD_RELEASE_REVIEW_20261027.md)에 실제 실행과 미실행 범위를 분리.
 
 - P1 첫 미니미 표시: 준비 전 빈 Canvas를 ‘준비 중’ 상태로 바꾸고 읽기 실패에48dp 재시도 행동 추가. 첫 전신 프레임을 먼저 표시하며8개 준비 뒤 순환 시작. 선택 취소와 실패를 구분하고 원본/데이터/의상 준비 상태는 유지. 제어된 지연·실패·재시도·부분 준비·취소 검사 추가. 첫 컴파일의 중첩 범위 오류 수정 후 재빌드/JVM30·lint오류0/경고57 통과. Android 실행 결과는 [로딩 검토](docs/AVATAR_LOADING_REVIEW_20261027.md)에 분리 기록.
 - 재시도 가시성은 대기만 보강해도 재실패해 로딩 상태/표시 하위 구성을 같은 요청 수명으로 수정. 초기 기본7/8·대기 재실패, 수정 후8/8을 구분. 실제320dp/font2에서 문단 하단71px/영역64px 잘림을 발견해 작은 영역을 접근성 이름이 있는24dp 로딩 아이콘으로 변경. 최신7fab0f3에서 기본8/8·큰 글씨4/4 재검증 통과. [최종 실제 출력과 모든 실패 로그](docs/AVATAR_LOADING_REVIEW_20261027.md)를 보존. font/애니메이션1.0·화면 복원, 앱 crash 버퍼0바이트, 소유 PID20072 종료/활성 AVD0. 원본8프레임과 데이터 보존, 새 공개 APK/대시보드 다운로드 교체 없음.
