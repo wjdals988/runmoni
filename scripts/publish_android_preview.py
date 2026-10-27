@@ -132,12 +132,18 @@ def child_process_env():
 
 def validate_credential(token):
     # Also excludes CR/LF, quotes and backslashes from curl's stdin config.
-    if not isinstance(token, str) or not re.fullmatch(r"[A-Za-z0-9_]{20,1024}", token):
+    # Managed environments may inject a short proxy placeholder instead of a
+    # raw GitHub token. Enforce header/config safety, not an assumed token shape.
+    if not isinstance(token, str) or not re.fullmatch(r"[A-Za-z0-9_.:/+=-]{1,4096}", token):
         raise PublicationError("GitHub credential format is invalid; credential output was omitted.")
     return token
 
 
 def github_credential():
+    # Reuse injected CLI/Actions authentication; never prompt or persist a token.
+    for name in ("GH_TOKEN", "GITHUB_TOKEN"):
+        if os.environ.get(name):
+            return validate_credential(os.environ[name])
     env = {**child_process_env(), "GIT_TERMINAL_PROMPT": "0", "GCM_INTERACTIVE": "never"}
     result = subprocess.run(
         ["git", "-c", f"safe.directory={ROOT.as_posix()}", "credential", "fill"],
@@ -149,6 +155,10 @@ def github_credential():
     if result.returncode or not token:
         raise PublicationError("Non-interactive GitHub authentication is required; credential output was omitted.")
     return validate_credential(token)
+
+
+def native_curl():
+    return "curl.exe" if os.name == "nt" else "curl"
 
 
 def curl_config_quote(value):
@@ -213,7 +223,7 @@ def github_api_request(method, path, token, *, json_body=None):
         lines += ['header = "Content-Type: application/json"',
                   "data-binary = " + json.dumps(serialized, ensure_ascii=True)]
     config = ("\n".join(lines) + "\n").encode("ascii")
-    arguments = ["curl.exe", "-q", "--silent", "--show-error", "--http1.1", "--proto", "=https",
+    arguments = [native_curl(), "-q", "--silent", "--show-error", "--http1.1", "--proto", "=https",
                  "--connect-timeout", "30", "--max-time", "120", "--max-filesize", str(MAX_API_RESPONSE_BYTES),
                  "--max-redirs", "0", "--request", method, "--config", "-",
                  "--write-out", HTTP_STATUS_MARKER.decode("ascii") + "%{http_code}", API + path]
@@ -282,7 +292,7 @@ def upload_asset(upload_url, local, token, rate_kib):
               f'header = "X-GitHub-Api-Version: {API_VERSION}"\n')
     seconds = max(120, math.ceil(local["size"] / (rate_kib * 1024)) * 2 + 120)
     result = subprocess.run([
-        "curl.exe", "-q", "--silent", "--show-error", "--fail-with-body", "--http1.1",
+        native_curl(), "-q", "--silent", "--show-error", "--fail-with-body", "--http1.1", "--proto", "=https",
         "--connect-timeout", "30", "--max-time", str(seconds), "--limit-rate", f"{rate_kib}K",
         "--request", "POST", "--header", "Content-Type: application/octet-stream",
         "--upload-file", local["path"], "--config", "-", upload_url + "?" + urlencode({"name": local["name"]}),

@@ -301,7 +301,7 @@ class PreviewPublisherTest(unittest.TestCase):
             publisher.upload_asset("https://uploads.github.com/repos/wjdals988/runmoni/releases/1/assets", local, token, 256)
         argv = run.call_args.args[0]
         options = run.call_args.kwargs
-        self.assertEqual(["curl.exe", "-q"], argv[:2])
+        self.assertEqual([publisher.native_curl(), "-q"], argv[:2])
         self.assertNotIn(token, " ".join(argv))
         self.assertIn("Authorization: Bearer " + token, options["input"])
         self.assertEqual("256K", argv[argv.index("--limit-rate") + 1])
@@ -499,7 +499,7 @@ class PreviewPublisherTest(unittest.TestCase):
         self.assertNotIn("런모니", config)
         self.assertNotIn(token, " ".join(argv))
         self.assertNotIn("data-binary", " ".join(argv))
-        self.assertEqual(["curl.exe", "-q"], argv[:2])
+        self.assertEqual([publisher.native_curl(), "-q"], argv[:2])
         self.assertIn("--http1.1", argv)
         self.assertEqual("30", argv[argv.index("--connect-timeout") + 1])
         self.assertEqual("120", argv[argv.index("--max-time") + 1])

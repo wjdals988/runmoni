@@ -1,5 +1,8 @@
 # Android 개발 프리뷰 게시
 
+Linux 클라우드 빌드와 GitHub Actions의 기존 키 연결·비공개 초안 업로드는
+[클라우드 Android 릴리스 준비](CLOUD_ANDROID_RELEASE.md)를 따른다.
+
 `scripts/publish_android_preview.py`는 기존 `work/publish-release.py`와 `work/verify-published-release.py`의 성공한 게시 흐름을 버전 인수로 일반화했다. 저장소는 `wjdals988/runmoni`로 고정하며 개발 prerelease만 다룬다. 기본 실행은 로컬 계획 확인이며 Git·자격 증명·HTTP를 호출하지 않는다. 명시적인 `--stage-draft`는 원격 비공개 초안까지만 준비하고, `--publish`만 공개 전환을 수행한다. AVD·Gradle·패키지 설치를 시작하지 않는다.
 
 ## 최종 빌드 준비
@@ -20,7 +23,7 @@
 
 ## 계획·비공개 초안·공개
 
-Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. GitHub 메타데이터 API와 자산 업로드 모두 기존 native `curl.exe`를 사용하며 외부 Python HTTP 패키지를 설치하지 않는다. 이전 `httpx` 기반 실행은 현재 번들에서 모듈 누락으로 인증 조회·API 요청 전에 실패했으므로 이 native 어댑터로 대체했다. 아래 `<version>`은 `0.1.5-dev` 같은 개발 버전, `<commit>`은 실제 소스의 전체40자리 소문자 SHA로 바꾼다.
+Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. GitHub 메타데이터 API와 자산 업로드는 Windows에서 native `curl.exe`, Linux에서 `curl`을 사용하며 외부 Python HTTP 패키지를 설치하지 않는다. 이전 `httpx` 기반 실행은 현재 번들에서 모듈 누락으로 인증 조회·API 요청 전에 실패했으므로 이 native 어댑터로 대체했다. 아래 `<version>`은 `0.1.5-dev` 같은 개발 버전, `<commit>`은 실제 소스의 전체40자리 소문자 SHA로 바꾼다.
 
 ```powershell
 & '<bundled-python.exe>' scripts/publish_android_preview.py --version <version> --target <commit> --plan
@@ -44,7 +47,7 @@ Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. Git
 & '<bundled-python.exe>' scripts/publish_android_preview.py --version <version> --target <commit> --publish --rate-kib 256
 ```
 
-GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰을 출력·파일 저장·프로세스 인수에 넣지 않는다. curl에는 stdin 설정으로만 전달한다. 첫 `-q`로 사용자 curlrc를 읽지 않고 CR/LF/따옴표/역슬래시가 있는 자격은 거부한다. 자식 프로세스의 Git/GCM trace·TLS key-log 환경변수를 제외하고 사용자 전역 설정은 변경하지 않는다. 오류 stderr/HTTP body 원문도 출력하지 않는다. 기존 인증이 없으면 자동 로그인창을 띄우지 않고 중단한다.
+주입된 `GH_TOKEN`/`GITHUB_TOKEN`을 우선 재사용하고, 없으면 GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰을 출력·파일 저장·프로세스 인수에 넣지 않는다. curl에는 stdin 설정으로만 전달한다. 첫 `-q`로 사용자 curlrc를 읽지 않고 CR/LF/따옴표/역슬래시가 있는 자격은 거부한다. 자식 프로세스의 Git/GCM trace·TLS key-log 환경변수를 제외하고 사용자 전역 설정은 변경하지 않는다. 오류 stderr/HTTP body 원문도 출력하지 않는다. 기존 인증이 없으면 자동 로그인창을 띄우지 않고 중단한다.
 
 메타데이터용 `CurlApiAdapter`는 고정 저장소의 정해진 GET/POST/PATCH 경로만 허용한다. 각 요청은 native curl1개·HTTP1.1·연결30초·전체120초이며 redirect를 따라가지 않는다. curl의 크기 제한과 Python의 제한 읽기로 API 응답 본문을 최대1MiB로 제한하고 크기 초과 시 자식 curl을 종료한다. 결과는 HTTP status와 JSON object이며 API 오류는 status만 보고한다. 요청 JSON은 `ensure_ascii=True`로 직렬화하고 그 문자열을 다시 JSON의 따옴표/역슬래시 규칙으로 감싸 curl stdin config의 `data-binary`에 넣는다. 한국어·emoji·실제 개행/CR·quote·backslash와 문자 그대로의 `\n`을 JSON 의미대로 보존하며, 본문도 파일/argv로 보내지 않는다.
 

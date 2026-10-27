@@ -1,0 +1,95 @@
+name: Android release candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Unsigned validation, signed artifact, or private GitHub draft
+        type: choice
+        default: unsigned
+        options: [unsigned, signed, stage-draft]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: runmoni-android-release
+  cancel-in-progress: false
+
+jobs:
+  candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    # Signing secrets belong in this environment, not in a pull-request job.
+    environment: android-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Validate requested mode and restore retained key
+        env:
+          MODE: ${{ inputs.mode }}
+          RUNMONI_KEYSTORE_BASE64: ${{ secrets.RUNMONI_KEYSTORE_BASE64 }}
+          RUNMONI_STORE_PASSWORD: ${{ secrets.RUNMONI_STORE_PASSWORD }}
+          RUNMONI_KEY_ALIAS: ${{ secrets.RUNMONI_KEY_ALIAS }}
+          RUNMONI_KEY_PASSWORD: ${{ secrets.RUNMONI_KEY_PASSWORD }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          mode = os.environ['MODE']
+          if mode not in ('unsigned', 'signed', 'stage-draft'):
+              raise SystemExit('Unsupported release mode.')
+          if mode != 'unsigned' and os.environ['GITHUB_REF'] != 'refs/heads/main':
+              raise SystemExit('Signed distribution must build the reviewed main branch.')
+          if mode != 'unsigned':
+              names = ('RUNMONI_KEYSTORE_BASE64', 'RUNMONI_STORE_PASSWORD', 'RUNMONI_KEY_ALIAS', 'RUNMONI_KEY_PASSWORD')
+              if not all(os.environ.get(name) for name in names):
+                  raise SystemExit('Retained signing inputs are missing in the android-release environment.')
+              try:
+                  data = base64.b64decode(os.environ[names[0]], validate=True)
+                  if not 0 < len(data) <= 1048576:
+                      raise ValueError()
+              except ValueError:
+                  raise SystemExit('Retained keystore encoding is invalid; raw details omitted.')
+              key = Path(os.environ['RUNNER_TEMP']) / 'runmoni-release.jks'
+              with key.open('xb') as output:
+                  key.chmod(0o600)
+                  output.write(data)
+          PY
+      - name: Prepare verified build tools, without an emulator
+        run: python3 scripts/cloud/prepare-android.py --build-only
+      - name: Build, test and inspect unsigned candidate
+        if: inputs.mode == 'unsigned'
+        run: python3 scripts/cloud/release-app.py --unsigned --online
+      - name: Build, test, sign and verify retained certificate
+        if: inputs.mode != 'unsigned'
+        env:
+          RUNMONI_KEYSTORE_FILE: ${{ runner.temp }}/runmoni-release.jks
+          RUNMONI_STORE_PASSWORD: ${{ secrets.RUNMONI_STORE_PASSWORD }}
+          RUNMONI_KEY_ALIAS: ${{ secrets.RUNMONI_KEY_ALIAS }}
+          RUNMONI_KEY_PASSWORD: ${{ secrets.RUNMONI_KEY_PASSWORD }}
+        run: python3 scripts/cloud/release-app.py --online
+      - name: Upload and verify private release draft
+        if: inputs.mode == 'stage-draft'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          metadata, = Path('outputs').glob('runmoni-*.metadata.json')
+          data = json.loads(metadata.read_text())
+          subprocess.run(['python3', 'scripts/publish_android_preview.py', '--version', data['version'],
+                          '--target', os.environ['GITHUB_SHA'], '--stage-draft'], check=True)
+          PY
+      - name: Retain APK and verification sidecars
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: runmoni-${{ inputs.mode }}-${{ github.sha }}
+          path: outputs/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Remove temporary retained key
+        if: always()
+        run: rm -f -- "$RUNNER_TEMP/runmoni-release.jks"

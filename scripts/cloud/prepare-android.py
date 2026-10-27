@@ -4,6 +4,7 @@
 Only writes work/cloud-android. Existing archives are verified and reused. The
 application source, dependency declarations, production signing and data stay intact.
 """
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -28,8 +29,12 @@ ITEMS=[
  ('jdk.tar.gz','sha256','d7f5d5cf865a2902b70ff549b97586a7d3f234e016f041ab447ea740c7d66d1c','https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk_x64_linux_hotspot_21.0.13_9.tar.gz','jdk-21.0.13+9'),
  ('gradle-8.13-bin.zip','sha256','20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78','https://services.gradle.org/distributions/gradle-8.13-bin.zip','gradle-8.13'),
 ]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--build-only',action='store_true',help='Skip emulator and system image downloads')
+args=parser.parse_args()
 proof=[]
 for name,algorithm,expected,url,target_name in ITEMS:
+    if args.build_only and target_name.startswith(('emulator','system-images/')): continue
     archive=DOWNLOADS/name
     previous=ROOT/'work/avatar-reference-review/tools'/name
     if not archive.exists() and previous.exists(): shutil.copy2(previous,archive)
