@@ -1,0 +1,82 @@
+{
+  "inspectedAt": "2026-10-27T07:48:21.437Z",
+  "mode": "read-only PNG metadata and generated-colorway face-region comparison",
+  "images": [
+    {
+      "file": "swimwear-mint-coral.png",
+      "sha256": "bc95bd8fcfb7e0dbddf302ee0fee5828990c3c251c0bbd59d45be64fbb89fb34",
+      "bytes": 902885,
+      "width": 1448,
+      "height": 1086,
+      "channels": 4,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 913985,
+      "visiblePixels": 602503,
+      "alpha16Bounds": [
+        60,
+        59,
+        1372,
+        1044
+      ]
+    },
+    {
+      "file": "swimwear-blue-purple.png",
+      "sha256": "3d58f140ad9388f0fa5a9458c9feb79f335a5d878cc5fdf7254727abd10c2a44",
+      "bytes": 895286,
+      "width": 1448,
+      "height": 1086,
+      "channels": 4,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 932621,
+      "visiblePixels": 597635,
+      "alpha16Bounds": [
+        59,
+        59,
+        1372,
+        1046
+      ]
+    }
+  ],
+  "sameSize": true,
+  "faceChecks": [
+    {
+      "name": "maleFace",
+      "box": [
+        261,
+        223,
+        582,
+        440
+      ],
+      "opaqueCompared": 66004,
+      "pixelsOverRgbDelta3": 46157,
+      "maxRgbDelta": 197,
+      "alphaDifferences": 14856,
+      "exactIdentityProven": false
+    },
+    {
+      "name": "femaleFace",
+      "box": [
+        1006,
+        288,
+        1325,
+        505
+      ],
+      "opaqueCompared": 61788,
+      "pixelsOverRgbDelta3": 37352,
+      "maxRgbDelta": 217,
+      "alphaDifferences": 16820,
+      "exactIdentityProven": false
+    }
+  ],
+  "productionReady": false,
+  "humanApproved": false,
+  "appIntegrated": false,
+  "limitations": [
+    "Both PNGs are whole-character image_gen proposals. Neither is an eight-frame animation.",
+    "The face-region comparison does not prove identity equivalence to the 0.3 approved reference.",
+    "Generated garment recoloring is not a runtime mask/palette implementation; non-garment pixels can change.",
+    "No Android capture, device verification, build or public release was performed for these images."
+  ]
+}
