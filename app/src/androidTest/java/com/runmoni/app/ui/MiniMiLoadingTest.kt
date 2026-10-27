@@ -45,6 +45,9 @@ class MiniMiLoadingTest : RunmoniDesignTestBase() {
         val gate = CompletableDeferred<Unit>(); val drawn = AtomicInteger(-1)
         fixture({ index, running -> gate.await(); avatarBitmap(context, AvatarStyle(), index, running) }, drawn)
         compose.onNodeWithTag("minimi_loading").assertIsDisplayed()
+        if (context.resources.configuration.fontScale >= 1.3f) {
+            compose.onNodeWithContentDescription("미니미 준비 중").assertIsDisplayed()
+        }
         assertEquals(-1, drawn.get())
         noTextOverflow("avatar loading")
         capture("avatar-loading-fixture")

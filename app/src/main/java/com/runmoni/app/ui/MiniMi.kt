@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -56,8 +57,8 @@ internal fun MiniMi(
     // Keep loading state AND its subcomposition in the same request lifetime.
     // Replacing only the State delegate can leave a new loading child unplaced.
     key(context, avatar, running, attempt, frameLoader) {
-    var frame by remember { mutableIntStateOf(0) }
-    val prepared by produceState(initialValue = MiniMiFrames()) {
+        var frame by remember { mutableIntStateOf(0) }
+        val prepared by produceState(initialValue = MiniMiFrames()) {
             try {
                 suspend fun load(index: Int) = withContext(Dispatchers.Default) {
                     ensureActive()
@@ -75,46 +76,51 @@ internal fun MiniMi(
                 // An avatar read failure must not take down recording or the rest of the UI.
                 value = MiniMiFrames(failed = true)
             }
-    }
-    val frames = prepared.frames
-    val playing = running && frames.size == ApprovedAvatarRenderer.FRAMES
-    LaunchedEffect(playing, lifecycle, frameOverride) {
-        frame = 0
-        if (playing && frameOverride == null) lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            val started = android.os.SystemClock.uptimeMillis()
-            while (isActive) {
-                frame = if (ValueAnimator.areAnimatorsEnabled()) ApprovedAvatarRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started) else 0
-                delay(ApprovedAvatarRenderer.MILLIS.toLong())
-            }
         }
-    }
-    val renderedFrame = if (frames.isEmpty()) 0 else Math.floorMod(frameOverride ?: frame, frames.size)
-    val image = frames.getOrNull(renderedFrame)
-    val accessible = if (description == null) Modifier.clearAndSetSemantics { } else Modifier.semantics { contentDescription = description }
-    BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
-        val showFailureLabel = maxWidth >= 100.dp && maxHeight >= 112.dp
-        if (image != null) {
-            Canvas(Modifier.fillMaxSize().then(accessible)) {
-                val scale = minOf(size.width / ApprovedAvatarRenderer.WIDTH, size.height / ApprovedAvatarRenderer.HEIGHT)
-                val width = (ApprovedAvatarRenderer.WIDTH * scale).roundToInt().coerceAtLeast(1)
-                val height = (ApprovedAvatarRenderer.HEIGHT * scale).roundToInt().coerceAtLeast(1)
-                drawImage(image, dstOffset = IntOffset(((size.width - width) / 2).roundToInt(), ((size.height - height) / 2).roundToInt()),
-                    dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
-                onFrameRendered?.invoke(renderedFrame)
-            }
-        } else if (prepared.failed) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                if (showFailureLabel) {
-                    Text("불러오기 실패", style = MaterialTheme.typography.labelSmall)
-                }
-                IconButton(onClick = { attempt++ }, modifier = Modifier.size(48.dp).testTag("minimi_retry")) {
-                    Icon(Icons.Outlined.Refresh, contentDescription = "미니미 다시 불러오기")
+        val frames = prepared.frames
+        val playing = running && frames.size == ApprovedAvatarRenderer.FRAMES
+        LaunchedEffect(playing, lifecycle, frameOverride) {
+            frame = 0
+            if (playing && frameOverride == null) lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                val started = android.os.SystemClock.uptimeMillis()
+                while (isActive) {
+                    frame = if (ValueAnimator.areAnimatorsEnabled()) ApprovedAvatarRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started) else 0
+                    delay(ApprovedAvatarRenderer.MILLIS.toLong())
                 }
             }
-        } else {
-            Text("준비 중", style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("minimi_loading"))
         }
-    }
+        val renderedFrame = if (frames.isEmpty()) 0 else Math.floorMod(frameOverride ?: frame, frames.size)
+        val image = frames.getOrNull(renderedFrame)
+        val accessible = if (description == null) Modifier.clearAndSetSemantics { } else Modifier.semantics { contentDescription = description }
+        BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
+            val showStatusText = maxWidth >= 100.dp && maxHeight >= 112.dp
+            if (image != null) {
+                Canvas(Modifier.fillMaxSize().then(accessible)) {
+                    val scale = minOf(size.width / ApprovedAvatarRenderer.WIDTH, size.height / ApprovedAvatarRenderer.HEIGHT)
+                    val width = (ApprovedAvatarRenderer.WIDTH * scale).roundToInt().coerceAtLeast(1)
+                    val height = (ApprovedAvatarRenderer.HEIGHT * scale).roundToInt().coerceAtLeast(1)
+                    drawImage(image, dstOffset = IntOffset(((size.width - width) / 2).roundToInt(), ((size.height - height) / 2).roundToInt()),
+                        dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
+                    onFrameRendered?.invoke(renderedFrame)
+                }
+            } else if (prepared.failed) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (showStatusText) {
+                        Text("불러오기 실패", style = MaterialTheme.typography.labelSmall)
+                    }
+                    IconButton(onClick = { attempt++ }, modifier = Modifier.size(48.dp).testTag("minimi_retry")) {
+                        Icon(Icons.Outlined.Refresh, contentDescription = "미니미 다시 불러오기")
+                    }
+                }
+            } else {
+                if (showStatusText) {
+                    Text("준비 중", style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("minimi_loading"))
+                } else {
+                    Icon(Icons.Outlined.HourglassEmpty, contentDescription = "미니미 준비 중",
+                        modifier = Modifier.size(24.dp).testTag("minimi_loading"))
+                }
+            }
+        }
     }
 }
 
