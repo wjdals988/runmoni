@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import android.graphics.Bitmap
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
+import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.BuildConfig
 import com.runmoni.app.domain.AppRelease
@@ -22,15 +23,47 @@ private fun newerReleaseFixture(): AppUpdateUiState {
 }
 
 class AppInformationTest : RunmoniDesignTestBase() {
+    @Test fun topVersionOpensConfirmationAndDownloadsOnlyAfterExplicitChoice() {
+        val state = mutableStateOf(AppState())
+        val links = mutableListOf<String>()
+        val fixture = newerReleaseFixture()
+        compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), fixture, onExternalAppLink = { links += it }) }
+        compose.onNodeWithTag("top_app_version").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        compose.onNodeWithText("v${BuildConfig.VERSION_NAME}").assertExists()
+        compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
+        captureDevice("version-shortcut-home-fixture")
+        compose.onNodeWithTag("top_app_version").performClick()
+        compose.onNodeWithTag("confirm_download_update").assertIsDisplayed()
+        compose.runOnIdle { assertTrue(links.isEmpty()) }
+        captureDevice("version-shortcut-confirmation-fixture")
+        compose.onNodeWithTag("cancel_app_update").performClick()
+        compose.onNodeWithTag("close_app_information").performClick()
+        compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
+        compose.runOnIdle { assertTrue(links.isEmpty()) }
+        compose.onNodeWithTag("top_app_version").performClick()
+        compose.onNodeWithTag("confirm_download_update").performClick()
+        compose.runOnIdle { assertEquals(listOf(fixture.release!!.downloadUrl), links) }
+        noTextOverflow("version shortcut and update prompt")
+    }
+
+    @Test fun topVersionWithoutUpdateShowsInformationAndHistory() {
+        val state = mutableStateOf(AppState())
+        compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state)) }
+        compose.onNodeWithTag("top_app_version").performClick()
+        compose.onNodeWithTag("confirm_download_update").assertDoesNotExist()
+        compose.onNodeWithTag("open_version_history").performScrollTo().performClick()
+        compose.onNodeWithText("현재 ${BuildConfig.VERSION_NAME} · 빌드 ${BuildConfig.VERSION_CODE}").assertIsDisplayed()
+    }
+
     @Test fun topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation() {
         val state = mutableStateOf(AppState())
         compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), newerReleaseFixture()) }
-        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
         captureDevice("home-update-dot-fixture-not-a-published-release")
         // The same global entry point must work from every tab.
         listOf("explore", "run", "crew", "me", "home").forEach {
             compose.onNodeWithTag("nav_$it").performClick()
-            compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+            compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
         }
         compose.onNodeWithTag("settings_button").performClick()
         compose.onNodeWithTag("settings_app_update").assertIsDisplayed()
@@ -39,14 +72,14 @@ class AppInformationTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("confirm_download_update").assertIsDisplayed()
         compose.onNodeWithTag("cancel_app_update").performClick()
         compose.onNodeWithTag("close_app_information").performClick()
-        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
     }
 
     @Test fun topRightDotRequiresATrustedNewerReleaseAndTracksStateChanges() {
         val state = mutableStateOf(AppState())
         val updates = mutableStateOf(AppUpdateUiState())
         compose.setContent { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), updates.value) }
-        fun noDot() = compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertDoesNotExist()
+        fun noDot() = compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertDoesNotExist()
         noDot()
         val trusted = newerReleaseFixture().release!!
         for (release in listOf(trusted.copy(versionCode = BuildConfig.VERSION_CODE.toLong()),
@@ -56,7 +89,7 @@ class AppInformationTest : RunmoniDesignTestBase() {
         compose.runOnIdle { updates.value = AppUpdateUiState(error = "연결 후 다시 확인해 주세요") }; noDot()
         // A last verified newer release stays useful when rechecking fails.
         compose.runOnIdle { updates.value = AppUpdateUiState(release = trusted, error = "다시 확인하지 못했어요") }
-        compose.onNodeWithTag("settings_update_red_dot", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
         compose.runOnIdle { updates.value = AppUpdateUiState(release = trusted.copy(versionCode = BuildConfig.VERSION_CODE.toLong())) }; noDot()
     }
 

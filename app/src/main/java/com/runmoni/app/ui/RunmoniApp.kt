@@ -46,7 +46,7 @@ import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
-fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState = AppUpdateUiState(), onCheckUpdates: () -> Unit = {}) {
+fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState = AppUpdateUiState(), onCheckUpdates: () -> Unit = {}, onExternalAppLink: ((String) -> Unit)? = null) {
     RunmoniTheme {
         var tab by rememberSaveable { mutableIntStateOf(0) }
         var settings by rememberSaveable { mutableStateOf(false) }
@@ -75,17 +75,18 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             containerColor = RunmoniColors.Cream,
             topBar = {
                 Column(Modifier.statusBarsPadding()) {
-                    Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 12.dp, top = 8.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1f)) {
+                    Column(Modifier.fillMaxWidth().padding(start = 20.dp, end = 12.dp, top = 8.dp, bottom = 4.dp)) {
+                        val largeHeader = LocalDensity.current.fontScale >= 1.3f
+                        if (largeHeader) Text(if (tab == 0) "runmoni" else tabs[tab], fontSize = 22.sp, fontWeight = FontWeight.Bold, letterSpacing = if (tab == 0) (-0.8).sp else 0.sp)
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        if (largeHeader) Spacer(Modifier.weight(1f))
+                        else Column(Modifier.weight(1f)) {
                             Text(if (tab == 0) "runmoni" else tabs[tab], fontSize = 22.sp, fontWeight = FontWeight.Bold, letterSpacing = if (tab == 0) (-0.8).sp else 0.sp)
                         }
+                        AppVersionShortcut(updates) { appInformation = true }
                         IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
-                            BadgedBox(badge = {
-                                if (updates.updateAvailable) Badge(
-                                    Modifier.testTag("settings_update_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" },
-                                    containerColor = MaterialTheme.colorScheme.error,
-                                )
-                            }) { Icon(Icons.Outlined.Settings, "계정 및 러닝 설정") }
+                            Icon(Icons.Outlined.Settings, "계정 및 러닝 설정")
+                        }
                         }
                     }
                     if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -117,7 +118,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             }
         }
         if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true }, onAppInformation = { settings = false; appInformation = true }, updates = updates)
-        if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable)
+        if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (chatOpen) ChatScreen(state, actions)
         selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud) { selectedRecord = null } }

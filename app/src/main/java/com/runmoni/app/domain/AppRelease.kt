@@ -44,7 +44,7 @@ data class AppVersionEntry(val version: String, val date: String, val status: St
 val bundledAppHistory = listOf(
     AppVersionEntry("0.1.6-dev", "2026-10-27", "개발 중 · 미게시", listOf(
         "홈·나·옷장의 기본 미니미를 승인된 전신 원화로 복구했어요.",
-        "새 공개 버전이 있으면 우상단 설정에 알림 점과 업데이트 안내를 표시해요.",
+        "상단의 설치 버전과 알림 점을 누르면 새 버전 확인과 APK 다운로드로 이동해요.",
         "연결되지 않은 모임을 정상 조회한 빈 결과처럼 표시하던 문제를 고쳤어요.",
         "꾸미기 아이템은 원화를 준비 중이에요. 기존 보유 내역과 선택은 보관돼요.",
     )),
