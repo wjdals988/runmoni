@@ -49,13 +49,15 @@ internal fun MiniMi(
 ) {
     val context = LocalContext.current.applicationContext
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    var frame by remember(running) { mutableIntStateOf(0) }
     var attempt by remember(context, avatar, running) { mutableIntStateOf(0) }
     // Asset decoding/cropping must not block the first home screen on the UI thread.
     // Publish the genuine first frame, then the complete clip. A changed selection
     // gets its own state, so an old outfit is never presented as a new one.
-    val prepared by key(context, avatar, running, attempt, frameLoader) {
-        produceState(initialValue = MiniMiFrames()) {
+    // Keep loading state AND its subcomposition in the same request lifetime.
+    // Replacing only the State delegate can leave a new loading child unplaced.
+    key(context, avatar, running, attempt, frameLoader) {
+    var frame by remember { mutableIntStateOf(0) }
+    val prepared by produceState(initialValue = MiniMiFrames()) {
             try {
                 suspend fun load(index: Int) = withContext(Dispatchers.Default) {
                     ensureActive()
@@ -73,7 +75,6 @@ internal fun MiniMi(
                 // An avatar read failure must not take down recording or the rest of the UI.
                 value = MiniMiFrames(failed = true)
             }
-        }
     }
     val frames = prepared.frames
     val playing = running && frames.size == ApprovedAvatarRenderer.FRAMES
@@ -113,6 +114,7 @@ internal fun MiniMi(
         } else {
             Text("준비 중", style = MaterialTheme.typography.labelSmall, modifier = Modifier.testTag("minimi_loading"))
         }
+    }
     }
 }
 
