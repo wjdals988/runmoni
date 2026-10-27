@@ -67,6 +67,11 @@ class MiniMiLoadingTest : RunmoniDesignTestBase() {
         noTextOverflow("avatar retry")
         capture("avatar-retry-fixture")
         compose.onNodeWithTag("minimi_retry").performClick()
+        // The new subcomposition can exist before its placement is committed.
+        // Keep the I/O gate closed until the loading state is visibly placed.
+        compose.waitUntil(30_000) {
+            runCatching { compose.onNodeWithTag("minimi_loading").assertIsDisplayed() }.isSuccess
+        }
         compose.onNodeWithTag("minimi_loading").assertIsDisplayed()
         gate.complete(Unit)
         compose.waitUntil(30_000) { drawn.get() == 0 }
