@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / 'work/cloud-android'
 SIGNING_VARIABLES = ('RUNMONI_KEYSTORE_FILE', 'RUNMONI_STORE_PASSWORD',
                      'RUNMONI_KEY_ALIAS', 'RUNMONI_KEY_PASSWORD')
-CERTIFICATE = '2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830'
+CERTIFICATE = json.loads((ROOT / 'config/android-release-signing.json').read_text())['certificateSha256']
 
 
 class ReleaseError(Exception):
@@ -67,7 +67,7 @@ def inspect_apk(badging, signature, *, unsigned=False):
         raise ReleaseError('Expected a development preview version.')
     signers = re.findall(r'^Signer #[0-9]+ certificate SHA-256 digest: ([0-9a-fA-F]{64})$', signature, re.M)
     if not unsigned and [s.lower() for s in signers] != [CERTIFICATE]:
-        raise ReleaseError('APK signer differs from the existing public Runmoni app.')
+        raise ReleaseError('APK signer differs from the approved Runmoni distribution certificate.')
     feed = json.loads((ROOT / 'updates/android.json').read_text())
     # This is the committed public baseline; remote publication is checked separately.
     previous = feed.get('preview', {})

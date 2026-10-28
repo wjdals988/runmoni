@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+  "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+  "previousCertificateSha256": "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830",
+  "keyAlgorithm": "RSA",
+  "keySize": 3072,
+  "createdAt": "2026-10-28T08:16:47.838924+00:00",
+  "packageName": "com.runmoni.app",
+  "firstIntendedVersion": "0.1.6-dev",
+  "githubEnvironment": "android-release"
+}

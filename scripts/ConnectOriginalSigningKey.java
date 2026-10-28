@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class ConnectOriginalSigningKey {
-    static final String CERTIFICATE = "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830";
+    static final String CERTIFICATE = "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a";
     static final String REPO = "wjdals988/runmoni";
     static final String ENVIRONMENT = "android-release";
     static class ConnectionError extends Exception {
@@ -64,7 +64,7 @@ public class ConnectOriginalSigningKey {
                 throw new ConnectionError("Retained key alias has no certificate.");
             String digest = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(certificate.getEncoded()));
             if (!digest.equals(expectedCertificate))
-                throw new ConnectionError("Certificate differs from the existing public Runmoni app. Connection stopped.");
+                throw new ConnectionError("Certificate differs from the approved Runmoni distribution signer. Connection stopped.");
             if (!(store.getKey(alias, keyChars) instanceof PrivateKey privateKey))
                 throw new ConnectionError("The retained private key could not be opened.");
             byte[] challenge = "Runmoni retained signing-key ownership preflight v1".getBytes(StandardCharsets.UTF_8);

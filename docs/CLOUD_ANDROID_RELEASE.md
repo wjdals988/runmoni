@@ -1,52 +1,42 @@
 # 클라우드 Android 릴리스 준비
 
-기존 공개 앱을 업데이트할 키는 새로 만들지 않는다. 기존 인증서 SHA-256은
-`2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830`이다.
-키·비밀번호·base64 내용을 채팅이나 Git 파일에 넣지 않는다. 서명된 APK에서 개인키를 복원할 수는 없다.
+2026-10-28 최신 사용자 요청으로 **새 배포 서명키를 생성**했다. 이전 Windows 키 유지 선택보다
+이 요청이 우선한다. 배포 기준은 [공개 서명 정책](../config/android-release-signing.json)이다.
 
-## 원래 Windows PC에서 자동 연결
+- 새 인증서 SHA-256: `a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a`
+- RSA3072, PKCS12. 개인키·비밀번호는 Git/채팅/로그에 넣지 않는다.
+- 이전 `2d7f724c…`의 APK는 새 키 APK로 덮어쓸 수 없다. 기존 테스트 설치본은 재설치가 필요하다.
+- 과거 APK의 인증서·해시·sourceRevision을 새 키로 바꾸어 기록하지 않는다.
+- 공개피드/대시보드는 실제 새 APK 공개·서버 자산 확인 뒤에 갱신한다.
 
-2026-10-28 사용자 선택은 **기존 앱 업데이트 유지**다. 새 키/별도 검토 앱을 만들지 않는다.
-인수인계에 원래 PC의 프로젝트는 `C:\Users\USER\Documents\runmoni`로 기록돼 있다.
-이는 현재 클라우드의 경로가 아니다. 클라우드에서 그 PC의 파일을 읽을 수는 없다.
+## 모든 환경에서 같은 키 사용
 
-[`ConnectOriginalSigningKey.java`](../scripts/ConnectOriginalSigningKey.java)는 원래 PC의
-`.secrets/signing.properties`와 그 파일이 가리키는 기존 keystore를 읽는다.
-Java Properties API는 기존 Gradle과 같은 escape/encoding 규칙을 사용한다.
-고정된 기존 공개 인증서와 개인키의 대응을 확인한 뒤에만 기존 GitHub 인증으로
-`android-release` Environment의 네 값에 연결한다. 비밀값은 GitHub CLI의 stdin으로 전달하며
-CLI가 로컬에서 암호화한다. argv·로그·새 임시 파일로 쓰지 않는다. 원본 두 파일을 변경하지 않는다.
-기존 Environment가 있으면 설정을 변경하지 않고 사용한다. 부분 실패 시 릴리스를 실행하지 말고
-권한을 해결한 뒤 같은 명령을 다시 실행한다.
+개발 환경마다 키를 새로 만들지 않는다. GitHub `android-release` Environment에 새 키를 한 번
+등록하고, 배포 APK는 GitHub Actions에서 그 키로 서명한다. PC/클라우드 변경이 개인키 자동 공유를
+뜻하지는 않는다. GitHub Secrets는 Actions 실행에 제공되며 일반 API로 평문을 다시 읽는 저장소가 아니다.
 
-원래 PC에 JDK21과 GitHub CLI(`gh`)가 필요하다. 기존 `gh` 로그인을 우선 사용하고,
-Windows에서만 Git Credential Manager의 기존 GitHub 로그인을 재사용한다.
-자동 로그인 창을 열거나 클라우드 프록시의 자격을 추출하지 않는다.
+현재 클라우드의 주입 GitHub 인증은 보안 설정에서403이다. 소스 읽기/푸시 권한과 secrets 쓰기 권한은
+다르다. [클라우드 연결 도구](../scripts/cloud/connect-signing-key.py)는 보호된 개인키 상태 파일에서
+입력을 읽어 공개 정책과 실제 인증서를 대조한 뒤, GitHub CLI로4개 값을 로컬 암호화해 등록한다.
+비밀값은 stdin으로만 전달한다. 기존 Environment가 있으면 설정을 바꾸지 않는다.
 
-최신 작업 브랜치에 도구가 있는 경우, 원래 PC의 **프로젝트 루트**에서 실행한다.
-
-```powershell
-java scripts/ConnectOriginalSigningKey.java --connect
+```bash
+python3 scripts/cloud/connect-signing-key.py --state-file <private-state.json> --login
 ```
 
-현재 PC의 작업 브랜치를 바꾸고 싶지 않으면, 아래 PowerShell 블록으로 도구만 가져올 수 있다.
-JDK21/gh가 PATH에 있어야 한다. 개인키를 내려받는 명령이 아니며 원래 PC의 보관 파일을 사용한다.
-PowerShell5의 기본 UTF-16/BOM 출력을 피하도록 UTF-8로 저장한다.
+`--login`은 공식 GitHub CLI의 웹 승인을 요청한다. 현재 task의 주입 인증을 덮어쓰지 않고 별도 임시
+인증 설정을 사용하며, 연결 종료 시 임시 로그인 설정을 삭제한다. 토큰/비밀번호를 채팅으로 요청하지
+않는다. `--login` 없이 실행하면 기존 인증을 사용한다. 이 도구는 새 키를 생성하거나 APK를 공개하지 않는다.
+실제 권한/secret 등록 성공은 모든4개 항목의 성공 receipt가 있어야 판단한다.
 
-```powershell
-git fetch origin 'codex/restore-avatar-and-update-indicator:refs/remotes/origin/codex/restore-avatar-and-update-indicator'
-if ($LASTEXITCODE -ne 0) { throw 'Git fetch failed.' }
-$runmoniSigningSource = git show 'refs/remotes/origin/codex/restore-avatar-and-update-indicator:scripts/ConnectOriginalSigningKey.java'
-if ($LASTEXITCODE -ne 0) { throw 'Signing helper is unavailable.' }
-New-Item -ItemType Directory -Force work | Out-Null
-[IO.File]::WriteAllText((Join-Path $PWD 'work/ConnectOriginalSigningKey.java'), ($runmoniSigningSource -join "`n"), [Text.UTF8Encoding]::new($false))
-java work/ConnectOriginalSigningKey.java --connect
-```
+새 키는 현재 소유자 전용 임시 파일로 준비돼 있다. GitHub 보안 저장소 등록/백업 확인 전에 클라우드
+스냅샷에 개인키를 포함하거나 임시 키를 지우지 않는다. 키가 사라져도 자동 재생성하지 않는다.
 
-`--connect`를 생략하면 로컬 키 검사만 하며 GitHub 호출은0회다.
-실제 Windows/GCM/기존 production 키 연결 성공은 아직 확인되지 않았다.
-현재 클라우드에서는 원본 파일이 없어 연결 전에 중단됨을 확인했다.
-이 도구는 앱 업로드/공개를 수행하지 않는다. 연결 이후 아래 릴리스 workflow를 사용한다.
+## Windows 보관 키 도구의 범위
+
+[`ConnectOriginalSigningKey.java`](../scripts/ConnectOriginalSigningKey.java)는 보관된 `.secrets` 파일의
+키를 연결하는 별도 복구 도구다. 현재 승인된 새 인증서만 받으므로 이전 Windows 키에는 사용하지 않는다.
+현재 새 키 연결은 위 클라우드 도구로 진행한다. 이전 대화의 Windows 설치/연결 명령은 필요하지 않다.
 
 ## GitHub에서 서명·업로드
 
@@ -55,19 +45,19 @@ java work/ConnectOriginalSigningKey.java --connect
 이 workflow를 main에 반영한 뒤 GitHub Actions의 Run workflow에서 실행한다.
 
 GitHub 저장소 **Settings → Environments → android-release → Environment secrets**에
-기존 보관용 키를 다음 이름으로 연결한다. 값은 GitHub 설정에만 입력한다.
+승인된 새 배포 키를 다음 이름으로 연결한다. 값은 GitHub 설정에만 입력한다.
 
 | 이름 | 필요한 값 |
 |---|---|
-| `RUNMONI_KEYSTORE_BASE64` | 기존 `runmoni-release.jks`의 base64 인코딩. 새 키가 아니다. |
-| `RUNMONI_STORE_PASSWORD` | 기존 keystore 비밀번호 |
-| `RUNMONI_KEY_ALIAS` | 기존 alias |
-| `RUNMONI_KEY_PASSWORD` | 해당 개인키의 기존 비밀번호 |
+| `RUNMONI_KEYSTORE_BASE64` | 승인된 새 배포 keystore의 base64 인코딩 |
+| `RUNMONI_STORE_PASSWORD` | 배포 keystore 비밀번호 |
+| `RUNMONI_KEY_ALIAS` | 배포 alias |
+| `RUNMONI_KEY_PASSWORD` | 해당 개인키의 비밀번호 |
 
 실행 모드는 다음과 같다.
 
 - `unsigned` — 키 없이 release 컴파일·JVM·lint·실제 APK 패키지/버전/non-debuggable/내장 source revision 검증. 산출물 이름에 unsigned를 넣으며 게시 입력으로 사용할 수 없다.
-- `signed` — 기존 인증서 확인 → release 빌드·JVM·lint → 서명·APK 검사 → Actions artifact 보관.
+- `signed` — 승인된 인증서 확인 → release 빌드·JVM·lint → 서명·APK 검사 → Actions artifact 보관.
 - `stage-draft` — signed와 같은 검사 뒤 GitHub Release의 **비공개 초안**에 APK·metadata·SHA256SUMS 세 파일을 올리고 서버 digest/size/URL을 재확인한다.
 
 서명키는 runner 임시 경로에0600 권한으로 복원하고 마지막 단계에서 삭제한다.
@@ -106,6 +96,6 @@ unsigned는 `outputs/release-candidate/<sourceRevision>/`에만 내보낸다.
 수행한 뒤 서명본을 공개한다. 그 후 서버 자산의 크기·해시·서명을 기준으로 `updates/android.json`과
 대시보드 다운로드 메타데이터를 갱신한다. unsigned/debug/미공개 초안은 새 공개 업데이트로 알리지 않는다.
 
-현재 클라우드에는 원래 키가 없고, GitHub Actions secret **목록 조회**도403이다.
-이는 GitHub에 키가 없다는 증거가 아니며, 이 인증으로 확인·연결할 수 없다는 의미다.
+새 키는 생성했으며 현재 GitHub 인증의 Actions secret/암호화용 공개키 조회는403이다.
+키 생성 자체가 이 권한을 해결하지 않는다. 공식 계정 승인 뒤 다시 확인한다.
 실제 서명/업로드 성공은 별도 실행 결과가 있어야 주장할 수 있다.

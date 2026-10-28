@@ -28,7 +28,7 @@ data class AppRelease(
 
     companion object {
         const val REPOSITORY = "https://github.com/wjdals988/runmoni"
-        const val RELEASE_CERTIFICATE = "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830"
+        const val RELEASE_CERTIFICATE = "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
         const val MAX_APK_BYTES = 512L * 1024 * 1024
     }
 }
