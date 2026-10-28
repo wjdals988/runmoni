@@ -4,6 +4,50 @@
 `2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830`이다.
 키·비밀번호·base64 내용을 채팅이나 Git 파일에 넣지 않는다. 서명된 APK에서 개인키를 복원할 수는 없다.
 
+## 원래 Windows PC에서 자동 연결
+
+2026-10-28 사용자 선택은 **기존 앱 업데이트 유지**다. 새 키/별도 검토 앱을 만들지 않는다.
+인수인계에 원래 PC의 프로젝트는 `C:\Users\USER\Documents\runmoni`로 기록돼 있다.
+이는 현재 클라우드의 경로가 아니다. 클라우드에서 그 PC의 파일을 읽을 수는 없다.
+
+[`ConnectOriginalSigningKey.java`](../scripts/ConnectOriginalSigningKey.java)는 원래 PC의
+`.secrets/signing.properties`와 그 파일이 가리키는 기존 keystore를 읽는다.
+Java Properties API는 기존 Gradle과 같은 escape/encoding 규칙을 사용한다.
+고정된 기존 공개 인증서와 개인키의 대응을 확인한 뒤에만 기존 GitHub 인증으로
+`android-release` Environment의 네 값에 연결한다. 비밀값은 GitHub CLI의 stdin으로 전달하며
+CLI가 로컬에서 암호화한다. argv·로그·새 임시 파일로 쓰지 않는다. 원본 두 파일을 변경하지 않는다.
+기존 Environment가 있으면 설정을 변경하지 않고 사용한다. 부분 실패 시 릴리스를 실행하지 말고
+권한을 해결한 뒤 같은 명령을 다시 실행한다.
+
+원래 PC에 JDK21과 GitHub CLI(`gh`)가 필요하다. 기존 `gh` 로그인을 우선 사용하고,
+Windows에서만 Git Credential Manager의 기존 GitHub 로그인을 재사용한다.
+자동 로그인 창을 열거나 클라우드 프록시의 자격을 추출하지 않는다.
+
+최신 작업 브랜치에 도구가 있는 경우, 원래 PC의 **프로젝트 루트**에서 실행한다.
+
+```powershell
+java scripts/ConnectOriginalSigningKey.java --connect
+```
+
+현재 PC의 작업 브랜치를 바꾸고 싶지 않으면, 아래 PowerShell 블록으로 도구만 가져올 수 있다.
+JDK21/gh가 PATH에 있어야 한다. 개인키를 내려받는 명령이 아니며 원래 PC의 보관 파일을 사용한다.
+PowerShell5의 기본 UTF-16/BOM 출력을 피하도록 UTF-8로 저장한다.
+
+```powershell
+git fetch origin 'codex/restore-avatar-and-update-indicator:refs/remotes/origin/codex/restore-avatar-and-update-indicator'
+if ($LASTEXITCODE -ne 0) { throw 'Git fetch failed.' }
+$runmoniSigningSource = git show 'refs/remotes/origin/codex/restore-avatar-and-update-indicator:scripts/ConnectOriginalSigningKey.java'
+if ($LASTEXITCODE -ne 0) { throw 'Signing helper is unavailable.' }
+New-Item -ItemType Directory -Force work | Out-Null
+[IO.File]::WriteAllText((Join-Path $PWD 'work/ConnectOriginalSigningKey.java'), ($runmoniSigningSource -join "`n"), [Text.UTF8Encoding]::new($false))
+java work/ConnectOriginalSigningKey.java --connect
+```
+
+`--connect`를 생략하면 로컬 키 검사만 하며 GitHub 호출은0회다.
+실제 Windows/GCM/기존 production 키 연결 성공은 아직 확인되지 않았다.
+현재 클라우드에서는 원본 파일이 없어 연결 전에 중단됨을 확인했다.
+이 도구는 앱 업로드/공개를 수행하지 않는다. 연결 이후 아래 릴리스 workflow를 사용한다.
+
 ## GitHub에서 서명·업로드
 
 [Android release candidate](../.github/workflows/android-release.yml)는 수동 실행만 지원한다.

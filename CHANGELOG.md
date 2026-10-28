@@ -1,5 +1,12 @@
 # 변경 이력
 
+## 2026-10-28 기존 서명키 연결 재시도
+
+- 사용자가 별도 검토 앱/새 키 대신 기존 앱 업데이트 경로를 선택하고 원래 키 연결을 요청. 클라우드 전체 `/workspace`의 key 파일명 검사(오류0)와 현재 로컬 Git refs 이력에서 원래 키를 찾지 못했고 공개 Android debug fixture만 확인. 인수인계의 원래 PC 경로는 `C:\Users\USER\Documents\runmoni`; 현재 Windows 마운트/원격 PC 접근 도구 없음. 키/비밀번호를 채팅으로 요청하거나 새 production 키를 생성하지 않음.
+- sandbox 네트워크의 socket 거부 뒤 허용된 네트워크 호출로 재확인: 저장소 secret 목록403·Environment 목록200/0개·secret 암호화용 공개키 API403. 원격 main effc3d4/앱 PR2 OPEN DRAFT 유지. 이 권한으로 보안 설정을 연결했다고 주장하지 않음.
+- 원래 PC의 보관 파일을 그대로 읽고 기존 공개 인증서 SHA/개인키 대응 확인 → 기존 gh 또는 Windows GCM 인증 재사용 → Environment의4개 값을 stdin/로컬 암호화로 연결하는 Java 단일 파일 도구 추가. 기본은 로컬 preflight, 명시적 `--connect`만 GitHub 수정. 원본 파일 수정·비밀 argv/로그/새 파일·새 키·앱 공개0. 실제 연결은 클라우드에서 원본 파일 없음으로 전송 전에 중단됨을 확인.
+- Linux JDK21의 공개 debug fixture/fake GitHub 전송 경계12개 통과. 잘못된 인증서/암호, Environment/공개키 권한 거부, 부분 실패, 기존 Environment 설정 보존, 원본 바이트 보존, stdin/진단 출력/메모리 초기화를 검사. 새 키 생성·실제 secret 쓰기·Windows/GCM/원래 키 성공 검증0. 앱 UI/미니미/버전/기존 APK 출처/공개피드/대시보드 다운로드 변경0, 실제 새 APK 업로드0.
+
 ## 0.1.6-dev / versionCode7 — 2026-10-27, 미게시
 
 - 서명키 질문과 ‘앱 업로드까지’ 요청에 따라 Linux release 빌드/실제 APK 검사 도구와 수동 GitHub Actions workflow 추가. 기존 인증서만 허용하고 unsigned 후보는 별도 경로, 서명본은 APK·metadata·체크섬을 생성. 초안 업로드는 원격 main/tag·3자산 서버 digest 검증 뒤 비공개로 종료. 기존 게시 도구의 Windows/Linux curl 선택과 주입 GitHub 인증 재사용을 지원. 최초 실제 인증 확인은 프록시 placeholder를 raw token 형태로 제한해 실패했으며, 헤더 안전성 검사를 유지하는 수정 뒤 저장소 GET HTTP200·push권한 확인. 비밀값 출력·추출0, 실제 게시/서명은 별도 결과로 구분.
