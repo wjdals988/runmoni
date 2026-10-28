@@ -1,5 +1,11 @@
 # 변경 이력
 
+## 2026-10-28 소유자 승인 뒤403 확인·암호화 전달 준비
+
+- 소유자 wjdals988의 공식 GitHub CLI 로그인 완료 뒤에도 저장소 Secrets 공개키 GET이 HTTP403/integration_permission, repoOAuthScopeGranted=false로 거부됨을 확인. secret 전송0·receipt없음. 로그인 승인과 보안 설정 권한을 구분하고 같은 OAuth 승인 반복을 중단. 정확한 중계 원인은 미확인으로 남기며 직접 네트워크/프록시/터널 우회 없음.
+- 기존 Windows Git/GCM/curl.exe로 공개키 조회와 암호문 PUT만 하는 Java11 단일 파일 도구, 클라우드의 기존 libsodium crypto_box_seal로 승인된4개 값을 암호화하는 도구 추가. 새 서명키를 다시 만들지 않고 개인키/비밀번호는 원래 PC/채팅으로 보내지 않음. 공개 packet과 서버 key ID/승인 인증서/정확한4필드를 대조하며201/204 뒤에만 receipt를 출력. 원래 PC의 normal login을 사용하고 cloud에서는 GCM 자격 읽기를 거부.
+- Python47개·새 Java bridge fake API12개 통과. libsodium 실제 fixture 왕복 복호화/정확한 바이트/다른 개인키 거부 확인. 첫 테스트 lambda 비-final 캡처 컴파일 오류 수정 뒤 재실행 성공. 실제 Windows/GCM/GitHub 등록은 미실행. 앱/서명키/서명APK/sourceRevision·공개피드·대시보드 다운로드 변경0. [다음 절차와 경계](docs/GITHUB_SIGNING_BRIDGE.md)에 공개정보/암호문/평문을 구분.
+
 ## 2026-10-28 GitHub 승인 후 연결 대상 수정
 
 - 사용자 승인으로 공식 GitHub CLI 로그인은 wjdals988 계정에서 성공했지만 Environment 생성이 실패해 secret 전송0회로 종료. 이전 오류 처리에 실제 HTTP status가 없어 소유자 승인 뒤의 실패를 기존403과 동일하다고 단정하지 않음. 임시 로그인 설정은 정리됐으며 서명키/서명APK는 보존.

@@ -11,6 +11,11 @@
 
 ## 모든 환경에서 같은 키 사용
 
+**현재 연결 방법:** 소유자 OAuth 로그인 뒤에도 이 클라우드의 Secrets API가403으로 거부됐다.
+같은 승인을 반복하지 않는다. [GitHub 공개키 암호화 전달](GITHUB_SIGNING_BRIDGE.md)로
+원래 PC의 기존 GitHub 로그인을 사용하되 서명값은 GitHub가 열 수 있는 암호문으로만 전달한다.
+GitHub CLI 설치/서명키 평문 전송/새 키 생성은 필요 없다. 아래 --login 방식은 실패 이력으로 보존한다.
+
 개발 환경마다 키를 새로 만들지 않는다. GitHub 저장소의 Actions Secrets에 새 키를 한 번
 등록하고, 배포 APK는 GitHub Actions에서 그 키로 서명한다. PC/클라우드 변경이 개인키 자동 공유를
 뜻하지는 않는다. GitHub Secrets는 Actions 실행에 제공되며 일반 API로 평문을 다시 읽는 저장소가 아니다.

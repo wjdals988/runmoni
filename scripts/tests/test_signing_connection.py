@@ -61,6 +61,7 @@ class SigningConnectionTests(unittest.TestCase):
         for relative, pattern in [
             ('app/src/main/java/com/runmoni/app/domain/AppRelease.kt', r'const val RELEASE_CERTIFICATE = "([a-f0-9]{64})"'),
             ('scripts/ConnectOriginalSigningKey.java', r'String CERTIFICATE = "([a-f0-9]{64})"'),
+            ('scripts/RunmoniGitHubSecretsBridge.java', r'String CERTIFICATE = "([a-f0-9]{64})"'),
         ]:
             self.assertEqual(policy, re.search(pattern, (ROOT / relative).read_text())[1])
         for name, relative in [('cloud_release', 'scripts/cloud/release-app.py'), ('publisher', 'scripts/publish_android_preview.py')]:
