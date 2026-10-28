@@ -6,6 +6,7 @@
 - 앱의 업데이트 신뢰 지문·서명 build/게시 검증·보관 키 연결 도구를 새 정책에 맞춤. 이전2d7f… 인증서 거부 회귀검사 추가. 기존 APK 서명/해시와0.1.5 sourceRevision75c39ca…는 유지. 현재0.1.6/code7은 미게시 후보이므로 버전/code를 추가로 올리지 않음. 이전 테스트 설치본은 새 키로 덮어쓰지 못해 재설치가 필요함.
 - 새 키 상태 파일을 검증하고 gh stdin 암호화로 Environment4개 값을 연결하는 클라우드 도구 추가. 공식 GitHub CLI 계정 승인을 별도 임시 인증 설정으로 지원하며 종료 시 그 로그인 설정만 삭제. 기존 주입 인증/기존 Environment 설정을 덮어쓰지 않고 비밀값을 argv/로그로 보내지 않음. 실제 secret 등록 성공은 별도 receipt로 판정.
 - Python 게시/키 연결 경계41개, Java 보관 키 경계12개 통과. 현재 GitHub 주입 인증의 secret 암호화 공개키 API403·Environment 목록0개를 재확인. 공식 로그인 페이지 GET302 도달을 확인했으나 이를 계정 승인/secret 연결 성공으로 간주하지 않음. 서명 release 빌드·실제 APK·GitHub 등록 결과는 후속 기록. 앱 의복/픽셀/UI·공개 피드·대시보드 다운로드 변경0.
+- `639b1f9` clean의 새 키 서명 APK0.1.6/code7 확보:218,201,869bytes·SHA256 `2de9eb6d1cb427d2df70888d3e97163406da76cc80123b549cabd28f2d8d3ada`, 실제 apksigner/패키지/non-debuggable/내장revision/승인원화SHA 일치. 오프라인1분28초·JVM31/31·release lint오류0/경고27, 로컬 plan차단0/네트워크0. 첫 sandbox 인터페이스 제한으로 Gradle 로컬 잠금 서비스 시작 실패 후 허용된 실행으로 재시도 성공. [검증 기록](docs/SIGNING_ROTATION_REVIEW_20261028.md)에 실패·성공·원격 승인 대기와 실제 Android 미실행을 분리. 이전 APK 출처·공개피드·대시보드 유지.
 
 ## 2026-10-28 기존 서명키 연결 재시도
 
