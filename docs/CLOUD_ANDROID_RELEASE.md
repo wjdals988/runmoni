@@ -11,14 +11,14 @@
 
 ## 모든 환경에서 같은 키 사용
 
-개발 환경마다 키를 새로 만들지 않는다. GitHub `android-release` Environment에 새 키를 한 번
+개발 환경마다 키를 새로 만들지 않는다. GitHub 저장소의 Actions Secrets에 새 키를 한 번
 등록하고, 배포 APK는 GitHub Actions에서 그 키로 서명한다. PC/클라우드 변경이 개인키 자동 공유를
 뜻하지는 않는다. GitHub Secrets는 Actions 실행에 제공되며 일반 API로 평문을 다시 읽는 저장소가 아니다.
 
 현재 클라우드의 주입 GitHub 인증은 보안 설정에서403이다. 소스 읽기/푸시 권한과 secrets 쓰기 권한은
 다르다. [클라우드 연결 도구](../scripts/cloud/connect-signing-key.py)는 보호된 개인키 상태 파일에서
 입력을 읽어 공개 정책과 실제 인증서를 대조한 뒤, GitHub CLI로4개 값을 로컬 암호화해 등록한다.
-비밀값은 stdin으로만 전달한다. 기존 Environment가 있으면 설정을 바꾸지 않는다.
+비밀값은 stdin으로만 전달한다. 기본 연결 대상은 저장소 Actions Secrets이며 Environment 생성/관리 권한을 요구하지 않는다. 필요할 때만 `--scope environment`로 별도 Environment를 사용한다.
 
 ```bash
 python3 scripts/cloud/connect-signing-key.py --state-file <private-state.json> --login
@@ -40,11 +40,13 @@ python3 scripts/cloud/connect-signing-key.py --state-file <private-state.json> -
 
 ## GitHub에서 서명·업로드
 
+실제 첫 소유자 로그인은 성공했지만 Environment 생성은 실패해 secret 전송0회로 종료됐다. 기존 도구가 그 거부 응답의 HTTP 상세를 남기지 않아 원인을 권한 거부로 단정하지 않는다. 저장소 Actions Secrets를 기본 대상으로 변경해 불필요한 Environment 생성 단계를 제거했고, HTTP status/오류 분류/OAuth scope 헤더 존재 여부만 남기는 진단을 추가했다. 원문 응답/토큰/비밀값은 출력하지 않는다.
+
 [Android release candidate](../.github/workflows/android-release.yml)는 수동 실행만 지원한다.
 서명 작업은 검토된 `main`에서만 가능하며, PR 생성 자체는 병합 승인이 아니다.
 이 workflow를 main에 반영한 뒤 GitHub Actions의 Run workflow에서 실행한다.
 
-GitHub 저장소 **Settings → Environments → android-release → Environment secrets**에
+GitHub 저장소 **Settings → Secrets and variables → Actions → Repository secrets**에
 승인된 새 배포 키를 다음 이름으로 연결한다. 값은 GitHub 설정에만 입력한다.
 
 | 이름 | 필요한 값 |

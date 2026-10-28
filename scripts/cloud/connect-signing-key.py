@@ -75,28 +75,55 @@ def request(arguments, body, env):
         raise ConnectionError('GitHub command could not complete; raw details omitted.') from None
     if len(result.stdout) > 1048576:
         raise ConnectionError('GitHub response exceeded its size limit; raw details omitted.')
+    # Keep enough evidence to distinguish API permissions from malformed requests.
+    # Never serialize a raw error body, credential, header value, or secret stdin.
+    status = re.search(rb'HTTP/\S+\s+(\d{3})', result.stdout)
+    combined = result.stdout + result.stderr
+    if status is None:
+        status = re.search(rb'HTTP\s+(\d{3})', result.stderr)
+    status_code = int(status[1]) if status else None
+    kind = ('integration_permission' if b'Resource not accessible by integration' in combined
+            else 'validation' if b'Validation Failed' in combined or b'Body should be a JSON' in combined
+            else 'authentication' if b'Bad credentials' in combined
+            else 'rate_limit' if b'API rate limit' in combined else None)
+    scopes = re.search(rb'(?im)^x-oauth-scopes:[ \t]*([^\r\n]*)', result.stdout)
+    repo_scope = bool(scopes and b'repo' in [s.strip() for s in scopes[1].split(b',')])
+    print(json.dumps({'githubOperation': 'api' if arguments[0] == 'api' else 'secret-set',
+                      'exitCode': result.returncode, 'httpStatus': status_code, 'errorKind': kind,
+                      'oauthScopesHeaderPresent': scopes is not None, 'repoOAuthScopeGranted': repo_scope}), flush=True)
     return result.returncode, result.stdout
 
 
-def connect(values, send):
-    path = f'repos/{REPO}/environments/{ENVIRONMENT}'
-    code, output = send(['api', '--include', path], None)
-    status = re.search(rb'HTTP/\S+\s+(\d{3})', output)
-    status = int(status[1]) if status else 0
-    if status == 404:
-        if send(['api', '--method', 'PUT', path], None)[0]:
-            raise ConnectionError('GitHub denied environment creation; no signing secrets were sent.')
-    elif code or status != 200:
-        raise ConnectionError(f'GitHub environment access failed (HTTP {status}); no signing secrets were sent.')
-    if send(['api', path + '/secrets/public-key'], None)[0]:
-        raise ConnectionError('GitHub denied signing-secret access; no signing secrets were sent.')
+def connect(values, send, scope='repository'):
+    if scope not in ('repository', 'environment'):
+        raise ConnectionError('Unsupported secret scope; no credentials were sent.')
+    if scope == 'environment':
+        path = f'repos/{REPO}/environments/{ENVIRONMENT}'
+        code, output = send(['api', '--include', path], None)
+        status = re.search(rb'HTTP/\S+\s+(\d{3})', output)
+        status = int(status[1]) if status else 0
+        if status == 404:
+            if send(['api', '--include', '--method', 'PUT', path, '--input', '-'], b'{}')[0]:
+                raise ConnectionError('GitHub environment creation failed; no signing secrets were sent. See safe HTTP diagnostics.')
+        elif code or status != 200:
+            raise ConnectionError(f'GitHub environment access failed (HTTP {status}); no signing secrets were sent.')
+        public_key_path = path + '/secrets/public-key'
+    else:
+        # Actions repository secrets avoid the separate Environment admin operation.
+        public_key_path = f'repos/{REPO}/actions/secrets/public-key'
+    if send(['api', '--include', public_key_path], None)[0]:
+        raise ConnectionError('GitHub signing-secret access failed; no signing secrets were sent. See safe HTTP diagnostics.')
     written = []
     for name, value in values.items():
-        if send(['secret', 'set', name, '--repo', REPO, '--env', ENVIRONMENT], value)[0]:
+        arguments = ['secret', 'set', name, '--repo', REPO]
+        if scope == 'environment':
+            arguments += ['--env', ENVIRONMENT]
+        if send(arguments, value)[0]:
             raise ConnectionError(f'Signing connection stopped after {len(written)} entries; do not start a release yet.')
         written.append(name)
         print(json.dumps({'connectedSecretName': name, 'valuePrinted': False}), flush=True)
-    return {'repository': REPO, 'environment': ENVIRONMENT, 'certificateSha256': POLICY['certificateSha256'],
+    return {'repository': REPO, 'scope': scope, 'environment': ENVIRONMENT if scope == 'environment' else None,
+            'certificateSha256': POLICY['certificateSha256'],
             'connectedSecretNames': written, 'connectedAt': datetime.now(timezone.utc).isoformat(),
             'appPublished': False}
 
@@ -105,6 +132,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--state-file', required=True, type=Path)
     parser.add_argument('--login', action='store_true', help='Official GitHub CLI web consent in temporary auth config')
+    parser.add_argument('--scope', choices=['repository', 'environment'], default='repository')
     args = parser.parse_args(argv)
     try:
         values = approved_inputs(args.state_file)
@@ -116,7 +144,7 @@ def main(argv=None):
                                          'https', '--web', '--scopes', 'repo'], env=env, timeout=1200)
                 if result.returncode:
                     raise ConnectionError('GitHub owner authorization did not complete.')
-            receipt = connect(values, lambda arguments, body: request(arguments, body, env))
+            receipt = connect(values, lambda arguments, body: request(arguments, body, env), args.scope)
             output = ROOT / 'work/signing-connection/receipt.json'
             output.parent.mkdir(parents=True, exist_ok=True)
             output.write_text(json.dumps(receipt, indent=2) + '\n')

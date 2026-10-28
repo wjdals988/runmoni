@@ -25,12 +25,12 @@ class FakeGitHub:
 
     def __call__(self, arguments, body):
         self.calls.append((arguments, body))
-        if '--include' in arguments:
-            return (0 if self.status == 200 else 1), f'HTTP/2.0 {self.status}\n{{}}'.encode()
         if 'PUT' in arguments:
             return int(self.deny_create), b'{}'
         if arguments[-1].endswith('public-key'):
-            return int(self.deny_public), b'{}'
+            return int(self.deny_public), b'HTTP/2.0 403\n{}' if self.deny_public else b'HTTP/2.0 200\n{}'
+        if '--include' in arguments:
+            return (0 if self.status == 200 else 1), f'HTTP/2.0 {self.status}\n{{}}'.encode()
         self.writes.append((arguments, body))
         return int(len(self.writes) - 1 == self.fail_write), b'{}'
 
@@ -50,9 +50,9 @@ class SigningConnectionTests(unittest.TestCase):
         return {'RUNMONI_STORE_PASSWORD': b'fixture-password', 'RUNMONI_KEY_ALIAS': b'fixture-alias',
                 'RUNMONI_KEY_PASSWORD': b'fixture-password', 'RUNMONI_KEYSTORE_BASE64': b'fixture-base64'}
 
-    def run_connect(self, server):
+    def run_connect(self, server, scope='repository'):
         with contextlib.redirect_stdout(io.StringIO()) as output:
-            receipt = connector.connect(self.values(), server)
+            receipt = connector.connect(self.values(), server, scope)
         self.assertNotIn('fixture-password', output.getvalue())
         return receipt
 
@@ -95,24 +95,26 @@ class SigningConnectionTests(unittest.TestCase):
                 connector.approved_inputs(state)
             run.assert_not_called()
 
-    def test_success_sends_four_values_through_stdin_and_preserves_existing_environment(self):
-        server = FakeGitHub(); receipt = self.run_connect(server)
+    def test_repository_success_needs_no_environment_admin_and_uses_only_stdin(self):
+        server = FakeGitHub(status=403); receipt = self.run_connect(server)
         self.assertEqual(list(self.values()), receipt['connectedSecretNames'])
         self.assertFalse(any('PUT' in args for args, _ in server.calls))
         self.assertFalse(receipt['appPublished'])
+        self.assertEqual('repository', receipt['scope'])
+        self.assertFalse(any('/environments/' in ' '.join(args) for args, _ in server.calls))
         for arguments, body in server.writes:
             self.assertNotIn(body.decode(), arguments)
-            self.assertIn('--env', arguments)
+            self.assertNotIn('--env', arguments)
 
     def test_authorized_missing_environment_is_created_before_secrets(self):
-        server = FakeGitHub(status=404); self.run_connect(server)
+        server = FakeGitHub(status=404); self.run_connect(server, 'environment')
         self.assertEqual(1, sum('PUT' in args for args, _ in server.calls))
         self.assertEqual(4, len(server.writes))
 
     def test_environment_and_public_key_denials_send_zero_secrets(self):
         for server in [FakeGitHub(status=403), FakeGitHub(status=404, deny_create=True), FakeGitHub(deny_public=True)]:
             with self.subTest(server=server), self.assertRaises(connector.ConnectionError):
-                self.run_connect(server)
+                self.run_connect(server, 'environment')
             self.assertEqual([], server.writes)
 
     def test_partial_failure_never_reports_a_complete_connection_or_secret_values(self):
@@ -130,6 +132,25 @@ class SigningConnectionTests(unittest.TestCase):
             self.assertNotIn('GH_DEBUG', env); self.assertNotIn('GIT_TRACE', env)
             self.assertEqual('fixture-task-token', os.environ['GH_TOKEN'])
             self.assertEqual('/tmp/fixture-owner-auth', env['GH_CONFIG_DIR'])
+
+    def test_safe_failure_diagnostics_distinguish_permissions_without_echoing_credentials(self):
+        result = mock.Mock(returncode=1, stdout=b'HTTP/2.0 403\nX-OAuth-Scopes: repo\n{}',
+                           stderr=b'Resource not accessible by integration fixture-private-value')
+        with mock.patch.object(connector.subprocess, 'run', return_value=result), \
+                contextlib.redirect_stdout(io.StringIO()) as output:
+            connector.request(['api', '--include', 'fixture-path'], None, {})
+        diagnostic = json.loads(output.getvalue())
+        self.assertEqual(403, diagnostic['httpStatus'])
+        self.assertEqual('integration_permission', diagnostic['errorKind'])
+        self.assertTrue(diagnostic['oauthScopesHeaderPresent'])
+        self.assertTrue(diagnostic['repoOAuthScopeGranted'])
+        self.assertNotIn('fixture-private-value', output.getvalue())
+
+    def test_environment_create_sends_explicit_json_and_existing_environment_is_preserved(self):
+        missing = FakeGitHub(status=404); self.run_connect(missing, 'environment')
+        self.assertEqual([b'{}'], [body for arguments, body in missing.calls if 'PUT' in arguments])
+        existing = FakeGitHub(); self.run_connect(existing, 'environment')
+        self.assertFalse(any('PUT' in arguments for arguments, _ in existing.calls))
 
 
 if __name__ == '__main__':

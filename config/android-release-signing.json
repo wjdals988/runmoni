@@ -8,5 +8,5 @@
   "createdAt": "2026-10-28T08:16:47.838924+00:00",
   "packageName": "com.runmoni.app",
   "firstIntendedVersion": "0.1.6-dev",
-  "githubEnvironment": "android-release"
+  "githubSecretScope": "repository"
 }

@@ -20,8 +20,7 @@ jobs:
   candidate:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
-    # Signing secrets belong in this environment, not in a pull-request job.
-    environment: android-release
+    # Repository Actions secrets; this workflow only runs on explicit dispatch.
     permissions:
       contents: write
     steps:
@@ -45,7 +44,7 @@ jobs:
           if mode != 'unsigned':
               names = ('RUNMONI_KEYSTORE_BASE64', 'RUNMONI_STORE_PASSWORD', 'RUNMONI_KEY_ALIAS', 'RUNMONI_KEY_PASSWORD')
               if not all(os.environ.get(name) for name in names):
-                  raise SystemExit('Retained signing inputs are missing in the android-release environment.')
+                  raise SystemExit('Approved signing inputs are missing in repository Actions secrets.')
               try:
                   data = base64.b64decode(os.environ[names[0]], validate=True)
                   if not 0 < len(data) <= 1048576:
