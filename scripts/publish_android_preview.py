@@ -332,8 +332,11 @@ def publish(plan, *, stage_draft=False):
                 raise PublicationError("Existing tag target differs; no tag was changed.")
 
         repo = api("GET", "")
-        if repo.get("full_name") != REPO or repo.get("permissions", {}).get("push") is not True:
-            raise PublicationError("Expected Runmoni repository write permission.")
+        if repo.get("full_name") != REPO:
+            raise PublicationError("Expected the pinned Runmoni repository identity.")
+        # The user-oriented permissions.push hint is not a token capability
+        # check for GitHub App/Actions tokens. GitHub enforces contents:write
+        # on each release mutation; a 403 still aborts without a success receipt.
         check_target()
         release = api("GET", f"/releases/tags/{plan['tag']}", optional=True)
         notes = Path(plan["releaseNotesPath"]).read_text(encoding="utf-8-sig")

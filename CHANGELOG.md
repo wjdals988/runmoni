@@ -1,5 +1,11 @@
 # 변경 이력
 
+## 2026-10-29 GitHub 서명 빌드 성공·업로드 사전검사 수정
+
+- run40855991283에서 SDK 경로 수정 뒤 release 빌드/JVM/lint와 실제 apksigner·패키지·non-debuggable·내장 sourceRevision 검사 성공. APK0.1.6/code7,218201869bytes, SHA2561a7164691a0e9dfe858ccf85c5da43dd4ce8fc28cb972ad9f4d8df53dac8d0ce, sourceRevision de49bb74aa85a35ecf5d867148d542e15ded0de2. 실제 Android/실기기 실행으로 합산하지 않음.
+- 이어진 게시 사전검사는 repository의 사용자용 permissions.push를 필수로 요구해 중단. 이 힌트가 보장되지 않는 Actions/App 토큰을 지원하도록 고정 저장소 identity는 확인하고 실제 write 권한은 GitHub의 각 쓰기 API 응답으로 판정.403은 즉시 실패하며 업로드/성공 receipt/공개 전환 금지 경계 검사 추가. 기존 main/tag·3자산 digest·불일치 차단은 유지.
+- 초안 업로드 실패 시 검증 APK를 Actions artifact로 복구할 수 있게 보존하고, 성공 빌드의 작은 JVM XML/lint XML/정제된 build log를 별도 artifact로 남기도록 추가. 키 파일은 포함하지 않음. 이전 run의 APK는 업로드되지 않았고 새 run은 별도 sourceRevision/해시를 기록해야 함.
+
 ## 2026-10-29 GitHub 기본 SDK와 전용 SDK의 경로 충돌 수정
 
 - run40855531908의 정제된 Gradle 오류로 실제 원인을 확인: 프로젝트 ANDROID_HOME은 검증한 work/cloud-android/sdk인데 GitHub가 상속한 ANDROID_SDK_ROOT는 /usr/local/lib/android/sdk여서 의존 작업 계산이 거부됨. 서명키나 앱 컴파일 오류로 단정하지 않음.

@@ -83,11 +83,23 @@ jobs:
                           '--target', os.environ['GITHUB_SHA'], '--stage-draft'], check=True)
           PY
       - name: Retain APK and verification sidecars
-        if: inputs.mode != 'stage-draft'
+        if: always() && (inputs.mode != 'stage-draft' || failure()) && hashFiles('outputs/**/*.metadata.json') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: runmoni-${{ inputs.mode }}-${{ github.sha }}
           path: outputs/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Retain small verification reports
+        if: always() && hashFiles('outputs/**/*.metadata.json') != ''
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: runmoni-verification-${{ github.sha }}
+          path: |
+            outputs/**/*.build.txt
+            app/build/test-results/testDebugUnitTest/*.xml
+            app/build/reports/lint-results-release.xml
+            config/android-release-signing.json
           if-no-files-found: error
           retention-days: 14
       - name: Remove temporary retained key
