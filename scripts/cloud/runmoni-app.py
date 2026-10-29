@@ -15,6 +15,7 @@ SDK=BASE/'sdk'
 JDK=BASE/'jdk-21.0.13+9'
 ENV=os.environ|{'JAVA_HOME':str(JDK),'GRADLE_USER_HOME':str(BASE/'gradle-home'),
     'ANDROID_HOME':str(SDK),'ANDROID_USER_HOME':str(BASE/'user')}
+ENV.pop('ANDROID_SDK_ROOT', None)
 
 def run(command,**kwargs):
     return subprocess.run([str(c) for c in command],cwd=ROOT,env=ENV,check=True,**kwargs)

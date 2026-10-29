@@ -43,7 +43,7 @@ def failure_categories(output):
         'dependency_resolution': r'Could not resolve|Could not download|Could not find [\w.]+:',
         'tls_trust': r'PKIX|SSLHandshakeException|certificate_unknown|unable to find valid certification path',
         'sdk_license': r'licenses? (?:have not been|not) accepted|LicenseNotAcceptedException',
-        'sdk_location': r'SDK location not found|Failed to find Platform SDK|failed to find target with hash string',
+        'sdk_location': r'SDK location not found|Failed to find Platform SDK|failed to find target with hash string|different paths to the SDK',
         'memory_limit': r'OutOfMemoryError|Java heap space|unable to create native thread|daemon disappeared',
         'initialization_script': r'Could not compile initialization script|Could not open.*init.*cache',
         'http_403': r'status code 403|HTTP[^\r\n]*403',
@@ -161,6 +161,9 @@ def build(args):
         raise ReleaseError('Signing environment is incomplete; no fallback key was used.')
     env.update(JAVA_HOME=str(jdk), ANDROID_HOME=str(sdk),
                ANDROID_USER_HOME=str(BASE / 'user'), GRADLE_USER_HOME=str(BASE / 'gradle-home'))
+    # GitHub runners already set this deprecated alias to their preinstalled SDK.
+    # The child build uses the verified SDK selected by ANDROID_HOME above.
+    env.pop('ANDROID_SDK_ROOT', None)
     # Export only the public DER certificate to memory; reject a wrong key before building.
     if not args.unsigned and all(present):
         key = Path(env['RUNMONI_KEYSTORE_FILE']).resolve()
