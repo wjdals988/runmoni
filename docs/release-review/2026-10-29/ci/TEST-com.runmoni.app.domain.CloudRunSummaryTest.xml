@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.runmoni.app.domain.CloudRunSummaryTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-29T10:36:34.577Z" hostname="runnervm48cm3" time="0.011">
+  <properties/>
+  <testcase name="nonFiniteAndOutOfRangeDistanceAreRejected" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.003"/>
+  <testcase name="timestampBoundsAndElapsedTimeCannotOverflow" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.002"/>
+  <testcase name="constructorAlsoValidatesSchemaAndPointCount" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.001"/>
+  <testcase name="defaultCloudStateDoesNotGrantPilotOrCloudAccess" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.001"/>
+  <testcase name="backupPreservesExactMillisAndOnlyWhitelistedSummaryFields" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.001"/>
+  <testcase name="activeRecordsCannotBeBackedUp" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.0"/>
+  <testcase name="activeDurationCannotBeNegativeOrExceedActualElapsedMillis" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.001"/>
+  <testcase name="factoryDoesNotReadOrCopyRawGpsPoints" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.0"/>
+  <testcase name="unsafeOrOversizedDocumentIdsAreRejected" classname="com.runmoni.app.domain.CloudRunSummaryTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

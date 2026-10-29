@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 1,
+  "repository": "wjdals988/runmoni",
+  "workflowRunId": 40858081567,
+  "workflowUrl": "https://github.com/wjdals988/runmoni/actions/runs/40858081567",
+  "workflowConclusion": "success",
+  "releaseId": 427731932,
+  "releaseReviewUrl": "https://github.com/wjdals988/runmoni/releases/tag/untagged-f1b8544460cf33bf1a99",
+  "sourceRevision": "9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750",
+  "metadata": {
+    "version": "0.1.6-dev",
+    "versionCode": 7,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.1.6-dev.apk",
+    "sizeBytes": 218201869,
+    "sha256": "de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+    "signed": true,
+    "sourceRevision": "9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750",
+    "sourceDirty": false,
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+  },
+  "draft": true,
+  "prerelease": true,
+  "assets": [
+    {
+      "id": 688199493,
+      "name": "runmoni-0.1.6-dev.apk",
+      "state": "uploaded",
+      "size": 218201869,
+      "digest": "sha256:de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/untagged-f1b8544460cf33bf1a99/runmoni-0.1.6-dev.apk"
+    },
+    {
+      "id": 688236284,
+      "name": "runmoni-0.1.6-dev.metadata.json",
+      "state": "uploaded",
+      "size": 427,
+      "digest": "sha256:6ffc4696a6817aeb2565f03be8b2cb3e4faf72ffc0e69ec57555fe48c32624cc",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/untagged-f1b8544460cf33bf1a99/runmoni-0.1.6-dev.metadata.json"
+    },
+    {
+      "id": 688236250,
+      "name": "SHA256SUMS-0.1.6-dev.txt",
+      "state": "uploaded",
+      "size": 88,
+      "digest": "sha256:36e3f04a574d522752863686c6f6f242f68dde903b19e78b085f6a05c5e57119",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/untagged-f1b8544460cf33bf1a99/SHA256SUMS-0.1.6-dev.txt"
+    }
+  ],
+  "checks": {
+    "ciApkSignaturePackageAndEmbeddedRevisionPassed": true,
+    "freshServerAssetDigestSizeAndUrlMatch": true,
+    "metadataAndChecksumBodiesMatch": true,
+    "mainMatchesSource": true,
+    "runnerTemporaryKeyCleanupPassed": true
+  },
+  "boundaries": {
+    "apkBodyDownloaded": false,
+    "actualAndroidExecutionOfThisApk": false,
+    "physicalDeviceSmokeVerified": false,
+    "actualGoogleLoginVerified": false,
+    "publicReleaseConfirmed": false,
+    "updateFeedChanged": false,
+    "dashboardDownloadChanged": false
+  },
+  "ciReports": {
+    "jvm": {
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testXmlFileCount": 5,
+    "lint": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 57,
+      "Information": 0
+    },
+    "artifactId": 12890738409,
+    "artifactBytes": 11993,
+    "lintWarningsById": {
+      "ApplySharedPref": 2,
+      "AndroidGradlePluginVersion": 1,
+      "GradleDependency": 25,
+      "NewerVersionAvailable": 4,
+      "ModifierParameter": 1,
+      "DataExtractionRules": 1,
+      "ObsoleteSdkInt": 1,
+      "UseKtx": 22
+    },
+    "buildLog": {
+      "path": "ci/build.txt.gz",
+      "encoding": "gzip",
+      "uncompressedBytes": 165099,
+      "uncompressedSha256": "97f30004d56286a16a9e57a2c8377300a963eb2df596b05015009f49edd01bbe",
+      "gzipSha256": "0b056278695c4eb8c06c832d6b3e1e1e88e142f2aaaf42cb79c1c04f58afb2de"
+    }
+  },
+  "recordedAt": "2026-10-29T10:56:11.415736+00:00",
+  "buildSummary": {
+    "gradleResult": "BUILD SUCCESSFUL in 6m 30s",
+    "actionableTasks": 81,
+    "executed": 77,
+    "fromCache": 4
+  },
+  "localValidation": {
+    "pythonTests": 59,
+    "failures": 0,
+    "actionlintPassed": true,
+    "dashboardNodeTests": 23,
+    "dashboardNodeFailures": 0
+  },
+  "dashboard": {
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/9",
+    "merged": true,
+    "sourceRevision": "f0fe80a59578541bdc00aad87260d43a0ee74f1c",
+    "publicApkChanged": false,
+    "productionDeploymentVerified": true,
+    "productionUrl": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "observedPage": {
+      "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+      "expectedDescriptionVisible": true,
+      "publicOldApkLinkPreserved": true,
+      "unpublishedNewApkLinkVisible": false
+    }
+  },
+  "previousArtifactsPreserved": [
+    {
+      "version": "0.1.5-dev",
+      "sourceRevision": "75c39ca900b140cfb02c1a47807a5955c8b8db7f"
+    },
+    {
+      "version": "0.1.6-dev",
+      "kind": "historical-local-candidate",
+      "sourceRevision": "639b1f943cf73d04aa4d76af0e9fff058169c8ba",
+      "sha256": "2de9eb6d1cb427d2df70888d3e97163406da76cc80123b549cabd28f2d8d3ada"
+    },
+    {
+      "version": "0.1.6-dev",
+      "kind": "historical-CI-build-with-upload-precheck-failure",
+      "sourceRevision": "de49bb74aa85a35ecf5d867148d542e15ded0de2",
+      "sha256": "1a7164691a0e9dfe858ccf85c5da43dd4ce8fc28cb972ad9f4d8df53dac8d0ce"
+    }
+  ],
+  "priorWorkflowOutcomes": [
+    {
+      "id": 40854107439,
+      "conclusion": "failure",
+      "phase": "build",
+      "diagnosisAtThatTime": "unclassified"
+    },
+    {
+      "id": 40854841273,
+      "conclusion": "failure",
+      "phase": "build",
+      "diagnosisAtThatTime": "unclassified"
+    },
+    {
+      "id": 40855531908,
+      "conclusion": "failure",
+      "phase": "build",
+      "diagnosisAtThatTime": "conflicting ANDROID_HOME and ANDROID_SDK_ROOT"
+    },
+    {
+      "id": 40855991283,
+      "conclusion": "failure",
+      "phase": "upload-precheck",
+      "signedApkVerified": true
+    },
+    {
+      "id": 40857270786,
+      "conclusion": "cancelled",
+      "reason": "avoid upload before correcting actual GitHub draft URL/discovery semantics"
+    }
+  ],
+  "privateState": {
+    "knownCloudPrivateDirectoryPresent": false,
+    "removedByThisAgent": false,
+    "replacementKeyGenerated": false,
+    "githubRetainedKeyActuallyUsed": true,
+    "projectKeyFileNameInventory": [
+      "/workspace/runmoni/work/cloud-android/review-app/review-debug.keystore"
+    ],
+    "projectTraversalErrors": 0,
+    "systemTempInspectionComplete": false,
+    "systemTempInspectionBoundary": "Unrelated platform /tmp/codex-daemon-1000 denied traversal; no contents were read or changed."
+  },
+  "draftNotes": {
+    "updatedWhileDraft": true,
+    "bodySha256": "897d48f28757fd781b56195ec2ded9e10de00f8d29a3b74671d43a80d46c65aa",
+    "sourcePath": "docs/RELEASE_NOTES_0.1.6-dev.md",
+    "binaryOrSourceMetadataChanged": false
+  }
+}

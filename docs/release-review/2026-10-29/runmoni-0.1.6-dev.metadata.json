@@ -1,0 +1,12 @@
+{
+  "version": "0.1.6-dev",
+  "versionCode": 7,
+  "packageName": "com.runmoni.app",
+  "fileName": "runmoni-0.1.6-dev.apk",
+  "sizeBytes": 218201869,
+  "sha256": "de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+  "signed": true,
+  "sourceRevision": "9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750",
+  "sourceDirty": false,
+  "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+}
