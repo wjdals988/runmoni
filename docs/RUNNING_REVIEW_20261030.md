@@ -62,3 +62,7 @@
 이번 APK는 로컬 테스트 키의 debug 빌드이며 미게시다. [해시와 빌드 당시 체크아웃 정보](app-review/2026-10-30/verification.json)의 `checkoutHeadAtBuild`는9c3df09+미커밋 변경 상태를 뜻하며 공개 APK의 `sourceRevision`으로 사용하지 않는다. 이후 커밋은 검토 가능한 구현 소스를 보존한다. 공개0.1.6의 sourceRevision9dd409f와 기존0.1.5의75c39ca를 바꾸지 않았다. 서명/공개 업데이트 피드/대시보드 다운로드는 이번에 변경하지 않았다.
 
 실제 휴대폰 설치/로그인·야외 GPS·장시간 화면 끔/배터리·저장소 쓰기 실패·Google 인증·2대 음성은 미검증이다. 본문은 스크롤되며 모든 정보를 한 화면에 동시에 보인다고 주장하지 않는다. 검토 화면과 사용자 시각 승인도 구분한다.
+
+## 저장소 반영
+
+구현/검증 기록 커밋: `7193f2a053555c6bdaf290af19957cd96d739d18`. `codex/run-readiness-and-auto-pause` 원격 브랜치 푸시와 [PR9](https://github.com/wjdals988/runmoni/pull/9) 생성을 완료했다. main 병합·새 서명 APK 업로드/공개·대시보드 다운로드 변경은 수행하지 않았다. 기존 수동 release CI 결과를 이번 PR의 CI 성공으로 표시하지 않는다.

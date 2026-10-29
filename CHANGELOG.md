@@ -10,6 +10,7 @@
 - 캐시·오프라인·Gradle 작업자1개로 debug/Android 테스트 APK 빌드, JVM40개 통과(새 회귀9개), lint오류0/경고33. 공개0.1.6의 기존 CI31개/경고57개를 이번 검증으로 합산하지 않는다. Android 실행 검증과 실기기/야외 GPS/Google 로그인 확인은 별도 기록한다.
 - 최종 Android7/7 통과(138.643초): 새 UI2개·GPS/백그라운드/단절/정지/11지점 저장 service1개·DB/포인트/보유권3개·러닝 조작의9개 폭/글자 조합1개. 1차7개와 중복 합산하지 않는다. 실제 Android Compose fixture 캡처와 원시 로그를 보존한다. MainActivity 첫 cold launch는 `am start -W` timeout/System UI 대기 창을 관찰했으며 Wait 후 resumed 확인. 첫 권한 설정 자동 확인은 UIAutomator null-root 뒤 assert 실패로 미확인. 앱 회귀 원인으로 단정하지 않고 시스템 설정 동선을 별도로 재확인한다.
 - 최종 MainActivity에서 실제 위치 설정 이동→GPS 켜기→복귀 후 안내 해제, 권한 회수 안내→런모니 앱 권한 설정 이동 모두 확인. 재확인에도 System UI 대기 창1회/null-root3회가 있었고 Wait/현재 XML 재조회로 완료. 실제 화면3개·fixture5개/동선 JSON을 보존. 위치/권한·애니메이션 복원 후 전용 AVD PID61224 실행 종료 확인. 로컬 debug APK는 미게시이며 빌드 당시9c3df09+dirty 상태를 공개 APK 출처로 재작성하지 않음. 실제 휴대폰/야외/Google 인증은 미확인 유지.
+- 구현/검증 커밋7193f2a·원격 `codex/run-readiness-and-auto-pause` 푸시·[PR9](https://github.com/wjdals988/runmoni/pull/9) 생성 완료. main 병합/새 서명 APK 공개/대시보드 다운로드 변경은 이번에 수행하지 않았다.
 
 ## 2026-10-29 사용자 요청으로 검증 전0.1.6 프리뷰 공개·다운로드 연결
 
