@@ -19,9 +19,11 @@ Secrets 등록 성공으로 해석하지 않는다. 정확한 중계 원인은 �
 repository scope/승인 인증서/미게시 상태가 일치한다. [수신 기록](release-review/2026-10-29/signing-connection.json)은
 사용자 제공 결과와 직접 관찰을 구분한다. 아래 명령을 다시 실행할 필요는 없다.
 
-GitHub CI의 실제 서명 성공은 아직 미검증이다. 원격 main effc3d4에는 서명 workflow가 없으므로,
-준비된 [PR2](https://github.com/wjdals988/runmoni/pull/2)를 main에 병합하도록 승인받은 뒤
-서명 workflow를 실행한다. main 제한을 우회하거나 임시 키를 먼저 삭제하지 않는다.
+이후 사용자가 진행을 승인해 [PR2](https://github.com/wjdals988/runmoni/pull/2)를 main에 병합했다.
+run40855991283은 SDK 경로 충돌 수정 뒤 동일 키의 실제 서명 APK 검사를 통과했다.
+업로드 단계의 Actions 권한 힌트/미공개 URL 처리도 실제 API 형태에 맞게 보강 중이며,
+서명 성공을 공개 APK 배포 완료로 표시하지 않는다. 알려진 임시 키 경로는 재연결 후 없는 상태로
+관찰됐고 에이전트가 삭제했다고 주장하거나 새 키를 생성하지 않았다.
 
 ## 1. 원래 Windows PC에서 공개 정보 조회
 
@@ -76,5 +78,6 @@ Python47개에는 실제 libsodium fixture 왕복 복호화·정확한 바이트
 Cloud에서 prepare를 호출하면 Windows 전용 보호가 먼저 거부해 cloud proxy 자격을 읽지 않음을 확인했다.
 첫 fixture 컴파일의 lambda 캡처 오류는 테스트 변수 수정 후 해결했다.
 원래 PC의 공개 packet과4개 등록 receipt를 사용자가 전달했다. Windows/GCM 실행을 클라우드에서
-직접 관찰한 것은 아니며, GitHub CI의 실제 서명 검증은 아직 실행하지 않았다.
+직접 관찰한 것은 아니다. 이후 run40855991283에서 같은 키의 실제 CI 서명 검사가 성공했으며
+APK sourceRevision은 de49bb74aa85a35ecf5d867148d542e15ded0de2다. 이 결과와 새 run의 출처를 구분한다.
 토큰/키값/원문 API 오류는 로그에 기록하지 않는다. TLS 검증을 해제하거나 별도 서비스/포트를 열지 않는다.

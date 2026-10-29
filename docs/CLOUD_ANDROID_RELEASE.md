@@ -13,8 +13,9 @@
 
 **현재 상태 — 2026-10-29:** [GitHub 공개키 암호화 전달](GITHUB_SIGNING_BRIDGE.md)을 거쳐
 사용자가 원래 PC의4개 등록 receipt를 전달했다. repository scope/승인 지문/미게시 상태가 일치한다.
-이는 사용자 제공 등록 결과이며 GitHub CI의 실제 서명 성공은 별도 검증이다. 원격 main에는
-서명 workflow가 없으므로 [PR2](https://github.com/wjdals988/runmoni/pull/2) 병합 승인 뒤 실행한다.
+이는 사용자 제공 등록 결과다. 이후 승인된 [PR2](https://github.com/wjdals988/runmoni/pull/2) main 병합과
+SDK 충돌 수정 뒤 run40855991283에서 같은 키의 실제 서명 APK 검사가 성공했다.
+릴리스 업로드는 별도 단계이며, Actions 권한 힌트와 실제 미공개 URL 처리 보강 후 이어간다.
 
 소유자 OAuth 로그인 뒤에도 이 클라우드의 Secrets API는403으로 거부됐다. 정확한 중계 원인은
 미확인이며 같은 승인을 반복하지 않는다. 아래 --login 방식은 실패 이력으로만 보존한다.
@@ -37,9 +38,9 @@ python3 scripts/cloud/connect-signing-key.py --state-file <private-state.json> -
 않는다. `--login` 없이 실행하면 기존 인증을 사용한다. 이 도구는 새 키를 생성하거나 APK를 공개하지 않는다.
 실제 권한/secret 등록 성공은 모든4개 항목의 성공 receipt가 있어야 판단한다.
 
-새 키는 현재 소유자 전용 임시 파일로도 보존돼 있다.4개 등록 receipt를 수신했지만 CI에서 같은 키의
-실제 사용/보관을 확인할 때까지 임시 키를 지우지 않는다. 클라우드 스냅샷에는 개인키를 포함하지 않는다.
-키가 사라져도 자동 재생성하지 않는다.
+재연결된 현재 환경에서는 알려진 소유자 전용 임시 키 경로가 없는 상태다. 에이전트가 정리를
+수행했다고 주장하지 않는다. GitHub에 등록된 동일 키로 실제 CI 서명을 확인했으며 자동 재생성하지 않는다.
+클라우드 스냅샷에는 개인키를 포함하지 않는다.
 
 ## Windows 보관 키 도구의 범위
 
@@ -108,4 +109,4 @@ unsigned는 `outputs/release-candidate/<sourceRevision>/`에만 내보낸다.
 대시보드 다운로드 메타데이터를 갱신한다. unsigned/debug/미공개 초안은 새 공개 업데이트로 알리지 않는다.
 
 원래 PC의 등록 receipt를 수신해 보관했다. 클라우드의 기존403을 추가 OAuth 승인으로 다시 시도하지 않는다.
-다음은 main 병합 승인 뒤 실제 CI 서명 검증이다. 등록 결과를 APK 업로드/공개 성공으로 해석하지 않는다.
+main 병합과 실제 CI 서명 검사는 완료했으며 초안 업로드를 이어간다. 등록/서명 결과를 APK 공개 성공으로 해석하지 않는다.

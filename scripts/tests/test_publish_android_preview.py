@@ -29,11 +29,12 @@ def metadata():
 
 class FakeGitHub:
     """Small in-memory server; a mutation records facts rather than enforcing the gate."""
-    def __init__(self, plan, *, main=TARGET, published=False, incomplete=False, corrupt_upload=False):
+    def __init__(self, plan, *, main=TARGET, published=False, incomplete=False, corrupt_upload=False, draft_urls=False):
         self.plan = plan
         self.main = main
         self.tag_exists = published
         self.corrupt_upload = corrupt_upload
+        self.draft_urls = draft_urls
         self.calls = []
         self.events = []
         self.uploads = []
@@ -52,14 +53,17 @@ class FakeGitHub:
         return False
 
     def release_payload(self, values):
+        url_tag = 'untagged-0123456789abcdef0123' if self.draft_urls and values.get('draft') else self.plan['tag']
         return {"id": 7, "tag_name": self.plan["tag"], "target_commitish": TARGET,
                 "upload_url": f"https://uploads.github.com/repos/{publisher.REPO}/releases/7/assets{{?name,label}}",
-                "html_url": f"{publisher.WEB}/releases/tag/{self.plan['tag']}", **values}
+                "html_url": f"{publisher.WEB}/releases/tag/{url_tag}", **values}
 
     def asset(self, local):
+        url_tag = ('untagged-0123456789abcdef0123'
+                   if self.draft_urls and self.release and self.release['draft'] else self.plan['tag'])
         return {"name": local["name"], "state": "uploaded", "size": local["size"],
                 "digest": "sha256:" + local["sha256"],
-                "browser_download_url": f"{publisher.WEB}/releases/download/{self.plan['tag']}/{local['name']}"}
+                "browser_download_url": f"{publisher.WEB}/releases/download/{url_tag}/{local['name']}"}
 
     def response(self, status, data):
         return SimpleNamespace(status_code=status, json=lambda: copy.deepcopy(data))
@@ -80,7 +84,10 @@ class FakeGitHub:
         if method == "GET" and path == f"/git/ref/tags/{self.plan['tag']}":
             return self.response(200, {"object": {"type": "commit", "sha": TARGET}}) if self.tag_exists else self.response(404, {})
         if method == "GET" and path == f"/releases/tags/{self.plan['tag']}":
-            return self.release_response() if self.release else self.response(404, {})
+            return self.release_response() if self.release and not self.release['draft'] else self.response(404, {})
+        if method == 'GET' and publisher.release_list_path(path):
+            return self.response(200, ([{**self.release, 'assets': list(self.assets.values())}]
+                                      if self.release and path.endswith('page=1') else []))
         if method == "POST" and path == "/releases":
             self.release = self.release_payload(options["json"])
             return self.response(201, {**self.release, "assets": []})
@@ -93,6 +100,10 @@ class FakeGitHub:
                 self.publication_snapshots.append({"assets": copy.deepcopy(self.assets),
                                                    "events": list(self.events)})
                 self.tag_exists = True
+                if self.draft_urls:
+                    self.release['html_url'] = f"{publisher.WEB}/releases/tag/{self.plan['tag']}"
+                    for name, asset in self.assets.items():
+                        asset['browser_download_url'] = f"{publisher.WEB}/releases/download/{self.plan['tag']}/{name}"
             self.release.update(options["json"])
             return self.release_response()
         raise AssertionError(f"Unexpected fake HTTP operation: {method} {path}")
@@ -193,8 +204,8 @@ class PreviewPublisherTest(unittest.TestCase):
     def transport(self, root, remote):
         real_validate = publisher.validate_remote_asset
 
-        def validate(asset, local, version):
-            real_validate(asset, local, version)
+        def validate(asset, local, version, **kwargs):
+            real_validate(asset, local, version, **kwargs)
             remote.events.append(("validated", local["name"]))
 
         def request(method, path, _token, *, json_body=None):
@@ -431,6 +442,61 @@ class PreviewPublisherTest(unittest.TestCase):
             self.assertEqual(3, len(remote.uploads))
             self.assertEqual([], remote.publication_snapshots)
 
+    def test_draft_assets_use_only_the_matching_temporary_url(self):
+        local = {'name': f'runmoni-{VERSION}.apk', 'size': len(PAYLOAD), 'sha256': DIGEST}
+        release = {'draft': True, 'html_url': f'{publisher.WEB}/releases/tag/untagged-0123456789abcdef0123'}
+        asset = {'name': local['name'], 'state': 'uploaded', 'size': len(PAYLOAD),
+                 'digest': 'sha256:' + DIGEST,
+                 'browser_download_url': f"{publisher.WEB}/releases/download/untagged-0123456789abcdef0123/{local['name']}"}
+        publisher.validate_remote_asset(asset, local, VERSION, release=release)
+        for bad in (None, {**release, 'draft': False},
+                    {**release, 'html_url': release['html_url'].replace('runmoni', 'other')},
+                    {**release, 'html_url': release['html_url'].replace('0123456789abcdef0123', 'aaaaaaaaaaaaaaaaaaaa')}):
+            with self.subTest(release=bad), self.assertRaises(publisher.PublicationError):
+                publisher.validate_remote_asset(asset, local, VERSION, release=bad)
+
+    def test_duplicate_or_incompletely_inspected_drafts_are_never_created(self):
+        for duplicates in (True, False):
+            with self.subTest(duplicates=duplicates), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory); self.fixture(root)
+                plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+                remote = FakeGitHub(plan)
+                original = remote.request
+                def request(method, url, **options):
+                    if publisher.release_list_path(url[len(publisher.API):]):
+                        data = ([{'id': 7, 'tag_name': plan['tag']}, {'id': 8, 'tag_name': plan['tag']}]
+                                if duplicates else [{'tag_name': 'unrelated'}] * 100)
+                        return remote.response(200, data)
+                    return original(method, url, **options)
+                with self.transport(root, remote), mock.patch.object(remote, 'request', side_effect=request):
+                    with self.assertRaises(publisher.PublicationError):
+                        publisher.publish(plan, stage_draft=True)
+                self.assertIsNone(remote.release)
+                self.assertEqual([], remote.uploads)
+
+    def test_realistic_temporary_draft_urls_are_verified_without_publication(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan, draft_urls=True)
+            with self.transport(root, remote):
+                result = publisher.publish(plan, stage_draft=True)
+            self.assertTrue(result['draft'])
+            self.assertEqual(3, len(remote.uploads))
+            self.assertEqual([], remote.publication_snapshots)
+            self.assertTrue(all('/untagged-' in asset['browser_download_url'] for asset in result['assets']))
+
+    def test_publishing_rechecks_canonical_urls_after_temporary_draft_urls(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan, draft_urls=True)
+            with self.transport(root, remote):
+                result = publisher.publish(plan)
+            self.assertFalse(result['draft'])
+            self.assertEqual(1, len(remote.publication_snapshots))
+            self.assertTrue(all(f"/download/v{VERSION}/" in asset['browser_download_url'] for asset in result['assets']))
+
     def test_authoritative_write_denial_stops_without_upload_or_success_receipt(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -572,6 +638,20 @@ class PreviewPublisherTest(unittest.TestCase):
                 with self.subTest(method=method, path=path), self.assertRaises(publisher.PublicationError):
                     publisher.github_api_request(method, path, "gho_" + "x" * 32, json_body=body)
             popen.assert_not_called()
+
+    def test_only_bounded_release_listing_accepts_array_responses(self):
+        path = '/releases?per_page=100&page=1'
+        payload = [{'id': 7, 'tag_name': 'v' + VERSION}]
+        process = FakeCurlProcess(json.dumps(payload).encode() + publisher.HTTP_STATUS_MARKER + b'200')
+        with mock.patch.object(publisher.subprocess, 'Popen', return_value=process):
+            self.assertEqual((200, payload), publisher.github_api_request('GET', path, 'fixture-token'))
+        for bad in (path.replace('100', '101'), path.replace('page=1', 'page=11'), path + '&redirect=elsewhere'):
+            with self.subTest(path=bad), self.assertRaises(publisher.PublicationError):
+                publisher.validate_api_path('GET', bad, None)
+        for body in ({'id': 7}, [None], [{}] * 101):
+            with self.subTest(shape=type(body).__name__), self.assertRaises(publisher.PublicationError):
+                publisher.parse_api_output(json.dumps(body).encode() + publisher.HTTP_STATUS_MARKER + b'200',
+                                           allow_release_list=True)
 
     def test_native_api_response_read_is_bounded_and_oversize_child_is_killed(self):
         raw = b"x" * (publisher.MAX_API_RESPONSE_BYTES + 1) + publisher.HTTP_STATUS_MARKER + b"200"

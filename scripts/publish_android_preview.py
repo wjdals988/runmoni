@@ -116,10 +116,28 @@ def prepare_plan(version, target, rate_kib=256, root=ROOT):
             "planNetworkRequests": 0, "planCredentialLookups": 0}
 
 
-def validate_remote_asset(asset, local, version):
+def release_download_tag(version, release=None):
+    tag = f"v{version}"
+    if release is None:
+        return tag
+    expected = f"{WEB}/releases/tag/{tag}"
+    url = release.get('html_url')
+    if url == expected:
+        return tag
+    # GitHub assigns a temporary URL until the draft is published. It must be
+    # the exact temporary tag from this validated release, on the pinned repo.
+    temporary = re.fullmatch(re.escape(f"{WEB}/releases/tag/") + r'(untagged-[0-9a-f]{8,64})',
+                             url if isinstance(url, str) else '')
+    if release.get('draft') is True and temporary:
+        return temporary[1]
+    raise PublicationError('Unexpected release URL; no asset was uploaded or published.')
+
+
+def validate_remote_asset(asset, local, version, *, release=None):
+    download_tag = release_download_tag(version, release)
     if (asset.get("name") != local["name"] or asset.get("state") != "uploaded"
             or asset.get("size") != local["size"] or asset.get("digest") != "sha256:" + local["sha256"]
-            or asset.get("browser_download_url") != f"{WEB}/releases/download/v{version}/{local['name']}"):
+            or asset.get("browser_download_url") != f"{WEB}/releases/download/{download_tag}/{local['name']}"):
         raise PublicationError("Remote asset differs from local bytes; no asset was overwritten or deleted.")
 
 
@@ -168,6 +186,10 @@ def curl_config_quote(value):
                   .replace("\t", "\\t").replace("\v", "\\v")) + '"'
 
 
+def release_list_path(path):
+    return isinstance(path, str) and re.fullmatch(r'/releases\?per_page=100&page=(?:[1-9]|10)', path) is not None
+
+
 def validate_api_path(method, path, json_body):
     if not isinstance(path, str) or len(path) > 256:
         raise PublicationError("Unexpected GitHub metadata API path.")
@@ -178,7 +200,7 @@ def validate_api_path(method, path, json_body):
             tag = path[len(prefix):]
             break
     tag_path = tag is not None and len(tag) <= 64 and PREVIEW.fullmatch(tag) is not None
-    allowed = ((method == "GET" and (path in ("", "/git/ref/heads/main") or release_id or tag_path
+    allowed = ((method == "GET" and (path in ("", "/git/ref/heads/main") or release_id or tag_path or release_list_path(path)
                                      or re.fullmatch(r"/git/tags/[0-9a-f]{40}", path)))
                or (method == "POST" and path == "/releases")
                or (method == "PATCH" and release_id))
@@ -188,7 +210,7 @@ def validate_api_path(method, path, json_body):
         raise PublicationError("GitHub metadata mutation requires a JSON object.")
 
 
-def parse_api_output(raw):
+def parse_api_output(raw, *, allow_release_list=False):
     if not isinstance(raw, bytes):
         raise PublicationError("Native curl API output was not binary data.")
     body, marker, status = raw.rpartition(HTTP_STATUS_MARKER)
@@ -200,7 +222,10 @@ def parse_api_output(raw):
         payload = json.loads(body.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError, RecursionError):
         raise PublicationError("GitHub metadata response was not valid bounded JSON.") from None
-    if not isinstance(payload, dict):
+    if allow_release_list and 200 <= int(status) < 300:
+        if not isinstance(payload, list) or len(payload) > 100 or not all(isinstance(item, dict) for item in payload):
+            raise PublicationError('Release listing must be a bounded array of objects.')
+    elif not isinstance(payload, dict):
         raise PublicationError("GitHub metadata response must be a JSON object.")
     return int(status), payload
 
@@ -242,7 +267,7 @@ def github_api_request(method, path, token, *, json_body=None):
         code = process.wait(timeout=125)
         if code:
             raise PublicationError(f"Native curl API request failed (curl {code}); raw details omitted.")
-        return parse_api_output(raw)
+        return parse_api_output(raw, allow_release_list=release_list_path(path))
     except subprocess.TimeoutExpired:
         raise PublicationError("Native curl API request exceeded its completion bound; raw details omitted.") from None
     except (OSError, BrokenPipeError):
@@ -302,6 +327,25 @@ def upload_asset(upload_url, local, token, rate_kib):
     return json.loads(result.stdout)
 
 
+def find_release(api, tag):
+    release = api('GET', f'/releases/tags/{tag}', optional=True)
+    if release is not None:
+        return release
+    # The tag endpoint excludes unpublished drafts. Search the authenticated
+    # release list before creating anything, including after a resumed run.
+    matches = []
+    for page in range(1, 11):
+        releases = api('GET', f'/releases?per_page=100&page={page}')
+        if not isinstance(releases, list) or len(releases) > 100 or not all(isinstance(item, dict) for item in releases):
+            raise PublicationError('Release listing was not a bounded array; nothing was created.')
+        matches.extend(item for item in releases if item.get('tag_name') == tag)
+        if len(matches) > 1:
+            raise PublicationError('Multiple matching drafts exist; no release was changed.')
+        if len(releases) < 100:
+            return matches[0] if matches else None
+    raise PublicationError('Release listing exceeded its inspection bound; nothing was created.')
+
+
 def publish(plan, *, stage_draft=False):
     if not plan["localMetadataReady"]:
         raise PublicationError("Local plan has publication blockers; no credential or network was used.")
@@ -338,7 +382,7 @@ def publish(plan, *, stage_draft=False):
         # check for GitHub App/Actions tokens. GitHub enforces contents:write
         # on each release mutation; a 403 still aborts without a success receipt.
         check_target()
-        release = api("GET", f"/releases/tags/{plan['tag']}", optional=True)
+        release = find_release(api, plan['tag'])
         notes = Path(plan["releaseNotesPath"]).read_text(encoding="utf-8-sig")
         apk = plan["assets"][0]
         body = notes + f"\n\nAPK SHA-256: `{apk['sha256']}`\nAPK bytes: {apk['size']}\nSource: `{plan['targetCommit']}`\n"
@@ -359,6 +403,7 @@ def publish(plan, *, stage_draft=False):
             if candidate["draft"] and (candidate.get("name") != release_name or not isinstance(candidate_body, str)
                                        or candidate_body.replace("\r\n", "\n") != body.replace("\r\n", "\n")):
                 raise PublicationError("Draft notes or title differ; no unreviewed draft was made public.")
+            release_download_tag(plan['version'], candidate)
             return identifier
 
         def record_result(candidate, remote_assets):
@@ -396,7 +441,7 @@ def publish(plan, *, stage_draft=False):
                 asset = upload_asset(upload_url, local, token, plan["rateKiBPerSecond"])
             else:
                 raise PublicationError("Published release is incomplete; no asset was added or replaced.")
-            validate_remote_asset(asset, local, plan["version"])
+            validate_remote_asset(asset, local, plan["version"], release=release)
         check_target()
         # Freshly re-read identity and all three server digests for either mode.
         release = api("GET", f"/releases/{release_id}")
@@ -406,7 +451,7 @@ def publish(plan, *, stage_draft=False):
         if release["draft"] and set(remote) != expected_names:
             raise PublicationError("Draft asset set changed; it remains unpublished.")
         for local in plan["assets"]:
-            validate_remote_asset(remote.get(local["name"], {}), local, plan["version"])
+            validate_remote_asset(remote.get(local["name"], {}), local, plan["version"], release=release)
         if stage_draft:
             # Identity verification above requires draft=true. This branch exits
             # before every public-state mutation, including an idempotent PATCH.
@@ -419,7 +464,7 @@ def publish(plan, *, stage_draft=False):
             raise PublicationError("Published preview state was not confirmed.")
         remote = {item["name"]: item for item in release.get("assets", [])}
         for local in plan["assets"]:
-            validate_remote_asset(remote.get(local["name"], {}), local, plan["version"])
+            validate_remote_asset(remote.get(local["name"], {}), local, plan["version"], release=release)
         check_target(require_tag=True)
         return record_result(release, remote)
 
