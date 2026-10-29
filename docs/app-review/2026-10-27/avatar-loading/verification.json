@@ -1,0 +1,97 @@
+{
+  "implementationCommit": "7fab0f3dc68e95dc96b7f69cef5f8cf1755e9580",
+  "versionName": "0.1.6-dev",
+  "versionCode": 7,
+  "buildType": "debug local TEST key; not a public release",
+  "appTreeMatchesImplementationCommit": true,
+  "worktreeHasDocumentationChanges": true,
+  "runtime": {
+    "nativeFontScale": "2.0",
+    "nativeWmSize": "Physical size: 480x854\nOverride size: 320x854",
+    "restoredFontScale": "1.0",
+    "restoredAnimationScale": "1.0",
+    "restoredWmSize": "Physical size: 480x854",
+    "crashBufferBytes": 0,
+    "installedVersion": [
+      "versionCode=7 minSdk=29 targetSdk=36",
+      "versionName=0.1.6-dev"
+    ]
+  },
+  "android": {
+    "normalTests": 8,
+    "normalFailures": 0,
+    "nativeTests": 4,
+    "nativeFailures": 0,
+    "controlledIoFixture": true,
+    "actualWholeMainActivityScreenshot": false,
+    "wholeAndroidSuiteRun": false
+  },
+  "jvmTests": 30,
+  "jvmFailures": 0,
+  "lintErrors": 0,
+  "lintWarnings": 57,
+  "approvedSourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "apk": {
+    "bytes": 237845311,
+    "sha256": "eff46d87dad23d426630b81ec23c23b9fc46cec6437a6ff21f0d60dea2703586"
+  },
+  "ownedEmulatorStopped": 20072,
+  "activeEmulatorsAfterStop": 0,
+  "productionKeyAvailable": false,
+  "actualRemoteApkDownloadTested": false,
+  "existing015ApkSourceRevisionUnchanged": "75c39ca900b140cfb02c1a47807a5955c8b8db7f",
+  "evidence": {
+    "native-ready.png": {
+      "bytes": 10284,
+      "sha256": "28f4bdfce9d59957ce4e202ea87c37efcf59d975e5159a3a9b38cbf7a805b55b"
+    },
+    "wait-recheck.txt": {
+      "bytes": 2398,
+      "sha256": "f91630e25e06f9c9e8d9c1a72f42e504ba614945866cd4d6bf5c9b0d43204219"
+    },
+    "normal-retry.png": {
+      "bytes": 7067,
+      "sha256": "415707ac3e8291e2fec69b84551d68c3555736cc6bd20204c3c9ff6e23a0bc43"
+    },
+    "initial-normal.txt": {
+      "bytes": 6650,
+      "sha256": "d8c031cc4e124e5883bf197aaf7e1124f7445d22d516a4a9d1df1114141bd26f"
+    },
+    "before-compact-native.txt": {
+      "bytes": 4434,
+      "sha256": "228555eb3b2fdf329267f3ac14b8d93449c6ac5d9ca742b1411724518be93629"
+    },
+    "normal-ready.png": {
+      "bytes": 28588,
+      "sha256": "e594a02de3998e16cf9dc429f27042f219516fe12c4d3377bc7cc93e98018880"
+    },
+    "native-loading.png": {
+      "bytes": 5739,
+      "sha256": "31d45ae19023edf277804407938ff654eee29910eb7a3dd50ef8feba43f1cfa2"
+    },
+    "normal.txt": {
+      "bytes": 5567,
+      "sha256": "a539e9114c2598d7edf504bba181302cffdf0b6720232566058f2325714b4f16"
+    },
+    "native-retry.png": {
+      "bytes": 5902,
+      "sha256": "5e1408b6733cd56d63086203b205b7f9369ed04b846330aa205a8d982166c57d"
+    },
+    "before-compact-normal.txt": {
+      "bytes": 5567,
+      "sha256": "035d31472b99dc2ee5461ccba72bb054182327d6d766f9457245b2a099be5076"
+    },
+    "diagnostic-recheck.txt": {
+      "bytes": 2398,
+      "sha256": "e86a0fc3e572baec26b80ae9873993ec46a95f5079faa1decb87e9ad442a0e90"
+    },
+    "normal-loading.png": {
+      "bytes": 5843,
+      "sha256": "0fd4ec762deb7e038aa4d4f89290f56820df02800f826844c22ef05ecfdfa7bf"
+    },
+    "native.txt": {
+      "bytes": 2887,
+      "sha256": "a4e856e9f141f7110bb12c995723f7a211519566cbd924755b6a291b7203600a"
+    }
+  }
+}

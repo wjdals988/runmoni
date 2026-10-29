@@ -1,0 +1,13 @@
+{
+  "resolution": [
+    256,
+    384
+  ],
+  "comparedPixels": 98304,
+  "differingPixels": 3114,
+  "maxChannelDelta": 2,
+  "testMaxChannelTolerance": 3,
+  "pixelsOverTolerance": 0,
+  "notARealMainActivityScreenshot": true,
+  "purpose": "Android Compose MiniMi fixture at 1:1 resolution; actual vs CPU Canvas approved source reference"
+}

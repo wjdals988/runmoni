@@ -1,0 +1,6 @@
+{
+  "savedRecordReappearedAfterForceStop": true,
+  "matchedOriginalRecordTimestampBeforeDeletion": true,
+  "onlyOwnedTestRecordDeletedViaUiConfirmation": true,
+  "gpsAccuracyValidated": false
+}

@@ -1,0 +1,167 @@
+{
+  "capturedApp": "com.runmoni.app/.MainActivity",
+  "versionName": "0.1.5-dev",
+  "versionCode": 6,
+  "buildType": "local TEST debug key; not a release; not the original signed APK",
+  "worktreeBaseCommit": "effc3d444443659c599c6a8b8898df30e390cb8a",
+  "worktreeHasUncommittedChanges": true,
+  "existingSignedApkSourceRevisionUnchanged": "75c39ca900b140cfb02c1a47807a5955c8b8db7f",
+  "debugApk": {
+    "path": "app/build/outputs/apk/debug/app-debug.apk",
+    "bytes": 237809977,
+    "sha256": "b5e511723a5aaa211884637c5ecbfdba9477fbdee2669016f032f687d6a5ca14"
+  },
+  "debugSigningCertificateSha256": "264eca67962faa6e51d44c050772ef7b836315344cc25d91a5ac41447736b267",
+  "approvedSource": {
+    "path": "docs/design/avatars/v0.3.0/running-motion-art-source.png",
+    "bytes": 2059314,
+    "sha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65"
+  },
+  "runtimeSource": {
+    "path": "app/src/main/assets/avatars/v0.3.0/running-motion.png",
+    "bytes": 2059314,
+    "sha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65"
+  },
+  "sources": [
+    {
+      "path": "app/src/main/java/com/runmoni/app/ui/MiniMi.kt",
+      "bytes": 4716,
+      "sha256": "1da209b4d815e02c4b96bb194dd11754a7ad309b9d358900d7d2c1b9fe2f028c"
+    },
+    {
+      "path": "app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt",
+      "bytes": 46009,
+      "sha256": "76007a94a61f5e6e74ded7bfae5554889e5813f6fe92630fb01c3e1ea988b0e4"
+    },
+    {
+      "path": "app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt",
+      "bytes": 34372,
+      "sha256": "012ef33782ea8bba0746f1f07245cc5e552a1e0b8b412693162c65b4ab89e255"
+    },
+    {
+      "path": "app/src/main/java/com/runmoni/app/avatar/ApprovedAvatarRenderer.kt",
+      "bytes": 2329,
+      "sha256": "9294ae8c587f57c3172eff0412b1d7604a855b9106b112add7eb3a020783c781"
+    },
+    {
+      "path": "app/src/androidTest/java/com/runmoni/app/ui/ApprovedAvatarRenderingTest.kt",
+      "bytes": 4889,
+      "sha256": "f9edaaf9da495389e84aa7359c07f5ba04f2f27927b050ca01aaa60f9421c880"
+    }
+  ],
+  "environment": {
+    "api": 29,
+    "abi": "x86_64",
+    "acceleration": "TCG software; no KVM",
+    "cores": 2,
+    "ramMiB": 2048,
+    "serial": "emulator-5556",
+    "avd": "Runmoni_Cloud_29"
+  },
+  "coverage": {
+    "baseOutfitOnly": true,
+    "firstSheetRowOnly": true,
+    "femaleBaseSelectionIntegrated": false,
+    "all58ArtworkIntegrated": false,
+    "realOutdoorGPSValidated": false,
+    "googleLoginValidated": false,
+    "naverMapAuthValidated": false,
+    "liveKitValidated": false
+  },
+  "validation": {
+    "jvm": {
+      "tests": 30,
+      "failures": 0,
+      "errors": 0
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 57
+    },
+    "instrumentation": {
+      "selectedUniqueTests": 6,
+      "initial": {
+        "tests": 6,
+        "passed": 5,
+        "failed": 1,
+        "log": "instrumentation-initial.txt"
+      },
+      "recheck": {
+        "tests": 1,
+        "passed": 1,
+        "failed": 0,
+        "log": "instrumentation-rendering-recheck.txt"
+      },
+      "change": "Rendering fixture compares at source resolution256x384 rather than downsampling; same tolerance3, all pixels still compared. Five other test implementations and production app unchanged.",
+      "fullSuiteRun": false
+    },
+    "composePixelComparison": {
+      "resolution": [
+        256,
+        384
+      ],
+      "comparedPixels": 98304,
+      "differingPixels": 3114,
+      "maxChannelDelta": 2,
+      "testMaxChannelTolerance": 3,
+      "pixelsOverTolerance": 0,
+      "notARealMainActivityScreenshot": true,
+      "purpose": "Android Compose MiniMi fixture at 1:1 resolution; actual vs CPU Canvas approved source reference"
+    }
+  },
+  "actualScreens": {
+    "home": "home-approved.png",
+    "profile": "me-approved.png",
+    "closet": "closet-approved.png",
+    "launcherIconVerified": false
+  },
+  "cleanup": {
+    "profilePointsObserved": 0,
+    "runRecordsObserved": 0,
+    "appCrashBufferBytes": 0,
+    "resumedActivityBeforeShutdown": "com.runmoni.app/.MainActivity",
+    "animatorDurationScaleRestored": "1.0",
+    "fontScaleObserved": "1.0",
+    "ownedEmulatorPidStopped": 7311,
+    "activeEmulatorsAfterShutdown": 0,
+    "userdataReset": false
+  },
+  "screenshotArtifacts": {
+    "explore.png": {
+      "bytes": 42891,
+      "sha256": "316c464d31a31bd6fc948bf9e87f01ae47f4db62c1c4eb60e8604b65a14bb478"
+    },
+    "home-approved.png": {
+      "bytes": 53181,
+      "sha256": "2ef2bf4000d167effefde4380909b531dbdb2c81c9f2772ec56b2c38de511d13"
+    },
+    "me-approved.png": {
+      "bytes": 48346,
+      "sha256": "d11292fa66ee14e33f194ff1eb748a67b4fd14bb3ba7f8ffb18f862fb9b0eeb2"
+    },
+    "run.png": {
+      "bytes": 41801,
+      "sha256": "95bfb18b1cd54248b16c2fd05144692e329183ea983658b5533bfa1b71917714"
+    },
+    "record-restored-before-avatar-fix.png": {
+      "bytes": 53249,
+      "sha256": "3b19a44dbf52b270b84c7ec1e85c3095b2fe9c2e13a59df0bef9a2b8269c7a8b"
+    },
+    "home-before.png": {
+      "bytes": 49412,
+      "sha256": "fa0319f3ad2df0dd2abba10dadc2f54d6c0fdb73ee7cba392e0e7dd5231831d5"
+    },
+    "closet-approved.png": {
+      "bytes": 66733,
+      "sha256": "916b908140c38312e94de78fc2ecf5339b139f756eed7c01201de350e4e2ef25"
+    },
+    "crew.png": {
+      "bytes": 36357,
+      "sha256": "d956c4e84c30aab91d6570e82b8c4d7c4c86ca8240ef4b2123287247eb463bc1"
+    },
+    "record-saved.png": {
+      "bytes": 35198,
+      "sha256": "e2efc2389431ab25a7e2098b72f95cbcc58cb34c9ea0281e14b5ef1bce30b58d"
+    }
+  }
+}

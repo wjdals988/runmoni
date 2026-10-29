@@ -33,6 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.runmoni.app.domain.*
+import com.runmoni.app.avatar.AvatarArtwork
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -41,7 +42,7 @@ import android.app.TimePickerDialog
 import androidx.activity.compose.BackHandler
 
 @Composable
-internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}) {
+internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}, updates: AppUpdateUiState = AppUpdateUiState()) {
     var url by remember(state.apiUrl) { mutableStateOf(state.apiUrl) }
     var name by remember(state.profile.name) { mutableStateOf(state.profile.name) }
     var cloudHistory by remember(state.cloud.uid) { mutableStateOf(false) }
@@ -55,6 +56,10 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         }
         HorizontalDivider(color = RunmoniColors.Line)
         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        if (updates.updateAvailable) {
+            AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
+            HorizontalDivider(color = RunmoniColors.Line)
+        }
         Text("Google 계정", style = MaterialTheme.typography.titleMedium)
         Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
         if (state.cloud.uid.isBlank()) {
@@ -239,12 +244,17 @@ internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions,
 
 @Composable
 internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -> Unit) {
+    var referenceReview by remember { mutableStateOf(false) }
     var slot by remember { mutableStateOf("top") }
     var accessorySlot by remember { mutableStateOf("eyewear") }
     var animate by remember { mutableStateOf(true) }
     val slots = AvatarCatalogue.slots
     val width = minOf(560.dp, (LocalConfiguration.current.screenWidthDp * 0.94f).dp)
     val compactPreview = LocalDensity.current.fontScale >= 1.3f
+    if (referenceReview) {
+        AvatarReferenceDialog(onDismiss = { referenceReview = false })
+        return
+    }
     AlertDialog(onDismissRequest = onDismiss, modifier = Modifier.width(width).testTag("form_dialog"),
         properties = DialogProperties(usePlatformDefaultWidth = false), title = { Text("나의 미니미 옷장") },
         confirmButton = { TextButton(onClick = onDismiss) { Text("닫기") } }, text = {
@@ -262,6 +272,10 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
         }
         }
         Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        TextButton(onClick = { referenceReview = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_avatar_reference")) {
+            Text("원화 · 수영복 시안 비교")
+        }
+        SmallNote("기본 미니미를 새 원화로 바꿨어요. 준비 중인 아이템은 아직 착용할 수 없어요. 보유 아이템·포인트·기존 선택은 그대로 보관돼요.")
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             AvatarCatalogue.tabs.forEach { (key, label) ->
                 FilterChip(selected = if (key == "accessories") slot in AvatarCatalogue.accessoryKeys else slot == key,
@@ -281,19 +295,23 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
         slots.first { it.key == slot }.variants.indices.forEach { variant ->
             val owned = "$slot:$variant" in profile.ownedItems
             val price = AvatarCatalogue.price(variant)
+            val ready = AvatarArtwork.itemReady(slot, variant)
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    AvatarMini(profile.avatar.withItem(slot, variant), Modifier.size(64.dp), decorative = true)
+                    if (ready) AvatarMini(profile.avatar.withItem(slot, variant), Modifier.size(64.dp), decorative = true)
+                    else Box(Modifier.size(64.dp).background(RunmoniColors.Mint, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
+                        Text("원화\n준비", style = MaterialTheme.typography.labelSmall)
+                    }
                     Text(slots.first { it.key == slot }.variants[variant], style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                 }
                 Text(if (owned) "보유 중" else "${price} P · 러닝 마일리지", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
-                if (equipped == variant && !covered) StatusPill("착용 중", RunmoniColors.Green)
-                else FilledTonalButton(onClick = { if (owned) actions.equipItem(slot, variant) else actions.buyItem(slot, variant) }, enabled = owned || profile.mileage >= price, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("closet_${slot}_$variant")) { Text(if (owned) "착용" else "${price} P 구매") }
+                if (equipped == variant && !covered) StatusPill(if (ready) "착용 중" else "선택 보관 중", RunmoniColors.Green)
+                else FilledTonalButton(onClick = { if (owned) actions.equipItem(slot, variant) else actions.buyItem(slot, variant) }, enabled = ready && (owned || profile.mileage >= price), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("closet_${slot}_$variant")) { Text(if (!ready) "원화 준비 중" else if (owned) "착용" else "${price} P 구매") }
             }
             HorizontalDivider(color = RunmoniColors.Line)
         }
         SmallNote("파일럿 옷장은 러닝 마일리지로 이용해요. 현금 결제와 유료 아이템 판매는 연결되어 있지 않아요.")
-        SmallNote("헤어와 옷은 성별 제한 없이 고를 수 있어요. 머리 장비·선글라스·워치·벨트·조끼를 함께 착용할 수 있어요.")
+        SmallNote("아이템 원화를 순서대로 연결하고 있어요. 준비된 아이템부터 다시 꾸밀 수 있어요.")
         }
         }
     })

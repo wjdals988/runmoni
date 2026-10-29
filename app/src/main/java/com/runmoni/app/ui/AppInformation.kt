@@ -98,6 +98,18 @@ fun rememberAppUpdates(): AppUpdateController {
 }
 
 @Composable
+internal fun AppVersionShortcut(updates: AppUpdateUiState, onClick: () -> Unit) {
+    TextButton(onClick = onClick, modifier = Modifier.heightIn(min = 48.dp).testTag("top_app_version")) {
+        BadgedBox(badge = {
+            if (updates.updateAvailable) Badge(
+                Modifier.testTag("top_app_version_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" },
+                containerColor = MaterialTheme.colorScheme.error,
+            )
+        }) { Text("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelLarge) }
+    }
+}
+
+@Composable
 internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag: String = "app_version") {
         Row(Modifier.fillMaxWidth().clickable(onClick = onClick).testTag(tag).heightIn(min = 64.dp).padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
             BadgedBox(badge = {

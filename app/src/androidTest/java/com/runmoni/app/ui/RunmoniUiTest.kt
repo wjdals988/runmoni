@@ -26,6 +26,25 @@ import org.junit.Test
 class RunmoniUiTest {
     @get:Rule val compose = createComposeRule()
 
+    @Test fun unavailableCommunityIsNotReportedAsAnEmptyServerResult() {
+        val state = mutableStateOf(AppState())
+        compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
+        compose.onNodeWithTag("nav_explore").performClick()
+        compose.onNodeWithText("초대 파일럿 연결이 필요해요").assertExists()
+        compose.onNodeWithText("표시할 러닝 파티가 없어요").assertDoesNotExist()
+        compose.onNodeWithTag("explore_layer_1").performClick()
+        compose.onNodeWithText("아직 만날 크루가 없어요").assertDoesNotExist()
+
+        // Both connectivity and authentication are prerequisites; health alone
+        // must not make an unavailable collection appear successfully empty.
+        compose.runOnIdle { state.value = state.value.copy(serverConnected = true) }
+        compose.onNodeWithText("아직 만날 크루가 없어요").assertDoesNotExist()
+        compose.runOnIdle { state.value = state.value.copy(signedIn = true) }
+        compose.onNodeWithText("아직 만날 크루가 없어요").assertExists()
+        compose.onNodeWithTag("explore_layer_0").performClick()
+        compose.onNodeWithText("표시할 러닝 파티가 없어요").assertExists()
+    }
+
     @Test fun fiveTabsOpenTheirActualScreens() {
         val state = mutableStateOf(AppState())
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }

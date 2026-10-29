@@ -1,0 +1,41 @@
+{
+  "sourceRevision": "e7bec3e37c7e6acb7d3d16cd08499ed987b6bffe",
+  "artifact": {
+    "version": "0.1.6-dev",
+    "versionCode": 7,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.1.6-dev-unsigned.apk",
+    "sizeBytes": 218120150,
+    "sha256": "db47d0f8b7899caef51031c1cdb31852fd34a91e99dff5abfed5bbde0e78b5e3",
+    "signed": false,
+    "sourceRevision": "e7bec3e37c7e6acb7d3d16cd08499ed987b6bffe",
+    "sourceDirty": false,
+    "productionUpdateCompatible": false
+  },
+  "unitTests": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "releaseLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 27
+  },
+  "approvedAvatarSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "embeddedSourceMatches": true,
+  "unsignedSignatureVerificationRejected": true,
+  "missingRetainedKeyStoppedBeforeBuild": true,
+  "offlinePublisherAndReleaseTests": 32,
+  "workflowActionlint": "1.7.12 passed",
+  "actualGithubRepositoryGetStatus": 200,
+  "githubEnvironmentCreateStatus": 403,
+  "githubSecretListStatus": 403,
+  "githubWorkflowExecuted": false,
+  "signedReleaseVerified": false,
+  "releaseCandidateInstalled": false,
+  "newReleaseUploaded": false,
+  "publicUpdateFeedChanged": false,
+  "dashboardDownloadChanged": false
+}

@@ -1,0 +1,11 @@
+{
+  "surface":"HOST Java pixel engine; NOT Android capture",
+  "paletteCombinationsPassed":216,
+  "maskedPixels":[23007,7805,3212],
+  "outsideMaskChanges":0,
+  "referenceFramesComparedExactly":8,
+  "gifSize":[512,384],
+  "gifFrames":8,
+  "humanApproved":false,
+  "androidValidated":false
+}

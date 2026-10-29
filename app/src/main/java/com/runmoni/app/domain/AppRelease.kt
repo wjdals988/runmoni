@@ -28,7 +28,7 @@ data class AppRelease(
 
     companion object {
         const val REPOSITORY = "https://github.com/wjdals988/runmoni"
-        const val RELEASE_CERTIFICATE = "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830"
+        const val RELEASE_CERTIFICATE = "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
         const val MAX_APK_BYTES = 512L * 1024 * 1024
     }
 }
@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.1.6-dev", "2026-10-27", "개발 중 · 미게시", listOf(
+        "홈·나·옷장의 기본 미니미를 승인된 전신 원화로 복구했어요.",
+        "상단의 설치 버전과 알림 점을 누르면 새 버전 확인과 APK 다운로드로 이동해요.",
+        "연결되지 않은 모임을 정상 조회한 빈 결과처럼 표시하던 문제를 고쳤어요.",
+        "꾸미기 아이템은 원화를 준비 중이에요. 기존 보유 내역과 선택은 보관돼요.",
+    )),
     AppVersionEntry("0.1.5-dev", "2026-10-25", "개발 프리뷰", listOf(
         "미니미를 원화 부품으로 구성해 얼굴과 체형을 유지하며 꾸밀 수 있게 바꿨어요.",
         "양팔과 다리가 함께 움직이는 달리기와 특수 세트 표현을 개선했어요.",

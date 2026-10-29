@@ -1,0 +1,181 @@
+{
+  "schema": 1,
+  "status": "unapproved-motion-review",
+  "frames": 8,
+  "frameMillis": 90,
+  "headLockMode": "original upper frame region plus connected source face/neck and contour",
+  "noBodyPartRotation": true,
+  "framesChecked": [
+    {
+      "row": 0,
+      "frame": 0,
+      "identityLockedPixels": 47757,
+      "garmentPixels": {
+        "1": 2355,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 1,
+      "identityLockedPixels": 47652,
+      "garmentPixels": {
+        "1": 1308,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 2,
+      "identityLockedPixels": 47607,
+      "garmentPixels": {
+        "1": 1797,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 3,
+      "identityLockedPixels": 47800,
+      "garmentPixels": {
+        "1": 2469,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 4,
+      "identityLockedPixels": 47800,
+      "garmentPixels": {
+        "1": 2357,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 5,
+      "identityLockedPixels": 46933,
+      "garmentPixels": {
+        "1": 1906,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 6,
+      "identityLockedPixels": 48051,
+      "garmentPixels": {
+        "1": 1849,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 0,
+      "frame": 7,
+      "identityLockedPixels": 47771,
+      "garmentPixels": {
+        "1": 2370,
+        "2": 0,
+        "3": 0
+      }
+    },
+    {
+      "row": 1,
+      "frame": 0,
+      "identityLockedPixels": 43247,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1222,
+        "3": 335
+      }
+    },
+    {
+      "row": 1,
+      "frame": 1,
+      "identityLockedPixels": 43135,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1147,
+        "3": 59
+      }
+    },
+    {
+      "row": 1,
+      "frame": 2,
+      "identityLockedPixels": 42840,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1143,
+        "3": 268
+      }
+    },
+    {
+      "row": 1,
+      "frame": 3,
+      "identityLockedPixels": 43177,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1159,
+        "3": 310
+      }
+    },
+    {
+      "row": 1,
+      "frame": 4,
+      "identityLockedPixels": 43224,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1169,
+        "3": 271
+      }
+    },
+    {
+      "row": 1,
+      "frame": 5,
+      "identityLockedPixels": 43001,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1198,
+        "3": 114
+      }
+    },
+    {
+      "row": 1,
+      "frame": 6,
+      "identityLockedPixels": 43208,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1195,
+        "3": 272
+      }
+    },
+    {
+      "row": 1,
+      "frame": 7,
+      "identityLockedPixels": 43158,
+      "garmentPixels": {
+        "1": 0,
+        "2": 1147,
+        "3": 306
+      }
+    }
+  ],
+  "assets": {
+    "approved-running.png": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+    "swimwear-motion-generated.png": "bfaa139f349ae8daaacc308c6bb67aeed2dfe738a42ce0755474ac9305f3b074",
+    "motion-identity-mask.png": "3a60071621909ec26ac8700684d5563aafbc2c444e530a444d9c991d571e5d6f",
+    "motion-fabric-mask.png": "ec850a338f89cdcb4eca17c06f10f34456b165fbf5be470f72f630533f7bbeec"
+  },
+  "limitations": [
+    "Source pixel locks are not an aesthetic or natural-motion approval",
+    "Shoe fabric is protected; entire shoe silhouette/sole equivalence is not proven",
+    "Not all 58 wardrobe items have frame layers"
+  ]
+}

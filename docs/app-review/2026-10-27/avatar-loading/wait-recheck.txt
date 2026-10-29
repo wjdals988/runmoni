@@ -1,0 +1,41 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.MiniMiLoadingTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.MiniMiLoadingTest:
+INSTRUMENTATION_STATUS: test=failedReadCanRetryWithoutCrashingOrShowingOldArtwork
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.MiniMiLoadingTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.MiniMiLoadingTest.failedReadCanRetryWithoutCrashingOrShowingOldArtwork(MiniMiLoadingTest.kt:72)
+
+INSTRUMENTATION_STATUS: stream=
+Error in failedReadCanRetryWithoutCrashingOrShowingOldArtwork(com.runmoni.app.ui.MiniMiLoadingTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.MiniMiLoadingTest.failedReadCanRetryWithoutCrashingOrShowingOldArtwork(MiniMiLoadingTest.kt:72)
+
+INSTRUMENTATION_STATUS: test=failedReadCanRetryWithoutCrashingOrShowingOldArtwork
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 60.293
+There was 1 failure:
+1) failedReadCanRetryWithoutCrashingOrShowingOldArtwork(com.runmoni.app.ui.MiniMiLoadingTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.MiniMiLoadingTest.failedReadCanRetryWithoutCrashingOrShowingOldArtwork(MiniMiLoadingTest.kt:72)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

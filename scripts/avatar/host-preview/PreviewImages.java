@@ -42,15 +42,20 @@ public final class PreviewImages {
     }
     /** GIF is a convenience preview; lossless PNGs remain the comparison evidence. */
     public static void gif(List<Bitmap> frames, Path path) throws IOException {
+        if (frames.isEmpty()) throw new IllegalArgumentException("GIF requires at least one frame");
+        int width = frames.get(0).getWidth(), height = frames.get(0).getHeight();
+        for (Bitmap frame : frames)
+            if (frame.getWidth() != width || frame.getHeight() != height)
+                throw new IllegalArgumentException("GIF frame dimensions differ");
         Files.createDirectories(path.getParent());
         ImageWriter writer = ImageIO.getImageWritersByFormatName("gif").next();
         try (ImageOutputStream output = ImageIO.createImageOutputStream(path.toFile())) {
             writer.setOutput(output); writer.prepareWriteSequence(null);
             for (int index = 0; index < frames.size(); index++) {
-                BufferedImage image = new BufferedImage(256, 384, BufferedImage.TYPE_INT_RGB);
+                BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
                 Graphics2D graphics = image.createGraphics();
                 try {
-                    graphics.setColor(new Color(0xf3eee5)); graphics.fillRect(0, 0, 256, 384);
+                    graphics.setColor(new Color(0xf3eee5)); graphics.fillRect(0, 0, width, height);
                     graphics.drawImage(frames.get(index).getImage(), 0, 0, null);
                 } finally { graphics.dispose(); }
                 IIOMetadata metadata = writer.getDefaultImageMetadata(new ImageTypeSpecifier(image), writer.getDefaultWriteParam());

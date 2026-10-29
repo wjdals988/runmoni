@@ -22,6 +22,10 @@ class AppReleaseTest {
         assertFalse(release.copy(certificateSha256 = "b".repeat(64)).isTrusted())
         assertFalse(release.copy(signed = false).isTrusted())
     }
+    @Test fun rejectsThePreviousCertificateAfterUserApprovedRotation() {
+        assertFalse(release.copy(certificateSha256 =
+            "2d7f724cd20b1ff2263eb34e8e02d5fec9db674488b10b813dd239838b975830").isTrusted())
+    }
     @Test fun rejectsMalformedVersionsNamesAndUnboundedSizes() {
         assertFalse(release.copy(version = "../x").isTrusted())
         assertFalse(release.copy(fileName = "other.apk").isTrusted())
