@@ -36,14 +36,40 @@ def clean_env():
                                  'JAVA_TOOL_OPTIONS', '_JAVA_OPTIONS', 'JDK_JAVA_OPTIONS')}
 
 
+def failure_categories(output):
+    """Return fixed labels only; never copy build text or credential values."""
+    patterns = {
+        'plugin_resolution': r'Plugin \[id:.*?was not found|plugin.*could not be resolved',
+        'dependency_resolution': r'Could not resolve|Could not download|Could not find [\w.]+:',
+        'tls_trust': r'PKIX|SSLHandshakeException|certificate_unknown|unable to find valid certification path',
+        'sdk_license': r'licenses? (?:have not been|not) accepted|LicenseNotAcceptedException',
+        'sdk_location': r'SDK location not found|Failed to find Platform SDK|failed to find target with hash string',
+        'memory_limit': r'OutOfMemoryError|Java heap space|unable to create native thread|daemon disappeared',
+        'initialization_script': r'Could not compile initialization script|Could not open.*init.*cache',
+        'http_403': r'status code 403|HTTP[^\r\n]*403',
+        'http_429': r'status code 429|HTTP[^\r\n]*429',
+        'connection_timeout': r'ConnectTimeoutException|Read timed out|connect timed out|Connection timed out',
+    }
+    categories = [label for label, pattern in patterns.items() if re.search(pattern, output, re.I | re.S)]
+    # Only fixed, public repository hostnames can appear in diagnostics.
+    for host in ('dl.google.com', 'repo.maven.apache.org', 'plugins.gradle.org',
+                 'repository.map.naver.com', 'jitpack.io'):
+        if host in output:
+            categories.append('repository:' + host)
+    return categories or ['unclassified']
+
+
 def checked(command, env):
     result = subprocess.run([str(c) for c in command], cwd=ROOT, env=env,
                             capture_output=True, text=True, timeout=1800)
     if result.returncode:
         # Gradle signing exceptions can contain configuration values.
-        tasks = re.findall(r'^> Task (:[A-Za-z0-9_:]+) FAILED$', result.stdout, re.M)
+        diagnostics = result.stdout + '\n' + result.stderr
+        tasks = re.findall(r'^> Task (:[A-Za-z0-9_:]+) FAILED$', diagnostics, re.M)
         detail = ' Failed tasks: ' + ', '.join(tasks) if tasks else ''
-        raise ReleaseError('Tool failed; raw signing/build diagnostics were omitted.' + detail)
+        categories = ', '.join(failure_categories(diagnostics))
+        raise ReleaseError('Tool failed; raw signing/build diagnostics were omitted.'
+                           + detail + ' Failure categories: ' + categories)
     return result.stdout
 
 

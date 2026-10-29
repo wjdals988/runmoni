@@ -21,6 +21,32 @@ SIGNATURE = 'Signer #1 certificate SHA-256 digest: ' + release.CERTIFICATE + '\n
 
 
 class ReleaseBoundaries(unittest.TestCase):
+    def test_failed_cold_build_reports_fixed_labels_without_raw_values(self):
+        secret = 'fixture-sensitive-password'
+        result = mock.Mock(returncode=1,
+                           stdout="Plugin [id: 'com.android.application'] was not found\n" + secret,
+                           stderr='Could not resolve dependency from https://dl.google.com/?token=' + secret
+                                  + '\nPKIX path building failed; received status code 403')
+        with mock.patch.object(release.subprocess, 'run', return_value=result):
+            with self.assertRaises(release.ReleaseError) as caught:
+                release.checked(['fixture-gradle'], {'RUNMONI_STORE_PASSWORD': secret})
+        message = str(caught.exception)
+        for expected in ('plugin_resolution', 'dependency_resolution', 'tls_trust', 'http_403',
+                         'repository:dl.google.com'):
+            self.assertIn(expected, message)
+        self.assertNotIn(secret, message)
+        self.assertNotIn('?token=', message)
+        self.assertNotIn('com.android.application', message)
+
+    def test_unknown_build_failures_do_not_copy_raw_output(self):
+        result = mock.Mock(returncode=1, stdout='unrecognized fixture secret', stderr='other secret')
+        with mock.patch.object(release.subprocess, 'run', return_value=result):
+            with self.assertRaises(release.ReleaseError) as caught:
+                release.checked(['fixture-tool'], {})
+        self.assertIn('unclassified', str(caught.exception))
+        self.assertNotIn('fixture secret', str(caught.exception))
+        self.assertNotIn('other secret', str(caught.exception))
+
     def test_release_requires_retained_certificate_and_non_debuggable_package(self):
         self.assertEqual(7, release.inspect_apk(BADGING, SIGNATURE)['versionCode'])
         for badging, signature in [
