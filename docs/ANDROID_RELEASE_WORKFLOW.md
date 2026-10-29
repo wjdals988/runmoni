@@ -39,6 +39,8 @@ Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. Git
 
 이 모드도 실제 GitHub 자격과 네트워크를 사용한다. 원격 main/tag 대상·기존 draft 제목/본문/자산집합 검사와 APK·해시·metadata3개의 최신 서버 size/digest/URL 검증은 공개 모드와 공유한다. 그 뒤 `draft: true`를 확인하고 공개 PATCH **0회**로 종료한다. 이미 공개된 release는 초안으로 바꾸거나 삭제하지 않고 고정 오류로 중단한다. 동일 초안 재실행은 일치 자산을 재사용하며, 서버 재조회에서 불일치가 있으면 성공 receipt를 남기지 않는다.
 
+GitHub의 미공개 초안은 tag 조회가404여도 인증된 release 목록에 존재할 수 있다. 목록은100개씩 최대10페이지와 기존1MiB 응답 한도 안에서 검사하며, 중복/불완전한 조회는 생성 전에 중단한다. 초안 자산은 검증된 해당 release의 `untagged-…` 임시 주소만 허용하고, 공개 뒤에는 고정 v버전 주소를 다시 확인한다. 임시 주소를 공개 다운로드로 안내하지 않는다.
+
 초안 결과는 `work/staged-release-<version>.json`에 별도로 기록한다. `mode: stage-draft`, `draft: true`, `publicReleaseConfirmed: false`와 인증이 필요한 API 주소를 담고 공개 다운로드용 `url` 필드는 제공하지 않는다. 초안의 자산 URL은 공개 다운로드 확인 증거가 아니며 업데이트 피드·대시보드는 기존 공개값을 유지한다. 이 모드는 실기기 검증 요건을 우회하는 옵션이 아니다.
 
 실기기 설치/업데이트·실행·로그인·변경 기능 smoke 등 공개 게이트까지 확인한 후에만 다음 명령으로 명시적으로 공개한다.
@@ -49,7 +51,7 @@ Python은 기존 번들 런타임과 표준 라이브러리만 사용한다. Git
 
 주입된 `GH_TOKEN`/`GITHUB_TOKEN`을 우선 재사용하고, 없으면 GCM의 기존 GitHub 자격을 비대화형으로 메모리에 받으며 토큰을 출력·파일 저장·프로세스 인수에 넣지 않는다. curl에는 stdin 설정으로만 전달한다. 첫 `-q`로 사용자 curlrc를 읽지 않고 CR/LF/따옴표/역슬래시가 있는 자격은 거부한다. 자식 프로세스의 Git/GCM trace·TLS key-log 환경변수를 제외하고 사용자 전역 설정은 변경하지 않는다. 오류 stderr/HTTP body 원문도 출력하지 않는다. 기존 인증이 없으면 자동 로그인창을 띄우지 않고 중단한다.
 
-메타데이터용 `CurlApiAdapter`는 고정 저장소의 정해진 GET/POST/PATCH 경로만 허용한다. 각 요청은 native curl1개·HTTP1.1·연결30초·전체120초이며 redirect를 따라가지 않는다. curl의 크기 제한과 Python의 제한 읽기로 API 응답 본문을 최대1MiB로 제한하고 크기 초과 시 자식 curl을 종료한다. 결과는 HTTP status와 JSON object이며 API 오류는 status만 보고한다. 요청 JSON은 `ensure_ascii=True`로 직렬화하고 그 문자열을 다시 JSON의 따옴표/역슬래시 규칙으로 감싸 curl stdin config의 `data-binary`에 넣는다. 한국어·emoji·실제 개행/CR·quote·backslash와 문자 그대로의 `\n`을 JSON 의미대로 보존하며, 본문도 파일/argv로 보내지 않는다.
+메타데이터용 `CurlApiAdapter`는 고정 저장소의 정해진 GET/POST/PATCH 경로만 허용한다. 각 요청은 native curl1개·HTTP1.1·연결30초·전체120초이며 redirect를 따라가지 않는다. curl의 크기 제한과 Python의 제한 읽기로 API 응답 본문을 최대1MiB로 제한하고 크기 초과 시 자식 curl을 종료한다. 결과는 HTTP status와 JSON object이며 고정된 release 목록 경로만 최대100개 object의 배열을 허용한다. API 오류는 status만 보고한다. 요청 JSON은 `ensure_ascii=True`로 직렬화하고 그 문자열을 다시 JSON의 따옴표/역슬래시 규칙으로 감싸 curl stdin config의 `data-binary`에 넣는다. 한국어·emoji·실제 개행/CR·quote·backslash와 문자 그대로의 `\n`을 JSON 의미대로 보존하며, 본문도 파일/argv로 보내지 않는다.
 
 메타데이터 요청마다 curl 프로세스가 끝나므로 유휴 API 소켓이 자산 업로드와 겹치지 않으며 한 번에1request·한 파일씩 처리한다. 업로드 기본 제한256KiB/s(약2.10Mbit/s), 200MiB의 이론적 최소시간은800초다. 이것이 실제 속도나 PC 전체 지연 해결을 보장하지 않는다. 업로드 timeout은 파일 크기와 선택 속도로 계산하며 자동 반복 재시도는 없다.
 

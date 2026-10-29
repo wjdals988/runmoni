@@ -1,5 +1,11 @@
 # 변경 이력
 
+## 2026-10-29 실제 GitHub 초안의 임시 자산 URL 지원
+
+- 기존0.1.5 초안을 읽기 전용으로 확인해 GitHub가 미공개 자산에 releases/download/untagged-… 주소를 부여함을 확인. 공개 v버전 URL만 가정한 검사로 새 APK 대용량 업로드 후 실패하지 않도록 run40857270786을 업로드 전 선제 취소. 기존 초안/자산/출처 변경0.
+- 고정 저장소의 검증된 초안 html_url에서 얻은 정확한 임시 태그만 허용하고, 크기/SHA256/state/파일명 검사는 유지. 다른 초안/저장소/공개본의 임시 URL은 거부한다. 공개 전환 뒤에는 canonical v버전 URL을 다시 검증. 실제 형태를 반영한 초안·공개 전환·URL 오염 회귀검사를 추가.
+- 실제0.1.5 초안이 있어도 tag 조회는404임을 확인. 재시도/공개 전환 때 중복 초안을 만들지 않도록 인증된 release 목록을 제한된 페이지/응답 크기로 검사해 기존 초안을 찾는다. 중복 후보나 불완전한 목록 검사는 생성 전에 차단. fixture도 미공개 tag404·임시 URL·공개 뒤 canonical URL로 실제 API 형태에 맞춤.
+
 ## 2026-10-29 GitHub 서명 빌드 성공·업로드 사전검사 수정
 
 - run40855991283에서 SDK 경로 수정 뒤 release 빌드/JVM/lint와 실제 apksigner·패키지·non-debuggable·내장 sourceRevision 검사 성공. APK0.1.6/code7,218201869bytes, SHA2561a7164691a0e9dfe858ccf85c5da43dd4ce8fc28cb972ad9f4d8df53dac8d0ce, sourceRevision de49bb74aa85a35ecf5d867148d542e15ded0de2. 실제 Android/실기기 실행으로 합산하지 않음.
