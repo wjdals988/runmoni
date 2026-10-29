@@ -1,5 +1,13 @@
 # 변경 이력
 
+## 2026-10-29 동일 키 CI·0.1.6 비공개 초안 업로드 완료
+
+- 최종 main9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750의 run40858081567 전체 성공. cold build6분30초·81작업(77실행/4캐시), 실제 JVM XML31/31·실패/오류/skip0, lint오류0/경고57(버전 알림30개). 이전 호스트 후보의27경고를 합산하지 않음. APK non-debuggable/승인 인증서/패키지/내장 revision 검사와 runner 키 삭제 단계 성공.
+- 실제0.1.6-dev/code7·218201869bytes·SHA256 de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf. [초안427731932](https://github.com/wjdals988/runmoni/releases/tag/untagged-f1b8544460cf33bf1a99)에 APK/metadata/SHA256SUMS3개 업로드 후 별도 최신 API 조회로 digest·size·초안 URL 확인. 작은 sidecar 본문 해시/출처/체크섬도 일치. APK 재다운로드0회, 검증 artifact11993bytes만 받음.
+- [실제 보고서와 경계](docs/RELEASE_REVIEW_20261029.md), XML5개/lint XML/build log·sidecar·기계 판독 근거를 보존. 이 서명 APK의 실제 Android/실기기/Google 로그인은 미검증이며 공개/피드/대시보드 다운로드 교체는 별도 확인 뒤 진행. 소유자용 APK 링크와 실제 휴대폰 확인 요청을 전달.
+- 앱 PR2와 CI 후속 PR3~7 main 병합. 대시보드 PR9의 최신 설명/변경 이력은 Node23개와 서버 테스트/lint/build 통과 후 f0fe80a에 병합. Vercel 운영 배포 success와 실제 페이지의 최신 설명/기존0.1.1 APK 링크/미게시0.1.6 링크 없음까지 확인. 다른 프로젝트도 보존. 과거0.1.5 source75c39ca…, 이전639b1f9/de49bb7 후보 출처·해시는 변경하지 않음.
+- 초안 안내의 이전 호스트 후보 문구를 이번 실제 CI 기준으로 정리하고 링크를 출처 commit의 절대 주소로 수정. APK/sidecar/출처/draft 상태는 변경하지 않았으며 변경 전후 자산ID·크기·digest를 대조.
+
 ## 2026-10-29 실제 GitHub 초안의 임시 자산 URL 지원
 
 - 기존0.1.5 초안을 읽기 전용으로 확인해 GitHub가 미공개 자산에 releases/download/untagged-… 주소를 부여함을 확인. 공개 v버전 URL만 가정한 검사로 새 APK 대용량 업로드 후 실패하지 않도록 run40857270786을 업로드 전 선제 취소. 기존 초안/자산/출처 변경0.
