@@ -14,6 +14,8 @@ import com.runmoni.app.MainActivity
 import com.runmoni.app.R
 import com.runmoni.app.RunmoniApplication
 import com.runmoni.app.domain.RunPhase
+import com.runmoni.app.domain.PauseReason
+import com.runmoni.app.domain.AutoPauseController
 import com.runmoni.app.data.PilotClient
 import com.runmoni.app.data.SecureSession
 import com.runmoni.app.BuildConfig
@@ -30,8 +32,7 @@ class RunTrackingService : Service(), LocationListener {
     private var presenceJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var timerKilometer = 0
-    private var stationarySince = 0L
-    private var autoPaused = false
+    private val autoPause = AutoPauseController()
     private val manager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -50,6 +51,7 @@ class RunTrackingService : Service(), LocationListener {
                 startForeground(1001, notification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
                 scope.launch {
                     runCatching { repository.begin(action == RECOVER) }.onSuccess {
+                        autoPause.reset()
                         timerKilometer = (repository.active.value.distanceMeters / 1000).toInt()
                         if (wakeLock?.isHeld == true) wakeLock?.release()
                         wakeLock = (getSystemService(POWER_SERVICE) as PowerManager).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "runmoni:recording").apply { acquire(2 * 60 * 60 * 1000L) }
@@ -57,8 +59,8 @@ class RunTrackingService : Service(), LocationListener {
                     }.onFailure { repository.gpsStatus(it.message ?: "기록 시작 실패"); stopSelf() }
                 }
             }
-            PAUSE -> scope.launch { autoPaused = false; repository.pause(); updateNotification() }
-            RESUME -> scope.launch { autoPaused = false; stationarySince = 0; repository.resume(); updateNotification() }
+            PAUSE -> scope.launch { autoPause.reset(); repository.pause(); updateNotification() }
+            RESUME -> scope.launch { autoPause.reset(); repository.resume(); updateNotification() }
             FINISH -> scope.launch {
                 preferences.edit().putBoolean("publicLocation", false).apply()
                 presenceJob?.cancel()
@@ -74,7 +76,10 @@ class RunTrackingService : Service(), LocationListener {
         ticker?.cancel()
         ticker = scope.launch {
             while (isActive) {
-                delay(1000); repository.tick(); updateNotification()
+                delay(1000)
+                val run = repository.active.value
+                applyAutoPause(autoPause.onTick(SystemClock.elapsedRealtime(), preferences.getBoolean("autoPause", false), run.phase, run.pauseReason))
+                repository.tick(); updateNotification()
                 if (wakeLock?.isHeld != true) wakeLock?.acquire(2 * 60 * 60 * 1000L)
                 val state = repository.active.value
                 val km = (state.distanceMeters / 1000).toInt()
@@ -116,33 +121,51 @@ class RunTrackingService : Service(), LocationListener {
     @Suppress("MissingPermission")
     private fun startLocation() {
         try {
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 0f, this, Looper.getMainLooper())
-            else repository.gpsStatus("기기의 GPS를 켜 주세요.")
-            if (manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000L, 0f, this, Looper.getMainLooper())
+            // Subscribe even while disabled so enabling GPS later delivers fixes without restarting the run.
+            if (LocationManager.GPS_PROVIDER in manager.allProviders) {
+                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 0f, this, Looper.getMainLooper())
+                if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) repository.gpsStatus("기기의 GPS를 켜 주세요.")
+            } else repository.gpsStatus("이 기기에서 GPS를 사용할 수 없어요.")
+            if (LocationManager.NETWORK_PROVIDER in manager.allProviders) manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000L, 0f, this, Looper.getMainLooper())
         } catch (_: SecurityException) { repository.gpsStatus("위치 권한이 해제되었습니다.") }
     }
     override fun onLocationChanged(location: Location) {
         scope.launch {
-            if (preferences.getBoolean("autoPause", false) && location.hasSpeed() && location.accuracy <= 20) {
-                if (location.speed < 0.5f && repository.active.value.phase == RunPhase.RUNNING) {
-                    if (stationarySince == 0L) stationarySince = SystemClock.elapsedRealtime()
-                    if (SystemClock.elapsedRealtime() - stationarySince >= 10_000) { autoPaused = true; repository.pause() }
-                } else if (location.speed >= 1.0f) {
-                    stationarySince = 0
-                    if (autoPaused) { autoPaused = false; repository.resume() }
-                }
-            }
+            val now = SystemClock.elapsedRealtime()
+            val run = repository.active.value
+            val fresh = now - location.elapsedRealtimeNanos / 1_000_000 in 0..5_000 && location.time >= run.startedAtMillis
+            applyAutoPause(autoPause.onLocation(now, preferences.getBoolean("autoPause", false), run.phase, run.pauseReason,
+                location.speed.takeIf { fresh && location.hasSpeed() }, location.accuracy.takeIf { fresh && location.hasAccuracy() }))
             repository.location(location)
         }
     }
-    override fun onProviderDisabled(provider: String) { if (provider == LocationManager.GPS_PROVIDER) repository.gpsStatus("GPS 꺼짐 · 기존 기록은 보존됩니다.") }
-    override fun onProviderEnabled(provider: String) { if (provider == LocationManager.GPS_PROVIDER) startLocation() }
+    private suspend fun applyAutoPause(decision: AutoPauseController.Decision) {
+        when (decision) {
+            AutoPauseController.Decision.PAUSE -> repository.pause(PauseReason.AUTOMATIC)
+            AutoPauseController.Decision.RESUME -> repository.resume()
+            AutoPauseController.Decision.NONE -> return
+        }
+        updateNotification()
+    }
+    override fun onProviderDisabled(provider: String) {
+        if (provider == LocationManager.GPS_PROVIDER) {
+            autoPause.reset()
+            scope.launch { repository.interruptLocation("GPS 꺼짐 · 기존 기록은 보존됩니다.") }
+        }
+    }
+    override fun onProviderEnabled(provider: String) {
+        if (provider == LocationManager.GPS_PROVIDER) {
+            autoPause.reset()
+            scope.launch { repository.interruptLocation("GPS 신호 기다리는 중") }
+        }
+    }
     private fun notification(): Notification {
         val state = repository.active.value
         val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val paused = state.phase == RunPhase.PAUSED
         val pause = PendingIntent.getService(this, 1, Intent(this, javaClass).setAction(if (paused) RESUME else PAUSE), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_stat_runmoni).setContentTitle(if (paused) "런모니 · 일시정지" else "런모니 · 러닝 기록 중")
+        val title = if (!paused) "런모니 · 러닝 기록 중" else if (state.pauseReason == PauseReason.AUTOMATIC) "런모니 · 자동 일시정지" else "런모니 · 일시정지"
+        return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_stat_runmoni).setContentTitle(title)
             .setContentText(String.format(Locale.KOREA, "%.2f km · %d분", state.distanceMeters / 1000, state.activeDurationMillis / 60_000))
             .setContentIntent(open).setOngoing(true).addAction(0, if (paused) "재개" else "일시정지", pause).build()
     }

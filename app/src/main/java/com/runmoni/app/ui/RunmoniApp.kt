@@ -219,15 +219,23 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
     var finishConfirmation by rememberSaveable { mutableStateOf(false) }
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
+    val permissionMissing = state.locationAccess.precisePermissionGranted == false
+    val gpsDisabled = state.locationAccess.gpsEnabled == false
+    val accuracy = run.accuracyMeters?.takeIf { !permissionMissing && !gpsDisabled && it.isFinite() && it >= 0f }
+    val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f)) {
             ScreenContent {
-                Text(if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
+                Text(if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
                     style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    StatusPill(run.gpsStatus, if (run.accuracyMeters != null && run.accuracyMeters <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
-                    run.accuracyMeters?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
+                    StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
+                    accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                 }
+                if (permissionMissing || gpsDisabled) LocationReadinessCard(permissionMissing, actions)
+                if (run.phase == RunPhase.PAUSED) SmallNote(if (run.pauseReason == PauseReason.AUTOMATIC)
+                    "멈춰 있어 러닝 시간을 잠시 멈췄어요. 움직임이 확인되면 자동으로 이어져요. 지금 시작하려면 ‘계속 달리기’를 누르세요."
+                    else "직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요.")
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
                 if (run.phase == RunPhase.IDLE) {
                     MapPane(run.points, modifier = Modifier.fillMaxWidth().height(264.dp).clip(RoundedCornerShape(20.dp)))
@@ -248,7 +256,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
                 }
                 if (optionsExpanded) {
-                    ToggleRow("자동 일시정지", "멈춰 있을 때 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
+                    ToggleRow("자동 일시정지", "정확한 GPS로 10초 동안 멈춤이 확인되면 시간을 멈추고, 움직이면 이어가요", state.autoPause, actions::setAutoPause)
                     ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
                 }
                 val joined = state.parties.firstOrNull { it.joined && !it.cancelled }
@@ -273,6 +281,21 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
             }
         }
     if (finishConfirmation) AlertDialog(onDismissRequest = { finishConfirmation = false }, title = { Text("오늘의 러닝을 마칠까요?") }, text = { DialogMessage("${distance(run.distanceMeters)} km · ${duration(run.activeDurationMillis)}\n저장한 기록은 ‘나’에서 다시 볼 수 있어요.") }, confirmButton = { TextButton(onClick = { finishConfirmation = false; actions.finishRun() }, modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } }, dismissButton = { TextButton(onClick = { finishConfirmation = false }) { Text("계속 뛰기") } })
+}
+
+@Composable
+private fun LocationReadinessCard(permissionMissing: Boolean, actions: AppActions) {
+    Surface(color = RunmoniColors.Mint, shape = RoundedCornerShape(20.dp)) {
+        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(if (permissionMissing) "정확한 위치 권한이 필요해요" else "GPS가 꺼져 있어요", style = MaterialTheme.typography.titleMedium)
+            Text(if (permissionMissing) "러닝 시작 시 위치 권한을 허용해 주세요. 권한 요청이 나오지 않으면 앱 설정에서 ‘정확한 위치’를 켜 주세요."
+                else "GPS를 켜면 새 위치부터 경로를 기록해요. 신호가 없는 구간의 거리는 추정해 더하지 않아요.", style = MaterialTheme.typography.bodyMedium)
+            OutlinedButton(onClick = if (permissionMissing) actions::openAppPermissionSettings else actions::openLocationSettings,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag(if (permissionMissing) "app_permission_settings" else "location_settings")) {
+                Text(if (permissionMissing) "앱 권한 설정" else "위치 설정 열기")
+            }
+        }
+    }
 }
 
 @Composable

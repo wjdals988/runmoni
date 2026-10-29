@@ -1,0 +1,20 @@
+{
+  "physicalDevice": false,
+  "automationNotes": [
+    "System UI isn't responding; chose Wait",
+    "UIAutomator returned no current XML; retried",
+    "UIAutomator returned no current XML; retried",
+    "UIAutomator returned no current XML; retried"
+  ],
+  "locationSettingsActivity": "mResumedActivity: ActivityRecord{2e51463 u0 com.android.settings/.Settings$LocationSettingsActivity t176}",
+  "gpsCardGoneAfterReturn": true,
+  "appPermissionSettingsActivity": "mResumedActivity: ActivityRecord{54d0e29 u0 com.android.settings/.applications.InstalledAppDetails t176}",
+  "appPermissionSettingsIntent": "android.settings.APPLICATION_DETAILS_SETTINGS; package:com.runmoni.app",
+  "complete": true,
+  "restoredLocationMode": "3",
+  "restoredAnimations": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "1.0",
+    "animator_duration_scale": "1.0"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "version": "0.1.7-dev",
+  "versionCode": 8,
+  "build": "debug; local test key; not published",
+  "jvm": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Warning": 33
+  },
+  "android": {
+    "tests": 7,
+    "passed": 7,
+    "failures": 0,
+    "seconds": 138.643,
+    "device": "Runmoni_Cloud_29; API29 AOSP; TCG; no KVM",
+    "fixtureViewportCases": 9
+  },
+  "physicalDeviceTests": 0,
+  "googleSignInVerified": false,
+  "debugApkSha256": "2920f76ee7deeec95e7e4745f5b8f1f52f3230cafdc918a3bdd375fabcc5fd8e",
+  "manualSystemSettings": {
+    "physicalDevice": false,
+    "automationNotes": [
+      "System UI isn't responding; chose Wait",
+      "UIAutomator returned no current XML; retried",
+      "UIAutomator returned no current XML; retried",
+      "UIAutomator returned no current XML; retried"
+    ],
+    "locationSettingsActivity": "mResumedActivity: ActivityRecord{2e51463 u0 com.android.settings/.Settings$LocationSettingsActivity t176}",
+    "gpsCardGoneAfterReturn": true,
+    "appPermissionSettingsActivity": "mResumedActivity: ActivityRecord{54d0e29 u0 com.android.settings/.applications.InstalledAppDetails t176}",
+    "appPermissionSettingsIntent": "android.settings.APPLICATION_DETAILS_SETTINGS; package:com.runmoni.app",
+    "complete": true,
+    "restoredLocationMode": "3",
+    "restoredAnimations": {
+      "window_animation_scale": "1.0",
+      "transition_animation_scale": "1.0",
+      "animator_duration_scale": "1.0"
+    }
+  },
+  "checkoutHeadAtBuild": "9c3df09e5f9449c1013d13f68e4bed3c9b89017b",
+  "uncommittedChangesAtBuild": true,
+  "published": false,
+  "emulatorStopped": true,
+  "emulatorProcessAfterStop": "PID61224: Zs; terminated, awaiting reaping"
+}

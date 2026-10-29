@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.runmoni.app.domain.AutoPauseControllerTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-29T16:22:26.117Z" hostname="daa3d80407f1" time="0.004">
+  <properties/>
+  <testcase name="onlyAutomaticPauseResumesOnReliableMovement" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.001"/>
+  <testcase name="clockRollbackStartsFresh" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.001"/>
+  <testcase name="unreliableOrMissingSpeedAndAccuracyRestartObservation" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <testcase name="disablingSettingReleasesOnlyAutomaticPauseWithoutGps" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.001"/>
+  <testcase name="ticksDoNotInterruptRecentStationarySamples" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <testcase name="signalGapCannotCountAsStandingStill" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <testcase name="pausesAfterTenSecondsOfContinuousStationaryFixes" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <testcase name="manualResetDoesNotReuseEarlierStationaryTime" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <testcase name="slowMovementResetsTheStopInterval" classname="com.runmoni.app.domain.AutoPauseControllerTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

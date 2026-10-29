@@ -14,6 +14,7 @@ import androidx.test.uiautomator.UiDevice
 import com.runmoni.app.MainActivity
 import com.runmoni.app.RunmoniApplication
 import com.runmoni.app.domain.RunPhase
+import com.runmoni.app.domain.PauseReason
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -33,13 +34,16 @@ class RecorderServiceTest {
         var runId = ""
         try {
             manager.addTestProvider(LocationManager.GPS_PROVIDER, false, true, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_FINE)
-            manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true)
+            manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false)
             manager.addTestProvider(LocationManager.NETWORK_PROVIDER, false, true, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
             manager.setTestProviderEnabled(LocationManager.NETWORK_PROVIDER, false)
             scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START) }
             until { app.runs.active.value.phase == RunPhase.RUNNING }
             runId = app.runs.active.value.id
             Thread.sleep(500) // begin publishes state just before the service registers listeners.
+            assertNull("disabled provider must not show old accuracy", app.runs.active.value.accuracyMeters)
+            manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true)
+            Thread.sleep(500)
             manager.setTestProviderLocation(LocationManager.GPS_PROVIDER, Location(LocationManager.GPS_PROVIDER).apply {
                 latitude = 37.5665; longitude = 126.978; accuracy = 5f
                 time = app.runs.active.value.startedAtMillis - 10000; elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
@@ -60,14 +64,25 @@ class RecorderServiceTest {
             val beforePause = app.runs.active.value.distanceMeters
             assertTrue("accepted route distance", beforePause in 14.0..17.0)
             assertTrue("foreground service advances active time", app.runs.active.value.activeDurationMillis >= 7000)
+            manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false)
+            until { app.runs.active.value.accuracyMeters == null }
+            Thread.sleep(1100)
+            manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true)
+            until { app.runs.active.value.gpsStatus == "GPS 신호 기다리는 중" }
+            emit(126.978225) // Plausible 4.4m gap: a speed/jump filter alone would accept it.
+            until { app.runs.active.value.points.size >= 9 }
+            assertEquals("GPS-off gap must not bridge distance", beforePause, app.runs.active.value.distanceMeters, .05)
+            assertTrue(app.runs.active.value.points[8].segment > app.runs.active.value.points[7].segment)
             RunTrackingService.command(app, RunTrackingService.PAUSE)
             until { app.runs.active.value.phase == RunPhase.PAUSED }
+            assertEquals(PauseReason.MANUAL, app.runs.active.value.pauseReason)
             val pausedCount = app.runs.active.value.points.size
             Thread.sleep(1100); emit(126.979)
             Thread.sleep(300)
             assertEquals(pausedCount, app.runs.active.value.points.size)
             RunTrackingService.command(app, RunTrackingService.RESUME)
             until { app.runs.active.value.phase == RunPhase.RUNNING }
+            assertNull(app.runs.active.value.pauseReason)
             Thread.sleep(1100); emit(126.979)
             until { app.runs.active.value.points.size > pausedCount }
             assertEquals(beforePause, app.runs.active.value.distanceMeters, .05)
@@ -76,7 +91,7 @@ class RecorderServiceTest {
             RunTrackingService.command(app, RunTrackingService.FINISH)
             until { app.runs.active.value.phase == RunPhase.IDLE }
             val record = runBlocking { app.runs.record(runId) }!!
-            assertEquals(10, record.points.size)
+            assertEquals(11, record.points.size)
             assertTrue(record.points.last().segment > record.points.first().segment)
             assertTrue(record.finishedAtMillis >= record.startedAtMillis)
             assertEquals(false, app.getSharedPreferences("runmoni", Context.MODE_PRIVATE).getBoolean("publicLocation", true))

@@ -42,7 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
-    AppVersionEntry("0.1.6-dev", "2026-10-27", "개발 중 · 미게시", listOf(
+    AppVersionEntry("0.1.7-dev", "2026-10-30", "개발 중 · 미게시", listOf(
+        "연속해서 멈춘 시간으로 자동 일시정지를 판단하고, 직접 멈춘 러닝은 자동으로 재개하지 않아요.",
+        "GPS를 나중에 켜도 기록을 다시 시작하지 않고 위치를 받아요.",
+        "러닝 화면에서 위치 설정·앱 권한 설정으로 이동하고 일시정지 이유를 확인해요.",
+    )),
+    AppVersionEntry("0.1.6-dev", "2026-10-29", "공개 테스트 프리뷰 · 실기기 검증 전", listOf(
         "홈·나·옷장의 기본 미니미를 승인된 전신 원화로 복구했어요.",
         "상단의 설치 버전과 알림 점을 누르면 새 버전 확인과 APK 다운로드로 이동해요.",
         "연결되지 않은 모임을 정상 조회한 빈 결과처럼 표시하던 문제를 고쳤어요.",

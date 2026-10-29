@@ -1,6 +1,7 @@
 package com.runmoni.app.domain
 
 enum class RunPhase { IDLE, RUNNING, PAUSED, RECOVERY }
+enum class PauseReason { MANUAL, AUTOMATIC }
 enum class PartyKind { LOCAL, REMOTE }
 
 data class TrackPoint(
@@ -36,7 +37,9 @@ data class ActiveRun(
     val points: List<TrackPoint> = emptyList(),
     val gpsStatus: String = "GPS 준비 전",
     val accuracyMeters: Float? = null,
+    val pauseReason: PauseReason? = null,
 )
+data class LocationAccess(val precisePermissionGranted: Boolean? = null, val gpsEnabled: Boolean? = null)
 data class AvatarStyle(
     val hair: Int = 0, val top: Int = 0, val bottom: Int = 0, val shoes: Int = 0,
     val accessory: Int = 0, val eyewear: Int = 0, val wrist: Int = 0,
@@ -111,6 +114,7 @@ data class AppState(
     val error: String? = null,
     val openedRoomId: String = "",
     val openedRoomTitle: String = "",
+    val locationAccess: LocationAccess = LocationAccess(),
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)
