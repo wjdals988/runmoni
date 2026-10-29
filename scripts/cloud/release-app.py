@@ -59,7 +59,22 @@ def failure_categories(output):
     return categories or ['unclassified']
 
 
-def checked(command, env):
+def public_failure_detail(output, env, redactions=()):
+    """Bound Gradle's error block after removing known credentials and URL data."""
+    match = re.search(r'\* What went wrong:\s*\n(.*?)(?:\n\* (?:Try|Exception is):|\Z)', output, re.S)
+    if not match:
+        return ''
+    detail = match[1]
+    values = list(redactions) + [value for name, value in env.items()
+                               if re.search(r'TOKEN|PASSWORD|SECRET|AUTH|KEY', name, re.I)]
+    for value in sorted((v for v in values if v), key=len, reverse=True):
+        detail = detail.replace(value, '[credential omitted]')
+    detail = re.sub(r'https?://[^\s<>\"\']+', '[URL omitted]', detail)
+    detail = re.sub(r'(?i)(?:gh[pousr]_|github_pat_)[A-Za-z0-9_]+', '[token omitted]', detail)
+    return detail.strip()[:2000]
+
+
+def checked(command, env, *, public_diagnostics=False, redactions=()):
     result = subprocess.run([str(c) for c in command], cwd=ROOT, env=env,
                             capture_output=True, text=True, timeout=1800)
     if result.returncode:
@@ -68,8 +83,15 @@ def checked(command, env):
         tasks = re.findall(r'^> Task (:[A-Za-z0-9_:]+) FAILED$', diagnostics, re.M)
         detail = ' Failed tasks: ' + ', '.join(tasks) if tasks else ''
         categories = ', '.join(failure_categories(diagnostics))
-        raise ReleaseError('Tool failed; raw signing/build diagnostics were omitted.'
-                           + detail + ' Failure categories: ' + categories)
+        message = ('Tool failed; raw signing/build diagnostics were omitted.'
+                   + detail + ' Failure categories: ' + categories
+                   + ' Tool: ' + Path(command[0]).name + '; exitCode: ' + str(result.returncode))
+        if (public_diagnostics and not any(env.get(name) for name in SIGNING_VARIABLES)
+                and not (ROOT / '.secrets/signing.properties').exists()):
+            public = public_failure_detail(diagnostics, env, redactions)
+            if public:
+                message += ' Redacted uncredentialed Gradle error: ' + public
+        raise ReleaseError(message)
     return result.stdout
 
 
@@ -168,7 +190,10 @@ def build(args):
             command += ['--offline']
         command += [':app:assembleRelease', ':app:testDebugUnitTest', ':app:lintRelease']
         print(json.dumps({'phase': 'release_build', 'sourceRevision': revision, 'unsigned': args.unsigned}), flush=True)
-        output = checked(command, env)
+        # Gradle produces the unsigned APK; only the later apksigner needs these.
+        build_env = {name: value for name, value in env.items() if name not in SIGNING_VARIABLES}
+        output = checked(command, build_env, public_diagnostics=not local_signing,
+                         redactions=[env.get(name, '') for name in SIGNING_VARIABLES])
         # Persist only successful output, with configured credentials removed even if a tool echoed one.
         for name in SIGNING_VARIABLES:
             if env.get(name):

@@ -21,6 +21,26 @@ SIGNATURE = 'Signer #1 certificate SHA-256 digest: ' + release.CERTIFICATE + '\n
 
 
 class ReleaseBoundaries(unittest.TestCase):
+    def test_uncredentialed_gradle_error_is_bounded_and_redacted(self):
+        output = ('* What went wrong:\nCould not configure build: original-signing-secret '
+                  'fixture-token https://user:pass@example.test/path?token=hidden\n'
+                  + 'x' * 3000 + '\n* Try:\nstacktrace advice')
+        detail = release.public_failure_detail(output, {'GH_TOKEN': 'fixture-token'},
+                                               ['original-signing-secret'])
+        self.assertLessEqual(len(detail), 2000)
+        self.assertIn('Could not configure build', detail)
+        for secret in ('original-signing-secret', 'fixture-token', 'user:pass', '?token=', 'stacktrace advice'):
+            self.assertNotIn(secret, detail)
+
+    def test_public_error_is_never_enabled_with_signing_inputs(self):
+        result = mock.Mock(returncode=1, stdout='* What went wrong:\nprivate build text\n* Try:\nhelp', stderr='')
+        with mock.patch.object(release.subprocess, 'run', return_value=result):
+            with self.assertRaises(release.ReleaseError) as caught:
+                release.checked(['fixture-gradle'], {'RUNMONI_STORE_PASSWORD': 'fixture'},
+                                public_diagnostics=True)
+        self.assertNotIn('private build text', str(caught.exception))
+        self.assertIn('exitCode: 1', str(caught.exception))
+
     def test_failed_cold_build_reports_fixed_labels_without_raw_values(self):
         secret = 'fixture-sensitive-password'
         result = mock.Mock(returncode=1,
