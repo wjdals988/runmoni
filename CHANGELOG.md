@@ -1,5 +1,10 @@
 # 변경 이력
 
+## 2026-10-29 GitHub 기본 SDK와 전용 SDK의 경로 충돌 수정
+
+- run40855531908의 정제된 Gradle 오류로 실제 원인을 확인: 프로젝트 ANDROID_HOME은 검증한 work/cloud-android/sdk인데 GitHub가 상속한 ANDROID_SDK_ROOT는 /usr/local/lib/android/sdk여서 의존 작업 계산이 거부됨. 서명키나 앱 컴파일 오류로 단정하지 않음.
+- 선택한 ANDROID_HOME을 유지하고 release/debug/별도 원화 검토 도구의 자식 환경에서만 deprecated ANDROID_SDK_ROOT를 제거. 부모/사용자 전역 SDK 설정과 검증된 SDK/TLS/체크섬은 바꾸지 않음. 오류 분류에도 SDK 경로 충돌 문구 추가. 실제 수정 검증은 다음 GitHub cold 빌드로 수행하며 이전3건의 실패와 구분.
+
 ## 2026-10-29 Gradle 실행에서 서명값 분리·cold 오류 확인 준비
 
 - 진단 run40854841273도 Gradle 빌드 단계에서 분류 불가 오류로 실패해 업로드0. 서명값 없는 Gradle의 설정 오류 블록만 길이 제한·자격/URL 제거 후 확인하도록 보강. Gradle은 unsigned APK만 만들므로 환경의4개 서명 입력을 제거하고 후속 apksigner에만 제공. 로컬 signing.properties가 있거나 서명 환경이 남아 있으면 상세 진단을 거부한다.

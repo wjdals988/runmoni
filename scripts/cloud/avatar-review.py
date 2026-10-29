@@ -25,6 +25,7 @@ ENV = os.environ | {"JAVA_HOME": str(JDK), "GRADLE_USER_HOME": str(BASE / "gradl
     "ANDROID_USER_HOME": str(BASE / "user"), "ANDROID_HOME": str(SDK),
     "ANDROID_AVD_HOME": str(BASE / "avds"), "ANDROID_EMULATOR_HOME": str(BASE / "user"),
     "ANDROID_I_WANT_MY_TCG": "yes"}
+ENV.pop("ANDROID_SDK_ROOT", None)
 
 def run(args, **kwargs):
     return subprocess.run([str(a) for a in args], env=ENV, check=True, cwd=ROOT, **kwargs)
