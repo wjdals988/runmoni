@@ -1,5 +1,11 @@
 # 변경 이력
 
+## 2026-10-29 원래 PC의 서명 설정4개 등록 receipt 수신
+
+- 사용자가 Windows bridge의 `connectedSecretCount: 4`, repository scope, 승인 SHA256 `a21359c6…`, `appPublished: false` receipt를 전달. 등록 시각은2026-10-29 12:18:52 KST(03:18:52 UTC). 대상/지문/개수/미게시 상태를 대조하고 [기계 판독 기록](docs/release-review/2026-10-29/signing-connection.json)에 출처를 사용자 제공 결과로 명시. 클라우드에서 Windows 실행을 직접 관찰하거나 GitHub가 제공하는 평문을 조회했다고 주장하지 않음.
+- 원격 main은effc3d4이며 서명 workflow 파일은 아직 없음. 등록된 workflow는 기존 Runmoni checks1개이고 PR2는 충돌 없이 병합 가능한 상태를 읽기 전용으로 확인. main 전용 서명 제한을 유지하며 dispatch/서명 빌드/업로드를 시도하지 않음. 남은 순서는 PR2 main 병합 승인 → 동일 키 CI 서명 검증 → 비공개 초안 업로드. 공개/피드/대시보드는 실기기 등 기존 검증 경계 뒤에 별도 진행.
+- 이번 변경은 기록/인수인계 문서뿐이며 새 Android 빌드/AVD/테스트 실행0회. 기존 APK의 실제 sourceRevision639b1f9와 과거0.1.5의75c39ca… 유지. CI에서 키 사용/보관을 확인하기 전 임시 개인키를 보존하고 환경 스냅샷을 게시하지 않음. 키 재생성·추가 OAuth 승인·비밀값 출력0.
+
 ## 2026-10-29 GitHub 공개키 수신·실제 서명값 암호화
 
 - 사용자가 원래 PC의 repository 공개 packet을 전달. 저장소/scope/32바이트 공개키 형식을 확인한 뒤, 보존한 새 배포키의 실제 인증서가 승인 SHA256과 일치함을 검사하고 기존 libsodium sealed box로4개 서명값을 암호화. 키 재생성·네트워크 요청·GitHub secret 쓰기0회, 평문 출력0.

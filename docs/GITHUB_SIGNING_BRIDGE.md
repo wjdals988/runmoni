@@ -14,8 +14,14 @@ Secrets 등록 성공으로 해석하지 않는다. 정확한 중계 원인은 �
 검사했다. 보존한 새 배포키의 승인 인증서 일치를 확인한 뒤4개 실제 서명값을 암호화했다.
 파일은 `work/signing-bridge/runmoni-github-secrets.encrypted.properties`에 있으며 Git에 넣지 않는다.
 7,024bytes, SHA256 `51f07c5d35521111a07f500b992245bcaddb5e7102203a7c27768fee8c461801`.
-이 작업의 네트워크 요청/secret 쓰기는0회다. 이제 아래3번의 원래 PC apply와4개 등록 receipt가
-필요하다. 등록 성공과 GitHub CI의 실제 서명 성공은 별도로 확인한다.
+암호화 작업의 네트워크 요청/secret 쓰기는0회다. 이후 사용자가 원래 PC apply의
+`connectedSecretCount: 4` receipt를 전달했다. 등록 시각은2026-10-29 12:18:52 KST이며,
+repository scope/승인 인증서/미게시 상태가 일치한다. [수신 기록](release-review/2026-10-29/signing-connection.json)은
+사용자 제공 결과와 직접 관찰을 구분한다. 아래 명령을 다시 실행할 필요는 없다.
+
+GitHub CI의 실제 서명 성공은 아직 미검증이다. 원격 main effc3d4에는 서명 workflow가 없으므로,
+준비된 [PR2](https://github.com/wjdals988/runmoni/pull/2)를 main에 병합하도록 승인받은 뒤
+서명 workflow를 실행한다. main 제한을 우회하거나 임시 키를 먼저 삭제하지 않는다.
 
 ## 1. 원래 Windows PC에서 공개 정보 조회
 
@@ -69,6 +75,6 @@ Linux JDK21에서 Java11 타깃 컴파일·fake API 경계12개 성공.
 Python47개에는 실제 libsodium fixture 왕복 복호화·정확한 바이트 보존·다른 개인키 거부가 포함된다.
 Cloud에서 prepare를 호출하면 Windows 전용 보호가 먼저 거부해 cloud proxy 자격을 읽지 않음을 확인했다.
 첫 fixture 컴파일의 lambda 캡처 오류는 테스트 변수 수정 후 해결했다.
-원래 PC의 공개 packet은 사용자가 전달했으며 실제 Windows/GCM/GitHub 등록 성공은 아직 확인하지 않았다.
-실제 등록 receipt가 필요하다.
+원래 PC의 공개 packet과4개 등록 receipt를 사용자가 전달했다. Windows/GCM 실행을 클라우드에서
+직접 관찰한 것은 아니며, GitHub CI의 실제 서명 검증은 아직 실행하지 않았다.
 토큰/키값/원문 API 오류는 로그에 기록하지 않는다. TLS 검증을 해제하거나 별도 서비스/포트를 열지 않는다.

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "evidenceSource": "owner-pasted-windows-bridge-receipt",
+  "receipt": {
+    "repository": "wjdals988/runmoni",
+    "scope": "repository",
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+    "connectedSecretCount": 4,
+    "connectedAt": "2026-10-29T03:18:52.977572700Z",
+    "appPublished": false
+  },
+  "checks": {
+    "approvedRepositoryScopeAndCertificateMatch": true,
+    "expectedSecretCount": 4,
+    "nativeExecutionDirectlyObservedByAgent": false,
+    "githubActionsSigningVerified": false,
+    "appPublished": false
+  },
+  "githubReadOnlyObservation": {
+    "mainRevision": "effc3d444443659c599c6a8b8898df30e390cb8a",
+    "releaseWorkflowOnMain": false,
+    "registeredWorkflowPaths": [
+      ".github/workflows/ci.yml"
+    ],
+    "pullRequest": "https://github.com/wjdals988/runmoni/pull/2",
+    "pullRequestHead": "473d2f5e96766ba6ab7905aa2f45e0adfc01993a",
+    "mergeable": true,
+    "releaseWorkflowDispatchAttempted": false
+  },
+  "nextStep": "Review and authorize PR2 main merge, then dispatch signed mode and verify the retained certificate before deleting ephemeral private signing state.",
+  "boundaries": {
+    "signingKeyRegenerated": false,
+    "ephemeralPrivateStateDeleted": false,
+    "signedCandidateSourceRevision": "639b1f943cf73d04aa4d76af0e9fff058169c8ba",
+    "existing015SourceRevision": "75c39ca900b140cfb02c1a47807a5955c8b8db7f",
+    "publicUpdateFeedChanged": false,
+    "dashboardDownloadChanged": false
+  }
+}

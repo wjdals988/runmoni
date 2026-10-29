@@ -11,10 +11,13 @@
 
 ## 모든 환경에서 같은 키 사용
 
-**현재 연결 방법:** 소유자 OAuth 로그인 뒤에도 이 클라우드의 Secrets API가403으로 거부됐다.
-같은 승인을 반복하지 않는다. [GitHub 공개키 암호화 전달](GITHUB_SIGNING_BRIDGE.md)로
-원래 PC의 기존 GitHub 로그인을 사용하되 서명값은 GitHub가 열 수 있는 암호문으로만 전달한다.
-GitHub CLI 설치/서명키 평문 전송/새 키 생성은 필요 없다. 아래 --login 방식은 실패 이력으로 보존한다.
+**현재 상태 — 2026-10-29:** [GitHub 공개키 암호화 전달](GITHUB_SIGNING_BRIDGE.md)을 거쳐
+사용자가 원래 PC의4개 등록 receipt를 전달했다. repository scope/승인 지문/미게시 상태가 일치한다.
+이는 사용자 제공 등록 결과이며 GitHub CI의 실제 서명 성공은 별도 검증이다. 원격 main에는
+서명 workflow가 없으므로 [PR2](https://github.com/wjdals988/runmoni/pull/2) 병합 승인 뒤 실행한다.
+
+소유자 OAuth 로그인 뒤에도 이 클라우드의 Secrets API는403으로 거부됐다. 정확한 중계 원인은
+미확인이며 같은 승인을 반복하지 않는다. 아래 --login 방식은 실패 이력으로만 보존한다.
 
 개발 환경마다 키를 새로 만들지 않는다. GitHub 저장소의 Actions Secrets에 새 키를 한 번
 등록하고, 배포 APK는 GitHub Actions에서 그 키로 서명한다. PC/클라우드 변경이 개인키 자동 공유를
@@ -34,14 +37,15 @@ python3 scripts/cloud/connect-signing-key.py --state-file <private-state.json> -
 않는다. `--login` 없이 실행하면 기존 인증을 사용한다. 이 도구는 새 키를 생성하거나 APK를 공개하지 않는다.
 실제 권한/secret 등록 성공은 모든4개 항목의 성공 receipt가 있어야 판단한다.
 
-새 키는 현재 소유자 전용 임시 파일로 준비돼 있다. GitHub 보안 저장소 등록/백업 확인 전에 클라우드
-스냅샷에 개인키를 포함하거나 임시 키를 지우지 않는다. 키가 사라져도 자동 재생성하지 않는다.
+새 키는 현재 소유자 전용 임시 파일로도 보존돼 있다.4개 등록 receipt를 수신했지만 CI에서 같은 키의
+실제 사용/보관을 확인할 때까지 임시 키를 지우지 않는다. 클라우드 스냅샷에는 개인키를 포함하지 않는다.
+키가 사라져도 자동 재생성하지 않는다.
 
 ## Windows 보관 키 도구의 범위
 
 [`ConnectOriginalSigningKey.java`](../scripts/ConnectOriginalSigningKey.java)는 보관된 `.secrets` 파일의
 키를 연결하는 별도 복구 도구다. 현재 승인된 새 인증서만 받으므로 이전 Windows 키에는 사용하지 않는다.
-현재 새 키 연결은 위 클라우드 도구로 진행한다. 이전 대화의 Windows 설치/연결 명령은 필요하지 않다.
+현재 새 키는 위 공개키 bridge의4개 등록 receipt를 수신한 상태다. 이전 키 연결 명령을 반복하지 않는다.
 
 ## GitHub에서 서명·업로드
 
@@ -103,6 +107,5 @@ unsigned는 `outputs/release-candidate/<sourceRevision>/`에만 내보낸다.
 수행한 뒤 서명본을 공개한다. 그 후 서버 자산의 크기·해시·서명을 기준으로 `updates/android.json`과
 대시보드 다운로드 메타데이터를 갱신한다. unsigned/debug/미공개 초안은 새 공개 업데이트로 알리지 않는다.
 
-새 키는 생성했으며 현재 GitHub 인증의 Actions secret/암호화용 공개키 조회는403이다.
-키 생성 자체가 이 권한을 해결하지 않는다. 공식 계정 승인 뒤 다시 확인한다.
-실제 서명/업로드 성공은 별도 실행 결과가 있어야 주장할 수 있다.
+원래 PC의 등록 receipt를 수신해 보관했다. 클라우드의 기존403을 추가 OAuth 승인으로 다시 시도하지 않는다.
+다음은 main 병합 승인 뒤 실제 CI 서명 검증이다. 등록 결과를 APK 업로드/공개 성공으로 해석하지 않는다.
