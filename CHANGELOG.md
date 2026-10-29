@@ -1,5 +1,11 @@
 # 변경 이력
 
+## 2026-10-29 GitHub 공개키 수신·실제 서명값 암호화
+
+- 사용자가 원래 PC의 repository 공개 packet을 전달. 저장소/scope/32바이트 공개키 형식을 확인한 뒤, 보존한 새 배포키의 실제 인증서가 승인 SHA256과 일치함을 검사하고 기존 libsodium sealed box로4개 서명값을 암호화. 키 재생성·네트워크 요청·GitHub secret 쓰기0회, 평문 출력0.
+- 암호문 파일은 무시되는 `work/signing-bridge/`에만 보관. 7,024bytes·SHA256 `51f07c5d35521111a07f500b992245bcaddb5e7102203a7c27768fee8c461801`, 공개 메타데이터6개/암호문4개와 대상 공개키 재검사 통과. 기존 테스트를 이번 production 암호문의 복호화 검증으로 합산하지 않음. 실제 등록은 원래 PC apply의4개201/204 receipt 대기이며, CI에서 같은 키 사용도 별도 미검증.
+- 앱 코드/버전/기존 서명 APK와 sourceRevision·공개피드·대시보드 다운로드 변경0. 등록/안전한 보관 확인 전 임시 개인키를 삭제하거나 환경 스냅샷을 게시하지 않음.
+
 ## 2026-10-28 소유자 승인 뒤403 확인·암호화 전달 준비
 
 - 소유자 wjdals988의 공식 GitHub CLI 로그인 완료 뒤에도 저장소 Secrets 공개키 GET이 HTTP403/integration_permission, repoOAuthScopeGranted=false로 거부됨을 확인. secret 전송0·receipt없음. 로그인 승인과 보안 설정 권한을 구분하고 같은 OAuth 승인 반복을 중단. 정확한 중계 원인은 미확인으로 남기며 직접 네트워크/프록시/터널 우회 없음.

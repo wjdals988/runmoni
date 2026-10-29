@@ -8,6 +8,15 @@ Secrets 등록 성공으로 해석하지 않는다. 정확한 중계 원인은 �
 클라우드에서 토큰을 요구하거나 직접 연결/프록시/터널로 우회하지 않는다.
 원래 PC의 정상 GitHub 로그인으로 승인된 저장소에 직접 등록한다.
 
+## 현재 진행 상태 — 2026-10-29
+
+사용자가 원래 PC의 공개 packet을 전달했고, 지정된 repository/scope와32바이트 공개키 형식을
+검사했다. 보존한 새 배포키의 승인 인증서 일치를 확인한 뒤4개 실제 서명값을 암호화했다.
+파일은 `work/signing-bridge/runmoni-github-secrets.encrypted.properties`에 있으며 Git에 넣지 않는다.
+7,024bytes, SHA256 `51f07c5d35521111a07f500b992245bcaddb5e7102203a7c27768fee8c461801`.
+이 작업의 네트워크 요청/secret 쓰기는0회다. 이제 아래3번의 원래 PC apply와4개 등록 receipt가
+필요하다. 등록 성공과 GitHub CI의 실제 서명 성공은 별도로 확인한다.
+
 ## 1. 원래 Windows PC에서 공개 정보 조회
 
 [`RunmoniGitHubSecretsBridge.java`](../scripts/RunmoniGitHubSecretsBridge.java)는 Java11이상,
@@ -45,7 +54,7 @@ Git·채팅에 평문을 넣지 않으며 암호화 작업의 네트워크 호�
 암호화된 properties 파일만 원래 PC에 내려받아 실행한다.
 
 ```powershell
-java work/RunmoniGitHubSecretsBridge.java apply "$env:USERPROFILE\Downloads\runmoni-github-secrets.encrypted.properties"
+java work\signing-bridge-9d0f0bd\RunmoniGitHubSecretsBridge.java apply "$env:USERPROFILE\Downloads\runmoni-github-secrets.encrypted.properties"
 ```
 
 도구는 저장소/공개키ID/승인 인증서/필드 집합과 현재 GitHub 공개키를 재확인하고,
@@ -60,5 +69,6 @@ Linux JDK21에서 Java11 타깃 컴파일·fake API 경계12개 성공.
 Python47개에는 실제 libsodium fixture 왕복 복호화·정확한 바이트 보존·다른 개인키 거부가 포함된다.
 Cloud에서 prepare를 호출하면 Windows 전용 보호가 먼저 거부해 cloud proxy 자격을 읽지 않음을 확인했다.
 첫 fixture 컴파일의 lambda 캡처 오류는 테스트 변수 수정 후 해결했다.
-실제 Windows/GCM/GitHub 등록 성공은 아직 확인하지 않았다. 원래 PC 공개 packet과 실제 등록 receipt가 필요하다.
+원래 PC의 공개 packet은 사용자가 전달했으며 실제 Windows/GCM/GitHub 등록 성공은 아직 확인하지 않았다.
+실제 등록 receipt가 필요하다.
 토큰/키값/원문 API 오류는 로그에 기록하지 않는다. TLS 검증을 해제하거나 별도 서비스/포트를 열지 않는다.
