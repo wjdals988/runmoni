@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "repository": "wjdals988/runmoni",
+  "releaseId": 427731932,
+  "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.1.6-dev",
+  "publishedAt": "2026-10-29T11:53:07Z",
+  "recordedAt": "2026-10-29T11:53:09.063038+00:00",
+  "sourceRevision": "9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750",
+  "metadata": {
+    "version": "0.1.6-dev",
+    "versionCode": 7,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.1.6-dev.apk",
+    "sizeBytes": 218201869,
+    "sha256": "de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+    "signed": true,
+    "sourceRevision": "9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750",
+    "sourceDirty": false,
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+  },
+  "publicReleaseConfirmed": true,
+  "prerelease": true,
+  "assets": [
+    {
+      "id": 688199493,
+      "name": "runmoni-0.1.6-dev.apk",
+      "state": "uploaded",
+      "size": 218201869,
+      "digest": "sha256:de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.1.6-dev/runmoni-0.1.6-dev.apk"
+    },
+    {
+      "id": 688236284,
+      "name": "runmoni-0.1.6-dev.metadata.json",
+      "state": "uploaded",
+      "size": 427,
+      "digest": "sha256:6ffc4696a6817aeb2565f03be8b2cb3e4faf72ffc0e69ec57555fe48c32624cc",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.1.6-dev/runmoni-0.1.6-dev.metadata.json"
+    },
+    {
+      "id": 688236250,
+      "name": "SHA256SUMS-0.1.6-dev.txt",
+      "state": "uploaded",
+      "size": 88,
+      "digest": "sha256:36e3f04a574d522752863686c6f6f242f68dde903b19e78b085f6a05c5e57119",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.1.6-dev/SHA256SUMS-0.1.6-dev.txt"
+    }
+  ],
+  "checks": {
+    "signedCiVerified": true,
+    "freshServerAssetsMatch": true,
+    "sidecarBodiesMatch": true,
+    "mainAndTagMatchSourceAtPublication": true,
+    "apkBodyDownloaded": false,
+    "assetsReuploadedOrReplaced": false
+  },
+  "distributionDecision": {
+    "userRequest": "대시보드에 올려줘",
+    "scope": "이번0.1.6 검증 전 개발 프리뷰 다운로드 제공",
+    "phoneAvailable": true,
+    "phoneTestResultsReceived": false,
+    "physicalDeviceSmokeVerified": false,
+    "actualGoogleLoginVerified": false
+  },
+  "dashboard": {
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/10",
+    "merged": true,
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "dashboardCommit": "34f2924c99d4aec87965671d28f591bbd4fc04a1",
+    "checks": {
+      "newApkHrefVisible": true,
+      "newVersionDescriptionVisible": true,
+      "unverifiedPreviewLabelVisible": true,
+      "sha256Visible": true,
+      "staleCurrentVersionDescriptionVisible": false
+    },
+    "apk": {
+      "url": "https://github.com/wjdals988/runmoni/releases/download/v0.1.6-dev/runmoni-0.1.6-dev.apk",
+      "fileName": "runmoni-0.1.6-dev.apk",
+      "version": "0.1.6-dev",
+      "versionCode": 7,
+      "size": "218,201,869 bytes",
+      "sha256": "de19ed6cc9337fce39bc321818e8979df80da7462dca4d1e584aadc03fda34cf",
+      "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.1.6-dev",
+      "label": "실기기 검증 전 개발 프리뷰 APK"
+    },
+    "serverTestsLintBuildPassed": true,
+    "vercelProductionReady": true,
+    "nodeTestsPassed": 23,
+    "nodeRunner": "--test-isolation=none"
+  },
+  "publicDownloadHead": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.1.6-dev/runmoni-0.1.6-dev.apk",
+    "httpStatus": 200,
+    "contentLength": 218201869,
+    "apkBodyBytesDownloaded": 0
+  },
+  "metadataValidation": {
+    "pythonTests": 60,
+    "failures": 0,
+    "actionlintPassed": true,
+    "dashboardNodeTests": 23,
+    "dashboardNodeFailures": 0,
+    "physicalDeviceTestsRecorded": 0
+  }
+}

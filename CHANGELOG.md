@@ -1,5 +1,12 @@
 # 변경 이력
 
+## 2026-10-29 사용자 요청으로 검증 전0.1.6 프리뷰 공개·다운로드 연결
+
+- 실제 휴대폰 확인이 가능하다고 한 사용자가 APK 확인 요청에는 ‘대시보드에 올려줘’라고 지시. 이번 APK의 검증 전 테스트용 배포 요청으로 적용하고 일반 배포의 smoke 성공으로 처리하지 않음. 실기기/실제 Google 로그인 확인은 여전히 미완료다.
+- 서명 CI·출처·서버3자산·작은 sidecar를 재검증한 뒤 기존 릴리스427731932를 v0.1.6-dev/prerelease로 공개. 임시 초안 태그에서 의도한 v0.1.6 태그를 명시하고 공개 main/tag9dd409f 및 정식3자산 URL/digest를 재확인. APK 재업로드/교체·출처 변경·추가 Android 빌드0회. 미검증 안내와 새 키 재설치 조건을 공개 본문에 명시.
+- 공개 확인 뒤 updates/android.json을 실제0.1.6/code7·218201869bytes·de19ed6c…·a21359c6…로 갱신하고 physicalDeviceTests0/미검증 안내를 유지. 실제 공개 baseline 변경에 영향받던 도구 unit fixture를 자체 baseline으로 분리하고 동일/낮은 code 거부 회귀검사 추가. Python60개·actionlint 통과.
+- 대시보드 공식 metadata updater dry run/반영 뒤 공개 버전 설명·상태·업데이트 내역·서명 APK URL/크기/해시를 갱신. 다른 프로젝트/순서/기존 이력 보존. 클라우드 Node 기본 child 모드는 파일2개만 보고해 검사 수로 쓰지 않았고, 지원되는 --test-isolation=none으로 실제23개 통과를 확인. 대시보드 PR10의 서버 테스트/lint/build·Vercel preview 통과 후34f2924에 병합. 운영 Vercel success와 실제 페이지의 새 APK href·0.1.6/code7 설명·미검증 표시·SHA256을 확인했다. 공개 APK HEAD도200/218201869bytes로 확인했고 본문 다운로드0회.
+
 ## 2026-10-29 동일 키 CI·0.1.6 비공개 초안 업로드 완료
 
 - 최종 main9dd409f00bab54f9ebf7f0ce3f85f36ff54b1750의 run40858081567 전체 성공. cold build6분30초·81작업(77실행/4캐시), 실제 JVM XML31/31·실패/오류/skip0, lint오류0/경고57(버전 알림30개). 이전 호스트 후보의27경고를 합산하지 않음. APK non-debuggable/승인 인증서/패키지/내장 revision 검사와 runner 키 삭제 단계 성공.

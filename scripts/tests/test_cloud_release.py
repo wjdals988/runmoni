@@ -21,6 +21,28 @@ SIGNATURE = 'Signer #1 certificate SHA-256 digest: ' + release.CERTIFICATE + '\n
 
 
 class ReleaseBoundaries(unittest.TestCase):
+    def setUp(self):
+        # Unit fixtures have their own published baseline; publishing the real
+        # feed must not redefine the expected package strings in these tests.
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root = Path(directory.name)
+        (root / 'updates').mkdir()
+        (root / 'updates/android.json').write_text('{"preview":{"versionCode":2}}')
+        patcher = mock.patch.object(release, 'ROOT', root)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_equal_or_lower_published_code_is_rejected_for_signed_and_unsigned(self):
+        (release.ROOT / 'updates/android.json').write_text('{"preview":{"versionCode":7}}')
+        for unsigned in (True, False):
+            for code in (6, 7):
+                with self.subTest(unsigned=unsigned, code=code), self.assertRaises(release.ReleaseError):
+                    release.inspect_apk(BADGING.replace("versionCode='7'", f"versionCode='{code}'"),
+                                        SIGNATURE, unsigned=unsigned)
+        next_apk = BADGING.replace("versionCode='7'", "versionCode='8'").replace('0.1.6-dev', '0.1.7-dev')
+        self.assertEqual(8, release.inspect_apk(next_apk, SIGNATURE)['versionCode'])
+
     def test_uncredentialed_gradle_error_is_bounded_and_redacted(self):
         output = ('* What went wrong:\nCould not configure build: original-signing-secret '
                   'fixture-token https://user:pass@example.test/path?token=hidden\n'

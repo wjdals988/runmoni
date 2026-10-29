@@ -1,12 +1,12 @@
 # 런모니 / Runmoni
 
-현재 개발 설정은 `0.1.6-dev`(code7)입니다. 상단의 설치 버전명에 새 버전 알림 점을 표시하고, 선택하면 버전 확인과 APK 다운로드로 이어지도록 연결했습니다. [실제 Android 업데이트 알림 검토](docs/UPDATE_REVIEW_20261027.md) · [우선순위와 완료 조건](docs/DEVELOPMENT_PRIORITIES.md) · [이번 개발본 설명](docs/RELEASE_NOTES_0.1.6-dev.md). 기존 서명키가 클라우드에 없어 새 공개 APK/대시보드 교체는 차단된 상태입니다.
+현재 공개 APK는 **실기기 검증 전 테스트용 `0.1.6-dev`(code7)**입니다. [대시보드에서 받기](https://coldbrewventi.vercel.app/projects/runmoni) · [GitHub 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.1.6-dev). 사용자 요청으로 검토용 다운로드를 제공하며 설치·실행·로그인 성공 확인은 아직 없습니다. 상단 설치 버전명의 새 버전 알림과 확인 후 APK 다운로드를 연결했습니다. [검증 기록](docs/RELEASE_REVIEW_20261029.md) · [남은 작업](docs/DEVELOPMENT_PRIORITIES.md) · [이번 APK 설명](docs/RELEASE_NOTES_0.1.6-dev.md).
 
 캐릭터 최신 상태(2026-10-27): 홈에 남아 있던 거절된 v0.4 조립 그래픽을 승인 v0.3 전신 원화로 교체했습니다. [전체 런모니 앱의 실제 화면·검증·남은 작업](docs/APP_REVIEW_20261027.md)을 확인하세요. 클라우드에서 전체 앱 빌드와 실행이 가능해졌습니다. 현재 첫 행 캐릭터의 기본 러닝복만 복구했으며, 58종 레이어와 여자 기본형 선택 연결은 남아 있습니다. 준비되지 않은 아이템은 구매·착용을 잠시 막고 보유권·포인트·기존 선택을 보존합니다. [수영복 검토 시안](docs/design/avatars/v0.5.2/README.md)은 계속 미승인입니다.
 
 첫 미니미의 [준비·실패·재시도 실제 Android 검토](docs/AVATAR_LOADING_REVIEW_20261027.md)도 진행했습니다. 최신 기본8개/320dp·글씨200%에서4개 검사를 통과했으며, 원화8프레임과 데이터 계약을 보존했습니다. 전체 꾸미기 복구와는 별개입니다.
 
-Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. Android 개발 설정은 `0.1.6-dev`(versionCode7), 보존된 이전 로컬 서명 APK는 `0.1.5-dev`(code6), 로컬 API는 `0.1.4`입니다. 이번 클라우드 빌드는 별도 로컬 테스트 키로 서명했습니다. JVM30/30·lint0오류/57경고, 실제 앱의 기본 러닝 기록·저장 복원을 확인했습니다. 공개 다운로드는 [서명된 `0.1.1-dev` APK](https://github.com/wjdals988/runmoni/releases/tag/v0.1.1-dev)이며, 이 APK에는 Firebase 기능이 없습니다. 새 소스는 [DESIGN.md](DESIGN.md)를 기준으로 UI를 개편하고 로컬 Firebase 설정을 읽습니다. 실기기·Google 로그인·원격 백업은 아직 미검증입니다.
+Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티를 운영하는 개발 프리뷰입니다. Android 설정은 `0.1.6-dev`(versionCode7), 보존된 이전 로컬 서명 APK는 `0.1.5-dev`(code6), 로컬 API는 `0.1.4`입니다. 이번 공개 APK는 GitHub Actions의 보관된 새 배포 키로 서명했고 JVM31/31·lint오류0/경고57·APK 서명/패키지/출처 검사를 통과했습니다. 이전 로컬 테스트 키의 debug Android 화면·기록 저장 검증과 구분합니다. 공개 빌드는 Firebase 설정 없이 생성됐으며 실제 휴대폰·Google 로그인·원격 백업·야외 GPS·음성은 미검증입니다. [DESIGN.md](DESIGN.md)의 기준과 미완료 기능을 유지합니다.
 
 ## 지금 구현한 범위
 
@@ -18,7 +18,7 @@ Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티�
 | 위치 공유 | 초대 성인 파일럿에 정밀 위치를 명시 동의 후 공유, 15초 게시·45초 만료, 종료·재시작 시 공유 해제 | 일반 대중에게 공개하는 지도와 미성년자 서비스는 후속 단계 |
 | 음성·DJ 음악 | LiveKit 음성, 음악 별도 트랙·별도 음량, 자체 파일 재생, 6개 외부 음악 앱 캡처 요청, Opus bridge | 실제 서버·2대 기기 송출은 미검증. 외부 앱은 캡처를 거부할 수 있음 |
 | 나·꾸미기 | 일/월/년 기록, 9개 옷장 탭·13개 저장 슬롯·58개 ID 보존, 승인 전신 기본형 표시 | 비기본 의상 레이어 준비 전 구매·착용 중단. 보유권·기존 선택·포인트 유지. 기기/서버 지갑은 별개 |
-| Google 계정·요약 백업 | Firebase Auth/Firestore SDK, 별도 계정 세션, 선택한 기록 1건의 요약 백업, 최근 50건 서버 조회·요약 삭제 | Spark 프로젝트·로컬 설정·서명 APK 준비 완료. 콘솔/Rules 설정은 사용자 보고이며 실제 Google 로그인·원격 저장은 미검증. GPS 원본·마일리지 제외 |
+| Google 계정·요약 백업 | Firebase Auth/Firestore SDK, 별도 계정 세션, 선택한 기록 1건의 요약 백업, 최근 50건 서버 조회·요약 삭제 | 이전 작업 PC의 설정 준비 기록과 현재 공개 빌드를 구분. 공개 APK는 Firebase 설정 없음. 새 서명 지문 연결·실제 로그인/저장 미검증. GPS 원본·마일리지 제외 |
 
 네트워크나 음악 실패로 GPS 기록을 멈추지 않는 구조입니다. OS 강제 종료 뒤에는 자동 연속 기록을 주장하지 않고, 저장된 지점부터 사용자 복구를 제공합니다. 빈 화면에 가짜 러너·가짜 GPS 기록을 넣지 않습니다.
 
@@ -32,7 +32,7 @@ Android에서 러닝 기록을 남기고, 초대된 친구들과 크루·파티�
 
 0.1.4 서명 APK의 실제 화면8장·아이콘1개와 이전1.3 화면16장은 [화면 확인 기록](docs/SCREENSHOT_REVIEW_20261025.md)에 정리했습니다. 배치·상태38/38과 JVM30/30을 통과했지만 본인 Google/Firebase 로그인·원격 백업 성공은 아직0회입니다. 새 Google 버튼은 기기 계정 추가 화면까지 열었으나 사용자가 Google시스템 오류를 보고했습니다. 이후 사용자 지시로 AVD를 제외하며 PC 브라우저 지연의 원인을 해결됐다고 표현하지 않습니다. [네트워크 진단 경계](docs/UPDATE_NETWORK_DIAGNOSIS.md).
 
-0.1.5의 [새 미니미 GIF·검사 근거](docs/design/avatars/v0.4.0/README.md)는 실제 Kotlin 렌더러를 호스트 Java2D로 실행한 결과입니다. 실제 Android 캡처로 표시하지 않습니다. 최종 APK의 PNG63개와 manifest 해시·서명·버전 직접 확인 결과는 [검증 기록](docs/VALIDATION.md)에 남겼습니다. 실기기 공개 전 검증이 남아 있어 공개 APK·업데이트 피드·대시보드 다운로드는 이전 버전을 유지합니다.
+0.1.5의 [미니미 GIF·검사 근거](docs/design/avatars/v0.4.0/README.md)는 거절된 v0.4 렌더러를 호스트 Java2D로 실행한 이력입니다. 실제 Android 캡처로 표시하지 않습니다. 당시 APK의 PNG63개·manifest·서명 확인 결과는 [이전 검증 기록](docs/VALIDATION.md)에 보존하며, 이번0.1.6 공개 프리뷰의 원화 승인이나 실행 결과로 합산하지 않습니다.
 
 ## 빌드
 
@@ -98,5 +98,7 @@ GitHub 소스/APK 공개와 대시보드 등록은 클라우드 운영을 시작
 기기 Room은 유지하고 공용 계정·DB의 목표는 Firebase Auth/Firestore입니다. 첫 단계는 독립 Google 로그인과 본인 기록 요약의 수동 백업입니다. Firebase 로그인은 기존 파일럿 세션이나 위치 공유 권한을 열지 않습니다. 요약은 자가 기록이며 보상 근거로 사용하지 않습니다. 크루·파티·차단·정원·DJ·보상을 이전하려면 현재 API의 43개 경로·87개 SQL 실행 지점에서 저장소를 분리하고 Firestore 트랜잭션과 Firebase 토큰 검증을 연결해야 합니다. 신뢰 가능한 HTTPS API와 음성/음악의 LiveKit·audio bridge 운영은 별도 작업입니다.
 
 ## 릴리스 서명
+
+공식 배포는 GitHub Actions의 동일한 새 보관 키를 사용합니다. 현재 공개 인증서 정책은 [config/android-release-signing.json](config/android-release-signing.json)이며 환경마다 키를 만들지 않습니다. 아래 PowerShell 경로는 로컬 보관 키용입니다. 기존 Windows의 이전 키가 자동으로 새 배포 키와 같아지는 것은 아니므로 배포 절차는 [클라우드 릴리스](docs/CLOUD_ANDROID_RELEASE.md)를 따릅니다.
 
 `scripts/build-release.ps1`은 `.secrets/signing.properties`가 있을 때만 서명 APK를 빌드합니다. 서명 키·비밀번호는 `.secrets/`에 보관하고 Git에서 제외합니다. 소유자는 이 폴더를 별도로 안전하게 백업해야 하며, 향후 업데이트는 같은 키를 사용해야 합니다. 첫0.1.0-dev 디버그 APK와 공개 서명 APK의 인증서는 다르므로 테스트 설치를 교체할 때는 기존 테스트 앱을 지우고 설치해야 합니다.

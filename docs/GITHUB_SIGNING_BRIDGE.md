@@ -82,3 +82,5 @@ Cloud에서 prepare를 호출하면 Windows 전용 보호가 먼저 거부해 cl
 직접 관찰한 것은 아니다. 이후 run40855991283에서 같은 키의 실제 CI 서명 검사가 성공했으며
 APK sourceRevision은 de49bb74aa85a35ecf5d867148d542e15ded0de2다. 이 결과와 새 run의 출처를 구분한다.
 토큰/키값/원문 API 오류는 로그에 기록하지 않는다. TLS 검증을 해제하거나 별도 서비스/포트를 열지 않는다.
+
+2026-10-29 최신 배포 상태: 사용자의 대시보드 다운로드 요청에 따라 검증 전0.1.6 개발 프리뷰를 공개했다. [공개 기록](release-review/2026-10-29/publication.json)의 sourceRevision9dd409f와 canonical URL/서버 digest를 기준으로 피드·대시보드를 갱신하며, 휴대폰/Google 로그인 성공으로 표시하지 않는다.
