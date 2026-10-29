@@ -413,6 +413,58 @@ class PreviewPublisherTest(unittest.TestCase):
             self.assertNotIn("url", receipt)
             self.assertFalse((root / "work" / f"published-release-{VERSION}.json").exists())
 
+    def test_actions_token_without_user_permission_hint_can_stage_verified_assets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan)
+            original = remote.request
+            def request(method, url, **options):
+                response = original(method, url, **options)
+                if method == 'GET' and url == publisher.API:
+                    return remote.response(200, {'full_name': publisher.REPO})
+                return response
+            with self.transport(root, remote), mock.patch.object(remote, 'request', side_effect=request):
+                result = publisher.publish(plan, stage_draft=True)
+            self.assertTrue(result['draft'])
+            self.assertEqual(3, len(remote.uploads))
+            self.assertEqual([], remote.publication_snapshots)
+
+    def test_authoritative_write_denial_stops_without_upload_or_success_receipt(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan)
+            original = remote.request
+            def request(method, url, **options):
+                if method == 'POST':
+                    return remote.response(403, {})
+                response = original(method, url, **options)
+                if method == 'GET' and url == publisher.API:
+                    return remote.response(200, {'full_name': publisher.REPO, 'permissions': {'push': False}})
+                return response
+            with self.transport(root, remote), mock.patch.object(remote, 'request', side_effect=request):
+                with self.assertRaisesRegex(publisher.PublicationError, 'GitHub API returned 403'):
+                    publisher.publish(plan, stage_draft=True)
+            self.assertEqual([], remote.uploads)
+            self.assertIsNone(remote.release)
+            self.assertFalse((root / 'work' / f'staged-release-{VERSION}.json').exists())
+
+    def test_wrong_repository_identity_stops_before_release_mutation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            plan = publisher.prepare_plan(VERSION, TARGET, root=root)
+            remote = FakeGitHub(plan)
+            with self.transport(root, remote), mock.patch.object(remote, 'request', return_value=
+                    remote.response(200, {'full_name': 'example/other', 'permissions': {'push': True}})):
+                with self.assertRaisesRegex(publisher.PublicationError, 'repository identity'):
+                    publisher.publish(plan, stage_draft=True)
+            self.assertIsNone(remote.release)
+            self.assertEqual([], remote.uploads)
+
     def test_stage_draft_rejects_digest_changed_in_fresh_server_response(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
