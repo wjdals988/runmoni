@@ -1,5 +1,10 @@
 # 변경 이력
 
+## 2026-10-29 main 병합·서명 빌드·배포 진행 승인
+
+- 사용자가 남은 작업과 커밋·푸시·PR·APK 배포까지 진행하도록 요청해, 앞서 제시한 PR2 main 병합 및 동일 키 CI 검증/초안 업로드를 승인한 것으로 기록. 같은 승인을 반복 요청하지 않으며 실제 결과는 후속 실행 기록으로 구분.
+- 재연결된 현재 환경에서는 알려진 `/tmp/runmoni-release-signing-20261028/` 경로가 없음. 에이전트가 정리를 수행했다고 주장하지 않으며 키를 다시 생성하지 않음. 등록된 GitHub Actions의 동일 키로 실제 서명을 확인한다. 공개 전 실기기·인증 검증은 별도이며 아직 완료로 표시하지 않음.
+
 ## 2026-10-29 원래 PC의 서명 설정4개 등록 receipt 수신
 
 - 사용자가 Windows bridge의 `connectedSecretCount: 4`, repository scope, 승인 SHA256 `a21359c6…`, `appPublished: false` receipt를 전달. 등록 시각은2026-10-29 12:18:52 KST(03:18:52 UTC). 대상/지문/개수/미게시 상태를 대조하고 [기계 판독 기록](docs/release-review/2026-10-29/signing-connection.json)에 출처를 사용자 제공 결과로 명시. 클라우드에서 Windows 실행을 직접 관찰하거나 GitHub가 제공하는 평문을 조회했다고 주장하지 않음.
