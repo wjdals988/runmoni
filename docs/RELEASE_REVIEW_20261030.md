@@ -22,4 +22,4 @@
 
 ## 대시보드
 
-사용자가 승인한 대시보드 PR11에 실제 공개0.2 metadata와7장 검토 갤러리를 반영한다. 새 공개 URL/크기/해시와 버전 설명을 함께 갱신하며 실제 main/Production/HTTP 검증 결과는 후속 기록을 따른다.
+[대시보드 PR11](https://github.com/wjdals988/mydashboard/pull/11)을 main `3fc006350e2456b8aaf95e0ed0a80fbc04c9c816`에 병합했고 main CI run41030926160과 Vercel Production success를 확인했다. 운영 URL HTTP200에서 새0.2 다운로드/버전 설명/SHA256/갤러리7장 링크/미게시 문구 없음과 홈 이미지 원본 일치를 확인했다. 로컬 Node23개도 통과했다. 다른 프로젝트·순서·과거0.1.6/0.1.1 내역은 보존한다. [실제 운영 확인](release-review/2026-10-30/dashboard-production-verification.json).

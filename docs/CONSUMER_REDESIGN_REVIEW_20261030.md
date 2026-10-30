@@ -47,3 +47,9 @@
 실제 발급된 [Vercel 미리보기](https://mydashboard-klausqav0-wjdals988-6836s-projects.vercel.app/projects/runmoni)는 소유자 로그인이 필요하다. 이 환경의 익명 HTTP 요청은 Login – Vercel 페이지로 연결돼 미리보기 갤러리 HTML/이미지의 익명 접근은 확인하지 못했다. 보호를 우회하거나 인증 정보를 요청하지 않았다. CI/미리보기 배포 성공과 실제 페이지의 익명 렌더 확인을 구분한다. Android 화면 자체는 위 실제 PNG에서 볼 수 있다. [서버 확인 결과](app-review/2026-10-30-redesign/dashboard-verification.json).
 
 운영 페이지는 HTTP200으로 기존0.1.6 다운로드를 유지하며 새 갤러리 경로가 없었다. 기존 Production commit34f2924와 새 Preview commit14b93f3도 구분했다. 자동 승인 검토가 main 병합을 거절한 뒤 이를 우회하지 않았으므로 PR9/10/앱UI PR11/대시보드 PR11의 main 통합·동일 키0.2 서명 CI·새 APK 공개·피드/운영 다운로드 교체는 명시적 main 병합 승인 뒤 진행한다. 공용 방 API URL/호스팅 계정 연결도 별개로 남아 있다.
+
+## 후속 공개 완료 — 명시 승인 이후
+
+사용자가 ‘main 병합 승인. APK와 운영 대시보드 배포 진행’을 명시했다. 앱 PR9/10/11과 대시보드 PR11을 main에 통합하고 기존 보관 키로 서명한0.2.0-dev/code10을 공개했다. 실제 APK 출처는 `e7b988af2b96c640fbcc40681d5201f74527b36a`, CI run41027995152의 JVM40/실패0·release lint오류0/경고60과 서명/패키지/내장 출처를 확인했다. 위 debug lint경고35와 온라인 release 경고60은 실행 환경별 결과이며 합치거나 오류0을 경고0으로 표시하지 않는다.
+
+운영 대시보드 main3fc0063의 CI/Vercel Production success, 실제 페이지 HTTP200과 새0.2 다운로드/버전/해시/갤러리7장·이미지 원본 일치도 확인했다. 이전 대기/미게시0.2/기존0.1.6 유지 서술은 검토 당시 이력이며 최신 상태는 [게시 검증](RELEASE_REVIEW_20261030.md)을 따른다. 실기기/Google 로그인/공용 방 서버는 여전히 별도 미확인이다.

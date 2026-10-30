@@ -1,0 +1,33 @@
+{
+  "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+  "httpStatus": 200,
+  "dashboardCommit": "3fc006350e2456b8aaf95e0ed0a80fbc04c9c816",
+  "pullRequest": "https://github.com/wjdals988/mydashboard/pull/11",
+  "merged": true,
+  "vercelProductionReady": true,
+  "mainCiRun": 41030926160,
+  "mainCiConclusion": "success",
+  "nodeTests": 23,
+  "nodeFailures": 0,
+  "checks": {
+    "newApkHrefVisible": true,
+    "newCurrentVersionDescriptionVisible": true,
+    "sha256Visible": true,
+    "galleryHeadingVisible": true,
+    "allSevenScreenLinksPresent": true,
+    "staleUnpublishedCaptionAbsent": true,
+    "homeImageBytesMatch": true
+  },
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.0-dev/runmoni-0.2.0-dev.apk",
+    "fileName": "runmoni-0.2.0-dev.apk",
+    "version": "0.2.0-dev",
+    "versionCode": 10,
+    "size": "218,300,173 bytes",
+    "sha256": "b3d802900d9f969b6c82d6b7b6bd7add40830c73b80c33a4cdca9f11fd43b7ca",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.2.0-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK"
+  },
+  "physicalDeviceTests": 0,
+  "publicRoomServerCreated": false
+}
