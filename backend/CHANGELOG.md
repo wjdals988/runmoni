@@ -1,3 +1,9 @@
+# 2026-10-30 — v0.1.5 크루·파티 방
+
+- 공개 메타데이터 목록과180일 닉네임 게스트 세션, 공개 크루 직접 입장, 크루 없는 독립 파티/채팅을 추가했다. 기존 계정/방은pilot으로 보존하고 새 게스트의 기존pilot 위치·방 접근을 거부한다. SQLite additive schema3이며 기존 데이터/원장은 보존한다.
+- 기존 API 회귀와 새 방7개를 포함해34개 통과(Starlette 경고1개). 공식 Render Blueprint 스키마/actionlint 통과. Docker 초기 소스 권한 오류를 고친 뒤 UID10001/HTTP/컨테이너 재생성 후 세션·방·메시지 보존을 확인했다.
+- 공용 호스팅은 계정 연결/유료 영속 디스크 승인 전으로 아직 생성하지 않았다. 기존 Firebase Spark 무료 선택은 변경하지 않았다. [앱·서버 검증 기록](../docs/COMMUNITY_ROOMS_REVIEW_20261030.md), [배포 설정과 다음 단계](../docs/COMMUNITY_SERVER_DEPLOYMENT.md).
+
 # Backend change history
 
 ## 0.1.4 — 2026-10-13

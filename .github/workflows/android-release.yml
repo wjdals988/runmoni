@@ -19,6 +19,8 @@ concurrency:
 jobs:
   candidate:
     runs-on: ubuntu-24.04
+    env:
+      RUNMONI_API_URL: ${{ vars.RUNMONI_API_URL || 'http://127.0.0.1:8787' }}
     timeout-minutes: 60
     # Repository Actions secrets; this workflow only runs on explicit dispatch.
     permissions:

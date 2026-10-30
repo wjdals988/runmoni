@@ -52,8 +52,8 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 8
-        versionName = "0.1.7-dev"
+        versionCode = 9
+        versionName = "0.1.8-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
         buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${configString("NAVER_MAP_CLIENT_ID")}\"")

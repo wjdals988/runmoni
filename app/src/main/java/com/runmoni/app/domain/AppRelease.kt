@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.1.8-dev", "2026-10-30", "개발 중 · 미게시", listOf(
+        "초대코드 없이 공개 크루·파티 방을 둘러보고 닉네임으로 참여해요.",
+        "크루 방과 파티 방을 직접 만들고 이름·지역·페이스로 찾아요.",
+        "크루에 가입하지 않아도 파티를 만들고 입장할 수 있어요.",
+    )),
     AppVersionEntry("0.1.7-dev", "2026-10-30", "개발 중 · 미게시", listOf(
         "연속해서 멈춘 시간으로 자동 일시정지를 판단하고, 직접 멈춘 러닝은 자동으로 재개하지 않아요.",
         "GPS를 나중에 켜도 기록을 다시 시작하지 않고 위치를 받아요.",

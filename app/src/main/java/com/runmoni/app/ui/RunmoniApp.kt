@@ -166,6 +166,7 @@ private fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, o
 
 @Composable
 private fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit) {
+    LaunchedEffect(Unit) { actions.refreshCommunity() }
     var layer by rememberSaveable { mutableIntStateOf(0) }
     var kindFilter by rememberSaveable { mutableIntStateOf(0) }
     var query by rememberSaveable { mutableStateOf("") }
@@ -180,17 +181,17 @@ private fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> 
             IconButton(onClick = actions::refreshCommunity, enabled = !state.busy, modifier = Modifier.size(48.dp).testTag("refresh_community")) { Icon(Icons.Outlined.Refresh, "모임 새로고침") }
         }
         OutlinedTextField(value = query, onValueChange = { query = it }, modifier = Modifier.fillMaxWidth(), singleLine = true, label = { Text("모임 검색") }, leadingIcon = { Icon(Icons.Outlined.Search, null) }, placeholder = { Text("이름, 지역, 페이스로 찾기") }, shape = RoundedCornerShape(16.dp))
-        if (!state.serverConnected || !state.signedIn) CommunityNotice(state, onSignIn)
+        if (!state.serverConnected) CommunityNotice(state, onSignIn)
         when (layer) {
             0 -> {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("전체", "현장", "원격").forEachIndexed { index, label -> FilterChip(selected = kindFilter == index, onClick = { kindFilter = index }, label = { Text(label) }, modifier = Modifier.heightIn(min = 48.dp)) } }
                 val parties = state.parties.filter { !it.cancelled && (kindFilter == 0 || if (kindFilter == 1) it.kind == PartyKind.LOCAL else it.kind == PartyKind.REMOTE) && (query.isBlank() || "${it.title} ${it.meetingLabel} ${it.paceLabel}".contains(query, true)) }
-                if (parties.isEmpty() && state.serverConnected && state.signedIn) EmptyCard("표시할 러닝 파티가 없어요", "연결된 서버의 실제 모집 일정이 여기에 표시돼요")
+                if (parties.isEmpty() && state.serverConnected) EmptyCard("표시할 러닝 파티가 없어요", "연결된 서버의 실제 모집 일정이 여기에 표시돼요")
                 parties.sortedBy { it.startsAtMillis }.forEach { party -> PartySummary(party) { selectedParty = party } }
             }
             1 -> {
                 val crews = state.crews.filter { query.isBlank() || "${it.name} ${it.region} ${it.paceLabel}".contains(query, true) }
-                if (crews.isEmpty() && state.serverConnected && state.signedIn) EmptyCard("아직 만날 크루가 없어요", "크루를 만들거나, 초대 파일럿에 연결해 주세요")
+                if (crews.isEmpty() && state.serverConnected) EmptyCard("아직 만날 크루가 없어요", "크루 탭에서 새 방을 만들거나 목록의 방을 골라보세요")
                 crews.forEach { crew -> CrewCard(crew, onJoin = { if (state.signedIn) actions.joinCrew(crew.id) else onSignIn() }) }
             }
             2 -> {
@@ -300,56 +301,7 @@ private fun LocationReadinessCard(permissionMissing: Boolean, actions: AppAction
 
 @Composable
 private fun CrewScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit) {
-    var newCrew by rememberSaveable { mutableStateOf(false) }
-    var selectedCrewId by rememberSaveable { mutableStateOf<String?>(null) }
-    var partyCrewId by rememberSaveable { mutableStateOf<String?>(null) }
-    var manageCrewId by rememberSaveable { mutableStateOf<String?>(null) }
-    var selectedParty by remember { mutableStateOf<Party?>(null) }
-    val selected = state.crews.firstOrNull { it.id == selectedCrewId }
-    ScreenContent {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("내 크루", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).semantics { heading() })
-            FilledTonalIconButton(onClick = { if (state.signedIn) newCrew = true else onSignIn() }, modifier = Modifier.testTag("create_crew")) { Icon(Icons.Outlined.Add, "크루 만들기") }
-        }
-        val crews = state.crews.filter { it.joined }
-        if (crews.isEmpty()) {
-            Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Groups, null, Modifier.size(56.dp), tint = RunmoniColors.Primary) }
-            Text("같이 달릴 크루를 만나보세요", style = MaterialTheme.typography.titleMedium)
-            SmallNote("크루에서 일정을 정하고, 채팅과 음성으로 함께해요.")
-            OutlinedButton(onClick = { if (state.signedIn) newCrew = true else onSignIn() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text(if (state.signedIn) "새 크루 만들기" else "초대코드로 연결") }
-            if (!state.serverConnected) SmallNote("크루 기능은 테스트 서버 연결이 필요해요. 러닝 기록은 혼자서도 사용할 수 있어요.")
-        } else if (!state.serverConnected) CommunityNotice(state, onSignIn)
-        crews.forEach { crew ->
-            Surface(shape = RoundedCornerShape(22.dp), color = if (selected?.id == crew.id) RunmoniColors.PrimarySoft else RunmoniColors.Paper, border = BorderStroke(1.dp, if (selected?.id == crew.id) RunmoniColors.Primary else RunmoniColors.Line), modifier = Modifier.clickable(role = Role.Button, onClickLabel = "크루 펼치기") { selectedCrewId = if (selected?.id == crew.id) null else crew.id }.testTag("crew_${crew.id}")) {
-                Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(crew.name, style = MaterialTheme.typography.titleLarge)
-                    Text("${crew.memberCount}명 · ${crew.region.ifBlank { "원격 가능" }} · ${crew.paceLabel}", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                    StatusPill(if (crew.isOwner) "크루장" else if (crew.isDj) "DJ" else "멤버", RunmoniColors.Green)
-                    Row(verticalAlignment = Alignment.CenterVertically) { Text(if (selected?.id == crew.id) "접기" else "크루 펼쳐보기", color = RunmoniColors.Primary, style = MaterialTheme.typography.labelMedium); Icon(if (selected?.id == crew.id) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null, tint = RunmoniColors.Primary) }
-                }
-            }
-        }
-        selected?.let { crew ->
-            Text(crew.description, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-            AdaptiveActions(
-                first = { modifier -> OutlinedButton(onClick = { actions.openChat("crew:${crew.id}", crew.name) }, modifier = modifier.heightIn(min = 48.dp)) { Text("공지 · 채팅") } },
-                second = { modifier -> OutlinedButton(onClick = { partyCrewId = crew.id }, enabled = crew.isOwner, modifier = modifier.heightIn(min = 48.dp).testTag("create_party_${crew.id}")) { Text("파티 만들기") } },
-            )
-            AudioPanel(state.audio, actions, "crew:${crew.id}")
-            if (!crew.isOwner) SmallNote("파일럿에서는 크루장이 파티를 만들고 운영해요.")
-            if (crew.isOwner) OutlinedButton(onClick = { manageCrewId = crew.id }, modifier = Modifier.fillMaxWidth().testTag("manage_crew_members")) { Text("멤버 · DJ · 초대 관리") }
-            if (crew.isOwner) SmallNote("크루장은 파일럿에서 크루를 탈퇴할 수 없어요.")
-            else TextButton(onClick = { actions.leaveCrew(crew.id); selectedCrewId = null }, modifier = Modifier.testTag("leave_crew_${crew.id}")) { Text("이 크루 나가기", color = RunmoniColors.Muted) }
-        }
-        val parties = state.parties.filter { it.joined || it.crewId in crews.map(Crew::id) }
-        if (crews.isNotEmpty() || parties.isNotEmpty()) SectionHeading("나의 러닝 파티")
-        if (crews.isNotEmpty() && parties.isEmpty()) SmallNote("예정된 파티가 없어요. 크루를 선택해 새 일정을 만들어보세요.")
-        parties.sortedBy { it.startsAtMillis }.forEach { party -> PartySummary(party) { selectedParty = party } }
-    }
-    if (newCrew) NewCrewDialog(actions) { newCrew = false }
-    partyCrewId?.let { crewId -> NewPartyDialog(crewId, actions) { partyCrewId = null } }
-    selectedParty?.let { party -> PartyDialog(state, party, actions, onSignIn = onSignIn) { selectedParty = null } }
-    manageCrewId?.let { crewId -> CrewMembersDialog(state, crewId, actions) { manageCrewId = null } }
+    CommunityRoomsScreen(state, actions)
 }
 
 @Composable
@@ -479,12 +431,13 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
 internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
     var confirmation by remember { mutableStateOf(false) }
     LaunchedEffect(state.signedIn) { if (!state.signedIn) confirmation = false }
+    if (state.communityGuest) { SmallNote("방에 참여해도 내 실시간 위치는 자동으로 공유되지 않아요."); return }
     ToggleRow("파일럿 위치 공유", if (state.signedIn) "초대받은 테스터에게 러닝 중 정밀 위치를 공유해요" else "초대 파일럿 로그인 후 이용할 수 있어요", state.publicLocation, { if (it) confirmation = true else actions.setPublicLocation(false) }, enabled = state.signedIn, tag = "share_location")
     if (confirmation && state.signedIn) AlertDialog(onDismissRequest = { confirmation = false }, title = { Text("러닝 위치를 공유할까요?") }, text = { DialogMessage("진행 중 러닝의 정밀 좌표, 러너 이름, 미니미를 같은 초대 파일럿의 성인 테스터에게 보여줘요. 인터넷 전체에 공개되는 지도는 아니에요.\n\n러닝 중 15초마다 위치를 갱신해요. 공유를 끄거나 러닝을 마치면 공유를 중지해요. 마지막 갱신 후 45초가 지나면 위치가 만료돼요.") }, confirmButton = { TextButton(onClick = { confirmation = false; actions.setPublicLocation(true) }, modifier = Modifier.testTag("confirm_share_location")) { Text("위치 공유 켜기") } }, dismissButton = { TextButton(onClick = { confirmation = false }, modifier = Modifier.testTag("cancel_share_location")) { Text("공유하지 않기") } })
 }
 
 @Composable
-private fun CommunityNotice(state: AppState, onSignIn: () -> Unit) { EmptyCard("초대 파일럿 연결이 필요해요", state.serverStatus, if (!state.signedIn) "초대코드로 로그인" else null, onSignIn) }
+private fun CommunityNotice(state: AppState, onSignIn: () -> Unit) { EmptyCard("모임 서버에 연결하지 못했어요", state.serverStatus) }
 
 @Composable
 private fun CrewCard(crew: Crew, onJoin: () -> Unit) {

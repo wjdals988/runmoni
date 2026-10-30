@@ -30,13 +30,18 @@ class PilotClient(var baseUrl: String, var token: String = "") {
     }
     suspend fun health() = request("GET", "/health")
     suspend fun login(inviteCode: String, nickname: String): JSONObject = request("POST", "/v1/auth/pilot", JSONObject().put("invite_code", inviteCode).put("nickname", nickname).put("adult_confirmed", true))
+    suspend fun connectCommunity(nickname: String) = request("POST", "/v1/auth/guest", JSONObject().put("nickname", nickname).put("adult_confirmed", true))
     suspend fun profile(): Profile = request("GET", "/v1/me").toProfile()
     suspend fun crews(): List<Crew> {
-        val joined = request("GET", "/v1/crews").items().map { it.toCrew(true) }
+        val joined = if (token.isBlank()) emptyList() else request("GET", "/v1/crews").items().map { it.toCrew(true) }
         val discovered = request("GET", "/v1/crews/discover").items().map { it.toCrew(false) }
         return (joined + discovered.filter { d -> joined.none { it.id == d.id } })
     }
-    suspend fun parties(): List<Party> = request("GET", "/v1/parties").items().map { it.toParty() }
+    suspend fun parties(): List<Party> {
+        val mine = if (token.isBlank()) emptyList() else request("GET", "/v1/parties").items().map { it.toParty() }
+        val public = request("GET", "/v1/parties/discover").items().map { it.toParty() }
+        return (mine + public).distinctBy { it.id }
+    }
     suspend fun members(crewId: String) = request("GET", "/v1/crews/$crewId/members").items().map { CrewMember(it.optString("user_id", it.optString("id")), it.optString("nickname"), it.optString("role") == "owner", it.optString("role") == "dj") }
     suspend fun chat(roomId: String): List<ChatMessage> {
         val (scope, id) = roomId.split(":", limit = 2)
@@ -57,8 +62,8 @@ class PilotClient(var baseUrl: String, var token: String = "") {
         val result = request("POST", "/v1/runs/${record.id}/finalize", JSONObject().put("ended_at_ms", record.finishedAtMillis).put("active_duration_s", record.activeDurationMillis / 1000.0))
         return result.optInt("reward_points")
     }
-    suspend fun createCrew(input: NewCrew) = request("POST", "/v1/crews", JSONObject().put("name", input.name).put("description", input.description).put("region", input.region).put("pace_label", input.paceLabel))
-    suspend fun createParty(input: NewParty) = request("POST", "/v1/parties", JSONObject().put("crew_id", input.crewId).put("title", input.title).put("kind", input.kind.name.lowercase()).put("starts_at_ms", input.startsAtMillis).put("meeting_point", input.meetingLabel).put("distance_km", input.distanceKm).put("pace_label", input.paceLabel).put("capacity", input.capacity).put("latitude", input.latitude ?: JSONObject.NULL).put("longitude", input.longitude ?: JSONObject.NULL))
+    suspend fun createCrew(input: NewCrew) = request("POST", "/v1/crews", JSONObject().put("visibility", "open").put("name", input.name).put("description", input.description).put("region", input.region).put("pace_label", input.paceLabel))
+    suspend fun createParty(input: NewParty) = request("POST", "/v1/parties", JSONObject().put("crew_id", input.crewId ?: JSONObject.NULL).put("title", input.title).put("kind", input.kind.name.lowercase()).put("starts_at_ms", input.startsAtMillis).put("meeting_point", input.meetingLabel).put("distance_km", input.distanceKm).put("pace_label", input.paceLabel).put("capacity", input.capacity).put("latitude", input.latitude ?: JSONObject.NULL).put("longitude", input.longitude ?: JSONObject.NULL))
     companion object {
         fun JSONObject.items(): List<JSONObject> = optJSONArray("items")?.let { array -> (0 until array.length()).map { array.getJSONObject(it) } } ?: emptyList()
         fun JSONObject?.toAvatar() = AvatarStyle(this?.optInt("hair") ?: 0, this?.optInt("top") ?: 0, this?.optInt("bottom") ?: 0, this?.optInt("shoes") ?: 0, this?.optInt("accessory") ?: 0,
@@ -75,7 +80,7 @@ class PilotClient(var baseUrl: String, var token: String = "") {
             val owned = optJSONArray("owned_items")?.let { array -> (0 until array.length()).map { array.optString(it) }.toSet() } ?: Profile().ownedItems
             return Profile(optString("nickname", "러너"), optJSONObject("avatar").toAvatar(), optInt("mileage"), AvatarCatalogue.migrateOwned(owned))
         }
-        fun JSONObject.toCrew(joined: Boolean) = Crew(optString("id"), optString("name"), optString("description"), optString("region"), optString("pace_label", "자유 페이스"), optInt("member_count"), joined, optString("role") == "owner", optString("role") == "dj", optString("invitation_code").takeIf { it.isNotBlank() && it != "null" })
-        fun JSONObject.toParty() = Party(optString("id"), optString("crew_id"), optString("title"), if (optString("kind") == "remote") PartyKind.REMOTE else PartyKind.LOCAL, optLong("starts_at_ms"), optString("meeting_point"), if (isNull("latitude")) null else optDouble("latitude"), if (isNull("longitude")) null else optDouble("longitude"), optDouble("distance_km", 5.0), optString("pace_label", "자유 페이스"), optInt("capacity", 20), optInt("participant_count"), optBoolean("is_joined"), optString("status") == "cancelled")
+        fun JSONObject.toCrew(joined: Boolean) = Crew(optString("id"), optString("name"), optString("description"), optString("region"), optString("pace_label", "자유 페이스"), optInt("member_count"), joined, optString("role") == "owner", optString("role") == "dj", optString("invitation_code").takeIf { it.isNotBlank() && it != "null" }, optString("visibility") == "open")
+        fun JSONObject.toParty() = Party(optString("id"), optString("crew_id"), optString("title"), if (optString("kind") == "remote") PartyKind.REMOTE else PartyKind.LOCAL, optLong("starts_at_ms"), optString("meeting_point"), if (isNull("latitude")) null else optDouble("latitude"), if (isNull("longitude")) null else optDouble("longitude"), optDouble("distance_km", 5.0), optString("pace_label", "자유 페이스"), optInt("capacity", 20), optInt("participant_count"), optBoolean("is_joined"), optString("status") == "cancelled", optBoolean("is_organizer"))
     }
 }

@@ -1,0 +1,16 @@
+{
+  "package": [
+    "versionCode=9 minSdk=29 targetSdk=36",
+    "versionName=0.1.8-dev"
+  ],
+  "display": "Physical size: 480x854",
+  "density": "Physical density: 160",
+  "fontScale": "1.0",
+  "api": "29",
+  "reverseMappings": "",
+  "animations": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "1.0",
+    "animator_duration_scale": "1.0"
+  }
+}

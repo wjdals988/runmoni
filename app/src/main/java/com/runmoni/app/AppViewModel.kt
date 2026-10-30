@@ -10,10 +10,15 @@ import androidx.lifecycle.viewModelScope
 import com.runmoni.app.audio.AudioConnection
 import com.runmoni.app.audio.AudioController
 import com.runmoni.app.data.*
+import com.runmoni.app.data.PilotClient.Companion.toCrew
+import com.runmoni.app.data.PilotClient.Companion.toParty
+import com.runmoni.app.data.PilotClient.Companion.toProfile
 import com.runmoni.app.domain.*
 import com.runmoni.app.tracking.RunTrackingService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -45,7 +50,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var selectedVoiceRoom = ""
     private var leaseId: String? = null
     private var pendingExternalLease: JSONObject? = null
-    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = api.token.isNotBlank(), publicLocation = preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true)))
+    private var pendingOperations = 0
+    private val communityRefresh = Mutex()
+    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = api.token.isNotBlank(), publicLocation = preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = preferences.getBoolean("communityGuest", false)))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
@@ -57,9 +64,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
         viewModelScope.launch { app.runs.active.collect { active -> mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) } } }
         viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
-        viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank()) wallet.read() else it.profile) } } }
+        viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank() || it.communityGuest) wallet.read() else it.profile) } } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
-            if (api.token.isBlank()) {
+            if (api.token.isBlank() || state.value.communityGuest) {
                 mutableState.update { it.copy(profile = wallet.read()) }
             } else { RunSyncWorker.enqueue(app); refreshCommunity() }
         } }
@@ -81,11 +88,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
     }
     private fun work(block: suspend () -> Unit) = viewModelScope.launch {
+        pendingOperations++
         mutableState.update { it.copy(busy = true, error = null) }
         try { block() } catch (failure: Exception) {
             if (failure is CancellationException) throw failure
             mutableState.update { it.copy(error = failure.message ?: "작업을 완료하지 못했습니다. 연결 상태를 확인해 주세요.") }
-        } finally { mutableState.update { it.copy(busy = false) } }
+        } finally { pendingOperations--; mutableState.update { it.copy(busy = pendingOperations > 0) } }
     }
     fun permissionDenied(message: String) { mutableState.update { it.copy(error = message) } }
     fun updateLocationAccess(precisePermissionGranted: Boolean, gpsEnabled: Boolean) {
@@ -103,6 +111,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
     override fun setPublicLocation(enabled: Boolean) {
+        if (enabled && state.value.communityGuest) { permissionDenied("현재 방 프로필에서는 실시간 위치 공유를 사용할 수 없어요."); return }
         if (enabled && api.token.isBlank()) { permissionDenied("초대코드로 로그인한 뒤 위치 공유를 켜 주세요."); return }
         preferences.edit().putBoolean("publicLocation", enabled).apply()
         mutableState.update { it.copy(publicLocation = enabled) }
@@ -110,21 +119,21 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     override fun updateProfile(name: String) = ignoreJob(work {
         require(name.trim().length in 1..30) { "이름은 1~30자로 입력해 주세요." }
-        if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("nickname", name.trim())); refreshNow() }
+        if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("nickname", name.trim())); if (state.value.communityGuest) mutateLocalProfile { it.copy(name = name.trim()) }; refreshNow() }
         else mutateLocalProfile { it.copy(name = name.trim()) }
     })
     override fun equipItem(slot: String, variant: Int) = ignoreJob(work {
         val item = "$slot:$variant"
         require(item in state.value.profile.ownedItems) { "먼저 아이템을 구매해 주세요." }
         val avatar = state.value.profile.avatar.with(slot, variant)
-        if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("avatar", avatar.toJson())); refreshNow() }
+        if (api.token.isNotBlank() && !state.value.communityGuest) { api.request("PATCH", "/v1/me", JSONObject().put("avatar", avatar.toJson())); refreshNow() }
         else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant)) }
     })
     override fun buyItem(slot: String, variant: Int) = ignoreJob(work {
         require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
         val item = "$slot:$variant"
         if (item in state.value.profile.ownedItems) return@work
-        if (api.token.isNotBlank()) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
+        if (api.token.isNotBlank() && !state.value.communityGuest) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
         else {
             val cost = AvatarCatalogue.price(variant)
             mutateLocalProfile { current ->
@@ -166,24 +175,36 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                     previousLease?.let { runCatching { previousClient.request("DELETE", "/v1/music/lease/$it") } }
                 }
                 leaseId = null; selectedVoiceRoom = ""
-                api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").apply()
+                api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("communityGuest", false).apply()
                 audio.stopMusic(); viewModelScope.launch { audio.disconnect() }
                 api.baseUrl = url.trim().trimEnd('/'); preferences.edit().putString("apiUrl", api.baseUrl).apply()
                 preferences.edit().putBoolean("publicLocation", false).apply()
-                mutableState.update { it.copy(apiUrl = api.baseUrl, signedIn = false, serverConnected = false, publicLocation = false, profile = readLocalProfile(), crews = emptyList(), parties = emptyList(), messages = emptyList(), liveRunners = emptyList(), crewMembers = emptyMap(), openedRoomId = "", openedRoomTitle = "", audio = it.audio.copy(roomId = "", canDj = false)) }
+                mutableState.update { it.copy(apiUrl = api.baseUrl, signedIn = false, communityGuest = false, serverConnected = false, publicLocation = false, profile = readLocalProfile(), crews = emptyList(), parties = emptyList(), messages = emptyList(), liveRunners = emptyList(), crewMembers = emptyMap(), openedRoomId = "", openedRoomTitle = "", audio = it.audio.copy(roomId = "", canDj = false)) }
             }
-        }.onFailure { permissionDenied(it.message ?: "서버 주소를 확인해 주세요.") }
+        }.onFailure { permissionDenied(it.message ?: "서버 주소를 확인해 주세요.") }.onSuccess { refreshCommunity() }
     }
+    override fun connectCommunity(name: String) = ignoreJob(work {
+        val result = api.connectCommunity(name.trim())
+        RunSyncWorker.cancel(app)
+        preferences.edit().putBoolean("communityGuest", true).putBoolean("publicLocation", false).apply()
+        api.token = result.getString("access_token"); session.write(api.token)
+        currentUserId = result.getJSONObject("user").getString("id")
+        preferences.edit().putString("userId", currentUserId).apply()
+        mutateLocalProfile { it.copy(name = name.trim()) }
+        mutableState.update { it.copy(signedIn = true, communityGuest = true, publicLocation = false) }
+        refreshNow()
+    })
     override fun signIn(inviteCode: String, name: String) = ignoreJob(work {
         val result = api.login(inviteCode.trim(), name.trim())
+        preferences.edit().putBoolean("communityGuest", false).apply()
         api.token = result.getString("access_token"); session.write(api.token)
         currentUserId = result.getJSONObject("user").getString("id"); preferences.edit().putString("userId", currentUserId).apply()
-        mutableState.update { it.copy(signedIn = true) }; refreshNow(); RunSyncWorker.enqueue(app)
+        mutableState.update { it.copy(signedIn = true, communityGuest = false) }; refreshNow(); RunSyncWorker.enqueue(app)
     })
     override fun signOut() = ignoreJob(work {
         runCatching { api.request("DELETE", "/v1/presence") }; runCatching { api.request("DELETE", "/v1/auth/session") }
-        audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).apply()
-        mutableState.update { it.copy(signedIn = false, serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
+        audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).putBoolean("communityGuest", false).apply()
+        mutableState.update { it.copy(signedIn = false, communityGuest = false, serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
     })
     override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
     suspend fun googleSignIn(context: Context) {
@@ -197,33 +218,56 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     })
     override fun refreshCloudSummaries(expectedUid: String) = ignoreJob(work { app.cloud.refreshSummaries(expectedUid) })
     override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work { app.cloud.deleteSummary(runId, expectedUid) })
-    override fun refreshCommunity() = ignoreJob(work { refreshNow() })
-    private suspend fun refreshNow() {
-        val health = api.health()
-        if (api.token.isBlank()) { mutableState.update { it.copy(serverConnected = true, serverStatus = "파일럿 서버 연결됨 · 초대코드로 로그인해 주세요") }; return }
-        val profile = api.profile()
-        val crews = api.crews()
-        val parties = api.parties().map { it.copy(isOrganizer = crews.any { crew -> crew.id == it.crewId && crew.isOwner }) }
-        val members = crews.filter { it.joined }.associate { it.id to api.members(it.id) }
-        val presence = api.presence()
-        val voice = health.optJSONObject("capabilities")?.optBoolean("voice") ?: false
-        val voiceCrew = when {
-            selectedVoiceRoom.startsWith("crew:") -> crews.find { it.joined && it.id == selectedVoiceRoom.substringAfter(':') }
-            selectedVoiceRoom.startsWith("party:") -> parties.find { it.joined && it.id == selectedVoiceRoom.substringAfter(':') }?.let { party -> crews.find { it.joined && it.id == party.crewId } }
-            else -> null
+    override fun refreshCommunity() = ignoreJob(work {
+        try { refreshNow() } catch (failure: Exception) {
+            mutableState.update { it.copy(serverConnected = false, serverStatus = "방 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") }
+            if (failure is CancellationException) throw failure
         }
-        if (selectedVoiceRoom.isNotBlank() && voiceCrew == null) {
+    })
+    private suspend fun refreshNow() = communityRefresh.withLock {
+        val expectedToken = api.token
+        val expectedUrl = api.baseUrl
+        val health = api.health()
+        check(health.optJSONObject("capabilities")?.optBoolean("public_rooms") == true) { "방 목록을 지원하는 서버가 필요해요. 서버 연결을 확인해 주세요." }
+        val identity = if (expectedToken.isBlank()) null else api.request("GET", "/v1/me")
+        val guest = identity?.optString("auth_mode") == "guest"
+        val profile = if (identity == null || guest) wallet.read() else identity.toProfile()
+        val crews = api.crews()
+        val parties = api.parties()
+        val members = crews.filter { it.joined }.associate { it.id to api.members(it.id) }
+        val presence = if (identity != null && !guest) api.presence() else emptyList()
+        val voice = health.optJSONObject("capabilities")?.optBoolean("voice") ?: false
+        if (expectedToken != api.token || expectedUrl != api.baseUrl) return@withLock
+        if (identity != null) preferences.edit().putBoolean("communityGuest", guest).apply()
+        val voiceParty = parties.find { "party:${it.id}" == selectedVoiceRoom && it.joined && !it.cancelled }
+        val voiceCrew = if (voiceParty != null) crews.find { it.joined && it.id == voiceParty.crewId }
+            else crews.find { "crew:${it.id}" == selectedVoiceRoom && it.joined }
+        if (selectedVoiceRoom.isNotBlank() && voiceCrew == null && voiceParty == null) {
             stopLease(); audio.disconnect(); selectedVoiceRoom = ""
         }
-        val canDj = voiceCrew?.let { it.isOwner || it.isDj } ?: false
+        val canDj = voiceParty?.isOrganizer == true || voiceCrew?.let { it.isOwner || it.isDj } == true
         if (!canDj && audio.status.value.musicSending) { audio.stopMusic(); stopLease() }
-        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = true, serverStatus = "초대 지인 파일럿 · 성인 테스트", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
+        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = identity != null, communityGuest = guest, serverStatus = "방 목록을 불러왔어요", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
     }
-    override fun createCrew(input: NewCrew) = ignoreJob(work { api.createCrew(input); refreshNow() })
+    private suspend fun refreshAfterCreation() {
+        runCatching { refreshNow() }.onFailure {
+            if (it is CancellationException) throw it
+            mutableState.update { it.copy(serverConnected = false, serverStatus = "방은 만들었지만 목록 갱신을 못했어요. 새로고침해 주세요.") }
+        }
+    }
+    override fun createCrew(input: NewCrew) = ignoreJob(work {
+        val crew = api.createCrew(input).toCrew(true)
+        mutableState.update { it.copy(crews = listOf(crew) + it.crews.filterNot { old -> old.id == crew.id }, lastCreatedCrewId = crew.id) }
+        refreshAfterCreation()
+    })
     override fun joinCrew(id: String) = ignoreJob(work { api.request("POST", "/v1/crews/$id/join"); refreshNow() })
     override fun leaveCrew(id: String) = ignoreJob(work { api.request("DELETE", "/v1/crews/$id/join"); refreshNow() })
     override fun setCrewDj(crewId: String, memberId: String, enabled: Boolean) = ignoreJob(work { api.request("PATCH", "/v1/crews/$crewId/members/$memberId", JSONObject().put("role", if (enabled) "dj" else "member")); refreshNow() })
-    override fun createParty(input: NewParty) = ignoreJob(work { api.createParty(input); refreshNow() })
+    override fun createParty(input: NewParty) = ignoreJob(work {
+        val party = api.createParty(input).toParty()
+        mutableState.update { it.copy(parties = listOf(party) + it.parties.filterNot { old -> old.id == party.id }, lastCreatedPartyId = party.id) }
+        refreshAfterCreation()
+    })
     override fun joinParty(id: String) = ignoreJob(work { api.request("POST", "/v1/parties/$id/join"); refreshNow() })
     override fun leaveParty(id: String) = ignoreJob(work { api.request("DELETE", "/v1/parties/$id/join"); refreshNow() })
     override fun cancelParty(id: String) = ignoreJob(work { api.request("POST", "/v1/parties/$id/cancel"); refreshNow() })

@@ -1,0 +1,7 @@
+**
+!backend
+!backend/__init__.py
+!backend/main.py
+!backend/models.py
+!backend/schema.sql
+!backend/requirements.lock.txt

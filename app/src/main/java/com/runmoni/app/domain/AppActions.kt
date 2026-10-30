@@ -19,6 +19,7 @@ interface AppActions {
     fun exportRun(id: String)
     fun configureServer(url: String)
     fun signIn(inviteCode: String, name: String)
+    fun connectCommunity(name: String)
     fun signOut()
     fun signInGoogle()
     fun signOutGoogle()
