@@ -30,15 +30,15 @@ class RunmoniUiTest {
         val state = mutableStateOf(AppState())
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         compose.onNodeWithTag("nav_explore").performClick()
-        compose.onNodeWithText("초대 파일럿 연결이 필요해요").assertExists()
+        compose.onNodeWithText("함께 달리기는 연결을 준비 중이에요").assertExists()
         compose.onNodeWithText("표시할 러닝 파티가 없어요").assertDoesNotExist()
         compose.onNodeWithTag("explore_layer_1").performClick()
         compose.onNodeWithText("아직 만날 크루가 없어요").assertDoesNotExist()
 
-        // Both connectivity and authentication are prerequisites; health alone
-        // must not make an unavailable collection appear successfully empty.
+        // A real successful anonymous fetch can be empty. Authentication is only
+        // requested when creating or joining a public room.
         compose.runOnIdle { state.value = state.value.copy(serverConnected = true) }
-        compose.onNodeWithText("아직 만날 크루가 없어요").assertDoesNotExist()
+        compose.onNodeWithText("아직 만날 크루가 없어요").assertExists()
         compose.runOnIdle { state.value = state.value.copy(signedIn = true) }
         compose.onNodeWithText("아직 만날 크루가 없어요").assertExists()
         compose.onNodeWithTag("explore_layer_0").performClick()
@@ -51,13 +51,13 @@ class RunmoniUiTest {
         val screens = listOf(
             "nav_explore" to "모임 검색",
             "nav_run" to "오늘의 러닝",
-            "nav_crew" to "내 크루",
+            "nav_crew" to "함께라서, 더 멀리.",
             "nav_me" to "미니미 꾸미기",
-            "nav_home" to "오늘도, 나답게.",
+            "nav_home" to "오늘도,\n나답게 달려요.",
         )
         screens.forEach { (tag, title) ->
             compose.onNodeWithTag(tag).performClick().assertIsSelected()
-            compose.onNodeWithText(title).assertIsDisplayed()
+            compose.onNodeWithText(title).performScrollTo().assertIsDisplayed()
         }
         // Connection diagnostics live in settings rather than every tab header.
         compose.onNodeWithTag("settings_button").performClick()

@@ -30,6 +30,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.Dialog
 import com.runmoni.app.domain.*
 import com.runmoni.app.avatar.AvatarArtwork
 import java.time.LocalDateTime
@@ -58,6 +59,16 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
             AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
             HorizontalDivider(color = RunmoniColors.Line)
         }
+        EditorialHeading("YOUR PACE", "나에게 맞추기")
+        Text("내 프로필", style = MaterialTheme.typography.titleMedium)
+        OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
+        OutlinedButton(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("save_profile")) { Text("이름 저장") }
+        HorizontalDivider()
+        Text("러닝과 위치", style = MaterialTheme.typography.titleMedium)
+        ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
+        ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
+        LocationSharingToggle(state, actions)
+        HorizontalDivider()
         Text("Google 계정", style = MaterialTheme.typography.titleMedium)
         Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
         if (state.cloud.uid.isBlank()) {
@@ -70,24 +81,15 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         }
         SmallNote("기록 상세에서 요약을 1건씩 백업해요. GPS 경로·마일리지는 포함하지 않아요.")
         HorizontalDivider()
-        Text("내 프로필", style = MaterialTheme.typography.titleMedium)
-        OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
-        OutlinedButton(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("save_profile")) { Text("이름 저장") }
-        HorizontalDivider()
-        Text("러닝과 위치", style = MaterialTheme.typography.titleMedium)
-        ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
-        ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
-        LocationSharingToggle(state, actions)
-        HorizontalDivider()
         Text("크루 · 파티 방 연결", style = MaterialTheme.typography.titleMedium)
-        StatusPill(if (state.serverConnected && state.signedIn) "파일럿 연결됨" else if (state.serverConnected) "로그인 필요" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
+        StatusPill(if (state.serverConnected && state.signedIn) "방 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
         Text(if (state.signedIn) "방 프로필 연결됨" else "공개 방을 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
         SmallNote("Google 계정과 별도로 연결하며 위치 공유는 직접 켜야 해요.")
-        Text(state.serverStatus, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-        if (state.signedIn) OutlinedButton(onClick = actions::signOut, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text("파일럿 로그아웃") }
+        if (state.signedIn) OutlinedButton(onClick = actions::signOut, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "방 프로필 연결 해제" else "파일럿 로그아웃") }
         else OutlinedButton(onClick = onSignIn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
         TextButton(onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "테스트 서버 설정 접기" else "테스트 서버 설정 펼치기") }
         if (connectionDetails) {
+            SmallNote(state.serverStatus)
             OutlinedTextField(value = url, onValueChange = { url = it }, label = { Text("서버 연결 주소") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("server_url"))
             Button(onClick = { actions.configureServer(url.trim()) }, enabled = url.startsWith("http://") || url.startsWith("https://"), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("connect_server")) { Text("서버 연결") }
             SmallNote("USB 연결 테스트는 localhost를 사용해요. 서버 주소는 Google 계정 설정과 별개예요.")
@@ -252,18 +254,21 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
     var accessorySlot by remember { mutableStateOf("eyewear") }
     var animate by remember { mutableStateOf(true) }
     val slots = AvatarCatalogue.slots
-    val width = minOf(560.dp, (LocalConfiguration.current.screenWidthDp * 0.94f).dp)
     val compactPreview = LocalDensity.current.fontScale >= 1.3f
     if (referenceReview) {
         AvatarReferenceDialog(onDismiss = { referenceReview = false })
         return
     }
-    AlertDialog(onDismissRequest = onDismiss, modifier = Modifier.width(width).testTag("form_dialog"),
-        properties = DialogProperties(usePlatformDefaultWidth = false), title = { Text("나의 미니미 옷장") },
-        confirmButton = { TextButton(onClick = onDismiss) { Text("닫기") } }, text = {
-        Column(Modifier.fillMaxWidth().heightIn(max = 480.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Box(Modifier.fillMaxWidth().height(if (compactPreview) 96.dp else 144.dp).clip(RoundedCornerShape(22.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) {
-            AvatarMini(profile.avatar, Modifier.size(if (compactPreview) 88.dp else 136.dp).testTag("closet_avatar_preview"), running = animate)
+    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+    Surface(Modifier.fillMaxSize().testTag("form_dialog"), color = RunmoniColors.Cream) {
+    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
+        Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("나의 미니미 옷장", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+            TextButton(onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp)) { Text("닫기") }
+        }
+        Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().weight(1f).align(Alignment.CenterHorizontally).padding(horizontal = 24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Box(Modifier.fillMaxWidth().height(if (compactPreview) 80.dp else 164.dp).clip(RoundedCornerShape(28.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) {
+            AvatarMini(profile.avatar, Modifier.width(if (compactPreview) 52.dp else 108.dp).height(if (compactPreview) 78.dp else 160.dp).testTag("closet_avatar_preview"), running = animate)
         }
         if (compactPreview) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text("${profile.mileage} P", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
@@ -275,10 +280,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
         }
         }
         Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        TextButton(onClick = { referenceReview = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_avatar_reference")) {
-            Text("원화 · 수영복 시안 비교")
-        }
-        SmallNote("기본 미니미를 새 원화로 바꿨어요. 준비 중인 아이템은 아직 착용할 수 없어요. 보유 아이템·포인트·기존 선택은 그대로 보관돼요.")
+        SmallNote("준비된 아이템만 착용할 수 있어요. 보유 아이템과 포인트는 그대로 보관돼요.")
         FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             AvatarCatalogue.tabs.forEach { (key, label) ->
                 FilterChip(selected = if (key == "accessories") slot in AvatarCatalogue.accessoryKeys else slot == key,
@@ -302,7 +304,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (ready) AvatarMini(profile.avatar.withItem(slot, variant), Modifier.size(64.dp), decorative = true)
-                    else Box(Modifier.size(64.dp).background(RunmoniColors.Mint, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
+                    else Box(Modifier.size(if (compactPreview) 88.dp else 64.dp).background(RunmoniColors.Mint, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
                         Text("원화\n준비", style = MaterialTheme.typography.labelSmall)
                     }
                     Text(slots.first { it.key == slot }.variants[variant], style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
@@ -313,11 +315,14 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             }
             HorizontalDivider(color = RunmoniColors.Line)
         }
-        SmallNote("파일럿 옷장은 러닝 마일리지로 이용해요. 현금 결제와 유료 아이템 판매는 연결되어 있지 않아요.")
-        SmallNote("아이템 원화를 순서대로 연결하고 있어요. 준비된 아이템부터 다시 꾸밀 수 있어요.")
+        SmallNote("러닝 마일리지로 이용하는 옷장이에요. 현금 결제는 없어요.")
+        TextButton(onClick = { referenceReview = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_avatar_reference")) { Text("원화 · 수영복 시안 비교") }
+        Spacer(Modifier.height(16.dp))
         }
         }
-    })
+    }
+    }
+    }
 }
 
 @Composable
