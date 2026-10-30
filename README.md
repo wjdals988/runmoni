@@ -1,12 +1,12 @@
 # 런모니 / Runmoni
 
-현재 공개 APK는 **실기기 검증 전 테스트용 `0.1.6-dev`(code7)**입니다. [대시보드에서 받기](https://coldbrewventi.vercel.app/projects/runmoni) · [GitHub 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.1.6-dev). 사용자 요청으로 검토용 다운로드를 제공하며 설치·실행·로그인 성공 확인은 아직 없습니다. 상단 설치 버전명의 새 버전 알림과 확인 후 APK 다운로드를 연결했습니다. [검증 기록](docs/RELEASE_REVIEW_20261029.md) · [남은 작업](docs/DEVELOPMENT_PRIORITIES.md) · [이번 APK 설명](docs/RELEASE_NOTES_0.1.6-dev.md).
+현재 공개 APK는 **실기기 검증 전 테스트용 `0.2.0-dev`(code10)**입니다. [대시보드에서 받기](https://coldbrewventi.vercel.app/projects/runmoni) · [GitHub 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.2.0-dev). 홈·탐색·러닝·크루·나, 전체 화면 옷장·채팅을 개편했습니다. 같은 보관 키로 서명했으며 실제 휴대폰/Google 로그인·야외 GPS·음성은 미검증입니다. [게시 검증](docs/RELEASE_REVIEW_20261030.md) · [화면 검토](docs/CONSUMER_REDESIGN_REVIEW_20261030.md) · [남은 작업](docs/DEVELOPMENT_PRIORITIES.md).
 
 캐릭터 최신 상태(2026-10-27): 홈에 남아 있던 거절된 v0.4 조립 그래픽을 승인 v0.3 전신 원화로 교체했습니다. [전체 런모니 앱의 실제 화면·검증·남은 작업](docs/APP_REVIEW_20261027.md)을 확인하세요. 클라우드에서 전체 앱 빌드와 실행이 가능해졌습니다. 현재 첫 행 캐릭터의 기본 러닝복만 복구했으며, 58종 레이어와 여자 기본형 선택 연결은 남아 있습니다. 준비되지 않은 아이템은 구매·착용을 잠시 막고 보유권·포인트·기존 선택을 보존합니다. [수영복 검토 시안](docs/design/avatars/v0.5.2/README.md)은 계속 미승인입니다.
 
 첫 미니미의 [준비·실패·재시도 실제 Android 검토](docs/AVATAR_LOADING_REVIEW_20261027.md)도 진행했습니다. 최신 기본8개/320dp·글씨200%에서4개 검사를 통과했으며, 원화8프레임과 데이터 계약을 보존했습니다. 전체 꾸미기 복구와는 별개입니다.
 
-Android에서 러닝 기록을 남기고 크루·파티 방을 만드는 개발 프리뷰입니다. 현재 개발 소스는 `0.2.0-dev`(versionCode10), 공개 다운로드는 `0.1.6-dev`(code7), API 소스는 `0.1.5`입니다. 새 소스는 소비자 앱 중심 UI와 초대코드 없는 방 목록/닉네임 참여/독립 파티, 자동 일시정지·위치 복구 개선을 포함합니다. **공용 방 서버는 아직 없습니다.** [화면 개편 검토](docs/CONSUMER_REDESIGN_REVIEW_20261030.md). 기존 공개0.1.6의 서명·출처·검증 결과와 새 개발본 검증은 각각 구분합니다. 실제 휴대폰·Google 로그인·원격 백업·야외 GPS·음성은 미검증입니다.
+Android에서 러닝 기록을 남기고 크루·파티 방을 만드는 개발 프리뷰입니다. 현재 개발 소스는 `0.2.0-dev`(versionCode10), 공개 다운로드는 `0.2.0-dev`(code10), API 소스는 `0.1.5`입니다. 새 소스는 소비자 앱 중심 UI와 초대코드 없는 방 목록/닉네임 참여/독립 파티, 자동 일시정지·위치 복구 개선을 포함합니다. **공용 방 서버는 아직 없습니다.** [화면 개편 검토](docs/CONSUMER_REDESIGN_REVIEW_20261030.md). 기존 공개0.1.6의 서명·출처·검증 결과와 새 개발본 검증은 각각 구분합니다. 실제 휴대폰·Google 로그인·원격 백업·야외 GPS·음성은 미검증입니다.
 
 ## 지금 구현한 범위
 
