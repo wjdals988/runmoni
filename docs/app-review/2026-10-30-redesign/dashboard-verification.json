@@ -1,0 +1,29 @@
+{
+  "dashboardCommit": "14b93f36cc956c68507db9b5477aac9e74c5abcc",
+  "dashboardPr": "https://github.com/wjdals988/mydashboard/pull/11",
+  "ciRun": 41024055547,
+  "ciTestLintBuild": "SUCCESS",
+  "vercelPreview": "success",
+  "previewUrl": "https://mydashboard-klausqav0-wjdals988-6836s-projects.vercel.app/projects/runmoni",
+  "productionChanged": false,
+  "newSignedApkPublished": false,
+  "nodeTests": 23,
+  "otherProjectsAndApkUnchanged": true,
+  "preview": {
+    "httpStatus": 200,
+    "existingApkLinkPresent": false,
+    "galleryHeadingPresent": false,
+    "newScreenPathPresent": false,
+    "requiresOwnerLogin": true,
+    "expectedPreviewContentVerified": false,
+    "observedPageTitle": "Login – Vercel",
+    "loginPromptObserved": true,
+    "renderedGalleryNotVerifiedWithoutOwnerLogin": true
+  },
+  "production": {
+    "httpStatus": 200,
+    "existingApkLinkPresent": true,
+    "galleryHeadingPresent": false,
+    "newScreenPathPresent": false
+  }
+}

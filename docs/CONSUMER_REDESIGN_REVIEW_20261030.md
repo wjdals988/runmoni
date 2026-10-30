@@ -39,3 +39,11 @@
 후속 MainActivity 캡처의 첫 시도는 UIAutomator의 빈 root/현재XML 파싱 실패로 중단됐다. 소유한 임시XML을 먼저 지우고 실제 현재 hierarchy가 파싱되는 경우에만 캡처하는 제한된 재시도를 추가했다. 이를 앱 기능 실패/성공이나 이미 완료된 테스트 수치로 합산하지 않는다.
 
 실제 MainActivity의 홈/탐색/러닝/크루 오프라인/나/옷장6개 전체 기기 캡처를 완료했다. [실제 실행/파일 해시](app-review/2026-10-30-redesign/main-screens-verification.json)와 raw PNG를 보관한다. 방/파티/채팅 PNG는 같은 최종 앱과 임시 loopback API의 실제 검증용 데이터이며, 별도의5개 탭 viewport PNG는 합성 AppState 테스트 화면이다. 호스트 렌더/GIF를 실제 앱 화면으로 표시하지 않았다. 최종 AVD PID203020도 이름/소유를 확인해 종료했고 추가 빌드·설치와 겹치지 않았다.
+
+## 대시보드 미리보기와 공개 경계
+
+[대시보드 PR11](https://github.com/wjdals988/mydashboard/pull/11), 커밋 `14b93f36cc956c68507db9b5477aac9e74c5abcc`에 실제 앱7화면의 대표 이미지/갤러리/원본 열기와 버전 구분을 반영했다. 다른 프로젝트·순서·현재0.1.6 APK 필드/과거 릴리스 내역은 깊은 비교로 불변을 확인했다. 로컬 Node23개 통과(실패/skip0), GitHub CI run41024055547의 Test, lint, and build SUCCESS와 Vercel Preview success를 확인했다. 의존성/잠금 파일 변경이나 APK 재다운로드는 없었다.
+
+실제 발급된 [Vercel 미리보기](https://mydashboard-klausqav0-wjdals988-6836s-projects.vercel.app/projects/runmoni)는 소유자 로그인이 필요하다. 이 환경의 익명 HTTP 요청은 Login – Vercel 페이지로 연결돼 미리보기 갤러리 HTML/이미지의 익명 접근은 확인하지 못했다. 보호를 우회하거나 인증 정보를 요청하지 않았다. CI/미리보기 배포 성공과 실제 페이지의 익명 렌더 확인을 구분한다. Android 화면 자체는 위 실제 PNG에서 볼 수 있다. [서버 확인 결과](app-review/2026-10-30-redesign/dashboard-verification.json).
+
+운영 페이지는 HTTP200으로 기존0.1.6 다운로드를 유지하며 새 갤러리 경로가 없었다. 기존 Production commit34f2924와 새 Preview commit14b93f3도 구분했다. 자동 승인 검토가 main 병합을 거절한 뒤 이를 우회하지 않았으므로 PR9/10/앱UI PR11/대시보드 PR11의 main 통합·동일 키0.2 서명 CI·새 APK 공개·피드/운영 다운로드 교체는 명시적 main 병합 승인 뒤 진행한다. 공용 방 API URL/호스팅 계정 연결도 별개로 남아 있다.
