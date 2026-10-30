@@ -68,7 +68,8 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions) {
                     second = { m -> OutlinedButton(onClick = { partyCrewId = selected.id; newParty = true }, enabled = selected.isOpen || selected.isOwner,
                         modifier = m.heightIn(min = 48.dp).testTag("create_party_${selected.id}")) { Text("파티 만들기") } },
                 )
-                AudioPanel(state.audio, actions, "crew:${selected.id}")
+                if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "crew:${selected.id}")
+                else SmallNote("채팅으로 함께 만나요. 음성 통화는 준비 중이에요.")
                 if (selected.isOwner) {
                     OutlinedButton(onClick = { manageId = selected.id }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("manage_crew_members")) { Text("멤버 · DJ 관리") }
                     SmallNote("방장은 공지와 멤버 역할을 관리해요. 현재 방장은 방을 나갈 수 없어요.")

@@ -62,4 +62,6 @@ data class CloudAccountState(
     val busy: Boolean = false,
     val status: String = "클라우드 백업 설정 준비 중",
     val summaries: List<CloudRunSummary> = emptyList(),
+    val interactiveSignInAt: Long = 0,
+    val sessionCheckedAt: Long = 0,
 )

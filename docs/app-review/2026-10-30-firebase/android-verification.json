@@ -1,0 +1,39 @@
+{
+  "project": "demo-runmoni",
+  "realAndroidSdk": true,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "rules": {
+    "tests": 110,
+    "pass": 110,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sdk": {
+    "tests": 1,
+    "failures": 0,
+    "seconds": 20.091
+  },
+  "native": {
+    "tests": 6,
+    "failures": 0,
+    "seconds": 71.049
+  },
+  "width320Font2": {
+    "tests": 4,
+    "failures": 0,
+    "seconds": 74.372
+  },
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "systemUiAnrObserved": true,
+  "actualMainActivityCaptureVerified": false,
+  "actualSharesheetVerified": false,
+  "windowInputVerified": false,
+  "uiChecksScope": "Compose layout/semantics/callback tests; OS ANR dialog observed in full-device captures",
+  "ownedAvdStoppedPid": 234249
+}

@@ -1,0 +1,50 @@
+name: Firebase room and summary rules
+on:
+  pull_request:
+    paths: ['firebase/**', '.github/workflows/firebase-rules.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: runmoni-firebase-rules-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  rules:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: firebase
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.19.0'
+          cache: npm
+          cache-dependency-path: firebase/package-lock.json
+      - name: Validate rules against the isolated demo emulator
+        run: |
+          export JAVA_HOME="$JAVA_HOME_21_X64"
+          export PATH="$JAVA_HOME/bin:$PATH"
+          unset GOOGLE_APPLICATION_CREDENTIALS FIREBASE_TOKEN
+          npm ci --ignore-scripts --no-audit --no-fund --maxsockets=1
+          result=0
+          npm test > rules-test.log 2>&1 || result=$?
+          python3 - <<'PY'
+          import json, re
+          from pathlib import Path
+          log = Path('rules-test.log').read_text()
+          counts = {key: int(re.search(r'ℹ '+key+r' (\d+)', log)[1]) if re.search(r'ℹ '+key+r' (\d+)', log) else None
+                    for key in ['tests', 'pass', 'fail', 'cancelled', 'skipped']}
+          report = {'project': 'demo-runmoni', 'remoteFirebaseModified': False, 'results': counts}
+          Path('rules-result.json').write_text(json.dumps(report, indent=2)+'\n')
+          print(json.dumps(report))
+          PY
+          exit "$result"
+      - name: Retain non-secret test summary
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: firebase-rules-${{ github.sha }}
+          path: firebase/rules-result.json
+          if-no-files-found: error

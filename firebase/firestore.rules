@@ -48,8 +48,156 @@ service cloud.firestore {
       allow delete: if isOwner(uid);
     }
 
-    // No profiles, crews, parties, presence, wallets, rewards, tracks or other paths.
-    // A later trusted API and its separately reviewed rules must authorize those features.
+    // Spark community is separate from personal summaries and the trusted pilot wallet.
+    function signedIn() { return request.auth != null; }
+    function validRoomId(id) { return id is string && id.matches('^[A-Za-z0-9]{20}$'); }
+    function profilePath(uid) { return /databases/$(database)/documents/communityProfiles/$(uid); }
+    function roomPath(id) { return /databases/$(database)/documents/communityRooms/$(id); }
+    function memberPath(id, uid) { return /databases/$(database)/documents/communityRooms/$(id)/members/$(uid); }
+    function messagePath(id, mid) { return /databases/$(database)/documents/communityRooms/$(id)/messages/$(mid); }
+    function memberOf(id) { return signedIn() && exists(memberPath(id, request.auth.uid)); }
+    function manager(id) {
+      let r = get(roomPath(id)).data;
+      return signedIn() && (r.ownerUid == request.auth.uid ||
+        (r.kind == 'party' && r.crewId != '' && get(roomPath(r.crewId)).data.ownerUid == request.auth.uid));
+    }
+    function boundedList(maximum) {
+      return request.query.limit != null && request.query.limit > 0 && request.query.limit <= maximum;
+    }
+    function validNickname(name) { return name is string && name.matches('^[A-Za-z0-9_가-힣 -]{2,24}$'); }
+    function validProfile(d) {
+      return d.keys().hasAll(['nickname', 'createdAt', 'updatedAt', 'joinedRoomIds', 'lastRoomId', 'createdRoomCount', 'lastRoomCreatedAt'])
+        && d.keys().hasOnly(['nickname', 'createdAt', 'updatedAt', 'joinedRoomIds', 'lastRoomId', 'createdRoomCount', 'lastRoomCreatedAt'])
+        && validNickname(d.nickname) && d.createdAt is timestamp && d.updatedAt == request.time
+        && d.joinedRoomIds is list && d.joinedRoomIds.size() <= 100
+        && d.joinedRoomIds.toSet().size() == d.joinedRoomIds.size()
+        && d.lastRoomId is string && d.createdRoomCount is int && d.createdRoomCount >= 0 && d.createdRoomCount <= 20
+        && d.lastRoomCreatedAt is timestamp;
+    }
+    function profileMembershipUpdate(uid) {
+      let old = resource.data;
+      let d = request.resource.data;
+      let id = d.lastRoomId;
+      let beforeIds = old.joinedRoomIds.toSet();
+      let afterIds = d.joinedRoomIds.toSet();
+      let creating = !exists(roomPath(id));
+      return validRoomId(id)
+        && d.diff(old).affectedKeys().hasOnly(['joinedRoomIds', 'lastRoomId', 'updatedAt', 'createdRoomCount', 'lastRoomCreatedAt'])
+        && ((!(id in beforeIds) && afterIds == beforeIds.union([id].toSet())
+              && existsAfter(memberPath(id, uid))
+              && (creating ? (d.createdRoomCount == old.createdRoomCount + 1
+                  && d.lastRoomCreatedAt == request.time
+                  && request.time >= old.lastRoomCreatedAt + duration.value(10, 's'))
+                : (d.createdRoomCount == old.createdRoomCount && d.lastRoomCreatedAt == old.lastRoomCreatedAt)))
+            || (id in beforeIds && afterIds == beforeIds.difference([id].toSet())
+              && !existsAfter(memberPath(id, uid))
+              && d.createdRoomCount == old.createdRoomCount && d.lastRoomCreatedAt == old.lastRoomCreatedAt));
+    }
+    match /communityProfiles/{uid} {
+      allow get: if isOwner(uid);
+      allow list, delete: if false;
+      allow create: if isOwner(uid) && validProfile(request.resource.data)
+        && request.resource.data.createdAt == request.time && request.resource.data.joinedRoomIds.size() == 0
+        && request.resource.data.lastRoomId == '' && request.resource.data.createdRoomCount == 0
+        && request.resource.data.lastRoomCreatedAt == timestamp.value(0);
+      allow update: if isOwner(uid) && validProfile(request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname', 'updatedAt']) || profileMembershipUpdate(uid));
+    }
+    function linkedAfter(id) { return id in getAfter(profilePath(request.auth.uid)).data.joinedRoomIds; }
+    function validRoom(d) {
+      return d.keys().hasAll(['kind', 'visibility', 'ownerUid', 'title', 'description', 'region', 'paceLabel', 'capacity', 'memberCount',
+          'createdAt', 'updatedAt', 'crewId', 'partyKind', 'startsAtMillis', 'meetingLabel', 'distanceKm', 'status'])
+        && d.keys().hasOnly(['kind', 'visibility', 'ownerUid', 'title', 'description', 'region', 'paceLabel', 'capacity', 'memberCount',
+          'createdAt', 'updatedAt', 'crewId', 'partyKind', 'startsAtMillis', 'meetingLabel', 'distanceKm', 'status'])
+        && d.kind in ['crew', 'party'] && d.visibility == 'open' && d.ownerUid is string
+        && d.title is string && d.title.size() >= 2 && d.title.size() <= 80
+        && d.description is string && d.description.size() <= 500 && d.region is string && d.region.size() <= 80
+        && d.paceLabel is string && d.paceLabel.size() <= 80
+        && d.memberCount is int && d.memberCount >= 1 && d.capacity is int && d.memberCount <= d.capacity
+        && d.createdAt is timestamp && d.updatedAt == request.time && d.status in ['active', 'cancelled']
+        && d.crewId is string && d.meetingLabel is string && d.meetingLabel.size() <= 200
+        && d.startsAtMillis is int && d.distanceKm is number
+        && ((d.kind == 'crew' && d.capacity == 100 && d.crewId == '' && d.partyKind == '' && d.startsAtMillis == 0 && d.distanceKm == 0)
+          || (d.kind == 'party' && d.capacity >= 2 && d.capacity <= 20 && d.partyKind in ['local', 'remote']
+            && d.startsAtMillis > 0 && d.paceLabel.size() >= 1 && d.distanceKm > 0 && d.distanceKm <= 100
+            && (d.partyKind != 'local' || d.meetingLabel.size() > 0)));
+    }
+    function parentMembership(d) {
+      return d.crewId == '' || (validRoomId(d.crewId) && get(roomPath(d.crewId)).data.kind == 'crew' && memberOf(d.crewId));
+    }
+    function membershipCountUpdate(id) {
+      let d = request.resource.data;
+      let uid = request.auth.uid;
+      return d.diff(resource.data).affectedKeys().hasOnly(['memberCount', 'updatedAt'])
+        && ((d.memberCount == resource.data.memberCount + 1 && resource.data.status == 'active'
+            && (resource.data.kind != 'party' || resource.data.startsAtMillis > request.time.toMillis())
+            && !exists(memberPath(id, uid)) && existsAfter(memberPath(id, uid)) && linkedAfter(id) && parentMembership(resource.data))
+          || (d.memberCount == resource.data.memberCount - 1 && resource.data.ownerUid != uid
+            && exists(memberPath(id, uid)) && !existsAfter(memberPath(id, uid)) && !linkedAfter(id)));
+    }
+    match /communityRooms/{id} {
+      allow get: if resource.data.visibility == 'open';
+      allow list: if boundedList(50) && resource.data.visibility == 'open';
+      allow create: if signedIn() && validRoomId(id) && validRoom(request.resource.data)
+        && request.resource.data.ownerUid == request.auth.uid && request.resource.data.memberCount == 1
+        && request.resource.data.createdAt == request.time && request.resource.data.status == 'active'
+        && (request.resource.data.kind != 'party' || request.resource.data.startsAtMillis > request.time.toMillis())
+        && parentMembership(request.resource.data)
+        && getAfter(memberPath(id, request.auth.uid)).data.role == 'owner' && linkedAfter(id)
+        && getAfter(profilePath(request.auth.uid)).data.lastRoomCreatedAt == request.time;
+      allow update: if signedIn() && validRoom(request.resource.data)
+        && (membershipCountUpdate(id) || (manager(id) && resource.data.kind == 'party'
+          && resource.data.status == 'active' && request.resource.data.status == 'cancelled'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])));
+      allow delete: if false;
+
+      function validMember(d, uid) {
+        return d.keys().hasAll(['uid', 'nickname', 'role', 'joinedAt', 'lastMessageAt', 'lastMessageId'])
+          && d.keys().hasOnly(['uid', 'nickname', 'role', 'joinedAt', 'lastMessageAt', 'lastMessageId'])
+          && d.uid == uid && validNickname(d.nickname) && d.role in ['owner', 'dj', 'member']
+          && d.joinedAt is timestamp && d.lastMessageAt is timestamp && d.lastMessageId is string;
+      }
+      match /members/{uid} {
+        allow get: if isOwner(uid) || memberOf(id);
+        allow list: if boundedList(100) && memberOf(id);
+        allow create: if isOwner(uid) && validMember(request.resource.data, uid)
+          && request.resource.data.nickname == get(profilePath(uid)).data.nickname
+          && request.resource.data.joinedAt == request.time && request.resource.data.lastMessageAt == timestamp.value(0)
+          && request.resource.data.lastMessageId == '' && linkedAfter(id)
+          && getAfter(roomPath(id)).data.memberCount == (exists(roomPath(id)) ? get(roomPath(id)).data.memberCount + 1 : 1)
+          && (getAfter(roomPath(id)).data.ownerUid == uid ? request.resource.data.role == 'owner' : request.resource.data.role == 'member');
+        allow delete: if isOwner(uid) && get(roomPath(id)).data.ownerUid != uid
+          && getAfter(roomPath(id)).data.memberCount == get(roomPath(id)).data.memberCount - 1 && !linkedAfter(id);
+        allow update: if signedIn() && validMember(request.resource.data, uid)
+          && ((manager(id) && resource.data.role != 'owner' && request.resource.data.role in ['member', 'dj']
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role']))
+            || (isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname', 'lastMessageAt', 'lastMessageId'])
+              && request.resource.data.nickname == get(profilePath(uid)).data.nickname
+              && request.resource.data.lastMessageAt == request.time && validRoomId(request.resource.data.lastMessageId)
+              && !exists(messagePath(id, request.resource.data.lastMessageId))
+              && getAfter(messagePath(id, request.resource.data.lastMessageId)).data.authorUid == uid
+              && getAfter(messagePath(id, request.resource.data.lastMessageId)).data.createdAt == request.time));
+      }
+      match /messages/{mid} {
+        allow get: if memberOf(id);
+        allow list: if boundedList(50) && memberOf(id);
+        allow create: if memberOf(id) && validRoomId(mid) && get(roomPath(id)).data.status == 'active'
+          && request.resource.data.keys().hasAll(['authorUid', 'nickname', 'body', 'kind', 'createdAt'])
+          && request.resource.data.keys().hasOnly(['authorUid', 'nickname', 'body', 'kind', 'createdAt'])
+          && request.resource.data.authorUid == request.auth.uid
+          && request.resource.data.nickname == getAfter(memberPath(id, request.auth.uid)).data.nickname
+          && request.resource.data.body is string && request.resource.data.body.size() >= 1 && request.resource.data.body.size() <= 1000
+          && request.resource.data.kind in ['chat', 'announcement'] && request.resource.data.createdAt == request.time
+          && (request.resource.data.kind != 'announcement' || get(memberPath(id, request.auth.uid)).data.role in ['owner', 'dj'] || manager(id))
+          && request.time >= get(memberPath(id, request.auth.uid)).data.lastMessageAt + duration.value(2, 's')
+          && getAfter(memberPath(id, request.auth.uid)).data.lastMessageAt == request.time
+          && getAfter(memberPath(id, request.auth.uid)).data.lastMessageId == mid;
+        allow update, delete: if false;
+      }
+    }
+
+    // Wallets, rewards, original tracks, presence and every other path stay denied.
     match /{document=**} {
       allow read, write: if false;
     }

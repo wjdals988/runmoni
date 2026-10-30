@@ -4,10 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Unsigned validation, signed artifact, or private GitHub draft
+        description: Connection audit, unsigned validation, signed artifact, or private GitHub draft
         type: choice
         default: unsigned
-        options: [unsigned, signed, stage-draft]
+        options: [audit, unsigned, signed, stage-draft]
+      profile:
+        description: Connected requires public room reads and current Firebase OAuth configuration
+        type: choice
+        default: review
+        options: [review, connected]
 
 permissions:
   contents: read
@@ -21,6 +26,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       RUNMONI_API_URL: ${{ vars.RUNMONI_API_URL || 'http://127.0.0.1:8787' }}
+      RUNMONI_COMMUNITY_BACKEND: ${{ vars.RUNMONI_COMMUNITY_BACKEND || 'firebase' }}
     timeout-minutes: 60
     # Repository Actions secrets; this workflow only runs on explicit dispatch.
     permissions:
@@ -39,7 +45,7 @@ jobs:
           import base64, os
           from pathlib import Path
           mode = os.environ['MODE']
-          if mode not in ('unsigned', 'signed', 'stage-draft'):
+          if mode not in ('audit', 'unsigned', 'signed', 'stage-draft'):
               raise SystemExit('Unsupported release mode.')
           if mode != 'unsigned' and os.environ['GITHUB_REF'] != 'refs/heads/main':
               raise SystemExit('Signed distribution must build the reviewed main branch.')
@@ -58,13 +64,35 @@ jobs:
                   key.chmod(0o600)
                   output.write(data)
           PY
+      - name: Inspect connections and inject Android client configuration
+        env:
+          RUNMONI_FIREBASE_ANDROID_CONFIG_BASE64: ${{ secrets.RUNMONI_FIREBASE_ANDROID_CONFIG_BASE64 }}
+          RUNMONI_KEYSTORE_FILE: ${{ inputs.mode != 'unsigned' && format('{0}/runmoni-release.jks', runner.temp) || '' }}
+          RUNMONI_STORE_PASSWORD: ${{ secrets.RUNMONI_STORE_PASSWORD }}
+          RUNMONI_KEY_ALIAS: ${{ secrets.RUNMONI_KEY_ALIAS }}
+          MODE: ${{ inputs.mode }}
+          PROFILE: ${{ inputs.profile }}
+        run: |
+          args=(--report work/connection-readiness.json)
+          if [ "$MODE" != audit ]; then args+=(--install); fi
+          if [ "$PROFILE" = connected ]; then args+=(--require-connected); fi
+          python3 scripts/cloud/prepare-connected-build.py "${args[@]}"
+      - name: Retain sanitized connection readiness
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: runmoni-connections-${{ github.sha }}
+          path: work/connection-readiness.json
+          if-no-files-found: error
+          retention-days: 14
       - name: Prepare verified build tools, without an emulator
+        if: inputs.mode != 'audit'
         run: python3 scripts/cloud/prepare-android.py --build-only
       - name: Build, test and inspect unsigned candidate
         if: inputs.mode == 'unsigned'
         run: python3 scripts/cloud/release-app.py --unsigned --online
       - name: Build, test, sign and verify retained certificate
-        if: inputs.mode != 'unsigned'
+        if: inputs.mode == 'signed' || inputs.mode == 'stage-draft'
         env:
           RUNMONI_KEYSTORE_FILE: ${{ runner.temp }}/runmoni-release.jks
           RUNMONI_STORE_PASSWORD: ${{ secrets.RUNMONI_STORE_PASSWORD }}
@@ -104,6 +132,6 @@ jobs:
             config/android-release-signing.json
           if-no-files-found: error
           retention-days: 14
-      - name: Remove temporary retained key
+      - name: Remove temporary signing and Android configuration files
         if: always()
-        run: rm -f -- "$RUNNER_TEMP/runmoni-release.jks"
+        run: rm -f -- "$RUNNER_TEMP/runmoni-release.jks" .secrets/firebase/google-services.json

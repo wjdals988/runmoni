@@ -20,6 +20,9 @@ val releaseSettings = Properties().apply { if (signingFile.exists()) signingFile
 
 // Public Android configuration only; a missing project keeps the offline app usable.
 val firebaseFile = rootProject.file(".secrets/firebase/google-services.json")
+val communityBackend = configString("RUNMONI_COMMUNITY_BACKEND", "firebase").also {
+    require(it in setOf("firebase", "http")) { "Community backend must be firebase or http." }
+}
 val firebaseValues = mutableMapOf<String, String>()
 if (firebaseFile.exists()) {
     val config = JsonSlurper().parse(firebaseFile) as Map<*, *>
@@ -52,10 +55,11 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 10
-        versionName = "0.2.0-dev"
+        versionCode = 11
+        versionName = "0.2.1-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
+        buildConfigField("String", "COMMUNITY_BACKEND", "\"$communityBackend\"")
         buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"${configString("NAVER_MAP_CLIENT_ID")}\"")
         buildConfigField("boolean", "FIREBASE_ENABLED", firebaseFile.exists().toString())
         for (name in listOf("FIREBASE_PROJECT_ID", "FIREBASE_APP_ID", "FIREBASE_API_KEY", "FIREBASE_WEB_CLIENT_ID")) {

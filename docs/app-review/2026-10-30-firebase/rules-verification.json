@@ -1,0 +1,9 @@
+{
+  "tests": 110,
+  "pass": 110,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "project": "demo-runmoni",
+  "productionFirebaseModified": false
+}

@@ -1,0 +1,14 @@
+test_certificate_export_uses_password_environment_and_redacts_failures (test_connected_build.ConnectedBuildTest.test_certificate_export_uses_password_environment_and_redacts_failures) ... ok
+test_connected_profile_fails_before_build_when_not_ready (test_connected_build.ConnectedBuildTest.test_connected_profile_fails_before_build_when_not_ready) ... ok
+test_current_signer_required (test_connected_build.ConnectedBuildTest.test_current_signer_required) ... ok
+test_existing_file_preserved_and_new_file_private (test_connected_build.ConnectedBuildTest.test_existing_file_preserved_and_new_file_private) ... ok
+test_health_requires_both_capabilities_and_no_authentication (test_connected_build.ConnectedBuildTest.test_health_requires_both_capabilities_and_no_authentication) ... ok
+test_invalid_or_admin_config_rejected_without_content_in_errors (test_connected_build.ConnectedBuildTest.test_invalid_or_admin_config_rejected_without_content_in_errors) ... ok
+test_public_https_only (test_connected_build.ConnectedBuildTest.test_public_https_only) ... ok
+test_public_name_resolving_to_private_address_is_rejected (test_connected_build.ConnectedBuildTest.test_public_name_resolving_to_private_address_is_rejected) ... ok
+test_report_contains_no_config_or_false_device_success (test_connected_build.ConnectedBuildTest.test_report_contains_no_config_or_false_device_success) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.005s
+
+OK

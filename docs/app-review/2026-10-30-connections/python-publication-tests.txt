@@ -1,0 +1,5 @@
+{"phase": "uploading_asset", "asset": "fixture.apk", "bytes": 100, "rateKiBPerSecond": 256}
+----------------------------------------------------------------------
+Ran 31 tests in 0.039s
+
+OK

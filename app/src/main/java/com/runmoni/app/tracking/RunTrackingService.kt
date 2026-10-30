@@ -91,6 +91,7 @@ class RunTrackingService : Service(), LocationListener {
         }
     }
     private fun pilotClient(): PilotClient? {
+        if (preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http") return null
         val token = SecureSession(this).read()
         if (token.isBlank()) return null
         return PilotClient(preferences.getString("apiUrl", BuildConfig.PILOT_API_URL)!!, token)
@@ -103,7 +104,7 @@ class RunTrackingService : Service(), LocationListener {
             while (isActive) {
                 val state = repository.active.value
                 val point = state.points.lastOrNull()
-                val enabled = !preferences.getBoolean("communityGuest", false) && preferences.getBoolean("publicLocation", false) && state.phase == RunPhase.RUNNING && point != null && point.accuracyMeters <= 30 && System.currentTimeMillis() - point.recordedAtMillis in 0..30_000
+                val enabled = preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) == "http" && !preferences.getBoolean("communityGuest", false) && preferences.getBoolean("publicLocation", false) && state.phase == RunPhase.RUNNING && point != null && point.accuracyMeters <= 30 && System.currentTimeMillis() - point.recordedAtMillis in 0..30_000
                 if (enabled) {
                     // The location recorder remains independent of every network failure.
                     runCatching {

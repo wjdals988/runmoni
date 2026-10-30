@@ -1,12 +1,35 @@
-요약: Firebase 첫 단계는 **Google 계정과 본인 러닝 요약의 수동 백업**입니다. 이 폴더의 규칙은 본인 요약 1개 경로만 허용하며 크루·파티·위치·지갑·마일리지·GPS 원본 경로는 모두 거부합니다. **검증된 보상 적립은 0개 기능이며 원격 Rules 배포는 0건**입니다.
+요약: **Google 계정의 본인 요약과 익명 공유 방**을 Firebase Spark로 연결합니다.0.2.1에서 `communityProfiles`/`communityRooms` 규칙을 추가했으며 기존 본인 요약·지갑/마일리지/원본 GPS 차단은 보존합니다. [최신 소유자 설정](../docs/FIREBASE_COMMUNITY.md)을 따릅니다. 코드/로컬 Emulator 검증과 운영 게시/실제 Google 로그인을 구분합니다.
 
-# Firebase 개인 기록 요약 규칙 / 0.1.0
+# Firebase 개인 요약·공유 방 규칙 / 0.2.1
 
-Firebase가 클라우드 경로로 선택되었습니다. 기기 Room은 원본 기록을 유지하며 로컬 FastAPI/SQLite 크루 기능은 별도로 남습니다. 이 규칙을 추가했다는 이유로 클라우드 크루·실시간 위치·LiveKit 음성이 연결된 것으로 취급하지 않습니다. `docs/FIREBASE_SETUP.md`의 기존 콘솔 준비 안내는 앱 SDK 구현 상태를 대신하지 않습니다.
+## 클라우드에서 재현
+
+Node24/JDK21과 기존 Android 도구를 확인한 환경에서 순차 실행한다. 아래는 현재 검증한 `/workspace/runmoni` 기준이며 다른 환경의 SDK/캐시/설정 파일을 가정하지 않는다.
+
+```bash
+cd /workspace/runmoni/firebase
+npm ci --ignore-scripts --no-audit --no-fund --maxsockets=1
+export JAVA_HOME=/workspace/runmoni/work/cloud-android/jdk-21.0.13+9
+export PATH="$JAVA_HOME/bin:$PATH"
+export XDG_CONFIG_HOME=/workspace/runmoni/work/firebase-cli-config
+export FIREBASE_EMULATORS_PATH=/workspace/runmoni/work/firebase-emulators
+unset GOOGLE_APPLICATION_CREDENTIALS FIREBASE_TOKEN
+npm test
+```
+
+실제 Android SDK 검증은 먼저 오프라인 앱/테스트 APK를 빌드한 뒤 허용된 전용 `Runmoni_Cloud_29`1개를 켜고 두 APK를 설치한다. 설치/빌드가 끝난 다음에만 아래 로컬 통합 검증을 실행한다. 외부/사용자 PC 기기를 사용하지 않는다.
+
+```bash
+GCLOUD_PROJECT=demo-runmoni JAVA_TOOL_OPTIONS=-Xmx512m npx --no-install firebase emulators:exec --only auth,firestore --project demo-runmoni --config firebase.json "python3 ../scripts/cloud/check-firebase-android.py"
+```
+
+도우미는 demo/loopback/전용 AVD/debug 앱을 확인하고 최신 규칙→Android 익명 클라이언트3개→화면/HTTP fixture→320dp/font2를 순차 검증한다. 글씨/밀도/애니메이션은 finally에서 복원한다. 종료 후 `scripts/cloud/avatar-review.py stop`으로 해당 AVD를 확인해 종료한다. `emulators:exec`는 소유한 Auth/Firestore 서버를 종료한다. 실제 Google 계정·운영 Firebase·휴대폰 성공으로 표시하지 않는다. 관리형 클라우드에서는 기존 프록시/CA 신뢰를 보존한다.
+
+기기 Room/지갑은 원본 기록과 보상을 유지합니다. Firebase 익명 방은 Google 요약 계정과 별도이며 HTTP 파일럿은 선택 가능한 테스트 경로입니다. 규칙을 저장한 사실은 운영 게시·실시간 위치·LiveKit 음성 연결을 뜻하지 않습니다.
 
 ## 허용 경로와 데이터
 
-`users/{Firebase UID}/runSummaries/{run ID}`만 허용합니다. Firebase 인증된 UID가 경로 UID와 정확히 같은 사용자는 자기 컬렉션 조회, 문서 읽기, 생성·갱신·삭제를 할 수 있습니다. 비로그인 요청, 다른 사용자, 컬렉션 그룹 전체 조회 및 다른 모든 경로는 거부합니다. 앱은 Google 로그인을 사용하지만 Rules의 소유자 검사는 특정 로그인 제공자가 아니라 인증된 UID를 기준으로 합니다.
+개인 요약은 `users/{Firebase UID}/runSummaries/{run ID}`를 허용합니다. 경로 UID와 같은 인증 사용자는 자기 요약을 조회/생성/갱신/삭제할 수 있습니다. 요약의 비로그인/다른 사용자/컬렉션 그룹 조회는 거부합니다. 방의 별도 경로/원자적 권한 검사는 [공유 방 안내](../docs/FIREBASE_COMMUNITY.md)를 따릅니다. 앱은 요약에 Google을 사용하지만 Rules는 인증 UID의 소유권으로 검사합니다.
 
 | 필드 | 필수 조건 |
 |---|---|

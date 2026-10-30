@@ -1,5 +1,7 @@
 # 공용 방 서버 배포
 
+**2026-10-30 최신 선택:** 사용자가 호스팅 계정 없이 기존 Firebase에서 진행하도록 요청했다. 기본 구현/설정은 [무료 Spark 공유 방](FIREBASE_COMMUNITY.md)을 따른다. 아래 Python/Render는 기존 파일럿의 선택 가능한 대안이며 Firebase 방의 필수 단계가 아니다. 유료 서비스는 생성하지 않았다.
+
 현재 상태: 배포할 코드/설정은 준비하며 실제 공용 서비스·주소는 아직 생성하지 않았다. 서버 관리 계정/실행 권한이 이 환경에 연결되지 않았다. 기존 [Firebase Spark 무료 선택](FIREBASE_SETUP.md)을 변경하거나 결제 계정을 연결하지 않았다.
 
 ## 준비한 구성
@@ -11,11 +13,13 @@
 
 ## 소유자가 Render를 선택할 때
 
-1. [PR10](https://github.com/wjdals988/runmoni/pull/10)의 배포 설정을 검토하고 GitHub 저장소 접근과 Render 계정을 연결한다. Blueprint 브랜치를 `codex/community-rooms`로 선택하고 유료 서비스/디스크 비용을 확인한 뒤 생성한다. [Blueprint 생성 화면](https://dashboard.render.com/blueprint/new?repo=https://github.com/wjdals988/runmoni&branch=codex/community-rooms).
+1. main에 통합된 배포 설정을 검토하고 GitHub 저장소 접근과 Render 계정을 연결한다. Blueprint 브랜치를 `main`으로 선택하고 유료 서비스/디스크 비용을 확인한 뒤 생성한다. [Blueprint 생성 화면](https://dashboard.render.com/blueprint/new?repo=https://github.com/wjdals988/runmoni&branch=main). 현재 무료 Spark 방침을 자동 변경하지 않으며 소유자가 비용을 승인하기 전 생성하지 않는다.
 2. 플랫폼이 실제 발급한 HTTPS 주소에서 `/health`의 public_rooms/guest_sessions=true와 공개 목록을 확인한다. 예시 주소를 실제 배포 URL로 기록하지 않는다.
 3. 재시작 뒤 테스트 방/참여/메시지 보존을 확인하고 영속 디스크에 DB와 WAL이 저장되는지 확인한다. 백업은 SQLite online backup으로 일관된 스냅샷을 만들고 복원도 확인한다. 디스크는 백업의 대체가 아니다.
 4. 확인된 공개 주소를 GitHub Actions repository variable `RUNMONI_API_URL`에 설정한다. 값은 공개 URL이며 토큰/비밀번호를 채팅으로 보내지 않는다. 앱을 이 주소로 새 빌드하고 실제 휴대폰2대에서 같은 방 목록/입장/채팅을 확인한다. 기존 사용자 설정 주소는 임의로 바꾸지 않는다.
 5. 앱 서명/새 APK 게시/다운로드 피드와 대시보드 반영은 별도 검증한다. 기존0.1.6 자산의 출처/해시를 다시 쓰지 않는다.
+
+등록 후 [Android release candidate](https://github.com/wjdals988/runmoni/actions/workflows/android-release.yml)를 `mode=audit, profile=review`로 실행하면 APK 빌드 없이 실제 보관 인증서·Firebase 구성·공용 `/health`를 확인한다. `connected` 프로필은 세 조건이 모두 충족돼야 빌드한다. 실제 휴대폰2대의 생성/입장/채팅 및 재시작 후 보존은 health 결과와 별도로 [점검 안내](CONNECTED_DEVICE_CHECKS.md)에 기록한다.
 
 ## 로컬 컨테이너 검증
 

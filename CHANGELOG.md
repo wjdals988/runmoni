@@ -1,3 +1,17 @@
+# 0.2.1-dev — 2026-10-30 Firebase 공유 방·연결·휴대폰 점검
+
+- 최신 사용자 선택 ‘기존 호스팅 없음, Firebase에서 진행’을 반영해 Spark Authentication 익명 닉네임/Firestore 방·멤버·파티·실시간 채팅을 추가했다. 기본은 Firebase, 기존 HTTP 파일럿은 명시적 테스트 설정으로 보존한다. Render/Cloud Functions/Blaze 결제를 생성하지 않는다. Google 요약 계정과 익명 방은 별도다.
+- 생성/입퇴장의 인원·개인 링크·멤버3문서 원자성, 정원 경쟁, 방장/부모 크루장/DJ/공지 권한, 채팅2초/생성10초 간격·각각1000자/20회 제한을 규칙으로 검증한다. 본인 요약 규칙과 지갑/보상/원본 GPS 차단을 유지한다. Firebase 선택 시 기존 HTTP 동기화/위치 전송을 작업자·서비스에서도 차단한다.
+- 목록은 수동/작업 후 갱신, 멤버는 관리 화면 진입 시 조회, 채팅은 열린 방만 구독한다. 캐시와 서버 응답을 구분하고 해제 시 구독을 종료한다. 익명 프로필 복구 불가 경고/해제 재확인을 추가했다. App Check·계정 연결/복구·신고/자동 정리·음성/음악/정확 위치 공유는 별도 후속 범위다.
+- Firestore demo Emulator에서 기존89개+방21개=110개 통과(9.568초). 첫 실행은 변경하지 않은 값을 위조로 기대한 테스트1개만 실패해 실제 값 변경 검증으로 수정했다. 운영 Firebase 게시/Google 로그인 성공으로 합산하지 않는다. Android SDK 연동과 최종 앱 결과는 후속 기록한다.
+
+- 사용자 요청에 따라 설정에 공용 방 서버 capability 확인·Google 대화형 로그인/온라인 세션 확인·버전별 휴대폰 체크리스트와 개인정보를 제외한 결과 공유를 추가했다. 서버 응답/저장 계정/수동 표시를 실기기 또는 Google 로그인 성공으로 합산하지 않는다.
+- CI에 APK 없이 실행하는audit와 구성 누락 시 빌드 전 중단하는connected 프로필, Android client 설정의 안전한 Secrets 주입/종료 시 삭제를 추가했다. 기존 서명 키4개를 유지하고 실제 공개 DER과 승인 지문을 대조한다. 배포 sidecar에 해당 커밋의 연결 준비 상태를 포함한다.
+- Firebase 안내와 로컬 검사에 남아 있던 이전 키 SHA-1을 현재 보관 키 기준 파일로 수정했다. Render 예시는 통합main을 가리키지만 최신 기본 연결에서는 사용하지 않는다. Firebase 관리 계정/Android 파일·GitHub Secrets/Variables 관리 권한은 현재 없으며 실제 운영 공유 방·실기기/Google 로그인은 미확인이다. [소유자 설정](docs/FIREBASE_COMMUNITY.md)을 준비했다.
+- Firebase 전 점검 UI의 실제 Android4개(49.634초), native320dp/font2 재실행2개(44.881초)는 통과했다. 별도 MainActivity 캡처 자동화2회는 클라우드 TCG의 Quickstep/System UI ANR 팝업으로 실패했다. Runmoni 앱 ANR/실기기 검증으로 기록하지 않으며 설정 복원 후 전용AVD PID223900 종료를 확인했다.
+- 최종 오프라인 JVM42/실패0·debug lint오류0/경고35, 최신 규칙110개, 실제 Android Firebase SDK1개20.091초(익명 클라이언트3개), native UI/HTTP6개71.049초·320dp/font2 UI4개74.372초, Python10/14/31개 통과. UI 의미/레이아웃/콜백 통과와 전체 창 입력을 구분한다. 최종 전체 화면 PNG에도 System UI ANR가 겹쳤고 실제MainActivity/공유 시트 검증은 실패/미확인이다. 원인 미확정으로 남기고 기기 설정 복원·서버/AVD PID234249 종료를 확인했다. [최종 검증](docs/app-review/2026-10-30-firebase/README.md).
+- 버전0.2.1-dev/code11과 번들 내역을 함께 갱신했다. 공개 피드/대시보드는 실제 APK 검증 후에만 변경한다.0.2.0 APK의 출처/바이트는 보존한다. 검증 결과와 실패 이력은 아래 후속 기록에 추가한다.
+
 # 0.2.0-dev — 2026-10-30 소비자 러닝 앱 전면 개편
 
 - 운영 대시보드 반영 완료: PR11 main3fc0063·CI run41030926160·Vercel Production success, HTTP200에서0.2 다운로드/버전/해시/갤러리7장과 홈 이미지 원본 일치 확인. Node23개 통과. 실제 공개 APK 검사와 검토용 Android debug 캡처를 구분한다.

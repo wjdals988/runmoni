@@ -13,7 +13,9 @@ if (!$runmoniClient) { throw 'Register Android package com.runmoni.app and downl
 if (!$runmoniClient.api_key.current_key) { throw 'Android API configuration is incomplete.' }
 $runmoniWebClient = $runmoniClient.oauth_client | Where-Object client_type -eq 3 | Select-Object -First 1
 if (!$runmoniWebClient.client_id) { throw 'Enable Google sign-in, save, then download the updated Android configuration.' }
-$runmoniReleaseOAuth = $runmoniClient.oauth_client | Where-Object { $_.client_type -eq 1 -and ($_.android_info.certificate_hash -replace ':','').ToLowerInvariant() -eq '6127e10b163a792c53975bea3af803609d84a780' } | Select-Object -First 1
+$runmoniApprovedSigning = Get-Content -LiteralPath (Join-Path $runmoniRoot 'config/android-release-signing.json') -Raw | ConvertFrom-Json
+$runmoniReleaseOAuth = $runmoniClient.oauth_client | Where-Object { $_.client_type -eq 1 -and $_.android_info.package_name -eq 'com.runmoni.app' -and ($_.android_info.certificate_hash -replace ':','').ToLowerInvariant() -eq $runmoniApprovedSigning.certificateSha1 } | Select-Object -First 1
+if (!$runmoniReleaseOAuth) { throw 'Register the current certificateSha1 from config/android-release-signing.json, then download the updated Android configuration.' }
 [pscustomobject]@{
     ProjectId = $runmoniConfig.project_info.project_id
     AndroidPackage = $runmoniClient.client_info.android_client_info.package_name
