@@ -1,0 +1,18 @@
+{
+  "ciRun": 41027995152,
+  "sourceRevision": "e7b988af2b96c640fbcc40681d5201f74527b36a",
+  "unitTests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 60
+  },
+  "retainedPolicyMatches": true,
+  "ciConclusion": "success",
+  "physicalDeviceTests": 0,
+  "actualGoogleLoginVerified": false
+}

@@ -1,0 +1,61 @@
+{
+  "repository": "wjdals988/runmoni",
+  "ciRun": 41027995152,
+  "sourceRevision": "e7b988af2b96c640fbcc40681d5201f74527b36a",
+  "releaseId": 428811171,
+  "metadata": {
+    "version": "0.2.0-dev",
+    "versionCode": 10,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.2.0-dev.apk",
+    "sizeBytes": 218300173,
+    "sha256": "b3d802900d9f969b6c82d6b7b6bd7add40830c73b80c33a4cdca9f11fd43b7ca",
+    "signed": true,
+    "sourceRevision": "e7b988af2b96c640fbcc40681d5201f74527b36a",
+    "sourceDirty": false,
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+  },
+  "assets": [
+    {
+      "id": 691497319,
+      "name": "runmoni-0.2.0-dev.apk",
+      "state": "uploaded",
+      "size": 218300173,
+      "digest": "sha256:b3d802900d9f969b6c82d6b7b6bd7add40830c73b80c33a4cdca9f11fd43b7ca",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.0-dev/runmoni-0.2.0-dev.apk"
+    },
+    {
+      "id": 691531478,
+      "name": "runmoni-0.2.0-dev.metadata.json",
+      "state": "uploaded",
+      "size": 428,
+      "digest": "sha256:0f140f145111cb185a34926ddc200963d5bee0c7191cdef813f4f224c28bbf88",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.0-dev/runmoni-0.2.0-dev.metadata.json"
+    },
+    {
+      "id": 691531460,
+      "name": "SHA256SUMS-0.2.0-dev.txt",
+      "state": "uploaded",
+      "size": 88,
+      "digest": "sha256:e842b9593a89cf3b44a98007d0497abb084ea202c443d042031350f2fa6cbdab",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.0-dev/SHA256SUMS-0.2.0-dev.txt"
+    }
+  ],
+  "signedCiVerified": true,
+  "sidecarBodiesVerified": true,
+  "apkBodyDownloaded": false,
+  "physicalDeviceTests": 0,
+  "googleLoginVerified": false,
+  "draft": false,
+  "publicationReady": true,
+  "publicReleaseConfirmed": true,
+  "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.2.0-dev",
+  "publishedAt": "2026-10-30T09:02:41Z",
+  "recordedAt": "2026-10-30T09:02:43.381248+00:00",
+  "distributionDecision": {
+    "userRequest": "main 병합 승인. APK와 운영 대시보드 배포 진행",
+    "scope": "실기기 검증 전 0.2.0 개발 prerelease",
+    "physicalDeviceSmokeVerified": false
+  },
+  "assetsReuploadedOrReplaced": false
+}
