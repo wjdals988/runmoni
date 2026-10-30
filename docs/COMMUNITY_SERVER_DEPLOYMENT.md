@@ -11,7 +11,7 @@
 
 ## 소유자가 Render를 선택할 때
 
-1. GitHub 저장소 접근과 Render 계정을 연결하고 Blueprint의 브랜치를 `codex/community-rooms`로 선택한다. 유료 서비스/디스크 비용을 확인한 뒤 생성한다. [Blueprint 생성 화면](https://dashboard.render.com/blueprint/new?repo=https://github.com/wjdals988/runmoni).
+1. [PR10](https://github.com/wjdals988/runmoni/pull/10)의 배포 설정을 검토하고 GitHub 저장소 접근과 Render 계정을 연결한다. Blueprint 브랜치를 `codex/community-rooms`로 선택하고 유료 서비스/디스크 비용을 확인한 뒤 생성한다. [Blueprint 생성 화면](https://dashboard.render.com/blueprint/new?repo=https://github.com/wjdals988/runmoni&branch=codex/community-rooms).
 2. 플랫폼이 실제 발급한 HTTPS 주소에서 `/health`의 public_rooms/guest_sessions=true와 공개 목록을 확인한다. 예시 주소를 실제 배포 URL로 기록하지 않는다.
 3. 재시작 뒤 테스트 방/참여/메시지 보존을 확인하고 영속 디스크에 DB와 WAL이 저장되는지 확인한다. 백업은 SQLite online backup으로 일관된 스냅샷을 만들고 복원도 확인한다. 디스크는 백업의 대체가 아니다.
 4. 확인된 공개 주소를 GitHub Actions repository variable `RUNMONI_API_URL`에 설정한다. 값은 공개 URL이며 토큰/비밀번호를 채팅으로 보내지 않는다. 앱을 이 주소로 새 빌드하고 실제 휴대폰2대에서 같은 방 목록/입장/채팅을 확인한다. 기존 사용자 설정 주소는 임의로 바꾸지 않는다.

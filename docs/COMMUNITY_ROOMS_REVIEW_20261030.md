@@ -52,3 +52,7 @@ Android 첫 실행은9개 중8개 통과/1개 실패(203.961초). 큰 글씨 목
 상태 주입 화면은 공용 서버의 실제 모집 목록이 아니다. 호스트 GIF/합성 목업을 Android 캡처로 사용하지 않았다. 승인 원본 SHA256 `f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65`와 캐릭터 렌더러를 보존했다. 새 그래픽/여자 기본형/의복 통합을 이번 검증으로 승인하지 않는다.
 
 전용 AVD `Runmoni_Cloud_29`/API29/AOSP/TCG에서만 실행했다. 크기480×854/density160/fontScale1, 애니메이션3종1.0 복원·reverse8789 제거·소유 API 종료를 확인하고 AVD PID192248을 종료했다. [설정 결과](app-review/2026-10-30-rooms/device-after-review.json). 실제 휴대폰2대/Google 인증/음성/공용 HTTPS·원격 영속성은 미검증이다. 여러 기기 계정 복구·방장 위임/방 삭제·서버 검색/페이지·생성 timeout 후 커밋 확인은 후속 항목이다.
+
+## 원격 반영
+
+구현/검증/배포 설정 커밋 `39b24f38ef474853b68519ac81b556520120cafd`, 원격 `codex/community-rooms`, [PR10](https://github.com/wjdals988/runmoni/pull/10). 앞선 PR9가 아직 열려 있으므로 기준 브랜치는 `codex/run-readiness-and-auto-pause`다. main 병합·새 서명 APK 업로드·공개 피드/대시보드 변경은 수행하지 않았다. 공용 서비스는 호스팅 계정 연결/비용 승인 전이며 URL을 발급받았다고 기록하지 않는다.
