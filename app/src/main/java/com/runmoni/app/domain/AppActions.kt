@@ -6,6 +6,8 @@ interface AppActions {
     fun resumeRun()
     fun finishRun()
     fun recoverRun()
+    fun openLocationSettings()
+    fun openAppPermissionSettings()
     fun dismissError()
     fun setAutoPause(enabled: Boolean)
     fun setVoiceGuidance(enabled: Boolean)

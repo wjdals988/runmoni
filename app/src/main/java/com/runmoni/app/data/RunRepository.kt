@@ -66,6 +66,13 @@ class RunRepository(context: Context) {
         if (active.value.phase != RunPhase.RUNNING) return@withLock
         val time = location.time
         if (time < (stored?.startedAtMillis ?: Long.MAX_VALUE) || time <= lastRecordedMillis || time > System.currentTimeMillis() + 30_000) return@withLock
+        if (!location.hasAccuracy() || !location.accuracy.isFinite() || location.accuracy < 0 ||
+            !location.latitude.isFinite() || location.latitude !in -90.0..90.0 ||
+            !location.longitude.isFinite() || location.longitude !in -180.0..180.0) {
+            engine.breakSegment()
+            gpsStatus("위치 정보를 확인하지 못했어요 · 다음 신호를 기다려요")
+            return@withLock
+        }
         engine.tick(SystemClock.elapsedRealtime(), true)
         val point = engine.addPoint(TrackPoint(sequence++, location.latitude, location.longitude, location.accuracy, time))
         lastRecordedMillis = time
@@ -76,18 +83,21 @@ class RunRepository(context: Context) {
         dao.append(row, StoredPoint(row.id, point.sequence, point.latitude, point.longitude, point.accuracyMeters, point.recordedAtMillis, point.segment))
     }
 
-    suspend fun pause() = mutex.withLock {
+    suspend fun pause(reason: PauseReason = PauseReason.MANUAL) = mutex.withLock {
+        if (active.value.phase == RunPhase.PAUSED && reason == PauseReason.MANUAL) {
+            active.update { it.copy(pauseReason = reason) }
+        }
         if (active.value.phase != RunPhase.RUNNING) return@withLock
         engine.tick(SystemClock.elapsedRealtime(), true)
         engine.breakSegment()
-        active.value = active.value.copy(phase = RunPhase.PAUSED, currentPaceSecondsPerKm = null)
+        active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = reason, currentPaceSecondsPerKm = null)
         publish(); stored?.let { dao.save(it) }
     }
     suspend fun resume() = mutex.withLock {
         if (active.value.phase != RunPhase.PAUSED) return@withLock
         engine.tick(SystemClock.elapsedRealtime(), false)
         engine.breakSegment()
-        active.value = active.value.copy(phase = RunPhase.RUNNING, gpsStatus = "GPS 재수신 중")
+        active.value = active.value.copy(phase = RunPhase.RUNNING, pauseReason = null, accuracyMeters = null, gpsStatus = "GPS 재수신 중")
         publish()
     }
     suspend fun finish() = mutex.withLock {
@@ -104,7 +114,13 @@ class RunRepository(context: Context) {
         active.value = ActiveRun()
     }
 
-    fun gpsStatus(message: String) { active.value = active.value.copy(gpsStatus = message) }
+    fun gpsStatus(message: String) { active.update { it.copy(gpsStatus = message, accuracyMeters = null) } }
+    suspend fun interruptLocation(message: String) = mutex.withLock {
+        if (active.value.phase !in setOf(RunPhase.RUNNING, RunPhase.PAUSED)) return@withLock
+        engine.breakSegment()
+        gpsStatus(message)
+        publish()
+    }
     suspend fun delete(id: String) { check(id != active.value.id) { "진행 중인 기록은 먼저 종료해 주세요." }; dao.delete(id) }
     suspend fun record(id: String): RunRecord? = dao.get(id)?.let { toRecord(it) }
     private fun publish() {

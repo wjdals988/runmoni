@@ -28,6 +28,8 @@ sealed interface UiRequest {
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
     data object GoogleSignIn : UiRequest
+    data object LocationSettings : UiRequest
+    data object AppPermissionSettings : UiRequest
     data class ExternalCapture(val packageName: String) : UiRequest
     data class ShareFile(val uri: Uri) : UiRequest
 }
@@ -86,9 +88,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         } finally { mutableState.update { it.copy(busy = false) } }
     }
     fun permissionDenied(message: String) { mutableState.update { it.copy(error = message) } }
+    fun updateLocationAccess(precisePermissionGranted: Boolean, gpsEnabled: Boolean) {
+        mutableState.update { it.copy(locationAccess = LocationAccess(precisePermissionGranted, gpsEnabled)) }
+    }
     fun beginWithPermission(recover: Boolean) { RunTrackingService.command(app, if (recover) RunTrackingService.RECOVER else RunTrackingService.START) }
     override fun startRun() { requests.tryEmit(UiRequest.RunPermission(false)) }
     override fun recoverRun() { requests.tryEmit(UiRequest.RunPermission(true)) }
+    override fun openLocationSettings() { requests.tryEmit(UiRequest.LocationSettings) }
+    override fun openAppPermissionSettings() { requests.tryEmit(UiRequest.AppPermissionSettings) }
     override fun pauseRun() { RunTrackingService.command(app, RunTrackingService.PAUSE) }
     override fun resumeRun() { RunTrackingService.command(app, RunTrackingService.RESUME) }
     override fun finishRun() { RunTrackingService.command(app, RunTrackingService.FINISH) }

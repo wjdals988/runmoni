@@ -2,9 +2,16 @@ package com.runmoni.app
 
 import android.Manifest
 import android.content.Intent
+import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,7 +28,11 @@ class MainActivity : ComponentActivity() {
     private val model: AppViewModel by viewModels()
     private var pendingPermission: UiRequest? = null
     private var capturePackage = ""
+    private val locationChanges = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) { refreshLocationAccess() }
+    }
     private val permissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        refreshLocationAccess()
         val pending = pendingPermission; pendingPermission = null
         when (pending) {
             is UiRequest.RunPermission -> {
@@ -49,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val capture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> model.captureResult(result.resultCode, result.data, capturePackage) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        refreshLocationAccess()
         enableEdgeToEdge()
         setContent {
             val state by model.state.collectAsState()
@@ -70,6 +82,8 @@ class MainActivity : ComponentActivity() {
                     }
                     UiRequest.PickMusic -> musicFile.launch(arrayOf("audio/*"))
                     UiRequest.GoogleSignIn -> lifecycleScope.launch { model.googleSignIn(this@MainActivity) }
+                    UiRequest.LocationSettings -> openSettings(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                    UiRequest.AppPermissionSettings -> openSettings(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
                     is UiRequest.ExternalCapture -> {
                         if (hasPermission(Manifest.permission.RECORD_AUDIO)) launchCapture(request.packageName)
                         else requestPermissions(request, listOf(Manifest.permission.RECORD_AUDIO) + notificationPermission())
@@ -78,6 +92,21 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onStart() {
+        super.onStart()
+        ContextCompat.registerReceiver(this, locationChanges, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION), ContextCompat.RECEIVER_NOT_EXPORTED)
+    }
+    override fun onResume() { super.onResume(); refreshLocationAccess() }
+    override fun onStop() { unregisterReceiver(locationChanges); super.onStop() }
+    private fun refreshLocationAccess() {
+        val manager = getSystemService(LOCATION_SERVICE) as LocationManager
+        model.updateLocationAccess(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION),
+            runCatching { manager.isProviderEnabled(LocationManager.GPS_PROVIDER) }.getOrDefault(false))
+    }
+    private fun openSettings(intent: Intent) {
+        try { startActivity(intent) }
+        catch (_: ActivityNotFoundException) { model.permissionDenied("설정 화면을 열 수 없어요. 기기 설정에서 런모니의 위치 권한과 위치 서비스를 확인해 주세요.") }
     }
     private fun launchCapture(packageName: String) { capturePackage = packageName; capture.launch(model.captureIntent()) }
     private fun requestPermissions(request: UiRequest, names: List<String>) { pendingPermission = request; permissions.launch(names.toTypedArray()) }

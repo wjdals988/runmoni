@@ -1,0 +1,18 @@
+{
+  "package": [
+    "versionCode=8 minSdk=29 targetSdk=36",
+    "versionName=0.1.7-dev",
+    "android.permission.ACCESS_FINE_LOCATION: granted=true, flags=[ USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED]"
+  ],
+  "api": "29",
+  "display": "Physical size: 480x854",
+  "density": "Physical density: 160",
+  "fontScale": "1.0",
+  "locationMode": "3",
+  "animations": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "1.0",
+    "animator_duration_scale": "1.0"
+  },
+  "lastAnrSummary": []
+}

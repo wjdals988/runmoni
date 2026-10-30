@@ -321,6 +321,7 @@ class RunmoniUiTest {
 
     internal class FakeActions(private val state: MutableState<AppState>) : AppActions {
         var starts = 0; var pauses = 0; var resumes = 0; var finishes = 0
+        var locationSettings = 0; var permissionSettings = 0
         val exports = mutableListOf<String>()
         val deletions = mutableListOf<String>()
         val purchases = mutableListOf<String>()
@@ -338,6 +339,8 @@ class RunmoniUiTest {
         override fun resumeRun() { resumes++; state.value = state.value.copy(activeRun = state.value.activeRun.copy(phase = RunPhase.RUNNING)) }
         override fun finishRun() { finishes++; val run = state.value.activeRun; state.value = state.value.copy(activeRun = ActiveRun(), records = listOf(RunRecord(run.id, run.startedAtMillis, System.currentTimeMillis(), distanceMeters = run.distanceMeters, activeDurationMillis = run.activeDurationMillis))) }
         override fun recoverRun() = Unit
+        override fun openLocationSettings() { locationSettings++ }
+        override fun openAppPermissionSettings() { permissionSettings++ }
         override fun dismissError() { state.value = state.value.copy(error = null) }
         override fun setAutoPause(enabled: Boolean) { state.value = state.value.copy(autoPause = enabled) }
         override fun setVoiceGuidance(enabled: Boolean) { state.value = state.value.copy(voiceGuidance = enabled) }
