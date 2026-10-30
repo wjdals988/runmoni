@@ -23,11 +23,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .models import (CrewCreate, CrewJoin, ItemPurchase, MessageCreate, MusicLease,
-                     PartyCreate, PilotLogin, PresenceUpdate, ProfilePatch,
+                     PartyCreate, PilotLogin, GuestLogin, PresenceUpdate, ProfilePatch,
                      RolePatch, RoomRequest, RunCreate, RunFinalize, TrackBatch,
                      UserBlock)
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 SEOUL = timezone(timedelta(hours=9))
 AVATAR_SLOTS = {"hair": "헤어", "top": "상의", "bottom": "하의", "shoes": "신발", "accessory": "머리 장비",
                 "eyewear": "선글라스", "wrist": "워치", "waist": "러닝 벨트", "hydration": "수분 조끼",
@@ -147,7 +147,8 @@ def create_app(settings=None, clock=None):
         initial.execute("PRAGMA journal_mode=WAL")
         initial.executescript(Path(__file__).with_name("schema.sql").read_text(encoding="utf-8"))
         # Additive pilot migrations: retain history from v0.1.0 without replacing the database.
-        additions = {"crews": {"region": "TEXT NOT NULL DEFAULT ''", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'"},
+        additions = {"users": {"auth_mode": "TEXT NOT NULL DEFAULT 'pilot'"},
+                     "crews": {"region": "TEXT NOT NULL DEFAULT ''", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'", "visibility": "TEXT NOT NULL DEFAULT 'pilot'", "room_kind": "TEXT NOT NULL DEFAULT 'crew'"},
                      "parties": {"kind": "TEXT NOT NULL DEFAULT 'local'", "latitude": "REAL", "longitude": "REAL", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'"},
                      "track_points": {"segment": "INTEGER NOT NULL DEFAULT 0"}, "runs": {"deleted_at_ms": "INTEGER"}}
         for table, columns in additions.items():
@@ -161,9 +162,9 @@ def create_app(settings=None, clock=None):
             initial.execute("DROP TABLE presence")
             initial.execute("CREATE TABLE presence (user_id TEXT PRIMARY KEY REFERENCES users(id),run_id TEXT NOT NULL REFERENCES runs(id),scope_type TEXT NOT NULL CHECK(scope_type IN ('crew','party','pilot')),scope_id TEXT NOT NULL,latitude REAL NOT NULL,longitude REAL NOT NULL,updated_at_ms INTEGER NOT NULL,expires_at_ms INTEGER NOT NULL)")
             initial.execute("CREATE INDEX presence_scope_idx ON presence(scope_type,scope_id,expires_at_ms)")
-        initial.execute("PRAGMA user_version=2")
+        initial.execute("PRAGMA user_version=3")
 
-    app = FastAPI(title="런모니 초대 코드 파일럿", version=VERSION)
+    app = FastAPI(title="런모니 크루·파티 방", version=VERSION)
     app.state.settings, app.state.db, app.state.clock = settings, db, now
     app.add_middleware(CORSMiddleware, allow_origins=list(settings.cors_origins), allow_credentials=False,
                        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"], allow_headers=["Authorization", "Content-Type"])
@@ -178,14 +179,21 @@ def create_app(settings=None, clock=None):
         # Do not echo input bodies: auth invite codes and locations are sensitive.
         return JSONResponse({"error": {"code": "invalid_request", "message": "요청 필드와 형식을 확인해 주세요."}}, status_code=422)
 
-    def current_user(authorization: str | None = Header(default=None)):
-        if not authorization or not authorization.startswith("Bearer "):
-            fail(401, "authentication_required", "로그인이 필요합니다.")
+    def optional_user(authorization: str | None = Header(default=None)):
+        if authorization is None:
+            return None
+        if not authorization.startswith("Bearer "):
+            fail(401, "authentication_required", "방 프로필 연결이 필요합니다.")
         with db() as c:
             row = c.execute("SELECT u.* FROM users u JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires_at_ms>?", (token_hash(authorization[7:]), now())).fetchone()
         if row is None:
             fail(401, "invalid_session", "세션이 만료되었거나 유효하지 않습니다.")
         return dict(row)
+
+    def current_user(user: dict | None = Depends(optional_user)):
+        if user is None:
+            fail(401, "authentication_required", "방 프로필 연결이 필요합니다.")
+        return user
 
     def mileage(c, user_id):
         return c.execute("SELECT COALESCE(SUM(delta),0) FROM ledger WHERE user_id=?", (user_id,)).fetchone()[0]
@@ -193,7 +201,7 @@ def create_app(settings=None, clock=None):
     def profile(c, user_id):
         row = c.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
         style = json.loads(row["avatar"])
-        return {"id": row["id"], "nickname": row["nickname"], "mileage": mileage(c, user_id), "avatar": canonical_avatar(style),
+        return {"id": row["id"], "nickname": row["nickname"], "auth_mode": row["auth_mode"], "mileage": mileage(c, user_id), "avatar": canonical_avatar(style),
                 "owned_items": migrated_owned(r[0] for r in c.execute("SELECT item_id FROM owned_items WHERE user_id=? ORDER BY item_id", (user_id,)))}
 
     def crew_member(c, crew_id, user_id):
@@ -206,13 +214,22 @@ def create_app(settings=None, clock=None):
         row = c.execute("SELECT * FROM parties WHERE id=?", (party_id,)).fetchone()
         if row is None:
             fail(404, "party_not_found", "파티를 찾을 수 없습니다.")
-        role = crew_member(c, row["crew_id"], user_id)
+        crew = c.execute("SELECT visibility FROM crews WHERE id=?", (row["crew_id"],)).fetchone()
+        if crew["visibility"] == "pilot":
+            role = crew_member(c, row["crew_id"], user_id)
+        else:
+            member = c.execute("SELECT role FROM crew_members WHERE crew_id=? AND user_id=?", (row["crew_id"], user_id)).fetchone()
+            role = member[0] if member else "member"
+        if row["creator_id"] == user_id:
+            role = "owner"
         if joined and c.execute("SELECT 1 FROM party_members WHERE party_id=? AND user_id=?", (party_id, user_id)).fetchone() is None:
             fail(403, "party_membership_required", "참가한 파티만 이용할 수 있습니다.")
         return row, role
 
     def scope_access(c, scope_type, scope_id, user_id, active=False):
         if scope_type == "pilot":
+            if c.execute("SELECT auth_mode FROM users WHERE id=?", (user_id,)).fetchone()[0] != "pilot":
+                fail(403, "pilot_membership_required", "기존 파일럿 위치는 초대된 계정만 조회할 수 있습니다.")
             return "member", "pilot"
         if scope_type == "crew":
             return crew_member(c, scope_id, user_id), scope_id
@@ -229,7 +246,7 @@ def create_app(settings=None, clock=None):
         row["member_count"] = c.execute("SELECT COUNT(*) FROM crew_members WHERE crew_id=?", (crew_id,)).fetchone()[0]
         role = c.execute("SELECT role FROM crew_members WHERE crew_id=? AND user_id=?", (crew_id, user_id)).fetchone()
         row["role"] = role[0] if role else None
-        if discover or role is None:
+        if discover or role is None or row["visibility"] == "open":
             row.pop("invitation_code")
         return row
 
@@ -237,6 +254,7 @@ def create_app(settings=None, clock=None):
         row = dict(c.execute("SELECT * FROM parties WHERE id=?", (party_id,)).fetchone())
         row["participant_count"] = c.execute("SELECT COUNT(*) FROM party_members WHERE party_id=?", (party_id,)).fetchone()[0]
         row["is_joined"] = c.execute("SELECT 1 FROM party_members WHERE party_id=? AND user_id=?", (party_id, user_id)).fetchone() is not None
+        row["is_organizer"] = row["creator_id"] == user_id
         return row
 
     def own_run(c, run_id, user_id):
@@ -251,11 +269,11 @@ def create_app(settings=None, clock=None):
     @app.get("/health")
     def health():
         voice = bool(settings.livekit_url and settings.livekit_api_key and settings.livekit_api_secret)
-        return {"status": "ok", "version": VERSION, "auth_mode": "invite_code_pilot", "capabilities": {
+        return {"status": "ok", "version": VERSION, "auth_mode": "guest_and_invite_pilot", "capabilities": {
+            "public_rooms": True, "guest_sessions": True,
             "voice": voice, "music_broadcast": bool(voice and settings.bridge_url and settings.bridge_secret and settings.bridge_control_secret)}}
 
-    @app.post("/v1/auth/pilot")
-    def login(body: PilotLogin, request: Request):
+    def limit_login(request):
         address = request.client.host if request.client else "unknown"
         with login_lock:
             attempts = login_attempts[address]
@@ -264,6 +282,25 @@ def create_app(settings=None, clock=None):
             if len(attempts) >= 10:
                 fail(429, "rate_limited", "잠시 후 다시 시도해 주세요.")
             attempts.append(now())
+
+    @app.post("/v1/auth/guest")
+    def guest_login(body: GuestLogin, request: Request):
+        limit_login(request)
+        if not body.adult_confirmed:
+            fail(403, "adult_only_pilot", "현재 모임은 성인만 참가할 수 있습니다.")
+        user_id, token, expiry = str(uuid4()), secrets.token_urlsafe(32), now() + 180 * 86400000
+        with db(True) as c:
+            try:
+                c.execute("INSERT INTO users(id,nickname,adult_confirmed,created_at_ms,auth_mode) VALUES(?,?,1,?,'guest')", (user_id, body.nickname, now()))
+            except sqlite3.IntegrityError:
+                fail(400, "nickname_taken", "이미 사용 중인 닉네임입니다. 다른 닉네임을 입력해 주세요.")
+            c.execute("INSERT INTO sessions VALUES(?,?,?)", (token_hash(token), user_id, expiry))
+            result = profile(c, user_id)
+        return {"access_token": token, "token_type": "bearer", "expires_at_ms": expiry, "user": result}
+
+    @app.post("/v1/auth/pilot")
+    def login(body: PilotLogin, request: Request):
+        limit_login(request)
         if not settings.pilot_invite:
             fail(503, "pilot_not_configured", "파일럿 초대 코드가 설정되지 않았습니다.")
         if not body.adult_confirmed:
@@ -361,29 +398,35 @@ def create_app(settings=None, clock=None):
 
     @app.post("/v1/crews")
     def create_crew(body: CrewCreate, user: dict = Depends(current_user)):
+        if body.visibility == "pilot" and user["auth_mode"] != "pilot":
+            fail(403, "pilot_membership_required", "공개 크루 방으로 만들어 주세요.")
         crew_id = str(uuid4())
         with db(True) as c:
-            c.execute("INSERT INTO crews(id,name,description,owner_id,invitation_code,created_at_ms,region,pace_label) VALUES(?,?,?,?,?,?,?,?)", (crew_id, body.name, body.description, user["id"], secrets.token_urlsafe(9), now(), body.region, body.pace_label))
+            c.execute("INSERT INTO crews(id,name,description,owner_id,invitation_code,created_at_ms,region,pace_label,visibility) VALUES(?,?,?,?,?,?,?,?,?)", (crew_id, body.name, body.description, user["id"], secrets.token_urlsafe(9), now(), body.region, body.pace_label, body.visibility))
             c.execute("INSERT INTO crew_members VALUES(?,?,'owner')", (crew_id, user["id"]))
             return crew_view(c, crew_id, user["id"])
 
     @app.get("/v1/crews")
     def crews(user: dict = Depends(current_user)):
         with db() as c:
-            ids = c.execute("SELECT crew_id FROM crew_members WHERE user_id=? ORDER BY crew_id", (user["id"],)).fetchall()
+            ids = c.execute("SELECT m.crew_id FROM crew_members m JOIN crews c ON c.id=m.crew_id WHERE m.user_id=? AND c.room_kind='crew' ORDER BY m.crew_id", (user["id"],)).fetchall()
             return {"items": [crew_view(c, row[0], user["id"]) for row in ids]}
 
     @app.get("/v1/crews/discover")
-    def discover_crews(user: dict = Depends(current_user)):
+    def discover_crews(user: dict | None = Depends(optional_user)):
         with db() as c:
-            return {"items": [crew_view(c, row[0], user["id"], True) for row in c.execute("SELECT id FROM crews ORDER BY created_at_ms DESC LIMIT 100").fetchall()]}
+            pilot = bool(user and user["auth_mode"] == "pilot")
+            rows = c.execute("SELECT id FROM crews WHERE room_kind='crew' AND (visibility='open' OR ?) ORDER BY created_at_ms DESC,id LIMIT 100", (pilot,)).fetchall()
+            return {"items": [crew_view(c, row[0], user["id"] if user else None, True) for row in rows]}
 
     @app.post("/v1/crews/join")
     def join_crew(body: CrewJoin, user: dict = Depends(current_user)):
         with db(True) as c:
-            row = c.execute("SELECT id FROM crews WHERE invitation_code=?", (body.invitation_code,)).fetchone()
+            row = c.execute("SELECT id,visibility FROM crews WHERE invitation_code=? AND room_kind='crew'", (body.invitation_code,)).fetchone()
             if row is None:
                 fail(404, "invalid_crew_invite", "크루 초대 코드를 확인해 주세요.")
+            if row["visibility"] == "pilot" and user["auth_mode"] != "pilot":
+                fail(403, "pilot_membership_required", "기존 파일럿 계정만 참여할 수 있습니다.")
             c.execute("INSERT OR IGNORE INTO crew_members VALUES(?,?,'member')", (row[0], user["id"]))
             return crew_view(c, row[0], user["id"])
 
@@ -396,8 +439,11 @@ def create_app(settings=None, clock=None):
     @app.post("/v1/crews/{crew_id}/join")
     def open_join_crew(crew_id: UUID, user: dict = Depends(current_user)):
         with db(True) as c:
-            if c.execute("SELECT 1 FROM crews WHERE id=?", (str(crew_id),)).fetchone() is None:
+            row = c.execute("SELECT visibility FROM crews WHERE id=? AND room_kind='crew'", (str(crew_id),)).fetchone()
+            if row is None:
                 fail(404, "crew_not_found", "크루를 찾을 수 없습니다.")
+            if row["visibility"] == "pilot" and user["auth_mode"] != "pilot":
+                fail(403, "pilot_membership_required", "기존 파일럿 계정만 참여할 수 있습니다.")
             c.execute("INSERT OR IGNORE INTO crew_members VALUES(?,?,'member')", (str(crew_id), user["id"]))
             return crew_view(c, str(crew_id), user["id"])
 
@@ -442,17 +488,31 @@ def create_app(settings=None, clock=None):
             fail(422, "coordinate_pair_required", "위도와 경도를 함께 입력해 주세요.")
         party_id = str(uuid4())
         with db(True) as c:
-            if crew_member(c, str(body.crew_id), user["id"]) != "owner":
-                fail(403, "owner_required", "크루장만 파티를 만들 수 있습니다.")
-            c.execute("INSERT INTO parties(id,crew_id,creator_id,title,starts_at_ms,meeting_point,distance_km,capacity,kind,latitude,longitude,pace_label) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (party_id, str(body.crew_id), user["id"], body.title, body.starts_at_ms, body.meeting_point, body.distance_km, body.capacity, body.kind, body.latitude, body.longitude, body.pace_label))
+            crew_id = str(body.crew_id) if body.crew_id else str(uuid4())
+            if body.crew_id:
+                role = crew_member(c, crew_id, user["id"])
+                visibility = c.execute("SELECT visibility FROM crews WHERE id=?", (crew_id,)).fetchone()[0]
+                if visibility == "pilot" and role != "owner":
+                    fail(403, "owner_required", "기존 파일럿 크루의 파티는 크루장만 만들 수 있습니다.")
+            else:
+                # Keep the existing non-null crew foreign key, but don't show this backing room as a crew.
+                c.execute("INSERT INTO crews(id,name,description,owner_id,invitation_code,created_at_ms,visibility,room_kind) VALUES(?,?,?,?,?,?,'open','party')", (crew_id, body.title, "", user["id"], secrets.token_urlsafe(9), now()))
+                c.execute("INSERT INTO crew_members VALUES(?,?,'owner')", (crew_id, user["id"]))
+            c.execute("INSERT INTO parties(id,crew_id,creator_id,title,starts_at_ms,meeting_point,distance_km,capacity,kind,latitude,longitude,pace_label) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (party_id, crew_id, user["id"], body.title, body.starts_at_ms, body.meeting_point, body.distance_km, body.capacity, body.kind, body.latitude, body.longitude, body.pace_label))
             c.execute("INSERT INTO party_members VALUES(?,?)", (party_id, user["id"]))
             return party_view(c, party_id, user["id"])
 
     @app.get("/v1/parties")
     def parties(user: dict = Depends(current_user)):
         with db() as c:
-            ids = c.execute("SELECT p.id FROM parties p JOIN crew_members m ON p.crew_id=m.crew_id WHERE m.user_id=? AND p.status='scheduled' ORDER BY starts_at_ms LIMIT 100", (user["id"],)).fetchall()
+            ids = c.execute("SELECT p.id FROM parties p WHERE (EXISTS(SELECT 1 FROM crew_members m WHERE m.crew_id=p.crew_id AND m.user_id=?) OR EXISTS(SELECT 1 FROM party_members m WHERE m.party_id=p.id AND m.user_id=?)) ORDER BY starts_at_ms LIMIT 100", (user["id"], user["id"])).fetchall()
             return {"items": [party_view(c, row[0], user["id"]) for row in ids]}
+
+    @app.get("/v1/parties/discover")
+    def discover_parties(user: dict | None = Depends(optional_user)):
+        with db() as c:
+            rows = c.execute("SELECT p.id FROM parties p JOIN crews c ON c.id=p.crew_id WHERE c.visibility='open' AND p.status='scheduled' AND p.starts_at_ms>=? ORDER BY p.starts_at_ms,p.id LIMIT 100", (now(),)).fetchall()
+            return {"items": [party_view(c, row[0], user["id"] if user else None) for row in rows]}
 
     @app.get("/v1/parties/{party_id}")
     def get_party(party_id: UUID, user: dict = Depends(current_user)):
@@ -468,6 +528,8 @@ def create_app(settings=None, clock=None):
                 fail(409, "party_cancelled", "취소된 파티입니다.")
             already = c.execute("SELECT 1 FROM party_members WHERE party_id=? AND user_id=?", (str(party_id), user["id"])).fetchone()
             if not already:
+                if party["starts_at_ms"] < now():
+                    fail(409, "party_started", "이미 시작한 파티입니다.")
                 if c.execute("SELECT COUNT(*) FROM party_members WHERE party_id=?", (str(party_id),)).fetchone()[0] >= party["capacity"]:
                     fail(409, "party_full", "파티 정원이 마감되었습니다.")
                 c.execute("INSERT INTO party_members VALUES(?,?)", (str(party_id), user["id"]))

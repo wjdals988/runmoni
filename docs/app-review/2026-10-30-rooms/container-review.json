@@ -1,0 +1,11 @@
+{
+  "publishedAddress": false,
+  "volume": "runmoni-room-check-data-38de2ad6",
+  "image": "runmoni-api:room-review",
+  "runtimeUid": "10001",
+  "python": "Python 3.12.16",
+  "imageId": "sha256:5953e67f13cbc43a0685934c5ae9fb157488bd0ef742d8c7eac4f554f6562ff0",
+  "recreatedContainerPreservedSessionCrewPartyMessage": true,
+  "httpTransport": "host loopback to published container port",
+  "containersStopped": true
+}

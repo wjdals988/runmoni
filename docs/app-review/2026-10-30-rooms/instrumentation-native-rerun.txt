@@ -1,0 +1,44 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.CommunityApiFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.integration.CommunityApiFlowTest:
+INSTRUMENTATION_STATUS: test=guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.CommunityApiFlowTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Real app exposes 크루
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns$tap(CommunityApiFlowTest.kt:85)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns(CommunityApiFlowTest.kt:93)
+
+INSTRUMENTATION_STATUS: stream=
+Error in guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns(com.runmoni.app.integration.CommunityApiFlowTest):
+java.lang.AssertionError: Real app exposes 크루
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns$tap(CommunityApiFlowTest.kt:85)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns(CommunityApiFlowTest.kt:93)
+
+INSTRUMENTATION_STATUS: test=guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 59.513
+There was 1 failure:
+1) guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns(com.runmoni.app.integration.CommunityApiFlowTest)
+java.lang.AssertionError: Real app exposes 크루
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns$tap(CommunityApiFlowTest.kt:85)
+	at com.runmoni.app.integration.CommunityApiFlowTest.guestCreatesDiscoversAndJoinsRealRoomsWithoutUploadingLocalRuns(CommunityApiFlowTest.kt:93)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

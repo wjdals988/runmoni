@@ -347,7 +347,8 @@ def test_voice_missing_credentials_not_fake_connected_and_roles(pilot):
     assert client.post("/v1/voice/token", headers=outsider_h, json=body).status_code == 403
     response = client.post("/v1/voice/token", headers=owner_h, json=body)
     assert response.status_code == 503 and response.json()["error"]["code"] == "capability_not_configured"
-    assert client.get("/health").json()["capabilities"] == {"voice": False, "music_broadcast": False}
+    caps = client.get("/health").json()["capabilities"]
+    assert caps["voice"] is False and caps["music_broadcast"] is False
 
 
 def test_audio_jwt_grants_lease_revoke_and_role_demotion(tmp_path):

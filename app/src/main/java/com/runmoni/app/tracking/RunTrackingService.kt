@@ -103,7 +103,7 @@ class RunTrackingService : Service(), LocationListener {
             while (isActive) {
                 val state = repository.active.value
                 val point = state.points.lastOrNull()
-                val enabled = preferences.getBoolean("publicLocation", false) && state.phase == RunPhase.RUNNING && point != null && point.accuracyMeters <= 30 && System.currentTimeMillis() - point.recordedAtMillis in 0..30_000
+                val enabled = !preferences.getBoolean("communityGuest", false) && preferences.getBoolean("publicLocation", false) && state.phase == RunPhase.RUNNING && point != null && point.accuracyMeters <= 30 && System.currentTimeMillis() - point.recordedAtMillis in 0..30_000
                 if (enabled) {
                     // The location recorder remains independent of every network failure.
                     runCatching {

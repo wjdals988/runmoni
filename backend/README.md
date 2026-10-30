@@ -1,6 +1,6 @@
-# 런모니 로컬 파일럿 서버
+# 런모니 크루·파티 방 서버
 
-요약: v0.1.4는 성인임을 확인한 초대 테스터를 위한 FastAPI + SQLite 서버입니다. 현재 인증은 **초대 코드 파일럿 인증**이며 이메일 OTP/본인 인증은 구현하지 않았습니다. Android는 `adb reverse tcp:8787 tcp:8787` 후 `http://127.0.0.1:8787`에 연결합니다. API 계약은 [API.md](API.md)에 있습니다.
+요약: v0.1.5는 FastAPI + SQLite 방 서버입니다. 공개 목록은 익명 조회, 생성/입장은 닉네임 게스트 세션을 사용합니다. 기존 초대 파일럿 계정/비공개 방/위치는 별도로 보존합니다. Android 로컬 검증은 `adb reverse tcp:8787 tcp:8787` 후 `http://127.0.0.1:8787`에 연결합니다. [API](API.md) · [방 검토](../docs/COMMUNITY_ROOMS_REVIEW_20261030.md).
 
 ## 설치와 실행
 
@@ -12,7 +12,7 @@ python -m venv backend/.venv
 Copy-Item backend/.env.example backend/.env
 ```
 
-`backend/.env`의 `RUNMONI_PILOT_INVITE`를 8자 이상의 별도 초대 코드로 채웁니다. 다른 값은 공백 없이 `KEY=value` 형태를 사용합니다. 파일에 저장한 값과 발급된 bearer token을 공유 저장소에 올리지 않습니다. 기존 코드를 바꿔도 이미 발급한 30일 세션은 유지되며, 세션 삭제 API로 폐기할 수 있습니다.
+게스트 방 기능에는 `RUNMONI_PILOT_INVITE`가 필요 없습니다. 기존 파일럿을 유지할 때만 별도 초대 코드를 설정합니다. 다른 값은 공백 없이 `KEY=value` 형태를 사용합니다. 파일에 저장한 값과 발급된 bearer token을 공유 저장소에 올리지 않습니다. 기존 코드를 바꿔도 이미 발급한 30일 세션은 유지되며, 세션 삭제 API로 폐기할 수 있습니다.
 
 ```powershell
 powershell -NoProfile -File backend/run.ps1
@@ -23,7 +23,6 @@ powershell -NoProfile -File backend/run.ps1
 직접 시작하는 경우 저장소 루트에서 실행합니다.
 
 ```powershell
-$env:RUNMONI_PILOT_INVITE = 'operator-chosen-invite-code'
 & backend/.venv/Scripts/python.exe -m uvicorn backend.main:app --host 127.0.0.1 --port 8787
 ```
 
@@ -37,13 +36,13 @@ $env:RUNMONI_PILOT_INVITE = 'operator-chosen-invite-code'
 
 | 항목 | 파일럿 동작 / 한계 |
 |---|---|
-| 계정 | 초대 코드 + 고유 닉네임 + 성인 확인, 30일 bearer token SHA-256만 DB 저장. 성인 확인은 자가 확인이며 신분증 검증이 아님 |
-| 파티 | **현장/원격 모두 크루장만 생성**. 2–20명, 생성자가 1자리 차지. 크루 회원만 참가 |
+| 계정 | 게스트 닉네임/성인 확인180일, 기존 초대 파일럿30일. bearer token SHA-256만 DB 저장. 성인 확인은 자가 확인이며 본인/나이 검증이 아님 |
+| 파티 | 공개 방은 크루 없이 생성/참가 가능. 공개 크루 멤버도 일정 생성 가능. 기존 비공개 파일럿은 크루장/회원 규칙 유지. 2–20명, 생성자가1자리 차지 |
 | 채팅 | 크루/파티 범위 권한 및 공지 권한 검증, 메시지당 2,000자. 활성 화면에서 3초 polling |
 | 위치 | 본인 active run + 정확한 위치 명시 동의 + 허가된 범위, server TTL 45초. `pilot`은 모든 초대 인증 성인 테스터가 보는 범위 |
 | 보상 | 100점/km. accuracy ≤30m, speed ≤8m/s, gap ≤60s, 동일 segment만 거리 계산. 기본 일별 상한 10,000점은 조정 가능한 악용 방지 설정 |
 | 시간 | 밀리초 UTC 시작/종료 시각을 소수점 초로 변환. 0 ≤ 활동 시간 ≤ 경과 시간 ≤ 86,400초. 기존 완료 기록 재전송은 저장된 요약 반환 |
-| 꾸미기 | 5슬롯 × 4종 = 20 SKU, 비용 0/500/1,000/2,000점, 비보유 유료 아이템 착용 거부 |
+| 꾸미기 | Android13개 슬롯/58개 현재 아이템 ID와 이전 accessory 호환을 보존. 이번 방 작업은 새 의복 표시를 완성한 작업이 아님 |
 | 기록 삭제 | GPS 삭제 + 이력/통계 숨김. 기존 보상을 유지하며 재적립 방지용 summary tombstone/ledger 보존 |
 | 오디오 | 음성 입장 JWT 5분, DJ music lease 15분, 방당 방송 1개, bridge 5초 lease 확인. 기술 테스트 확인 플래그가 음악 사용권 증명이 되지 않음 |
 

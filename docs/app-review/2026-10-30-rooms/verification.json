@@ -1,0 +1,49 @@
+{
+  "appVersion": "0.1.8-dev",
+  "versionCode": 9,
+  "backendVersion": "0.1.5",
+  "backendTests": 34,
+  "jvm": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Warning": 35
+  },
+  "publicHostingCreated": false,
+  "physicalDeviceTests": 0,
+  "androidTests": {
+    "initial": {
+      "tests": 9,
+      "passed": 8,
+      "failures": 1,
+      "seconds": 203.961
+    },
+    "nativeRerunBeforePreflight": {
+      "tests": 1,
+      "failures": 1,
+      "seconds": 59.513
+    },
+    "nativeAfterSystemUiWait": {
+      "tests": 1,
+      "passed": 1,
+      "failures": 0,
+      "seconds": 52.698
+    },
+    "distinctSuccessfulCases": 9,
+    "allNinePassedInSingleRun": false,
+    "mainApkUnchangedAfterTestOrderFix": true
+  },
+  "renderBlueprintSchemaValidated": true,
+  "renderSchemaSource": "https://render.com/schema/render.yaml.json",
+  "debugApkSha256": "01ae52e3bfc19d5edc6992f097d04b0676837da58a64e7e86f6b336e11526b3c",
+  "checkoutHeadAtBuild": "a993e158dc6acc352db899e01cc7f6d79da66c43",
+  "uncommittedChangesAtBuild": true,
+  "actionlint": "passed",
+  "renderBlueprintSha256": "ea3e7ccee00409ebdaa82aeba0882684ebfb8a28f10159fd49978d187fd59e21",
+  "deviceStopped": true,
+  "ownedLoopbackApiStopped": true,
+  "adbReverse8789Removed": true
+}

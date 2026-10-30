@@ -14,6 +14,11 @@ class PilotLogin(Model):
     adult_confirmed: StrictBool
 
 
+class GuestLogin(Model):
+    nickname: str = Field(min_length=2, max_length=24, pattern=r"^[\w가-힣 -]+$")
+    adult_confirmed: StrictBool
+
+
 class Avatar(Model):
     hair: int = Field(default=0, ge=0, le=3)
     top: int = Field(default=0, ge=0, le=5)
@@ -49,6 +54,7 @@ class CrewCreate(Model):
     description: str = Field(default="", max_length=500)
     region: str = Field(default="", max_length=80)
     pace_label: str = Field(default="자유 페이스", max_length=80)
+    visibility: Literal["pilot", "open"] = "pilot"
 
 
 class CrewJoin(Model):
@@ -60,7 +66,7 @@ class RolePatch(Model):
 
 
 class PartyCreate(Model):
-    crew_id: UUID
+    crew_id: UUID | None = None
     title: str = Field(min_length=2, max_length=80)
     starts_at_ms: int = Field(gt=0)
     kind: Literal["local", "remote"] = "local"

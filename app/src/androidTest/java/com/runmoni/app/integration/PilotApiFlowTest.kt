@@ -34,7 +34,7 @@ class PilotApiFlowTest {
             scenario.onActivity { model.createCrew(NewCrew("검증크루-$suffix", "자동 API 검증용", "서울", "6:00/km")) }
             until { model.state.value.crews.any { it.name == "검증크루-$suffix" && it.joined && it.isOwner } && !model.state.value.busy }
             val crew = model.state.value.crews.first { it.name == "검증크루-$suffix" }
-            assertNotNull(crew.invitationCode)
+            assertNull(crew.invitationCode)
             scenario.onActivity { model.createParty(NewParty(crew.id, "검증파티-$suffix", PartyKind.REMOTE, System.currentTimeMillis() + 900000, "각자 출발", 3.0, "6:00/km", 2)) }
             until { model.state.value.parties.any { it.title == "검증파티-$suffix" } && !model.state.value.busy }
             val party = model.state.value.parties.first { it.title == "검증파티-$suffix" }

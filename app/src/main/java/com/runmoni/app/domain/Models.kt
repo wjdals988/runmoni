@@ -59,6 +59,7 @@ data class Crew(
     val isOwner: Boolean = false,
     val isDj: Boolean = false,
     val invitationCode: String? = null,
+    val isOpen: Boolean = false,
 )
 data class CrewMember(val id: String, val name: String, val isOwner: Boolean = false, val isDj: Boolean = false)
 data class Party(
@@ -115,6 +116,9 @@ data class AppState(
     val openedRoomId: String = "",
     val openedRoomTitle: String = "",
     val locationAccess: LocationAccess = LocationAccess(),
+    val communityGuest: Boolean = false,
+    val lastCreatedCrewId: String = "",
+    val lastCreatedPartyId: String = "",
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
-data class NewParty(val crewId: String, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)
+data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)

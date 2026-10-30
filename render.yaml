@@ -1,0 +1,21 @@
+# This paid persistent-disk example requires owner account/billing approval before creation.
+services:
+  - type: web
+    name: runmoni-api
+    runtime: python
+    plan: starter
+    region: singapore
+    branch: codex/community-rooms
+    autoDeploy: false
+    buildCommand: pip install --disable-pip-version-check -r backend/requirements.lock.txt
+    startCommand: python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT --workers 1 --no-access-log
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.16
+      - key: RUNMONI_DB_PATH
+        value: /var/data/runmoni.sqlite3
+    disk:
+      name: runmoni-data
+      mountPath: /var/data
+      sizeGB: 1

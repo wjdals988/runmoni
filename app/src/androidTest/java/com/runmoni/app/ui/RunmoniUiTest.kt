@@ -266,20 +266,20 @@ class RunmoniUiTest {
         compose.runOnIdle { assertEquals(1, state.value.profile.avatar.top) }
     }
 
-    @Test fun pilotSignInRequiresAdultAttestationAndInviteCode() {
+    @Test fun guestConnectRequiresAdultAttestationWithoutInvite() {
         val state = mutableStateOf(AppState())
         val actions = FakeActions(state)
         compose.setContent { RunmoniApp(state.value, actions) }
         compose.onNodeWithTag("settings_button").performClick()
         compose.onNodeWithTag("open_sign_in").performScrollTo().performClick()
         compose.onNodeWithTag("confirm_sign_in").assertIsNotEnabled()
-        compose.onNodeWithTag("invite_code").performTextInput("ui-invite-fixture")
+        compose.onNodeWithTag("invite_code").assertDoesNotExist()
         compose.onNodeWithTag("display_name").performTextClearance()
         compose.onNodeWithTag("display_name").performTextInput("테스트 러너")
         compose.onNodeWithTag("confirm_sign_in").assertIsNotEnabled()
         compose.onNodeWithTag("adult_checkbox").performScrollTo().performClick()
         compose.onNodeWithTag("confirm_sign_in").assertIsEnabled().performClick()
-        compose.runOnIdle { assertEquals("ui-invite-fixture" to "테스트 러너", actions.login) }
+        compose.runOnIdle { assertEquals("" to "테스트 러너", actions.login) }
     }
 
     @Test fun missingCloudConfigurationKeepsGoogleLoginDisabled() {
@@ -334,6 +334,8 @@ class RunmoniUiTest {
         val musicPackages = mutableListOf<String>()
         var login: Pair<String, String>? = null
         val cloudBackups = mutableListOf<Pair<String, String>>()
+        val joinedCrews = mutableListOf<String>()
+        val joinedParties = mutableListOf<String>()
         override fun startRun() { starts++; state.value = state.value.copy(activeRun = ActiveRun(id = "ui-contract-run", phase = RunPhase.RUNNING, startedAtMillis = System.currentTimeMillis(), gpsStatus = "UI 상태 계약 테스트")) }
         override fun pauseRun() { pauses++; state.value = state.value.copy(activeRun = state.value.activeRun.copy(phase = RunPhase.PAUSED)) }
         override fun resumeRun() { resumes++; state.value = state.value.copy(activeRun = state.value.activeRun.copy(phase = RunPhase.RUNNING)) }
@@ -352,6 +354,7 @@ class RunmoniUiTest {
         override fun exportRun(id: String) { exports += id }
         override fun configureServer(url: String) = Unit
         override fun signIn(inviteCode: String, name: String) { login = inviteCode to name }
+        override fun connectCommunity(name: String) { login = "" to name }
         override fun signOut() = Unit
         override fun signInGoogle() = Unit
         override fun signOutGoogle() = Unit
@@ -360,11 +363,11 @@ class RunmoniUiTest {
         override fun deleteCloudSummary(runId: String, expectedUid: String) = Unit
         override fun refreshCommunity() = Unit
         override fun createCrew(input: NewCrew) = Unit
-        override fun joinCrew(id: String) = Unit
+        override fun joinCrew(id: String) { joinedCrews += id }
         override fun leaveCrew(id: String) { leftCrews += id }
         override fun setCrewDj(crewId: String, memberId: String, enabled: Boolean) { djChanges += Triple(crewId, memberId, enabled); state.value = state.value.copy(crewMembers = state.value.crewMembers + (crewId to state.value.crewMembers[crewId].orEmpty().map { if (it.id == memberId) it.copy(isDj = enabled) else it })) }
         override fun createParty(input: NewParty) { createdParties += input }
-        override fun joinParty(id: String) = Unit
+        override fun joinParty(id: String) { joinedParties += id }
         override fun leaveParty(id: String) { leftParties += id }
         override fun cancelParty(id: String) { cancelledParties += id; state.value = state.value.copy(parties = state.value.parties.map { if (it.id == id) it.copy(cancelled = true) else it }) }
         override fun openChat(roomId: String, title: String) = Unit

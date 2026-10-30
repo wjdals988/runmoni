@@ -1,3 +1,14 @@
+# 공개 방 API — v0.1.5
+
+- `POST /v1/auth/guest`: nickname(2~24자), adult_confirmed=true. 초대 없이180일 bearer 세션. DB에는 토큰 SHA256만 저장하며 세션 해제/만료 뒤 복구는 미지원.
+- `GET /v1/crews/discover`, `GET /v1/parties/discover`: 인증 없이 공개 메타데이터. 기존pilot 방·초대코드·정밀 위치는 제외. 유효한 세션은 참여 상태를 함께 반환.
+- `POST /v1/crews`: 새 앱은 visibility=open 명시. 생략하면 기존pilot 규칙 유지.
+- `POST /v1/parties`: crew_id 생략/null이면 독립 공개 파티. 공개 크루는 가입 멤버가 생성.
+- 크루/파티의 `POST /{id}/join`, `DELETE /{id}/join`: 인증 필요. 공개 파티 입장이 크루 가입을 추가하지 않음. 정원/중복/시작/취소/공지·채팅·음성 권한을 검증.
+- 기존pilot 방·pilot 위치 범위는 게스트가 접근할 수 없음.
+
+아래는 기존 파일럿 API 이력이며 위 변경을 우선합니다.
+
 # Runmoni pilot API v0.1.4
 
 Local-only base URL: `http://127.0.0.1:8787`. Android emulator uses `http://10.0.2.2:8787`; USB device uses `adb reverse tcp:8787 tcp:8787`. Prefix `/v1`. JSON uses snake_case, UUID strings, UTC Unix milliseconds, distances in metres and durations in seconds. Authenticated endpoints require `Authorization: Bearer <token>`. Lists return `{ "items": [...] }`. Failures return `{ "error": { "code": "...", "message": "..." } }` and HTTP 401/403/404/409/422/503.

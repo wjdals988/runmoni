@@ -1,0 +1,7 @@
+{
+  "observedDialog": "System UI isn't responding",
+  "action": "Wait selected before instrumentation; no app ANR dialog dismissed",
+  "source": "actual UIAutomator XML and native-failure.png",
+  "appApkChanged": false,
+  "testApkChangedAfterNativeRerun": false
+}
