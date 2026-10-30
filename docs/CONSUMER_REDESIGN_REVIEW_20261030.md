@@ -27,3 +27,15 @@
 초기 debug APK에서21개 Android 검증이 한 번의 실행으로 모두 통과했다(410.318초). 5개 탭×너비320/360/411dp×fontScale1/1.5/2, 고정 러닝 조작, 방 생성/입장/실패 초안 보존, 전체 화면 옷장, 버전 레드닷/확인 후 링크, 로컬 상태 러닝·기록 흐름을 포함한다. 합성 AppState/테스트 액션을 쓰는 UI 계약 검증이며 실제 GPS·공용 서버·휴대폰 검증이 아니다. 클라우드 부팅 시 ‘System UI isn’t responding’을 확인하고 instrumentation 이전 Wait를 선택한 사실을 preflight에 보존했다. 앱 ANR을 통과 처리하거나 테스트 중 경고를 자동으로 닫지 않았다.
 
 실제 캡처에서 크루 소개/생성 버튼이 첫 목록을 가리는 것을 확인했다. 제목/간격을 압축하고 선택한 방 종류의 생성 행동 하나와 참여 필터를 배치했으며 Android 뒤로 가기로 목록에 복귀한다. 큰 글씨용 원화 준비 placeholder도88dp로 공간을 확보한다. 이 후속 수정은 초기21개 통과와 구분해 새 APK에서 관련 검증을 수행한다. 초기 AVD PID199466은 빌드 전에 종료했다.
+
+소스는 `29700f4`에서 원격 `codex/consumer-app-redesign`에 저장했고 [앱 PR11](https://github.com/wjdals988/runmoni/pull/11)을 생성했다. 기준 브랜치는 아직 열린 방 PR10의 `codex/community-rooms`다. PR 생성/푸시는 main 병합·서명 APK 공개를 뜻하지 않는다.
+
+최종 debug APK의 후속 Android8개는 한 번에 모두 통과했다(262.737초). 방4개/5개 탭의9조합/실제 화면 전환/채팅 선택 유지/옷장 고정 미리보기·보유권을 다시 확인했다. `finalDebugApkSha256`와 현재 실행 로그를 기준으로 초기21개 실행과 분리한다. 실제 동작 없는 지표·방 목록을 채워 넣지 않았으며 오프라인 안내와 정상 빈 결과를 구분한다.
+
+전용 AVD의 실제 해상도를320×640/density160, 시스템 fontScale2로 변경한 native 검증3개가 한 번에 통과했다(114.672초). 옷장/프로필 이름 저장과 보유권 보존, 앱 정보/업데이트 확인, 새 채팅 도착 시 읽던 위치 유지와 실제 IME 위 입력·52dp 전송 버튼의 전체 영역/보내기/뒤로 가기를 확인했다. 테스트 로그의 일시적 UiTestAutomationBridge null-root 진단은 테스트 실패로 이어지지 않았으며 앱/실기기 성공으로 확대하지 않는다. 해상도/폰트/하드웨어 키보드 표시 설정과 애니메이션은 저장한 원래 값으로 복원했다. [복원 결과](app-review/2026-10-30-redesign/native-large-restoration.json)를 따른다.
+
+실제 MainActivity/AppViewModel/PilotClient와 소유한127.0.0.1:8789 API를 연결한 Android1개도 통과했다(81.06초). 임시 게스트2개로 방 생성/공개 발견/독립 파티/중복 입장(정원2명 유지)/채팅을 확인했다. WorkManager를 실제 실행해 기기 기록은 미동기화로 남고 원격 기록0건인 것을 확인했으며 포인트/보유권/아바타를 보존하고 원래 지갑/연결 주소를 복원했다. 임시 로컬 기록은 삭제했고 API 프로세스는 종료했고8789 adb reverse 제거 명령을 실행했다(제거 후 목록은 별도 캡처하지 않았다). 다른 실제 휴대폰2대나 공용 서버 검증이 아니다. room-review의 이전 PNG를 지운 뒤 이번 실행이 새로 만든 PNG만 보관했다. [결과](app-review/2026-10-30-redesign/loopback-api-verification.json).
+
+후속 MainActivity 캡처의 첫 시도는 UIAutomator의 빈 root/현재XML 파싱 실패로 중단됐다. 소유한 임시XML을 먼저 지우고 실제 현재 hierarchy가 파싱되는 경우에만 캡처하는 제한된 재시도를 추가했다. 이를 앱 기능 실패/성공이나 이미 완료된 테스트 수치로 합산하지 않는다.
+
+실제 MainActivity의 홈/탐색/러닝/크루 오프라인/나/옷장6개 전체 기기 캡처를 완료했다. [실제 실행/파일 해시](app-review/2026-10-30-redesign/main-screens-verification.json)와 raw PNG를 보관한다. 방/파티/채팅 PNG는 같은 최종 앱과 임시 loopback API의 실제 검증용 데이터이며, 별도의5개 탭 viewport PNG는 합성 AppState 테스트 화면이다. 호스트 렌더/GIF를 실제 앱 화면으로 표시하지 않았다. 최종 AVD PID203020도 이름/소유를 확인해 종료했고 추가 빌드·설치와 겹치지 않았다.

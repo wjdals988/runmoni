@@ -1,0 +1,14 @@
+{
+  "before": {
+    "size": "Physical size: 480x854",
+    "density": "Physical density: 160",
+    "fontScale": "1.0",
+    "showImeWithHardware": "1"
+  },
+  "after": {
+    "size": "Physical size: 480x854",
+    "density": "Physical density: 160",
+    "fontScale": "1.0",
+    "showImeWithHardware": "1"
+  }
+}
