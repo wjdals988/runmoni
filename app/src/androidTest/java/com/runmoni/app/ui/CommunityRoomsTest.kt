@@ -34,6 +34,8 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.runOnIdle { assertEquals(listOf(crew.id), actions.joinedCrews); state.value = state.value.copy(crews = listOf(crew.copy(joined = true))) }
         compose.onNodeWithText("공지 · 채팅").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("create_party_${crew.id}").assertIsEnabled()
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.onNodeWithTag("rooms_search").performScrollTo().assertIsDisplayed()
     }
 
     @Test fun failedCrewCreationKeepsDraftAndSuccessOpensCreatedRoom() {
@@ -64,6 +66,7 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         val actions = RunmoniUiTest.FakeActions(state)
         compose.setContent { ViewportBox(Viewport()) { RunmoniApp(state.value, actions) } }
         compose.onNodeWithTag("nav_crew").performClick()
+        compose.onNodeWithTag("rooms_type_1").performScrollTo().performClick()
         compose.onNodeWithTag("create_party").performScrollTo().performClick()
         compose.onNodeWithTag("party_title").performTextInput("퇴근 후 원격 러닝")
         compose.onNodeWithTag("party_remote").performScrollTo().performClick()
@@ -83,9 +86,11 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.setContent { ViewportBox(Viewport(320, 2f)) { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state)) } }
         compose.onNodeWithTag("nav_crew").performClick()
         compose.onNodeWithTag("create_crew").performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        compose.onNodeWithTag("rooms_type_1").performScrollTo().performClick()
         compose.onNodeWithTag("create_party").performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(48.dp)
         noTextOverflow("rooms list 320 / 2")
         capture("rooms-list-320-200")
+        compose.onNodeWithTag("rooms_type_0").performScrollTo().performClick()
         compose.onNodeWithTag("crew_${crew.id}").performScrollTo().performClick()
         compose.onNodeWithTag("create_party_${crew.id}").performScrollTo().assertIsEnabled()
         noTextOverflow("crew room 320 / 2")

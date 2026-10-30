@@ -97,12 +97,16 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                 Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (messages.isEmpty()) EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 이야기를 남겨보세요", "이 방의 실제 메시지만 표시해요")
                     messages.forEach { message ->
-                        Surface(shape = RoundedCornerShape(18.dp), color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.PrimarySoft else RunmoniColors.Paper, modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
+                        Surface(shape = RoundedCornerShape(18.dp), color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
+                            contentColor = if (message.mine && !message.notice) RunmoniColors.OnDark else RunmoniColors.Navy,
+                            modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 Text(if (message.notice) "공지 · ${message.author}" else message.author, style = MaterialTheme.typography.labelMedium)
                                 Text(message.body, style = MaterialTheme.typography.bodyLarge)
-                                Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                                Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall, color = if (message.mine && !message.notice) RunmoniColors.OnDarkMuted else RunmoniColors.Muted)
                             }
+                        }
                         }
                     }
                 }

@@ -1,0 +1,65 @@
+{
+  "version": "0.2.0-dev",
+  "versionCode": 10,
+  "unitTests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 35
+  },
+  "physicalDeviceTests": 0,
+  "publicHostingCreated": false,
+  "buildWithUncommittedChanges": true,
+  "originalAvatarSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "initialDebugApkSha256": "bf9523b23d9c33e1c012c93883d19ea5f014af200a44065420512ce925d406ec",
+  "initialUiSuiteBeforeRoomListCompression": true,
+  "initialAndroidSuite": {
+    "tests": 21,
+    "passed": 21,
+    "failed": 0,
+    "seconds": 410.318,
+    "beforeRoomListCompression": true,
+    "raw": "instrumentation-initial.txt"
+  },
+  "initialDeviceStopped": true,
+  "finalDebugApkSha256": "528a3abdef6108f3b73571f913c38fda04eda80c8a210a1d8b96da533bfc9c71",
+  "finalBuildPassed": true,
+  "finalLint": {
+    "Error": 0,
+    "Warning": 35
+  },
+  "finalAndroidFollowup": {
+    "tests": 8,
+    "passed": 8,
+    "failed": 0,
+    "seconds": 262.737,
+    "raw": "instrumentation-final.txt"
+  },
+  "nativeLargeText": {
+    "tests": 3,
+    "passed": 3,
+    "failed": 0,
+    "seconds": 114.672,
+    "nativeWidthDp": 320,
+    "nativeFontScale": 2,
+    "raw": "instrumentation-large.txt"
+  },
+  "nativeApi": {
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "seconds": 81.06,
+    "raw": "instrumentation-native-api.txt",
+    "physicalPhones": 0,
+    "publicHostingCreated": false
+  },
+  "finalDeviceStopped": true,
+  "ownedLoopbackApiStopped": true,
+  "mainActivityScreensCaptured": 6,
+  "newSignedApkPublished": false,
+  "productionDashboardChanged": false
+}

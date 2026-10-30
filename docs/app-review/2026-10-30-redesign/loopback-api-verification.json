@@ -1,0 +1,12 @@
+{
+  "serverHost": "127.0.0.1",
+  "serverPort": 8789,
+  "publicHostingCreated": false,
+  "physicalDevice": false,
+  "testDatabase": "runmoni-consumer-92c5925008.sqlite3",
+  "instrumentationCommandExit": 0,
+  "testPassed": true,
+  "ownedApiStopped": true,
+  "adbReverseRemovalCommandExecuted": true,
+  "adbReverseRemovalPostcheckCaptured": false
+}

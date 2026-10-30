@@ -1,0 +1,99 @@
+{
+  "captureNotes": [],
+  "physicalDevice": false,
+  "package": "com.runmoni.app",
+  "version": "0.2.0-dev",
+  "captures": [
+    {
+      "file": "main-home.png",
+      "sha256": "76cfc290b1253e5838bb1ae8a6f75b7d6bd7d1a933e93802a8409abea88b83f8",
+      "visibleText": [
+        "10월 30일 금요일",
+        "오늘도,\n나답게 달려요.",
+        "빠르지 않아도 괜찮아요. 나만의 페이스로.",
+        "러닝 시작하기",
+        "함께 달리면 더 즐거워요",
+        "크루와 파티에서 러닝 메이트를 찾아요",
+        "나만의 러닝을 발견해요",
+        "함께할 모임과 내가 달린 길 둘러보기",
+        "러닝 기록은 이 기기에 저장돼요"
+      ]
+    },
+    {
+      "file": "main-explore.png",
+      "sha256": "955f564ce0886c8f36945b537fde3aaee8cf324ee8cc7016040b4acd110d890b",
+      "visibleText": [
+        "DISCOVER",
+        "다음 러닝을\n발견하는 곳.",
+        "함께할 사람과 달리고 싶은 순간을 찾아요.",
+        "모임 검색",
+        "파티",
+        "크루",
+        "러너",
+        "함께 달리기는 연결을 준비 중이에요",
+        "방 목록을 불러오지 못했어요. 혼자 달리기와 내 기록은 계속 이용할 수 있어요."
+      ]
+    },
+    {
+      "file": "main-run.png",
+      "sha256": "1fac7d15ce34ed68c7222576e6423c9664cd5b393534c1f14657855019d2d486",
+      "visibleText": [
+        "오늘의 러닝",
+        "GPS 준비 전",
+        "JUST RUN",
+        "신발 끈 묶고,\n가볍게 시작해요.",
+        "시작하면 GPS 경로와 시간을 기록해요.",
+        "내 기록은 기기에 안전하게 저장돼요",
+        "러닝 옵션",
+        "러닝 시작",
+        "runmoni"
+      ]
+    },
+    {
+      "file": "main-crew-offline.png",
+      "sha256": "02daa6b18260370d0db20c2387b92022db8d3a845651ca89a88af8877c5c9a6c",
+      "visibleText": [
+        "RUN TOGETHER",
+        "함께라서, 더 멀리.",
+        "크루 방",
+        "파티 방",
+        "방 검색",
+        "크루 방 만들기",
+        "내가 참여한 방",
+        "함께 달리기는 연결을 준비 중이에요",
+        "방 목록을 불러오지 못했어요. 혼자 달리기와 내 기록은 계속 이용할 수 있어요."
+      ]
+    },
+    {
+      "file": "main-profile.png",
+      "sha256": "7885d2e1fef4c5b65e05171497908151950809aaef8ab98d399eb4a8cf4cc60a",
+      "visibleText": [
+        "MY RUNMONI",
+        "러너님의\n러닝 이야기",
+        "나와 함께 뛰는 미니미",
+        "달린 만큼, 나답게 꾸며요",
+        "2 P",
+        "미니미 꾸미기",
+        "차곡차곡, 나의 기록",
+        "일별",
+        "월별"
+      ]
+    },
+    {
+      "file": "main-closet.png",
+      "sha256": "21e1d3d5efb0e6b2906cfb18309c909e061228ed4aa0e5005e4da46600a0d507",
+      "visibleText": [
+        "나의 미니미 옷장",
+        "닫기",
+        "2 P",
+        "달리기 멈춤",
+        "준비된 아이템만 착용할 수 있어요. 보유 아이템과 포인트는 그대로 보관돼요.",
+        "헤어",
+        "모자",
+        "얼굴",
+        "상의"
+      ]
+    }
+  ],
+  "resumedActivity": "mResumedActivity: ActivityRecord{80a0546 u0 com.runmoni.app/.MainActivity t271}"
+}

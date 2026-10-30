@@ -14,18 +14,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 internal object RunmoniColors {
-    val Cream = Color(0xFFF8FAF8)
+    val Cream = Color(0xFFF7F7F2)
     val Paper = Color(0xFFFFFFFF)
     val Coral = Color(0xFFF16D55)
-    val Primary = Color(0xFF245C45)
-    val PrimarySoft = Color(0xFFE6F0E8)
-    val Navy = Color(0xFF182A23)
-    val Muted = Color(0xFF526158)
-    val Line = Color(0xFFD8E1D9)
-    val Outline = Color(0xFF748278)
-    val Mint = Color(0xFFE6F0E8)
+    val Primary = Color(0xFF205641)
+    val PrimarySoft = Color(0xFFE9EFDF)
+    val Navy = Color(0xFF192D25)
+    val Muted = Color(0xFF556158)
+    val Line = Color(0xFFDFE3DA)
+    val Outline = Color(0xFF748071)
+    val Mint = Color(0xFFE9EFDF)
     val Green = Primary
-    val Lime = Color(0xFFCEEF92)
+    val Lime = Color(0xFFD7F58A)
     val OnDark = Color(0xFFFFFFFF)
     val OnDarkMuted = Color(0xFFD6E5DA)
 }
@@ -70,7 +70,7 @@ internal fun RunmoniTheme(content: @Composable () -> Unit) {
             errorContainer = Color(0xFFFFEAE5),
             onErrorContainer = Color(0xFF74221C),
         ),
-        shapes = Shapes(small = RoundedCornerShape(12.dp), medium = RoundedCornerShape(16.dp), large = RoundedCornerShape(24.dp), extraLarge = RoundedCornerShape(28.dp)),
+        shapes = Shapes(small = RoundedCornerShape(12.dp), medium = RoundedCornerShape(20.dp), large = RoundedCornerShape(28.dp), extraLarge = RoundedCornerShape(32.dp)),
         typography = Typography(
             displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 64.sp, lineHeight = 72.sp),
             displayMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 48.sp, lineHeight = 56.sp),

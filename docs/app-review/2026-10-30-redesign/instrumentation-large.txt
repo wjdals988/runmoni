@@ -1,0 +1,53 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.ConsumerClosetTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.ConsumerClosetTest:
+INSTRUMENTATION_STATUS: test=fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.ConsumerClosetTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.AppInformationNativeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.AppInformationNativeTest:
+INSTRUMENTATION_STATUS: test=largeAboutAndUpdateConfirmationRemainReadableAndScrollable
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.AppInformationNativeTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=largeAboutAndUpdateConfirmationRemainReadableAndScrollable
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunmoniDialogDesignTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.RunmoniDialogDesignTest:
+INSTRUMENTATION_STATUS: test=arrivingChatDoesNotMoveReadersAwayFromOlderMessages
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunmoniDialogDesignTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=arrivingChatDoesNotMoveReadersAwayFromOlderMessages
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 114.672
+
+OK (3 tests)
+
+
+INSTRUMENTATION_CODE: -1

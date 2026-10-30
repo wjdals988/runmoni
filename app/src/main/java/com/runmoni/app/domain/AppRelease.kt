@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.2.0-dev", "2026-10-30", "검토용 개발 프리뷰 · 실기기 검증 전", listOf(
+        "홈·탐색·러닝·크루·나의 화면 구성과 주요 동선을 새롭게 바꿨어요.",
+        "러닝 시작과 실제 방 목록을 먼저 보여주고, 기록과 꾸미기에 집중했어요.",
+        "전체 화면 옷장과 대화형 채팅을 적용하고 큰 글씨에서도 조작할 수 있게 개선했어요.",
+        "공용 모임 서버는 연결 준비 중이며 혼자 달리기와 내 기록은 기기에서 이용해요.",
+    )),
     AppVersionEntry("0.1.8-dev", "2026-10-30", "개발 중 · 미게시", listOf(
         "초대코드 없이 공개 크루·파티 방을 둘러보고 닉네임으로 참여해요.",
         "크루 방과 파티 방을 직접 만들고 이름·지역·페이스로 찾아요.",
