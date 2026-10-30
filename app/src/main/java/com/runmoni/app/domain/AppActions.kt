@@ -23,6 +23,12 @@ interface AppActions {
     fun signOut()
     fun signInGoogle()
     fun signOutGoogle()
+    fun checkRoomConnection() {}
+    fun checkGoogleSession() {}
+    fun setPhoneCheck(check: PhoneCheck, confirmed: Boolean) {}
+    fun shareDeviceChecks() {}
+    fun useFirebaseCommunity() {}
+    fun loadCrewMembers(id: String) {}
     fun backupCloudRun(runId: String, expectedUid: String)
     fun refreshCloudSummaries(expectedUid: String)
     fun deleteCloudSummary(runId: String, expectedUid: String)

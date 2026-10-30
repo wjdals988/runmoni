@@ -89,6 +89,7 @@ class MainActivity : ComponentActivity() {
                         else requestPermissions(request, listOf(Manifest.permission.RECORD_AUDIO) + notificationPermission())
                     }
                     is UiRequest.ShareFile -> startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/gpx+xml").putExtra(Intent.EXTRA_STREAM, request.uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION), "러닝 코스 내보내기"))
+                    is UiRequest.ShareText -> startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, request.text), "연결·휴대폰 점검 결과 공유"))
                 }
             }
         }

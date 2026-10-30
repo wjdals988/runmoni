@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.2.1-dev", "2026-10-30", "연결 점검 개발 프리뷰 · 실기기 검증 전", listOf(
+        "별도 유료 서버 없이 Firebase 공유 방·익명 닉네임·실시간 채팅을 연결할 수 있게 준비했어요.",
+        "설정에서 공용 방 서버·Google 계정 연결과 휴대폰 확인 항목을 점검해요.",
+        "계정이나 GPS 경로를 포함하지 않는 점검 결과를 직접 공유할 수 있어요.",
+        "Google 설정과 공용 서버를 검사하는 배포 절차를 추가했어요. 실제 연결 완료 여부는 점검 결과를 확인해 주세요.",
+    )),
     AppVersionEntry("0.2.0-dev", "2026-10-30", "검토용 개발 프리뷰 · 실기기 검증 전", listOf(
         "홈·탐색·러닝·크루·나의 화면 구성과 주요 동선을 새롭게 바꿨어요.",
         "러닝 시작과 실제 방 목록을 먼저 보여주고, 기록과 꾸미기에 집중했어요.",

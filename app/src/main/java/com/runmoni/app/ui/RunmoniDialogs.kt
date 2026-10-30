@@ -46,6 +46,12 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
     var name by remember(state.profile.name) { mutableStateOf(state.profile.name) }
     var cloudHistory by remember(state.cloud.uid) { mutableStateOf(false) }
     var connectionDetails by remember { mutableStateOf(false) }
+    var deviceChecks by remember { mutableStateOf(false) }
+    var disconnectRoom by remember { mutableStateOf(false) }
+    if (deviceChecks) {
+        DeviceChecksScreen(state, actions) { deviceChecks = false }
+        return
+    }
     BackHandler(onBack = onDismiss)
     Surface(Modifier.fillMaxSize().testTag("settings_screen"), color = RunmoniColors.Paper) {
     Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
@@ -69,6 +75,7 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
         LocationSharingToggle(state, actions)
         HorizontalDivider()
+        OutlinedButton(onClick = { deviceChecks = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_device_checks")) { Text("연결·휴대폰 점검") }
         Text("Google 계정", style = MaterialTheme.typography.titleMedium)
         Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
         if (state.cloud.uid.isBlank()) {
@@ -85,10 +92,12 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         StatusPill(if (state.serverConnected && state.signedIn) "방 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
         Text(if (state.signedIn) "방 프로필 연결됨" else "공개 방을 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
         SmallNote("Google 계정과 별도로 연결하며 위치 공유는 직접 켜야 해요.")
-        if (state.signedIn) OutlinedButton(onClick = actions::signOut, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "방 프로필 연결 해제" else "파일럿 로그아웃") }
+        if (state.signedIn) OutlinedButton(onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "방 프로필 연결 해제" else "파일럿 로그아웃") }
         else OutlinedButton(onClick = onSignIn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
         TextButton(onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "테스트 서버 설정 접기" else "테스트 서버 설정 펼치기") }
         if (connectionDetails) {
+            Text(if (state.communityBackend == CommunityBackend.FIREBASE) "Firebase 공유 방 사용 중" else "HTTP 테스트 서버 사용 중")
+            if (state.communityBackend != CommunityBackend.FIREBASE) OutlinedButton(onClick = actions::useFirebaseCommunity, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("use_firebase_rooms")) { Text("Firebase 공유 방 사용") }
             SmallNote(state.serverStatus)
             OutlinedTextField(value = url, onValueChange = { url = it }, label = { Text("서버 연결 주소") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("server_url"))
             Button(onClick = { actions.configureServer(url.trim()) }, enabled = url.startsWith("http://") || url.startsWith("https://"), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("connect_server")) { Text("서버 연결") }
@@ -100,6 +109,10 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
     }
     }
     if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
+    if (disconnectRoom) AlertDialog(onDismissRequest = { disconnectRoom = false }, title = { Text("방 프로필 연결을 해제할까요?") },
+        text = { DialogMessage("익명 프로필로 참여한 방과 방장 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 Google 계정 연결은 유지돼요.") },
+        confirmButton = { TextButton(onClick = { disconnectRoom = false; actions.signOut() }) { Text("연결 해제") } },
+        dismissButton = { TextButton(onClick = { disconnectRoom = false }) { Text("유지하기") } })
 }
 
 @Composable
@@ -114,7 +127,7 @@ internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () ->
         Text("닉네임으로 게스트 프로필을 연결하면 방을 만들고 참여할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
         OutlinedTextField(value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("방 닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("display_name"))
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }).testTag("adult_checkbox"), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = adult, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("만 19세 이상입니다", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
-        SmallNote("게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
+        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 연결 해제·기기 변경·재설치 후에는 참여 내역과 방장 권한을 복구할 수 없어요. Google 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
     }
 }
 
@@ -194,7 +207,8 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
         if (!state.signedIn) OutlinedButton(onClick = { onDismiss(); onSignIn() }, modifier = Modifier.fillMaxWidth()) { Text("닉네임으로 입장하기") }
         if (party.joined && !party.cancelled) {
             OutlinedButton(onClick = { actions.openChat("party:${party.id}", party.title); onDismiss() }, modifier = Modifier.fillMaxWidth().testTag("open_party_chat")) { Text("파티 공지 · 채팅") }
-            AudioPanel(state.audio, actions, "party:${party.id}")
+            if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "party:${party.id}")
+            else SmallNote("채팅으로 함께 만나요. 음성 통화는 준비 중이에요.")
         }
         if ((crew?.isOwner == true || party.isOrganizer) && !party.cancelled) TextButton(onClick = { cancelConfirmation = true }, modifier = Modifier.testTag("cancel_party_${party.id}")) { Text("파티 취소", color = MaterialTheme.colorScheme.error) }
         SmallNote("파티 음성 연결과 내 GPS 기록은 별개예요. 러닝 탭에서 각자 기록을 시작해 주세요.")
@@ -327,6 +341,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
 
 @Composable
 internal fun CrewMembersDialog(state: AppState, crewId: String, actions: AppActions, onDismiss: () -> Unit) {
+    LaunchedEffect(crewId) { actions.loadCrewMembers(crewId) }
     val crew = state.crews.firstOrNull { it.id == crewId }
     val members = state.crewMembers[crewId].orEmpty()
     FormDialog("멤버 · DJ 관리", onDismiss, dismissLabel = null, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
@@ -337,7 +352,7 @@ internal fun CrewMembersDialog(state: AppState, crewId: String, actions: AppActi
                 if (!member.isOwner && crew?.isOwner == true) OutlinedButton(onClick = { actions.setCrewDj(crewId, member.id, !member.isDj) }, modifier = Modifier.testTag("assign_dj_${member.id}")) { Text(if (member.isDj) "DJ 해제" else "DJ 임명") }
             }
         }
-        SmallNote("DJ는 음악 공유를 제어할 수 있어요. 크루 관리 권한은 크루장에게 있어요.")
+        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "DJ는 공지를 작성할 수 있어요. 크루 관리 권한은 크루장에게 있어요." else "DJ는 음악 공유를 제어할 수 있어요. 크루 관리 권한은 크루장에게 있어요.")
     }
 }
 

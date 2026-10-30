@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.runmoni.app.audio.AudioConnection
@@ -37,6 +38,7 @@ sealed interface UiRequest {
     data object AppPermissionSettings : UiRequest
     data class ExternalCapture(val packageName: String) : UiRequest
     data class ShareFile(val uri: Uri) : UiRequest
+    data class ShareText(val text: String) : UiRequest
 }
 
 class AppViewModel(application: Application) : AndroidViewModel(application), AppActions {
@@ -45,6 +47,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val session = SecureSession(app)
     private val wallet = LocalWallet(app)
     private val api = PilotClient(preferences.getString("apiUrl", BuildConfig.PILOT_API_URL)!!, session.read())
+    private val firebaseRooms = app.community
+    private var firebaseMode = preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http"
+    private var communityGeneration = 0L
     private val audio = AudioController(app)
     private var currentUserId = preferences.getString("userId", "").orEmpty()
     private var selectedVoiceRoom = ""
@@ -52,11 +57,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var pendingExternalLease: JSONObject? = null
     private var pendingOperations = 0
     private val communityRefresh = Mutex()
-    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = api.token.isNotBlank(), publicLocation = preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = preferences.getBoolean("communityGuest", false)))
+    private var connectionCheckGeneration = 0L
+    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
     init {
+        if (firebaseMode) RunSyncWorker.cancel(app)
+        val reported = preferences.getStringSet("phoneChecks.${BuildConfig.VERSION_CODE}", emptySet()).orEmpty()
+        mutableState.update { it.copy(deviceChecks = DeviceChecks(selfReported = PhoneCheck.entries.filter { check -> check.name in reported }.toSet())) }
         audio.onBroadcastStopped = { oldLeaseId ->
             val oldClient = PilotClient(api.baseUrl, api.token)
             if (leaseId == oldLeaseId) leaseId = null
@@ -66,7 +75,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
         viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank() || it.communityGuest) wallet.read() else it.profile) } } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
-            if (api.token.isBlank() || state.value.communityGuest) {
+            if (firebaseMode || api.token.isBlank() || state.value.communityGuest) {
                 mutableState.update { it.copy(profile = wallet.read()) }
             } else { RunSyncWorker.enqueue(app); refreshCommunity() }
         } }
@@ -75,15 +84,28 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         } }
         viewModelScope.launch {
             while (isActive) {
-                if (api.token.isNotBlank()) runCatching { refreshNow() }.onFailure { mutableState.update { it.copy(serverConnected = false, serverStatus = "서버 연결 안 됨 · 기기 기록 계속 가능") } }
+                if (!firebaseMode && api.token.isNotBlank()) runCatching { refreshNow() }.onFailure { mutableState.update { it.copy(serverConnected = false, serverStatus = "서버 연결 안 됨 · 기기 기록 계속 가능") } }
                 delay(15_000)
             }
         }
         viewModelScope.launch {
             while (isActive) {
                 val room = state.value.openedRoomId
-                if (room.isNotBlank() && api.token.isNotBlank()) runCatching { api.chat(room) }.onSuccess { messages -> mutableState.update { if (it.openedRoomId == room) it.copy(messages = messages) else it } }
+                if (!firebaseMode && room.isNotBlank() && api.token.isNotBlank()) runCatching { api.chat(room) }.onSuccess { messages -> mutableState.update { if (!firebaseMode && it.openedRoomId == room) it.copy(messages = messages) else it } }
                 delay(3000)
+            }
+        }
+        viewModelScope.launch {
+            state.map { if (it.communityBackend == CommunityBackend.FIREBASE) it.openedRoomId else "" }.distinctUntilChanged().collectLatest { opened ->
+                if (opened.isBlank()) return@collectLatest
+                val generation = communityGeneration
+                try {
+                    firebaseRooms.messages(opened.substringAfter(':')).collect { update ->
+                        mutableState.update { if (firebaseMode && communityGeneration == generation && it.openedRoomId == opened)
+                            it.copy(messages = update.messages.map { message -> message.copy(roomId = opened) }, chatFromCache = update.fromCache) else it }
+                    }
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { if (firebaseMode && communityGeneration == generation) mutableState.update { it.copy(messages = emptyList(), chatCanNotice = false, chatFromCache = true, error = "Firebase 채팅 연결과 방 참여 권한을 확인해 주세요.") } }
             }
         }
     }
@@ -111,14 +133,21 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
     override fun setPublicLocation(enabled: Boolean) {
+        if (enabled && firebaseMode) { permissionDenied("Firebase 방에서는 실시간 위치 공유를 지원하지 않아요. 내 GPS 기록은 기기에 저장돼요."); return }
         if (enabled && state.value.communityGuest) { permissionDenied("현재 방 프로필에서는 실시간 위치 공유를 사용할 수 없어요."); return }
         if (enabled && api.token.isBlank()) { permissionDenied("초대코드로 로그인한 뒤 위치 공유를 켜 주세요."); return }
         preferences.edit().putBoolean("publicLocation", enabled).apply()
         mutableState.update { it.copy(publicLocation = enabled) }
-        if (!enabled && api.token.isNotBlank()) work { api.request("DELETE", "/v1/presence"); refreshNow() }
+        if (!enabled && !firebaseMode && api.token.isNotBlank()) work { api.request("DELETE", "/v1/presence"); refreshNow() }
     }
     override fun updateProfile(name: String) = ignoreJob(work {
         require(name.trim().length in 1..30) { "이름은 1~30자로 입력해 주세요." }
+        if (firebaseMode) {
+            if (state.value.signedIn) require(name.trim().matches(Regex("[\\w가-힣 -]{2,24}"))) { "방에 연결한 이름은 2~24자의 한글·영문·숫자·공백으로 입력해 주세요." }
+            if (state.value.signedIn) firebaseRooms.updateNickname(name.trim())
+            mutateLocalProfile { it.copy(name = name.trim()) }
+            return@work
+        }
         if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("nickname", name.trim())); if (state.value.communityGuest) mutateLocalProfile { it.copy(name = name.trim()) }; refreshNow() }
         else mutateLocalProfile { it.copy(name = name.trim()) }
     })
@@ -126,14 +155,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val item = "$slot:$variant"
         require(item in state.value.profile.ownedItems) { "먼저 아이템을 구매해 주세요." }
         val avatar = state.value.profile.avatar.with(slot, variant)
-        if (api.token.isNotBlank() && !state.value.communityGuest) { api.request("PATCH", "/v1/me", JSONObject().put("avatar", avatar.toJson())); refreshNow() }
+        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) { api.request("PATCH", "/v1/me", JSONObject().put("avatar", avatar.toJson())); refreshNow() }
         else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant)) }
     })
     override fun buyItem(slot: String, variant: Int) = ignoreJob(work {
         require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
         val item = "$slot:$variant"
         if (item in state.value.profile.ownedItems) return@work
-        if (api.token.isNotBlank() && !state.value.communityGuest) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
+        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
         else {
             val cost = AvatarCatalogue.price(variant)
             mutateLocalProfile { current ->
@@ -146,7 +175,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     })
     override fun deleteRun(id: String) = ignoreJob(work {
         val record = app.runs.record(id)
-        if (api.token.isNotBlank()) try { api.request("DELETE", "/v1/runs/$id") } catch (failure: PilotException) { if (failure.status != 404 || record?.synced == true) throw failure }
+        if (!firebaseMode && api.token.isNotBlank()) try { api.request("DELETE", "/v1/runs/$id") } catch (failure: PilotException) { if (failure.status != 404 || record?.synced == true) throw failure }
         app.runs.delete(id)
     })
     override fun exportRun(id: String) = ignoreJob(work {
@@ -167,7 +196,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             val uri = URI(url.trim())
             require(uri.userInfo == null && uri.query == null && uri.fragment == null && uri.host != null && uri.scheme in setOf("http", "https")) { "올바른 서버 주소를 입력해 주세요." }
             require(uri.scheme == "https" || uri.host in setOf("127.0.0.1", "localhost", "10.0.2.2")) { "로컬 주소 외에는 HTTPS 주소를 사용해 주세요." }
+            if (firebaseMode) {
+                firebaseMode = false; communityGeneration++; connectionCheckGeneration++
+                preferences.edit { putString("communityBackend", "http") }
+                mutableState.update { it.copy(communityBackend = CommunityBackend.HTTP, signedIn = false, serverConnected = false, deviceChecks = it.deviceChecks.copy(room = RoomCheck.NOT_CHECKED, roomCheckedAt = 0), crews = emptyList(), parties = emptyList(), crewMembers = emptyMap(), messages = emptyList(), openedRoomId = "", openedRoomTitle = "") }
+            }
             if (api.baseUrl != url.trim().trimEnd('/')) {
+                connectionCheckGeneration++
+                mutableState.update { it.copy(deviceChecks = it.deviceChecks.copy(room = RoomCheck.NOT_CHECKED, roomCheckedAt = 0)) }
                 val previousClient = PilotClient(api.baseUrl, api.token)
                 val previousLease = leaseId
                 viewModelScope.launch {
@@ -184,6 +220,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }.onFailure { permissionDenied(it.message ?: "서버 주소를 확인해 주세요.") }.onSuccess { refreshCommunity() }
     }
     override fun connectCommunity(name: String) = ignoreJob(work {
+        val generation = communityGeneration
+        if (firebaseMode) {
+            firebaseRooms.connect(name.trim())
+            if (!firebaseMode || generation != communityGeneration) return@work
+            mutateLocalProfile { it.copy(name = name.trim()) }
+            refreshNow()
+            return@work
+        }
         val result = api.connectCommunity(name.trim())
         RunSyncWorker.cancel(app)
         preferences.edit().putBoolean("communityGuest", true).putBoolean("publicLocation", false).apply()
@@ -202,11 +246,73 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         mutableState.update { it.copy(signedIn = true, communityGuest = false) }; refreshNow(); RunSyncWorker.enqueue(app)
     })
     override fun signOut() = ignoreJob(work {
+        if (firebaseMode) {
+            firebaseRooms.signOut(); communityGeneration++
+            mutableState.update { it.copy(signedIn = false, communityGuest = true, openedRoomId = "", openedRoomTitle = "", messages = emptyList(), crewMembers = emptyMap(), crews = emptyList(), parties = emptyList(), serverConnected = false) }
+            refreshNow()
+            return@work
+        }
         runCatching { api.request("DELETE", "/v1/presence") }; runCatching { api.request("DELETE", "/v1/auth/session") }
         audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).putBoolean("communityGuest", false).apply()
         mutableState.update { it.copy(signedIn = false, communityGuest = false, serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
     })
     override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
+    override fun useFirebaseCommunity() = ignoreJob(work {
+        val previous = PilotClient(api.baseUrl, api.token)
+        val previousHttp = !firebaseMode
+        firebaseMode = true; communityGeneration++; connectionCheckGeneration++
+        preferences.edit { putString("communityBackend", "firebase"); putBoolean("publicLocation", false) }
+        RunSyncWorker.cancel(app)
+        mutableState.update { it.copy(communityBackend = CommunityBackend.FIREBASE, signedIn = false, communityGuest = true, publicLocation = false,
+            serverConnected = false, deviceChecks = it.deviceChecks.copy(room = RoomCheck.NOT_CHECKED, roomCheckedAt = 0),
+            crews = emptyList(), parties = emptyList(), crewMembers = emptyMap(), messages = emptyList(), openedRoomId = "", openedRoomTitle = "") }
+        if (previousHttp && previous.token.isNotBlank()) runCatching { previous.request("DELETE", "/v1/presence") }
+        audio.stopMusic(); runCatching { stopLease() }; audio.disconnect(); selectedVoiceRoom = ""
+        refreshNow()
+    })
+    override fun loadCrewMembers(id: String) {
+        if (!firebaseMode || state.value.crews.none { it.id == id && it.joined }) return
+        val generation = communityGeneration
+        work {
+            val members = firebaseRooms.members(id)
+            mutableState.update { if (firebaseMode && generation == communityGeneration) it.copy(
+                crewMembers = it.crewMembers + (id to members),
+                crews = it.crews.map { crew -> if (crew.id == id) crew.copy(isDj = members.any { member -> member.id == firebaseRooms.uid && member.isDj }) else crew },
+            ) else it }
+        }
+    }
+    override fun checkGoogleSession() = ignoreJob(viewModelScope.launch { app.cloud.checkSession() })
+    override fun checkRoomConnection() {
+        if (state.value.deviceChecks.room == RoomCheck.CHECKING) return
+        val expectedUrl = api.baseUrl
+        val generation = ++connectionCheckGeneration
+        mutableState.update { it.copy(deviceChecks = it.deviceChecks.copy(room = RoomCheck.CHECKING, roomCheckedAt = 0)) }
+        viewModelScope.launch {
+            val result = if (firebaseMode) {
+                if (!firebaseRooms.configured) RoomCheck.UNCONFIGURED
+                else try { firebaseRooms.snapshot(); RoomCheck.FIREBASE_READY }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { RoomCheck.UNREACHABLE }
+            } else RoomConnectionCheck.check(expectedUrl)
+            mutableState.update { if (generation == connectionCheckGeneration && api.baseUrl == expectedUrl) it.copy(deviceChecks = it.deviceChecks.copy(room = result, roomCheckedAt = System.currentTimeMillis())) else it }
+        }
+    }
+    override fun setPhoneCheck(check: PhoneCheck, confirmed: Boolean) {
+        mutableState.update {
+            val next = if (confirmed) it.deviceChecks.selfReported + check else it.deviceChecks.selfReported - check
+            it.copy(deviceChecks = it.deviceChecks.copy(selfReported = next))
+        }
+        preferences.edit { putStringSet("phoneChecks.${BuildConfig.VERSION_CODE}", state.value.deviceChecks.selfReported.map { it.name }.toSet()) }
+    }
+    override fun shareDeviceChecks() {
+        val installed = InstalledAppIdentity.read(app)
+        val current = state.value
+        requests.tryEmit(UiRequest.ShareText(deviceCheckReport(
+            installed.version, installed.code, installed.certificateSha256, current.deviceChecks,
+            current.cloud.configured, current.cloud.uid.isNotBlank(), current.cloud.interactiveSignInAt,
+            current.cloud.sessionCheckedAt, current.locationAccess.precisePermissionGranted == true, current.locationAccess.gpsEnabled == true, current.communityBackend,
+        )))
+    }
     suspend fun googleSignIn(context: Context) {
         try { app.cloud.signIn(context) } catch (failure: CancellationException) { throw failure }
         catch (_: Exception) { permissionDenied("Google 로그인에 실패했습니다. 클라우드 연결 설정을 확인해 주세요.") }
@@ -219,12 +325,28 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun refreshCloudSummaries(expectedUid: String) = ignoreJob(work { app.cloud.refreshSummaries(expectedUid) })
     override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work { app.cloud.deleteSummary(runId, expectedUid) })
     override fun refreshCommunity() = ignoreJob(work {
+        val generation = communityGeneration
         try { refreshNow() } catch (failure: Exception) {
-            mutableState.update { it.copy(serverConnected = false, serverStatus = "방 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") }
+            mutableState.update { if (generation == communityGeneration) it.copy(serverConnected = false, serverStatus = "방 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") else it }
             if (failure is CancellationException) throw failure
         }
     })
     private suspend fun refreshNow() = communityRefresh.withLock {
+        val generation = communityGeneration
+        if (firebaseMode) {
+            val snapshot = firebaseRooms.snapshot()
+            if (!firebaseMode || generation != communityGeneration) return@withLock
+            mutableState.update {
+                val openedId = it.openedRoomId.substringAfter(':')
+                val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || snapshot.parties.any { r -> r.id == openedId && r.joined }
+                it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = snapshot.parties,
+                    signedIn = snapshot.signedIn, communityGuest = true, publicLocation = false, liveRunners = emptyList(),
+                    serverConnected = true, serverStatus = "Firebase 공유 방을 불러왔어요 · 종류별 최근50개와 참여한 방",
+                    openedRoomId = if (stillMember) it.openedRoomId else "", openedRoomTitle = if (stillMember) it.openedRoomTitle else "",
+                    messages = if (stillMember) it.messages else emptyList(), audio = it.audio.copy(canDj = false, status = "Firebase 방에서는 채팅을 이용해 주세요 · 음성 서버는 별도예요"))
+            }
+            return@withLock
+        }
         val expectedToken = api.token
         val expectedUrl = api.baseUrl
         val health = api.health()
@@ -237,7 +359,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val members = crews.filter { it.joined }.associate { it.id to api.members(it.id) }
         val presence = if (identity != null && !guest) api.presence() else emptyList()
         val voice = health.optJSONObject("capabilities")?.optBoolean("voice") ?: false
-        if (expectedToken != api.token || expectedUrl != api.baseUrl) return@withLock
+        if (firebaseMode || generation != communityGeneration || expectedToken != api.token || expectedUrl != api.baseUrl) return@withLock
         if (identity != null) preferences.edit().putBoolean("communityGuest", guest).apply()
         val voiceParty = parties.find { "party:${it.id}" == selectedVoiceRoom && it.joined && !it.cancelled }
         val voiceCrew = if (voiceParty != null) crews.find { it.joined && it.id == voiceParty.crewId }
@@ -256,35 +378,48 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
     }
     override fun createCrew(input: NewCrew) = ignoreJob(work {
-        val crew = api.createCrew(input).toCrew(true)
+        val generation = communityGeneration
+        val crew = if (firebaseMode) firebaseRooms.createCrew(input) else api.createCrew(input).toCrew(true)
+        if (generation != communityGeneration) return@work
         mutableState.update { it.copy(crews = listOf(crew) + it.crews.filterNot { old -> old.id == crew.id }, lastCreatedCrewId = crew.id) }
         refreshAfterCreation()
     })
-    override fun joinCrew(id: String) = ignoreJob(work { api.request("POST", "/v1/crews/$id/join"); refreshNow() })
-    override fun leaveCrew(id: String) = ignoreJob(work { api.request("DELETE", "/v1/crews/$id/join"); refreshNow() })
-    override fun setCrewDj(crewId: String, memberId: String, enabled: Boolean) = ignoreJob(work { api.request("PATCH", "/v1/crews/$crewId/members/$memberId", JSONObject().put("role", if (enabled) "dj" else "member")); refreshNow() })
+    override fun joinCrew(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.join(id) else api.request("POST", "/v1/crews/$id/join"); refreshNow() })
+    override fun leaveCrew(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.leave(id) else api.request("DELETE", "/v1/crews/$id/join"); refreshNow() })
+    override fun setCrewDj(crewId: String, memberId: String, enabled: Boolean) = ignoreJob(work { if (firebaseMode) firebaseRooms.setDj(crewId, memberId, enabled) else api.request("PATCH", "/v1/crews/$crewId/members/$memberId", JSONObject().put("role", if (enabled) "dj" else "member")); refreshNow(); loadCrewMembers(crewId) })
     override fun createParty(input: NewParty) = ignoreJob(work {
-        val party = api.createParty(input).toParty()
+        val generation = communityGeneration
+        val party = if (firebaseMode) firebaseRooms.createParty(input) else api.createParty(input).toParty()
+        if (generation != communityGeneration) return@work
         mutableState.update { it.copy(parties = listOf(party) + it.parties.filterNot { old -> old.id == party.id }, lastCreatedPartyId = party.id) }
         refreshAfterCreation()
     })
-    override fun joinParty(id: String) = ignoreJob(work { api.request("POST", "/v1/parties/$id/join"); refreshNow() })
-    override fun leaveParty(id: String) = ignoreJob(work { api.request("DELETE", "/v1/parties/$id/join"); refreshNow() })
-    override fun cancelParty(id: String) = ignoreJob(work { api.request("POST", "/v1/parties/$id/cancel"); refreshNow() })
+    override fun joinParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.join(id) else api.request("POST", "/v1/parties/$id/join"); refreshNow() })
+    override fun leaveParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.leave(id) else api.request("DELETE", "/v1/parties/$id/join"); refreshNow() })
+    override fun cancelParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.cancelParty(id) else api.request("POST", "/v1/parties/$id/cancel"); refreshNow() })
     override fun openChat(roomId: String, title: String) {
-        mutableState.update { it.copy(openedRoomId = roomId, openedRoomTitle = title, messages = emptyList()) }
-        work { val messages = api.chat(roomId); mutableState.update { if (it.openedRoomId == roomId) it.copy(messages = messages) else it } }
+        mutableState.update { it.copy(openedRoomId = roomId, openedRoomTitle = title, messages = emptyList(), chatFromCache = true, chatCanNotice = false) }
+        if (firebaseMode) {
+            val generation = communityGeneration
+            work {
+                val allowed = firebaseRooms.canAnnounce(roomId.substringAfter(':'))
+                mutableState.update { if (firebaseMode && generation == communityGeneration && it.openedRoomId == roomId) it.copy(chatCanNotice = allowed) else it }
+            }
+        }
+        if (!firebaseMode) work { val messages = api.chat(roomId); mutableState.update { if (!firebaseMode && it.openedRoomId == roomId) it.copy(messages = messages) else it } }
     }
     override fun closeChat() { mutableState.update { it.copy(openedRoomId = "", openedRoomTitle = "", messages = emptyList()) } }
     override fun sendMessage(body: String, notice: Boolean) = ignoreJob(work {
         val roomId = state.value.openedRoomId
         require(roomId.contains(':')) { "채팅방을 선택해 주세요." }
+        if (firebaseMode) { firebaseRooms.sendMessage(roomId.substringAfter(':'), body, notice); return@work }
         val (scope, id) = roomId.split(":", limit = 2)
         api.request("POST", "/v1/${if (scope == "crew") "crews" else "parties"}/$id/messages", JSONObject().put("body", body.trim()).put("kind", if (notice) "announcement" else "chat"))
         val messages = api.chat(roomId); mutableState.update { it.copy(messages = messages) }
     })
-    override fun connectVoice(roomId: String) { requests.tryEmit(UiRequest.MicrophonePermission(roomId)) }
+    override fun connectVoice(roomId: String) { if (firebaseMode) permissionDenied("Firebase 방은 채팅을 지원해요. 음성 통화 서버는 별도 연결이 필요해요.") else requests.tryEmit(UiRequest.MicrophonePermission(roomId)) }
     fun connectVoiceWithPermission(roomId: String) = work {
+        check(!firebaseMode) { "이 방에서는 채팅을 이용해 주세요. 음성 통화는 준비 중이에요." }
         val token = api.request("POST", "/v1/voice/token", roomScope(roomId))
         selectedVoiceRoom = roomId
         val crew = if (roomId.startsWith("crew:")) state.value.crews.find { it.id == roomId.substringAfter(':') } else state.value.crews.find { c -> c.id == state.value.parties.find { it.id == roomId.substringAfter(':') }?.crewId }

@@ -1,0 +1,15 @@
+{
+  "variant": "debug offline, workers=1; worktree build",
+  "jvm": {
+    "tests": 42,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Warning": 35
+  },
+  "firebasePublicDeploymentVerified": false,
+  "realGoogleLoginVerified": false,
+  "physicalDeviceVerified": false
+}

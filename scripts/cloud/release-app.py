@@ -225,6 +225,12 @@ def build(args):
         name = f'runmoni-{version}' + ('-unsigned' if args.unsigned else '') + '.apk'
         metadata = {**facts, 'fileName': name, 'sizeBytes': apk.stat().st_size, 'sha256': digest(apk),
                     'signed': not args.unsigned, 'sourceRevision': revision, 'sourceDirty': False}
+        readiness = ROOT / 'work/connection-readiness.json'
+        if readiness.is_file():
+            report = json.loads(readiness.read_text())
+            if report.get('sourceRevision') != revision:
+                raise ReleaseError('Connection audit source differs from the APK source.')
+            metadata['connectionReadiness'] = report
         if args.unsigned:
             metadata['productionUpdateCompatible'] = False
         else:

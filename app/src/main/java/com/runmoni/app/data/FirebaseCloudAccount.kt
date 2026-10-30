@@ -127,7 +127,7 @@ class FirebaseCloudAccount(context: Context) {
                 rejectedEpoch = sessionEpoch
                 rejectedUid = actualUid
                 mutableState.value = mutableState.value.copy(
-                    uid = "", accountLabel = "", busy = false, summaries = emptyList(),
+                    uid = "", accountLabel = "", busy = false, summaries = emptyList(), interactiveSignInAt = 0, sessionCheckedAt = 0,
                     status = if (actualUid.isBlank()) "Google 계정 로그아웃됨 · 기기 기록은 유지됩니다"
                     else "Google 계정 세션이 변경되었습니다 · 다시 연결해 주세요",
                 )
@@ -152,7 +152,7 @@ class FirebaseCloudAccount(context: Context) {
             operationSequence++
             Ticket(sessionEpoch, operationSequence, mutableState.value.uid).also {
                 activeLogin = it
-                mutableState.value = mutableState.value.copy(busy = true, summaries = emptyList(), status = "백업할 Google 계정을 선택해 주세요")
+                mutableState.value = mutableState.value.copy(busy = true, summaries = emptyList(), interactiveSignInAt = 0, sessionCheckedAt = 0, status = "백업할 Google 계정을 선택해 주세요")
             }
         }
         var stage = "ACCOUNT_PICKER"
@@ -181,6 +181,7 @@ class FirebaseCloudAccount(context: Context) {
                 sessionEpoch++
                 mutableState.value = mutableState.value.copy(
                     uid = user.uid, accountLabel = accountLabel(user), busy = false, summaries = emptyList(),
+                    interactiveSignInAt = System.currentTimeMillis(),
                     status = "Google 계정 연결됨 · 요약 백업과 조회는 수동으로 실행합니다",
                 )
             }
@@ -239,7 +240,7 @@ class FirebaseCloudAccount(context: Context) {
             acceptedUid = ""
             sessionEpoch++
             operationSequence++
-            mutableState.value = mutableState.value.copy(uid = "", accountLabel = "", busy = true, summaries = emptyList(), status = "Google 계정 로그아웃 중")
+            mutableState.value = mutableState.value.copy(uid = "", accountLabel = "", busy = true, summaries = emptyList(), interactiveSignInAt = 0, sessionCheckedAt = 0, status = "Google 계정 로그아웃 중")
             Ticket(sessionEpoch, operationSequence, "")
         }
         try {
@@ -266,6 +267,35 @@ class FirebaseCloudAccount(context: Context) {
     private fun finishSignedOut(ticket: Ticket, status: String) = synchronized(lock) {
         if (currentSignOutLocked(ticket)) {
             mutableState.value = mutableState.value.copy(busy = false, status = status)
+        }
+    }
+
+    /** Online session check, separate from the interactive account picker and Firestore permission tests. */
+    suspend fun checkSession() {
+        val ticket = synchronized(lock) {
+            val uid = mutableState.value.uid
+            if (closed || activeLogin != null || mutableState.value.busy || uid.isBlank() || acceptedUid != uid || auth?.currentUser?.uid != uid) return
+            operationSequence++
+            mutableState.value = mutableState.value.copy(busy = true, sessionCheckedAt = 0, status = "Google 계정 연결을 확인하고 있어요")
+            Ticket(sessionEpoch, operationSequence, uid)
+        }
+        try {
+            withTimeout(NETWORK_TIMEOUT_MILLIS) {
+                val user = auth?.currentUser ?: error("No session")
+                user.reload().await()
+            }
+            synchronized(lock) {
+                if (currentTicketLocked(ticket)) mutableState.value = mutableState.value.copy(
+                    busy = false, sessionCheckedAt = System.currentTimeMillis(), status = "Google 계정 서버 응답 확인됨 · 기록 백업은 별도로 확인해 주세요",
+                )
+            }
+        } catch (_: TimeoutCancellationException) {
+            operationFailure(ticket, "Google 계정 연결 확인 시간이 초과됐어요 · 다시 시도해 주세요")
+        } catch (cancelled: CancellationException) {
+            operationFailure(ticket, "Google 계정 연결 확인을 취소했어요")
+            throw cancelled
+        } catch (_: Exception) {
+            operationFailure(ticket, "Google 계정 연결을 확인하지 못했어요 · 네트워크와 계정 설정을 확인해 주세요")
         }
     }
 

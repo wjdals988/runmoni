@@ -1,4 +1,12 @@
 {
-  "indexes": [],
+  "indexes": [{
+    "collectionGroup": "communityRooms",
+    "queryScope": "COLLECTION",
+    "fields": [
+      {"fieldPath": "visibility", "order": "ASCENDING"},
+      {"fieldPath": "kind", "order": "ASCENDING"},
+      {"fieldPath": "createdAt", "order": "DESCENDING"}
+    ]
+  }],
   "fieldOverrides": []
 }

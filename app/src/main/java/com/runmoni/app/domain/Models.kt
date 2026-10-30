@@ -3,6 +3,7 @@ package com.runmoni.app.domain
 enum class RunPhase { IDLE, RUNNING, PAUSED, RECOVERY }
 enum class PauseReason { MANUAL, AUTOMATIC }
 enum class PartyKind { LOCAL, REMOTE }
+enum class CommunityBackend { FIREBASE, HTTP }
 
 data class TrackPoint(
     val sequence: Int,
@@ -119,6 +120,10 @@ data class AppState(
     val communityGuest: Boolean = false,
     val lastCreatedCrewId: String = "",
     val lastCreatedPartyId: String = "",
+    val deviceChecks: DeviceChecks = DeviceChecks(),
+    val communityBackend: CommunityBackend = CommunityBackend.HTTP,
+    val chatFromCache: Boolean = true,
+    val chatCanNotice: Boolean = false,
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)
