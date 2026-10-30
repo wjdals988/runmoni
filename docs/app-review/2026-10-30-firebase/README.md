@@ -2,6 +2,8 @@
 
 대상0.2.1-dev/code11 debug 작업트리. 릴리스 키/운영 Firebase를 사용하지 않았다. 앱 의존성·원화·옷장ID·기기 지갑/기록 스키마는 보존했다.
 
+PR13은 main `4f270f0795125bf96e10b08dfe92ec8433e4d3d7`에 통합됐다. [GitHub 규칙 CI](https://github.com/wjdals988/runmoni/actions/runs/41042955223)는110/실패0으로 통과했다([결과](github-rules-result.json)). 이후 main의 [연결 audit](https://github.com/wjdals988/runmoni/actions/runs/41043328298)은 **실제 보관 DER 지문 일치**, `firebase=missing`, `server=firebase_configuration_missing`, `ready=false`를 확인했다([결과](github-connection-readiness.json)). 이 audit는 APK를 빌드/게시하지 않았고 운영 Firebase를 변경하지 않았다. 로컬 debug 검증과 CI 보관 인증서 검증을 구분한다.
+
 | 실행 | 결과 | 확인 범위 |
 |---|---|---|
 | 오프라인 Gradle·worker1 | JVM42, 실패/오류/skip0; debug lint오류0/기존 경고35 | 현재 앱/테스트 APK 컴파일, 도메인/공유 allowlist |

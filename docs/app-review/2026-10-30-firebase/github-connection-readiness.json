@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T10:47:37.044463+00:00",
+  "sourceRevision": "4f270f0795125bf96e10b08dfe92ec8433e4d3d7",
+  "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+  "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+  "certificateVerified": true,
+  "firebase": "missing",
+  "server": "firebase_configuration_missing",
+  "ready": false,
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false,
+  "anonymousProviderVerified": false,
+  "publicRoomWritesVerified": false,
+  "backend": "firebase",
+  "ci": {
+    "url": "https://github.com/wjdals988/runmoni/actions/runs/41043328298",
+    "conclusion": "success",
+    "mode": "audit",
+    "apkBuilt": false
+  }
+}
