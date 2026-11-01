@@ -1,0 +1,77 @@
+{
+  "repository": "wjdals988/runmoni",
+  "ciRun": 41321774862,
+  "sourceRevision": "c6bc5739746fe176269fed3bf64360417b50875e",
+  "releaseId": 430677113,
+  "metadata": {
+    "version": "0.2.1-dev",
+    "versionCode": 11,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.2.1-dev.apk",
+    "sizeBytes": 218431245,
+    "sha256": "2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218",
+    "signed": true,
+    "sourceRevision": "c6bc5739746fe176269fed3bf64360417b50875e",
+    "sourceDirty": false,
+    "connectionReadiness": {
+      "schemaVersion": 1,
+      "checkedAt": "2026-11-01T15:33:01.874900+00:00",
+      "sourceRevision": "c6bc5739746fe176269fed3bf64360417b50875e",
+      "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+      "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+      "certificateVerified": true,
+      "firebase": "ready",
+      "server": "ready",
+      "ready": true,
+      "physicalDeviceVerified": false,
+      "interactiveGoogleLoginVerified": false,
+      "anonymousProviderVerified": false,
+      "publicRoomWritesVerified": false,
+      "backend": "firebase"
+    },
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+  },
+  "assets": [
+    {
+      "id": 698736592,
+      "name": "runmoni-0.2.1-dev.apk",
+      "state": "uploaded",
+      "size": 218431245,
+      "digest": "sha256:2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.1-dev/runmoni-0.2.1-dev.apk"
+    },
+    {
+      "id": 698768393,
+      "name": "runmoni-0.2.1-dev.metadata.json",
+      "state": "uploaded",
+      "size": 1050,
+      "digest": "sha256:55535d4c317a82d1f7ea58a61789aeb502a5ec6b5f600eaeb4c9c6b8cb9391a7",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.1-dev/runmoni-0.2.1-dev.metadata.json"
+    },
+    {
+      "id": 698768355,
+      "name": "SHA256SUMS-0.2.1-dev.txt",
+      "state": "uploaded",
+      "size": 88,
+      "digest": "sha256:835a72b751e38196ee6647b4e00d7cbf3b76e271a097ba218cdef60afa9a09f9",
+      "browser_download_url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.1-dev/SHA256SUMS-0.2.1-dev.txt"
+    }
+  ],
+  "signedCiVerified": true,
+  "sidecarBodiesVerified": true,
+  "apkBodyDownloaded": false,
+  "physicalDeviceTests": 0,
+  "googleLoginVerified": false,
+  "draft": false,
+  "publicationReady": true,
+  "publicReleaseConfirmed": true,
+  "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.2.1-dev",
+  "publishedAt": "2026-11-01T15:53:38Z",
+  "recordedAt": "2026-11-01T15:53:40.127620+00:00",
+  "distributionDecision": {
+    "userRequest": "main 병합 승인. APK와 운영 대시보드 배포 진행",
+    "scope": "실기기 검증 전 0.2.1 개발 prerelease",
+    "physicalDeviceSmokeVerified": false
+  },
+  "assetsReuploadedOrReplaced": false
+}
