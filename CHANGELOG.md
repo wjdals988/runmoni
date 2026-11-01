@@ -1,5 +1,7 @@
 # 0.2.1-dev — 2026-10-30 Firebase 공유 방·연결·휴대폰 점검
 
+- 2026-11-01 소유자가 Firebase 설정1~4 완료/복합 색인 생성 중이라고 알렸다. main567c37의 audit CI41321594248에서 보관 인증서 일치·Android/Web OAuth/현재 SHA-1·운영 공개 방 조회가 통과해 `ready=true`를 확인했다. 비밀 원문을 내려받거나 운영 계정/방을 생성하지 않았다. 공개 읽기 성공은 색인 콘솔 완료·익명 제공자/방 쓰기·실기기/Google 로그인 성공을 뜻하지 않는다. 설정 포함0.2.1 서명 프리뷰를 준비하며 실제 게시 결과는 후속 기록한다. [점검 근거](docs/app-review/2026-11-01-connected-release/README.md).
+
 - PR13 main4f270f0 통합 완료. GitHub 규칙CI41042955223의110개 통과, main 연결audit41043328298에서 기존 DER의 SHA-1/SHA-256 일치와 Firebase Android 구성 누락/준비false를 확인했다. APK 빌드/공개·운영 규칙/색인·새 유료 서비스는 실행하지 않았다. 소유자 설정 후 구성 포함0.2.1 서명 후보를 준비하며 현재 공개0.2.0의 출처/피드/다운로드는 유지한다. [CI 결과](docs/app-review/2026-10-30-firebase/github-connection-readiness.json).
 
 - 최신 사용자 선택 ‘기존 호스팅 없음, Firebase에서 진행’을 반영해 Spark Authentication 익명 닉네임/Firestore 방·멤버·파티·실시간 채팅을 추가했다. 기본은 Firebase, 기존 HTTP 파일럿은 명시적 테스트 설정으로 보존한다. Render/Cloud Functions/Blaze 결제를 생성하지 않는다. Google 요약 계정과 익명 방은 별도다.
