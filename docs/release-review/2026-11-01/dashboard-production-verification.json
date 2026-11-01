@@ -1,0 +1,42 @@
+{
+  "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+  "httpStatus": 200,
+  "checks": {
+    "newApkHrefVisible": true,
+    "newCurrentVersionDescriptionVisible": true,
+    "sha256Visible": true,
+    "firebaseDescriptionVisible": true,
+    "physicalAndGoogleUnverifiedVisible": true,
+    "previousScreenshotVersionVisible": true,
+    "allSevenScreenLinksPresent": true
+  },
+  "checkedAt": "2026-11-01T15:59:12.572770+00:00",
+  "dashboardCommit": "1eba844093970da85fc386513f85bd80b8a1e3e9",
+  "pullRequest": "https://github.com/wjdals988/mydashboard/pull/12",
+  "merged": true,
+  "vercelEnvironment": "Production",
+  "vercelDeploymentId": 7475399522,
+  "vercelProductionReady": true,
+  "mainCiRun": 41323853447,
+  "mainCiConclusion": "success",
+  "prCiRun": 41323705260,
+  "prCiConclusion": "success",
+  "nodeTests": 23,
+  "nodeFailures": 0,
+  "physicalDeviceTests": 0,
+  "interactiveGoogleLoginVerified": false,
+  "productionAnonymousRoomWritesVerified": false,
+  "indexCompletionVerified": false,
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.2.1-dev/runmoni-0.2.1-dev.apk",
+    "fileName": "runmoni-0.2.1-dev.apk",
+    "version": "0.2.1-dev",
+    "versionCode": 11,
+    "size": "218,431,245 bytes",
+    "sha256": "2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.2.1-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK"
+  },
+  "apkSourceRevision": "c6bc5739746fe176269fed3bf64360417b50875e",
+  "mainCiUrl": "https://github.com/wjdals988/mydashboard/actions/runs/41323853447"
+}

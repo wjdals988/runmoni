@@ -1,5 +1,7 @@
 # 0.2.1-dev — 2026-10-30 Firebase 공유 방·연결·휴대폰 점검
 
+- 2026-11-01 공개 뒤 앱 PR16의 업데이트 피드/main 통합·실제 HTTP200/0.2.1 응답을 확인했다. 대시보드 PR12/main1eba844·PR CI41323705260의 테스트/audit/lint/build·Vercel Production7475399522 success와 운영 페이지 HTTP200/새 다운로드·버전·해시·Firebase 검증 경계·기존7장 안내를 확인했다. Node23개와 운영 main CI41323853447도 통과. APK 원래 출처c6bc573과 실제 휴대폰/Google/운영 방 쓰기 미검증·색인 완료 미확인을 유지한다. [배포 근거](docs/RELEASE_REVIEW_20261101.md).
+
 - 2026-11-01 사용자 배포 승인 범위에서 설정 포함0.2.1-dev/code11을 동일 보관 키의 개발 prerelease로 공개했다. CI41321774862/JVM42·실패0, release lint오류0/경고60, 실제 APK의 서명/non-debuggable/버전·패키지·내장 출처 검사 통과. 실제 sourceRevision `c6bc5739746fe176269fed3bf64360417b50875e`, 218431245bytes/SHA256 `2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218`. 서버3자산/작은 sidecar·공개 HEAD200/크기를 확인했고 공개 뒤 업데이트 피드를 갱신한다. Python55개 통과. 실기기·Google 로그인·운영 익명 방 쓰기/색인 완료는 별도 미확인이다. [게시 근거](docs/RELEASE_REVIEW_20261101.md).
 
 - 2026-11-01 소유자가 Firebase 설정1~4 완료/복합 색인 생성 중이라고 알렸다. main567c37의 audit CI41321594248에서 보관 인증서 일치·Android/Web OAuth/현재 SHA-1·운영 공개 방 조회가 통과해 `ready=true`를 확인했다. 비밀 원문을 내려받거나 운영 계정/방을 생성하지 않았다. 공개 읽기 성공은 색인 콘솔 완료·익명 제공자/방 쓰기·실기기/Google 로그인 성공을 뜻하지 않는다. 설정 포함0.2.1 서명 프리뷰를 준비하며 실제 게시 결과는 후속 기록한다. [점검 근거](docs/app-review/2026-11-01-connected-release/README.md).
