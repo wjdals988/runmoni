@@ -18,4 +18,10 @@ APK는 실제 프로젝트의 Android 설정을 포함한다. 공개 목록 읽�
 
 이전 demo Emulator 규칙110개/Android SDK·UI 검사와 클라우드 System UI ANR 제한은 [이전 검토](app-review/2026-10-30-firebase/README.md)에 보존한다. 이번에 AVD를 새로 실행하거나 실제 휴대폰/Google 로그인으로 재분류하지 않았다. 대시보드의 이전0.2.0 검토 이미지는0.2.1 Firebase 운영 화면으로 표시하지 않는다.
 
-공개를 확인한 뒤 업데이트 피드/대시보드를 변경한다. 운영 대시보드 배포 근거는 실제 확인 후 추가한다.
+## 업데이트 피드·운영 대시보드
+
+앱 [PR16](https://github.com/wjdals988/runmoni/pull/16)을 main `8ca73a26a7d56be424e2354597cbaa70376dab34`에 통합했고 실제 공개 피드 HTTP200에서0.2.1/code11·원래 APK 출처/해시를 확인했다. APK의 출처는 계속 `c6bc5739746fe176269fed3bf64360417b50875e`다.
+
+대시보드 [PR12](https://github.com/wjdals988/mydashboard/pull/12)를 main **`1eba844093970da85fc386513f85bd80b8a1e3e9`**에 병합했다. PR CI41323705260의 테스트/audit/lint/build와 Vercel preview가 통과했고, 실제 `Production` 배포7475399522가 success를 반환했다. 운영 [런모니 페이지](https://coldbrewventi.vercel.app/projects/runmoni) HTTP200에서 새 APK href·현재 버전 설명·SHA256·Firebase/미검증 안내·이전0.2.0 갤러리 표기와7개 이미지 링크를 확인했다. 로컬 Node23개도 통과했다. [운영 확인](release-review/2026-11-01/dashboard-production-verification.json).
+
+운영 main CI [41323853447](https://github.com/wjdals988/mydashboard/actions/runs/41323853447)도 success를 확인했다. CI 결과를 실제 휴대폰/Google 로그인/운영 방 쓰기 성공으로 바꾸지 않는다.
