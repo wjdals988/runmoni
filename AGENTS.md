@@ -21,6 +21,8 @@
 
 ## 변경 이력
 
+- 2026-11-02(한국 시간) 최신 사용자 확인/진행 지시: 소유자가 ‘5번도 완료됐음 굳굳’이라고 답해 Firebase 설정1~5번 완료를 보고받았다. 이어서 추가 진행 항목을 갱신해 계속 개발할 수 있게 해달라고 요청했다. [개발 이어가기](docs/DEVELOPMENT_CONTINUATION.md)와 [우선순위/완료 조건](docs/DEVELOPMENT_PRIORITIES.md)을 현재 시작점으로 사용한다. 휴대폰 결과가 없더라도 독립적인 여자 기본형 선택 연결부터 착수할 수 있다. 소유자 보고를 관리 API 검증·실기기/Google 로그인·운영 방 쓰기 성공으로 바꾸지 않으며 과거 CI JSON의 false를 수정하지 않는다. 색인 완료만으로 새 APK/서명키/Secret 재등록을 요구하지 않는다.
+
 - 2026-11-01 최신 게시 상태: Firebase Android 설정 Secret을 소유자가 등록했고 audit/연결 포함 서명CI41321774862가 통과했다. 동일 보관 키0.2.1-dev/code11 검토 prerelease와 피드·운영 대시보드 공개 완료. APK 실제 sourceRevision은 `c6bc5739746fe176269fed3bf64360417b50875e`, SHA256 `2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218`이며 후속 문서/피드 커밋으로 재기록하지 않는다. [게시 근거](docs/RELEASE_REVIEW_20261101.md). 실제 휴대폰·Google 로그인·운영 익명 방 쓰기·소유자 콘솔 색인 완료는 미확인이다. 아래0.2.0 게시/구성 누락은 이전 시점 이력이다.
 
 - 2026-10-30 최신 공용 방 선택: 사용자가 ‘없어... 뭐 어떻게 파이어베이스에서 하면 안돼?’라고 답했다. 기존 Spark 프로젝트 `runmoni-3c08e`의 익명 Authentication/Firestore 방·멤버·실시간 채팅을 기본으로 구현한다. 별도 Render/유료 디스크/Blaze/Cloud Functions를 생성하지 않는다. Google 요약과 익명 방은 별도이며 원본 GPS·지갑/보상은 이관하지 않는다. [Firebase 공유 방 설정](docs/FIREBASE_COMMUNITY.md)과 권한 규칙/검증 경계를 따른다. 운영 콘솔 설정·실제 휴대폰·Google 로그인 성공을 코드/Emulator 결과로 대신하지 않는다.

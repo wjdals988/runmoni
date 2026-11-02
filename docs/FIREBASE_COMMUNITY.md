@@ -4,7 +4,9 @@
 
 ## 소유자가 한 번 연결하는 순서
 
-현재 클라우드에 Firebase 관리 계정/Android 설정 파일이 없고 GitHub Secrets 관리 API는403이다. 다음 항목만 소유자 콘솔에서 적용한다. 비밀번호·서비스 계정키·토큰·서명키는 채팅으로 보내지 않는다.
+**2026-11-02(한국 시간) 소유자 확인:** ‘5번도 완료됐음 굳굳’ 응답으로 아래1~5번 설정 완료를 보고받았다.1~4번은 앞서 완료 보고/CI 구성 검사를 받았고5번은 소유자 콘솔 완료 보고다. 현재0.2.1 APK에 설정이 포함돼 있어 색인 완료 때문에 다시 빌드하거나 설정 파일/Secret을 다시 보낼 필요가 없다. 실제 휴대폰·Google 로그인·운영 방 쓰기는 별도 미검증이다. [이어서 진행할 작업](DEVELOPMENT_CONTINUATION.md)을 따른다.
+
+아래는 최초 연결/향후 설정 변경 때의 참고 절차다. Android 설정은 GitHub Secret으로 CI에 한시 주입하며 클라우드에 관리 계정을 연결하지 않았다. 비밀번호·서비스 계정키·토큰·서명키는 채팅으로 보내지 않는다.
 
 1. [Authentication 제공자](https://console.firebase.google.com/project/runmoni-3c08e/authentication/providers)에서 **익명(Anonymous)**과 **Google**을 켠다. 익명은 방 닉네임, Google은 개인 기록 요약 백업에 사용한다. 지원 이메일은 본인이 선택한다.
 2. [Android 설정](https://console.firebase.google.com/project/runmoni-3c08e/settings/general)의 `com.runmoni.app`에 현재 보관 키 지문을 추가한다. SHA-1 **`19:2A:7E:29:84:3C:90:21:0E:ED:D1:37:3A:78:D4:DA:77:F0:97:73`**, SHA-256 **`A2:13:59:C6:57:F6:79:7F:5F:B8:22:9C:30:98:E4:8B:C7:2A:45:F9:D2:52:69:F8:D4:1F:F5:12:24:65:DF:4A`**. 등록 후 새 `google-services.json`을 받는다. 이전 키 지문은 지우지 않아도 된다.
