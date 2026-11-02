@@ -130,8 +130,8 @@ private data class MiniMiFrames(
 )
 
 /** Same approved base in Compose and map markers. Saved equipment is never rewritten. */
-internal fun avatarBitmap(context: Context, @Suppress("UNUSED_PARAMETER") avatar: AvatarStyle, frame: Int = 0, running: Boolean = false): Bitmap =
-    AvatarArtRuntime.renderer(context).render(frame, running)
+internal fun avatarBitmap(context: Context, avatar: AvatarStyle, frame: Int = 0, running: Boolean = false): Bitmap =
+    AvatarArtRuntime.renderer(context).render(frame, running, avatar.gender)
 
 /** One application asset repository/cache shared by Compose and map markers. */
 private object AvatarArtRuntime {

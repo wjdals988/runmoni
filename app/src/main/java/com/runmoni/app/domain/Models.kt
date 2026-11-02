@@ -41,12 +41,24 @@ data class ActiveRun(
     val pauseReason: PauseReason? = null,
 )
 data class LocationAccess(val precisePermissionGranted: Boolean? = null, val gpsEnabled: Boolean? = null)
+/** Explicit artwork base, independent of hair, clothing and the saved equipment slots. */
+enum class AvatarGender(val wireValue: String, val label: String, val spriteRow: Int) {
+    MALE("male", "남자", 0),
+    FEMALE("female", "여자", 1);
+
+    companion object {
+        fun fromWire(value: String?): AvatarGender = entries.firstOrNull {
+            it.wireValue.equals(value, ignoreCase = true)
+        } ?: MALE
+    }
+}
 data class AvatarStyle(
     val hair: Int = 0, val top: Int = 0, val bottom: Int = 0, val shoes: Int = 0,
     val accessory: Int = 0, val eyewear: Int = 0, val wrist: Int = 0,
     val waist: Int = 0, val hydration: Int = 0,
     val face: Int = 0, val socks: Int = 0, val headwear: Int? = null,
     val ear: Int? = null, val costume: Int = 0,
+    val gender: AvatarGender = AvatarGender.MALE,
 )
 data class Profile(val name: String = "러너", val avatar: AvatarStyle = AvatarStyle(), val mileage: Int = 0, val ownedItems: Set<String> = AvatarCatalogue.defaultOwned)
 data class Crew(
@@ -99,6 +111,8 @@ data class AppState(
     val activeRun: ActiveRun = ActiveRun(),
     val records: List<RunRecord> = emptyList(),
     val crews: List<Crew> = emptyList(),
+    val crewPartiesLoading: Boolean = false,
+    val crewPartiesError: String? = null,
     val crewMembers: Map<String, List<CrewMember>> = emptyMap(),
     val parties: List<Party> = emptyList(),
     val messages: List<ChatMessage> = emptyList(),

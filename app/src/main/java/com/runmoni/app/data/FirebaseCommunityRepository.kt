@@ -16,6 +16,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 
 data class FirebaseRoomSnapshot(val crews: List<Crew>, val parties: List<Party>, val signedIn: Boolean)
 data class FirebaseRoomMessages(val messages: List<ChatMessage>, val fromCache: Boolean)
@@ -50,23 +51,23 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     init { auth?.addAuthStateListener(authListener) }
     val configured get() = database != null && auth != null
     val uid get() = synchronized(lock) { acceptedUid.takeIf { auth?.currentUser?.uid == it }.orEmpty() }
-    private fun db() = database ?: error("Firebase 방 설정이 없는 빌드예요. 설정을 포함한 새 APK가 필요해요.")
-    private fun identity(): String = uid.takeIf { it.isNotBlank() } ?: error("닉네임으로 방 프로필을 먼저 연결해 주세요.")
+    private fun db() = database ?: error("크루·파티 연결 설정이 없는 빌드예요. 설정을 포함한 새 APK가 필요해요.")
+    private fun identity(): String = uid.takeIf { it.isNotBlank() } ?: error("닉네임으로 크루 프로필을 먼저 연결해 주세요.")
     private fun profile(user: String) = db().collection("communityProfiles").document(user)
-    private fun room(id: String) = db().collection("communityRooms").document(id.also { require(it.matches(Regex("[A-Za-z0-9]{20}"))) { "방 주소를 확인해 주세요." } })
+    private fun room(id: String) = db().collection("communityRooms").document(id.also { require(it.matches(Regex("[A-Za-z0-9]{20}"))) { "크루·파티 주소를 확인해 주세요." } })
     private fun member(id: String, user: String) = room(id).collection("members").document(user)
 
     private suspend fun <T> network(action: suspend () -> T): T {
         val ticket = synchronized(lock) { check(!closed); epoch }
         try {
             val value = withTimeout(15_000) { action() }
-            check(synchronized(lock) { !closed && epoch == ticket }) { "방 연결이 바뀌었어요. 다시 확인해 주세요." }
+            check(synchronized(lock) { !closed && epoch == ticket }) { "크루 프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
             return value
-        } catch (_: TimeoutCancellationException) { error("Firebase 방 응답 시간이 초과됐어요. 저장 여부는 새로고침해 주세요.") }
+        } catch (_: TimeoutCancellationException) { error("크루·파티 응답 시간이 초과됐어요. 저장 여부는 새로고침해 주세요.") }
         catch (cancelled: CancellationException) { throw cancelled }
         catch (failure: FirebaseFirestoreException) {
             error(if (failure.code == FirebaseFirestoreException.Code.PERMISSION_DENIED)
-                "Firebase 방 규칙 또는 참여 권한을 확인해 주세요." else "Firebase 방에 연결하지 못했어요. 저장 여부는 새로고침해 주세요.")
+                "Firebase 크루·파티 규칙 또는 참여 권한을 확인해 주세요." else "크루·파티에 연결하지 못했어요. 저장 여부는 새로고침해 주세요.")
         } catch (_: FirebaseAuthException) { error("Firebase Authentication의 익명 로그인을 사용 설정해 주세요.") }
         catch (_: FirebaseException) { error("Firebase 연결을 확인해 주세요. 계정 정보는 공유 결과에 포함되지 않아요.") }
     }
@@ -77,9 +78,9 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val ticket = synchronized(lock) { epoch++; activeLogin = true; epoch }
         try {
             val user = withTimeout(15_000) { currentAuth.currentUser ?: currentAuth.signInAnonymously().await().user }
-                ?: error("방 프로필을 연결하지 못했어요.")
+                ?: error("크루 프로필을 연결하지 못했어요.")
             synchronized(lock) {
-                check(!closed && epoch == ticket) { "방 연결이 바뀌었어요." }
+                check(!closed && epoch == ticket) { "크루 프로필 연결이 바뀌었어요." }
                 acceptedUid = user.uid; activeLogin = false
             }
             network {
@@ -90,10 +91,10 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                     "updatedAt" to FieldValue.serverTimestamp(), "joinedRoomIds" to emptyList<String>(),
                     "lastRoomId" to "", "createdRoomCount" to 0, "lastRoomCreatedAt" to Timestamp(0, 0))).await()
             }
-        } catch (_: TimeoutCancellationException) { reconcileLogin(ticket); error("방 프로필 연결 시간이 초과됐어요. 다시 시도해 주세요.") }
+        } catch (_: TimeoutCancellationException) { reconcileLogin(ticket); error("크루 프로필 연결 시간이 초과됐어요. 다시 시도해 주세요.") }
         catch (cancelled: CancellationException) { reconcileLogin(ticket); throw cancelled }
         catch (_: FirebaseAuthException) { reconcileLogin(ticket); error("Firebase Authentication에서 익명 로그인을 켜 주세요.") }
-        catch (_: FirebaseException) { reconcileLogin(ticket); error("Firebase 방 프로필 연결에 실패했어요. 네트워크와 익명 로그인 설정을 확인해 주세요.") }
+        catch (_: FirebaseException) { reconcileLogin(ticket); error("크루 프로필 연결에 실패했어요. 네트워크와 익명 로그인 설정을 확인해 주세요.") }
         catch (failure: Exception) { reconcileLogin(ticket); throw failure }
     }
     private fun reconcileLogin(ticket: Long) = synchronized(lock) {
@@ -107,20 +108,66 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         profile(identity()).update(mapOf("nickname" to nickname, "updatedAt" to FieldValue.serverTimestamp())).await()
     }
 
-    suspend fun snapshot(): FirebaseRoomSnapshot = network {
+    suspend fun snapshot(): FirebaseRoomSnapshot {
+        val deleted = mutableListOf<String>()
+        var cleanupIdentity = ""
+        val result = network {
         val current = uid
+        cleanupIdentity = current
         val own = if (current.isBlank()) null else profile(current).get(Source.SERVER).await().takeIf { it.exists() }
-        val joined = (own?.get("joinedRoomIds") as? List<*>)?.filterIsInstance<String>().orEmpty().toSet()
+        val joined = (own?.get("joinedRoomIds") as? List<*>)?.filterIsInstance<String>().orEmpty().toMutableSet()
         val rooms = mutableMapOf<String, DocumentSnapshot>()
         for (kind in listOf("crew", "party")) {
-            db().collection("communityRooms").whereEqualTo("visibility", "open").whereEqualTo("kind", kind)
-                .orderBy("createdAt", Query.Direction.DESCENDING).limit(50).get(Source.SERVER).await()
-                .documents.forEach { rooms[it.id] = it }
+            // Reuse the existing visibility/kind/createdAt index. Tombstones do not
+            // consume a whole first page: scan at most 3 x 50 documents per kind,
+            // returning at most 50 visible documents plus explicitly joined ones.
+            var cursor: DocumentSnapshot? = null
+            var visible = 0
+            for (page in 0 until PUBLIC_SCAN_PAGES) {
+                var query = db().collection("communityRooms").whereEqualTo("visibility", "open").whereEqualTo("kind", kind)
+                    .orderBy("createdAt", Query.Direction.DESCENDING).limit(PUBLIC_PAGE_SIZE.toLong())
+                cursor?.let { query = query.startAfter(it) }
+                val documents = query.get(Source.SERVER).await().documents
+                for (document in documents) {
+                    if (document.getString("status") != "deleted" && visible < PUBLIC_PAGE_SIZE) {
+                        rooms[document.id] = document; visible++
+                    } else if (document.id in joined) rooms[document.id] = document
+                }
+                if (visible >= PUBLIC_PAGE_SIZE || documents.size < PUBLIC_PAGE_SIZE) break
+                cursor = documents.lastOrNull() ?: break
+            }
         }
-        // Keep joined rooms available after they leave the latest public page.
+        // Keep joined groups available after they leave the latest public page.
         for (id in joined - rooms.keys) room(id).get(Source.SERVER).await().takeIf { it.exists() }?.let { rooms[id] = it }
-        FirebaseRoomSnapshot(rooms.values.filter { it.getString("kind") == "crew" }.map { crew(it, current, it.id in joined) },
-            rooms.values.filter { it.getString("kind") == "party" }.map { party(it, current, it.id in joined) }, own != null)
+        // A party's parent can be older than the crew discovery page.
+        val parents = rooms.values.filter { it.getString("kind") == "party" && it.getString("status") != "deleted" }
+            .mapNotNull { it.getString("crewId")?.takeIf { id -> id.matches(Regex("[A-Za-z0-9]{20}")) } }.toSet()
+        for (id in parents - rooms.keys) room(id).get(Source.SERVER).await().takeIf { it.exists() && it.getString("kind") == "crew" }?.let { rooms[id] = it }
+        deleted += joined.filter { rooms[it]?.getString("status") == "deleted" }.take(DELETED_CLEANUP_LIMIT)
+        val visible = rooms.values.filter { it.getString("status") != "deleted" }
+        FirebaseRoomSnapshot(visible.filter { it.getString("kind") == "crew" }.map { crew(it, current, it.id in joined) },
+            visible.filter { it.getString("kind") == "party" }.map { party(it, current, it.id in joined) }, own != null)
+        }
+        // Keep optional maintenance outside the authoritative read's 15s budget.
+        // Its own timeout cannot turn a successful snapshot into a failed read.
+        cleanupDeletedMemberships(deleted, cleanupIdentity)
+        return result
+    }
+
+    /** Public children of the selected crew, independently of global discovery. */
+    suspend fun partiesForCrew(crewId: String): List<Party> = network {
+        val current = uid
+        val parent = room(crewId).get(Source.SERVER).await()
+        require(parent.getString("kind") == "crew" && parent.getString("status") == "active") { "참여할 크루를 다시 확인해 주세요." }
+        val own = if (current.isBlank()) null else profile(current).get(Source.SERVER).await()
+        val joined = (own?.get("joinedRoomIds") as? List<*>)?.filterIsInstance<String>().orEmpty().toSet()
+        // Equality-only filters use Firestore index merging. No orderBy is
+        // introduced here; sorting the bounded result does not require a new
+        // visibility/kind/crewId/status/createdAt composite index.
+        db().collection("communityRooms").whereEqualTo("visibility", "open").whereEqualTo("kind", "party")
+            .whereEqualTo("crewId", crewId).whereEqualTo("status", "active").limit(PUBLIC_PAGE_SIZE.toLong())
+            .get(Source.SERVER).await().documents.map { party(it, current, it.id in joined) }
+            .sortedBy { it.startsAtMillis }
     }
 
     suspend fun members(id: String): List<CrewMember> = network {
@@ -137,6 +184,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         return network { crew(room(id).get(Source.SERVER).await(), identity(), true) }
     }
     suspend fun createParty(input: NewParty): Party {
+        require(!input.crewId.isNullOrBlank()) { "파티를 만들 크루를 먼저 선택해 주세요." }
         val id = create(mapOf("kind" to "party", "title" to input.title, "description" to "", "region" to "",
             "paceLabel" to input.paceLabel, "capacity" to input.capacity, "crewId" to input.crewId.orEmpty(),
             "partyKind" to input.kind.name.lowercase(), "startsAtMillis" to input.startsAtMillis,
@@ -148,8 +196,14 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val ref = db().collection("communityRooms").document()
         db().runTransaction { tx ->
             val p = tx.get(profile(user))
-            require((p.getLong("createdRoomCount") ?: 0) < 20) { "검토 기간에는 프로필당 최대20개 방을 만들 수 있어요." }
-            require(Timestamp.now().seconds - (p.getTimestamp("lastRoomCreatedAt")?.seconds ?: 0) >= 10) { "방은 10초 간격으로 만들어 주세요." }
+            require(Timestamp.now().seconds - (p.getTimestamp("lastRoomCreatedAt")?.seconds ?: 0) >= 10) { "크루와 파티는 10초 간격으로 만들어 주세요." }
+            if (fields["kind"] == "party") {
+                val parent = fields["crewId"] as String
+                val crew = tx.get(room(parent)); val membership = tx.get(member(parent, user))
+                require(crew.getString("kind") == "crew" && crew.getString("status") == "active" && membership.exists()) {
+                    "참여한 크루 안에서 파티를 만들어 주세요."
+                }
+            }
             tx.set(ref, fields + mapOf("ownerUid" to user, "visibility" to "open", "status" to "active", "memberCount" to 1,
                 "createdAt" to FieldValue.serverTimestamp(), "updatedAt" to FieldValue.serverTimestamp()))
             tx.set(ref.collection("members").document(user), memberFields(user, p.getString("nickname").orEmpty(), "owner"))
@@ -163,8 +217,14 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val user = identity()
         db().runTransaction { tx ->
             val r = tx.get(room(id)); val p = tx.get(profile(user)); val mine = tx.get(member(id, user))
+            if (r.getString("kind") == "party") {
+                val parent = r.getString("crewId").orEmpty()
+                require(parent.matches(Regex("[A-Za-z0-9]{20}"))) { "이전 독립 파티에는 새로 참여할 수 없어요. 크루에서 새 파티를 만들어 주세요." }
+                val crew = tx.get(room(parent)); val parentMember = tx.get(member(parent, user))
+                require(crew.getString("kind") == "crew" && crew.getString("status") == "active" && parentMember.exists()) { "먼저 이 파티의 크루에 참여해 주세요." }
+            }
             if (!mine.exists()) {
-                require(r.getString("status") == "active") { "종료된 방이에요." }
+                require(r.getString("status") == "active") { "종료되거나 삭제된 파티예요." }
                 require((r.getLong("memberCount") ?: 0) < (r.getLong("capacity") ?: 0)) { "정원이 가득 찼어요." }
                 require(r.getString("kind") != "party" || (r.getLong("startsAtMillis") ?: 0) > System.currentTimeMillis()) { "이미 시작한 파티예요." }
                 tx.set(member(id, user), memberFields(user, p.getString("nickname").orEmpty(), "member"))
@@ -173,26 +233,76 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
             }
         }.await()
     }
-    suspend fun leave(id: String) = network {
-        val user = identity()
+    suspend fun leave(id: String) = network { leaveMembership(id, identity()) }
+    private suspend fun leaveMembership(id: String, user: String) {
         db().runTransaction { tx ->
-            val r = tx.get(room(id)); val mine = tx.get(member(id, user)); tx.get(profile(user))
-            require(r.getString("ownerUid") != user) { "방장·주최자는 방을 나갈 수 없어요." }
+            val r = tx.get(room(id)); val mine = tx.get(member(id, user)); val p = tx.get(profile(user))
+            require(r.getString("ownerUid") != user || r.getString("status") == "deleted") { "크루장·주최자는 먼저 파티를 종료·삭제해 주세요." }
             if (mine.exists()) {
                 tx.delete(member(id, user))
                 tx.update(room(id), mapOf("memberCount" to FieldValue.increment(-1), "updatedAt" to FieldValue.serverTimestamp()))
                 tx.update(profile(user), mapOf("joinedRoomIds" to FieldValue.arrayRemove(id), "lastRoomId" to id, "updatedAt" to FieldValue.serverTimestamp()))
+            } else if (r.getString("status") == "deleted" && (p.get("joinedRoomIds") as? List<*>)?.contains(id) == true) {
+                // An already-removed member may still have an old private link.
+                tx.update(profile(user), mapOf("joinedRoomIds" to FieldValue.arrayRemove(id), "lastRoomId" to id, "updatedAt" to FieldValue.serverTimestamp()))
             }
         }.await()
     }
+    private suspend fun cleanupDeletedMemberships(ids: List<String>, user: String) {
+        if (user.isBlank() || uid != user) return
+        // withTimeoutOrNull catches this local budget only. Parent cancellation
+        // still propagates and is never reported as a successful maintenance run.
+        withTimeoutOrNull(DELETED_CLEANUP_MILLIS) {
+            for (id in ids.take(DELETED_CLEANUP_LIMIT)) {
+                if (uid != user) break
+                tryCleanupDeletedMembership(id, user)
+            }
+        }
+    }
+    private suspend fun tryCleanupDeletedMembership(id: String, user: String): Boolean = try {
+        leaveMembership(id, user); true
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (_: FirebaseException) {
+        // A committed deletion/list read remains valid if this optional cleanup
+        // races with another client or momentarily loses the network.
+        false
+    }
+
     suspend fun setDj(id: String, memberId: String, enabled: Boolean) = network {
         identity(); member(id, memberId).update("role", if (enabled) "dj" else "member").await()
     }
     suspend fun cancelParty(id: String) = network {
         identity(); room(id).update(mapOf("status" to "cancelled", "updatedAt" to FieldValue.serverTimestamp())).await()
     }
+    /** Delete from discovery without destroying messages or other participants' data. */
+    suspend fun deleteParty(id: String) {
+        val user = network {
+            val user = identity()
+            db().runTransaction { tx ->
+                val party = tx.get(room(id))
+                require(party.getString("kind") == "party") { "파티만 삭제할 수 있어요." }
+                if (party.getString("status") != "deleted") tx.update(room(id), mapOf("status" to "deleted", "updatedAt" to FieldValue.serverTimestamp()))
+            }.await()
+            user
+        }
+        // The status mutation has completed before optional maintenance starts.
+        // A local cleanup timeout cannot overturn this committed deletion.
+        cleanupDeletedMemberships(listOf(id), user)
+    }
+    private suspend fun requireReadableMembership(id: String, user: String) {
+        val group = room(id).get(Source.SERVER).await()
+        check(group.exists() && group.getString("status") != "deleted" && member(id, user).get(Source.SERVER).await().exists()) { "참여 중인 크루·파티에서 채팅을 열어 주세요." }
+        if (group.getString("kind") == "party") {
+            val parent = group.getString("crewId").orEmpty()
+            check(parent.matches(Regex("[A-Za-z0-9]{20}"))) { "크루에 속한 파티에서 채팅을 열어 주세요." }
+            val crew = room(parent).get(Source.SERVER).await()
+            check(crew.getString("kind") == "crew" && crew.getString("status") == "active" && member(parent, user).get(Source.SERVER).await().exists()) { "먼저 이 파티의 크루에 참여해 주세요." }
+        }
+    }
     suspend fun canAnnounce(id: String): Boolean = network {
         val user = identity()
+        requireReadableMembership(id, user)
         val mine = member(id, user).get(Source.SERVER).await()
         if (!mine.exists()) false
         else if (mine.getString("role") in setOf("owner", "dj")) true
@@ -206,10 +316,10 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val user = identity()
         val ticket = synchronized(lock) { epoch }
         // Confirm current membership from the server before showing any cached content.
-        network { check(member(id, user).get(Source.SERVER).await().exists()) { "이 방에 먼저 입장해 주세요." } }
+        network { requireReadableMembership(id, user) }
         val listener = room(id).collection("messages").orderBy("createdAt", Query.Direction.DESCENDING).limit(50)
             .addSnapshotListener(MetadataChanges.INCLUDE) { snapshot, failure ->
-                if (failure != null) { close(IllegalStateException("방 채팅 권한과 연결을 확인해 주세요.")); return@addSnapshotListener }
+                if (failure != null) { close(IllegalStateException("채팅방 참여 권한과 연결을 확인해 주세요.")); return@addSnapshotListener }
                 if (synchronized(lock) { closed || epoch != ticket } || uid != user) { close(); return@addSnapshotListener }
                 if (snapshot != null) trySend(FirebaseRoomMessages(snapshot.documents.filterNot { it.metadata.hasPendingWrites() }.reversed().map {
                     ChatMessage(it.id, id, it.getString("nickname").orEmpty(), it.getString("body").orEmpty(),
@@ -223,7 +333,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val message = room(id).collection("messages").document()
         db().runTransaction { tx ->
             val mine = tx.get(member(id, user)); val p = tx.get(profile(user))
-            require(mine.exists()) { "이 방에 먼저 입장해 주세요." }
+            require(mine.exists()) { "이 크루나 파티에 먼저 참여해 주세요." }
             require(Timestamp.now().seconds - (mine.getTimestamp("lastMessageAt")?.seconds ?: 0) >= 2) { "메시지는 2초 간격으로 보내 주세요." }
             val nickname = p.getString("nickname").orEmpty()
             tx.set(message, mapOf("authorUid" to user, "nickname" to nickname, "body" to body.trim(),
@@ -244,5 +354,11 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         paceLabel = doc.getString("paceLabel").orEmpty(), capacity = doc.getLong("capacity")?.toInt() ?: 0,
         participantCount = doc.getLong("memberCount")?.toInt() ?: 0, joined = joined,
         cancelled = doc.getString("status") == "cancelled", isOrganizer = doc.getString("ownerUid") == user)
-    companion object { private const val APP_NAME = "runmoni-community" }
+    companion object {
+        private const val APP_NAME = "runmoni-community"
+        private const val PUBLIC_PAGE_SIZE = 50
+        private const val PUBLIC_SCAN_PAGES = 3
+        private const val DELETED_CLEANUP_LIMIT = 5
+        private const val DELETED_CLEANUP_MILLIS = 1_000L
+    }
 }

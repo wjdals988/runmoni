@@ -27,12 +27,12 @@ from .models import (CrewCreate, CrewJoin, ItemPurchase, MessageCreate, MusicLea
                      RolePatch, RoomRequest, RunCreate, RunFinalize, TrackBatch,
                      UserBlock)
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 SEOUL = timezone(timedelta(hours=9))
 AVATAR_SLOTS = {"hair": "헤어", "top": "상의", "bottom": "하의", "shoes": "신발", "accessory": "머리 장비",
                 "eyewear": "선글라스", "wrist": "워치", "waist": "러닝 벨트", "hydration": "수분 조끼",
                 "face": "얼굴", "socks": "양말", "headwear": "모자", "ear": "귀 장비", "costume": "특수 코스튬"}
-CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost": [0, 500, 1000, 2000, 500, 1000][variant], "slot": slot, "value": variant}
+CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost": 0, "slot": slot, "value": variant}
              for slot, label in AVATAR_SLOTS.items() for variant in range(6 if slot in {"top", "bottom", "costume"} else 4)]
 
 
@@ -43,6 +43,7 @@ def canonical_avatar(style):
         result["headwear"] = {1: 3, 2: 1}.get(legacy, 0)
     if style.get("ear") is None:
         result["ear"] = 1 if legacy == 3 else 0
+    result["gender"] = style.get("gender") if style.get("gender") in {"male", "female"} else "male"
     return result
 
 
@@ -149,7 +150,7 @@ def create_app(settings=None, clock=None):
         # Additive pilot migrations: retain history from v0.1.0 without replacing the database.
         additions = {"users": {"auth_mode": "TEXT NOT NULL DEFAULT 'pilot'"},
                      "crews": {"region": "TEXT NOT NULL DEFAULT ''", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'", "visibility": "TEXT NOT NULL DEFAULT 'pilot'", "room_kind": "TEXT NOT NULL DEFAULT 'crew'"},
-                     "parties": {"kind": "TEXT NOT NULL DEFAULT 'local'", "latitude": "REAL", "longitude": "REAL", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'"},
+                     "parties": {"deleted_at_ms": "INTEGER", "kind": "TEXT NOT NULL DEFAULT 'local'", "latitude": "REAL", "longitude": "REAL", "pace_label": "TEXT NOT NULL DEFAULT '자유 페이스'"},
                      "track_points": {"segment": "INTEGER NOT NULL DEFAULT 0"}, "runs": {"deleted_at_ms": "INTEGER"}}
         for table, columns in additions.items():
             existing_columns = {row[1] for row in initial.execute(f"PRAGMA table_info({table})")}
@@ -162,7 +163,7 @@ def create_app(settings=None, clock=None):
             initial.execute("DROP TABLE presence")
             initial.execute("CREATE TABLE presence (user_id TEXT PRIMARY KEY REFERENCES users(id),run_id TEXT NOT NULL REFERENCES runs(id),scope_type TEXT NOT NULL CHECK(scope_type IN ('crew','party','pilot')),scope_id TEXT NOT NULL,latitude REAL NOT NULL,longitude REAL NOT NULL,updated_at_ms INTEGER NOT NULL,expires_at_ms INTEGER NOT NULL)")
             initial.execute("CREATE INDEX presence_scope_idx ON presence(scope_type,scope_id,expires_at_ms)")
-        initial.execute("PRAGMA user_version=3")
+        initial.execute("PRAGMA user_version=4")
 
     app = FastAPI(title="런모니 크루·파티 방", version=VERSION)
     app.state.settings, app.state.db, app.state.clock = settings, db, now
@@ -212,10 +213,10 @@ def create_app(settings=None, clock=None):
 
     def party_access(c, party_id, user_id, joined=True):
         row = c.execute("SELECT * FROM parties WHERE id=?", (party_id,)).fetchone()
-        if row is None:
+        if row is None or row["deleted_at_ms"] is not None:
             fail(404, "party_not_found", "파티를 찾을 수 없습니다.")
-        crew = c.execute("SELECT visibility FROM crews WHERE id=?", (row["crew_id"],)).fetchone()
-        if crew["visibility"] == "pilot":
+        crew = c.execute("SELECT visibility,room_kind FROM crews WHERE id=?", (row["crew_id"],)).fetchone()
+        if crew["room_kind"] == "crew":
             role = crew_member(c, row["crew_id"], user_id)
         else:
             member = c.execute("SELECT role FROM crew_members WHERE crew_id=? AND user_id=?", (row["crew_id"], user_id)).fetchone()
@@ -338,6 +339,8 @@ def create_app(settings=None, clock=None):
                 changes = body.avatar.model_dump(exclude_unset=True)
                 owned = set(profile(c, user["id"])["owned_items"])
                 for slot, variant in changes.items():
+                    if slot == "gender":
+                        continue
                     if variant is None:
                         fail(422, "invalid_avatar", "아이템 번호를 선택해 주세요.")
                     if f"{slot}:{variant}" not in owned:
@@ -480,6 +483,8 @@ def create_app(settings=None, clock=None):
 
     @app.post("/v1/parties")
     def create_party(body: PartyCreate, user: dict = Depends(current_user)):
+        if body.crew_id is None:
+            fail(422, "crew_required", "가입한 크루에서 파티를 만들어 주세요.")
         if not now() <= body.starts_at_ms <= now() + 366 * 86400000:
             fail(422, "invalid_party_time", "앞으로 1년 이내의 일정을 입력해 주세요.")
         if body.kind == "local" and len(body.meeting_point) < 2:
@@ -488,16 +493,13 @@ def create_app(settings=None, clock=None):
             fail(422, "coordinate_pair_required", "위도와 경도를 함께 입력해 주세요.")
         party_id = str(uuid4())
         with db(True) as c:
-            crew_id = str(body.crew_id) if body.crew_id else str(uuid4())
-            if body.crew_id:
-                role = crew_member(c, crew_id, user["id"])
-                visibility = c.execute("SELECT visibility FROM crews WHERE id=?", (crew_id,)).fetchone()[0]
-                if visibility == "pilot" and role != "owner":
-                    fail(403, "owner_required", "기존 파일럿 크루의 파티는 크루장만 만들 수 있습니다.")
-            else:
-                # Keep the existing non-null crew foreign key, but don't show this backing room as a crew.
-                c.execute("INSERT INTO crews(id,name,description,owner_id,invitation_code,created_at_ms,visibility,room_kind) VALUES(?,?,?,?,?,?,'open','party')", (crew_id, body.title, "", user["id"], secrets.token_urlsafe(9), now()))
-                c.execute("INSERT INTO crew_members VALUES(?,?,'owner')", (crew_id, user["id"]))
+            crew_id = str(body.crew_id)
+            parent = c.execute("SELECT visibility,room_kind FROM crews WHERE id=?", (crew_id,)).fetchone()
+            if parent is None or parent["room_kind"] != "crew":
+                fail(422, "crew_required", "파티가 속할 크루를 선택해 주세요.")
+            role = crew_member(c, crew_id, user["id"])
+            if parent["visibility"] == "pilot" and role != "owner":
+                fail(403, "owner_required", "기존 파일럿 크루의 파티는 크루장만 만들 수 있습니다.")
             c.execute("INSERT INTO parties(id,crew_id,creator_id,title,starts_at_ms,meeting_point,distance_km,capacity,kind,latitude,longitude,pace_label) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (party_id, crew_id, user["id"], body.title, body.starts_at_ms, body.meeting_point, body.distance_km, body.capacity, body.kind, body.latitude, body.longitude, body.pace_label))
             c.execute("INSERT INTO party_members VALUES(?,?)", (party_id, user["id"]))
             return party_view(c, party_id, user["id"])
@@ -505,13 +507,13 @@ def create_app(settings=None, clock=None):
     @app.get("/v1/parties")
     def parties(user: dict = Depends(current_user)):
         with db() as c:
-            ids = c.execute("SELECT p.id FROM parties p WHERE (EXISTS(SELECT 1 FROM crew_members m WHERE m.crew_id=p.crew_id AND m.user_id=?) OR EXISTS(SELECT 1 FROM party_members m WHERE m.party_id=p.id AND m.user_id=?)) ORDER BY starts_at_ms LIMIT 100", (user["id"], user["id"])).fetchall()
+            ids = c.execute("SELECT p.id FROM parties p WHERE p.deleted_at_ms IS NULL AND (EXISTS(SELECT 1 FROM crew_members m WHERE m.crew_id=p.crew_id AND m.user_id=?) OR EXISTS(SELECT 1 FROM party_members m WHERE m.party_id=p.id AND m.user_id=?)) ORDER BY starts_at_ms LIMIT 100", (user["id"], user["id"])).fetchall()
             return {"items": [party_view(c, row[0], user["id"]) for row in ids]}
 
     @app.get("/v1/parties/discover")
     def discover_parties(user: dict | None = Depends(optional_user)):
         with db() as c:
-            rows = c.execute("SELECT p.id FROM parties p JOIN crews c ON c.id=p.crew_id WHERE c.visibility='open' AND p.status='scheduled' AND p.starts_at_ms>=? ORDER BY p.starts_at_ms,p.id LIMIT 100", (now(),)).fetchall()
+            rows = c.execute("SELECT p.id FROM parties p JOIN crews c ON c.id=p.crew_id WHERE c.visibility='open' AND c.room_kind='crew' AND p.deleted_at_ms IS NULL AND p.status='scheduled' AND p.starts_at_ms>=? ORDER BY p.starts_at_ms,p.id LIMIT 100", (now(),)).fetchall()
             return {"items": [party_view(c, row[0], user["id"] if user else None) for row in rows]}
 
     @app.get("/v1/parties/{party_id}")
@@ -524,6 +526,8 @@ def create_app(settings=None, clock=None):
     def join_party(party_id: UUID, user: dict = Depends(current_user)):
         with db(True) as c:
             party, _ = party_access(c, str(party_id), user["id"], False)
+            if c.execute("SELECT room_kind FROM crews WHERE id=?", (party["crew_id"],)).fetchone()[0] != "crew":
+                fail(409, "legacy_party", "새 파티는 크루 안에서 참가해 주세요.")
             if party["status"] == "cancelled":
                 fail(409, "party_cancelled", "취소된 파티입니다.")
             already = c.execute("SELECT 1 FROM party_members WHERE party_id=? AND user_id=?", (str(party_id), user["id"])).fetchone()
@@ -556,6 +560,20 @@ def create_app(settings=None, clock=None):
             c.execute("DELETE FROM presence WHERE scope_type='party' AND scope_id=?", (str(party_id),))
             c.execute("UPDATE music_leases SET revoked=1 WHERE scope_type='party' AND scope_id=?", (str(party_id),))
             return party_view(c, str(party_id), user["id"])
+
+    @app.delete("/v1/parties/{party_id}")
+    def delete_party(party_id: UUID, user: dict = Depends(current_user)):
+        with db(True) as c:
+            party = c.execute("SELECT * FROM parties WHERE id=? AND deleted_at_ms IS NULL", (str(party_id),)).fetchone()
+            if party is None:
+                fail(404, "party_not_found", "파티를 찾을 수 없습니다.")
+            parent_role = c.execute("SELECT role FROM crew_members WHERE crew_id=? AND user_id=?", (party["crew_id"], user["id"])).fetchone()
+            if party["creator_id"] != user["id"] and (parent_role is None or parent_role[0] != "owner"):
+                fail(403, "owner_required", "크루장이나 파티 주최자만 삭제할 수 있습니다.")
+            c.execute("UPDATE parties SET status='cancelled',deleted_at_ms=? WHERE id=?", (now(), str(party_id)))
+            c.execute("DELETE FROM presence WHERE scope_type='party' AND scope_id=?", (str(party_id),))
+            c.execute("UPDATE music_leases SET revoked=1 WHERE scope_type='party' AND scope_id=?", (str(party_id),))
+        return {"deleted": True, "id": str(party_id)}
 
     def list_messages(scope_type, scope_id, user, after_id, limit):
         with db() as c:

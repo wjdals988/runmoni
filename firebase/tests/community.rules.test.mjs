@@ -61,6 +61,14 @@ async function send(d,u,{id='M'.repeat(20),notice=false,body='함께 달려요',
  b.update(member(d,u,rid),{nickname,lastMessageAt:serverTimestamp(),lastMessageId:id});
  return b.commit();
 }
+async function cooldown(u){
+ await env.withSecurityRulesDisabled(async ctx=>updateDoc(profile(ctx.firestore(),u),{lastRoomCreatedAt:zero}));
+}
+async function linkedParty(){
+ const {a,b}=await basic();await join(b,'bobby');await cooldown('alice');
+ await create(a,'alice',PID,{kind:'party',partyKind:'remote',crewId:RID,startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:3});
+ return {a,b};
+}
 async function basic(){const a=await connect('alice'),b=await connect('bobby');await create(a,'alice');return {a,b};}
 
 test('public bounded discovery works; private profiles/members/chats and unbounded lists do not',async()=>{
@@ -100,7 +108,8 @@ test('incomplete membership batches cannot change capacity/counts or bypass priv
 });
 test('parallel attempts for the last party slot cannot overfill it',async()=>{
  const a=await connect('alice'),b=await connect('bobby'),c=await connect('carol');
- await create(a,'alice',PID,{kind:'party',partyKind:'remote',startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:2});
+ await create(a,'alice');await join(b,'bobby');await join(c,'carol');await cooldown('alice');
+ await create(a,'alice',PID,{kind:'party',partyKind:'remote',crewId:RID,startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:2});
  const results=await Promise.allSettled([join(b,'bobby',PID),join(c,'carol',PID)]);
  assert.equal(results.filter(r=>r.status==='fulfilled').length,1);
  assert.equal((await getDoc(room(a,PID))).data().memberCount,2);
@@ -159,9 +168,111 @@ test('profile fields are bounded and cannot claim wallet, routes or someone else
  await assertFails(setDoc(profile(db('bobby'),'alice'),{nickname:'bobby'}));
  await assertFails(deleteDoc(profile(a,'alice')));
 });
-test('profile creation budget and interval are enforced by rules',async()=>{
+test('creation interval stays enforced after more than twenty lifetime creations',async()=>{
  const a=await connect('alice');await create(a,'alice');
  await assertFails(create(a,'alice',PID));
  await env.withSecurityRulesDisabled(async ctx=>updateDoc(profile(ctx.firestore(),'alice'),{createdRoomCount:20,lastRoomCreatedAt:zero}));
+ await assertSucceeds(create(a,'alice',PID));
+ assert.equal((await getDoc(profile(a,'alice'))).data().createdRoomCount,21);
+});
+
+test('new parties cannot exist outside an active crew or use a party as their parent',async()=>{
+ const a=await connect('alice');
+ const fields={kind:'party',partyKind:'remote',startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:3};
+ await assertFails(create(a,'alice',PID,fields));
+ await assertFails(create(a,'alice',PID,{...fields,crewId:'Z'.repeat(20)}));
+ await create(a,'alice');await cooldown('alice');
+ await create(a,'alice',PID,{...fields,crewId:RID});await cooldown('alice');
+ await assertFails(create(a,'alice','C'.repeat(20),{...fields,crewId:PID}));
+});
+test('party access is lost immediately after leaving its parent crew even for organizer or DJ',async()=>{
+ const {a,b}=await basic();await join(b,'bobby');
+ await create(b,'bobby',PID,{kind:'party',partyKind:'remote',crewId:RID,startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:3});
+ await send(b,'bobby',{rid:PID});await leave(b,'bobby');
+ await assertFails(getDocs(query(collection(b,'communityRooms',PID,'messages'),limit(50))));
+ await assertFails(getDoc(message(b,'M'.repeat(20),PID)));
+ await assertFails(send(b,'bobby',{rid:PID,id:'N'.repeat(20)}));
+ await assertFails(getDocs(query(collection(b,'communityRooms',PID,'members'),limit(100))));
+ // Own membership is still readable for cleanup, and the former organizer can delete it.
+ await assertSucceeds(getDoc(member(b,'bobby',PID)));
+ await assertSucceeds(updateDoc(room(b,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertSucceeds(leave(b,'bobby',PID));
+});
+test('only organizer or parent crew owner may delete a party; deleted conversations are retained but inaccessible',async()=>{
+ const {a,b}=await linkedParty();await join(b,'bobby',PID);
+ const c=await connect('carol');await create(c,'carol','C'.repeat(20));
+ await send(a,'alice',{rid:PID});
+ await assertFails(updateDoc(room(b,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertFails(updateDoc(room(c,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertSucceeds(updateDoc(room(a,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertFails(getDoc(message(a,'M'.repeat(20),PID)));
+ await assertFails(getDocs(query(collection(b,'communityRooms',PID,'messages'),limit(50))));
+ await assertFails(send(b,'bobby',{rid:PID}));
+ await assertFails(updateDoc(member(a,'bobby',PID),{role:'dj'}));
+ await assertFails(updateDoc(room(a,PID),{status:'active',updatedAt:serverTimestamp()}));
+ await assertFails(updateDoc(room(a,PID),{title:'revive',status:'active',updatedAt:serverTimestamp()}));
+ await assertFails(deleteDoc(room(a,PID)));
+ await env.withSecurityRulesDisabled(async ctx=>{
+  assert.equal((await getDoc(message(ctx.firestore(),'M'.repeat(20),PID))).data().body,'함께 달려요');
+ });
+});
+test('parent crew owner can delete a cancelled party without being a party member',async()=>{
+ const {a,b}=await basic();await join(b,'bobby');
+ await create(b,'bobby',PID,{kind:'party',partyKind:'remote',crewId:RID,startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:3});
+ await assertSucceeds(updateDoc(room(a,PID),{status:'cancelled',updatedAt:serverTimestamp()}));
+ await assertSucceeds(updateDoc(room(a,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertFails(join(a,'alice',PID));
+ await assertFails(updateDoc(room(a),{status:'deleted',updatedAt:serverTimestamp()}));
+});
+test('deleted party cleanup frees private links for organizer and members including the last member',async()=>{
+ const {a,b}=await linkedParty();await join(b,'bobby',PID);
+ await assertFails(leave(a,'alice',PID));
+ await updateDoc(room(a,PID),{status:'deleted',updatedAt:serverTimestamp()});
+ await assertFails(updateDoc(room(a,PID),{memberCount:1,updatedAt:serverTimestamp()}));
+ await assertFails(updateDoc(profile(a,'alice'),{joinedRoomIds:[RID],lastRoomId:PID,updatedAt:serverTimestamp()}));
+ const missingProfile=writeBatch(a);missingProfile.delete(member(a,'alice',PID));missingProfile.update(room(a,PID),{memberCount:1,updatedAt:serverTimestamp()});
+ await assertFails(missingProfile.commit());
+ await assertSucceeds(leave(a,'alice',PID));await assertSucceeds(leave(b,'bobby',PID));
+ assert.equal((await getDoc(room(a,PID))).data().memberCount,0);
+ assert.deepEqual((await getDoc(profile(a,'alice'))).data().joinedRoomIds,[RID]);
+ assert.deepEqual((await getDoc(profile(b,'bobby'))).data().joinedRoomIds,[RID]);
+ await assertFails(updateDoc(room(a,PID),{memberCount:-1,updatedAt:serverTimestamp()}));
+ await cooldown('alice');await assertSucceeds(create(a,'alice','D'.repeat(20)));
+});
+test('cleanup at the hundred-membership bound allows the next creation without fake counters',async()=>{
+ const {a}=await linkedParty();
+ const old=Array.from({length:98},(_,i)=>String(i).padStart(20,'0'));
+ await env.withSecurityRulesDisabled(async ctx=>updateDoc(profile(ctx.firestore(),'alice'),{joinedRoomIds:[RID,PID,...old],lastRoomCreatedAt:zero}));
+ await assertFails(create(a,'alice','D'.repeat(20)));
+ await updateDoc(room(a,PID),{status:'deleted',updatedAt:serverTimestamp()});
+ await assertSucceeds(leave(a,'alice',PID));
+ await assertSucceeds(create(a,'alice','D'.repeat(20)));
+ assert.equal((await getDoc(profile(a,'alice'))).data().joinedRoomIds.length,100);
+});
+test('legacy standalone party cannot accept new members or messages but its owner may archive and cleanup',async()=>{
+ const a=await connect('alice'),b=await connect('bobby');
+ await env.withSecurityRulesDisabled(async ctx=>{
+  const d=ctx.firestore();await setDoc(room(d,PID),roomData('alice',{kind:'party',partyKind:'remote',startsAtMillis:Date.now()+3600000,distanceKm:5,capacity:3}));
+  await setDoc(member(d,'alice',PID),memberData('alice','owner'));
+  await updateDoc(profile(d,'alice'),{joinedRoomIds:[PID]});
+ });
+ await assertFails(join(b,'bobby',PID));
+ await assertFails(send(a,'alice',{rid:PID}));
+ await assertSucceeds(updateDoc(room(a,PID),{status:'deleted',updatedAt:serverTimestamp()}));
+ await assertSucceeds(leave(a,'alice',PID));
+});
+test('a former crew member loses party DJ read and announcement privileges',async()=>{
+ const {a,b}=await linkedParty();await join(b,'bobby',PID);
+ await updateDoc(member(a,'bobby',PID),{role:'dj'});
+ await assertSucceeds(send(b,'bobby',{rid:PID,notice:true}));
+ await leave(b,'bobby');
+ await assertFails(getDoc(message(b,'M'.repeat(20),PID)));
+ await assertFails(send(b,'bobby',{rid:PID,id:'N'.repeat(20),notice:true}));
+ await assertFails(updateDoc(member(b,'bobby',PID),{role:'owner'}));
+});
+test('cumulative creation counter remains bounded and cannot be reset or incremented without creation',async()=>{
+ const a=await connect('alice');await create(a,'alice');
+ await assertFails(updateDoc(profile(a,'alice'),{createdRoomCount:0,updatedAt:serverTimestamp()}));
+ await env.withSecurityRulesDisabled(async ctx=>updateDoc(profile(ctx.firestore(),'alice'),{createdRoomCount:1000000,lastRoomCreatedAt:zero}));
  await assertFails(create(a,'alice',PID));
 });

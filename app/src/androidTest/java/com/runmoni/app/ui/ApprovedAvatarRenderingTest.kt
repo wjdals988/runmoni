@@ -22,6 +22,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.avatar.ApprovedAvatarRenderer
 import com.runmoni.app.domain.AppState
 import com.runmoni.app.domain.AvatarStyle
+import com.runmoni.app.domain.AvatarGender
 import com.runmoni.app.domain.Profile
 import org.junit.Assert.*
 import org.junit.Rule
@@ -38,20 +39,29 @@ class ApprovedAvatarRenderingTest {
         bitmap.getPixels(it, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
     }
 
-    @Test fun sharedAppAndMapBitmapMatchesAllEightApprovedSourceCellsExactly() {
+    @Test fun sharedAppAndMapBitmapMatchesBothRowsAndAllEightApprovedSourceCellsExactly() {
         val source = context.assets.open(ApprovedAvatarRenderer.ASSET).use {
             BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inScaled = false })!!
         }
-        val hashes = mutableSetOf<Int>()
-        for (frame in 0..7) {
-            val expected = IntArray(256 * 384)
-            source.getPixels(expected, 0, 256, frame * 256, 0, 256, 384)
-            val actual = pixels(avatarBitmap(context, AvatarStyle(), frame, true))
-            assertArrayEquals("App still uses a reconstructed body at frame $frame", expected, actual)
-            hashes += actual.contentHashCode()
+        for (gender in AvatarGender.entries) {
+            val hashes = mutableSetOf<Int>()
+            for (frame in 0..7) {
+                val expected = IntArray(256 * 384)
+                source.getPixels(expected, 0, 256, frame * 256, gender.spriteRow * 384, 256, 384)
+                val actual = pixels(avatarBitmap(context, AvatarStyle(gender = gender), frame, true))
+                assertArrayEquals("Approved ${gender.wireValue} frame $frame changed", expected, actual)
+                hashes += actual.contentHashCode()
+            }
+            assertEquals(8, hashes.size)
+            val base = AvatarStyle(gender = gender)
+            assertArrayEquals(pixels(avatarBitmap(context, base, 0, false)), pixels(avatarBitmap(context, base, 7, false)))
         }
-        assertEquals(8, hashes.size)
-        assertArrayEquals(pixels(avatarBitmap(context, AvatarStyle(), 0, false)), pixels(avatarBitmap(context, AvatarStyle(), 7, false)))
+        // Alternate the shared cache as home, closet and markers change selection.
+        val female = avatarBitmap(context, AvatarStyle(gender = AvatarGender.FEMALE), 0, false)
+        val male = avatarBitmap(context, AvatarStyle(), 0, false)
+        assertFalse(pixels(female).contentEquals(pixels(male)))
+        assertSame(female, avatarBitmap(context, AvatarStyle(gender = AvatarGender.FEMALE), 0, false))
+        assertSame(male, avatarBitmap(context, AvatarStyle(), 0, false))
         source.recycle()
     }
 
@@ -85,14 +95,16 @@ class ApprovedAvatarRenderingTest {
         }
     }
 
-    @Test fun unfinishedArtworkCannotSpendPointsEvenWithEnoughBalance() {
+    @Test fun unfinishedFreeItemCanBeSavedWithoutSpendingOrReplacingTheApprovedBase() {
         val state = mutableStateOf(AppState(profile = Profile(mileage = 10_000)))
         compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, RunmoniUiTest.FakeActions(state)) {} } }
-        compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsNotEnabled()
+        val before = pixels(avatarBitmap(context, state.value.profile.avatar))
+        compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsEnabled().performClick()
         compose.runOnIdle {
             assertEquals(10_000, state.value.profile.mileage)
-            assertEquals(AvatarStyle(), state.value.profile.avatar)
-            assertFalse("top:1" in state.value.profile.ownedItems)
+            assertEquals(1, state.value.profile.avatar.top)
+            assertTrue("top:1" in state.value.profile.ownedItems)
+            assertArrayEquals(before, pixels(avatarBitmap(context, state.value.profile.avatar)))
         }
     }
 }

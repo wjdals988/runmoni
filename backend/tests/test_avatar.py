@@ -8,7 +8,7 @@ def own(app, user, items):
         c.executemany("INSERT OR IGNORE INTO owned_items VALUES(?,?)", [(user["id"], item) for item in items])
 
 
-def test_new_catalogue_and_paid_equipment_rejection_are_atomic(pilot):
+def test_catalogue_and_unclaimed_equipment_rejection_are_atomic(pilot):
     _, client, _, account = pilot
     _, h = account("꾸미기 카탈로그")
     items = client.get("/v1/shop/items", headers=h).json()["items"]
@@ -62,3 +62,43 @@ def test_costumes_preserve_underlying_clothes_and_exit_on_covered_slot_change(pi
     client.patch("/v1/me", headers=h, json={"avatar": {"costume": 3}})
     shoes = client.patch("/v1/me", headers=h, json={"avatar": {"shoes": 1}}).json()["avatar"]
     assert shoes["costume"] == 3
+
+
+def test_explicit_gender_round_trip_and_old_client_patch_preserve_the_base(pilot):
+    app, client, _, account = pilot
+    user, h = account("기본형 선택 러너")
+    before = client.get("/v1/me", headers=h).json()
+    assert before["avatar"]["gender"] == "male"
+    female = client.patch("/v1/me", headers=h, json={"avatar": {"gender": "female"}})
+    assert female.status_code == 200, female.text
+    assert female.json()["avatar"]["gender"] == "female"
+    assert female.json()["owned_items"] == before["owned_items"]
+    assert female.json()["mileage"] == before["mileage"]
+    old = client.patch("/v1/me", headers=h, json={"avatar": {"hair": 0, "top": 0}})
+    assert old.status_code == 200
+    assert old.json()["avatar"]["gender"] == "female"
+    assert client.get("/v1/me", headers=h).json()["avatar"]["gender"] == "female"
+    assert client.patch("/v1/me", headers=h, json={"avatar": {"gender": "unknown"}}).status_code == 422
+    male = client.patch("/v1/me", headers=h, json={"avatar": {"gender": "male"}})
+    assert male.status_code == 200 and male.json()["avatar"]["gender"] == "male"
+
+
+def test_all_test_items_are_free_and_claims_preserve_existing_mileage(pilot):
+    app, client, clock, account = pilot
+    user, h = account("무료 옷장 러너")
+    with app.state.db(True) as c:
+        c.execute("INSERT INTO ledger VALUES(?,?,NULL,NULL,?,?)", ("existing-test-credit", user["id"], 777, clock[0]))
+    before = client.get("/v1/me", headers=h).json()
+    assert before["mileage"] == 777
+    items = client.get("/v1/shop/items", headers=h).json()["items"]
+    assert len(items) == 62 and all(item["cost"] == 0 for item in items)
+    for item in items:
+        first = client.post("/v1/shop/purchase", headers=h, json={"item_id": item["id"]})
+        assert first.status_code == 200, first.text
+        assert first.json()["mileage"] == 777
+        repeat = client.post("/v1/shop/purchase", headers=h, json={"item_id": item["id"]})
+        assert repeat.status_code == 200 and repeat.json()["already_owned"] is True
+        assert repeat.json()["mileage"] == 777
+    after = client.get("/v1/me", headers=h).json()
+    assert set(before["owned_items"]) <= set(after["owned_items"])
+    assert {item["id"] for item in items} <= set(after["owned_items"])

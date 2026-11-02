@@ -27,13 +27,15 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.Crew
 
 @Composable
 internal fun EditorialHeading(eyebrow: String, title: String, description: String? = null) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(eyebrow, style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Primary)
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (eyebrow.any { it.code > 127 }) Text(eyebrow, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         Text(title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
         if (description != null) Text(description, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
     }
@@ -65,13 +67,14 @@ internal fun DestinationRow(title: String, subtitle: String, icon: ImageVector, 
 
 @Composable
 internal fun DestinationTabs(labels: List<String>, selected: Int, onSelect: (Int) -> Unit, tag: String) {
-    val largeText = LocalDensity.current.fontScale >= 1.3f
-    FlowRow(Modifier.fillMaxWidth().selectableGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    ScrollableTabRow(selectedTabIndex = selected, edgePadding = 0.dp, containerColor = Color.Transparent,
+        contentColor = RunmoniColors.Primary, divider = { HorizontalDivider(color = RunmoniColors.Line) },
+        indicator = { positions -> TabRowDefaults.SecondaryIndicator(Modifier.tabIndicatorOffset(positions[selected]), color = RunmoniColors.Primary) }) {
         labels.forEachIndexed { index, label ->
-            Surface(color = if (selected == index) RunmoniColors.Navy else RunmoniColors.Paper, shape = CircleShape,
-                modifier = Modifier.heightIn(min = 48.dp).selectable(selected == index, role = Role.Tab, onClick = { onSelect(index) }).testTag("${tag}_$index")) {
-                Box(Modifier.padding(horizontal = if (largeText) 14.dp else 20.dp, vertical = 12.dp), contentAlignment = Alignment.Center) { Text(label, style = MaterialTheme.typography.labelLarge, color = if (selected == index) RunmoniColors.OnDark else RunmoniColors.Muted) }
-            }
+            Tab(selected = selected == index, onClick = { onSelect(index) },
+                modifier = Modifier.heightIn(min = 48.dp).testTag("${tag}_$index"),
+                text = { Text(label, style = MaterialTheme.typography.titleSmall, maxLines = 1) },
+                selectedContentColor = RunmoniColors.Primary, unselectedContentColor = RunmoniColors.Muted)
         }
     }
 }
@@ -88,16 +91,16 @@ internal fun RoomSearch(value: String, onChange: (String) -> Unit, label: String
 @Composable
 internal fun CrewRoomCard(crew: Crew, onClick: () -> Unit) {
     Surface(color = RunmoniColors.Paper, shape = RoundedCornerShape(24.dp),
-        modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "크루 방 보기", onClick = onClick).testTag("crew_${crew.id}")) {
+        modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "크루 보기", onClick = onClick).testTag("crew_${crew.id}")) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Box(Modifier.size(48.dp).clip(RoundedCornerShape(16.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) { Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary) }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text(crew.name, style = MaterialTheme.typography.titleLarge); Text("${crew.region.ifBlank { "지역 자유" }} · ${crew.paceLabel}", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted) }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) { Text(crew.name, style = MaterialTheme.typography.titleMedium); Text("${crew.region.ifBlank { "지역 자유" }} · ${crew.paceLabel}", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted) }
             }
             if (crew.description.isNotBlank()) Text(crew.description, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             HorizontalDivider(color = RunmoniColors.Line)
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("${crew.memberCount}명 · ${if (crew.isOwner) "내가 만든 방" else if (crew.joined) "참여 중" else "입장 가능"}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
+                Text("${crew.memberCount}명 · ${if (crew.isOwner) "크루장" else if (crew.joined) "가입한 크루" else "가입 가능"}", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
                 Icon(Icons.Outlined.ArrowForward, null, tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
             }
         }

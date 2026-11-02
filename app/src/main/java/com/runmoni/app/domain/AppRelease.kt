@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.0-dev", "2026-11-02", "크루·파티와 옷장 개편 · 실기기 검증 전", listOf(
+        "크루 안에서 파티를 만들고 참가·삭제하는 구조로 정리했어요.",
+        "카테고리는 가로 탭으로, 화면 제목과 내용의 정렬·단계를 새롭게 맞췄어요.",
+        "남녀 기본형을 전환하고 모든 아이템을 0P로 획득·선택 저장할 수 있어요.",
+        "미준비 의상은 선택을 보관하고 승인된 기본형을 표시해요. 파티 삭제에는 최신 Firebase 규칙이 필요해요.",
+    )),
     AppVersionEntry("0.2.1-dev", "2026-10-30", "연결 점검 개발 프리뷰 · 실기기 검증 전", listOf(
         "별도 유료 서버 없이 Firebase 공유 방·익명 닉네임·실시간 채팅을 연결할 수 있게 준비했어요.",
         "설정에서 공용 방 서버·Google 계정 연결과 휴대폰 확인 항목을 점검해요.",

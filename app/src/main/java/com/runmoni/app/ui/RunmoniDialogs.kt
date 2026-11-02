@@ -88,16 +88,16 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         }
         SmallNote("기록 상세에서 요약을 1건씩 백업해요. GPS 경로·마일리지는 포함하지 않아요.")
         HorizontalDivider()
-        Text("크루 · 파티 방 연결", style = MaterialTheme.typography.titleMedium)
-        StatusPill(if (state.serverConnected && state.signedIn) "방 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
-        Text(if (state.signedIn) "방 프로필 연결됨" else "공개 방을 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
+        Text("크루 프로필", style = MaterialTheme.typography.titleMedium)
+        StatusPill(if (state.serverConnected && state.signedIn) "크루 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
+        Text(if (state.signedIn) "크루 프로필 연결됨" else "공개 크루를 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
         SmallNote("Google 계정과 별도로 연결하며 위치 공유는 직접 켜야 해요.")
-        if (state.signedIn) OutlinedButton(onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "방 프로필 연결 해제" else "파일럿 로그아웃") }
+        if (state.signedIn) OutlinedButton(onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "크루 프로필 연결 해제" else "파일럿 로그아웃") }
         else OutlinedButton(onClick = onSignIn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
         TextButton(onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "테스트 서버 설정 접기" else "테스트 서버 설정 펼치기") }
         if (connectionDetails) {
-            Text(if (state.communityBackend == CommunityBackend.FIREBASE) "Firebase 공유 방 사용 중" else "HTTP 테스트 서버 사용 중")
-            if (state.communityBackend != CommunityBackend.FIREBASE) OutlinedButton(onClick = actions::useFirebaseCommunity, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("use_firebase_rooms")) { Text("Firebase 공유 방 사용") }
+            Text(if (state.communityBackend == CommunityBackend.FIREBASE) "Firebase 크루·파티 사용 중" else "HTTP 테스트 서버 사용 중")
+            if (state.communityBackend != CommunityBackend.FIREBASE) OutlinedButton(onClick = actions::useFirebaseCommunity, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("use_firebase_rooms")) { Text("Firebase 크루·파티 사용") }
             SmallNote(state.serverStatus)
             OutlinedTextField(value = url, onValueChange = { url = it }, label = { Text("서버 연결 주소") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("server_url"))
             Button(onClick = { actions.configureServer(url.trim()) }, enabled = url.startsWith("http://") || url.startsWith("https://"), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("connect_server")) { Text("서버 연결") }
@@ -109,8 +109,8 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
     }
     }
     if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
-    if (disconnectRoom) AlertDialog(onDismissRequest = { disconnectRoom = false }, title = { Text("방 프로필 연결을 해제할까요?") },
-        text = { DialogMessage("익명 프로필로 참여한 방과 방장 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 Google 계정 연결은 유지돼요.") },
+    if (disconnectRoom) AlertDialog(onDismissRequest = { disconnectRoom = false }, title = { Text("크루 프로필 연결을 해제할까요?") },
+        text = { DialogMessage("익명 프로필의 크루·파티 참여 내역과 크루장·주최자 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 Google 계정 연결은 유지돼요.") },
         confirmButton = { TextButton(onClick = { disconnectRoom = false; actions.signOut() }) { Text("연결 해제") } },
         dismissButton = { TextButton(onClick = { disconnectRoom = false }) { Text("유지하기") } })
 }
@@ -121,13 +121,13 @@ internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () ->
     var adult by remember { mutableStateOf(false) }
     var submitted by remember { mutableStateOf(false) }
     LaunchedEffect(state.signedIn) { if (state.signedIn && submitted) onDismiss() }
-    FormDialog("방에 참여할 닉네임", onDismiss, confirm = {
+    FormDialog("함께 달릴 닉네임", onDismiss, confirm = {
         TextButton(onClick = { submitted = true; actions.connectCommunity(name.trim()) }, enabled = adult && name.trim().matches(Regex("[\\w가-힣 -]{2,24}")) && !state.busy, modifier = Modifier.testTag("confirm_sign_in")) { Text(if (state.busy) "연결 중" else "참여하기") }
     }) {
-        Text("닉네임으로 게스트 프로필을 연결하면 방을 만들고 참여할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
-        OutlinedTextField(value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("방 닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("display_name"))
+        Text("닉네임으로 게스트 프로필을 연결하면 크루에 가입하고 파티에 참가할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
+        OutlinedTextField(value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("display_name"))
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }).testTag("adult_checkbox"), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = adult, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("만 19세 이상입니다", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
-        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 연결 해제·기기 변경·재설치 후에는 참여 내역과 방장 권한을 복구할 수 없어요. Google 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
+        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 연결 해제·기기 변경·재설치 후에는 참여 내역과 크루장 권한을 복구할 수 없어요. Google 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
     }
 }
 
@@ -140,12 +140,12 @@ internal fun NewCrewDialog(actions: AppActions, state: AppState = AppState(), on
     var submitted by remember { mutableStateOf(false) }
     val previousId = remember { state.lastCreatedCrewId }
     LaunchedEffect(state.lastCreatedCrewId) { if (submitted && state.lastCreatedCrewId != previousId) onDismiss() }
-    FormDialog("크루 방 만들기", onDismiss, confirm = { TextButton(onClick = { submitted = true; actions.createCrew(NewCrew(name.trim(), description.trim(), region.trim(), pace.trim())) }, enabled = name.trim().length in 2..60 && !state.busy, modifier = Modifier.testTag("confirm_create_crew")) { Text("만들기") } }) {
+    FormDialog("크루 만들기", onDismiss, confirm = { TextButton(onClick = { submitted = true; actions.createCrew(NewCrew(name.trim(), description.trim(), region.trim(), pace.trim())) }, enabled = name.trim().length in 2..60 && !state.busy, modifier = Modifier.testTag("confirm_create_crew")) { Text("만들기") } }) {
         FormField("크루 이름", name, { if (it.length <= 60) name = it }, "crew_name")
         FormField("크루 소개", description, { description = it.take(500) }, "crew_description", singleLine = false)
         FormField("활동 지역", region, { region = it.take(80) }, "crew_region")
         FormField("기본 페이스", pace, { pace = it.take(80) }, "crew_pace")
-        SmallNote("공개 방 목록에 이름·설명·지역·페이스가 표시돼요. 방을 찾은 러너가 코드 없이 참여할 수 있어요.")
+        SmallNote("크루 목록에 이름·설명·지역·페이스가 표시돼요. 크루를 찾은 러너가 코드 없이 참여할 수 있어요.")
     }
 }
 
@@ -163,12 +163,12 @@ internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppStat
     val time = runCatching { LocalDateTime.parse(starts, formatter).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
     val km = distance.toDoubleOrNull()
     val max = capacity.toIntOrNull()
-    val valid = title.trim().length in 2..80 && time != null && time > System.currentTimeMillis() && km != null && km.isFinite() && km > 0 && km <= 100 && max != null && max in 2..20 && pace.trim().length in 1..80 && time <= System.currentTimeMillis() + 366L * 86400000 && (kind == PartyKind.REMOTE || meeting.trim().length >= 2)
+    val valid = crewId != null && state.crews.any { it.id == crewId && it.joined } && title.trim().length in 2..80 && time != null && time > System.currentTimeMillis() && km != null && km.isFinite() && km > 0 && km <= 100 && max != null && max in 2..20 && pace.trim().length in 1..80 && time <= System.currentTimeMillis() + 366L * 86400000 && (kind == PartyKind.REMOTE || meeting.trim().length >= 2)
     var submitted by remember { mutableStateOf(false) }
     val previousId = remember { state.lastCreatedPartyId }
     LaunchedEffect(state.lastCreatedPartyId) { if (submitted && state.lastCreatedPartyId != previousId) onDismiss() }
-    FormDialog("파티 방 만들기", onDismiss, confirm = { TextButton(onClick = { submitted = true; actions.createParty(NewParty(crewId, title.trim(), kind, time!!, if (kind == PartyKind.LOCAL) meeting.trim() else "원격 음성방", km!!, pace.trim(), max!!)) }, enabled = valid && !state.busy, modifier = Modifier.testTag("confirm_create_party")) { Text("만들기") } }) {
-        SmallNote(if (crewId == null) "크루 가입 없이 만드는 공개 파티예요. 일정·집결 장소가 방 목록에 표시돼요." else "이 크루의 러닝 일정을 만들어요.")
+    FormDialog("파티 만들기", onDismiss, confirm = { TextButton(onClick = { submitted = true; actions.createParty(NewParty(crewId, title.trim(), kind, time!!, if (kind == PartyKind.LOCAL) meeting.trim() else "각자의 러닝 코스", km!!, pace.trim(), max!!)) }, enabled = valid && !state.busy, modifier = Modifier.testTag("confirm_create_party")) { Text("만들기") } }) {
+        Text(state.crews.firstOrNull { it.id == crewId }?.name ?: "먼저 크루에 가입해 주세요", style = MaterialTheme.typography.titleMedium)
         FormField("파티 이름", title, { if (it.length <= 80) title = it }, "party_title")
         FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) { FilterChip(selected = kind == PartyKind.LOCAL, onClick = { kind = PartyKind.LOCAL }, label = { Text("현장 모임") }, modifier = Modifier.heightIn(min = 48.dp).testTag("party_local")); FilterChip(selected = kind == PartyKind.REMOTE, onClick = { kind = PartyKind.REMOTE }, label = { Text("원격 함께 뛰기") }, modifier = Modifier.heightIn(min = 48.dp).testTag("party_remote")) }
         AdaptiveActions(
@@ -182,38 +182,12 @@ internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppStat
             }, modifier = modifier.heightIn(min = 48.dp).testTag("pick_party_time")) { Text("시간 선택") } },
         )
         FormField("시작 날짜·시간", starts, { starts = it }, "party_time", hint = "휴대폰 시간 · 예: ${LocalDateTime.now().plusHours(1).format(formatter)}", error = when { time == null -> "날짜와 시간을 yyyy-MM-dd HH:mm 형식으로 입력해 주세요"; time <= System.currentTimeMillis() -> "현재보다 나중 시간을 선택해 주세요"; else -> null })
-        if (kind == PartyKind.LOCAL) FormField("집결 장소", meeting, { meeting = it.take(200) }, "party_meeting") else SmallNote("각자의 장소에서 뛰며 파티 음성방으로 만나요.")
+        if (kind == PartyKind.LOCAL) FormField("집결 장소", meeting, { meeting = it.take(200) }, "party_meeting") else SmallNote("각자의 장소에서 같은 시간에 달려요.")
         FormField("목표 거리 · km", distance, { distance = it }, "party_distance", keyboardType = KeyboardType.Decimal, error = if (km == null || !km.isFinite() || km <= 0 || km > 100) "거리는 0 초과 100km 이하로 입력해 주세요" else null)
         FormField("페이스 범위", pace, { pace = it.take(80) }, "party_pace")
         FormField("정원 · 2~20명", capacity, { capacity = it }, "party_capacity", keyboardType = KeyboardType.Number, error = if (max == null || max !in 2..20) "정원은 2~20명으로 입력해 주세요" else null)
         if (!valid) SmallNote("미래의 시작 시간, 거리, 정원을 확인해 주세요. 현장 모임에는 집결 장소가 필요해요.")
     }
-}
-
-@Composable
-internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, onSignIn: () -> Unit = {}, onDismiss: () -> Unit) {
-    val party = state.parties.firstOrNull { it.id == original.id } ?: original
-    val crew = state.crews.firstOrNull { it.id == party.crewId }
-    var cancelConfirmation by remember { mutableStateOf(false) }
-    FormDialog(party.title, onDismiss, dismissLabel = null, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
-        StatusPill(if (party.kind == PartyKind.LOCAL) "현장 러닝" else "원격 함께 뛰기", RunmoniColors.Green)
-        Text(dateTime(party.startsAtMillis), style = MaterialTheme.typography.titleMedium)
-        Text("${party.distanceKm} km · ${party.paceLabel}")
-        Text(if (party.kind == PartyKind.LOCAL) "집결지 · ${party.meetingLabel}" else "각자의 장소에서 뛰고 음성방에서 만나요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-        Text("참가 ${party.participantCount}/${party.capacity}명")
-        if (party.cancelled) Text("취소된 파티예요", color = MaterialTheme.colorScheme.error)
-        else if (party.isOrganizer) SmallNote("주최자는 참가를 취소할 수 없어요. 모임을 종료하려면 파티를 취소해 주세요.")
-        else Button(onClick = { if (party.joined) actions.leaveParty(party.id) else actions.joinParty(party.id) }, enabled = !state.busy && state.signedIn && (party.joined || (party.participantCount < party.capacity && party.startsAtMillis >= System.currentTimeMillis())), modifier = Modifier.fillMaxWidth().testTag("join_party_${party.id}")) { Text(if (party.joined) "파티 나가기" else if (party.participantCount >= party.capacity) "정원이 가득 찼어요" else "파티 방 입장") }
-        if (!state.signedIn) OutlinedButton(onClick = { onDismiss(); onSignIn() }, modifier = Modifier.fillMaxWidth()) { Text("닉네임으로 입장하기") }
-        if (party.joined && !party.cancelled) {
-            OutlinedButton(onClick = { actions.openChat("party:${party.id}", party.title); onDismiss() }, modifier = Modifier.fillMaxWidth().testTag("open_party_chat")) { Text("파티 공지 · 채팅") }
-            if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "party:${party.id}")
-            else SmallNote("채팅으로 함께 만나요. 음성 통화는 준비 중이에요.")
-        }
-        if ((crew?.isOwner == true || party.isOrganizer) && !party.cancelled) TextButton(onClick = { cancelConfirmation = true }, modifier = Modifier.testTag("cancel_party_${party.id}")) { Text("파티 취소", color = MaterialTheme.colorScheme.error) }
-        SmallNote("파티 음성 연결과 내 GPS 기록은 별개예요. 러닝 탭에서 각자 기록을 시작해 주세요.")
-    }
-    if (cancelConfirmation) AlertDialog(onDismissRequest = { cancelConfirmation = false }, title = { Text("파티를 취소할까요?") }, text = { DialogMessage("참가한 러너에게 취소 상태가 표시돼요.") }, confirmButton = { TextButton(onClick = { actions.cancelParty(party.id); cancelConfirmation = false }, modifier = Modifier.testTag("confirm_cancel_party")) { Text("파티 취소") } }, dismissButton = { TextButton(onClick = { cancelConfirmation = false }) { Text("유지하기") } })
 }
 
 @Composable
@@ -259,84 +233,6 @@ internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions,
         }
     }
     pendingDelete?.let { summary -> AlertDialog(onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n선택한 클라우드 요약만 삭제해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(onClick = { pendingDelete = null }) { Text("취소") } }) }
-}
-
-@Composable
-internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -> Unit) {
-    var referenceReview by remember { mutableStateOf(false) }
-    var slot by remember { mutableStateOf("top") }
-    var accessorySlot by remember { mutableStateOf("eyewear") }
-    var animate by remember { mutableStateOf(true) }
-    val slots = AvatarCatalogue.slots
-    val compactPreview = LocalDensity.current.fontScale >= 1.3f
-    if (referenceReview) {
-        AvatarReferenceDialog(onDismiss = { referenceReview = false })
-        return
-    }
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
-    Surface(Modifier.fillMaxSize().testTag("form_dialog"), color = RunmoniColors.Cream) {
-    Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
-        Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text("나의 미니미 옷장", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
-            TextButton(onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp)) { Text("닫기") }
-        }
-        Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().weight(1f).align(Alignment.CenterHorizontally).padding(horizontal = 24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Box(Modifier.fillMaxWidth().height(if (compactPreview) 80.dp else 164.dp).clip(RoundedCornerShape(28.dp)).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) {
-            AvatarMini(profile.avatar, Modifier.width(if (compactPreview) 52.dp else 108.dp).height(if (compactPreview) 78.dp else 160.dp).testTag("closet_avatar_preview"), running = animate)
-        }
-        if (compactPreview) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("${profile.mileage} P", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
-            FilledTonalIconButton(onClick = { animate = !animate }, modifier = Modifier.size(48.dp).testTag("closet_animation")) { Icon(if (animate) Icons.Outlined.Pause else Icons.Outlined.PlayArrow, if (animate) "달리기 멈춤" else "달리기 재생") }
-        } else {
-        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("${profile.mileage} P", style = MaterialTheme.typography.titleLarge)
-            TextButton(onClick = { animate = !animate }, modifier = Modifier.heightIn(min = 48.dp).testTag("closet_animation")) { Text(if (animate) "달리기 멈춤" else "달리기 재생") }
-        }
-        }
-        Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SmallNote("준비된 아이템만 착용할 수 있어요. 보유 아이템과 포인트는 그대로 보관돼요.")
-        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            AvatarCatalogue.tabs.forEach { (key, label) ->
-                FilterChip(selected = if (key == "accessories") slot in AvatarCatalogue.accessoryKeys else slot == key,
-                    onClick = { slot = if (key == "accessories") accessorySlot else key }, label = { Text(label) },
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("closet_slot_$key"))
-            }
-        }
-        if (slot in AvatarCatalogue.accessoryKeys) FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            slots.filter { it.key in AvatarCatalogue.accessoryKeys }.forEach { item ->
-                FilterChip(selected = slot == item.key, onClick = { slot = item.key; accessorySlot = item.key }, label = { Text(item.label) },
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("closet_slot_${item.key}"))
-            }
-        }
-        val covered = slot in AvatarCatalogue.coveredSlots(profile.avatar.costume)
-        if (profile.avatar.costume != 0) SmallNote(if (covered) "이 부위는 세트가 덮고 있어요. 일반 아이템을 착용하면 세트가 해제돼요." else "세트가 덮지 않는 얼굴·헤어·장비는 함께 바꿀 수 있어요.")
-        val equipped = profile.avatar.variantFor(slot)
-        slots.first { it.key == slot }.variants.indices.forEach { variant ->
-            val owned = "$slot:$variant" in profile.ownedItems
-            val price = AvatarCatalogue.price(variant)
-            val ready = AvatarArtwork.itemReady(slot, variant)
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    if (ready) AvatarMini(profile.avatar.withItem(slot, variant), Modifier.size(64.dp), decorative = true)
-                    else Box(Modifier.size(if (compactPreview) 88.dp else 64.dp).background(RunmoniColors.Mint, RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center) {
-                        Text("원화\n준비", style = MaterialTheme.typography.labelSmall)
-                    }
-                    Text(slots.first { it.key == slot }.variants[variant], style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                }
-                Text(if (owned) "보유 중" else "${price} P · 러닝 마일리지", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
-                if (equipped == variant && !covered) StatusPill(if (ready) "착용 중" else "선택 보관 중", RunmoniColors.Green)
-                else FilledTonalButton(onClick = { if (owned) actions.equipItem(slot, variant) else actions.buyItem(slot, variant) }, enabled = ready && (owned || profile.mileage >= price), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("closet_${slot}_$variant")) { Text(if (!ready) "원화 준비 중" else if (owned) "착용" else "${price} P 구매") }
-            }
-            HorizontalDivider(color = RunmoniColors.Line)
-        }
-        SmallNote("러닝 마일리지로 이용하는 옷장이에요. 현금 결제는 없어요.")
-        TextButton(onClick = { referenceReview = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_avatar_reference")) { Text("원화 · 수영복 시안 비교") }
-        Spacer(Modifier.height(16.dp))
-        }
-        }
-    }
-    }
-    }
 }
 
 @Composable

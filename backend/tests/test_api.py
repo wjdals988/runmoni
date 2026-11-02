@@ -316,20 +316,20 @@ def test_cosmetic_ownership_atomic_purchase_and_delete_no_replay(pilot):
     app, client, _, account = pilot
     user, h = account("꾸미는 러너")
     assert client.patch("/v1/me", headers=h, json={"avatar": {"hair": 1}}).status_code == 403
-    assert client.post("/v1/shop/purchase", headers=h, json={"item_id": "hair:1"}).status_code == 409
+    assert client.post("/v1/shop/purchase", headers=h, json={"item_id": "hair:1"}).status_code == 200
     with app.state.db(True) as c:
         c.execute("INSERT INTO ledger VALUES(?,?,NULL,NULL,1000,?)", (str(uuid4()), user["id"], NOW))
     barrier = threading.Barrier(2)
 
     def buy():
         barrier.wait()
-        return client.post("/v1/shop/purchase", headers=h, json={"item_id": "hair:1"})
+        return client.post("/v1/shop/purchase", headers=h, json={"item_id": "hair:2"})
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         futures = [pool.submit(buy), pool.submit(buy)]
         responses = [future.result() for future in futures]
     assert all(r.status_code == 200 for r in responses)
-    assert client.get("/v1/me", headers=h).json()["mileage"] == 500
+    assert client.get("/v1/me", headers=h).json()["mileage"] == 1000
     assert client.patch("/v1/me", headers=h, json={"avatar": {"hair": 1}}).status_code == 200
     record = run(client, h)
     url = f"/v1/runs/{record['id']}"

@@ -147,36 +147,42 @@ def check_health(url):
 
 
 def firebase_health(data, sha1):
-    """Public room query only. No account creation, auth token, private reads or writes."""
+    """Bounded public discovery and crew-specific query. No sign-in or writes."""
     config = json.loads(data)
     client = next(c for c in config['client'] if c['client_info']['android_client_info']['package_name'] == 'com.runmoni.app')
     api_key = client['api_key'][0]['current_key']
-    query = {'structuredQuery': {'from': [{'collectionId': 'communityRooms'}], 'limit': 1,
-        'where': {'compositeFilter': {'op': 'AND', 'filters': [
-            {'fieldFilter': {'field': {'fieldPath': 'visibility'}, 'op': 'EQUAL', 'value': {'stringValue': 'open'}}},
-            {'fieldFilter': {'field': {'fieldPath': 'kind'}, 'op': 'EQUAL', 'value': {'stringValue': 'crew'}}}]}},
-        'orderBy': [{'field': {'fieldPath': 'createdAt'}, 'direction': 'DESCENDING'}]}}
+    # A fixed synthetic parent ID checks query/index readiness without creating
+    # a room or reading members, chat, account profiles or client credentials.
+    checks = [({'visibility': 'open', 'kind': 'crew'}, True),
+              ({'visibility': 'open', 'kind': 'party', 'crewId': '00000000000000000000', 'status': 'active'}, False)]
     try:
-        request = urllib.request.Request('https://firestore.googleapis.com/v1/projects/runmoni-3c08e/databases/(default)/documents:runQuery',
-            data=json.dumps(query).encode(), method='POST', headers={'Content-Type': 'application/json',
-                'X-Goog-Api-Key': api_key, 'X-Android-Package': 'com.runmoni.app', 'X-Android-Cert': sha1.upper()})
-        with urllib.request.build_opener(NoRedirect()).open(request, timeout=10) as response:
-            if response.status != 200:
-                return 'firebase_public_query_failed'
-            payload = response.read(32769)
-            if len(payload) > 32768:
-                return 'firebase_public_response_invalid'
-        rows = json.loads(payload)
-        if not isinstance(rows, list) or not rows or len(rows) > 2:
-            return 'firebase_public_response_invalid'
-        for row in rows:
-            if not isinstance(row.get('readTime'), str):
-                return 'firebase_public_response_invalid'
-            if 'document' in row:
-                document = row['document']
-                if (not re.fullmatch(r'projects/runmoni-3c08e/databases/\(default\)/documents/communityRooms/[A-Za-z0-9]{20}', document['name'])
-                        or document['fields']['visibility'] != {'stringValue': 'open'} or document['fields']['kind'] != {'stringValue': 'crew'}):
+        for expected, ordered in checks:
+            structured = {'from': [{'collectionId': 'communityRooms'}], 'limit': 1,
+                'where': {'compositeFilter': {'op': 'AND', 'filters': [
+                    {'fieldFilter': {'field': {'fieldPath': key}, 'op': 'EQUAL', 'value': {'stringValue': value}}}
+                    for key, value in expected.items()]}}}
+            if ordered:
+                structured['orderBy'] = [{'field': {'fieldPath': 'createdAt'}, 'direction': 'DESCENDING'}]
+            request = urllib.request.Request('https://firestore.googleapis.com/v1/projects/runmoni-3c08e/databases/(default)/documents:runQuery',
+                data=json.dumps({'structuredQuery': structured}).encode(), method='POST', headers={'Content-Type': 'application/json',
+                    'X-Goog-Api-Key': api_key, 'X-Android-Package': 'com.runmoni.app', 'X-Android-Cert': sha1.upper()})
+            with urllib.request.build_opener(NoRedirect()).open(request, timeout=10) as response:
+                if response.status != 200:
+                    return 'firebase_public_query_failed'
+                payload = response.read(32769)
+                if len(payload) > 32768:
                     return 'firebase_public_response_invalid'
+            rows = json.loads(payload)
+            if not isinstance(rows, list) or not rows or len(rows) > 2:
+                return 'firebase_public_response_invalid'
+            for row in rows:
+                if not isinstance(row.get('readTime'), str):
+                    return 'firebase_public_response_invalid'
+                if 'document' in row:
+                    document = row['document']
+                    if (not re.fullmatch(r'projects/runmoni-3c08e/databases/\(default\)/documents/communityRooms/[A-Za-z0-9]{20}', document['name'])
+                            or any(document['fields'][key] != {'stringValue': value} for key, value in expected.items())):
+                        return 'firebase_public_response_invalid'
         return 'ready'
     except urllib.error.HTTPError as error:
         return {403: 'firebase_rules_or_api_access_missing', 404: 'firebase_database_missing',

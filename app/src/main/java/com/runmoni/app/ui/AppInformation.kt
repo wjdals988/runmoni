@@ -190,7 +190,7 @@ private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> 
 internal fun MileageExplanationDialog(onDismiss: () -> Unit, serverWallet: Boolean = false) {
     FormDialog("러닝 마일리지", onDismiss, dismissLabel = null, confirm = { TextButton(onClick = onDismiss, modifier = Modifier.testTag("close_mileage_help")) { Text("알겠어요") } }) {
         Text("내 미니미를 꾸미는 러닝 포인트예요", style = MaterialTheme.typography.titleMedium)
-        Text("${if (serverWallet) "현재는 초대 파일럿 서버의 지갑을 보고 있어요. 서버가 검증한 러닝 기록을 기준으로" else "현재는 기기의 지갑을 보고 있어요. 기기에 완료한 러닝을 기준으로"} 10m당 1P, 즉 1km당 100P를 받아요. 옷장에서 헤어·옷·신발·장비를 구매하고 장착할 때 사용해요.", style = MaterialTheme.typography.bodyLarge)
+        Text("${if (serverWallet) "현재는 초대 파일럿 서버의 지갑을 보고 있어요. 서버가 검증한 러닝 기록을 기준으로" else "현재는 기기의 지갑을 보고 있어요. 기기에 완료한 러닝을 기준으로"} 10m당 1P, 즉 1km당 100P를 받아요. 포인트는 계속 적립돼요. 지금은 테스트 기간이라 모든 아이템을0P로 선택할 수 있고 기존 포인트는 차감하지 않아요.", style = MaterialTheme.typography.bodyLarge)
         if (serverWallet) SmallNote("기본 환산 기준이며 실제 지급은 GPS 검증과 서버의 일일 지급 한도에 따라 달라질 수 있어요.")
         Text("1km → 100P\n5km → 500P\n10km → 1,000P", style = MaterialTheme.typography.titleSmall)
         SmallNote("현금 전환·유료 결제·출금 기능은 없어요. ${if (serverWallet) "현재 포인트는 파일럿 서버 프로필에 보관되며 기기 포인트와 자동 합산되지 않아요." else "현재 포인트는 기기에 보관되며 파일럿 서버 포인트와 자동 합산되지 않아요."} Google 기록 요약 백업에는 포인트와 아이템이 포함되지 않아요.")

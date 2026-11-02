@@ -1,5 +1,7 @@
 package com.runmoni.app
 
+import com.runmoni.app.data.PilotClient.Companion.items
+
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -57,6 +59,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var pendingExternalLease: JSONObject? = null
     private var pendingOperations = 0
     private val communityRefresh = Mutex()
+    private val wardrobeChanges = Mutex()
+    private var focusedCrewForParties: String? = null
     private var connectionCheckGeneration = 0L
     private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
@@ -105,7 +109,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                             it.copy(messages = update.messages.map { message -> message.copy(roomId = opened) }, chatFromCache = update.fromCache) else it }
                     }
                 } catch (cancelled: CancellationException) { throw cancelled }
-                catch (_: Exception) { if (firebaseMode && communityGeneration == generation) mutableState.update { it.copy(messages = emptyList(), chatCanNotice = false, chatFromCache = true, error = "Firebase 채팅 연결과 방 참여 권한을 확인해 주세요.") } }
+                catch (_: Exception) { if (firebaseMode && communityGeneration == generation) mutableState.update { it.copy(messages = emptyList(), chatCanNotice = false, chatFromCache = true, error = "크루·파티 채팅 연결과 참여 권한을 확인해 주세요.") } }
             }
         }
     }
@@ -133,8 +137,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
     override fun setPublicLocation(enabled: Boolean) {
-        if (enabled && firebaseMode) { permissionDenied("Firebase 방에서는 실시간 위치 공유를 지원하지 않아요. 내 GPS 기록은 기기에 저장돼요."); return }
-        if (enabled && state.value.communityGuest) { permissionDenied("현재 방 프로필에서는 실시간 위치 공유를 사용할 수 없어요."); return }
+        if (enabled && firebaseMode) { permissionDenied("현재 크루·파티 연결에서는 실시간 위치 공유를 지원하지 않아요. 내 GPS 기록은 기기에 저장돼요."); return }
+        if (enabled && state.value.communityGuest) { permissionDenied("현재 크루 프로필에서는 실시간 위치 공유를 사용할 수 없어요."); return }
         if (enabled && api.token.isBlank()) { permissionDenied("초대코드로 로그인한 뒤 위치 공유를 켜 주세요."); return }
         preferences.edit().putBoolean("publicLocation", enabled).apply()
         mutableState.update { it.copy(publicLocation = enabled) }
@@ -143,7 +147,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun updateProfile(name: String) = ignoreJob(work {
         require(name.trim().length in 1..30) { "이름은 1~30자로 입력해 주세요." }
         if (firebaseMode) {
-            if (state.value.signedIn) require(name.trim().matches(Regex("[\\w가-힣 -]{2,24}"))) { "방에 연결한 이름은 2~24자의 한글·영문·숫자·공백으로 입력해 주세요." }
+            if (state.value.signedIn) require(name.trim().matches(Regex("[\\w가-힣 -]{2,24}"))) { "크루 프로필 이름은 2~24자의 한글·영문·숫자·공백으로 입력해 주세요." }
             if (state.value.signedIn) firebaseRooms.updateNickname(name.trim())
             mutateLocalProfile { it.copy(name = name.trim()) }
             return@work
@@ -151,28 +155,27 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("nickname", name.trim())); if (state.value.communityGuest) mutateLocalProfile { it.copy(name = name.trim()) }; refreshNow() }
         else mutateLocalProfile { it.copy(name = name.trim()) }
     })
-    override fun equipItem(slot: String, variant: Int) = ignoreJob(work {
-        val item = "$slot:$variant"
-        require(item in state.value.profile.ownedItems) { "먼저 아이템을 구매해 주세요." }
-        val avatar = state.value.profile.avatar.with(slot, variant)
-        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) { api.request("PATCH", "/v1/me", JSONObject().put("avatar", avatar.toJson())); refreshNow() }
-        else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant)) }
-    })
-    override fun buyItem(slot: String, variant: Int) = ignoreJob(work {
+    override fun setAvatarGender(gender: AvatarGender) = ignoreJob(work { wardrobeChanges.withLock {
+        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) {
+            api.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put("gender", gender.wireValue)))
+            refreshNow()
+        } else mutateLocalProfile { it.copy(avatar = it.avatar.copy(gender = gender)) }
+    } })
+    override fun equipItem(slot: String, variant: Int) = ignoreJob(work { wardrobeChanges.withLock {
         require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
         val item = "$slot:$variant"
-        if (item in state.value.profile.ownedItems) return@work
-        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) { api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item)); refreshNow() }
-        else {
-            val cost = AvatarCatalogue.price(variant)
-            mutateLocalProfile { current ->
-                if (item in current.ownedItems) current else {
-                    require(current.mileage >= cost) { "마일리지가 부족합니다. 러닝 기록을 쌓아 주세요." }
-                    current.copy(mileage = current.mileage - cost, ownedItems = current.ownedItems + item)
-                }
+        if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) {
+            if (item !in state.value.profile.ownedItems) {
+                val entry = api.request("GET", "/v1/shop/items").items().firstOrNull { it.optString("id") == item }
+                require(entry?.optInt("cost", -1) == 0) { "이 서버는 무료 테스트 설정이 아니에요. 서버 업데이트 후 다시 시도해 주세요." }
+                api.request("POST", "/v1/shop/purchase", JSONObject().put("item_id", item))
             }
-        }
-    })
+            // Send only the selected slot: a slower purchase must not overwrite
+            // a newer gender or equipment selection with an old full profile.
+            api.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put(slot, variant))); refreshNow()
+        } else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant), ownedItems = it.ownedItems + item) }
+    } })
+    override fun buyItem(slot: String, variant: Int) = equipItem(slot, variant)
     override fun deleteRun(id: String) = ignoreJob(work {
         val record = app.runs.record(id)
         if (!firebaseMode && api.token.isNotBlank()) try { api.request("DELETE", "/v1/runs/$id") } catch (failure: PilotException) { if (failure.status != 404 || record?.synced == true) throw failure }
@@ -281,6 +284,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             ) else it }
         }
     }
+    override fun loadCrewParties(id: String) {
+        focusedCrewForParties = id
+        if (!firebaseMode) return
+        val generation = communityGeneration
+        work {
+            mutableState.update { it.copy(crewPartiesLoading = true, crewPartiesError = null) }
+            try { refreshNow() }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { mutableState.update { if (generation == communityGeneration) it.copy(crewPartiesError = "파티를 불러오지 못했어요. 연결 후 다시 시도해 주세요.") else it } }
+            finally { mutableState.update { if (generation == communityGeneration && focusedCrewForParties == id) it.copy(crewPartiesLoading = false) else it } }
+        }
+    }
     override fun checkGoogleSession() = ignoreJob(viewModelScope.launch { app.cloud.checkSession() })
     override fun checkRoomConnection() {
         if (state.value.deviceChecks.room == RoomCheck.CHECKING) return
@@ -327,30 +342,37 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun refreshCommunity() = ignoreJob(work {
         val generation = communityGeneration
         try { refreshNow() } catch (failure: Exception) {
-            mutableState.update { if (generation == communityGeneration) it.copy(serverConnected = false, serverStatus = "방 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") else it }
+            mutableState.update { if (generation == communityGeneration) it.copy(serverConnected = false, serverStatus = "크루·파티 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") else it }
             if (failure is CancellationException) throw failure
         }
     })
     private suspend fun refreshNow() = communityRefresh.withLock {
         val generation = communityGeneration
         if (firebaseMode) {
+            val focusedAtStart = focusedCrewForParties
             val snapshot = firebaseRooms.snapshot()
-            if (!firebaseMode || generation != communityGeneration) return@withLock
+            var scopedError: String? = null
+            val focused = focusedCrewForParties?.takeIf { id -> snapshot.crews.any { it.id == id } }
+            val scoped = try { focused?.let { firebaseRooms.partiesForCrew(it) }.orEmpty() }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { scopedError = "크루의 파티를 불러오지 못했어요. 다시 시도해 주세요."; emptyList() }
+            val visibleParties = (snapshot.parties + scoped).distinctBy { it.id }
+            if (!firebaseMode || generation != communityGeneration || focusedAtStart != focusedCrewForParties) return@withLock
             mutableState.update {
                 val openedId = it.openedRoomId.substringAfter(':')
-                val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || snapshot.parties.any { r -> r.id == openedId && r.joined }
-                it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = snapshot.parties,
+                val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || visibleParties.any { r -> r.id == openedId && r.joined }
+                it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = visibleParties, crewPartiesError = scopedError,
                     signedIn = snapshot.signedIn, communityGuest = true, publicLocation = false, liveRunners = emptyList(),
-                    serverConnected = true, serverStatus = "Firebase 공유 방을 불러왔어요 · 종류별 최근50개와 참여한 방",
+                    serverConnected = true, serverStatus = "크루·파티 목록을 불러왔어요",
                     openedRoomId = if (stillMember) it.openedRoomId else "", openedRoomTitle = if (stillMember) it.openedRoomTitle else "",
-                    messages = if (stillMember) it.messages else emptyList(), audio = it.audio.copy(canDj = false, status = "Firebase 방에서는 채팅을 이용해 주세요 · 음성 서버는 별도예요"))
+                    messages = if (stillMember) it.messages else emptyList(), audio = it.audio.copy(canDj = false, status = "현재 크루·파티에서는 채팅을 이용해 주세요 · 음성 서버는 별도예요"))
             }
             return@withLock
         }
         val expectedToken = api.token
         val expectedUrl = api.baseUrl
         val health = api.health()
-        check(health.optJSONObject("capabilities")?.optBoolean("public_rooms") == true) { "방 목록을 지원하는 서버가 필요해요. 서버 연결을 확인해 주세요." }
+        check(health.optJSONObject("capabilities")?.optBoolean("public_rooms") == true) { "크루·파티 목록을 지원하는 서버가 필요해요. 서버 연결을 확인해 주세요." }
         val identity = if (expectedToken.isBlank()) null else api.request("GET", "/v1/me")
         val guest = identity?.optString("auth_mode") == "guest"
         val profile = if (identity == null || guest) wallet.read() else identity.toProfile()
@@ -369,12 +391,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
         val canDj = voiceParty?.isOrganizer == true || voiceCrew?.let { it.isOwner || it.isDj } == true
         if (!canDj && audio.status.value.musicSending) { audio.stopMusic(); stopLease() }
-        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = identity != null, communityGuest = guest, serverStatus = "방 목록을 불러왔어요", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
+        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = identity != null, communityGuest = guest, serverStatus = "크루·파티 목록을 불러왔어요", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
     }
     private suspend fun refreshAfterCreation() {
         runCatching { refreshNow() }.onFailure {
             if (it is CancellationException) throw it
-            mutableState.update { it.copy(serverConnected = false, serverStatus = "방은 만들었지만 목록 갱신을 못했어요. 새로고침해 주세요.") }
+            mutableState.update { it.copy(serverConnected = false, serverStatus = "생성은 완료했지만 목록을 새로 불러오지 못했어요. 새로고침해 주세요.") }
         }
     }
     override fun createCrew(input: NewCrew) = ignoreJob(work {
@@ -388,15 +410,34 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun leaveCrew(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.leave(id) else api.request("DELETE", "/v1/crews/$id/join"); refreshNow() })
     override fun setCrewDj(crewId: String, memberId: String, enabled: Boolean) = ignoreJob(work { if (firebaseMode) firebaseRooms.setDj(crewId, memberId, enabled) else api.request("PATCH", "/v1/crews/$crewId/members/$memberId", JSONObject().put("role", if (enabled) "dj" else "member")); refreshNow(); loadCrewMembers(crewId) })
     override fun createParty(input: NewParty) = ignoreJob(work {
+        require(input.crewId != null && state.value.crews.any { it.id == input.crewId && it.joined }) { "가입한 크루에서 파티를 만들어 주세요." }
         val generation = communityGeneration
         val party = if (firebaseMode) firebaseRooms.createParty(input) else api.createParty(input).toParty()
         if (generation != communityGeneration) return@work
         mutableState.update { it.copy(parties = listOf(party) + it.parties.filterNot { old -> old.id == party.id }, lastCreatedPartyId = party.id) }
         refreshAfterCreation()
     })
-    override fun joinParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.join(id) else api.request("POST", "/v1/parties/$id/join"); refreshNow() })
+    override fun joinParty(id: String) = ignoreJob(work {
+        val party = state.value.parties.firstOrNull { it.id == id } ?: error("파티 정보를 새로고침해 주세요.")
+        val crew = state.value.crews.firstOrNull { it.id == party.crewId } ?: error("먼저 크루에서 파티를 선택해 주세요.")
+        val generation = communityGeneration
+        try {
+            if (!crew.joined) { if (firebaseMode) firebaseRooms.join(crew.id) else api.request("POST", "/v1/crews/${crew.id}/join") }
+            check(generation == communityGeneration) { "연결이 바뀌었어요. 다시 시도해 주세요." }
+            if (firebaseMode) firebaseRooms.join(id) else api.request("POST", "/v1/parties/$id/join")
+        } finally { if (generation == communityGeneration) runCatching { refreshNow() } }
+    })
     override fun leaveParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.leave(id) else api.request("DELETE", "/v1/parties/$id/join"); refreshNow() })
     override fun cancelParty(id: String) = ignoreJob(work { if (firebaseMode) firebaseRooms.cancelParty(id) else api.request("POST", "/v1/parties/$id/cancel"); refreshNow() })
+    override fun deleteParty(id: String) = ignoreJob(work {
+        if (firebaseMode) firebaseRooms.deleteParty(id) else api.request("DELETE", "/v1/parties/$id")
+        mutableState.update { it.copy(parties = it.parties.filterNot { party -> party.id == id }) }
+        if (state.value.openedRoomId == "party:$id") closeChat()
+        runCatching { refreshNow() }.onFailure {
+            if (it is CancellationException) throw it
+            mutableState.update { current -> current.copy(serverConnected = false, serverStatus = "파티는 삭제됐어요. 목록을 다시 불러와 주세요.") }
+        }
+    })
     override fun openChat(roomId: String, title: String) {
         mutableState.update { it.copy(openedRoomId = roomId, openedRoomTitle = title, messages = emptyList(), chatFromCache = true, chatCanNotice = false) }
         if (firebaseMode) {
@@ -417,9 +458,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         api.request("POST", "/v1/${if (scope == "crew") "crews" else "parties"}/$id/messages", JSONObject().put("body", body.trim()).put("kind", if (notice) "announcement" else "chat"))
         val messages = api.chat(roomId); mutableState.update { it.copy(messages = messages) }
     })
-    override fun connectVoice(roomId: String) { if (firebaseMode) permissionDenied("Firebase 방은 채팅을 지원해요. 음성 통화 서버는 별도 연결이 필요해요.") else requests.tryEmit(UiRequest.MicrophonePermission(roomId)) }
+    override fun connectVoice(roomId: String) { if (firebaseMode) permissionDenied("현재 크루·파티는 채팅을 지원해요. 음성 통화 서버는 별도 연결이 필요해요.") else requests.tryEmit(UiRequest.MicrophonePermission(roomId)) }
     fun connectVoiceWithPermission(roomId: String) = work {
-        check(!firebaseMode) { "이 방에서는 채팅을 이용해 주세요. 음성 통화는 준비 중이에요." }
+        check(!firebaseMode) { "현재 크루·파티에서는 채팅을 이용해 주세요. 음성 통화는 준비 중이에요." }
         val token = api.request("POST", "/v1/voice/token", roomScope(roomId))
         selectedVoiceRoom = roomId
         val crew = if (roomId.startsWith("crew:")) state.value.crews.find { it.id == roomId.substringAfter(':') } else state.value.crews.find { c -> c.id == state.value.parties.find { it.id == roomId.substringAfter(':') }?.crewId }

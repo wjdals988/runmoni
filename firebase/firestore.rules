@@ -56,6 +56,12 @@ service cloud.firestore {
     function memberPath(id, uid) { return /databases/$(database)/documents/communityRooms/$(id)/members/$(uid); }
     function messagePath(id, mid) { return /databases/$(database)/documents/communityRooms/$(id)/messages/$(mid); }
     function memberOf(id) { return signedIn() && exists(memberPath(id, request.auth.uid)); }
+    // A party never grants access independently of its parent crew membership.
+    function readableMember(id) {
+      let r = get(roomPath(id)).data;
+      return memberOf(id) && r.status != 'deleted'
+        && (r.kind == 'crew' || parentMembership(r));
+    }
     function manager(id) {
       let r = get(roomPath(id)).data;
       return signedIn() && (r.ownerUid == request.auth.uid ||
@@ -71,7 +77,7 @@ service cloud.firestore {
         && validNickname(d.nickname) && d.createdAt is timestamp && d.updatedAt == request.time
         && d.joinedRoomIds is list && d.joinedRoomIds.size() <= 100
         && d.joinedRoomIds.toSet().size() == d.joinedRoomIds.size()
-        && d.lastRoomId is string && d.createdRoomCount is int && d.createdRoomCount >= 0 && d.createdRoomCount <= 20
+        && d.lastRoomId is string && d.createdRoomCount is int && d.createdRoomCount >= 0 && d.createdRoomCount <= 1000000
         && d.lastRoomCreatedAt is timestamp;
     }
     function profileMembershipUpdate(uid) {
@@ -114,8 +120,8 @@ service cloud.firestore {
         && d.title is string && d.title.size() >= 2 && d.title.size() <= 80
         && d.description is string && d.description.size() <= 500 && d.region is string && d.region.size() <= 80
         && d.paceLabel is string && d.paceLabel.size() <= 80
-        && d.memberCount is int && d.memberCount >= 1 && d.capacity is int && d.memberCount <= d.capacity
-        && d.createdAt is timestamp && d.updatedAt == request.time && d.status in ['active', 'cancelled']
+        && d.memberCount is int && d.memberCount >= (d.status == 'deleted' ? 0 : 1) && d.capacity is int && d.memberCount <= d.capacity
+        && d.createdAt is timestamp && d.updatedAt == request.time && d.status in ['active', 'cancelled', 'deleted']
         && d.crewId is string && d.meetingLabel is string && d.meetingLabel.size() <= 200
         && d.startsAtMillis is int && d.distanceKm is number
         && ((d.kind == 'crew' && d.capacity == 100 && d.crewId == '' && d.partyKind == '' && d.startsAtMillis == 0 && d.distanceKm == 0)
@@ -124,7 +130,9 @@ service cloud.firestore {
             && (d.partyKind != 'local' || d.meetingLabel.size() > 0)));
     }
     function parentMembership(d) {
-      return d.crewId == '' || (validRoomId(d.crewId) && get(roomPath(d.crewId)).data.kind == 'crew' && memberOf(d.crewId));
+      return d.kind == 'crew' || (validRoomId(d.crewId)
+        && get(roomPath(d.crewId)).data.kind == 'crew'
+        && get(roomPath(d.crewId)).data.status == 'active' && memberOf(d.crewId));
     }
     function membershipCountUpdate(id) {
       let d = request.resource.data;
@@ -133,7 +141,8 @@ service cloud.firestore {
         && ((d.memberCount == resource.data.memberCount + 1 && resource.data.status == 'active'
             && (resource.data.kind != 'party' || resource.data.startsAtMillis > request.time.toMillis())
             && !exists(memberPath(id, uid)) && existsAfter(memberPath(id, uid)) && linkedAfter(id) && parentMembership(resource.data))
-          || (d.memberCount == resource.data.memberCount - 1 && resource.data.ownerUid != uid
+          || (d.memberCount == resource.data.memberCount - 1
+            && (resource.data.ownerUid != uid || resource.data.status == 'deleted')
             && exists(memberPath(id, uid)) && !existsAfter(memberPath(id, uid)) && !linkedAfter(id)));
     }
     match /communityRooms/{id} {
@@ -148,7 +157,8 @@ service cloud.firestore {
         && getAfter(profilePath(request.auth.uid)).data.lastRoomCreatedAt == request.time;
       allow update: if signedIn() && validRoom(request.resource.data)
         && (membershipCountUpdate(id) || (manager(id) && resource.data.kind == 'party'
-          && resource.data.status == 'active' && request.resource.data.status == 'cancelled'
+          && ((resource.data.status == 'active' && request.resource.data.status == 'cancelled')
+            || (resource.data.status in ['active', 'cancelled'] && request.resource.data.status == 'deleted'))
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])));
       allow delete: if false;
 
@@ -159,18 +169,20 @@ service cloud.firestore {
           && d.joinedAt is timestamp && d.lastMessageAt is timestamp && d.lastMessageId is string;
       }
       match /members/{uid} {
-        allow get: if isOwner(uid) || memberOf(id);
-        allow list: if boundedList(100) && memberOf(id);
+        allow get: if isOwner(uid) || readableMember(id);
+        allow list: if boundedList(100) && readableMember(id);
         allow create: if isOwner(uid) && validMember(request.resource.data, uid)
           && request.resource.data.nickname == get(profilePath(uid)).data.nickname
           && request.resource.data.joinedAt == request.time && request.resource.data.lastMessageAt == timestamp.value(0)
           && request.resource.data.lastMessageId == '' && linkedAfter(id)
           && getAfter(roomPath(id)).data.memberCount == (exists(roomPath(id)) ? get(roomPath(id)).data.memberCount + 1 : 1)
           && (getAfter(roomPath(id)).data.ownerUid == uid ? request.resource.data.role == 'owner' : request.resource.data.role == 'member');
-        allow delete: if isOwner(uid) && get(roomPath(id)).data.ownerUid != uid
+        allow delete: if isOwner(uid)
+          && (get(roomPath(id)).data.ownerUid != uid || get(roomPath(id)).data.status == 'deleted')
           && getAfter(roomPath(id)).data.memberCount == get(roomPath(id)).data.memberCount - 1 && !linkedAfter(id);
-        allow update: if signedIn() && validMember(request.resource.data, uid)
-          && ((manager(id) && resource.data.role != 'owner' && request.resource.data.role in ['member', 'dj']
+        allow update: if signedIn() && get(roomPath(id)).data.status != 'deleted' && validMember(request.resource.data, uid)
+          && ((manager(id) && parentMembership(get(roomPath(id)).data)
+              && resource.data.role != 'owner' && request.resource.data.role in ['member', 'dj']
               && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role']))
             || (isOwner(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname', 'lastMessageAt', 'lastMessageId'])
               && request.resource.data.nickname == get(profilePath(uid)).data.nickname
@@ -180,9 +192,9 @@ service cloud.firestore {
               && getAfter(messagePath(id, request.resource.data.lastMessageId)).data.createdAt == request.time));
       }
       match /messages/{mid} {
-        allow get: if memberOf(id);
-        allow list: if boundedList(50) && memberOf(id);
-        allow create: if memberOf(id) && validRoomId(mid) && get(roomPath(id)).data.status == 'active'
+        allow get: if readableMember(id);
+        allow list: if boundedList(50) && readableMember(id);
+        allow create: if readableMember(id) && validRoomId(mid) && get(roomPath(id)).data.status == 'active'
           && request.resource.data.keys().hasAll(['authorUid', 'nickname', 'body', 'kind', 'createdAt'])
           && request.resource.data.keys().hasOnly(['authorUid', 'nickname', 'body', 'kind', 'createdAt'])
           && request.resource.data.authorUid == request.auth.uid

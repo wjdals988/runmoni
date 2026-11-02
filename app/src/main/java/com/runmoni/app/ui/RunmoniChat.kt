@@ -98,7 +98,7 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                 Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (messages.isEmpty()) {
                         if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) EmptyCard("메시지 연결 확인 중", "서버에서 받은 내용을 확인한 뒤 표시해요")
-                        else EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 이야기를 남겨보세요", "이 방의 실제 메시지만 표시해요")
+                        else EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 이야기를 남겨보세요", "이 채팅방의 실제 메시지만 표시해요")
                     }
                     messages.forEach { message ->
                         Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
