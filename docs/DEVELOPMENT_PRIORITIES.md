@@ -1,6 +1,6 @@
 # 개발 우선순위 — 0.3 공개 이후 (2026-11-02 검토 묶음)
 
-**개발 소스와 공개 APK는0.3.0-dev/code12**다. 크루 최상위/하위 파티·삭제, 남녀 원본 두 행×8프레임·저장, 전 아이템0P 선택 보관과 옷장/전체 정렬 개선을 구현했고 Android 범위별 검증·앱 PR19 main 병합·동일 키 서명·실제 공개 자산 검증을 완료했다. **공개 피드/운영 대시보드의0.3 다운로드 동기화는 마무리 중**이며 작성 시점에는0.2.1을 제공한다. 새 운영 규칙 게시 확인과 실제 휴대폰/Google/운영 쓰기는 별도 대기다. [현재 검토](CREW_CLOSET_REVIEW_20261102.md) · [공개 근거](app-review/2026-11-02-crew-ux/publication-verification.json) · [이어서 진행할 순서](DEVELOPMENT_CONTINUATION.md).
+**개발 소스와 공개 APK는0.3.0-dev/code12**다. 크루 최상위/하위 파티·삭제, 남녀 원본 두 행×8프레임·저장, 전 아이템0P 선택 보관과 옷장/전체 정렬 개선을 구현했고 Android 범위별 검증·앱 PR19 main 병합·동일 키 서명·실제 공개 자산 검증을 완료했다. **공개 피드는 PR20에0.3으로 반영하며 운영 대시보드0.3 다운로드·실제 메타데이터·PNG5장 일치를 확인했다.** 공개 raw 피드 main 응답은 PR20의 최종 게시 댓글에 기록한다. 새 운영 규칙 게시 확인과 실제 휴대폰/Google/운영 쓰기는 별도 대기다. [현재 검토](CREW_CLOSET_REVIEW_20261102.md) · [공개 근거](app-review/2026-11-02-crew-ux/publication-verification.json) · [이어서 진행할 순서](DEVELOPMENT_CONTINUATION.md).
 
 ## 먼저 닫을 검증·배포 항목
 
@@ -9,7 +9,7 @@
 | R01 / P0 | **클라우드 Android 범위별 검증 완료** | demo Firebase SDK1개31.619초·최종 MainActivity/로컬HTTP1개110.626초·native320dp/글씨200% 프로필1개83.866초·baseline 차이0px의 근거 보존. debug/fixture·TCG를 공개 release의 실기기/Google/운영 Firebase 성공으로 바꾸지 않음 |
 | R02 / P0 | **완료: 커밋/푸시·앱 PR19 main 병합·동일 키0.3 APK 공개** | CI41508813724/JVM45·실패0·release lint오류0/경고60·동일 인증서·non-debuggable/버전/내장 출처·서버3자산·공개 HEAD200/218496781bytes 일치 확인. 실제 APK 출처 `01e37ab3f7ac13cc3b69d37576a6d623274de101` 보존 |
 | R03 / P0 | **새 Firestore 규칙 운영 게시 확인 대기** | 관리 계정 연결이 없고 소유자 새 게시 응답도 아직 없음. 소유자가 검토한 새 규칙을 게시한 사실과 운영의 부모 소속/삭제 후 접근 차단을 확인. 이전 설정1~5번 완료·public read CI를 새 규칙 적용 증거로 사용하지 않음 |
-| R04 / P0 | **마무리: 공개 피드·대시보드0.3 동기화** |0.3 APK 자체는 공개됐다. 작성 시점의 피드/운영 다운로드0.2.1을 검증한0.3 버전/링크/해시로 갱신한 뒤 main·배포·실제 운영 응답을 확인. 기존0.2.1 출처/바이트 보존 |
+| R04 / P0 | **0.3 피드PR20 반영·운영 대시보드 확인 완료** | Production7501775796 success/main CI41513392797 성공·HTTP200/버전12/다운로드/해시/사진5장 원본 일치. [근거](app-review/2026-11-02-crew-ux/dashboard-production-verification.json). PR20 main 통합 뒤 공개 raw 피드 확인을 최종 댓글에 기록하며 이 확인까지 끝나면 R04를 닫음. 기존 APK 출처/바이트 보존 |
 | F01 / P0 | 실제 휴대폰·Google·운영 쓰기 미검증 | 같은 키 업데이트/기록 보존, Google 계정 선택/온라인 응답/요약 백업, 두 기기의 크루/파티 참가·채팅·정원/권한·삭제를 각각 확인. 실제 장애는 다음 기능보다 우선 수정 |
 
 소유자는 기존 Firebase 설정1~5번을 완료했다고 보고했다. 이번0.3 삭제/계층 규칙은 이후 바뀐 내용이므로 **별도 운영 게시가 필요하다.** 콘솔 보고·JVM/demo/Android·실제 휴대폰/Google/운영 쓰기는 서로 다른 검증이다. 새 규칙 적용 전 실제 파티 삭제 완료로 안내하지 않는다.
@@ -41,7 +41,7 @@
 
 ## 기록과 공개 기준
 
-현재 공개 APK는0.3.0-dev/code12이며 실제 출처 **`01e37ab3f7ac13cc3b69d37576a6d623274de101`**, **218496781bytes/SHA256 `a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387`**다. [실제 공개 근거](app-review/2026-11-02-crew-ux/publication-verification.json) · [서명 CI 검증](app-review/2026-11-02-crew-ux/signed-ci-verification.json) · [공개 APK HEAD](app-review/2026-11-02-crew-ux/public-apk-head-verification.json). 후속 문서/피드 main 커밋을 이 APK 출처로 바꾸지 않는다. 공개 피드/대시보드의0.3 다운로드 동기화 완료는 실제 배포/운영 응답 확인 뒤 별도 기록한다.
+현재 공개 APK는0.3.0-dev/code12이며 실제 출처 **`01e37ab3f7ac13cc3b69d37576a6d623274de101`**, **218496781bytes/SHA256 `a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387`**다. [실제 공개 근거](app-review/2026-11-02-crew-ux/publication-verification.json) · [서명 CI 검증](app-review/2026-11-02-crew-ux/signed-ci-verification.json) · [공개 APK HEAD](app-review/2026-11-02-crew-ux/public-apk-head-verification.json). 후속 문서/피드 main 커밋을 이 APK 출처로 바꾸지 않는다. 운영 대시보드0.3 반영은 실제 배포/HTML/PNG 응답으로 확인했고, 공개 피드 main 확인은 PR20 최종 댓글에 기록한다.
 
 기존0.2.1은 출처 `c6bc5739746fe176269fed3bf64360417b50875e`,218431245bytes/SHA256 `2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218`로 보존한다. [0.2.1 게시 검증](RELEASE_REVIEW_20261101.md).0.1.5 출처 `75c39ca900b140cfb02c1a47807a5955c8b8db7f`를 포함한 과거 APK의 출처/바이트를 새 공개·문서 커밋으로 재작성하지 않는다.
 

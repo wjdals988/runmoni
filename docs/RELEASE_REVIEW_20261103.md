@@ -28,4 +28,8 @@
 
 ## 피드·대시보드
 
-검증한0.3 metadata로 피드를 준비했다. [대시보드 PR13](https://github.com/wjdals988/mydashboard/pull/13)은 실제 MainActivity/로컬HTTP 사진5장·동일 APK 메타데이터/새 내역을 반영하고 Node23개/coverage기준을 통과했다. 공개 APK 바이너리는 GitHub Release에만 두고 다른 프로젝트/기존 이력을 보존한다. 대시보드 CI/운영 배포 및 피드 main 통합 결과는 완료 후 이 절에 추가한다.
+검증한0.3 metadata를 [피드/문서 PR20](https://github.com/wjdals988/runmoni/pull/20)으로 반영한다. stable은 null이며 공개 프리뷰만 갱신한다. main 통합 뒤 공개 raw 피드의 실제 응답 확인은 PR20의 최종 게시 댓글에 남긴다. 피드/문서 커밋을 APK 출처로 사용하지 않는다.
+
+[대시보드 PR13](https://github.com/wjdals988/mydashboard/pull/13)은 main `d65028627f01cad235ca0c553201631fe7f3e8f2`에 병합됐고 PR CI41512884899·main CI41513392797의 test/audit/lint/build와 Vercel Production7501775796 success를 확인했다. 로컬 Node23개/실패0, coverage lines92.69%/branches86.14%/functions100%다.
+
+[운영 페이지](https://coldbrewventi.vercel.app/projects/runmoni)의 실제 HTTP200 응답에서0.3.0-dev/code12·APK 링크·218496781bytes·SHA256·미검증 안내·갤러리5개 경로를 확인했다. 운영 PNG5장도 원본과 바이트 SHA256이 일치한다. [운영 검증 근거](app-review/2026-11-02-crew-ux/dashboard-production-verification.json). 사진은 debug MainActivity/로컬HTTP이며 공개 서명 APK/실기기/운영 Firebase 실행으로 표시하지 않는다. 공개 APK 바이너리는 GitHub Release에만 두고 다른 프로젝트/기존 이력을 보존한다.
