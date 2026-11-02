@@ -1,19 +1,19 @@
 {
   "preview": {
     "package": "com.runmoni.app",
-    "version": "0.2.1-dev",
-    "versionCode": 11,
-    "fileName": "runmoni-0.2.1-dev.apk",
-    "sizeBytes": 218431245,
-    "sha256": "2b74ee38f56be2fcfbe88a5b74b2a11c84c8817c961da467a5f7151f12833218",
+    "version": "0.3.0-dev",
+    "versionCode": 12,
+    "fileName": "runmoni-0.3.0-dev.apk",
+    "sizeBytes": 218496781,
+    "sha256": "a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "c6bc5739746fe176269fed3bf64360417b50875e",
+    "sourceRevision": "01e37ab3f7ac13cc3b69d37576a6d623274de101",
     "buildType": "release",
     "signed": true,
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.2.1-dev/runmoni-0.2.1-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.2.1-dev",
-    "notes": "실기기 검증 전 테스트용 개발 프리뷰입니다. Firebase 설정을 포함해 닉네임·공개 크루/파티·실시간 채팅과 연결·휴대폰 점검을 추가했습니다. 현재 서명/Android 설정/운영 공개 목록 조회가 통과했습니다. 실제 익명 방 생성·두 휴대폰 채팅·Google 로그인·야외 GPS는 미검증입니다. 0.1.6/0.2.0과 같은 배포 키이며 개인 기록과 보유 내역을 유지합니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.0-dev/runmoni-0.3.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.0-dev",
+    "notes": "실기기 검증 전 개발 프리뷰입니다. 크루 아래 파티 생성·참가·삭제, 가로 카테고리 옷장과 남녀 기본형·전 아이템0P 선택 저장을 추가했습니다. 미준비 의상은 선택만 보관하고 승인 기본형을 표시합니다. 파티 삭제에는 새 Firebase 규칙 게시가 필요하며 실제 휴대폰·Google 로그인·운영 두 기기 동작은 미검증입니다. 기존0.1.6/0.2.0/0.2.1과 같은 보관 키를 사용합니다."
   },
   "schemaVersion": 1,
   "stable": null
