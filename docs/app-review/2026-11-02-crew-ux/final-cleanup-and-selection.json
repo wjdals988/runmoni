@@ -1,0 +1,27 @@
+{
+  "mainActivityPassed": 1,
+  "failed": 0,
+  "seconds": 110.626,
+  "ownedApiPidStopped": 535457,
+  "adbReverse8789Removed": true,
+  "ownedLocalDatabaseCounts": {
+    "users": 2,
+    "crews": 1,
+    "parties": 2,
+    "runs": 0,
+    "activeParties": 1,
+    "softDeletedParties": 1
+  },
+  "checkedMintItem": [
+    {
+      "class": "android.view.View",
+      "checked": "true",
+      "clickable": "false",
+      "bounds": "[246,416][460,640]"
+    }
+  ],
+  "finalProfileTitleCopyCompiledButNotInReviewedApk": "나의 미니미",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false
+}

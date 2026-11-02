@@ -1,0 +1,52 @@
+{
+  "reviewerAgent": "ux_critical_review",
+  "actualImageInspection": true,
+  "scope": "six actual MainActivity/debug/localhost HTTP test screenshots",
+  "majorScreensDistinct": true,
+  "criticalClippingObserved": false,
+  "systemPopupOverlayObserved": false,
+  "femaleAndMintSelectionWithPendingArtworkNoticeObserved": true,
+  "partyImageIsHttpPathWithAudioPanel": true,
+  "userVisualApproval": false,
+  "signedReleaseApkExecution": false,
+  "physicalDevice": false,
+  "productionFirebase": false,
+  "images": [
+    {
+      "file": "mainactivity-closet-female-free-selection.png",
+      "sha256": "28bc945871b114697bbc4225cf39ba4f899598a8e52ac0870d2f154325be0317",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-crew-detail.png",
+      "sha256": "fa250ad17a32f55885143dfc4d7de5a678ada7fa8dc8d5003f68b3b50e956fff",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-crew-list.png",
+      "sha256": "dd49edaea76cdb5a8916b166f448da3a1821cc5eee507e412d3587b299978131",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-home.png",
+      "sha256": "f6d662f37f0dbd06e63a0834f4dec0ce7ea0d30a326a25fd37bec6dc6503672b",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-party-chat.png",
+      "sha256": "afa6edde58a1d9b3d93178ccaca3df492e95cc218f4c9cac13a7fd6ca207378a",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-party-detail.png",
+      "sha256": "7c74fd6f3bcc52fc590fa5585bfdc289656b232cfc253c12294f1886559a0662",
+      "width": 480,
+      "height": 854
+    }
+  ]
+}

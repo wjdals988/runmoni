@@ -1,0 +1,38 @@
+{
+  "project": "ui-fixtures",
+  "realAndroidSdk": true,
+  "firebaseSdkExecutedThisRun": false,
+  "mainActivityLoopbackRequested": true,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "screenshotsRequireVisualInspection": true,
+  "phases": {
+    "native-ui": {
+      "failed": true,
+      "errorType": "RuntimeError"
+    },
+    "native-320dp-font2": {
+      "tests": 1,
+      "failures": 0,
+      "seconds": 83.866
+    }
+  },
+  "nativeCaptures": [],
+  "mainActivityLoopbackCaptures": [
+    "mainactivity-loopback-native-crew-detail.png",
+    "mainactivity-loopback-native-crew-list.png",
+    "mainactivity-loopback-native-home.png",
+    "mainactivity-loopback-native-party-chat.png",
+    "mainactivity-loopback-native-party-detail.png"
+  ],
+  "largeTextCaptures": [
+    "320dp-font2-closet-closed-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-fixture.png"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

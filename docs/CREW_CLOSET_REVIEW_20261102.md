@@ -34,7 +34,9 @@ UI/UX 검토(`ux_critical_review`), Firebase 권한/수명주기(`community_life
 
 추가 반박: 기존 noTextOverflow 검사 통과만으로 단어 분리/라벨 baseline 차이를 잡지 못했다. 실제 전체 창 관찰을 근거로 구조를 수정하고 새 native 검사에 워드마크/5탭1행·잘림 없음·baseline span 측정을 추가했다. [최종 컴파일/다른 debug APK 해시](app-review/2026-11-02-crew-ux/final-debug-build-verification.json).
 
-실제 MainActivity/HTTP·LocalWallet과 계층4개(213.39초), native320/font2 정렬1개(94.935초)도 통과했다. 라벨 baseline은 실제801px로 같고 차이0px였다. 다만 수치 통과와 별도로 사진을 검토해 파티/크루 PNG 동일 SHA 및 저장 직후 재표시 전 옷장 캡처를 발견했다. 고유 화면/선택 안내까지 기다리는 조건을 추가했다. 큰 글씨 프로필 설명의 좁은2열도 세로로 바꾸고 다시 오프라인 컴파일/JVM45·lint0오류/35경고 통과. 마지막 실행/사진을 확인 중이며 stale PNG를 대시보드에 쓰지 않는다.
+실제 MainActivity/HTTP·LocalWallet과 계층4개(213.39초), native320/font2 정렬1개(94.935초)도 통과했다. 라벨 baseline은 실제801px로 같고 차이0px였다. 다만 수치 통과와 별도로 사진을 검토해 파티/크루 PNG 동일 SHA 및 저장 직후 재표시 전 옷장 캡처를 발견했다. 고유 화면/선택 안내까지 기다리는 조건을 추가했다. 큰 글씨 프로필 설명의 좁은2열도 세로로 바꾸고 다시 오프라인 컴파일/JVM45·lint0오류/35경고 통과. 프로필 세로 배치 native1개83.866초, 최종 MainActivity1개110.626초로 통과했다. 실제 체크된 민트 카드와 이름/선택 보관 안내를 XML·사진으로 함께 확인했다. stale PNG는 대시보드에 쓰지 않는다. 마지막 프로필 제목 축약은 컴파일로 확인한 작은 문구 변경이며 캡처 앱은 이전 제목이다. [최종 근거/사진](app-review/2026-11-02-crew-ux/README.md).
+
+최종 캡처 검사에서 선택된 Compose 항목을 clickable=true/특정 RadioButton 클래스로 찾은2회 실패를 기록했다. 실제 트리는 checked=true/clickable=false인 일반 View이며 같은 아이템 이름/선택 안내를 가진다. 이 관찰에 맞춰 클래스 가정을 제거하고 체크/이름/안내 검사를 유지해 통과했다. Searchable 패키지 전용 API의 컴파일 실패도 공개 조건 반복으로 교정했다. UI의 정상 선택을 검사 오류로 숨기거나 실패를 성공으로 덮어쓰지 않는다. 최종 로컬 API/AVD 종료와 기기 설정 복원도 확인했다.
 
 ## 원화·저장·배포 경계
 

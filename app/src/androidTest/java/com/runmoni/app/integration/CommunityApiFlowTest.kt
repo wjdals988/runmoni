@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
@@ -154,9 +155,29 @@ class CommunityApiFlowTest {
             // Capture only after the same item visibly reports its selected state.
             assertTrue("Closet renders the saved-selection preview notice", device.wait(Until.hasObject(
                 By.text("선택은 저장됐어요 · 미리보기는 기본형을 표시해요")), 30000))
-            assertTrue("Mint top card visibly reports the saved selection", device.wait(Until.hasObject(
-                By.clickable(true).hasDescendant(By.text("민트 러닝 반팔"))
-                    .hasDescendant(By.text("선택 보관 · 미리보기 준비 중"))), 30000))
+            val diagnosticDir = File(app.cacheDir, "room-review").apply { mkdirs() }
+            device.dumpWindowHierarchy(File(diagnosticDir, "native-closet-selected-window.xml"))
+            capture("native-closet-selected-before-check")
+            // Compose maps non-tab Selected semantics to checked. A selected
+            // RadioButton is intentionally not accessibility-clickable, and its
+            // name/status may be merged into the node rather than descendants.
+            fun UiObject2.exposes(value: String): Boolean = text.orEmpty().contains(value) ||
+                contentDescription.orEmpty().contains(value) || hasObject(By.textContains(value)) ||
+                hasObject(By.descContains(value))
+            var selectedMint: UiObject2? = null
+            try {
+                until(timeoutMillis = 30000) {
+                    // The actual Compose accessibility tree exposes this
+                    // selectable card as android.view.View, with checked=true.
+                    selectedMint = device.findObjects(By.checked(true))
+                        .firstOrNull { it.exposes("민트 러닝 반팔") && it.exposes("선택 보관 · 미리보기 준비 중") }
+                    selectedMint != null
+                }
+            } finally {
+                device.dumpWindowHierarchy(File(diagnosticDir, "native-closet-selected-after-check-window.xml"))
+                capture("native-closet-selected-after-check")
+            }
+            assertNotNull("Mint RadioButton is checked and exposes its name and saved-selection status", selectedMint)
             capture("native-closet-female-free-selection")
             tap("닫기")
             // Finishing a run opens its summary; keep this fixture after UI navigation.
@@ -220,8 +241,8 @@ class CommunityApiFlowTest {
         try { action(); fail("Expected HTTP$status from the local policy boundary") }
         catch (failure: PilotException) { assertEquals(status, failure.status) }
     }
-    private fun until(condition: () -> Boolean) {
-        val end = SystemClock.elapsedRealtime()+60000
+    private fun until(timeoutMillis: Long = 60000, condition: () -> Boolean) {
+        val end = SystemClock.elapsedRealtime()+timeoutMillis
         while (!condition() && SystemClock.elapsedRealtime()<end) Thread.sleep(100)
         assertTrue("State arrived before deadline", condition())
     }

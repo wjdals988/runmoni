@@ -133,7 +133,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                 BoxWithConstraints(Modifier.fillMaxWidth()) {
                     val details: @Composable (Modifier) -> Unit = { modifier ->
                         Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text("나와 함께 뛰는 미니미", style = MaterialTheme.typography.titleMedium)
+                            Text("나의 미니미", style = MaterialTheme.typography.titleMedium)
                             Text("테스트 기간 · 아이템 모두 무료", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                             TextButton(onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
                         }
