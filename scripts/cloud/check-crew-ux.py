@@ -48,7 +48,10 @@ def main():
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--focused', action='store_true', help='Rerun changed hierarchy cases and native large-text cases')
     selection.add_argument('--real-app', action='store_true', help='Requires owned localhost:8789 API and adb reverse; run MainActivity, hierarchy and native large text')
+    parser.add_argument('--main-only', action='store_true', help='With --real-app, rerun MainActivity captures and native profile; hierarchy was checked separately')
     args = parser.parse_args()
+    if args.main_only and not args.real_app:
+        parser.error('--main-only requires --real-app')
     for key, expected in [('GCLOUD_PROJECT', 'demo-runmoni'), ('FIRESTORE_EMULATOR_HOST', '127.0.0.1:8080'),
                           ('FIREBASE_AUTH_EMULATOR_HOST', '127.0.0.1:9099')]:
         if not args.ui_only and os.environ.get(key) != expected:
@@ -98,7 +101,7 @@ def main():
             'com.runmoni.app.ui.RunmoniDesignTest']
         if args.real_app:
             clear_captures('room-review')
-            native = ['com.runmoni.app.integration.CommunityApiFlowTest', native[0]]
+            native = ['com.runmoni.app.integration.CommunityApiFlowTest'] + ([] if args.main_only else [native[0]])
         phase('native-ui', ','.join(native[:2] if args.focused else native))
         proof['nativeCaptures'] = captures(args.out, 'native')
         if args.real_app:

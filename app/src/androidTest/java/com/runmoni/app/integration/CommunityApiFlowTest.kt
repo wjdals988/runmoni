@@ -118,13 +118,20 @@ class CommunityApiFlowTest {
                 val dir = File(app.cacheDir, "room-review").apply { mkdirs() }
                 assertTrue(device.takeScreenshot(File(dir, "$name.png")))
             }
+            tap("홈")
+            assertTrue(device.wait(Until.hasObject(By.text("오늘도, 나답게.")), 30000))
+            capture("native-home")
             tap("크루")
             assertTrue(device.wait(Until.hasObject(By.text(crew.name)), 30000))
+            until { !model.state.value.busy }
+            assertTrue("Crew creation is enabled after refresh", device.wait(Until.hasObject(
+                By.text("크루 만들기").enabled(true)), 30000))
             capture("native-crew-list")
             tap(crew.name)
             assertTrue(device.wait(Until.hasObject(By.text(party.title)), 30000))
             capture("native-crew-detail")
             tap(party.title)
+            assertTrue(device.wait(Until.hasObject(By.text("파티 공지 · 채팅")), 30000))
             capture("native-party-detail")
             tap("파티 공지 · 채팅")
             assertTrue(device.wait(Until.hasObject(By.text("파티 참가 검증 메시지")), 30000))
@@ -143,6 +150,13 @@ class CommunityApiFlowTest {
             assertEquals(selected.avatar, model.state.value.profile.avatar)
             assertEquals(before.mileage, selected.mileage)
             assertEquals(before.ownedItems + "top:1", selected.ownedItems)
+            // Wallet/StateFlow updates can precede Compose's accessibility tree.
+            // Capture only after the same item visibly reports its selected state.
+            assertTrue("Closet renders the saved-selection preview notice", device.wait(Until.hasObject(
+                By.text("선택은 저장됐어요 · 미리보기는 기본형을 표시해요")), 30000))
+            assertTrue("Mint top card visibly reports the saved selection", device.wait(Until.hasObject(
+                By.clickable(true).hasDescendant(By.text("민트 러닝 반팔"))
+                    .hasDescendant(By.text("선택 보관 · 미리보기 준비 중"))), 30000))
             capture("native-closet-female-free-selection")
             tap("닫기")
             // Finishing a run opens its summary; keep this fixture after UI navigation.

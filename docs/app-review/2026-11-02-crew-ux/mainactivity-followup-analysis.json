@@ -1,0 +1,43 @@
+{
+  "nativeUi": {
+    "passed": 4,
+    "failed": 0,
+    "seconds": 213.39
+  },
+  "native320Font2": {
+    "passed": 1,
+    "failed": 0,
+    "seconds": 94.935
+  },
+  "baselinePixels": [
+    801.0,
+    801.0,
+    801.0,
+    801.0,
+    801.0
+  ],
+  "baselineSpanPixels": 0.0,
+  "scope": "actual MainActivity/HTTP+LocalWallet; hierarchy and native large UI fixtures",
+  "ownedApiPidStopped": 530647,
+  "adbReverse8789Removed": true,
+  "ownedLocalDatabaseCounts": {
+    "users": 2,
+    "crews": 1,
+    "parties": 2,
+    "runs": 0,
+    "activeParties": 1,
+    "softDeletedParties": 1
+  },
+  "manualHomeCapture": {
+    "verified": false,
+    "failure": "XML parsing failed; not an app execution success"
+  },
+  "captureLimitations": [
+    "Closet first capture predates selected top:1 UI render; not selected-top evidence.",
+    "Party-detail first capture duplicates crew-detail SHA; not party screen evidence."
+  ],
+  "followup": "Explicit render waits and responsive profile card; final app/native rerun required",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false
+}

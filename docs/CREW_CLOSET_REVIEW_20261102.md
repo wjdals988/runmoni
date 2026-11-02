@@ -34,6 +34,8 @@ UI/UX 검토(`ux_critical_review`), Firebase 권한/수명주기(`community_life
 
 추가 반박: 기존 noTextOverflow 검사 통과만으로 단어 분리/라벨 baseline 차이를 잡지 못했다. 실제 전체 창 관찰을 근거로 구조를 수정하고 새 native 검사에 워드마크/5탭1행·잘림 없음·baseline span 측정을 추가했다. [최종 컴파일/다른 debug APK 해시](app-review/2026-11-02-crew-ux/final-debug-build-verification.json).
 
+실제 MainActivity/HTTP·LocalWallet과 계층4개(213.39초), native320/font2 정렬1개(94.935초)도 통과했다. 라벨 baseline은 실제801px로 같고 차이0px였다. 다만 수치 통과와 별도로 사진을 검토해 파티/크루 PNG 동일 SHA 및 저장 직후 재표시 전 옷장 캡처를 발견했다. 고유 화면/선택 안내까지 기다리는 조건을 추가했다. 큰 글씨 프로필 설명의 좁은2열도 세로로 바꾸고 다시 오프라인 컴파일/JVM45·lint0오류/35경고 통과. 마지막 실행/사진을 확인 중이며 stale PNG를 대시보드에 쓰지 않는다.
+
 ## 원화·저장·배포 경계
 
 승인 원본 SHA256 `f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65`를 유지하고 남녀16셀을 직접 crop한다.0.4 조립 렌더를 활성화하거나 미승인 수영복을 실제 옷장 원화로 게시하지 않는다. 아이템 ID/보유권/포인트/동시 점유 규칙은 유지한다. 새 앱 의존성·원화 생성·Aseprite 실행은 없다.

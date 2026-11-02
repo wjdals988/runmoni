@@ -17,6 +17,12 @@
 
 첫 Android 실행은 UI19개 중2개 실패, native320/font2의2개 중1개 실패였다. Back helper의1초 접근성 이벤트 판정과 부분 문구의 전체 일치 검사를 고쳤으며 첫 실패를 성공으로 덮어쓰지 않는다. [첫 실행 분석](first-run-analysis.json). [실행/설정 복원](focused-android-verification.json)을 기록하고 전용AVD PID528139를 종료했다. 실제 MainActivity/loopback과 최종 문구/상단 정렬 빌드는 후속 기록한다.
 
+## 실제 MainActivity와 정렬 후속 실행
+
+최종 계층/실제 MainActivity·HTTP/LocalWallet4개는213.39초, native320dp/font2의1개는94.935초로 통과했다. [MainActivity 원시 보고서](mainactivity-and-hierarchy-native.txt) · [큰 글씨 원시 보고서](final-navigation-native-320dp-font2.txt). 실제 하단 라벨 baseline은 모두801px, 차이0px였다. [측정값](navigation-label-baselines-native-320-font2.txt). 원래 URL/backend/지갑·임시 지급 원장 복원, 원격 러닝0건·부모 크루/다른 파티 보존도 검사했다.
+
+다만 사진은 별도로 검토해 파티 상세 PNG가 크루 상세와 동일 SHA이고 옷장 PNG는 top:1 UI 갱신 전임을 발견했다. 두 사진을 해당 상태의 증거로 쓰지 않는다. 고유 UI 상태까지 기다리도록 캡처를 수정했다. 큰 글씨 프로필 설명도 좁은2열 대신 세로 배치로 바꾸고 새 컴파일(JVM45/lint0오류·35경고)을 통과했다. 이 마지막 변경의 MainActivity·native 검사/사진은 현재 후속 확인 중이다. [앞 실행의 경계/정리](mainactivity-followup-analysis.json) · [새 캡처 빌드](capture-profile-build-verification.json).
+
 ## 실제 Android 출력
 
 ![공개 파티 상세를 Android Dialog에서 출력한 검토 fixture](party-public-android-fixture.png)

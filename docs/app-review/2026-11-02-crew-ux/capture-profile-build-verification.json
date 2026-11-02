@@ -1,0 +1,20 @@
+{
+  "checkoutHeadAtDebugBuild": "d20ed5430c19154403cbeedef8ff3594c1af2b54",
+  "sourceDirty": true,
+  "variant": "debug",
+  "changes": "responsive profile card and UI capture synchronization",
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 35
+  },
+  "notPublicReleaseApk": true,
+  "reviewDebugApkSha256": "28a87e3aba9e2c179b2a82bfe65f33251ebd0cb67b79b31bf375c5441b4bf360",
+  "reviewAndroidTestApkSha256": "07b40be1a00e42278bf7f217d2b46c30683c36c3ee966363f7162fc4a962f64c"
+}

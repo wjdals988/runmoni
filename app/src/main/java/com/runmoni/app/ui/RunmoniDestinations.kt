@@ -130,12 +130,22 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
         EditorialHeading("MY RUNMONI", "나의 러닝")
         Surface(color = RunmoniColors.Paper, shape = RoundedCornerShape(28.dp)) {
             Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("나와 함께 뛰는 미니미", style = MaterialTheme.typography.titleMedium)
-                        Text("테스트 기간 · 아이템 모두 무료", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                        TextButton(onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val details: @Composable (Modifier) -> Unit = { modifier ->
+                        Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("나와 함께 뛰는 미니미", style = MaterialTheme.typography.titleMedium)
+                            Text("테스트 기간 · 아이템 모두 무료", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                            TextButton(onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+                        }
+                    }
+                    if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            AvatarMini(state.profile.avatar, Modifier.align(Alignment.CenterHorizontally).width(72.dp).height(104.dp), running = true, decorative = true)
+                            details(Modifier.fillMaxWidth())
+                        }
+                    } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
+                        details(Modifier.weight(1f))
                     }
                 }
                 FilledTonalButton(onClick = { closet = true }, shape = RoundedCornerShape(50), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
