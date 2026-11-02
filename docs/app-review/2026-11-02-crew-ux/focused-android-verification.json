@@ -1,0 +1,51 @@
+{
+  "project": "ui-fixtures",
+  "realAndroidSdk": true,
+  "firebaseSdkExecutedThisRun": false,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "screenshotsRequireVisualInspection": true,
+  "phases": {
+    "native-ui": {
+      "tests": 7,
+      "failures": 0,
+      "seconds": 215.622
+    },
+    "native-320dp-font2": {
+      "tests": 2,
+      "failures": 0,
+      "seconds": 166.121
+    }
+  },
+  "nativeCaptures": [
+    "native-hierarchy-back-after-removal-device.png",
+    "native-hierarchy-back-to-crew-device.png",
+    "native-hierarchy-back-to-list-device.png",
+    "native-hierarchy-crew-public-device.png",
+    "native-hierarchy-crew-public-fixture.png",
+    "native-hierarchy-party-public-device.png",
+    "native-hierarchy-party-public-fixture.png",
+    "native-hierarchy-party-removed-device.png",
+    "native-hierarchy-party-removed-fixture.png",
+    "native-rooms-create-crew-320-200.png",
+    "native-rooms-crew-detail-320-200.png",
+    "native-rooms-list-320-200.png",
+    "native-rooms-list-360-100.png",
+    "native-rooms-party-dialog-360-100.png"
+  ],
+  "largeTextCaptures": [
+    "320dp-font2-closet-closed-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-fixture.png",
+    "320dp-font2-consumer-closet-native-items.png",
+    "320dp-font2-consumer-closet-native.png",
+    "320dp-font2-consumer-settings-native.png"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "terminatedAvdPid": 528139,
+  "followupRequired": "Observed header/label wrapping; subsequent layout change requires separate native verification."
+}

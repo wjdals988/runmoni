@@ -28,9 +28,11 @@ UI/UX 검토(`ux_critical_review`), Firebase 권한/수명주기(`community_life
 - demo Firestore 규칙119개 통과/실패·skip0. 기존 본인 요약 규칙을 포함한다. 선택 크루 조회는 동등 필터/기존 인덱스를 사용하며 실제 운영 조회는 CI에서 별도 검사한다.
 - Python 연결·서명·게시 모의55개 통과. 공개 전 점검에 무해한 고정 부모 ID의 크루별 목록 쿼리도 추가했다. 계정 생성/비공개 읽기/운영 쓰기는 하지 않는다.
 - 첫 앱 컴파일은 부모 통합의 import/명명 인자 누락으로 실패 후 수정했다. 구 서버 정책 기대5개 실패를 최신 계약으로 갱신했고 새 보존 삭제 회귀도 추가했다. 실행별 검사를 중복 합산하지 않는다.
-- 실제 API29/TCG에서 demo Firebase SDK1개(31.619초)는 통과했다. 첫 UI는19개 중2개 실패(414.374초), native320dp/font2는2개 중1개 실패(138.293초)였다. Back 검사에서 키 주입 대신1초 내 접근성 이벤트를 요구한 문제와 부분 문구의 전체 일치 검사를 교정했다. 목적 화면 검사는 유지한다. 수정 후 해당 UI 재실행은 현재 진행 중이다.
+- 실제 API29/TCG에서 demo Firebase SDK1개(31.619초)는 통과했다. 첫 UI는19개 중2개 실패(414.374초), native320dp/font2는2개 중1개 실패(138.293초)였다. Back 검사에서 키 주입 대신1초 내 접근성 이벤트를 요구한 문제와 부분 문구의 전체 일치 검사를 교정했다. 목적 화면 검사는 유지한다. 수정 후 계층/뒤로7개(215.622초), 실제320dp/font2 옷장2개(166.121초)가 통과했다. [원시 보고서/한계](app-review/2026-11-02-crew-ux/README.md).
 - 첫 파티 캡처는 Dialog 대신 배경 크루 Activity를 잡았고 첫 큰 글씨 수집에는 이전 PNG가 섞였다. 파티 root 선택/단계별 캐시 정리를 고쳤으며 잘못된 PNG는 파티·큰 글씨의 근거로 쓰지 않는다. 앱 실행 전 런처 위 System UI ANR를 관찰했고 원인 해결로 기록하지 않는다. [첫 실행 분석](app-review/2026-11-02-crew-ux/first-run-analysis.json).
-- 캡처용 debug APK 이후에는 크루·파티 용어 정리만 추가했다. 계약/로직/레이아웃은 바꾸지 않았으며 최종 컴파일 및 실제 MainActivity 통합 검사는 후속 기록한다. 캡처 APK의 해시/dirty 출처는 [빌드 근거](app-review/2026-11-02-crew-ux/build-verification.json)에 구분했다.
+- 첫 캡처 APK 이후 크루·파티 문구를 정리했고 실제 관찰한 워드마크/하단 라벨 분리를 수정했다. 상단 버전 행을 분리하고 하단 아이콘 영역/라벨 baseline을 통일했다. 새 빌드도 JVM45개·lint오류0/경고35로 통과했다. 이 레이아웃의 native 재검증과 실제 MainActivity 통합 검사는 후속 기록한다. 캡처 APK의 해시/dirty 출처는 [빌드 근거](app-review/2026-11-02-crew-ux/build-verification.json)에 구분했다.
+
+추가 반박: 기존 noTextOverflow 검사 통과만으로 단어 분리/라벨 baseline 차이를 잡지 못했다. 실제 전체 창 관찰을 근거로 구조를 수정하고 새 native 검사에 워드마크/5탭1행·잘림 없음·baseline span 측정을 추가했다. [최종 컴파일/다른 debug APK 해시](app-review/2026-11-02-crew-ux/final-debug-build-verification.json).
 
 ## 원화·저장·배포 경계
 

@@ -27,13 +27,13 @@ def instrument(classes, path):
     return {'tests': int(count[1]), 'failures': 0, 'seconds': float(elapsed[1]) if elapsed else None}
 
 
-def captures(directory, prefix):
-    names = shell('run-as', 'com.runmoni.app', 'ls', 'cache/design-review').splitlines()
+def captures(directory, prefix, cache='design-review'):
+    names = shell('run-as', 'com.runmoni.app', 'ls', 'cache/' + cache).splitlines()
     copied = []
     for name in names:
         if not re.fullmatch(r'[A-Za-z0-9_.-]+\.png', name):
             continue
-        raw = subprocess.check_output(ADB + ['exec-out', 'run-as', 'com.runmoni.app', 'cat', 'cache/design-review/' + name], timeout=30)
+        raw = subprocess.check_output(ADB + ['exec-out', 'run-as', 'com.runmoni.app', 'cat', 'cache/' + cache + '/' + name], timeout=30)
         if not raw.startswith(b'\x89PNG') or len(raw) > 4 * 1024 * 1024:
             raise RuntimeError('Invalid Android capture.')
         (directory / (prefix + '-' + name)).write_bytes(raw)
@@ -45,7 +45,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, default=ROOT / 'work/crew-ux/android')
     parser.add_argument('--ui-only', action='store_true', help='Skip the separately verified demo SDK phase')
-    parser.add_argument('--focused', action='store_true', help='Rerun changed hierarchy cases and native large-text cases')
+    selection = parser.add_mutually_exclusive_group()
+    selection.add_argument('--focused', action='store_true', help='Rerun changed hierarchy cases and native large-text cases')
+    selection.add_argument('--real-app', action='store_true', help='Requires owned localhost:8789 API and adb reverse; run MainActivity, hierarchy and native large text')
     args = parser.parse_args()
     for key, expected in [('GCLOUD_PROJECT', 'demo-runmoni'), ('FIRESTORE_EMULATOR_HOST', '127.0.0.1:8080'),
                           ('FIREBASE_AUTH_EMULATOR_HOST', '127.0.0.1:9099')]:
@@ -59,17 +61,18 @@ def main():
     animations = {k: shell('settings', 'get', 'global', k) for k in
                   ['window_animation_scale', 'transition_animation_scale', 'animator_duration_scale']}
     proof = {'project': 'ui-fixtures' if args.ui_only else 'demo-runmoni', 'realAndroidSdk': True,
-             'firebaseSdkExecutedThisRun': not args.ui_only, 'physicalDeviceVerified': False,
+             'firebaseSdkExecutedThisRun': not args.ui_only, 'mainActivityLoopbackRequested': args.real_app,
+             'physicalDeviceVerified': False,
              'realGoogleLoginVerified': False, 'productionFirebaseModified': False,
              'screenshotsRequireVisualInspection': True, 'phases': {}}
     failed = False
 
-    def clear_captures():
-        shell('run-as', 'com.runmoni.app', 'mkdir', '-p', 'cache/design-review')
-        names = [name for name in shell('run-as', 'com.runmoni.app', 'ls', 'cache/design-review').splitlines()
+    def clear_captures(cache='design-review'):
+        shell('run-as', 'com.runmoni.app', 'mkdir', '-p', 'cache/' + cache)
+        names = [name for name in shell('run-as', 'com.runmoni.app', 'ls', 'cache/' + cache).splitlines()
                  if re.fullmatch(r'[A-Za-z0-9_.-]+\.png', name)]
         if names:
-            shell('run-as', 'com.runmoni.app', 'rm', '-f', *['cache/design-review/' + name for name in names])
+            shell('run-as', 'com.runmoni.app', 'rm', '-f', *['cache/' + cache + '/' + name for name in names])
 
     def phase(name, classes):
         nonlocal failed
@@ -93,12 +96,18 @@ def main():
             'com.runmoni.app.ui.ConsumerClosetTest', 'com.runmoni.app.ui.ApprovedAvatarRenderingTest',
             'com.runmoni.app.data.AvatarGenderPersistenceTest', 'com.runmoni.app.ui.MiniMiLoadingTest',
             'com.runmoni.app.ui.RunmoniDesignTest']
+        if args.real_app:
+            clear_captures('room-review')
+            native = ['com.runmoni.app.integration.CommunityApiFlowTest', native[0]]
         phase('native-ui', ','.join(native[:2] if args.focused else native))
         proof['nativeCaptures'] = captures(args.out, 'native')
+        if args.real_app:
+            proof['mainActivityLoopbackCaptures'] = captures(args.out, 'mainactivity-loopback', 'room-review')
         shell('wm', 'density', '240')
         shell('settings', 'put', 'system', 'font_scale', '2.0')
         clear_captures()
-        phase('native-320dp-font2', 'com.runmoni.app.ui.HierarchyClosetLargeTextUxTest,com.runmoni.app.ui.ConsumerClosetTest')
+        phase('native-320dp-font2', 'com.runmoni.app.ui.HierarchyClosetLargeTextUxTest' +
+              ('' if args.real_app else ',com.runmoni.app.ui.ConsumerClosetTest'))
         proof['largeTextCaptures'] = captures(args.out, '320dp-font2')
     finally:
         shell('wm', 'density', override[1] if override else 'reset')

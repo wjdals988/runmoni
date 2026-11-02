@@ -3,12 +3,15 @@ package com.runmoni.app.ui
 import android.view.KeyEvent
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
 import org.junit.Test
+import java.io.File
 
 /** UI callbacks/navigation fixtures, never production Firebase or phone evidence. */
 class HierarchyClosetUxTest : RunmoniDesignTestBase() {
@@ -116,6 +119,17 @@ class HierarchyClosetUxTest : RunmoniDesignTestBase() {
 
 /** Run separately with the actual Android window at 320dp and system fontScale=2. */
 class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
+    private fun singleLineBaseline(node: SemanticsNodeInteraction, name: String): Float {
+        node.assertIsDisplayed()
+        val layouts = mutableListOf<TextLayoutResult>()
+        node.performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
+        assertEquals("Exactly one text layout for $name", 1, layouts.size)
+        val layout = layouts.single()
+        assertEquals("Single line for $name", 1, layout.lineCount)
+        assertFalse("No text clipping for $name", layout.hasVisualOverflow)
+        return node.fetchSemanticsNode().boundsInRoot.top + layout.firstBaseline
+    }
+
     @Test fun genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory() {
         val config = InstrumentationRegistry.getInstrumentation().targetContext.resources.configuration
         assertTrue("Requires actual system fontScale=2", config.fontScale >= 1.9f)
@@ -170,6 +184,18 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK))
         compose.waitForIdle()
         compose.onNodeWithTag("nav_me").assertIsSelected()
+        singleLineBaseline(compose.onNodeWithTag("app_wordmark"), "runmoni wordmark")
+        val baselines = listOf("home" to "홈", "explore" to "탐색", "run" to "러닝", "crew" to "크루", "me" to "나").map { (key, label) ->
+            singleLineBaseline(compose.onNode(hasText(label, substring = false) and hasAnyAncestor(hasTestTag("nav_$key")), useUnmergedTree = true), label)
+        }
+        val span = baselines.max() - baselines.min()
+        File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review").apply { mkdirs() }
+            .resolve("navigation-label-baselines-native-320-font2.txt")
+            .writeText("screenWidthDp=${config.screenWidthDp} fontScale=${config.fontScale}\nbaselinePixels=$baselines\nspanPixels=$span\n")
+        // All five labels share the same font and icon/layout dimensions, so
+        // require identical measured baselines; no arbitrary pixel tolerance.
+        assertEquals("Bottom navigation label baseline span in physical pixels: $baselines", 0f, span, 0f)
+        noTextOverflow("native 320dp / font2 main after closet")
         captureDevice("closet-closed-native-320-font2-device")
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
         compose.onNodeWithTag("closet_gender_male").performScrollTo().assertIsSelected()

@@ -5,6 +5,7 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +33,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
 import java.time.Instant
@@ -72,11 +74,20 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             containerColor = RunmoniColors.Cream,
             topBar = {
                 Column(Modifier.statusBarsPadding()) {
-                    Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp), modifier = Modifier.weight(1f))
-                        AppVersionShortcut(updates) { appInformation = true }
-                        IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
-                            Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                    BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        val separateVersion = LocalDensity.current.fontScale >= 1.3f || maxWidth < 360.dp
+                        Column(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+                            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
+                                    modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
+                                if (!separateVersion) AppVersionShortcut(updates) { appInformation = true }
+                                IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
+                                    Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                                }
+                            }
+                            if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                AppVersionShortcut(updates) { appInformation = true }
+                            }
                         }
                     }
                     if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -86,21 +97,37 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 Surface(color = RunmoniColors.Paper) {
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
-                        NavigationBar(containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
+                        val navDensity = LocalDensity.current
+                        // Keep a full label line below equal 48dp icon areas. The
+                        // text's real scaled line height determines any extra height.
+                        val navContentHeight = maxOf(80.dp, 48.dp + 4.dp + with(navDensity) {
+                            MaterialTheme.typography.labelMedium.lineHeight.toDp()
+                        } + 8.dp)
+                        val navBottomInset = with(navDensity) { NavigationBarDefaults.windowInsets.getBottom(this).toDp() }
+                        NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset),
+                            containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
                             tabs.forEachIndexed { index, label ->
-                                NavigationBarItem(
-                                    selected = tab == index, onClick = { if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }; tab = index },
-                                    icon = {
+                                Column(Modifier.weight(1f).heightIn(min = navContentHeight)
+                                    .selectable(selected = tab == index, role = Role.Tab, onClick = {
+                                        if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
+                                        tab = index
+                                    }).testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index])
+                                    .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center) {
+                                    Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
                                         if (index == 2) Box(Modifier.size(48.dp).clip(CircleShape).background(if (tab == index) RunmoniColors.Primary else RunmoniColors.Navy), contentAlignment = Alignment.Center) {
                                             Icon(painterResource(icons[index]), null, Modifier.size(26.dp), tint = RunmoniColors.Lime)
-                                        } else Icon(painterResource(icons[index]), null, Modifier.size(23.dp))
-                                    },
-                                    label = { Text(label, style = MaterialTheme.typography.labelMedium) },
-                                    colors = NavigationBarItemDefaults.colors(indicatorColor = if (index == 2) Color.Transparent else RunmoniColors.PrimarySoft,
-                                        selectedIconColor = RunmoniColors.Primary, selectedTextColor = RunmoniColors.Primary,
-                                        unselectedIconColor = RunmoniColors.Muted, unselectedTextColor = RunmoniColors.Muted),
-                                    modifier = Modifier.testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index]),
-                                )
+                                        } else {
+                                            if (tab == index) Box(Modifier.width(64.dp).height(32.dp).clip(CircleShape).background(RunmoniColors.PrimarySoft))
+                                            Icon(painterResource(icons[index]), null, Modifier.size(23.dp),
+                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                        }
+                                    }
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false,
+                                        textAlign = TextAlign.Center, color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted,
+                                        modifier = Modifier.fillMaxWidth())
+                                }
                             }
                         }
                     }
