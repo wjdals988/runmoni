@@ -4,6 +4,8 @@ data class AvatarSlot(val key: String, val label: String, val variants: List<Str
 
 /** Stable saved item IDs; all hair/clothes work on the same face/body. */
 object AvatarCatalogue {
+    /** Temporary user-requested test policy. Ownership and existing mileage are never reset. */
+    const val TEST_ITEMS_FREE = true
     val slots = listOf(
         AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발")),
         AvatarSlot("headwear", "모자", listOf("모자 없음", "러닝 캡", "선바이저", "스웨트 헤드밴드")),
@@ -24,7 +26,10 @@ object AvatarCatalogue {
         "costume" to "세트", "socks" to "양말", "shoes" to "신발", "accessories" to "액세서리")
     val defaultOwned: Set<String> = slots.map { "${it.key}:0" }.toSet() + "accessory:0"
     fun valid(slot: String, variant: Int) = if (slot == "accessory") variant in 0..3 else slots.firstOrNull { it.key == slot }?.let { variant in it.variants.indices } == true
-    fun price(variant: Int): Int { require(variant in 0..5); return listOf(0, 500, 1000, 2000, 500, 1000)[variant] }
+    fun price(variant: Int): Int {
+        require(variant in 0..5)
+        return if (TEST_ITEMS_FREE) 0 else listOf(0, 500, 1000, 2000, 500, 1000)[variant]
+    }
     fun migrateOwned(owned: Set<String>): Set<String> = owned + defaultOwned + buildSet {
         if ("accessory:1" in owned) add("headwear:3")
         if ("accessory:2" in owned) add("headwear:1")

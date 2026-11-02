@@ -1,0 +1,13 @@
+{
+  "project": "demo-runmoni",
+  "remoteFirebaseModified": false,
+  "results": {
+    "tests": 119,
+    "pass": 119,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "ciRun": 41497114591,
+  "url": "https://github.com/wjdals988/runmoni/actions/runs/41497114591"
+}

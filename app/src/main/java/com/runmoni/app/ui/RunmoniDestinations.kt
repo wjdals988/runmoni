@@ -23,14 +23,14 @@ import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onExplore: () -> Unit, onRecord: (RunRecord) -> Unit) {
+internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onExplore: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }) {
     val today = LocalDate.now()
     val todaysRuns = state.records.filter { localDate(it.startedAtMillis) == today }
     val largeText = LocalDensity.current.fontScale >= 1.3f
     ScreenContent {
         if (largeText) {
             Text("오늘도, 나답게.", style = MaterialTheme.typography.headlineMedium)
-        } else EditorialHeading(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), "오늘도,\n나답게 달려요.",
+        } else EditorialHeading(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), "오늘도, 나답게.",
             if (todaysRuns.isEmpty()) "빠르지 않아도 괜찮아요. 나만의 페이스로." else "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km를 달렸어요.")
         RunwayArtwork(state.profile.avatar, compact = largeText)
         Button(onClick = onRun, shape = RoundedCornerShape(50), contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
@@ -39,13 +39,13 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
             Text(if (state.activeRun.phase == RunPhase.IDLE) "러닝 시작하기" else "진행 중 러닝 보기", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.weight(1f)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp))
         }
-        if (!AvatarArtwork.styleReady(state.profile.avatar)) SmallNote("기본 러닝복을 표시하고 있어요. 저장된 꾸미기 선택은 보관돼요.")
+
         Column {
             DestinationRow("함께 달리면 더 즐거워요", "크루와 파티에서 러닝 메이트를 찾아요", Icons.Outlined.Groups, onCrew, Modifier.testTag("home_find_rooms"))
             HorizontalDivider(color = RunmoniColors.Line)
         }
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
-        if (next != null) { SectionHeading("다가오는 약속", "모두 보기", onCrew); PartySummary(next, onCrew) }
+        if (next != null) { SectionHeading("다가오는 약속", "모두 보기", onCrew); PartySummary(next) { onParty(next) } }
         if (state.records.isNotEmpty()) {
             SectionHeading("최근의 한 걸음")
             state.records.sortedByDescending { it.startedAtMillis }.take(2).forEach { record -> RecordRow(record) { onRecord(record) } }
@@ -55,7 +55,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 }
 
 @Composable
-internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit, onRooms: () -> Unit) {
+internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit, onRooms: () -> Unit, onCrew: (String) -> Unit = { onRooms() }) {
     LaunchedEffect(Unit) { actions.refreshCommunity() }
     var layer by rememberSaveable { mutableIntStateOf(0) }
     var kindFilter by rememberSaveable { mutableIntStateOf(0) }
@@ -67,27 +67,29 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
     val runners = state.liveRunners.filter { it.hasValidCoordinates() && mapClock - it.updatedAtMillis in 0L until 45_000L }
     val points = state.activeRun.points.ifEmpty { state.records.maxByOrNull { it.startedAtMillis }?.points.orEmpty() }
     ScreenContent {
-        EditorialHeading("DISCOVER", "다음 러닝을\n발견하는 곳.", "함께할 사람과 달리고 싶은 순간을 찾아요.")
+        EditorialHeading("DISCOVER", "탐색", "함께할 사람과 달리고 싶은 순간을 찾아요.")
         RoomSearch(query, { query = it }, "모임 검색", "explore_search")
-        DestinationTabs(listOf("파티", "크루", "러너"), layer, { layer = it }, "explore_layer")
+        DestinationTabs(listOf("크루", "크루의 파티", "러너"), layer, { layer = it }, "explore_layer")
         if (!state.serverConnected) CommunityUnavailable(actions)
         when (layer) {
             0 -> {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) { listOf("전체", "현장", "원격").forEachIndexed { i, label -> FilterChip(selected = kindFilter == i, onClick = { kindFilter = i }, label = { Text(label) }, modifier = Modifier.heightIn(min = 48.dp)) } }
-                val parties = state.parties.filter { !it.cancelled && it.startsAtMillis >= mapClock && (kindFilter == 0 || if (kindFilter == 1) it.kind == PartyKind.LOCAL else it.kind == PartyKind.REMOTE) && "${it.title} ${it.meetingLabel} ${it.paceLabel}".contains(query.trim(), true) }.sortedBy { it.startsAtMillis }
-                if (parties.isEmpty() && state.serverConnected && !state.busy) EmptyCard("표시할 러닝 파티가 없어요", "다른 조건으로 찾아보거나 새로운 러닝 약속을 만들어보세요.", "파티 만들러 가기", onRooms)
-                parties.forEach { party -> PartySummary(party) { selectedParty = party } }
+                val crews = state.crews.filter { "${it.name} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
+                if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard("아직 만날 크루가 없어요", "함께 달릴 크루를 찾아보세요.", "크루 둘러보기", onRooms)
+                crews.forEach { crew -> CrewRoomCard(crew) { onCrew(crew.id) } }
             }
             1 -> {
-                val crews = state.crews.filter { "${it.name} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
-                if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard("아직 만날 크루가 없어요", "꾸준히 함께 달릴 사람들을 모아보세요.", "크루 만들러 가기", onRooms)
-                crews.forEach { crew -> CrewRoomCard(crew, onRooms) }
+                val parties = state.parties.filter { p -> !p.cancelled && p.startsAtMillis >= mapClock && state.crews.any { it.id == p.crewId } && "${p.title} ${p.meetingLabel} ${p.paceLabel}".contains(query.trim(), true) }.sortedBy { it.startsAtMillis }
+                if (parties.isEmpty() && state.serverConnected && !state.busy) EmptyCard("예정된 파티가 없어요", "크루에 가입해 함께 달릴 일정을 만들어보세요.", "크루 둘러보기", onRooms)
+                parties.forEach { party ->
+                    Text(state.crews.first { it.id == party.crewId }.name, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Primary)
+                    PartySummary(party) { selectedParty = party }
+                }
             }
             2 -> {
                 SectionHeading("위치를 공유한 러너 ${runners.size}명")
                 SmallNote("위치 공유에 동의한 성인 파일럿 러너만 보여요. 45초가 지난 위치는 사라져요.")
                 LocationSharingToggle(state, actions)
-                if (runners.isEmpty()) EmptyCard("지금 표시할 러너가 없어요", "일반 방에 입장해도 실시간 위치는 공유되지 않아요.")
+                if (runners.isEmpty()) EmptyCard("지금 표시할 러너가 없어요", "크루에 가입해도 실시간 위치는 공유되지 않아요.")
                 runners.forEach { runner ->
                     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         AvatarMini(runner.avatar, Modifier.size(64.dp), decorative = true)
@@ -110,7 +112,7 @@ internal fun CommunityUnavailable(actions: AppActions) {
     Surface(color = RunmoniColors.Mint, shape = RoundedCornerShape(24.dp)) {
         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("함께 달리기는 연결을 준비 중이에요", style = MaterialTheme.typography.titleMedium)
-            Text("방 목록을 불러오지 못했어요. 혼자 달리기와 내 기록은 계속 이용할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            Text("크루와 파티를 불러오지 못했어요. 혼자 달리기와 내 기록은 계속 이용할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             TextButton(onClick = actions::refreshCommunity, enabled = true, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text("다시 불러오기"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp)) }
         }
     }
@@ -125,19 +127,29 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
     val reference = LocalDate.ofEpochDay(referenceEpoch)
     val records = state.records.filter { val date = localDate(it.startedAtMillis); when (period) { 0 -> date == reference; 1 -> date.year == reference.year && date.month == reference.month; else -> date.year == reference.year } }
     ScreenContent {
-        EditorialHeading("MY RUNMONI", "${state.profile.name}님의\n러닝 이야기")
+        EditorialHeading("MY RUNMONI", "나의 러닝")
         Surface(color = RunmoniColors.Paper, shape = RoundedCornerShape(28.dp)) {
             Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("나와 함께 뛰는 미니미", style = MaterialTheme.typography.titleMedium)
-                        Text("달린 만큼, 나답게 꾸며요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                        TextButton(onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val details: @Composable (Modifier) -> Unit = { modifier ->
+                        Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("나의 미니미", style = MaterialTheme.typography.titleMedium)
+                            Text("테스트 기간 · 아이템 모두 무료", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                            TextButton(onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+                        }
+                    }
+                    if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            AvatarMini(state.profile.avatar, Modifier.align(Alignment.CenterHorizontally).width(72.dp).height(104.dp), running = true, decorative = true)
+                            details(Modifier.fillMaxWidth())
+                        }
+                    } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
+                        details(Modifier.weight(1f))
                     }
                 }
                 FilledTonalButton(onClick = { closet = true }, shape = RoundedCornerShape(50), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
-                if (!AvatarArtwork.styleReady(state.profile.avatar)) SmallNote("기존 선택은 보관 중이에요. 현재는 기본 러닝복을 표시해요.")
+
             }
         }
         SectionHeading("차곡차곡, 나의 기록")

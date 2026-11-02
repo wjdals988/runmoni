@@ -70,11 +70,13 @@ class PilotClient(var baseUrl: String, var token: String = "") {
             this?.optInt("eyewear") ?: 0, this?.optInt("wrist") ?: 0, this?.optInt("waist") ?: 0, this?.optInt("hydration") ?: 0,
             this?.optInt("face") ?: 0, this?.optInt("socks") ?: 0,
             this?.takeIf { it.has("headwear") && !it.isNull("headwear") }?.optInt("headwear"),
-            this?.takeIf { it.has("ear") && !it.isNull("ear") }?.optInt("ear"), this?.optInt("costume") ?: 0)
+            this?.takeIf { it.has("ear") && !it.isNull("ear") }?.optInt("ear"), this?.optInt("costume") ?: 0,
+            AvatarGender.fromWire(this?.optString("gender")))
         fun encodeAvatar(avatar: AvatarStyle) = with(avatar) {
             JSONObject().put("hair", hair).put("top", top).put("bottom", bottom).put("shoes", shoes).put("accessory", accessory)
                 .put("eyewear", eyewear).put("wrist", wrist).put("waist", waist).put("hydration", hydration)
                 .put("face", face).put("socks", socks).put("headwear", variantFor("headwear")).put("ear", variantFor("ear")).put("costume", costume)
+                .put("gender", gender.wireValue)
         }
         fun JSONObject.toProfile(): Profile {
             val owned = optJSONArray("owned_items")?.let { array -> (0 until array.length()).map { array.optString(it) }.toSet() } ?: Profile().ownedItems

@@ -91,7 +91,11 @@ class ConnectedBuildTest(unittest.TestCase):
         with mock.patch.object(connected.urllib.request, 'build_opener', return_value=opener):
             response.read.return_value = b'[{"readTime":"2026-10-30T00:00:00Z"}]'
             self.assertEqual('ready', connected.firebase_health(json.dumps(config()).encode(), SHA1))
+            self.assertEqual(2, opener.open.call_count)
             request = opener.open.call_args.args[0]
+            filters = json.loads(request.data)['structuredQuery']['where']['compositeFilter']['filters']
+            self.assertEqual({'visibility','kind','crewId','status'}, {x['fieldFilter']['field']['fieldPath'] for x in filters})
+            self.assertNotIn('orderBy', json.loads(request.data)['structuredQuery'])
             self.assertEqual('POST', request.method)
             self.assertFalse(request.has_header('Authorization'))
             self.assertNotIn('fixture-public', request.full_url)

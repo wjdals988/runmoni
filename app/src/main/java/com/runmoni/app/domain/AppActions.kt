@@ -13,6 +13,7 @@ interface AppActions {
     fun setVoiceGuidance(enabled: Boolean)
     fun setPublicLocation(enabled: Boolean)
     fun updateProfile(name: String)
+    fun setAvatarGender(gender: AvatarGender) {}
     fun equipItem(slot: String, variant: Int)
     fun buyItem(slot: String, variant: Int)
     fun deleteRun(id: String)
@@ -29,6 +30,7 @@ interface AppActions {
     fun shareDeviceChecks() {}
     fun useFirebaseCommunity() {}
     fun loadCrewMembers(id: String) {}
+    fun loadCrewParties(id: String) {}
     fun backupCloudRun(runId: String, expectedUid: String)
     fun refreshCloudSummaries(expectedUid: String)
     fun deleteCloudSummary(runId: String, expectedUid: String)
@@ -41,6 +43,7 @@ interface AppActions {
     fun joinParty(id: String)
     fun leaveParty(id: String)
     fun cancelParty(id: String)
+    fun deleteParty(id: String) { cancelParty(id) }
     fun openChat(roomId: String, title: String)
     fun closeChat()
     fun sendMessage(body: String, notice: Boolean)

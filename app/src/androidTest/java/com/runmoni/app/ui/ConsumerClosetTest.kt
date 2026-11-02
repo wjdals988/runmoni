@@ -27,7 +27,7 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
             compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         }
         compose.onNodeWithTag("closet_slot_top").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsEnabled()
         noTextOverflow("consumer closet actual Android viewport")
         capture("consumer-closet-native-items")
         compose.onAllNodesWithText("닫기").assertCountEquals(1)

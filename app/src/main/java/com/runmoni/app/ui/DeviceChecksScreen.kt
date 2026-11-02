@@ -26,20 +26,20 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
             HorizontalDivider(color = RunmoniColors.Line)
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 EditorialHeading("READY TO RUN", "함께 확인해요")
-                Text("방 연결과 Google 계정을 확인하고, 휴대폰에서 해본 항목을 표시해 주세요.", color = RunmoniColors.Muted)
+                Text("크루·파티 연결과 Google 계정을 확인하고, 휴대폰에서 해본 항목을 표시해 주세요.", color = RunmoniColors.Muted)
                 Text("1. 크루·파티 서버", style = MaterialTheme.typography.titleMedium)
                 Text(when (state.deviceChecks.room) {
                     RoomCheck.NOT_CHECKED -> "아직 확인하지 않았어요"
                     RoomCheck.CHECKING -> "서버 응답을 확인하고 있어요…"
-                    RoomCheck.FIREBASE_READY -> "Firebase 공유 방 목록을 서버에서 확인했어요"
-                    RoomCheck.UNCONFIGURED -> "이 빌드에는 Firebase 방 설정이 없어요 · 설정을 포함한 새 APK가 필요해요"
-                    RoomCheck.PUBLIC_READY -> "공용 주소에서 방 기능 응답을 확인했어요"
+                    RoomCheck.FIREBASE_READY -> "크루·파티 목록을 불러왔어요"
+                    RoomCheck.UNCONFIGURED -> "이 빌드에는 크루·파티 연결 설정이 없어요 · 설정을 포함한 새 APK가 필요해요"
+                    RoomCheck.PUBLIC_READY -> "공용 주소에서 크루·파티 기능 응답을 확인했어요"
                     RoomCheck.LOCAL_READY -> "로컬 테스트 서버 응답이에요 · 공용 서버는 별도로 필요해요"
-                    RoomCheck.UNREACHABLE -> if (state.communityBackend == CommunityBackend.FIREBASE) "방 목록에 연결하지 못했어요 · Firebase 설정·규칙·인덱스를 확인해 주세요" else "서버에 연결하지 못했어요 · 설정에서 서버 주소를 확인해 주세요"
-                    RoomCheck.UNSUPPORTED -> "방 기능을 지원하는 서버인지 확인이 필요해요"
+                    RoomCheck.UNREACHABLE -> if (state.communityBackend == CommunityBackend.FIREBASE) "크루·파티 목록에 연결하지 못했어요 · Firebase 설정·규칙·인덱스를 확인해 주세요" else "서버에 연결하지 못했어요 · 설정에서 서버 주소를 확인해 주세요"
+                    RoomCheck.UNSUPPORTED -> "크루·파티 기능을 지원하는 서버인지 확인이 필요해요"
                 }, modifier = Modifier.testTag("room_check_status"))
                 OutlinedButton(onClick = actions::checkRoomConnection, enabled = state.deviceChecks.room != RoomCheck.CHECKING, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_room_connection")) { Text("서버 연결 확인") }
-                SmallNote("응답 확인 후에는 크루 탭에서 방을 만들고 다른 휴대폰으로 입장해 주세요. 방 보존·채팅 확인은 아래에 직접 표시해요.")
+                SmallNote("크루를 만들고 그 안에서 파티에 참가해 보세요. 다른 휴대폰과의 참여 내역·채팅 확인은 아래에 직접 표시해요.")
                 HorizontalDivider()
                 Text("2. Google 계정", style = MaterialTheme.typography.titleMedium)
                 Text(if (!state.cloud.configured) "이 빌드에는 Google 연결 설정이 없어요 · 설정을 포함한 새 APK가 필요해요" else state.cloud.status, modifier = Modifier.testTag("device_google_status"))
@@ -49,7 +49,7 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                     Text(if (state.cloud.interactiveSignInAt > 0) "이번 실행에서 계정 선택·로그인 완료" else "이번 실행의 계정 선택·로그인은 아직 확인하지 않았어요", modifier = Modifier.testTag("interactive_login_status"))
                     Text(if (state.cloud.sessionCheckedAt > 0) "이번 실행에서 계정 서버 응답을 확인했어요" else "계정 서버 응답은 아직 확인하지 않았어요")
                 }
-                SmallNote("Google 계정과 방 닉네임은 따로 연결해요. 기록 요약 백업은 기록 상세에서 직접 확인해 주세요.")
+                SmallNote("Google 계정과 크루 닉네임은 따로 연결해요. 기록 요약 백업은 기록 상세에서 직접 확인해 주세요.")
                 HorizontalDivider()
                 Text("3. 내 휴대폰에서 확인", style = MaterialTheme.typography.titleMedium)
                 SmallNote("아래 표시는 직접 확인한 결과예요. 자동 검사 결과와 구분해서 공유해요. 새 버전에서는 다시 확인해 주세요.")

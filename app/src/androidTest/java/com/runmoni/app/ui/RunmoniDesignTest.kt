@@ -75,16 +75,19 @@ abstract class RunmoniDesignTestBase {
         }
     }
 
+    /** Compose-target capture. Use captureDevice separately to inspect OS overlays. */
     protected fun capture(name: String) {
         val target = InstrumentationRegistry.getInstrumentation().targetContext
         val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
         val roots = compose.onAllNodes(isRoot())
         val forms = compose.onAllNodesWithTag("form_dialog")
         val chats = compose.onAllNodesWithTag("chat_dialog")
+        val partyDetails = compose.onAllNodesWithTag("party_detail")
         val viewports = compose.onAllNodesWithTag("audit_viewport")
         val root = when {
             forms.fetchSemanticsNodes().isNotEmpty() -> forms[forms.fetchSemanticsNodes().lastIndex]
             chats.fetchSemanticsNodes().isNotEmpty() -> chats[chats.fetchSemanticsNodes().lastIndex]
+            partyDetails.fetchSemanticsNodes().isNotEmpty() -> partyDetails[partyDetails.fetchSemanticsNodes().lastIndex]
             viewports.fetchSemanticsNodes().isNotEmpty() -> viewports[0]
             else -> roots[roots.fetchSemanticsNodes().lastIndex]
         }

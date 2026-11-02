@@ -1,0 +1,38 @@
+{
+  "checkoutHeadAtDebugBuild": "07d59507f2c89594f2b0b39a37447355408650f5",
+  "sourceDirty": true,
+  "variant": "debug",
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 35
+  },
+  "backend": {
+    "passed": 38,
+    "failed": 0,
+    "warnings": 1
+  },
+  "firestoreDemoRules": {
+    "passed": 119,
+    "failed": 0,
+    "skipped": 0
+  },
+  "pythonPublicationPolicy": {
+    "passed": 55,
+    "failed": 0
+  },
+  "physicalDeviceVerified": false,
+  "productionGoogleLoginVerified": false,
+  "productionNewRulesPublishedByAgent": false,
+  "finalDebugBuildLog": "runmoni-crew-ux-build-final-ui.txt",
+  "reviewDebugApkSha256": "6871000ed4786fa7e64040d3c07c5abb37a0313bb25017734e0f4e0d6adc0104",
+  "reviewAndroidTestApkSha256": "c29d4652fe62efce91362e429097bf9f16c6ecaafb122bcd462197b0ca4139d5",
+  "notPublicReleaseApk": true,
+  "laterChangesNotInThisReviewApk": "Community copy normalization and updated real MainActivity integration test; final compilation/CI will be recorded separately."
+}

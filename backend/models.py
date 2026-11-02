@@ -20,6 +20,7 @@ class GuestLogin(Model):
 
 
 class Avatar(Model):
+    gender: Literal["male", "female"] = "male"
     hair: int = Field(default=0, ge=0, le=3)
     top: int = Field(default=0, ge=0, le=5)
     bottom: int = Field(default=0, ge=0, le=5)

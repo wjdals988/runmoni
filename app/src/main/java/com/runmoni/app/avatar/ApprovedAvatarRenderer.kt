@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.runmoni.app.domain.AvatarCatalogue
+import com.runmoni.app.domain.AvatarGender
 import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.variantFor
 import java.security.MessageDigest
@@ -36,14 +37,15 @@ class ApprovedAvatarRenderer(context: Context) {
             require(it.width == WIDTH * FRAMES && it.height == HEIGHT * 2) { "Invalid approved avatar sheet" }
         }
     }
-    private val frames = arrayOfNulls<Bitmap>(FRAMES)
+    private val frames = Array(AvatarGender.entries.size) { arrayOfNulls<Bitmap>(FRAMES) }
 
     /** Base outfit only until per-item frame layers exist. Readiness is disclosed in the closet. */
     @Synchronized
-    fun render(frame: Int, running: Boolean): Bitmap {
+    fun render(frame: Int, running: Boolean, gender: AvatarGender = AvatarGender.MALE): Bitmap {
         val selected = if (running) Math.floorMod(frame, FRAMES) else 0
-        return frames[selected] ?: Bitmap.createBitmap(source, selected * WIDTH, 0, WIDTH, HEIGHT).also {
-            frames[selected] = it
+        val row = gender.spriteRow
+        return frames[row][selected] ?: Bitmap.createBitmap(source, selected * WIDTH, row * HEIGHT, WIDTH, HEIGHT).also {
+            frames[row][selected] = it
         }
     }
 }

@@ -6,7 +6,7 @@ enum class PhoneCheck(val label: String) {
     INSTALL_LAUNCH("APK 설치 후 앱이 정상적으로 열렸어요"),
     RUN_REOPEN("야외 러닝을 저장하고 앱을 다시 열어 기록을 확인했어요"),
     GPX_EXPORT("저장한 기록의 GPX 파일을 내보냈어요"),
-    TWO_DEVICE_ROOMS("휴대폰 두 대에서 같은 방에 입장하고 채팅을 주고받았어요"),
+    TWO_DEVICE_ROOMS("휴대폰 두 대에서 같은 크루의 파티에 참가하고 채팅을 주고받았어요"),
 }
 
 data class DeviceChecks(

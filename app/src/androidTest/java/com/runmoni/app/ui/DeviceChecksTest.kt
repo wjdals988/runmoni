@@ -50,7 +50,7 @@ class DeviceChecksTest : RunmoniDesignTestBase() {
         val state = mutableStateOf(AppState(communityBackend = CommunityBackend.FIREBASE,
             cloud = CloudAccountState(configured = true), deviceChecks = DeviceChecks(room = RoomCheck.FIREBASE_READY)))
         compose.setContent { RunmoniTheme { DeviceChecksScreen(state.value, RunmoniUiTest.FakeActions(state)) {} } }
-        compose.onNodeWithTag("room_check_status").performScrollTo().assertTextContains("Firebase 공유 방 목록", substring = true)
+        compose.onNodeWithTag("room_check_status").performScrollTo().assertTextContains("크루·파티 목록을 불러왔어요", substring = true)
         compose.onNodeWithTag("check_google_session").performScrollTo().assertIsNotEnabled()
         compose.onNodeWithTag("interactive_login_status").assertTextContains("아직 확인하지 않았어요", substring = true)
         noTextOverflow("Firebase public read fixture")

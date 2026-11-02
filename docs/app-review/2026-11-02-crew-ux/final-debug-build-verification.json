@@ -1,0 +1,22 @@
+{
+  "checkoutHeadAtDebugBuild": "cf466bd3e9cda0405a32299f1d6372aefaf0119a",
+  "sourceDirty": true,
+  "variant": "debug",
+  "finalCompilationAfterCopyHeaderNavigationChanges": true,
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 35
+  },
+  "reviewDebugApkSha256": "5d44597048c8f9120ff359970fcc55664c9c9565bd9b71bb7bbce46f90e31254",
+  "reviewAndroidTestApkSha256": "b4c3d4246c3222dbdf0447e03f31ba296efd01ae6d75fe3a0cfaa74312656351",
+  "notPublicReleaseApk": true,
+  "physicalDeviceVerified": false,
+  "productionGoogleLoginVerified": false
+}

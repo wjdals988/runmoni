@@ -5,6 +5,7 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,6 +33,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
 import java.time.Instant
@@ -43,6 +45,9 @@ import java.util.Locale
 fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState = AppUpdateUiState(), onCheckUpdates: () -> Unit = {}, onExternalAppLink: ((String) -> Unit)? = null) {
     RunmoniTheme {
         var tab by rememberSaveable { mutableIntStateOf(0) }
+        var crewNavigation by rememberSaveable { mutableStateOf<String?>(null) }
+        var partyNavigation by rememberSaveable { mutableStateOf<String?>(null) }
+        var communityNavigationEpoch by rememberSaveable { mutableIntStateOf(0) }
         var settings by rememberSaveable { mutableStateOf(false) }
         var signIn by rememberSaveable { mutableStateOf(false) }
         var appInformation by rememberSaveable { mutableStateOf(false) }
@@ -69,11 +74,20 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             containerColor = RunmoniColors.Cream,
             topBar = {
                 Column(Modifier.statusBarsPadding()) {
-                    Row(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 4.dp, bottom = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp), modifier = Modifier.weight(1f))
-                        AppVersionShortcut(updates) { appInformation = true }
-                        IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
-                            Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                    BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        val separateVersion = LocalDensity.current.fontScale >= 1.3f || maxWidth < 360.dp
+                        Column(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+                            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
+                                    modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
+                                if (!separateVersion) AppVersionShortcut(updates) { appInformation = true }
+                                IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
+                                    Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                                }
+                            }
+                            if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                AppVersionShortcut(updates) { appInformation = true }
+                            }
                         }
                     }
                     if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -83,21 +97,37 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 Surface(color = RunmoniColors.Paper) {
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
-                        NavigationBar(containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
+                        val navDensity = LocalDensity.current
+                        // Keep a full label line below equal 48dp icon areas. The
+                        // text's real scaled line height determines any extra height.
+                        val navContentHeight = maxOf(80.dp, 48.dp + 4.dp + with(navDensity) {
+                            MaterialTheme.typography.labelMedium.lineHeight.toDp()
+                        } + 8.dp)
+                        val navBottomInset = with(navDensity) { NavigationBarDefaults.windowInsets.getBottom(this).toDp() }
+                        NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset),
+                            containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
                             tabs.forEachIndexed { index, label ->
-                                NavigationBarItem(
-                                    selected = tab == index, onClick = { tab = index },
-                                    icon = {
+                                Column(Modifier.weight(1f).heightIn(min = navContentHeight)
+                                    .selectable(selected = tab == index, role = Role.Tab, onClick = {
+                                        if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
+                                        tab = index
+                                    }).testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index])
+                                    .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center) {
+                                    Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
                                         if (index == 2) Box(Modifier.size(48.dp).clip(CircleShape).background(if (tab == index) RunmoniColors.Primary else RunmoniColors.Navy), contentAlignment = Alignment.Center) {
                                             Icon(painterResource(icons[index]), null, Modifier.size(26.dp), tint = RunmoniColors.Lime)
-                                        } else Icon(painterResource(icons[index]), null, Modifier.size(23.dp))
-                                    },
-                                    label = { Text(label, style = MaterialTheme.typography.labelMedium) },
-                                    colors = NavigationBarItemDefaults.colors(indicatorColor = if (index == 2) Color.Transparent else RunmoniColors.PrimarySoft,
-                                        selectedIconColor = RunmoniColors.Primary, selectedTextColor = RunmoniColors.Primary,
-                                        unselectedIconColor = RunmoniColors.Muted, unselectedTextColor = RunmoniColors.Muted),
-                                    modifier = Modifier.testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index]),
-                                )
+                                        } else {
+                                            if (tab == index) Box(Modifier.width(64.dp).height(32.dp).clip(CircleShape).background(RunmoniColors.PrimarySoft))
+                                            Icon(painterResource(icons[index]), null, Modifier.size(23.dp),
+                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                        }
+                                    }
+                                    Spacer(Modifier.height(4.dp))
+                                    Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false,
+                                        textAlign = TextAlign.Center, color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted,
+                                        modifier = Modifier.fillMaxWidth())
+                                }
                             }
                         }
                     }
@@ -106,10 +136,10 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { tab = 3 }, onExplore = { tab = 1 }, onRecord = { selectedRecord = it })
-                    1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { tab = 3 })
-                    2 -> RunningScreen(state, actions, onCrew = { tab = 3 })
-                    3 -> CrewScreen(state, actions, onSignIn = { signIn = true })
+                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onExplore = { tab = 1 }, onRecord = { selectedRecord = it }, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
+                    1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
+                    2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
+                    3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
                     4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = { selectedRecord = it }, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true })
                 }
             }
@@ -174,7 +204,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                 }
                 val joined = state.parties.firstOrNull { it.joined && !it.cancelled }
                 if (state.communityBackend == CommunityBackend.HTTP && (joined != null || state.audio.roomId.isNotBlank())) AudioPanel(state.audio, actions, state.audio.roomId.ifBlank { "party:${joined!!.id}" })
-                else if (optionsExpanded) TextButton(onClick = onCrew, modifier = Modifier.heightIn(min = 48.dp)) { Icon(Icons.Outlined.Groups, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("함께 달릴 방 둘러보기") }
+                else if (optionsExpanded) TextButton(onClick = onCrew, modifier = Modifier.heightIn(min = 48.dp)) { Icon(Icons.Outlined.Groups, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("함께 달릴 크루 둘러보기") }
             }
         }
         Surface(color = RunmoniColors.Paper, modifier = Modifier.fillMaxWidth().testTag("run_control_bar")) {
@@ -305,7 +335,7 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
 internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
     var confirmation by remember { mutableStateOf(false) }
     LaunchedEffect(state.signedIn) { if (!state.signedIn) confirmation = false }
-    if (state.communityGuest) { SmallNote("방에 참여해도 내 실시간 위치는 자동으로 공유되지 않아요."); return }
+    if (state.communityGuest) { SmallNote("크루에 가입해도 내 실시간 위치는 자동으로 공유되지 않아요."); return }
     ToggleRow("파일럿 위치 공유", if (state.signedIn) "초대받은 테스터에게 러닝 중 정밀 위치를 공유해요" else "초대 파일럿 로그인 후 이용할 수 있어요", state.publicLocation, { if (it) confirmation = true else actions.setPublicLocation(false) }, enabled = state.signedIn, tag = "share_location")
     if (confirmation && state.signedIn) AlertDialog(onDismissRequest = { confirmation = false }, title = { Text("러닝 위치를 공유할까요?") }, text = { DialogMessage("진행 중 러닝의 정밀 좌표, 러너 이름, 미니미를 같은 초대 파일럿의 성인 테스터에게 보여줘요. 인터넷 전체에 공개되는 지도는 아니에요.\n\n러닝 중 15초마다 위치를 갱신해요. 공유를 끄거나 러닝을 마치면 공유를 중지해요. 마지막 갱신 후 45초가 지나면 위치가 만료돼요.") }, confirmButton = { TextButton(onClick = { confirmation = false; actions.setPublicLocation(true) }, modifier = Modifier.testTag("confirm_share_location")) { Text("위치 공유 켜기") } }, dismissButton = { TextButton(onClick = { confirmation = false }, modifier = Modifier.testTag("cancel_share_location")) { Text("공유하지 않기") } })
 }
@@ -313,8 +343,8 @@ internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
 @Composable
 internal fun PartySummary(party: Party, onClick: () -> Unit) {
     Surface(shape = RoundedCornerShape(24.dp), color = RunmoniColors.Paper,
-        modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "파티 참가 정보 보기", onClick = onClick)) {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "파티 참가 정보 보기", onClick = onClick).testTag("party_${party.id}")) {
+        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 StatusPill(if (party.kind == PartyKind.LOCAL) "함께 모여 달려요" else "각자의 곳에서 달려요", RunmoniColors.Primary)
                 Text(if (party.cancelled) "취소됨" else if (party.joined) "참가 중" else "${party.participantCount}/${party.capacity}명", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)

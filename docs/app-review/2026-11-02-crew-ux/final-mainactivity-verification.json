@@ -1,0 +1,37 @@
+{
+  "scope": "actual MainActivity/owned localhost API/LocalWallet",
+  "reviewAppSha256": "28a87e3aba9e2c179b2a82bfe65f33251ebd0cb67b79b31bf375c5441b4bf360",
+  "appReinstalledThisRun": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "testApkSha256": "d3d7187375454c98f60259705510b6d264f9bcdbca2ab1f98f0a6ca768c530af",
+  "result": {
+    "tests": 1,
+    "failures": 0,
+    "seconds": 110.626
+  },
+  "captures": [
+    "mainactivity-loopback-native-closet-female-free-selection.png",
+    "mainactivity-loopback-native-closet-selected-after-check.png",
+    "mainactivity-loopback-native-closet-selected-before-check.png",
+    "mainactivity-loopback-native-crew-detail.png",
+    "mainactivity-loopback-native-crew-list.png",
+    "mainactivity-loopback-native-home.png",
+    "mainactivity-loopback-native-party-chat.png",
+    "mainactivity-loopback-native-party-detail.png"
+  ],
+  "accessibilityXml": [
+    "native-closet-selected-window.xml",
+    "native-closet-selected-after-check-window.xml"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160",
+    "animations": {
+      "window_animation_scale": "1.0",
+      "transition_animation_scale": "1.0",
+      "animator_duration_scale": "1.0"
+    }
+  }
+}

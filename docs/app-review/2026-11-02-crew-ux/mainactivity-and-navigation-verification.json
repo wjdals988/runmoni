@@ -1,0 +1,49 @@
+{
+  "project": "ui-fixtures",
+  "realAndroidSdk": true,
+  "firebaseSdkExecutedThisRun": false,
+  "mainActivityLoopbackRequested": true,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "screenshotsRequireVisualInspection": true,
+  "phases": {
+    "native-ui": {
+      "tests": 4,
+      "failures": 0,
+      "seconds": 213.39
+    },
+    "native-320dp-font2": {
+      "tests": 1,
+      "failures": 0,
+      "seconds": 94.935
+    }
+  },
+  "nativeCaptures": [
+    "native-hierarchy-back-after-removal-device.png",
+    "native-hierarchy-back-to-crew-device.png",
+    "native-hierarchy-back-to-list-device.png",
+    "native-hierarchy-crew-public-device.png",
+    "native-hierarchy-crew-public-fixture.png",
+    "native-hierarchy-party-public-device.png",
+    "native-hierarchy-party-public-fixture.png",
+    "native-hierarchy-party-removed-device.png",
+    "native-hierarchy-party-removed-fixture.png"
+  ],
+  "mainActivityLoopbackCaptures": [
+    "mainactivity-loopback-native-closet-female-free-selection.png",
+    "mainactivity-loopback-native-crew-detail.png",
+    "mainactivity-loopback-native-crew-list.png",
+    "mainactivity-loopback-native-party-chat.png",
+    "mainactivity-loopback-native-party-detail.png"
+  ],
+  "largeTextCaptures": [
+    "320dp-font2-closet-closed-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-device.png",
+    "320dp-font2-closet-hierarchy-native-320-font2-fixture.png"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

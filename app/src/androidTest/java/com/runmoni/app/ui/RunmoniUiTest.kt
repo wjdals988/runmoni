@@ -348,7 +348,8 @@ class RunmoniUiTest {
         override fun setVoiceGuidance(enabled: Boolean) { state.value = state.value.copy(voiceGuidance = enabled) }
         override fun setPublicLocation(enabled: Boolean) { locationChanges += enabled; state.value = state.value.copy(publicLocation = enabled) }
         override fun updateProfile(name: String) { state.value = state.value.copy(profile = state.value.profile.copy(name = name)) }
-        override fun equipItem(slot: String, variant: Int) { state.value = state.value.copy(profile = state.value.profile.copy(avatar = state.value.profile.avatar.withItem(slot, variant))) }
+        override fun setAvatarGender(gender: AvatarGender) { state.value = state.value.copy(profile = state.value.profile.copy(avatar = state.value.profile.avatar.copy(gender = gender))) }
+        override fun equipItem(slot: String, variant: Int) { val p = state.value.profile; state.value = state.value.copy(profile = p.copy(avatar = p.avatar.withItem(slot, variant), ownedItems = p.ownedItems + "$slot:$variant")) }
         override fun buyItem(slot: String, variant: Int) { val price = AvatarCatalogue.price(variant); purchases += "$slot:$variant"; val profile = state.value.profile; state.value = state.value.copy(profile = profile.copy(mileage = profile.mileage - price, ownedItems = profile.ownedItems + "$slot:$variant")) }
         override fun deleteRun(id: String) { deletions += id; state.value = state.value.copy(records = state.value.records.filterNot { it.id == id }) }
         override fun exportRun(id: String) { exports += id }
