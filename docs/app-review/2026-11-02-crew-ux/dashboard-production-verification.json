@@ -1,0 +1,123 @@
+{
+  "verifiedAtUtc": "2026-11-02T19:51:13.698504+00:00",
+  "dashboard": {
+    "repository": "wjdals988/mydashboard",
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/13",
+    "mergedAt": "2026-11-02T19:48:41Z",
+    "mergeRevision": "d65028627f01cad235ca0c553201631fe7f3e8f2",
+    "pullRequestCi": {
+      "runId": 41512884899,
+      "conclusion": "success"
+    },
+    "mainCi": [
+      {
+        "conclusion": "success",
+        "databaseId": 41513392797,
+        "status": "completed",
+        "url": "https://github.com/wjdals988/mydashboard/actions/runs/41513392797"
+      }
+    ],
+    "localNodeTests": {
+      "passed": 23,
+      "failed": 0,
+      "coveragePercent": {
+        "lines": 92.69,
+        "branches": 86.14,
+        "functions": 100
+      }
+    },
+    "productionDeployment": {
+      "id": 7501775796,
+      "environment": "Production",
+      "state": "success",
+      "environmentUrl": "https://mydashboard-nawzari7v-wjdals988-6836s-projects.vercel.app",
+      "createdAt": "2026-11-02T19:49:05Z"
+    }
+  },
+  "productionPage": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "checks": {
+      "http200": true,
+      "canonicalUrl": true,
+      "apkDownloadUrl": true,
+      "versionAndCode": true,
+      "fileSize": true,
+      "sha256": true,
+      "developmentPreviewLabel": true,
+      "newRulesPending": true,
+      "phoneGoogleNotVerified": true,
+      "unpreparedClothesSelectionOnly": true,
+      "screenshotsProvenance": true
+    },
+    "responseSha256": "cacc685ea0b7b83c6fc4e89eb7703993cd5787a8166a19e6c7a2a3f34315f1b2"
+  },
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.3.0-dev/runmoni-0.3.0-dev.apk",
+    "fileName": "runmoni-0.3.0-dev.apk",
+    "version": "0.3.0-dev",
+    "versionCode": 12,
+    "size": "218,496,781 bytes",
+    "sha256": "a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.0-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK",
+    "sizeBytes": 218496781,
+    "sourceRevision": "01e37ab3f7ac13cc3b69d37576a6d623274de101",
+    "physicalDeviceVerified": false,
+    "interactiveGoogleLoginVerified": false,
+    "productionPartyWritesVerified": false
+  },
+  "gallery": [
+    {
+      "path": "/reviews/runmoni/0.3.0-dev/home.png",
+      "httpStatus": 200,
+      "sizeBytes": 69717,
+      "sha256": "f6d662f37f0dbd06e63a0834f4dec0ce7ea0d30a326a25fd37bec6dc6503672b",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.0-dev/crews.png",
+      "httpStatus": 200,
+      "sizeBytes": 35940,
+      "sha256": "dd49edaea76cdb5a8916b166f448da3a1821cc5eee507e412d3587b299978131",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.0-dev/crew.png",
+      "httpStatus": 200,
+      "sizeBytes": 50304,
+      "sha256": "fa250ad17a32f55885143dfc4d7de5a678ada7fa8dc8d5003f68b3b50e956fff",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.0-dev/closet.png",
+      "httpStatus": 200,
+      "sizeBytes": 56880,
+      "sha256": "28bc945871b114697bbc4225cf39ba4f899598a8e52ac0870d2f154325be0317",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.0-dev/chat.png",
+      "httpStatus": 200,
+      "sizeBytes": 23377,
+      "sha256": "afa6edde58a1d9b3d93178ccaca3df492e95cc218f4c9cac13a7fd6ca207378a",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    }
+  ],
+  "limits": [
+    "HTML and unchanged PNG body checks; no browser interaction or visual approval inferred.",
+    "Gallery is actual debug MainActivity on cloud AOSP Android with local HTTP test data, not signed release/phone/production Firebase execution.",
+    "New Firestore rules owner publication and production party deletion are pending.",
+    "No full APK body redownload. Existing signed CI/server asset verification is recorded separately."
+  ]
+}
