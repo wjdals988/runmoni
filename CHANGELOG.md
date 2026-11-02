@@ -1,3 +1,11 @@
+# 2026-11-02 — 설정 완료 반영·개발 이어가기 (한국 시간)
+
+- 소유자의 ‘5번도 완료됐음 굳굳’ 응답을 Firebase 설정1~5번 완료 보고로 기록했다. 색인 콘솔 완료는 소유자 보고이며 관리 API 조회·실제 휴대폰/Google 로그인·운영 방 쓰기 성공으로 합산하지 않는다. 이전 배포/CI JSON은 당시 근거로 보존한다.
+- README의0.2.0 공개/공용 방 없음/Google 설정 없음 설명을 실제 공개0.2.1 및 기본 Firebase 방 구성에 맞췄다. HTTP 파일럿·위치/음성과 기본 Firebase 경로를 구분했다.
+- 기능·UI/UX 작업에 우선순위·의존 조건·완료 기준과 다음 작업의 코드 경로를 추가했다. [개발 이어가기](docs/DEVELOPMENT_CONTINUATION.md)는 여자 기본형 선택 연결을 다음 독립 개발 묶음으로 지정한다. 승인 원본의 두 행·8프레임·저장 호환/기존 보유권·작은 화면·큰 글씨 확인을 요구하며 아직 구현/승인 완료로 표시하지 않는다.
+- 이번 변경은 문서/진행 기록이다. 앱 코드·버전·APK·공개 피드·대시보드 다운로드를 변경하지 않으며 기존0.2.1의 sourceRevision `c6bc5739746fe176269fed3bf64360417b50875e`를 유지한다.
+- 문서7개의 로컬 링크102개 대상 존재·앱/공개 피드의0.2.1/code11 일치·APK 출처/해시/크기·승인 원본 SHA 보존과 문서만 변경됨을 확인했다. 최초 링크 검사에서 기존 CHANGELOG의 상대 경로1건 오류를 발견해 `docs/` 경로로 수정한 뒤 통과했다. `git diff --check`도 통과했으며 앱 빌드/테스트/실행·새 배포는 수행하지 않았다.
+
 # 0.2.1-dev — 2026-10-30 Firebase 공유 방·연결·휴대폰 점검
 
 - 2026-11-01 공개 뒤 앱 PR16의 업데이트 피드/main 통합·실제 HTTP200/0.2.1 응답을 확인했다. 대시보드 PR12/main1eba844·PR CI41323705260의 테스트/audit/lint/build·Vercel Production7475399522 success와 운영 페이지 HTTP200/새 다운로드·버전·해시·Firebase 검증 경계·기존7장 안내를 확인했다. Node23개와 운영 main CI41323853447도 통과. APK 원래 출처c6bc573과 실제 휴대폰/Google/운영 방 쓰기 미검증·색인 완료 미확인을 유지한다. [배포 근거](docs/RELEASE_REVIEW_20261101.md).
@@ -153,7 +161,7 @@
 ## 0.1.6-dev / versionCode7 — 2026-10-27, 미게시
 
 - 서명키 질문과 ‘앱 업로드까지’ 요청에 따라 Linux release 빌드/실제 APK 검사 도구와 수동 GitHub Actions workflow 추가. 기존 인증서만 허용하고 unsigned 후보는 별도 경로, 서명본은 APK·metadata·체크섬을 생성. 초안 업로드는 원격 main/tag·3자산 서버 digest 검증 뒤 비공개로 종료. 기존 게시 도구의 Windows/Linux curl 선택과 주입 GitHub 인증 재사용을 지원. 최초 실제 인증 확인은 프록시 placeholder를 raw token 형태로 제한해 실패했으며, 헤더 안전성 검사를 유지하는 수정 뒤 저장소 GET HTTP200·push권한 확인. 비밀값 출력·추출0, 실제 게시/서명은 별도 결과로 구분.
-- `e7bec3e` clean에서 새 도구의 오프라인 release 빌드3분38초·JVM30/30·release lint오류0/경고27 통과. unsigned 실제 APK0.1.6/code7·218,120,150bytes·SHA256 `db47d0f8b7899caef51031c1cdb31852fd34a91e99dff5abfed5bbde0e78b5e3`, non-debuggable/내장revision/승인원화SHA 일치. apksigner가 unsigned를 거부하고 키 없는 서명 명령이 Gradle 전에 중단함을 확인. 게시/서명 경계 오프라인32개·actionlint1.7.12 통과. GitHub Environment 생성도403으로 외부 설정 차단을 확인했고 임의키·unsigned 업로드·공개피드/대시보드 교체0. [검증 기록](CLOUD_RELEASE_REVIEW_20261027.md)에 실제 실행과 미실행 범위를 분리.
+- `e7bec3e` clean에서 새 도구의 오프라인 release 빌드3분38초·JVM30/30·release lint오류0/경고27 통과. unsigned 실제 APK0.1.6/code7·218,120,150bytes·SHA256 `db47d0f8b7899caef51031c1cdb31852fd34a91e99dff5abfed5bbde0e78b5e3`, non-debuggable/내장revision/승인원화SHA 일치. apksigner가 unsigned를 거부하고 키 없는 서명 명령이 Gradle 전에 중단함을 확인. 게시/서명 경계 오프라인32개·actionlint1.7.12 통과. GitHub Environment 생성도403으로 외부 설정 차단을 확인했고 임의키·unsigned 업로드·공개피드/대시보드 교체0. [검증 기록](docs/CLOUD_RELEASE_REVIEW_20261027.md)에 실제 실행과 미실행 범위를 분리.
 
 - P1 첫 미니미 표시: 준비 전 빈 Canvas를 ‘준비 중’ 상태로 바꾸고 읽기 실패에48dp 재시도 행동 추가. 첫 전신 프레임을 먼저 표시하며8개 준비 뒤 순환 시작. 선택 취소와 실패를 구분하고 원본/데이터/의상 준비 상태는 유지. 제어된 지연·실패·재시도·부분 준비·취소 검사 추가. 첫 컴파일의 중첩 범위 오류 수정 후 재빌드/JVM30·lint오류0/경고57 통과. Android 실행 결과는 [로딩 검토](docs/AVATAR_LOADING_REVIEW_20261027.md)에 분리 기록.
 - 재시도 가시성은 대기만 보강해도 재실패해 로딩 상태/표시 하위 구성을 같은 요청 수명으로 수정. 초기 기본7/8·대기 재실패, 수정 후8/8을 구분. 실제320dp/font2에서 문단 하단71px/영역64px 잘림을 발견해 작은 영역을 접근성 이름이 있는24dp 로딩 아이콘으로 변경. 최신7fab0f3에서 기본8/8·큰 글씨4/4 재검증 통과. [최종 실제 출력과 모든 실패 로그](docs/AVATAR_LOADING_REVIEW_20261027.md)를 보존. font/애니메이션1.0·화면 복원, 앱 crash 버퍼0바이트, 소유 PID20072 종료/활성 AVD0. 원본8프레임과 데이터 보존, 새 공개 APK/대시보드 다운로드 교체 없음.

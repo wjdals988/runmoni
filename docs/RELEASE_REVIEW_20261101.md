@@ -25,3 +25,7 @@ APK는 실제 프로젝트의 Android 설정을 포함한다. 공개 목록 읽�
 대시보드 [PR12](https://github.com/wjdals988/mydashboard/pull/12)를 main **`1eba844093970da85fc386513f85bd80b8a1e3e9`**에 병합했다. PR CI41323705260의 테스트/audit/lint/build와 Vercel preview가 통과했고, 실제 `Production` 배포7475399522가 success를 반환했다. 운영 [런모니 페이지](https://coldbrewventi.vercel.app/projects/runmoni) HTTP200에서 새 APK href·현재 버전 설명·SHA256·Firebase/미검증 안내·이전0.2.0 갤러리 표기와7개 이미지 링크를 확인했다. 로컬 Node23개도 통과했다. [운영 확인](release-review/2026-11-01/dashboard-production-verification.json).
 
 운영 main CI [41323853447](https://github.com/wjdals988/mydashboard/actions/runs/41323853447)도 success를 확인했다. CI 결과를 실제 휴대폰/Google 로그인/운영 방 쓰기 성공으로 바꾸지 않는다.
+
+## 2026-11-02 소유자 후속 확인 (한국 시간)
+
+소유자가 ‘5번도 완료됐음 굳굳’이라고 답해 Firestore 복합 색인까지 설정1~5번 완료를 보고했다. 위2026-11-01의 생성 중/미확인 내용과 JSON은 당시 검증 이력이며 다시 쓰지 않는다. 관리 API에서 색인 상태를 직접 읽은 결과나 실제 휴대폰·Google 로그인·운영 방 쓰기 성공은 아니다. 색인은 서버 설정이므로 기존0.2.1 APK를 다시 만들지 않는다. 현재 다음 작업은 [개발 이어가기](DEVELOPMENT_CONTINUATION.md)를 따른다.
