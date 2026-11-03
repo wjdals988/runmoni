@@ -1,22 +1,22 @@
-# 런모니 개발 이어가기 — 0.3 공개 이후
+# 런모니 개발 이어가기 — 0.3.1-dev 공개 이후
 
-**0.3.0-dev / code12의 크루 계층·UI/UX·무료 옷장·성별 전환을 구현하고 동일 키 서명 APK를 공개했다.** 앱 PR19는 main에 병합됐고 실제 APK/공개3자산/HEAD 검증도 완료했다. 0.3 공개 피드는 PR20으로 반영하며 운영 대시보드의 실제 다운로드·메타데이터·사진5장 반영을 확인했다. 새 Firestore 규칙 게시 확인은 별도 대기다. 코드/클라우드 Android/demo 검증을 실제 휴대폰·Google 로그인·운영 Firebase 쓰기 성공으로 합산하지 않는다. [크루·옷장 검토](CREW_CLOSET_REVIEW_20261102.md) · [개발 우선순위](DEVELOPMENT_PRIORITIES.md). 이전 F02 착수 계획을 반복 구현하지 않는다.
+**사용 맥락 중심 UI를0.3.1-dev/code13으로 구현하고 PR21 main 병합·동일 키 서명 APK 공개/실제 자산 검증을 완료했다.** [최신 게시 검증](RELEASE_REVIEW_0.3.1_20261103.md) · [UI 상호 검토](CONTEXT_UI_REVIEW_20261103.md) · [개발 우선순위](DEVELOPMENT_PRIORITIES.md). 새 피드/대시보드 main 동기화는 별도 마무리 단계이며 실제 운영 응답 확인 전 완료로 표시하지 않는다. 새 Firestore 규칙 소유자 게시·실제 휴대폰·Google 대화형 로그인·운영 두 기기 쓰기는 별도 대기다. 미준비 의상은 선택만 저장하고 승인 기본형을 표시하며 실제 의복/색상 완성으로 표시하지 않는다.
 
 ## 2026-11-03 최신 UI 후속
 
-개발 소스는 **0.3.1-dev/code13**으로 진행 중이며 아직 공개 전이다. [사용 맥락 중심 UI 상호 검토](CONTEXT_UI_REVIEW_20261103.md)에 따라 홈·크루/파티 목록·옷장·프로필/탐색/러닝 표현을 정리했다. 최종 빌드 JVM45개/debug lint오류0·경고35, 영향받은 Android2개/실제MainActivity1개/native1개 재검증과 실제 사진·전체CTA·정리 결과는 [이번 검토 기록](app-review/2026-11-03-context-ui/README.md)에 기록했다. 공개0.3 APK의 출처01e37ab와 기존 자산/피드는 검증한 새 서명 APK 공개 전까지 보존한다. 이번 UI 검토/게시를 마친 뒤 새 Rules/실기기 결과와 F03 원화를 이어간다.
+홈의 러닝 시작·실제 오늘 합계/일정/최근 기록, 크루·파티 비교 목록과 작은 옷장 선택 타일을 우선했다. 최종 오프라인 JVM45개/debug lint오류0·경고35, 영향받은 Android2개/실제MainActivity1개/native1개·실제 전체CTA/기준선/사진은 [이번 실행 기록](app-review/2026-11-03-context-ui/README.md)에 있다. 초기 실패·사진의 버튼 잘림과 수정 후 재검증은 각각 보존한다. 코드/클라우드 debug 검증을 공개 서명 release·실제 휴대폰·Google/운영 쓰기 성공으로 합산하지 않는다.
 
 ## 현재 배포와 개발 상태
 
 | 항목 | 상태 |
 |---|---|
-| 개발 소스/PR | **0.3.0-dev / code12**, [앱 PR19](https://github.com/wjdals988/runmoni/pull/19) 커밋/푸시·main 병합 완료 |
-| 현재 공개 앱 | **0.3.0-dev / code12**, 실기기 검증 전 개발 prerelease. [공개 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.0-dev) · [실제 공개 검증](app-review/2026-11-02-crew-ux/publication-verification.json) |
-| 공개 APK 실제 출처 | **`01e37ab3f7ac13cc3b69d37576a6d623274de101`**. 실제 빌드/내장 출처이며 후속 문서·피드 main 커밋으로 재작성하지 않음 |
-| 공개 APK 바이트 | **218496781bytes**, SHA256 **`a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387`**. 서버3자산·작은 sidecar와 [공개 HEAD200/크기 일치](app-review/2026-11-02-crew-ux/public-apk-head-verification.json) 확인 |
-| 서명/CI | 기존 보관 인증서 SHA256 `a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a` 일치. [CI41508813724](https://github.com/wjdals988/runmoni/actions/runs/41508813724) 성공, JVM45개 실패/오류/skip0·release lint오류0/경고60·non-debuggable/패키지/버전·내장 출처 확인. [서명 CI 근거](app-review/2026-11-02-crew-ux/signed-ci-verification.json) |
-| 공개 피드·운영 대시보드 | **0.3 동기화**: 피드는 [PR20](https://github.com/wjdals988/runmoni/pull/20)에 반영. [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) Production7501775796 success·HTTP200/버전12/링크/크기/해시·PNG5장 원본 일치 확인. [근거](app-review/2026-11-02-crew-ux/dashboard-production-verification.json). 공개 raw 피드 main 확인은 PR20 최종 댓글에 기록 |
-| 과거 APK 출처 |0.2.1은 `c6bc5739746fe176269fed3bf64360417b50875e`,0.1.5는 `75c39ca900b140cfb02c1a47807a5955c8b8db7f`로 보존.0.3 공개로 이전 APK 바이트/출처를 바꾸지 않음 |
+| 개발 소스/PR | **0.3.1-dev / code13**, [앱 PR21](https://github.com/wjdals988/runmoni/pull/21) 커밋/푸시·main 병합 완료 |
+| 현재 공개 앱 | **0.3.1-dev / code13**, 실기기 검증 전 개발 prerelease. [공개 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.1-dev) · [실제 공개 검증](app-review/2026-11-03-context-ui/publication-verification.json) |
+| 공개 APK 실제 출처 | **`3074c0f40797a2452b36e4277dd559f94a31ac07`**. 실제 빌드/내장 출처이며 후속 피드/문서 main 커밋으로 재작성하지 않음 |
+| 공개 APK 바이트 | **218496781bytes**, SHA256 **`2f77849607140903de2bb80611bd4ce28a2c0d418c59fd0d7d74d880db56b16c`**. [서버3자산](app-review/2026-11-03-context-ui/publication-verification.json) · [공개 HEAD200/크기](app-review/2026-11-03-context-ui/public-apk-head-verification.json) 일치 확인 |
+| 서명/CI | 기존 보관 인증서 `a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a` 일치. [CI41591649566](https://github.com/wjdals988/runmoni/actions/runs/41591649566) 성공, JVM45개·실패/오류/skip0·release lint오류0/경고60·non-debuggable/패키지/버전/내장 출처 확인. [근거](app-review/2026-11-03-context-ui/signed-ci-verification.json) |
+| 공개 피드·운영 대시보드 | **새0.3.1 동기화 대기**. 검증한 공개 자산을 main 피드·운영 다운로드에 연결하고 실제 Production/HTML/버전/링크/해시·사진 원본 일치를 확인한 뒤 완료 기록. 이전0.3 PR20/대시보드 PR13 검증은 이전 배포 이력 |
+| 과거 APK 출처 |0.3은 `01e37ab3f7ac13cc3b69d37576a6d623274de101`/218496781bytes/SHA256 `a080129a7ac2d2cb75e507d476e28f0e72308276ba70d3b4232125928d8af387`.0.2.1 출처c6bc573·0.1.5 출처75c39ca를 포함한 과거 자산/출처는 [이전 검증](RELEASE_REVIEW_20261103.md)에 보존 |
 | Firebase 소유자 설정 | 소유자가 기존 안내1~5번 완료를 보고. 이는 당시 제공자·지문·Secret·규칙·색인 설정 보고이며 이번0.3의 새 규칙 게시를 뜻하지 않음 |
 | 이번 운영 규칙 | **새 Firestore 규칙 게시 확인 대기**. 클라우드에 관리 계정 연결이 없고 새 게시 요청에도 아직 소유자 응답이 없음. 공개 목록 읽기 성공은 새 `deleted` 상태/계층 권한의 운영 규칙 버전·운영 삭제 검증이 아님 |
 | 실제 휴대폰·Google·운영 쓰기 | 별도 미검증. 소유자 콘솔 보고와 SDK/demo 테스트를 실제 계정 로그인·두 기기 채팅 성공으로 바꾸지 않음 |
@@ -34,13 +34,15 @@
 
 ## 완료한 검증·공개의 경계
 
-로컬 demo Auth/Firestore에 대한 Android SDK1개31.619초, 최종 MainActivity1개110.626초, native320dp/글씨200% 프로필1개83.866초가 통과했다. 하단 라벨 baseline 차이는 실측0px다. 이는 클라우드 API29/TCG의 debug 앱/fixture와 실제 MainActivity/로컬HTTP·LocalWallet 검증이며, 공개 서명 release의 실제 휴대폰·Google·운영 Firebase 쓰기 성공이 아니다. 중간 실패·재시도·stale PNG를 최종 결과에 합산하지 않는다. [원시 보고서와 이미지](app-review/2026-11-02-crew-ux/README.md). 마지막 프로필 제목 축약은 컴파일로 확인한 문구 변경이며 캡처 앱의 이전 제목과 구분한다.
+현재0.3.1의 최종 debug2+1+1 실행과 최초10개 중1개 테스트 오류·native 사진의 버튼 잘림/수정·전체CTA/기준선/정리는 [원시 보고서/사진](app-review/2026-11-03-context-ui/README.md)에 보존한다. 이전0.3의 SDK/demo·Android 검증은 [이전 실행 기록](app-review/2026-11-02-crew-ux/README.md)으로 구분한다. 반복 실행을 고유 개수로 합산하지 않는다.
+
+공개0.3.1의 서명 CI/3자산/HEAD200 검증은 [RELEASE_REVIEW_0.3.1_20261103.md](RELEASE_REVIEW_0.3.1_20261103.md)에 있다. 실제 휴대폰·공개 서명 release 실행·Google·운영 Firebase 쓰기는 미검증이며 설정 ready나 소유자 콘솔 보고로 대신하지 않는다. 후속 피드/문서 커밋은 APK 출처 `3074c0f40797a2452b36e4277dd559f94a31ac07`가 아니다.
 
 ## 바로 이어서 완료할 일
 
-1. **R04 공개 후 동기화:** 운영 대시보드의0.3 다운로드·해시·배포 확인은 완료했다. 피드 PR20 main 통합 뒤 공개 raw 응답 확인을 같은 PR의 최종 댓글에 기록한다. 이 확인까지 끝나면 반복 배포하지 않고 R03/F01과 F03을 이어간다. 실제 APK 출처는 계속 `01e37ab3f7ac13cc3b69d37576a6d623274de101`이며 과거 APK의 출처·바이트를 보존한다.
+1. **R04 새0.3.1 공개 후 동기화:** 이미 공개·검증한 APK의 metadata로 피드/대시보드를 반영하고 main·실제 운영 URL의 버전13/다운로드/크기/해시·사진5장/배포 상태를 확인한다. 결과를 최신 게시 검토에 추가하기 전 완료로 표시하지 않는다. 실제 APK 출처는 `3074c0f40797a2452b36e4277dd559f94a31ac07`이며 과거 출처/바이트를 보존한다.
 2. **R03 새 운영 규칙 적용 확인:** 검토한 [firestore.rules](../firebase/firestore.rules)를 소유자가 운영에 게시해야 한다. 기존1~5번 완료 보고를 이번 새 규칙 게시로 재해석하지 않는다. 관리 계정/서비스 계정키를 채팅으로 받거나 공개 읽기만으로 운영 삭제가 검증됐다고 표시하지 않는다. 소유자 응답/운영 권한 확인 전 이 항목을 대기로 유지한다.
-3. **F01 실제 휴대폰·Google·운영 쓰기:** [휴대폰 확인 순서](FIREBASE_COMMUNITY.md#휴대폰에서-확인하는-순서)에 따라0.3 설치/같은 키 업데이트·기록 보존·Google 계정 선택/온라인 응답/요약 백업, 두 기기의 같은 크루/파티·채팅·정원·삭제 후 접근 차단을 각각 확인한다. 실제 장애가 보고되면 후속 기능보다 먼저 수정한다.
+3. **F01 실제 휴대폰·Google·운영 쓰기:** [휴대폰 확인 순서](FIREBASE_COMMUNITY.md#휴대폰에서-확인하는-순서)에 따라0.3.1 설치/같은 키 업데이트·기록 보존·Google 계정 선택/온라인 응답/요약 백업, 두 기기의 같은 크루/파티·채팅·정원·삭제 후 접근 차단을 각각 확인한다. 실제 장애가 보고되면 후속 기능보다 먼저 수정한다.
 4. **다음 독립 구현 F03:** 공개 동기화 기록을 닫은 뒤 원본 품질의 의복/수영복 레이어·명시 마스크/색상 작업을 이어간다. 새 규칙/휴대폰 결과를 기다리는 동안에도 원화와 오류 주입 검증 등 독립 작업을 진행할 수 있다. F02+U01이나 이미 확인한0.3 빌드/게시를 완료 전 단계로 되돌려 반복하지 않는다.
 
 ## 그다음 독립 개발
