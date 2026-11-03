@@ -6,6 +6,7 @@ interface AppActions {
     fun resumeRun()
     fun finishRun()
     fun recoverRun()
+    fun retryRunPersistence() {}
     fun openLocationSettings()
     fun openAppPermissionSettings()
     fun dismissError()
@@ -23,6 +24,8 @@ interface AppActions {
     fun connectCommunity(name: String)
     fun signOut()
     fun signInGoogle()
+    fun linkCommunityGoogle() {}
+    fun restoreCommunityGoogle() {}
     fun signOutGoogle()
     fun checkRoomConnection() {}
     fun checkGoogleSession() {}

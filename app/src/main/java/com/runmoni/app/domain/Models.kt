@@ -109,6 +109,8 @@ data class AudioUiState(
 data class AppState(
     val profile: Profile = Profile(),
     val activeRun: ActiveRun = ActiveRun(),
+    // Screen fixtures are ready by default; AppViewModel injects the repository's actual initial state.
+    val runPersistence: RunPersistenceState = RunPersistenceState(initialized = true),
     val records: List<RunRecord> = emptyList(),
     val crews: List<Crew> = emptyList(),
     val crewPartiesLoading: Boolean = false,
@@ -119,6 +121,7 @@ data class AppState(
     val liveRunners: List<LiveRunner> = emptyList(),
     val audio: AudioUiState = AudioUiState(),
     val cloud: CloudAccountState = CloudAccountState(),
+    val communityGoogleLink: CommunityGoogleLinkState = CommunityGoogleLinkState(),
     val apiUrl: String = "http://127.0.0.1:8787",
     val serverConnected: Boolean = false,
     val signedIn: Boolean = false,

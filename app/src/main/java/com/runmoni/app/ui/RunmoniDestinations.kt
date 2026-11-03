@@ -25,11 +25,11 @@ import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onExplore: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }) {
+internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onExplore: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }, onRetrySave: () -> Unit = {}) {
     val today = LocalDate.now()
     val todaysRuns = state.records.filter { localDate(it.startedAtMillis) == today }
     val largeText = LocalDensity.current.fontScale >= 1.3f
-    val todaySummary = if (todaysRuns.isEmpty()) "오늘의 기록이 아직 없어요" else "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회"
+    val todaySummary = if (state.runPersistence.historyUnavailable) "기록 목록 확인 필요" else if (todaysRuns.isEmpty()) "오늘 러닝 0회" else "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회"
     ScreenContent {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -49,11 +49,12 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
             Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp))
         }
         if (largeText) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        RunPersistenceNotice(state.runPersistence, onRetrySave)
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
         if (next != null) { SectionHeading("예정된 파티", "모두 보기", onCrew); PartySummary(next) { onParty(next) } }
         if (state.records.isNotEmpty()) {
-            SectionHeading("최근 러닝")
+            SectionHeading(if (state.runPersistence.historyUnavailable) "마지막으로 불러온 러닝" else "최근 러닝")
             state.records.sortedByDescending { it.startedAtMillis }.take(2).forEach { record -> RecordRow(record) { onRecord(record) } }
         }
         DestinationRow("크루 찾기", "크루별 파티 일정과 참가 정보", Icons.Outlined.Groups, onCrew, Modifier.testTag("home_find_rooms"))
@@ -163,6 +164,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             }
         HorizontalDivider(color = RunmoniColors.Line)
         SectionHeading("러닝 기록")
+        RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
         DestinationTabs(listOf("일별", "월별", "연도별"), period, { period = it }, "history_period")
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { referenceEpoch = when (period) { 0 -> reference.minusDays(1); 1 -> reference.minusMonths(1); else -> reference.minusYears(1) }.toEpochDay() }, modifier = Modifier.size(48.dp).testTag("history_previous")) { Icon(Icons.Outlined.ChevronLeft, "이전 기간") }
@@ -171,11 +173,11 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
         }
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("이 기간에 달린 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-            DistanceNumber(distance(records.sumOf { it.distanceMeters }), RunmoniColors.Navy, maxSize = 48f)
-            Text("km · 러닝 ${records.size}회", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            DistanceNumber(if (state.runPersistence.historyUnavailable && state.records.isEmpty()) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.Navy, maxSize = 48f)
+            Text(if (state.runPersistence.historyUnavailable) "마지막으로 불러온 기록 · 목록 확인 필요" else "km · 러닝 ${records.size}회", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         }
         HorizontalDivider(color = RunmoniColors.Line)
-        if (records.isEmpty()) EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 날짜별 기록을 확인할 수 있어요.", "러닝 시작", onRun)
+        if (records.isEmpty() && !state.runPersistence.historyUnavailable) EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 날짜별 기록을 확인할 수 있어요.", "러닝 시작", onRun)
         records.sortedByDescending { it.startedAtMillis }.forEach { record -> RecordRow(record) { onRecord(record) } }
         DestinationRow("계정 및 러닝 설정", "백업, 이름, 러닝 옵션을 관리해요", Icons.Outlined.Settings, onSettings)
         AppVersionCard(updates, onAppInformation)

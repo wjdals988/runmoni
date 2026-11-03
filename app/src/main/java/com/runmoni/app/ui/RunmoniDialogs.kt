@@ -48,6 +48,8 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
     var connectionDetails by remember { mutableStateOf(false) }
     var deviceChecks by remember { mutableStateOf(false) }
     var disconnectRoom by remember { mutableStateOf(false) }
+    var linkCommunityGoogle by remember { mutableStateOf(false) }
+    var restoreCommunityGoogle by remember { mutableStateOf(false) }
     if (deviceChecks) {
         DeviceChecksScreen(state, actions) { deviceChecks = false }
         return
@@ -75,24 +77,37 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         LocationSharingToggle(state, actions)
         HorizontalDivider()
         OutlinedButton(onClick = { deviceChecks = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_device_checks")) { Text("연결·휴대폰 점검") }
-        Text("Google 계정", style = MaterialTheme.typography.titleMedium)
+        Text("Google 계정 · 기록 요약 백업", style = MaterialTheme.typography.titleMedium)
         Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
         if (state.cloud.uid.isBlank()) {
-            OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.busy, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
+            OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.communityGoogleLink.busy && !state.busy, shape = RoundedCornerShape(12.dp), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
             if (!state.cloud.configured) SmallNote("클라우드 백업 연결을 준비 중이에요. 러닝 기록은 계속 기기에 저장할 수 있어요.")
         } else {
             Text(state.cloud.accountLabel, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cloud_account"))
             OutlinedButton(onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().testTag("cloud_history")) { Text("백업한 기록 요약 보기") }
-            TextButton(onClick = actions::signOutGoogle, enabled = !state.cloud.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 계정 로그아웃") }
+            TextButton(onClick = actions::signOutGoogle, enabled = !state.cloud.busy && !state.communityGoogleLink.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 계정 로그아웃") }
         }
         SmallNote("기록 상세에서 요약을 1건씩 백업해요. GPS 경로·마일리지는 포함하지 않아요.")
         HorizontalDivider()
         Text("크루 프로필", style = MaterialTheme.typography.titleMedium)
         StatusPill(if (state.serverConnected && state.signedIn) "크루 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
         Text(if (state.signedIn) "크루 프로필 연결됨" else "공개 크루를 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
-        SmallNote("Google 계정과 별도로 연결하며 위치 공유는 직접 켜야 해요.")
-        if (state.signedIn) OutlinedButton(onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "크루 프로필 연결 해제" else "파일럿 로그아웃") }
-        else OutlinedButton(onClick = onSignIn, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
+        SmallNote("기록 요약 백업과 크루 프로필은 별도예요. 위치 공유는 직접 켜야 해요.")
+        if (state.communityBackend == CommunityBackend.FIREBASE) {
+            val link = state.communityGoogleLink
+            Text(link.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                modifier = Modifier.testTag("community_google_status"))
+            if (link.linked && link.accountLabel.isNotBlank()) Text(link.accountLabel, style = MaterialTheme.typography.bodyMedium)
+            if (link.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+            if (state.signedIn && !link.linked) OutlinedButton(onClick = { linkCommunityGoogle = true }, enabled = !link.busy && !state.cloud.busy,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("link_community_google")) { Text("크루 프로필에 Google 연결") }
+            if (!state.signedIn) OutlinedButton(onClick = { restoreCommunityGoogle = true }, enabled = state.cloud.configured && !link.busy && !state.cloud.busy,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("restore_community_google")) { Text("Google로 크루 프로필 다시 연결") }
+            SmallNote("Google을 연결한 크루 프로필만 다시 찾을 수 있어요. 기기의 GPS 기록·포인트·옷장은 이 연결로 복원되지 않아요.")
+        }
+        if (state.signedIn) OutlinedButton(onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, enabled = !state.communityGoogleLink.busy && !state.cloud.busy,
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "크루 프로필 연결 해제" else "파일럿 로그아웃") }
+        else OutlinedButton(onClick = onSignIn, enabled = !state.communityGoogleLink.busy && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
         TextButton(onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "테스트 서버 설정 접기" else "테스트 서버 설정 펼치기") }
         if (connectionDetails) {
             Text(if (state.communityBackend == CommunityBackend.FIREBASE) "Firebase 크루·파티 사용 중" else "HTTP 테스트 서버 사용 중")
@@ -108,8 +123,20 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
     }
     }
     if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
+    if (linkCommunityGoogle) AlertDialog(onDismissRequest = { linkCommunityGoogle = false },
+        title = { Text("현재 크루 프로필에 Google을 연결할까요?") },
+        text = { DialogMessage("현재 크루 소속과 크루장·주최자 권한을 그대로 유지해요. 이미 다른 프로필에 사용한 Google 계정은 자동으로 합치지 않아요.\n\n이 연결은 기기의 GPS 기록·포인트·옷장 백업과는 별도예요.") },
+        confirmButton = { TextButton(onClick = { linkCommunityGoogle = false; actions.linkCommunityGoogle() }, modifier = Modifier.testTag("confirm_link_community_google")) { Text("Google 계정 선택") } },
+        dismissButton = { TextButton(onClick = { linkCommunityGoogle = false }) { Text("취소") } })
+    if (restoreCommunityGoogle) AlertDialog(onDismissRequest = { restoreCommunityGoogle = false },
+        title = { Text("기존 크루 프로필을 다시 연결할까요?") },
+        text = { DialogMessage("이전에 크루 프로필에 연결한 같은 Google 계정을 선택해 주세요. 기존 크루 소속과 권한을 확인하며 새 프로필을 만들거나 다른 프로필과 합치지 않아요.\n\n기기의 GPS 기록·포인트·옷장은 이 연결로 복원되지 않아요.") },
+        confirmButton = { TextButton(onClick = { restoreCommunityGoogle = false; actions.restoreCommunityGoogle() }, modifier = Modifier.testTag("confirm_restore_community_google")) { Text("Google 계정 선택") } },
+        dismissButton = { TextButton(onClick = { restoreCommunityGoogle = false }) { Text("취소") } })
     if (disconnectRoom) AlertDialog(onDismissRequest = { disconnectRoom = false }, title = { Text("크루 프로필 연결을 해제할까요?") },
-        text = { DialogMessage("익명 프로필의 크루·파티 참여 내역과 크루장·주최자 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 Google 계정 연결은 유지돼요.") },
+        text = { DialogMessage(if (state.communityGoogleLink.linked)
+            "연결을 해제하면 이 기기에서 크루·파티를 이용하려면 같은 Google 계정으로 크루 프로필을 다시 연결해야 해요. 기기 러닝 기록과 포인트, 기록 요약 백업 로그인은 유지돼요."
+            else "Google을 연결하지 않은 익명 프로필의 크루·파티 참여 내역과 크루장·주최자 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 기록 요약 백업 로그인은 유지돼요.") },
         confirmButton = { TextButton(onClick = { disconnectRoom = false; actions.signOut() }) { Text("연결 해제") } },
         dismissButton = { TextButton(onClick = { disconnectRoom = false }) { Text("유지하기") } })
 }
@@ -126,7 +153,7 @@ internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () ->
         Text("닉네임으로 게스트 프로필을 연결하면 크루에 가입하고 파티에 참가할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
         OutlinedTextField(value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("display_name"))
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }).testTag("adult_checkbox"), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = adult, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("만 19세 이상입니다", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
-        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 연결 해제·기기 변경·재설치 후에는 참여 내역과 크루장 권한을 복구할 수 없어요. Google 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
+        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 설정에서 Google 계정을 연결하기 전에는 기기 변경·재설치 후 참여 내역과 크루장 권한을 복구할 수 없어요. 기록 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
     }
 }
 
@@ -190,7 +217,7 @@ internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppStat
 }
 
 @Composable
-internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAccountState = CloudAccountState(), onDismiss: () -> Unit) {
+internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAccountState = CloudAccountState(), persistence: RunPersistenceState = RunPersistenceState(initialized = true), onDismiss: () -> Unit) {
     var deleteConfirmation by remember { mutableStateOf(false) }
     var backupConfirmation by remember(cloud.uid, record.id) { mutableStateOf(false) }
     FormDialog("나의 러닝 기록", onDismiss, dismissLabel = null, confirm = { TextButton(onClick = onDismiss) { Text("닫기") } }) {
@@ -199,6 +226,10 @@ internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAc
         Text("러닝 시간 ${duration(record.activeDurationMillis)} · 평균 ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km", modifier = Modifier.testTag("record_duration_pace"))
         MapPane(record.points, modifier = Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(18.dp)))
         StatusPill(if (record.synced) "서버 동기화됨" else "기기에 저장됨", if (record.synced) RunmoniColors.Green else RunmoniColors.Muted)
+        if (record.id in persistence.pendingCreditRunIds)
+            RunPersistenceNotice(RunPersistenceState(issue = RunPersistenceIssue.CREDIT,
+                initialized = true, saving = persistence.saving, creditPending = true,
+                pendingCreditRunIds = setOf(record.id)), actions::retryRunPersistence)
         if (record.interrupted) SmallNote("중단된 구간이 있어요. 확인되지 않은 거리는 더하지 않았어요.")
         if (record.splits.isNotEmpty()) {
             Text("킬로미터별 기록", style = MaterialTheme.typography.titleMedium)

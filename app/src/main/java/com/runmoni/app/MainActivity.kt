@@ -82,6 +82,8 @@ class MainActivity : ComponentActivity() {
                     }
                     UiRequest.PickMusic -> musicFile.launch(arrayOf("audio/*"))
                     UiRequest.GoogleSignIn -> lifecycleScope.launch { model.googleSignIn(this@MainActivity) }
+                    UiRequest.LinkCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity) }
+                    UiRequest.RestoreCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity, restore = true) }
                     UiRequest.LocationSettings -> openSettings(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     UiRequest.AppPermissionSettings -> openSettings(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
                     is UiRequest.ExternalCapture -> {
