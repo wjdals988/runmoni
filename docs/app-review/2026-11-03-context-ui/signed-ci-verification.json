@@ -1,0 +1,38 @@
+{
+  "ciRun": 41591649566,
+  "sourceRevision": "3074c0f40797a2452b36e4277dd559f94a31ac07",
+  "ciSuccess": true,
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 60,
+    "Information": 0
+  },
+  "signedApkInspectedByCi": true,
+  "nonDebuggablePackageVersionAndEmbeddedRevisionCheckedByCi": true,
+  "connectionReadiness": {
+    "schemaVersion": 1,
+    "checkedAt": "2026-11-03T06:43:13.696068+00:00",
+    "sourceRevision": "3074c0f40797a2452b36e4277dd559f94a31ac07",
+    "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+    "certificateVerified": true,
+    "firebase": "ready",
+    "server": "ready",
+    "ready": true,
+    "physicalDeviceVerified": false,
+    "interactiveGoogleLoginVerified": false,
+    "anonymousProviderVerified": false,
+    "publicRoomWritesVerified": false,
+    "backend": "firebase"
+  },
+  "apkBodyDownloadedByCloudReviewer": false,
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false
+}
