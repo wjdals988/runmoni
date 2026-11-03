@@ -67,8 +67,9 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("join_crew_${selected.id}")) { Text("크루 가입하기") }
             DestinationTabs(listOf("파티", "소개 · 멤버"), detailSection, { detailSection = it }, "crew_detail")
             if (detailSection == 0) {
-                SectionHeading("이 크루의 파티")
-                if (selected.joined) TextButton(onClick = { newParty = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("create_party_${selected.id}")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("파티 만들기") }
+                if (selected.joined) Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    TextButton(onClick = { newParty = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("create_party_${selected.id}")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("파티 만들기") }
+                }
                 val events = state.parties.filter { it.crewId == selected.id && !it.cancelled }.sortedBy { it.startsAtMillis }
                 if (state.crewPartiesError != null) {
                     Text(state.crewPartiesError, color = MaterialTheme.colorScheme.error)
@@ -77,7 +78,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 if (events.size >= 50) SmallNote("크루별 기본 조회는50개까지예요. 참여한 파티도 함께 표시해요.")
                 if (events.isEmpty() && (state.busy || state.crewPartiesLoading)) LinearProgressIndicator(Modifier.fillMaxWidth())
                 else if (events.isEmpty() && state.serverConnected && state.crewPartiesError == null) EmptyCard("아직 파티가 없어요", if (selected.joined) "이 크루에서 함께 달릴 일정을 만들어보세요." else "크루에 가입하면 함께 달릴 파티를 만들고 참가할 수 있어요.")
-                events.forEach { p -> PartySummary(p) { selectedPartyId = p.id } }
+                Column { events.forEach { p -> PartySummary(p) { selectedPartyId = p.id } } }
             } else {
                 if (selected.description.isNotBlank()) Text(selected.description, style = MaterialTheme.typography.bodyLarge)
                 if (selected.joined) {
@@ -93,19 +94,22 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 Text("크루", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.weight(1f))
                 IconButton(onClick = actions::refreshCommunity, enabled = !state.busy, modifier = Modifier.size(48.dp).testTag("rooms_refresh")) { Icon(Icons.Outlined.Refresh, "크루 새로고침") }
             }
-            Text("함께 달릴 사람들을 만나세요", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted)
             DestinationTabs(listOf("내 크루", "둘러보기"), section, { section = it }, "crews_section")
             RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
-            TextButton(onClick = { connected("create") }, enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("create_crew")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기") }
+            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                TextButton(onClick = { connected("create") }, enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("create_crew")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기") }
+            }
             if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             if (!state.serverConnected && !state.busy) RoomConnectionNotice(state, actions)
             val crews = state.crews.filter { (section == 1 || it.joined) && "${it.name} ${it.description} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
-            if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(if (query.isNotBlank()) "검색한 크루가 없어요" else if (section == 0) "가입한 크루가 없어요" else "첫 크루를 만들어보세요", if (section == 0) "둘러보기에서 나와 맞는 크루를 찾아보세요." else "이름이나 지역을 바꿔 검색할 수 있어요.")
-            crews.forEach { crew -> CrewRoomCard(crew) { selectedCrewId = crew.id; detailSection = 0 } }
+            if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(
+                if (query.isNotBlank()) "검색한 크루가 없어요" else if (section == 0) "가입한 크루가 없어요" else "등록된 크루가 없어요",
+                if (query.isNotBlank()) "다른 이름·지역·페이스로 검색해 보세요." else if (section == 0) "둘러보기에서 크루에 가입할 수 있어요." else "크루 만들기로 새 크루를 시작할 수 있어요.")
+            Column { crews.forEach { crew -> CrewRoomCard(crew) { selectedCrewId = crew.id; detailSection = 0 } } }
             val legacy = state.parties.filter { it.joined && state.crews.none { c -> c.id == it.crewId } }
             if (legacy.isNotEmpty()) {
                 TextButton(onClick = { legacyExpanded = !legacyExpanded }, modifier = Modifier.heightIn(min = 48.dp)) { Text("이전 버전 파티 관리") }
-                if (legacyExpanded) legacy.forEach { p -> PartySummary(p) { selectedPartyId = p.id } }
+                if (legacyExpanded) Column { legacy.forEach { p -> PartySummary(p) { selectedPartyId = p.id } } }
             }
         }
     }

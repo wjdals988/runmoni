@@ -120,7 +120,7 @@ class CommunityApiFlowTest {
                 assertTrue(device.takeScreenshot(File(dir, "$name.png")))
             }
             tap("홈")
-            assertTrue(device.wait(Until.hasObject(By.text("오늘도, 나답게.")), 30000))
+            assertTrue(device.wait(Until.hasObject(By.text("러닝 시작하기")), 30000))
             capture("native-home")
             tap("크루")
             assertTrue(device.wait(Until.hasObject(By.text(crew.name)), 30000))
@@ -154,7 +154,7 @@ class CommunityApiFlowTest {
             // Wallet/StateFlow updates can precede Compose's accessibility tree.
             // Capture only after the same item visibly reports its selected state.
             assertTrue("Closet renders the saved-selection preview notice", device.wait(Until.hasObject(
-                By.text("선택은 저장됐어요 · 미리보기는 기본형을 표시해요")), 30000))
+                By.textContains("미리보기는 기본형을 표시해요")), 30000))
             val diagnosticDir = File(app.cacheDir, "room-review").apply { mkdirs() }
             device.dumpWindowHierarchy(File(diagnosticDir, "native-closet-selected-window.xml"))
             capture("native-closet-selected-before-check")

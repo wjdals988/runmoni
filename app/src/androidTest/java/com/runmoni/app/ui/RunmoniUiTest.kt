@@ -27,37 +27,45 @@ class RunmoniUiTest {
     @get:Rule val compose = createComposeRule()
 
     @Test fun unavailableCommunityIsNotReportedAsAnEmptyServerResult() {
-        val state = mutableStateOf(AppState())
+        val state = mutableStateOf(AppState(busy = true))
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         compose.onNodeWithTag("nav_explore").performClick()
-        compose.onNodeWithText("함께 달리기는 연결을 준비 중이에요").assertExists()
-        compose.onNodeWithText("표시할 러닝 파티가 없어요").assertDoesNotExist()
+        compose.onNodeWithTag("explore_loading").assertExists()
+        compose.onNodeWithText("크루 목록을 불러오지 못했어요").assertDoesNotExist()
+        compose.onNodeWithText("등록된 크루가 없어요").assertDoesNotExist()
+        compose.runOnIdle { state.value = state.value.copy(busy = false) }
+        compose.onNodeWithTag("explore_loading").assertDoesNotExist()
+        compose.onNodeWithText("크루 목록을 불러오지 못했어요").assertExists()
+        compose.onNodeWithText("등록된 크루가 없어요").assertDoesNotExist()
         compose.onNodeWithTag("explore_layer_1").performClick()
-        compose.onNodeWithText("아직 만날 크루가 없어요").assertDoesNotExist()
+        compose.onNodeWithText("예정된 파티가 없어요").assertDoesNotExist()
 
         // A real successful anonymous fetch can be empty. Authentication is only
         // requested when creating or joining a public room.
         compose.runOnIdle { state.value = state.value.copy(serverConnected = true) }
-        compose.onNodeWithText("아직 만날 크루가 없어요").assertExists()
+        compose.onNodeWithText("예정된 파티가 없어요").assertExists()
         compose.runOnIdle { state.value = state.value.copy(signedIn = true) }
-        compose.onNodeWithText("아직 만날 크루가 없어요").assertExists()
+        compose.onNodeWithText("예정된 파티가 없어요").assertExists()
         compose.onNodeWithTag("explore_layer_0").performClick()
-        compose.onNodeWithText("표시할 러닝 파티가 없어요").assertExists()
+        compose.onNodeWithText("등록된 크루가 없어요").assertExists()
     }
 
     @Test fun fiveTabsOpenTheirActualScreens() {
         val state = mutableStateOf(AppState())
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         val screens = listOf(
-            "nav_explore" to "모임 검색",
-            "nav_run" to "오늘의 러닝",
-            "nav_crew" to "함께라서, 더 멀리.",
-            "nav_me" to "미니미 꾸미기",
-            "nav_home" to "오늘도,\n나답게 달려요.",
+            "nav_explore" to "explore_search",
+            "nav_run" to "start_run",
+            "nav_crew" to "rooms_search",
+            "nav_me" to "open_closet",
+            "nav_home" to "home_start_run",
         )
-        screens.forEach { (tag, title) ->
+        screens.forEach { (tag, target) ->
             compose.onNodeWithTag(tag).performClick().assertIsSelected()
-            compose.onNodeWithText(title).performScrollTo().assertIsDisplayed()
+            val destination = compose.onNodeWithTag(target)
+            // The running action is fixed outside the scrollable content.
+            if (target != "start_run") destination.performScrollTo()
+            destination.assertIsDisplayed()
         }
         // Connection diagnostics live in settings rather than every tab header.
         compose.onNodeWithTag("settings_button").performClick()
@@ -94,7 +102,7 @@ class RunmoniUiTest {
         compose.onNodeWithTag("record_ui-record-fixture").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("history_period_0").performScrollTo().performClick()
         compose.onNodeWithTag("history_previous").performScrollTo().performClick()
-        compose.onNodeWithText("이 기간에는 아직 기록이 없어요").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("이 기간에는 기록이 없어요").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("history_next").performScrollTo().performClick()
         compose.onNodeWithTag("record_ui-record-fixture").performScrollTo().assertIsDisplayed()
     }

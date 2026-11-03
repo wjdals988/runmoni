@@ -1,0 +1,16 @@
+{
+  "version": "0.3.1-dev",
+  "versionCode": 13,
+  "packages": [
+    {
+      "package": "com.runmoni.app",
+      "installedApkSha256": "a0181d32883e4b174c32dfda76652b50b9853b3006e5d97efef2c277dcac5b28",
+      "matchesFinalLocalApk": true
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "installedApkSha256": "87e9ab1ef0e0e981acefc612a5a22babce6185c57734577afc48423c493d8c63",
+      "matchesFinalLocalApk": true
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "reviewer": "ux_context_review agent and parent",
+  "actualMainActivityDebugLocalHttpScreens": [
+    {
+      "file": "mainactivity-home.png",
+      "sha256": "bf314fa1214c3126eee914bd4c881e56a7467b6a2868d2d1f51f02351371fa71"
+    },
+    {
+      "file": "mainactivity-crew-list.png",
+      "sha256": "cd4c91501dc52d9ab50bf86ac2e55febe5b02644330720390d89bf1c5dc42789"
+    },
+    {
+      "file": "mainactivity-crew-detail.png",
+      "sha256": "5d7c16f0f990c838ad45ceaa24db8ce4b43f2899a3e0c200249ef09f183f7e1a"
+    },
+    {
+      "file": "mainactivity-party-detail.png",
+      "sha256": "e2d7c8695790838c7506619c1c09b63259df2d4d2eb7067b163fb7fe66a4c0ff"
+    },
+    {
+      "file": "mainactivity-party-chat.png",
+      "sha256": "ac3e5c2b6d3e364d5261caff66f6b2fd8dac0f75433cd5e98ac15f33d2a05105"
+    },
+    {
+      "file": "mainactivity-closet-female-free-selection.png",
+      "sha256": "cdac803c770b14055dd4b1544026270135bc9dce3ea0975ee34ae8c11d863a4f"
+    }
+  ],
+  "allSixUnique": true,
+  "selectedFemaleBasicAndMintSavedSelectionObserved": true,
+  "osPopupAbsentInSixScreens": true,
+  "galleryExcludesHttpOnlyAudioPartyDetail": true,
+  "nativeHomeUnclippedBoundsVerified": true,
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false,
+  "signedReleaseExecutionVerified": false,
+  "remainingVisualNote": "Auxiliary today summary can wrap a final Korean character at fontScale2; P2 followup, no CTA clipping."
+}

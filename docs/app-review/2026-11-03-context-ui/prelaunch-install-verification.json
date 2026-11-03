@@ -1,0 +1,17 @@
+{
+  "cloudAvd": "Runmoni_Cloud_29",
+  "pid": 601147,
+  "apiPid": 600390,
+  "tcgSoftwareAcceleration": true,
+  "physicalDeviceVerified": false,
+  "prelaunchSystemUiAnrObserved": true,
+  "newRunmoniApkOpenedAtObservation": false,
+  "observedWaitSelected": true,
+  "postInstallScreenshotPopupAbsent": true,
+  "rootCauseVerified": false,
+  "installedVersion": "0.3.1-dev",
+  "installedVersionCode": 13,
+  "reversePort": 8789,
+  "appAndTestInstallSucceeded": true,
+  "scope": "Launcher/install evidence only; Android tests were started separately."
+}

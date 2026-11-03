@@ -178,11 +178,11 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                     else "직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요.")
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
                 if (run.phase == RunPhase.IDLE) {
-                    EditorialHeading("JUST RUN", "신발 끈 묶고,\n가볍게 시작해요.", "시작하면 GPS 경로와 시간을 기록해요.")
+                    Text("시작하면 거리·시간·GPS 경로를 기록해요.", style = MaterialTheme.typography.bodyLarge)
                     RunwayArtwork(state.profile.avatar, compact = LocalDensity.current.fontScale >= 1.3f)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
-                        Text("내 기록은 기기에 안전하게 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                        Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     }
                 } else Surface(shape = RoundedCornerShape(28.dp), color = RunmoniColors.Navy) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -312,7 +312,6 @@ internal fun StatusPill(label: String, color: Color, tag: String = "") {
 @Composable
 internal fun EmptyCard(title: String, message: String, action: String? = null, onClick: () -> Unit = {}) {
     Column(Modifier.fillMaxWidth().padding(vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.size(48.dp).clip(CircleShape).background(RunmoniColors.Mint), contentAlignment = Alignment.Center) { Icon(Icons.Outlined.DirectionsRun, null, tint = RunmoniColors.Primary) }
         Text(title, style = MaterialTheme.typography.titleLarge)
         Text(message, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         if (action != null) TextButton(onClick = onClick, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text(action); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(18.dp)) }
@@ -342,19 +341,25 @@ internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
 
 @Composable
 internal fun PartySummary(party: Party, onClick: () -> Unit) {
-    Surface(shape = RoundedCornerShape(24.dp), color = RunmoniColors.Paper,
-        modifier = Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "파티 참가 정보 보기", onClick = onClick).testTag("party_${party.id}")) {
-        Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                StatusPill(if (party.kind == PartyKind.LOCAL) "함께 모여 달려요" else "각자의 곳에서 달려요", RunmoniColors.Primary)
-                Text(if (party.cancelled) "취소됨" else if (party.joined) "참가 중" else "${party.participantCount}/${party.capacity}명", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
+    Column(Modifier.fillMaxWidth().heightIn(min = 48.dp)
+        .clickable(role = Role.Button, onClickLabel = "파티 참가 정보 보기", onClick = onClick).testTag("party_${party.id}")) {
+        Column(Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(dateTime(party.startsAtMillis), style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                if (party.cancelled || party.joined) Text(if (party.cancelled) "취소됨" else "참가 중",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (party.cancelled) MaterialTheme.colorScheme.error else RunmoniColors.Primary)
             }
-            Text(party.title, style = MaterialTheme.typography.titleLarge)
-            Text(dateTime(party.startsAtMillis), style = MaterialTheme.typography.bodyMedium)
-            Text("${party.distanceKm} km · ${party.paceLabel}${if (party.meetingLabel.isNotBlank()) " · ${party.meetingLabel}" else ""}", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-            HorizontalDivider(color = RunmoniColors.Line)
-            Row(verticalAlignment = Alignment.CenterVertically) { Text("참가 정보 보기", color = RunmoniColors.Primary, style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f)); Icon(Icons.Outlined.ArrowForward, null, tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp)) }
+            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(party.title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                Icon(Icons.Outlined.ChevronRight, null, tint = RunmoniColors.Muted, modifier = Modifier.size(24.dp))
+            }
+            Text("${party.distanceKm} km · ${party.paceLabel} · ${party.participantCount}/${party.capacity}명", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            val meeting = party.meetingLabel.trim()
+            val kind = if (party.kind == PartyKind.LOCAL) "현장 모임" else "각자 출발"
+            Text(if (meeting.isBlank() || meeting == kind) kind else "$kind · $meeting", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         }
+        HorizontalDivider(color = RunmoniColors.Line)
     }
 }
 

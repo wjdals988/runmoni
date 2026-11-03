@@ -55,8 +55,8 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 12
-        versionName = "0.3.0-dev"
+        versionCode = 13
+        versionName = "0.3.1-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
         buildConfigField("String", "COMMUNITY_BACKEND", "\"$communityBackend\"")
