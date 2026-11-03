@@ -57,7 +57,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                             Text("기본형", Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                             GenderSelector(profile, actions)
                         }
-                        Text(if (AvatarArtwork.styleReady(profile.avatar)) "테스트 기간 · 모든 아이템 무료" else "선택은 저장됐어요 · 미리보기는 기본형을 표시해요",
+                        Text(if (AvatarArtwork.styleReady(profile.avatar)) "테스트 기간 · 모든 아이템 0P" else "모든 아이템 0P · 선택은 저장됐어요. 미리보기는 기본형을 표시해요",
                             style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.testTag("closet_artwork_status"))
                         ClosetTabs(AvatarCatalogue.tabs, category, { category = it }, "closet_slot")
                         val key = AvatarCatalogue.tabs[category].first
@@ -72,23 +72,21 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                                 variants.forEach { variant ->
                                     val ready = AvatarArtwork.itemReady(slot.key, variant)
                                     val selected = profile.avatar.variantFor(slot.key) == variant && !covered
-                                    Surface(shape = RoundedCornerShape(16.dp), color = if (selected) RunmoniColors.Mint else RunmoniColors.Paper,
-                                        border = if (selected) BorderStroke(1.5.dp, RunmoniColors.Primary) else null,
-                                        modifier = Modifier.weight(1f).selectable(selected, role = Role.RadioButton,
+                                    Surface(shape = RoundedCornerShape(12.dp), color = if (selected) RunmoniColors.Mint else RunmoniColors.Cream,
+                                        border = BorderStroke(if (selected) 1.5.dp else 1.dp, if (selected) RunmoniColors.Primary else RunmoniColors.Outline),
+                                        modifier = Modifier.weight(1f).heightIn(min = 112.dp).selectable(selected, role = Role.RadioButton,
                                             onClick = { actions.equipItem(slot.key, variant) }).testTag("closet_${slot.key}_$variant")) {
-                                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                                                Box(Modifier.size(56.dp), contentAlignment = Alignment.Center) {
-                                                    if (ready) AvatarMini(profile.avatar.withItem(slot.key, variant), Modifier.fillMaxSize(), decorative = true)
-                                                    else Icon(Icons.Outlined.Checkroom, null, tint = RunmoniColors.Muted, modifier = Modifier.size(32.dp))
-                                                }
-                                                Spacer(Modifier.weight(1f))
-                                                if (selected) Icon(Icons.Outlined.CheckCircle, "선택됨", tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
+                                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                Text(if (variant == 0 && slot.key in setOf("hair", "top", "bottom", "shoes")) "기본 ${slot.label}" else slot.variants[variant],
+                                                    style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                                                if (selected) Icon(Icons.Outlined.CheckCircle, "선택됨", tint = RunmoniColors.Primary, modifier = Modifier.size(18.dp))
                                             }
-                                            Text(if (variant == 0 && slot.key in setOf("hair", "top", "bottom", "shoes")) "기본 ${slot.label}" else slot.variants[variant],
-                                                style = MaterialTheme.typography.titleSmall, modifier = Modifier.heightIn(min = if (largeText) 0.dp else 72.dp))
-                                            Text("무료 · 0 P", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Primary)
-                                            Text(if (ready) if (selected) "착용 중" else "바로 착용" else if (selected) "선택 보관 · 미리보기 준비 중" else "선택 저장 · 미리보기 준비 중", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                if (ready) AvatarMini(profile.avatar.withItem(slot.key, variant), Modifier.width(36.dp).height(48.dp), decorative = true)
+                                                Text(if (ready) if (selected) "착용 중" else "바로 착용" else if (selected) "선택 보관 · 미리보기 준비 중" else "미리보기 준비 중",
+                                                    style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.weight(1f))
+                                            }
                                         }
                                     }
                                 }

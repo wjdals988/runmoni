@@ -1,0 +1,18 @@
+{
+  "stoppedAvdPid": 603953,
+  "stoppedApiPid": 604002,
+  "reverse8789Removed": true,
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160",
+    "animations": {
+      "window_animation_scale": "1.0",
+      "transition_animation_scale": "1.0",
+      "animator_duration_scale": "1.0"
+    }
+  },
+  "testSqlitePreserved": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseModified": false
+}

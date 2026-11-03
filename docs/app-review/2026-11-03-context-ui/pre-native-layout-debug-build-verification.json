@@ -1,0 +1,32 @@
+{
+  "version": "0.3.1-dev",
+  "versionCode": 13,
+  "gradle": "offline/no-parallel/max-workers1",
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 35
+  },
+  "sourceHashes": {
+    "app/build.gradle.kts": "19971f527c90dd093364c544ecd614b07b605e59f989fcd9ff96704e91565928",
+    "app/src/androidTest/java/com/runmoni/app/integration/CommunityApiFlowTest.kt": "446da25cba4c01798e4aa2bd8b866d96c7ece8c08ccd1cc42d7432c54452c9ab",
+    "app/src/androidTest/java/com/runmoni/app/ui/HierarchyClosetUxTest.kt": "821b3f7908157599e169d3a0f1d99437851650cd7ea20138d6412e92034b8026",
+    "app/src/androidTest/java/com/runmoni/app/ui/RunmoniUiTest.kt": "8bb5cd78d19ad95bd32392c65e3b794b79b36a48c73481b29273ec2ebd20933e",
+    "app/src/main/java/com/runmoni/app/domain/AppRelease.kt": "dc8ea5173a09bfdfe65c331a8f5a25d6685123ef01a023d81cd63340e1ef3fdc",
+    "app/src/main/java/com/runmoni/app/ui/AvatarClosetScreen.kt": "ec1ec0377b02fdb284b80470bd6ecaefb750cc38f6356dfa6ce018b9d429628b",
+    "app/src/main/java/com/runmoni/app/ui/CommunityRooms.kt": "34b8c956169ed64f08376d3f2821fffe9203e367da9189235073a1b9854a69b2",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt": "f226569b732c0be2e1a791f38dbbe4f834bffe27f85b233e9af3238013662b4f",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniDestinations.kt": "0eceb921dd3c1182f9bf61027a4ad965b9dc17502c6e950c3b260e952aee52cc",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt": "6a64208b871af4621df3c9f28619577e5bcb527e91c0436acb800797fd62fd37",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniEditorial.kt": "445c81affd9271ac74a4c86fdbbd5a3d06c95f5bc7c9baa3e586b213b1c2e66d"
+  },
+  "debugAppSha256": "9450c99fe2536eb7a5e33cdb4967572df50ac4ff9de79fdf7615231182319ca0",
+  "testAppSha256": "97f37a1b9afd5f4935fedf1e68c36e9b3342c4113870f61ee334b02dd5be6406",
+  "includesFinalCtaAndLoadingFix": true,
+  "scope": "debug/test APK compilation and JVM/lint only; no Android execution or release-signature inference"
+}

@@ -1,0 +1,10 @@
+{
+  "run": 10,
+  "passed": 9,
+  "failures": 1,
+  "seconds": 248.469,
+  "failure": "fiveTabsOpenTheirActualScreens calls performScrollTo on fixed start_run button with no scroll ancestor",
+  "scope": "debug Android UI fixtures, not production Firebase/physical phone",
+  "rerunPending": true,
+  "productCodeChangeForThisFailureNeeded": false
+}

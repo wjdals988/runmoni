@@ -151,6 +151,19 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
         // No logical-only viewport wrapper: the full-screen Dialog's actual
         // Android window must satisfy the native configuration checks above.
         compose.setContent { RunmoniApp(state.value, actions) }
+        // Check the full, unclipped active Home action in the actual 320dp
+        // Android window. Partial visibility must not count as a usable CTA.
+        compose.runOnIdle { state.value = state.value.copy(activeRun = ActiveRun(id = "native-home-layout-fixture", phase = RunPhase.RUNNING)) }
+        compose.onNodeWithTag("home_start_run").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        noTextOverflow("native 320dp / font2 active Home action")
+        captureDevice("home-active-native-320-font2-device")
+        val cta = compose.onNodeWithTag("home_start_run").getUnclippedBoundsInRoot()
+        val nav = compose.onNodeWithTag("nav_home").getUnclippedBoundsInRoot()
+        File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review").apply { mkdirs() }
+            .resolve("home-action-unclipped-native-320-font2.json")
+            .writeText("""{"screenWidthDp":${config.screenWidthDp},"fontScale":${config.fontScale},"ctaTopDp":${cta.top.value},"ctaBottomDp":${cta.bottom.value},"navigationTopDp":${nav.top.value},"unit":"dp; unclipped bounds"}""")
+        assertTrue("Full Home CTA must precede bottom navigation: $cta / $nav", cta.bottom <= nav.top)
+        compose.runOnIdle { state.value = state.value.copy(activeRun = ActiveRun()) }
         compose.onNodeWithTag("nav_me").performClick()
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
         val preview = compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot

@@ -1,0 +1,33 @@
+{
+  "version": "0.3.1-dev",
+  "versionCode": 13,
+  "gradle": "offline/no-parallel/max-workers1",
+  "jvm": {
+    "tests": 45,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 35
+  },
+  "sourceHashes": {
+    "app/build.gradle.kts": "19971f527c90dd093364c544ecd614b07b605e59f989fcd9ff96704e91565928",
+    "app/src/androidTest/java/com/runmoni/app/integration/CommunityApiFlowTest.kt": "446da25cba4c01798e4aa2bd8b866d96c7ece8c08ccd1cc42d7432c54452c9ab",
+    "app/src/androidTest/java/com/runmoni/app/ui/HierarchyClosetUxTest.kt": "14ba9c4aa562a713d4071a90010f0ae5d07b3edc4b1c93d84dbecb1fb6a91f6f",
+    "app/src/androidTest/java/com/runmoni/app/ui/RunmoniUiTest.kt": "1c05f71427dbe2d16016e1796d14be8483a5bcfe5de7b76947b58bcb31162536",
+    "app/src/main/java/com/runmoni/app/domain/AppRelease.kt": "dc8ea5173a09bfdfe65c331a8f5a25d6685123ef01a023d81cd63340e1ef3fdc",
+    "app/src/main/java/com/runmoni/app/ui/AvatarClosetScreen.kt": "ec1ec0377b02fdb284b80470bd6ecaefb750cc38f6356dfa6ce018b9d429628b",
+    "app/src/main/java/com/runmoni/app/ui/CommunityRooms.kt": "34b8c956169ed64f08376d3f2821fffe9203e367da9189235073a1b9854a69b2",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt": "f226569b732c0be2e1a791f38dbbe4f834bffe27f85b233e9af3238013662b4f",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniDestinations.kt": "005734f2cd0e0a91b4b402207153fe06b0fa99d00b26cc75399aefd12392eb9e",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt": "6a64208b871af4621df3c9f28619577e5bcb527e91c0436acb800797fd62fd37",
+    "app/src/main/java/com/runmoni/app/ui/RunmoniEditorial.kt": "445c81affd9271ac74a4c86fdbbd5a3d06c95f5bc7c9baa3e586b213b1c2e66d"
+  },
+  "debugAppSha256": "a0181d32883e4b174c32dfda76652b50b9853b3006e5d97efef2c277dcac5b28",
+  "testAppSha256": "87e9ab1ef0e0e981acefc612a5a22babce6185c57734577afc48423c493d8c63",
+  "approvedArtSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "includesCompactLargeHomeAndUnclippedTest": true,
+  "scope": "debug/test APK compilation and JVM/lint only; no Android execution or release-signature inference"
+}

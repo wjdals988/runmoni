@@ -1,0 +1,66 @@
+{
+  "startedAtUtc": "2026-11-03T06:32:57.466931+00:00",
+  "scope": "cloud Android debug UI fixtures and actual MainActivity/local HTTP test data",
+  "version": "0.3.1-dev",
+  "versionCode": 13,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "phases": {
+    "corrected-five-tabs-and-responsive-home": {
+      "tests": 2,
+      "failures": 0,
+      "seconds": 106.224
+    },
+    "mainactivity-local-http": {
+      "tests": 1,
+      "failures": 0,
+      "seconds": 87.99
+    },
+    "native-320dp-font2": {
+      "tests": 1,
+      "failures": 0,
+      "seconds": 57.543
+    }
+  },
+  "debugAppSha256": "a0181d32883e4b174c32dfda76652b50b9853b3006e5d97efef2c277dcac5b28",
+  "testAppSha256": "87e9ab1ef0e0e981acefc612a5a22babce6185c57734577afc48423c493d8c63",
+  "fixtureCaptures": [
+    "fixture-crew-320-200.png",
+    "fixture-crew-360-100.png",
+    "fixture-explore-320-200.png",
+    "fixture-explore-360-100.png",
+    "fixture-home-320-200.png",
+    "fixture-home-360-100.png",
+    "fixture-me-320-200.png",
+    "fixture-me-360-100.png",
+    "fixture-run-320-200.png",
+    "fixture-run-360-100.png"
+  ],
+  "mainActivityCaptures": [
+    "mainactivity-native-closet-female-free-selection.png",
+    "mainactivity-native-closet-selected-after-check.png",
+    "mainactivity-native-closet-selected-before-check.png",
+    "mainactivity-native-crew-detail.png",
+    "mainactivity-native-crew-list.png",
+    "mainactivity-native-home.png",
+    "mainactivity-native-party-chat.png",
+    "mainactivity-native-party-detail.png"
+  ],
+  "nativeLargeTextCaptures": [
+    "native-320dp-font2-closet-closed-native-320-font2-device.png",
+    "native-320dp-font2-closet-hierarchy-native-320-font2-device.png",
+    "native-320dp-font2-closet-hierarchy-native-320-font2-fixture.png",
+    "native-320dp-font2-home-active-native-320-font2-device.png"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160",
+    "animations": {
+      "window_animation_scale": "1.0",
+      "transition_animation_scale": "1.0",
+      "animator_duration_scale": "1.0"
+    }
+  },
+  "finishedAtUtc": "2026-11-03T06:38:36.541604+00:00"
+}

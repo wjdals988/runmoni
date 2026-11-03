@@ -1,0 +1,84 @@
+{
+  "startedAtUtc": "2026-11-03T06:14:16.784991+00:00",
+  "scope": "cloud Android debug UI fixtures and actual MainActivity/local HTTP test data",
+  "version": "0.3.1-dev",
+  "versionCode": 13,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseModified": false,
+  "phases": {
+    "ui-flow-and-responsive-fixtures": {
+      "failed": true,
+      "errorType": "RuntimeError"
+    },
+    "mainactivity-local-http": {
+      "tests": 1,
+      "failures": 0,
+      "seconds": 76.56
+    },
+    "native-320dp-font2": {
+      "tests": 2,
+      "failures": 0,
+      "seconds": 97.97
+    }
+  },
+  "debugAppSha256": "9450c99fe2536eb7a5e33cdb4967572df50ac4ff9de79fdf7615231182319ca0",
+  "testAppSha256": "97f37a1b9afd5f4935fedf1e68c36e9b3342c4113870f61ee334b02dd5be6406",
+  "fixtureCaptures": [
+    "fixture-consumer-closet-native-items.png",
+    "fixture-consumer-closet-native.png",
+    "fixture-consumer-settings-native.png",
+    "fixture-crew-320-200.png",
+    "fixture-crew-360-100.png",
+    "fixture-explore-320-200.png",
+    "fixture-explore-360-100.png",
+    "fixture-hierarchy-back-after-removal-device.png",
+    "fixture-hierarchy-back-to-crew-device.png",
+    "fixture-hierarchy-back-to-list-device.png",
+    "fixture-hierarchy-crew-public-device.png",
+    "fixture-hierarchy-crew-public-fixture.png",
+    "fixture-hierarchy-party-public-device.png",
+    "fixture-hierarchy-party-public-fixture.png",
+    "fixture-hierarchy-party-removed-device.png",
+    "fixture-hierarchy-party-removed-fixture.png",
+    "fixture-home-320-200.png",
+    "fixture-home-360-100.png",
+    "fixture-me-320-200.png",
+    "fixture-me-360-100.png",
+    "fixture-rooms-create-crew-320-200.png",
+    "fixture-rooms-crew-detail-320-200.png",
+    "fixture-rooms-list-320-200.png",
+    "fixture-run-320-200.png",
+    "fixture-run-360-100.png",
+    "fixture-running-active-fixture-360-100.png"
+  ],
+  "mainActivityCaptures": [
+    "mainactivity-native-closet-female-free-selection.png",
+    "mainactivity-native-closet-selected-after-check.png",
+    "mainactivity-native-closet-selected-before-check.png",
+    "mainactivity-native-crew-detail.png",
+    "mainactivity-native-crew-list.png",
+    "mainactivity-native-home.png",
+    "mainactivity-native-party-chat.png",
+    "mainactivity-native-party-detail.png"
+  ],
+  "nativeLargeTextCaptures": [
+    "native-320dp-font2-closet-closed-native-320-font2-device.png",
+    "native-320dp-font2-closet-hierarchy-native-320-font2-device.png",
+    "native-320dp-font2-closet-hierarchy-native-320-font2-fixture.png",
+    "native-320dp-font2-consumer-closet-native-items.png",
+    "native-320dp-font2-consumer-closet-native.png",
+    "native-320dp-font2-consumer-settings-native.png",
+    "native-320dp-font2-home-active-native-320-font2-device.png"
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160",
+    "animations": {
+      "window_animation_scale": "1.0",
+      "transition_animation_scale": "1.0",
+      "animator_duration_scale": "1.0"
+    }
+  },
+  "finishedAtUtc": "2026-11-03T06:23:00.184395+00:00"
+}

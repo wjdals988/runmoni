@@ -65,7 +65,6 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
             AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
             HorizontalDivider(color = RunmoniColors.Line)
         }
-        EditorialHeading("YOUR PACE", "나에게 맞추기")
         Text("내 프로필", style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("profile_name"))
         OutlinedButton(onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("save_profile")) { Text("이름 저장") }

@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.1-dev", "2026-11-03", "러닝·일정 중심 UI 개선 · 실기기 검증 전", listOf(
+        "홈에서 러닝 시작·예정된 파티·최근 기록을 먼저 확인해요.",
+        "크루와 파티를 일정·거리·페이스·인원으로 비교하는 목록으로 정리했어요.",
+        "옷장의 큰 빈 카드와 반복 가격을 줄이고 선택·원화 준비 상태를 구분했어요.",
+        "남녀 기본형·전 아이템 0P·기존 포인트와 보유 내역을 유지해요. 미준비 의상은 선택만 보관해요.",
+    )),
     AppVersionEntry("0.3.0-dev", "2026-11-02", "크루·파티와 옷장 개편 · 실기기 검증 전", listOf(
         "크루 안에서 파티를 만들고 참가·삭제하는 구조로 정리했어요.",
         "카테고리는 가로 탭으로, 화면 제목과 내용의 정렬·단계를 새롭게 맞췄어요.",
