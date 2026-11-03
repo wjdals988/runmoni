@@ -30,4 +30,8 @@ Instagram 분석과 awesome-design-md를 우선순위별로 적용한 UI를 [앱
 
 ## 피드·대시보드
 
-검증한 공개 자산으로 preview 피드와 대시보드 다운로드/화면을 갱신하는 단계다. **새0.3.1 피드 main 통합·운영 대시보드 동기화는 아직 완료로 기록하지 않는다.** 실제 운영 CI/Production·HTML/버전/링크/크기/해시·사진 원본 일치는 부모 작업에서 확인한 뒤 이 절에 추가한다. 피드나 대시보드 커밋은 APK의 출처가 아니다.
+대시보드 PR14/main `05202f65fe2b288cfe6943d74af477ef79e4dd39`·PR CI41594079975/main CI41594302891·Vercel Production7512608845 success와 실제 운영 HTTP200/0.3.1-dev(code13)/다운로드/크기/해시·PNG5장 원본 일치를 확인했다. Node23개/실패0·coverage lines92.69%/branches86.14%/functions100%다. [운영 검증 근거](app-review/2026-11-03-context-ui/dashboard-production-verification.json). 공개 APK 바이너리는 GitHub Release에만 두며 다른8프로젝트·기존 내역5개와 이전 자산을 보존한다.
+
+[운영 페이지](https://coldbrewventi.vercel.app/projects/runmoni)의 실제 HTML 텍스트·다운로드 anchor·갤러리 원본 바이트를 대조했다. 브라우저 클릭/사용자 시각 승인이나 서명 APK/실기기/운영 Firebase 실행으로 확장하지 않는다.
+
+공개 preview 피드는 [PR22](https://github.com/wjdals988/runmoni/pull/22)에 반영하며 stable은 null이다. main 통합 뒤 canonical raw 피드의 실제 응답 확인을 PR22 최종 게시 댓글에 남긴다. 후속 피드/문서 main 커밋으로 APK 출처3074c0f를 바꾸지 않는다.

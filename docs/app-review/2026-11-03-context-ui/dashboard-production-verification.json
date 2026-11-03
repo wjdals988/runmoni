@@ -1,0 +1,123 @@
+{
+  "verifiedAtUtc": "2026-11-03T07:10:39.428574+00:00",
+  "dashboard": {
+    "repository": "wjdals988/mydashboard",
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/14",
+    "mergedAt": "2026-11-03T07:08:07Z",
+    "mergeRevision": "05202f65fe2b288cfe6943d74af477ef79e4dd39",
+    "pullRequestCi": {
+      "runId": 41594079975,
+      "conclusion": "success"
+    },
+    "mainCi": {
+      "runId": 41594302891,
+      "conclusion": "success",
+      "url": "https://github.com/wjdals988/mydashboard/actions/runs/41594302891"
+    },
+    "localNodeTests": {
+      "passed": 23,
+      "failed": 0,
+      "durationMilliseconds": 147.655996,
+      "coveragePercent": {
+        "lines": 92.69,
+        "branches": 86.14,
+        "functions": 100
+      }
+    },
+    "productionDeployment": {
+      "id": 7512608845,
+      "state": "success",
+      "environmentUrl": "https://mydashboard-7ttd3slf6-wjdals988-6836s-projects.vercel.app",
+      "createdAt": "2026-11-03T07:08:32Z"
+    }
+  },
+  "productionPage": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "checks": {
+      "http200": true,
+      "canonicalUrl": true,
+      "downloadAnchor": true,
+      "versionAndCode": true,
+      "fileSize": true,
+      "sha256": true,
+      "previewLabel": true,
+      "descriptionIncludingUnverifiedBoundaries": true,
+      "screenshotsProvenance": true,
+      "gallery_home": true,
+      "gallery_crews": true,
+      "gallery_crew": true,
+      "gallery_closet": true,
+      "gallery_chat": true
+    },
+    "responseSha256": "f18cea3964dfb0b56c46af31eb06fb9fdcf863b8f270b16b9e7771119f6ec088"
+  },
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.3.1-dev/runmoni-0.3.1-dev.apk",
+    "fileName": "runmoni-0.3.1-dev.apk",
+    "version": "0.3.1-dev",
+    "versionCode": 13,
+    "size": "218,496,781 bytes",
+    "sha256": "2f77849607140903de2bb80611bd4ce28a2c0d418c59fd0d7d74d880db56b16c",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.1-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK",
+    "sourceRevision": "3074c0f40797a2452b36e4277dd559f94a31ac07",
+    "sizeBytes": 218496781
+  },
+  "gallery": [
+    {
+      "path": "/reviews/runmoni/0.3.1-dev/home.png",
+      "httpStatus": 200,
+      "sizeBytes": 58989,
+      "sha256": "bf314fa1214c3126eee914bd4c881e56a7467b6a2868d2d1f51f02351371fa71",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.1-dev/crews.png",
+      "httpStatus": 200,
+      "sizeBytes": 29031,
+      "sha256": "cd4c91501dc52d9ab50bf86ac2e55febe5b02644330720390d89bf1c5dc42789",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.1-dev/crew.png",
+      "httpStatus": 200,
+      "sizeBytes": 47323,
+      "sha256": "5d7c16f0f990c838ad45ceaa24db8ce4b43f2899a3e0c200249ef09f183f7e1a",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.1-dev/closet.png",
+      "httpStatus": 200,
+      "sizeBytes": 65987,
+      "sha256": "cdac803c770b14055dd4b1544026270135bc9dce3ea0975ee34ae8c11d863a4f",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    },
+    {
+      "path": "/reviews/runmoni/0.3.1-dev/chat.png",
+      "httpStatus": 200,
+      "sizeBytes": 23810,
+      "sha256": "ac3e5c2b6d3e364d5261caff66f6b2fd8dac0f75433cd5e98ac15f33d2a05105",
+      "matchesCommittedOriginal": true,
+      "width": 480,
+      "height": 854
+    }
+  ],
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false,
+  "productionPartyWritesVerified": false,
+  "newRulesOwnerPublicationVerified": false,
+  "limits": [
+    "HTML actual text/anchor and unchanged PNG response checks; no browser interaction or user visual approval inferred.",
+    "Gallery is debug MainActivity/cloud Android/local HTTP, not signed APK/physical phone/production Firebase execution.",
+    "No full APK body download; signed CI and public asset/HEAD proofs are separate."
+  ]
+}
