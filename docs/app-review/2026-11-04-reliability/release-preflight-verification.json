@@ -1,0 +1,28 @@
+{
+  "recordedAtUtc": "2026-11-04T06:20:39.909113+00:00",
+  "phase": "pre-publication",
+  "releaseToolingUnitTests": {
+    "command": "python3 -m unittest discover -s scripts/tests",
+    "tests": 70,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 0.093
+  },
+  "helperSyntaxChecks": {
+    "scripts": 6,
+    "passed": true
+  },
+  "independentReview": {
+    "reviewedScripts": 5,
+    "finding": "Preview-note meaning assertion used an older wording; corrected before execution; exact draft body validation retained",
+    "recommendedGuardsApplied": [
+      "Sidecar declared size bounded before download",
+      "Exact version/code/source/CI/dashboard source assertions"
+    ]
+  },
+  "ciSourceRevision": "8eb04d80e3b810f6514c7586dfefde4e1207f1f2",
+  "publicReleasePublishedAtThisObservation": false,
+  "physicalDeviceVerified": false,
+  "realGoogleVerified": false,
+  "scope": "Static/helper preflight and existing packaging unit tests; not production or phone execution"
+}
