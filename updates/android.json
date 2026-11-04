@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.3.2-dev",
-    "versionCode": 14,
-    "fileName": "runmoni-0.3.2-dev.apk",
-    "sizeBytes": 218627853,
-    "sha256": "2b1789d22f811bdfe84e7c81dcb62aa472e3ed4a693f2831cf4fa3113ee809a4",
+    "version": "0.3.3-dev",
+    "versionCode": 15,
+    "fileName": "runmoni-0.3.3-dev.apk",
+    "sizeBytes": 218882079,
+    "sha256": "6fa1b77a70b022eeee92ab1033d5aa0bd287ae3f503f178bd0ced4beea1c612e",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "8eb04d80e3b810f6514c7586dfefde4e1207f1f2",
+    "sourceRevision": "abee084b115abfb8693a9fe92c03e024c9adb29d",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.2-dev/runmoni-0.3.2-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.2-dev",
-    "notes": "실기기 검증 전 개발 프리뷰입니다. 러닝 저장 재시도·중단 복구와 기기 기록/포인트/Google 백업 상태를 구분하고 크루 UID를 보존하는 Google 연결·기존 연결 프로필 재연결을 추가했습니다. 남녀·전 아이템0P·기존 데이터와 승인 기본형을 유지하며 미준비 의상은 선택만 보관합니다. 실제 휴대폰·Google·다른 기기 복원·운영 쓰기는 미검증입니다. 새 Firebase 규칙 변경은 없으며 기존 보관 키입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.3-dev/runmoni-0.3.3-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.3-dev",
+    "notes": "실기기 검증 전 개발 프리뷰입니다. 승인 남녀 원본의 기본 상의·하의·신발 천 색상을 각각 선택하고 기기에 저장합니다. 기존9탭/13슬롯/58개ID·0P·성별·포인트/보유권을 유지합니다. 새 형태 의상/수영복 완성과 사용자 시각 승인은 별도입니다. 실제 휴대폰·Google·운영 두 기기 쓰기는 미검증이며 새 Firebase 규칙 변경은 없습니다. 기존 보관 키입니다."
   },
   "schemaVersion": 1,
   "stable": null
