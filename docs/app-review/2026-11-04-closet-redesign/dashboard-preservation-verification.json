@@ -1,0 +1,71 @@
+{
+  "dashboardPullRequest": "https://github.com/wjdals988/mydashboard/pull/17",
+  "baselineRevision": "b27ec7aaab9e4194324ea02ca7d47c082227b62d",
+  "headRevision": "8a9c90c7a303be73a648b641ecd310dc0bbb35bc",
+  "projectCount": 9,
+  "projectOrderPreserved": true,
+  "otherProjects": [
+    {
+      "slug": "starlink-duo",
+      "beforeSha256": "8c24c1d6ad55325c044ea0d42a1fff60a766e9534ccd2d71b7086961c0cc554f",
+      "afterSha256": "8c24c1d6ad55325c044ea0d42a1fff60a766e9534ccd2d71b7086961c0cc554f"
+    },
+    {
+      "slug": "reaction-speed-test",
+      "beforeSha256": "8ed305f70e5c673dc50e6fa08e54b3bacc6736a51cdd59c44ab16da350e4df8e",
+      "afterSha256": "8ed305f70e5c673dc50e6fa08e54b3bacc6736a51cdd59c44ab16da350e4df8e"
+    },
+    {
+      "slug": "shared-schedule-checker",
+      "beforeSha256": "ddfe8e08989ea518490b0a210c5b4cf9fc3d48f61078bcc515a748796786d6f1",
+      "afterSha256": "ddfe8e08989ea518490b0a210c5b4cf9fc3d48f61078bcc515a748796786d6f1"
+    },
+    {
+      "slug": "location-widget",
+      "beforeSha256": "00cbea98c1f94264cd77db7e1023a107be0e57d4be9873f64d4a4ef5232534c3",
+      "afterSha256": "00cbea98c1f94264cd77db7e1023a107be0e57d4be9873f64d4a4ef5232534c3"
+    },
+    {
+      "slug": "gifticon-doctor",
+      "beforeSha256": "f1e43e55bce1022904e619e6f2fe8a893dcc6e017838aec22909565e87743e53",
+      "afterSha256": "f1e43e55bce1022904e619e6f2fe8a893dcc6e017838aec22909565e87743e53"
+    },
+    {
+      "slug": "donghaeng-ilgi",
+      "beforeSha256": "72562233106e8bf5bba2714060699796b7b1f5ed3cb47f81200102fa95c6b118",
+      "afterSha256": "72562233106e8bf5bba2714060699796b7b1f5ed3cb47f81200102fa95c6b118"
+    },
+    {
+      "slug": "streamer-alert-system",
+      "beforeSha256": "b14a366b326a008f33d00198722e35e03219469c45e09a40b1379a53f826f859",
+      "afterSha256": "b14a366b326a008f33d00198722e35e03219469c45e09a40b1379a53f826f859"
+    },
+    {
+      "slug": "pricehere",
+      "beforeSha256": "fa610700aff023527fe433a24157ba8f6fafddfad4071afb64883327ee4d3f84",
+      "afterSha256": "fa610700aff023527fe433a24157ba8f6fafddfad4071afb64883327ee4d3f84"
+    }
+  ],
+  "oldNotesCount": 8,
+  "newNotesCount": 9,
+  "oldNotesPreservedExactly": true,
+  "sourceUrlPreserved": true,
+  "oldImages": [
+    {
+      "path": "public/reviews/runmoni/0.3.3-dev/male-closet.png",
+      "sha256": "ab4d6f5f245c3e1ea8c89221d97b12208fc33472b2c092cebde205cacb2ec5a0",
+      "bytesPreserved": true
+    },
+    {
+      "path": "public/reviews/runmoni/0.3.3-dev/female-closet.png",
+      "sha256": "63bb50cbbfa93155856320b4cd77cf713f86e62be162a686ce374c66544d1b71",
+      "bytesPreserved": true
+    },
+    {
+      "path": "public/reviews/runmoni/0.3.3-dev/home.png",
+      "sha256": "126e41b396cc9cf56941728a7d722643bc4223d58436df68853797b5b9ba7e2b",
+      "bytesPreserved": true
+    }
+  ],
+  "newScreenshots": 4
+}
