@@ -1,0 +1,56 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.RunningKitMainActivityTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.integration.RunningKitMainActivityTest:
+INSTRUMENTATION_STATUS: test=actualClosetColorsPersistAcrossActivityAndViewModelRelaunch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.RunningKitMainActivityTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: null; localColors=RunningKitColors(top=1, bottom=2, shoes=3); uiColors=RunningKitColors(top=1, bottom=2, shoes=3); busy=false; hasError=false
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:149)
+	... 52 trimmed
+Caused by: java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:115)
+	... 53 more
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(com.runmoni.app.integration.RunningKitMainActivityTest):
+java.lang.AssertionError: null; localColors=RunningKitColors(top=1, bottom=2, shoes=3); uiColors=RunningKitColors(top=1, bottom=2, shoes=3); busy=false; hasError=false
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:149)
+	... 52 trimmed
+Caused by: java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:115)
+	... 53 more
+
+INSTRUMENTATION_STATUS: test=actualClosetColorsPersistAcrossActivityAndViewModelRelaunch
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 120.125
+There was 1 failure:
+1) actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(com.runmoni.app.integration.RunningKitMainActivityTest)
+java.lang.AssertionError: null; localColors=RunningKitColors(top=1, bottom=2, shoes=3); uiColors=RunningKitColors(top=1, bottom=2, shoes=3); busy=false; hasError=false
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:149)
+	... 52 trimmed
+Caused by: java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:115)
+	... 53 more
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

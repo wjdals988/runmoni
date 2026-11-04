@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.3-dev", "2026-11-04", "기본 러닝복 색상 · 실기기 검증 전", listOf(
+        "기본 상의·하의·신발의 천 색상을 각각 선택하고 기기에 저장해요.",
+        "원본·민트·코랄·블루·퍼플·골드를 선택하고 남녀 기본형의 8프레임에서 확인해요.",
+        "기존 아이템·성별·포인트·보유 내역은 유지해요. 색상 변경은 새로운 의상 형태의 완성을 뜻하지 않아요.",
+        "무료 아이템 선택과 실제 원화 준비 상태를 구분해요. 기본 Firebase의 색상은 기기에 저장돼요.",
+    )),
     AppVersionEntry("0.3.2-dev", "2026-11-04", "기록 저장·크루 계정 연결 개선 · 실기기 검증 전", listOf(
         "기록 저장 실패와 포인트 처리 지연을 구분하고 해당 작업을 다시 시도할 수 있어요.",
         "종료 저장 중에는 러닝을 다시 시작하지 않으며 저장되지 않은 경로를 재시도해요.",

@@ -1,0 +1,21 @@
+{
+  "observedAtUtc": "2026-11-04T10:28:39.341520+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "pid": 140924,
+  "androidApi": "29",
+  "version": "0.3.3-dev",
+  "versionCode": 15,
+  "packages": [
+    {
+      "package": "com.runmoni.app",
+      "installedBaseApkSha256": "2b4b1f6509599b8aebdfb253fc746621070e10d218f8718fa422c8f973c3714c",
+      "matchesLocalBinary": true
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "installedBaseApkSha256": "65ea3647394170645b6f125adf3c5bfdb2b0fdf3432ea6b8ffa17b2cfffb5e08",
+      "matchesLocalBinary": true
+    }
+  ],
+  "physicalDeviceVerified": false
+}

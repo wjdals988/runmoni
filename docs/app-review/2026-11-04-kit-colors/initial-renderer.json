@@ -1,0 +1,26 @@
+{
+  "phase": "renderer",
+  "selection": "com.runmoni.app.avatar.RunningKitRendererTest,com.runmoni.app.ui.ApprovedAvatarRenderingTest",
+  "startedAtUtc": "2026-11-04T10:30:59.941745+00:00",
+  "installedBinaryReference": "installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 7,
+  "failures": 0,
+  "seconds": 85.283,
+  "captures": [],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

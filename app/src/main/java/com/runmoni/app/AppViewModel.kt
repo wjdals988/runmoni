@@ -83,21 +83,25 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             val before = state.value.profile
             val local = if (resolvedCredit) withContext(Dispatchers.IO) { wallet.read() } else null
             mutableState.update { previous -> previous.copy(runPersistence = persistence,
-                profile = if (local != null && previous.profile == before && (api.token.isBlank() || previous.communityGuest)) local else previous.profile) }
+                profile = if (local != null && (api.token.isBlank() || previous.communityGuest))
+                    previous.profile.mergeWalletMileage(before, local) else previous.profile) }
         } }
         viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
         viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
         viewModelScope.launch { app.runs.records.collect { records ->
             val before = state.value.profile
             val local = withContext(Dispatchers.IO) { wallet.read() }
-            // An IO snapshot must not undo a newer name, outfit or wallet update in the UI.
-            mutableState.update { it.copy(records = records, profile = if (it.profile == before && (api.token.isBlank() || it.communityGuest)) local else it.profile) }
+            // New clothes or a nickname must not discard a completed credit read.
+            // Merge only the balance, and never replace a balance updated after this read began.
+            mutableState.update { it.copy(records = records, profile = if (api.token.isBlank() || it.communityGuest)
+                it.profile.mergeWalletMileage(before, local) else it.profile) }
         } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
             if (firebaseMode || api.token.isBlank() || state.value.communityGuest) {
                 val before = state.value.profile
                 val local = withContext(Dispatchers.IO) { wallet.read() }
-                mutableState.update { if (it.profile == before && (firebaseMode || api.token.isBlank() || it.communityGuest)) it.copy(profile = local) else it }
+                mutableState.update { if (firebaseMode || api.token.isBlank() || it.communityGuest)
+                    it.copy(profile = it.profile.mergeWalletMileage(before, local)) else it }
             } else { RunSyncWorker.enqueue(app); refreshCommunity() }
         } }
         viewModelScope.launch { audio.status.collect { status ->
@@ -180,6 +184,49 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             api.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put("gender", gender.wireValue)))
             refreshNow()
         } else mutateLocalProfile { it.copy(avatar = it.avatar.copy(gender = gender)) }
+    } })
+    override fun setRunningKitColor(region: RunningKitRegion, color: Int) = ignoreJob(work { wardrobeChanges.withLock {
+        require(color in 0 until RunningKitColors.COLOR_COUNT) { "올바른 러닝복 색상을 선택해 주세요." }
+        val generation = communityGeneration
+        val targetUrl = api.baseUrl
+        val targetToken = api.token
+        val serverProfile = !firebaseMode && targetToken.isNotBlank() && !state.value.communityGuest
+        val savedColor = if (serverProfile) {
+            // Snapshot the intended HTTP session before suspension. Send only the
+            // selected fabric region; old equipment/gender and other colors stay intact.
+            val target = PilotClient(targetUrl, targetToken)
+            val result = try {
+                target.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put(
+                    "runningKitColors", JSONObject().put(region.wireKey, color))))
+            } catch (failure: Exception) {
+                if (failure is CancellationException) throw failure
+                if (communityGeneration != generation || firebaseMode || api.baseUrl != targetUrl ||
+                    api.token != targetToken || state.value.communityGuest) return@withLock
+                if (failure is PilotException && failure.status == 422)
+                    throw IllegalStateException("이 서버는 러닝복 색상을 지원하지 않아요. 서버 업데이트 후 다시 시도해 주세요.")
+                throw failure
+            }
+            if (communityGeneration != generation || firebaseMode || api.baseUrl != targetUrl ||
+                api.token != targetToken || state.value.communityGuest) return@withLock
+            with(PilotClient) { result.confirmedRunningKitColor(region, color) }
+        } else withContext(Dispatchers.IO) {
+            wallet.update { profile -> profile.copy(avatar = profile.avatar.copy(
+                runningKitColors = profile.avatar.runningKitColors.withColor(region, color)))
+            }.avatar.runningKitColors.color(region)
+        }
+        // Publish after any older community/profile snapshot. A refresh that starts
+        // after this lock observes the already committed local or HTTP color value.
+        communityRefresh.withLock {
+            mutableState.update { previous ->
+                val stillServerProfile = !firebaseMode && api.token.isNotBlank() && !previous.communityGuest
+                if (communityGeneration == generation && api.baseUrl == targetUrl && api.token == targetToken &&
+                    stillServerProfile == serverProfile) previous.copy(profile = previous.profile.copy(
+                    // Never replace a newer nickname, wallet, gender or item selection
+                    // with a profile snapshot received before this operation completed.
+                    avatar = previous.profile.avatar.copy(runningKitColors =
+                        previous.profile.avatar.runningKitColors.withColor(region, savedColor)))) else previous
+            }
+        }
     } })
     override fun equipItem(slot: String, variant: Int) = ignoreJob(work { wardrobeChanges.withLock {
         require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
@@ -530,7 +577,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private fun roomScope(room: String): JSONObject { val (scope, id) = room.split(":", limit = 2); return JSONObject().put("scope_type", scope).put("scope_id", id) }
     private fun readLocalProfile(): Profile = wallet.read()
     private fun mutateLocalProfile(transform: (Profile) -> Profile) { val profile = wallet.update(transform); mutableState.update { it.copy(profile = profile) } }
-    private fun AvatarStyle.toJson() = PilotClient.encodeAvatar(this)
     private fun AvatarStyle.with(slot: String, variant: Int) = withItem(slot, variant)
     private fun ignoreJob(job: Job) = Unit
     override fun onCleared() { audio.close(); super.onCleared() }

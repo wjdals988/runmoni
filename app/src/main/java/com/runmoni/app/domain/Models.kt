@@ -59,6 +59,7 @@ data class AvatarStyle(
     val face: Int = 0, val socks: Int = 0, val headwear: Int? = null,
     val ear: Int? = null, val costume: Int = 0,
     val gender: AvatarGender = AvatarGender.MALE,
+    val runningKitColors: RunningKitColors = RunningKitColors(),
 )
 data class Profile(val name: String = "러너", val avatar: AvatarStyle = AvatarStyle(), val mileage: Int = 0, val ownedItems: Set<String> = AvatarCatalogue.defaultOwned)
 data class Crew(

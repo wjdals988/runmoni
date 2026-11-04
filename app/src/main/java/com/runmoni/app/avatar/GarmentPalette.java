@@ -20,6 +20,13 @@ public final class GarmentPalette {
         return value >= 0 && value < COLORS ? value : ORIGINAL;
     }
 
+    /** Approved running-kit mask: 1=top, 2=bottom, 3=shoe fabric.
+     * This is a separate asset contract from the swimsuit mask below.
+     */
+    public static int[] recolorRunningKit(int[] source, int[] mask, int top, int bottom, int shoes) {
+        return recolor(source, mask, top, bottom, shoes);
+    }
+
     /**
      * Mask: alpha=255, red=region (1 shorts, 2 bikini top, 3 bikini bottom),
      * green=shade (0..255), blue=0. Alpha=0 means copy the source bit-for-bit.
@@ -43,7 +50,7 @@ public final class GarmentPalette {
             int position = shade * 4, index = position / 255, fraction = position % 255;
             int a = PALETTES[selected][index], b = PALETTES[selected][Math.min(index + 1, 4)];
             int rgb = 0;
-            for (int shift : new int[]{16, 8, 0}) {
+            for (int shift = 16; shift >= 0; shift -= 8) {
                 int lo = (a >>> shift) & 255, hi = (b >>> shift) & 255;
                 int channel = (lo * (255 - fraction) + hi * fraction + 127) / 255;
                 rgb |= channel << shift;

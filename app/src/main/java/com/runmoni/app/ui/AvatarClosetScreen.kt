@@ -64,6 +64,16 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                         val sub = AvatarCatalogue.slots.filter { it.key in AvatarCatalogue.accessoryKeys }
                         val slot = if (key == "accessories") sub[accessory] else AvatarCatalogue.slots.first { it.key == key }
                         if (key == "accessories") ClosetTabs(sub.map { it.key to it.label }, accessory, { accessory = it }, "closet_slot")
+                        val fabricRegion = when (key) {
+                            "top" -> RunningKitRegion.TOP
+                            "bottom" -> RunningKitRegion.BOTTOM
+                            "shoes" -> RunningKitRegion.SHOES
+                            else -> null
+                        }
+                        if (fabricRegion != null) {
+                            RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor)
+                            HorizontalDivider(color = RunmoniColors.Line)
+                        }
                         val covered = slot.key in AvatarCatalogue.coveredSlots(profile.avatar.costume)
                         if (covered) Text("일반 아이템을 선택하면 세트가 해제돼요", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                         val columns = if (largeText) 1 else 2

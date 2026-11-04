@@ -19,6 +19,13 @@ class GuestLogin(Model):
     adult_confirmed: StrictBool
 
 
+class RunningKitColors(Model):
+    # Palette settings never grant inventory ownership or change item shapes.
+    top: int = Field(default=0, strict=True, ge=0, le=5)
+    bottom: int = Field(default=0, strict=True, ge=0, le=5)
+    shoes: int = Field(default=0, strict=True, ge=0, le=5)
+
+
 class Avatar(Model):
     gender: Literal["male", "female"] = "male"
     hair: int = Field(default=0, ge=0, le=3)
@@ -35,6 +42,7 @@ class Avatar(Model):
     headwear: int | None = Field(default=None, ge=0, le=3)
     ear: int | None = Field(default=None, ge=0, le=3)
     costume: int = Field(default=0, ge=0, le=5)
+    runningKitColors: RunningKitColors = Field(default_factory=RunningKitColors)
 
 
 class ProfilePatch(Model):

@@ -1,0 +1,23 @@
+{
+  "scope": "host raw PNG ARGB and production GarmentPalette; not Android/user approval",
+  "cells": 16,
+  "combinationsPerCell": 216,
+  "cases": 3456,
+  "outsideMaskPixelChecks": 317242224,
+  "protectedPixelChecks": 195892344,
+  "alphaPixelChecks": 339738624,
+  "disabledRegionPixelChecks": 3749400,
+  "changedOutsideMask": 0,
+  "changedProtectedPixels": 0,
+  "changedAlpha": 0,
+  "sourceMutated": false,
+  "invalidMaskCasesRejected": 3,
+  "seconds": 2.827241161,
+  "verifiedInputHashes": {
+    "docs/design/avatars/v0.3.0/running-motion-art-source.png": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+    "docs/design/avatars/running-kit-v1/fabric-mask.png": "462433ce98a7a2f52c98823d851bed462418bbab18f4262c75f6113456e74bb5",
+    "docs/design/avatars/running-kit-v1/protected-mask.png": "b0cb7500f4f267d530a9e188778dc1fe4cfe7665c1e042b28d2401082d6ae7f0",
+    "app/src/main/java/com/runmoni/app/avatar/GarmentPalette.java": "d5ac2fce4f32d4064e396bcdfbcd530936b79be7ad6b9c2454c4a1ae12b48741"
+  },
+  "inputHashesConfirmedAfterDeterministicMaskRebuild": true
+}

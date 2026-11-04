@@ -1,0 +1,15 @@
+{
+  "observedAtUtc": "2026-11-04T10:55:34.441927+00:00",
+  "avdPid": 145281,
+  "phase": "boot after test-only rebuild, before final test install or Runmoni launch",
+  "bootCompletedObserved": true,
+  "observedDialog": "System UI isn't responding",
+  "runmoniAnrVerified": false,
+  "causeVerified": false,
+  "generalResolutionVerified": false,
+  "inputWakeTimeoutSeconds": 20,
+  "readyFrame": "final-ready-launcher.png",
+  "systemUiDialogAbsentInReadyFrame": true,
+  "testApkInstallHostCommandTimedOutSeconds": 120,
+  "installedTestHashVerificationRequired": true
+}

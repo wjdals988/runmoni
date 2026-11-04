@@ -44,6 +44,12 @@ def canonical_avatar(style):
     if style.get("ear") is None:
         result["ear"] = 1 if legacy == 3 else 0
     result["gender"] = style.get("gender") if style.get("gender") in {"male", "female"} else "male"
+    colors = style.get("runningKitColors")
+    colors = colors if isinstance(colors, dict) else {}
+    result["runningKitColors"] = {
+        region: colors[region] if type(colors.get(region)) is int and 0 <= colors[region] <= 5 else 0
+        for region in ("top", "bottom", "shoes")
+    }
     return result
 
 
@@ -339,7 +345,7 @@ def create_app(settings=None, clock=None):
                 changes = body.avatar.model_dump(exclude_unset=True)
                 owned = set(profile(c, user["id"])["owned_items"])
                 for slot, variant in changes.items():
-                    if slot == "gender":
+                    if slot in {"gender", "runningKitColors"}:
                         continue
                     if variant is None:
                         fail(422, "invalid_avatar", "아이템 번호를 선택해 주세요.")
@@ -348,6 +354,11 @@ def create_app(settings=None, clock=None):
                 # An older client that sends only five slots must preserve new equipment.
                 saved = c.execute("SELECT avatar FROM users WHERE id=?", (user["id"],)).fetchone()
                 style = canonical_avatar(json.loads(saved["avatar"]))
+                # Older clients omit colors; a one-region patch must retain the
+                # other regions and must not alter inventory/costume occupancy.
+                colors = changes.pop("runningKitColors", None)
+                if colors is not None:
+                    style["runningKitColors"].update(colors)
                 if "accessory" in changes:
                     if "headwear" not in changes:
                         changes["headwear"] = {1: 3, 2: 1}.get(changes["accessory"], 0)

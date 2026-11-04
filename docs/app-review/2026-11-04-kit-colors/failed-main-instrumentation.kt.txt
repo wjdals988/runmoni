@@ -1,0 +1,182 @@
+package com.runmoni.app.integration
+
+import android.graphics.Color
+import android.os.SystemClock
+import androidx.lifecycle.ViewModelProvider
+import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
+import androidx.test.uiautomator.StaleObjectException
+import com.runmoni.app.*
+import com.runmoni.app.data.LocalWallet
+import com.runmoni.app.data.SecureSession
+import com.runmoni.app.domain.*
+import org.json.JSONObject
+import org.junit.Assert.*
+import org.junit.Test
+import org.junit.runner.RunWith
+import java.io.File
+
+/** Real Android input/Choreographer, MainActivity, VM and wallet; no Compose test clock. */
+@RunWith(AndroidJUnit4::class)
+class RunningKitMainActivityTest {
+    @Test fun actualClosetColorsPersistAcrossActivityAndViewModelRelaunch() {
+        val app = ApplicationProvider.getApplicationContext<RunmoniApplication>()
+        assertTrue(BuildConfig.DEBUG)
+        assertFalse("No production Firebase writes in this review", app.community.configured)
+        assertTrue("Do not replace a real HTTP login", SecureSession(app).read().isBlank())
+        assertEquals(RunPhase.IDLE, app.runs.active.value.phase)
+        val wallet = LocalWallet(app)
+        val prefs = app.getSharedPreferences("runmoni", android.content.Context.MODE_PRIVATE)
+        val backup = File(app.cacheDir, "running-kit-private-state-backup.json")
+        fun restore(saved: JSONObject) {
+            val edit = prefs.edit()
+            for ((key, marker) in listOf("localProfile" to "hasProfile", "communityBackend" to "hasBackend")) {
+                if (saved.getBoolean(marker)) edit.putString(key, saved.getString(key)) else edit.remove(key)
+            }
+            check(edit.commit()) { "Private fixture state restoration failed" }
+        }
+        // Keep the raw fields private and recoverable across an instrumentation crash.
+        if (backup.exists()) { restore(JSONObject(backup.readText())); check(backup.delete()) }
+        val before = wallet.read()
+        val saved = JSONObject().put("hasProfile", prefs.contains("localProfile"))
+            .put("hasBackend", prefs.contains("communityBackend"))
+        for (key in listOf("localProfile", "communityBackend")) if (prefs.contains(key)) saved.put(key, prefs.getString(key, ""))
+        val temporary = File(app.cacheDir, "running-kit-private-state-backup.tmp")
+        temporary.writeText(saved.toString()); check(temporary.renameTo(backup))
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val evidence = File(app.cacheDir, "kit-main-review").apply { mkdirs() }
+        val seed = before.copy(name = "검토 러너", avatar = before.avatar.copy(
+            gender = AvatarGender.MALE, runningKitColors = RunningKitColors()))
+        var scenario: ActivityScenario<MainActivity>? = null
+        var model: AppViewModel? = null
+        fun launch() {
+            scenario = ActivityScenario.launch(MainActivity::class.java)
+            scenario!!.onActivity { model = ViewModelProvider(it)[AppViewModel::class.java] }
+            until { model!!.state.value.runPersistence.initialized && !model!!.state.value.busy }
+        }
+        fun actionTarget(text: String): UiObject2? {
+            for (label in device.findObjects(By.text(text))) {
+                val box = label.visibleBounds
+                if (box.isEmpty || box.width() < 12 || box.centerX() !in 20 until device.displayWidth - 20) continue
+                var node: UiObject2? = label
+                repeat(7) {
+                    val current = node ?: return@repeat
+                    if (current.isClickable || current.isCheckable || current.isSelected) {
+                        // Never skip a disabled radio row to click a higher container.
+                        return if (current.isEnabled) current else null
+                    }
+                    node = current.parent
+                }
+            }
+            return null
+        }
+        fun tap(text: String) {
+            var target: UiObject2? = null
+            until(30_000) { actionTarget(text)?.also { target = it } != null }
+            val node = requireNotNull(target)
+            // Selected tabs can expose no accessibility click action.
+            if (!node.isSelected && !node.isChecked) node.click()
+            device.waitForIdle(1000)
+        }
+        val categories = listOf("헤어", "모자", "얼굴", "상의", "하의", "세트", "양말", "신발", "액세서리")
+        var activeCategory = 3
+        fun tab(text: String) {
+            val wanted = categories.indexOf(text); check(wanted >= 0)
+            repeat(3) {
+                if (actionTarget(text) != null) return@repeat
+                val anchor = categories.asSequence().mapNotNull { actionTarget(it) }.firstOrNull()
+                assertNotNull("Visible category strip", anchor)
+                val y = anchor!!.visibleBounds.centerY()
+                val left = 40; val right = device.displayWidth - 40
+                if (wanted < activeCategory) device.swipe(left, y, right, y, 25)
+                else device.swipe(right, y, left, y, 25)
+            }
+            tap(text)
+            until { actionTarget(text)?.isSelected == true }
+            activeCategory = wanted
+        }
+        fun color(region: RunningKitRegion, label: String, expected: Int) {
+            until { device.findObject(By.text("색상은 기본형에 적용돼요")) != null }
+            tap(label)
+            until { !model!!.state.value.busy && wallet.read().avatar.runningKitColors.color(region) == expected &&
+                model!!.state.value.profile.avatar.runningKitColors.color(region) == expected && actionTarget(label)?.isChecked == true }
+        }
+        fun capture(name: String) {
+            until { device.findObject(By.text("준비 중")) == null && device.findObject(By.desc("미니미 준비 중")) == null }
+            assertNull(device.findObject(By.desc("미니미 다시 불러오기")))
+            assertTrue(device.takeScreenshot(File(evidence, "$name.png")))
+        }
+        fun awaitVisibleTopHue(low: Float, high: Float) {
+            until(30_000) {
+                val node = device.findObjects(By.desc("나의 러닝 미니미"))
+                    .filter { !it.visibleBounds.isEmpty }.maxByOrNull { it.visibleBounds.height() } ?: return@until false
+                val box = node.visibleBounds
+                val shot = InstrumentationRegistry.getInstrumentation().uiAutomation.takeScreenshot() ?: return@until false
+                try {
+                    val hsv = FloatArray(3); var count = 0
+                    for (y in box.top + (box.height() * .40f).toInt() until box.top + (box.height() * .68f).toInt())
+                        for (x in box.left + (box.width() * .28f).toInt() until box.left + (box.width() * .82f).toInt()) {
+                            Color.colorToHSV(shot.getPixel(x.coerceIn(0, shot.width - 1), y.coerceIn(0, shot.height - 1)), hsv)
+                            if (hsv[0] in low..high && hsv[1] > .3f && hsv[2] > .45f) count++
+                        }
+                    count >= 12
+                } finally { shot.recycle() }
+            }
+        }
+        try {
+            check(prefs.edit().putString("communityBackend", "firebase").commit())
+            wallet.update { seed }
+            launch(); tap("나"); tap("미니미 꾸미기")
+            tab("상의"); color(RunningKitRegion.TOP, "민트", 1)
+            tab("하의"); color(RunningKitRegion.BOTTOM, "코랄", 2)
+            tab("신발"); color(RunningKitRegion.SHOES, "블루", 3)
+            assertEquals(RunningKitColors(1, 2, 3), wallet.read().avatar.runningKitColors)
+            awaitVisibleTopHue(135f, 195f); capture("male-mint-coral-blue-closet")
+            tap("닫기"); tap("홈")
+            until { device.findObject(By.text("러닝 시작하기")) != null }
+            capture("male-mint-coral-blue-home")
+            tap("나"); tap("미니미 꾸미기"); tap("여자")
+            until { !model!!.state.value.busy && wallet.read().avatar.gender == AvatarGender.FEMALE }
+            tab("상의"); color(RunningKitRegion.TOP, "퍼플", 4)
+            tab("하의"); color(RunningKitRegion.BOTTOM, "블루", 3)
+            tab("신발"); color(RunningKitRegion.SHOES, "골드", 5)
+            awaitVisibleTopHue(250f, 295f); capture("female-purple-blue-gold-closet")
+            val chosen = seed.copy(avatar = seed.avatar.copy(gender = AvatarGender.FEMALE, runningKitColors = RunningKitColors(4, 3, 5)))
+            assertEquals(chosen, wallet.read()); assertEquals(chosen.avatar, model!!.state.value.profile.avatar)
+            tap("닫기"); tap("홈")
+            until { device.findObject(By.text("러닝 시작하기")) != null }
+            capture("female-purple-blue-gold-home")
+            scenario!!.close(); scenario = null
+            launch(); until { model!!.state.value.profile.avatar == chosen.avatar }
+            assertEquals(chosen, wallet.read())
+            tap("나"); tap("미니미 꾸미기")
+            awaitVisibleTopHue(250f, 295f); capture("female-colors-after-activity-relaunch")
+            scenario!!.onActivity { model!!.setRunningKitColor(RunningKitRegion.TOP, 0) }
+            until { !model!!.state.value.busy && wallet.read().avatar.runningKitColors == RunningKitColors(0, 3, 5) }
+            assertEquals(before.mileage, wallet.read().mileage)
+            assertEquals(before.ownedItems, wallet.read().ownedItems)
+            assertEquals(seed.avatar.top, wallet.read().avatar.top)
+        } catch (failure: Throwable) {
+            device.takeScreenshot(File(evidence, "failure-main.png"))
+            throw AssertionError("${failure.message}; localColors=${wallet.read().avatar.runningKitColors}; " +
+                "uiColors=${model?.state?.value?.profile?.avatar?.runningKitColors}; " +
+                "busy=${model?.state?.value?.busy}; hasError=${model?.state?.value?.error != null}", failure)
+        } finally {
+            scenario?.close()
+            restore(saved)
+            assertEquals(before, wallet.read())
+            check(backup.delete()) { "Private fixture backup could not be removed" }
+        }
+    }
+    private fun until(timeout: Long = 60_000, condition: () -> Boolean) {
+        val end = SystemClock.elapsedRealtime() + timeout
+        fun ready() = try { condition() } catch (_: StaleObjectException) { false }
+        while (!ready() && SystemClock.elapsedRealtime() < end) Thread.sleep(120)
+        assertTrue("Actual app state/visible pixels arrived", ready())
+    }
+}

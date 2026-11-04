@@ -1,0 +1,37 @@
+{
+  "phase": "native",
+  "selection": "com.runmoni.app.ui.RunningKitColorsNativeUiTest",
+  "startedAtUtc": "2026-11-04T10:37:50.998117+00:00",
+  "installedBinaryReference": "installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "2.0",
+    "density": "Physical density: 160\nOverride density: 240"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 1,
+  "failures": 0,
+  "seconds": 55.885,
+  "captures": [
+    {
+      "file": "initial-native-kit-colors-closet-native-320-font2-device.png",
+      "sha256": "a119ed14d3f076e136839b82c3fde66ce34b28e0d64176ba887510f98cc750fb",
+      "bytes": 56019
+    },
+    {
+      "file": "initial-native-kit-colors-closet-native-320-font2-fixture.png",
+      "sha256": "970564704029028a93112fe3ac6cc6550a51ce45182bc971e23aff6e765798f7",
+      "bytes": 57154
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

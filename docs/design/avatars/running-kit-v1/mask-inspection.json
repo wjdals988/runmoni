@@ -1,0 +1,650 @@
+{
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "sourceUnchanged": true,
+  "protectedIntersection": 0,
+  "cells": [
+    {
+      "gender": "male",
+      "frame": 0,
+      "labelledPixels": {
+        "top": 2439,
+        "bottom": 1313,
+        "shoes": 1858
+      },
+      "protectedPixels": 62445,
+      "componentSizes": {
+        "top": [
+          2439,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          1240,
+          73,
+          11,
+          7,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1
+        ],
+        "shoes": [
+          989,
+          869,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 1,
+      "labelledPixels": {
+        "top": 1588,
+        "bottom": 1081,
+        "shoes": 1477
+      },
+      "protectedPixels": 59559,
+      "componentSizes": {
+        "top": [
+          1588,
+          4,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          598,
+          483,
+          30,
+          15,
+          4,
+          4,
+          3,
+          3,
+          2,
+          1
+        ],
+        "shoes": [
+          902,
+          575
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 2,
+      "labelledPixels": {
+        "top": 2392,
+        "bottom": 1338,
+        "shoes": 1739
+      },
+      "protectedPixels": 60046,
+      "componentSizes": {
+        "top": [
+          2385,
+          7,
+          3,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          919,
+          419,
+          6,
+          6,
+          4,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "shoes": [
+          920,
+          819,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 3,
+      "labelledPixels": {
+        "top": 2366,
+        "bottom": 1193,
+        "shoes": 1825
+      },
+      "protectedPixels": 63079,
+      "componentSizes": {
+        "top": [
+          2366,
+          4,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          1193,
+          29,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          975,
+          850,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 4,
+      "labelledPixels": {
+        "top": 2321,
+        "bottom": 1129,
+        "shoes": 1865
+      },
+      "protectedPixels": 62721,
+      "componentSizes": {
+        "top": [
+          2321,
+          4,
+          3,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          1129,
+          30,
+          6,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          993,
+          872,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 5,
+      "labelledPixels": {
+        "top": 1644,
+        "bottom": 1747,
+        "shoes": 766
+      },
+      "protectedPixels": 59677,
+      "componentSizes": {
+        "top": [
+          1644,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          1747,
+          5,
+          3,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          685,
+          81,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 6,
+      "labelledPixels": {
+        "top": 2363,
+        "bottom": 876,
+        "shoes": 1773
+      },
+      "protectedPixels": 60539,
+      "componentSizes": {
+        "top": [
+          2356,
+          7,
+          5,
+          3,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          876,
+          51,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "shoes": [
+          896,
+          877,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "male",
+      "frame": 7,
+      "labelledPixels": {
+        "top": 2288,
+        "bottom": 1072,
+        "shoes": 1900
+      },
+      "protectedPixels": 62638,
+      "componentSizes": {
+        "top": [
+          2288,
+          6,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          626,
+          446,
+          23,
+          3,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          1013,
+          887,
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 0,
+      "labelledPixels": {
+        "top": 3446,
+        "bottom": 3633,
+        "shoes": 1842
+      },
+      "protectedPixels": 53068,
+      "componentSizes": {
+        "top": [
+          3446,
+          2,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          2616,
+          1017,
+          44,
+          2,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          953,
+          889,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 1,
+      "labelledPixels": {
+        "top": 2643,
+        "bottom": 2880,
+        "shoes": 1551
+      },
+      "protectedPixels": 50967,
+      "componentSizes": {
+        "top": [
+          2643,
+          1
+        ],
+        "bottom": [
+          2089,
+          510,
+          281,
+          42,
+          7,
+          6,
+          5,
+          4,
+          4,
+          3
+        ],
+        "shoes": [
+          784,
+          767,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 2,
+      "labelledPixels": {
+        "top": 2991,
+        "bottom": 2763,
+        "shoes": 1597
+      },
+      "protectedPixels": 50944,
+      "componentSizes": {
+        "top": [
+          2968,
+          23,
+          1,
+          1
+        ],
+        "bottom": [
+          2153,
+          610,
+          56,
+          8,
+          4,
+          4,
+          3,
+          2,
+          2,
+          2
+        ],
+        "shoes": [
+          802,
+          795
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 3,
+      "labelledPixels": {
+        "top": 3364,
+        "bottom": 3724,
+        "shoes": 1799
+      },
+      "protectedPixels": 53004,
+      "componentSizes": {
+        "top": [
+          3364,
+          3,
+          2,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          2689,
+          1035,
+          35,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "shoes": [
+          948,
+          851,
+          3,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 4,
+      "labelledPixels": {
+        "top": 3229,
+        "bottom": 3452,
+        "shoes": 1830
+      },
+      "protectedPixels": 52616,
+      "componentSizes": {
+        "top": [
+          3229,
+          6,
+          5,
+          2,
+          1
+        ],
+        "bottom": [
+          2626,
+          826,
+          33,
+          7,
+          4,
+          4,
+          4,
+          3,
+          2,
+          2
+        ],
+        "shoes": [
+          965,
+          865,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 5,
+      "labelledPixels": {
+        "top": 2846,
+        "bottom": 2816,
+        "shoes": 1520
+      },
+      "protectedPixels": 50878,
+      "componentSizes": {
+        "top": [
+          2846,
+          1,
+          1
+        ],
+        "bottom": [
+          2694,
+          122,
+          6,
+          4,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "shoes": [
+          781,
+          739,
+          4,
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 6,
+      "labelledPixels": {
+        "top": 3146,
+        "bottom": 2890,
+        "shoes": 1633
+      },
+      "protectedPixels": 51966,
+      "componentSizes": {
+        "top": [
+          3146,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          2428,
+          462,
+          56,
+          26,
+          6,
+          4,
+          4,
+          3,
+          3,
+          2
+        ],
+        "shoes": [
+          834,
+          799
+        ]
+      }
+    },
+    {
+      "gender": "female",
+      "frame": 7,
+      "labelledPixels": {
+        "top": 3109,
+        "bottom": 3363,
+        "shoes": 1730
+      },
+      "protectedPixels": 52762,
+      "componentSizes": {
+        "top": [
+          3109,
+          5,
+          2,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "bottom": [
+          2320,
+          1043,
+          12,
+          3,
+          3,
+          2,
+          1,
+          1,
+          1,
+          1
+        ],
+        "shoes": [
+          871,
+          859,
+          4,
+          2,
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  ]
+}

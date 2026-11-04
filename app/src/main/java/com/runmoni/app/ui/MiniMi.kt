@@ -26,6 +26,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.runmoni.app.avatar.ApprovedAvatarRenderer
+import com.runmoni.app.avatar.RunningKitArtwork
 import com.runmoni.app.domain.AvatarStyle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -51,12 +52,13 @@ internal fun MiniMi(
     val context = LocalContext.current.applicationContext
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var attempt by remember(context, avatar, running) { mutableIntStateOf(0) }
+    val artworkGeneration by RunningKitArtwork.generation.collectAsState()
     // Asset decoding/cropping must not block the first home screen on the UI thread.
     // Publish the genuine first frame, then the complete clip. A changed selection
     // gets its own state, so an old outfit is never presented as a new one.
     // Keep loading state AND its subcomposition in the same request lifetime.
     // Replacing only the State delegate can leave a new loading child unplaced.
-    key(context, avatar, running, attempt, frameLoader) {
+    key(context, avatar, running, attempt, frameLoader, artworkGeneration) {
         var frame by remember { mutableIntStateOf(0) }
         val prepared by produceState(initialValue = MiniMiFrames()) {
             try {
@@ -131,7 +133,7 @@ private data class MiniMiFrames(
 
 /** Same approved base in Compose and map markers. Saved equipment is never rewritten. */
 internal fun avatarBitmap(context: Context, avatar: AvatarStyle, frame: Int = 0, running: Boolean = false): Bitmap =
-    AvatarArtRuntime.renderer(context).render(frame, running, avatar.gender)
+    AvatarArtRuntime.renderer(context).renderForDisplay(frame, running, avatar.gender, avatar.runningKitColors)
 
 /** One application asset repository/cache shared by Compose and map markers. */
 private object AvatarArtRuntime {

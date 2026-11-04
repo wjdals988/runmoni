@@ -71,12 +71,38 @@ class PilotClient(var baseUrl: String, var token: String = "") {
             this?.optInt("face") ?: 0, this?.optInt("socks") ?: 0,
             this?.takeIf { it.has("headwear") && !it.isNull("headwear") }?.optInt("headwear"),
             this?.takeIf { it.has("ear") && !it.isNull("ear") }?.optInt("ear"), this?.optInt("costume") ?: 0,
-            AvatarGender.fromWire(this?.optString("gender")))
+            AvatarGender.fromWire(this?.optString("gender")),
+            this?.optJSONObject("runningKitColors").toRunningKitColors())
+        private fun JSONObject?.toRunningKitColors() = RunningKitColors(
+            strictColor("top"), strictColor("bottom"), strictColor("shoes"),
+        )
+        // A malformed new preference must not make LocalWallet reset an otherwise
+        // valid name, balance, ownership or equipment through its top-level fallback.
+        private fun JSONObject?.strictColor(key: String): Int = when (val raw = this?.opt(key)) {
+            is Int -> raw.takeIf { it in 0 until RunningKitColors.COLOR_COUNT } ?: 0
+            is Long -> raw.takeIf { it in 0L until RunningKitColors.COLOR_COUNT.toLong() }?.toInt() ?: 0
+            else -> 0
+        }
+        /** Full persistence codec, not a PATCH payload for legacy HTTP servers.
+         * Network wardrobe actions deliberately send only the selected supported field.
+         */
         fun encodeAvatar(avatar: AvatarStyle) = with(avatar) {
             JSONObject().put("hair", hair).put("top", top).put("bottom", bottom).put("shoes", shoes).put("accessory", accessory)
                 .put("eyewear", eyewear).put("wrist", wrist).put("waist", waist).put("hydration", hydration)
                 .put("face", face).put("socks", socks).put("headwear", variantFor("headwear")).put("ear", variantFor("ear")).put("costume", costume)
                 .put("gender", gender.wireValue)
+                .put("runningKitColors", runningKitColors.normalized().let {
+                    JSONObject().put("top", it.top).put("bottom", it.bottom).put("shoes", it.shoes)
+                })
+        }
+        /** A decoder's safe default is not proof that a server saved an original-color reset. */
+        fun JSONObject.confirmedRunningKitColor(region: RunningKitRegion, color: Int): Int {
+            require(color in 0 until RunningKitColors.COLOR_COUNT)
+            val value = optJSONObject("avatar")?.optJSONObject("runningKitColors")?.opt(region.wireKey)
+            check((value is Int && value == color) || (value is Long && value == color.toLong())) {
+                "서버에서 색상 저장을 확인하지 못했어요. 연결 후 다시 시도해 주세요."
+            }
+            return color
         }
         fun JSONObject.toProfile(): Profile {
             val owned = optJSONArray("owned_items")?.let { array -> (0 until array.length()).map { array.optString(it) }.toSet() } ?: Profile().ownedItems

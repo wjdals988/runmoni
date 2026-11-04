@@ -39,7 +39,7 @@ class ApprovedAvatarRenderingTest {
         bitmap.getPixels(it, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
     }
 
-    @Test fun sharedAppAndMapBitmapMatchesBothRowsAndAllEightApprovedSourceCellsExactly() {
+    @Test fun sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding() {
         val source = context.assets.open(ApprovedAvatarRenderer.ASSET).use {
             BitmapFactory.decodeStream(it, null, BitmapFactory.Options().apply { inScaled = false })!!
         }
@@ -48,6 +48,9 @@ class ApprovedAvatarRenderingTest {
             for (frame in 0..7) {
                 val expected = IntArray(256 * 384)
                 source.getPixels(expected, 0, 256, frame * 256, gender.spriteRow * 384, 256, 384)
+                if (gender == AvatarGender.FEMALE) {
+                    java.util.Arrays.fill(expected, 0, 256 * ApprovedAvatarRenderer.FEMALE_DISPLAY_PADDING, 0)
+                }
                 val actual = pixels(avatarBitmap(context, AvatarStyle(gender = gender), frame, true))
                 assertArrayEquals("Approved ${gender.wireValue} frame $frame changed", expected, actual)
                 hashes += actual.contentHashCode()

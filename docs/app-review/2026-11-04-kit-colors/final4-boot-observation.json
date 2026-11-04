@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-11-04T11:36:14.427485+00:00",
+  "avdPid": 151840,
+  "phase": "before final4 test install or Runmoni launch",
+  "bootCompletedObserved": true,
+  "observedDialog": "System UI isn't responding",
+  "action": "Wait at x160/y489 after direct inspection",
+  "runmoniAnrVerified": false,
+  "causeVerified": false,
+  "generalResolutionVerified": false,
+  "readyFrame": "final4-ready-launcher.png",
+  "systemUiDialogAbsentInReadyFrame": true
+}

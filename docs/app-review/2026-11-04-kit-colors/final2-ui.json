@@ -1,0 +1,77 @@
+{
+  "phase": "ui",
+  "selection": "com.runmoni.app.ui.RunningKitColorsUiTest",
+  "startedAtUtc": "2026-11-04T11:16:29.542070+00:00",
+  "installedBinaryReference": "final2-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 3,
+  "failures": 0,
+  "seconds": 84.962,
+  "captures": [
+    {
+      "file": "final2-ui-kit-colors-closet-female-fixture-device.png",
+      "sha256": "63a56d51f21cadff3b4452eada87f7f4d934b86293d15de4d52cc52b7d829278",
+      "bytes": 65823
+    },
+    {
+      "file": "final2-ui-kit-colors-closet-female-fixture.png",
+      "sha256": "94a871620ad3a19f7ca80d04f4a8b2783bcd80cb00aa49d0b692143d031b2ffa",
+      "bytes": 71063
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-240-200-device.png",
+      "sha256": "d547940ea39af420dcb28d0f2a75988c8272bd3be3a699b61f56fcae6b23fbd5",
+      "bytes": 23239
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-240-200.png",
+      "sha256": "49b3a82d76fe39920d86667b18d3b5ee9bdcf802c3bf49131ce1c9baa11319ba",
+      "bytes": 22094
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-320-100-device.png",
+      "sha256": "02c47e2b42c995f82aa2ef1fae15520ede3ae8b5d7d40ebffd0cf4fd844fa389",
+      "bytes": 17474
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-320-100.png",
+      "sha256": "3c7e92274e893d903da1e4f9b3d5683751018f80bb944dc1365de1c39edc6700",
+      "bytes": 15855
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-320-200-device.png",
+      "sha256": "707f061173d132d3711a63bf7c0656d50b1faec733163f9b4a4932ff9f9ce02b",
+      "bytes": 22466
+    },
+    {
+      "file": "final2-ui-kit-colors-palette-fixture-320-200.png",
+      "sha256": "9b9de8868cf82ea93e77732ba3dcb12d7270c7f43f788eaa2c94cd37e51acffd",
+      "bytes": 22044
+    },
+    {
+      "file": "final2-ui-kit-colors-unavailable-fixture-320-200-device.png",
+      "sha256": "a0c8664912f8d4f25f4acbe9ae0a05657f05ca1285fa76f28544850ef17697e2",
+      "bytes": 31225
+    },
+    {
+      "file": "final2-ui-kit-colors-unavailable-fixture-320-200.png",
+      "sha256": "b2076b863fe012298e0f550fad1be0e778bb8c049d2a711ff90012ef8af84e57",
+      "bytes": 31349
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}
