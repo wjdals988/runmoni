@@ -1,0 +1,12 @@
+{
+  "phase": "production HTTP verification after successful main CI/deployment",
+  "failedCheck": "versionAndCode exact joined-text substring",
+  "observedDownloadTextFragments": [
+    "0.3.4-dev",
+    "(",
+    "16",
+    ") \u00b7"
+  ],
+  "cause": "React comments split visible text nodes; parser inserted extra spaces. The download version/code were correct.",
+  "correction": "Parse the actual download section and allow whitespace between version/code fragments; keep exact expected version/code and URL/size/hash."
+}
