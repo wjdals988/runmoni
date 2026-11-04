@@ -1,0 +1,15 @@
+{
+  "recordedAtUtc": "2026-11-04T12:25:11.855362+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "terminatedPid": 153313,
+  "ownedAvdStopped": true,
+  "currentPreHostProfileRestored": true,
+  "originalPreFinal4CrashProfileRestorationVerified": false,
+  "restoredSettings": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "privateProfileBaselinePublished": false,
+  "phoneOrProductionFirebaseMutated": false
+}

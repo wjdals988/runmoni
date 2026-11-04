@@ -1,0 +1,61 @@
+{
+  "startedAtUtc": "2026-11-04T12:01:12.123573+00:00",
+  "verificationKind": "host-driven real Android input; no instrumentation or Compose test clock",
+  "avd": "Runmoni_Cloud_29",
+  "androidApi": 29,
+  "acceleration": "TCG",
+  "version": "0.3.3-dev",
+  "versionCode": 15,
+  "appSha256": "2b4b1f6509599b8aebdfb253fc746621070e10d218f8718fa422c8f973c3714c",
+  "installedBinaryReference": "final5-installed-verification.json",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseWritesVerified": false,
+  "originalPreFinal4CrashProfileRestorationVerified": false,
+  "operations": [
+    {
+      "action": "gender",
+      "value": "male",
+      "committed": true
+    },
+    {
+      "action": "fabricColor",
+      "region": "top",
+      "value": 1,
+      "committed": true
+    },
+    {
+      "action": "category",
+      "region": "bottom",
+      "visibleContentConfirmed": true
+    },
+    {
+      "action": "fabricColor",
+      "region": "bottom",
+      "value": 2,
+      "committed": true
+    },
+    {
+      "action": "category",
+      "region": "shoes",
+      "visibleContentConfirmed": true
+    },
+    {
+      "action": "fabricColor",
+      "region": "shoes",
+      "value": 3,
+      "committed": true
+    }
+  ],
+  "captures": [],
+  "passed": false,
+  "failureType": "ParseError",
+  "failure": "syntax error: line 1, column 0",
+  "currentPreAttemptProfileRestored": true,
+  "restoredSettings": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "finishedAtUtc": "2026-11-04T12:04:47.440601+00:00"
+}

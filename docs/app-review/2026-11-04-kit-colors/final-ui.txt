@@ -1,0 +1,444 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.RunningKitColorsUiTest:
+INSTRUMENTATION_STATUS: test=closetColorChangesKeepItemSelectionsCostumeInventoryAndGender
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed to perform GetTextLayoutResult action.
+Can't retrieve node at index '33' of '(Text is defined) && (GetTextLayoutResult is defined)'
+There are '33' nodes only:
+1) Node #9 at (l=20.0, t=22.0, r=354.0, b=51.0)px
+Text = '[옷장]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 4 siblings
+2) Node #14 at (l=417.0, t=25.0, r=445.0, b=47.0)px
+Text = '[닫기]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+3) Node #21 at (l=20.0, t=252.0, r=333.0, b=276.0)px
+Text = '[기본형]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+4) Node #28 at (l=351.0, t=253.0, r=379.0, b=275.0)px
+Text = '[남자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+5) Node #36 at (l=427.0, t=253.0, r=455.0, b=275.0)px
+Text = '[여자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+6) Node #37 at (l=20.0, t=304.0, r=378.0, b=324.0)px, Tag: 'closet_artwork_status'
+Text = '[모든 아이템 0P · 선택은 저장됐어요. 미리보기는 기본형을 표시해요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+7) Node #98 at (l=-322.0, t=352.0, r=-292.0, b=376.0)px
+Text = '[헤어]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+8) Node #102 at (l=-232.0, t=352.0, r=-202.0, b=376.0)px
+Text = '[모자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+9) Node #106 at (l=-142.0, t=352.0, r=-112.0, b=376.0)px
+Text = '[얼굴]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+10) Node #110 at (l=-52.0, t=352.0, r=-22.0, b=376.0)px
+Text = '[상의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+11) Node #114 at (l=38.0, t=352.0, r=68.0, b=376.0)px
+Text = '[하의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+12) Node #118 at (l=128.0, t=352.0, r=158.0, b=376.0)px
+Text = '[세트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+13) Node #122 at (l=218.0, t=352.0, r=248.0, b=376.0)px
+Text = '[양말]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+14) Node #126 at (l=308.0, t=352.0, r=338.0, b=376.0)px
+Text = '[신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+15) Node #130 at (l=384.0, t=352.0, r=444.0, b=376.0)px
+Text = '[액세서리]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+16) Node #41 at (l=20.0, t=404.0, r=133.0, b=428.0)px
+Text = '[기본 러닝복 색상]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+17) Node #136 at (l=58.0, t=449.0, r=158.0, b=471.0)px
+Text = '[원본]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+18) Node #139 at (l=206.0, t=449.0, r=306.0, b=471.0)px
+Text = '[민트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+19) Node #143 at (l=354.0, t=449.0, r=454.0, b=471.0)px
+Text = '[코랄]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+20) Node #147 at (l=58.0, t=497.0, r=158.0, b=519.0)px
+Text = '[블루]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+21) Node #150 at (l=206.0, t=497.0, r=306.0, b=519.0)px
+Text = '[퍼플]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+22) Node #153 at (l=354.0, t=497.0, r=454.0, b=519.0)px
+Text = '[골드]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+23) Node #164 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+24) Node #50 at (l=32.0, t=605.0, r=222.0, b=629.0)px
+Text = '[기본 신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+25) Node #53 at (l=76.0, t=651.0, r=222.0, b=671.0)px
+Text = '[바로 착용]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+26) Node #57 at (l=258.0, t=605.0, r=422.0, b=629.0)px
+Text = '[코랄 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+27) Node #59 at (l=258.0, t=637.0, r=448.0, b=657.0)px
+Text = '[선택 보관 · 미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+28) Node #64 at (l=32.0, t=733.0, r=222.0, b=757.0)px
+Text = '[블루 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+29) Node #66 at (l=32.0, t=765.0, r=222.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+30) Node #70 at (l=258.0, t=733.0, r=448.0, b=757.0)px
+Text = '[골드 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+31) Node #72 at (l=258.0, t=765.0, r=448.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+32) Node #86 at (l=20.0, t=849.0, r=421.0, b=869.0)px
+Text = '[포인트 차감 없이 한 번 눌러 선택해요. 기존 포인트와 보유 내역은 보관돼요.]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+33) Node #89 at (l=32.0, t=898.0, r=178.0, b=920.0)px
+Text = '[원화 · 수영복 시안 비교]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:175)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performSemanticsAction(Actions.kt:586)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:58)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:132)
+
+INSTRUMENTATION_STATUS: stream=
+Error in closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest):
+java.lang.AssertionError: Failed to perform GetTextLayoutResult action.
+Can't retrieve node at index '33' of '(Text is defined) && (GetTextLayoutResult is defined)'
+There are '33' nodes only:
+1) Node #9 at (l=20.0, t=22.0, r=354.0, b=51.0)px
+Text = '[옷장]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 4 siblings
+2) Node #14 at (l=417.0, t=25.0, r=445.0, b=47.0)px
+Text = '[닫기]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+3) Node #21 at (l=20.0, t=252.0, r=333.0, b=276.0)px
+Text = '[기본형]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+4) Node #28 at (l=351.0, t=253.0, r=379.0, b=275.0)px
+Text = '[남자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+5) Node #36 at (l=427.0, t=253.0, r=455.0, b=275.0)px
+Text = '[여자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+6) Node #37 at (l=20.0, t=304.0, r=378.0, b=324.0)px, Tag: 'closet_artwork_status'
+Text = '[모든 아이템 0P · 선택은 저장됐어요. 미리보기는 기본형을 표시해요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+7) Node #98 at (l=-322.0, t=352.0, r=-292.0, b=376.0)px
+Text = '[헤어]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+8) Node #102 at (l=-232.0, t=352.0, r=-202.0, b=376.0)px
+Text = '[모자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+9) Node #106 at (l=-142.0, t=352.0, r=-112.0, b=376.0)px
+Text = '[얼굴]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+10) Node #110 at (l=-52.0, t=352.0, r=-22.0, b=376.0)px
+Text = '[상의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+11) Node #114 at (l=38.0, t=352.0, r=68.0, b=376.0)px
+Text = '[하의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+12) Node #118 at (l=128.0, t=352.0, r=158.0, b=376.0)px
+Text = '[세트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+13) Node #122 at (l=218.0, t=352.0, r=248.0, b=376.0)px
+Text = '[양말]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+14) Node #126 at (l=308.0, t=352.0, r=338.0, b=376.0)px
+Text = '[신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+15) Node #130 at (l=384.0, t=352.0, r=444.0, b=376.0)px
+Text = '[액세서리]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+16) Node #41 at (l=20.0, t=404.0, r=133.0, b=428.0)px
+Text = '[기본 러닝복 색상]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+17) Node #136 at (l=58.0, t=449.0, r=158.0, b=471.0)px
+Text = '[원본]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+18) Node #139 at (l=206.0, t=449.0, r=306.0, b=471.0)px
+Text = '[민트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+19) Node #143 at (l=354.0, t=449.0, r=454.0, b=471.0)px
+Text = '[코랄]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+20) Node #147 at (l=58.0, t=497.0, r=158.0, b=519.0)px
+Text = '[블루]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+21) Node #150 at (l=206.0, t=497.0, r=306.0, b=519.0)px
+Text = '[퍼플]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+22) Node #153 at (l=354.0, t=497.0, r=454.0, b=519.0)px
+Text = '[골드]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+23) Node #164 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+24) Node #50 at (l=32.0, t=605.0, r=222.0, b=629.0)px
+Text = '[기본 신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+25) Node #53 at (l=76.0, t=651.0, r=222.0, b=671.0)px
+Text = '[바로 착용]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+26) Node #57 at (l=258.0, t=605.0, r=422.0, b=629.0)px
+Text = '[코랄 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+27) Node #59 at (l=258.0, t=637.0, r=448.0, b=657.0)px
+Text = '[선택 보관 · 미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+28) Node #64 at (l=32.0, t=733.0, r=222.0, b=757.0)px
+Text = '[블루 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+29) Node #66 at (l=32.0, t=765.0, r=222.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+30) Node #70 at (l=258.0, t=733.0, r=448.0, b=757.0)px
+Text = '[골드 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+31) Node #72 at (l=258.0, t=765.0, r=448.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+32) Node #86 at (l=20.0, t=849.0, r=421.0, b=869.0)px
+Text = '[포인트 차감 없이 한 번 눌러 선택해요. 기존 포인트와 보유 내역은 보관돼요.]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+33) Node #89 at (l=32.0, t=898.0, r=178.0, b=920.0)px
+Text = '[원화 · 수영복 시안 비교]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:175)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performSemanticsAction(Actions.kt:586)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:58)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:132)
+
+INSTRUMENTATION_STATUS: test=closetColorChangesKeepItemSelectionsCostumeInventoryAndGender
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 88.005
+There was 1 failure:
+1) closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest)
+java.lang.AssertionError: Failed to perform GetTextLayoutResult action.
+Can't retrieve node at index '33' of '(Text is defined) && (GetTextLayoutResult is defined)'
+There are '33' nodes only:
+1) Node #9 at (l=20.0, t=22.0, r=354.0, b=51.0)px
+Text = '[옷장]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 4 siblings
+2) Node #14 at (l=417.0, t=25.0, r=445.0, b=47.0)px
+Text = '[닫기]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+3) Node #21 at (l=20.0, t=252.0, r=333.0, b=276.0)px
+Text = '[기본형]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+4) Node #28 at (l=351.0, t=253.0, r=379.0, b=275.0)px
+Text = '[남자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+5) Node #36 at (l=427.0, t=253.0, r=455.0, b=275.0)px
+Text = '[여자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+6) Node #37 at (l=20.0, t=304.0, r=378.0, b=324.0)px, Tag: 'closet_artwork_status'
+Text = '[모든 아이템 0P · 선택은 저장됐어요. 미리보기는 기본형을 표시해요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+7) Node #98 at (l=-322.0, t=352.0, r=-292.0, b=376.0)px
+Text = '[헤어]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+8) Node #102 at (l=-232.0, t=352.0, r=-202.0, b=376.0)px
+Text = '[모자]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+9) Node #106 at (l=-142.0, t=352.0, r=-112.0, b=376.0)px
+Text = '[얼굴]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+10) Node #110 at (l=-52.0, t=352.0, r=-22.0, b=376.0)px
+Text = '[상의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+11) Node #114 at (l=38.0, t=352.0, r=68.0, b=376.0)px
+Text = '[하의]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+12) Node #118 at (l=128.0, t=352.0, r=158.0, b=376.0)px
+Text = '[세트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+13) Node #122 at (l=218.0, t=352.0, r=248.0, b=376.0)px
+Text = '[양말]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+14) Node #126 at (l=308.0, t=352.0, r=338.0, b=376.0)px
+Text = '[신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+15) Node #130 at (l=384.0, t=352.0, r=444.0, b=376.0)px
+Text = '[액세서리]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+16) Node #41 at (l=20.0, t=404.0, r=133.0, b=428.0)px
+Text = '[기본 러닝복 색상]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+17) Node #136 at (l=58.0, t=449.0, r=158.0, b=471.0)px
+Text = '[원본]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+18) Node #139 at (l=206.0, t=449.0, r=306.0, b=471.0)px
+Text = '[민트]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+19) Node #143 at (l=354.0, t=449.0, r=454.0, b=471.0)px
+Text = '[코랄]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+20) Node #147 at (l=58.0, t=497.0, r=158.0, b=519.0)px
+Text = '[블루]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+21) Node #150 at (l=206.0, t=497.0, r=306.0, b=519.0)px
+Text = '[퍼플]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+22) Node #153 at (l=354.0, t=497.0, r=454.0, b=519.0)px
+Text = '[골드]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+23) Node #164 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+24) Node #50 at (l=32.0, t=605.0, r=222.0, b=629.0)px
+Text = '[기본 신발]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+25) Node #53 at (l=76.0, t=651.0, r=222.0, b=671.0)px
+Text = '[바로 착용]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+26) Node #57 at (l=258.0, t=605.0, r=422.0, b=629.0)px
+Text = '[코랄 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+27) Node #59 at (l=258.0, t=637.0, r=448.0, b=657.0)px
+Text = '[선택 보관 · 미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+28) Node #64 at (l=32.0, t=733.0, r=222.0, b=757.0)px
+Text = '[블루 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+29) Node #66 at (l=32.0, t=765.0, r=222.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+30) Node #70 at (l=258.0, t=733.0, r=448.0, b=757.0)px
+Text = '[골드 러닝화]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+31) Node #72 at (l=258.0, t=765.0, r=448.0, b=785.0)px
+Text = '[미리보기 준비 중]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 1 sibling
+32) Node #86 at (l=20.0, t=849.0, r=421.0, b=869.0)px
+Text = '[포인트 차감 없이 한 번 눌러 선택해요. 기존 포인트와 보유 내역은 보관돼요.]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 10 siblings
+33) Node #89 at (l=32.0, t=898.0, r=178.0, b=920.0)px
+Text = '[원화 · 수영복 시안 비교]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:175)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performSemanticsAction(Actions.kt:586)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:58)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:132)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,67 @@
+{
+  "phase": "ui",
+  "selection": "com.runmoni.app.ui.RunningKitColorsUiTest",
+  "startedAtUtc": "2026-11-04T10:59:24.481359+00:00",
+  "installedBinaryReference": "selector-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": false,
+  "tests": 3,
+  "failures": 1,
+  "seconds": 88.005,
+  "captures": [
+    {
+      "file": "final-ui-kit-colors-palette-fixture-240-200-device.png",
+      "sha256": "b4c5de27bbdfe23ad42971d9eeb19462d41491bb7b2339393cf4cc1ea2969ccf",
+      "bytes": 23193
+    },
+    {
+      "file": "final-ui-kit-colors-palette-fixture-240-200.png",
+      "sha256": "49b3a82d76fe39920d86667b18d3b5ee9bdcf802c3bf49131ce1c9baa11319ba",
+      "bytes": 22094
+    },
+    {
+      "file": "final-ui-kit-colors-palette-fixture-320-100-device.png",
+      "sha256": "7a5debefa88672cbf5ea08c8d448c4a1cbf1e5819e5f365439d1c63ca926fe1a",
+      "bytes": 17555
+    },
+    {
+      "file": "final-ui-kit-colors-palette-fixture-320-100.png",
+      "sha256": "3c7e92274e893d903da1e4f9b3d5683751018f80bb944dc1365de1c39edc6700",
+      "bytes": 15855
+    },
+    {
+      "file": "final-ui-kit-colors-palette-fixture-320-200-device.png",
+      "sha256": "5a18d9d1ef11feaa79449319c3c1500a353d59cfef358bbff9cc3ac1303d579d",
+      "bytes": 22443
+    },
+    {
+      "file": "final-ui-kit-colors-palette-fixture-320-200.png",
+      "sha256": "9b9de8868cf82ea93e77732ba3dcb12d7270c7f43f788eaa2c94cd37e51acffd",
+      "bytes": 22044
+    },
+    {
+      "file": "final-ui-kit-colors-unavailable-fixture-320-200-device.png",
+      "sha256": "d392fd566fcadc5ccf7851ece46a43eaf4a8178640f592f59e35f7a9cf708e1e",
+      "bytes": 31308
+    },
+    {
+      "file": "final-ui-kit-colors-unavailable-fixture-320-200.png",
+      "sha256": "b2076b863fe012298e0f550fad1be0e778bb8c049d2a711ff90012ef8af84e57",
+      "bytes": 31349
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

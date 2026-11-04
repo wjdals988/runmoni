@@ -1,0 +1,8 @@
+{
+  "command": "backend/.venv/bin/python -m pytest backend/tests -q",
+  "passed": 43,
+  "failed": 0,
+  "warnings": 1,
+  "seconds": 4.29,
+  "scope": "Local HTTP TestClient; no public deployment or Firebase writes"
+}

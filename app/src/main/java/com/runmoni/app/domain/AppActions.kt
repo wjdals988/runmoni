@@ -15,6 +15,7 @@ interface AppActions {
     fun setPublicLocation(enabled: Boolean)
     fun updateProfile(name: String)
     fun setAvatarGender(gender: AvatarGender) {}
+    fun setRunningKitColor(region: RunningKitRegion, color: Int) {}
     fun equipItem(slot: String, variant: Int)
     fun buyItem(slot: String, variant: Int)
     fun deleteRun(id: String)

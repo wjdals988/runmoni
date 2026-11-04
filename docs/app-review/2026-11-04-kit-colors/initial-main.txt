@@ -1,0 +1,47 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.RunningKitMainActivityTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.integration.RunningKitMainActivityTest:
+INSTRUMENTATION_STATUS: test=actualClosetColorsPersistAcrossActivityAndViewModelRelaunch
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.integration.RunningKitMainActivityTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Actual app state/visible pixels arrived
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until(RunningKitMainActivityTest.kt:142)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until$default(RunningKitMainActivityTest.kt:139)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:93)
+
+INSTRUMENTATION_STATUS: stream=
+Error in actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(com.runmoni.app.integration.RunningKitMainActivityTest):
+java.lang.AssertionError: Actual app state/visible pixels arrived
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until(RunningKitMainActivityTest.kt:142)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until$default(RunningKitMainActivityTest.kt:139)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:93)
+
+INSTRUMENTATION_STATUS: test=actualClosetColorsPersistAcrossActivityAndViewModelRelaunch
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 115.309
+There was 1 failure:
+1) actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(com.runmoni.app.integration.RunningKitMainActivityTest)
+java.lang.AssertionError: Actual app state/visible pixels arrived
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until(RunningKitMainActivityTest.kt:142)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.until$default(RunningKitMainActivityTest.kt:139)
+	at com.runmoni.app.integration.RunningKitMainActivityTest.actualClosetColorsPersistAcrossActivityAndViewModelRelaunch(RunningKitMainActivityTest.kt:93)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

@@ -1,0 +1,246 @@
+{
+  "startedAtUtc": "2026-11-04T12:07:33.191259+00:00",
+  "verificationKind": "host-driven real Android input; no instrumentation or Compose test clock",
+  "avd": "Runmoni_Cloud_29",
+  "androidApi": 29,
+  "acceleration": "TCG",
+  "version": "0.3.3-dev",
+  "versionCode": 15,
+  "appSha256": "2b4b1f6509599b8aebdfb253fc746621070e10d218f8718fa422c8f973c3714c",
+  "installedBinaryReference": "final5-installed-verification.json",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionFirebaseWritesVerified": false,
+  "originalPreFinal4CrashProfileRestorationVerified": false,
+  "operations": [
+    {
+      "phase": "verification",
+      "action": "gender",
+      "value": "male",
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "top",
+      "value": 0,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "bottom",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "bottom",
+      "value": 0,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "shoes",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "shoes",
+      "value": 0,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "top",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "top",
+      "value": 1,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "bottom",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "bottom",
+      "value": 2,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "shoes",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "shoes",
+      "value": 3,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "gender",
+      "value": "female",
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "top",
+      "value": 4,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "bottom",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "bottom",
+      "value": 3,
+      "committed": true
+    },
+    {
+      "phase": "verification",
+      "action": "category",
+      "region": "shoes",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "verification",
+      "action": "fabricColor",
+      "region": "shoes",
+      "value": 5,
+      "committed": true
+    },
+    {
+      "phase": "restore",
+      "action": "gender",
+      "value": "male",
+      "committed": true
+    },
+    {
+      "phase": "restore",
+      "action": "fabricColor",
+      "region": "top",
+      "value": 1,
+      "committed": true
+    },
+    {
+      "phase": "restore",
+      "action": "category",
+      "region": "bottom",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "restore",
+      "action": "fabricColor",
+      "region": "bottom",
+      "value": 2,
+      "committed": true
+    },
+    {
+      "phase": "restore",
+      "action": "category",
+      "region": "shoes",
+      "visibleContentConfirmed": true
+    },
+    {
+      "phase": "restore",
+      "action": "fabricColor",
+      "region": "shoes",
+      "value": 3,
+      "committed": true
+    }
+  ],
+  "captures": [
+    {
+      "file": "host-main-final-male-mint-coral-blue-closet.png",
+      "sha256": "ab4d6f5f245c3e1ea8c89221d97b12208fc33472b2c092cebde205cacb2ec5a0",
+      "bytes": 68547,
+      "width": 480,
+      "height": 854,
+      "topHueRange": [
+        135,
+        195
+      ],
+      "actualMatchingTopPixels": 430
+    },
+    {
+      "file": "host-main-final-male-mint-coral-blue-home.png",
+      "sha256": "b1abdc3111634a34f21d057f23527aacdd90d4481a88d032bdece46c88d42bbb",
+      "bytes": 51574,
+      "width": 480,
+      "height": 854,
+      "topHueRange": null,
+      "actualMatchingTopPixels": null
+    },
+    {
+      "file": "host-main-final-female-purple-blue-gold-closet.png",
+      "sha256": "63bb50cbbfa93155856320b4cd77cf713f86e62be162a686ce374c66544d1b71",
+      "bytes": 69522,
+      "width": 480,
+      "height": 854,
+      "topHueRange": [
+        250,
+        295
+      ],
+      "actualMatchingTopPixels": 386
+    },
+    {
+      "file": "host-main-final-female-purple-blue-gold-home.png",
+      "sha256": "126e41b396cc9cf56941728a7d722643bc4223d58436df68853797b5b9ba7e2b",
+      "bytes": 52205,
+      "width": 480,
+      "height": 854,
+      "topHueRange": null,
+      "actualMatchingTopPixels": null
+    },
+    {
+      "file": "host-main-final-female-colors-after-process-relaunch.png",
+      "sha256": "ddc96d17ec14b8196d5ddf6efeb55c73a6e6e1c38e6a03a3ee8e191495647f2d",
+      "bytes": 69870,
+      "width": 480,
+      "height": 854,
+      "topHueRange": [
+        250,
+        295
+      ],
+      "actualMatchingTopPixels": 386
+    }
+  ],
+  "passed": true,
+  "processRelaunch": {
+    "beforePid": 4481,
+    "afterPid": 6333,
+    "oldPidAbsentAfterForceStop": true,
+    "newProcessConfirmed": true,
+    "femaleColorsPreserved": true,
+    "actualTopHueConfirmed": true
+  },
+  "currentPreAttemptProfileRestored": true,
+  "restoredSettings": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "driverSha256": "b3c12799759b0acf394baa3c783995b360c82e8be6df8c9833d484c350756b00",
+  "finishedAtUtc": "2026-11-04T12:23:35.605863+00:00"
+}

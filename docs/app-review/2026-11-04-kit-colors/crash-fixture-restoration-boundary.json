@@ -1,0 +1,16 @@
+{
+  "phase": "after final4 instrumentation process crash",
+  "preCrashRawProfileBackupAvailable": false,
+  "preCrashOriginalNameGenderAndColorsRestorationVerified": false,
+  "fixtureNameMarkerObserved": true,
+  "observedColors": {
+    "top": 1,
+    "bottom": 2,
+    "shoes": 3
+  },
+  "observedGender": "male",
+  "observedMileage": 4,
+  "originalFieldsGuessedOrOverwrittenForRecovery": false,
+  "scope": "owned cloud debug AVD only; no phone or production Firebase writes",
+  "nextAttemptBackup": "raw localProfile and backend fields are written to private app cache before mutation; never copied to public evidence"
+}

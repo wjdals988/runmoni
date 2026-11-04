@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-11-04T10:24:12.807044+00:00",
+  "avdPid": 140924,
+  "phase": "owned AVD boot, before0.3.3 install or app launch",
+  "firstFrame": "pre-install-device.png entirely black",
+  "awakeFrame": "awake-preinstall-device.png",
+  "observedDialog": "System UI isn't responding",
+  "action": "Wait at x160/y489 after direct screenshot inspection",
+  "runmoniAnrVerified": false,
+  "causeVerified": false,
+  "generalResolutionVerified": false
+}

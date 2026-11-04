@@ -1,0 +1,96 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.RunningKitColorsUiTest:
+INSTRUMENTATION_STATUS: test=closetColorChangesKeepItemSelectionsCostumeInventoryAndGender
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '기본형' (ignoreCase: false))
+Semantics of the node:
+Node #169 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+Selector used: (TestTag = 'kit_colors_scope')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:122)
+
+INSTRUMENTATION_STATUS: stream=
+Error in closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '기본형' (ignoreCase: false))
+Semantics of the node:
+Node #169 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+Selector used: (TestTag = 'kit_colors_scope')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:122)
+
+INSTRUMENTATION_STATUS: test=closetColorChangesKeepItemSelectionsCostumeInventoryAndGender
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunningKitColorsUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=3
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 71.549
+There was 1 failure:
+1) closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '기본형' (ignoreCase: false))
+Semantics of the node:
+Node #169 at (l=20.0, t=540.0, r=158.0, b=560.0)px, Tag: 'kit_colors_scope'
+Text = '[색상은 기본형에 적용돼요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 2 siblings
+Selector used: (TestTag = 'kit_colors_scope')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepItemSelectionsCostumeInventoryAndGender(RunningKitColorsUiTest.kt:122)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+
+INSTRUMENTATION_CODE: -1

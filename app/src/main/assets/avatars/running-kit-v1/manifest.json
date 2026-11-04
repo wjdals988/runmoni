@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "maskVersion": "approved-running-kit-v1",
+  "canvas": [
+    2048,
+    768
+  ],
+  "cell": [
+    256,
+    384
+  ],
+  "rows": 2,
+  "frames": 8,
+  "sourceAsset": "avatars/v0.3.0/running-motion.png",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "maskFile": "fabric-mask.png",
+  "maskSha256": "462433ce98a7a2f52c98823d851bed462418bbab18f4262c75f6113456e74bb5",
+  "protectedFile": "protected-mask.png",
+  "protectedSha256": "b0cb7500f4f267d530a9e188778dc1fe4cfe7665c1e042b28d2401082d6ae7f0",
+  "annotationSha256": "78bfeb7a7b06a5be498dcc3838ef9cc09de62b251ea4960cd747d267a6b17aa6",
+  "regions": {
+    "1": "top",
+    "2": "bottom",
+    "3": "shoes-fabric"
+  },
+  "maskEncoding": "RGBA alpha255; red region1..3; green shade0..255; blue0. Alpha0 copies source exactly.",
+  "visualApproval": "pending",
+  "artworkScope": "Existing basic outfit colors only; no new garment forms, no body-part reconstruction."
+}

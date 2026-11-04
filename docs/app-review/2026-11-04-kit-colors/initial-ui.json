@@ -1,0 +1,67 @@
+{
+  "phase": "ui",
+  "selection": "com.runmoni.app.ui.RunningKitColorsUiTest",
+  "startedAtUtc": "2026-11-04T10:32:53.952297+00:00",
+  "installedBinaryReference": "installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": false,
+  "tests": 3,
+  "failures": 1,
+  "seconds": 71.549,
+  "captures": [
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-240-200-device.png",
+      "sha256": "b4169e46ce9901b5624394b0001e27bad4b3cf06f83885fac051a591d18f76fd",
+      "bytes": 23599
+    },
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-240-200.png",
+      "sha256": "49b3a82d76fe39920d86667b18d3b5ee9bdcf802c3bf49131ce1c9baa11319ba",
+      "bytes": 22094
+    },
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-320-100-device.png",
+      "sha256": "2d74a851a1de3bdbcbe653490245c8af99421f728089831adaa6d984f5281abe",
+      "bytes": 17915
+    },
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-320-100.png",
+      "sha256": "3c7e92274e893d903da1e4f9b3d5683751018f80bb944dc1365de1c39edc6700",
+      "bytes": 15855
+    },
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-320-200-device.png",
+      "sha256": "d793816755fa1527fdd487f76ce221f5cc7e1f534b0f0f91fb225114b38c27e0",
+      "bytes": 22870
+    },
+    {
+      "file": "initial-ui-kit-colors-palette-fixture-320-200.png",
+      "sha256": "9b9de8868cf82ea93e77732ba3dcb12d7270c7f43f788eaa2c94cd37e51acffd",
+      "bytes": 22044
+    },
+    {
+      "file": "initial-ui-kit-colors-unavailable-fixture-320-200-device.png",
+      "sha256": "bdc9a545e82077520752c35fa9a8bad0eee1e12ce7b2f9fe3d82d27a2b138d6d",
+      "bytes": 31578
+    },
+    {
+      "file": "initial-ui-kit-colors-unavailable-fixture-320-200.png",
+      "sha256": "b2076b863fe012298e0f550fad1be0e778bb8c049d2a711ff90012ef8af84e57",
+      "bytes": 31349
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

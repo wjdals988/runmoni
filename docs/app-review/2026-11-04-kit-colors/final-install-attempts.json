@@ -1,0 +1,25 @@
+{
+  "recordedAtUtc": "2026-11-04T10:59:23.366859+00:00",
+  "attempts": [
+    {
+      "mode": "streaming adb install -r test APK only",
+      "hostTimeoutSeconds": 120,
+      "successVerified": false
+    },
+    {
+      "mode": "read installed test APK SHA256",
+      "installedTestSha256": "65ea3647394170645b6f125adf3c5bfdb2b0fdf3432ea6b8ffa17b2cfffb5e08",
+      "matchesFinalTestApk": false,
+      "testingProceeded": false
+    },
+    {
+      "mode": "adb install --no-streaming -r test APK only",
+      "commandExitCode": 0,
+      "packageManagerResult": "Success",
+      "hashProof": "final-installed-verification.json"
+    }
+  ],
+  "appApkReinstalled": false,
+  "userDataCleared": false,
+  "runmoniAnrVerified": false
+}

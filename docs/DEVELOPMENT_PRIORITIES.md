@@ -1,5 +1,7 @@
 # 개발 우선순위 — 0.3.2-dev 공개 이후 (2026-11-04 한국 시간)
 
+진행 중0.3.3-dev/code15에서는 F03 첫 묶음인 기본 러닝복3부위 독립 색상·기기 저장을 구현했다. [구현/검토](RUNNING_KIT_REVIEW_20261104.md)와 [실행별 근거](app-review/2026-11-04-kit-colors/README.md)를 따른다. 새 형태 의상/수영복/58종 완성과 사용자 시각 승인은 별도이며, 실제 서명 APK 공개 전까지 아래0.3.2 게시 정보를 유지한다. 새 Rules 변경은 없다.
+
 현재 공개0.3.2-dev/code14, 출처 `8eb04d80e3b810f6514c7586dfefde4e1207f1f2`,218627853bytes/SHA256 `2b1789d22f811bdfe84e7c81dcb62aa472e3ed4a693f2831cf4fa3113ee809a4`. [실제 게시](RELEASE_REVIEW_0.3.2_20261104.md) · [이어서 개발](DEVELOPMENT_CONTINUATION.md).
 
 | ID/우선순위 | 현재 상태 | 남은 경계 |

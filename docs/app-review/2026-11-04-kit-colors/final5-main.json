@@ -1,0 +1,32 @@
+{
+  "phase": "main",
+  "selection": "com.runmoni.app.integration.RunningKitMainActivityTest",
+  "startedAtUtc": "2026-11-04T11:51:13.349586+00:00",
+  "installedBinaryReference": "final5-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": false,
+  "tests": 1,
+  "failures": 1,
+  "seconds": 116.406,
+  "captures": [
+    {
+      "file": "final5-main-failure-main.png",
+      "sha256": "13f4cec4ae318a174b5019d4eef5fc55dd4e30157774aa5262236a71b17db664",
+      "bytes": 62711
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

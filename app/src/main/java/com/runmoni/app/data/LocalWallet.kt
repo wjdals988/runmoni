@@ -11,7 +11,11 @@ class LocalWallet internal constructor(private val preferences: SharedPreference
     constructor(context: Context) : this(context.applicationContext.getSharedPreferences("runmoni", Context.MODE_PRIVATE))
     fun read(): Profile = synchronized(lock) { readUnsafe() }
     fun update(transform: (Profile) -> Profile): Profile = synchronized(lock) {
-        transform(readUnsafe()).also { profile -> check(preferences.edit().putString("localProfile", encode(profile)).commit()) }
+        transform(readUnsafe()).also { profile ->
+            check(preferences.edit().putString("localProfile", encode(profile)).commit()) {
+                "변경 내용을 기기에 저장하지 못했어요. 다시 시도해 주세요."
+            }
+        }
     }
     fun credit(runId: String, points: Int): Profile = synchronized(lock) {
         val credited = preferences.getStringSet("creditedLocalRuns", emptySet()).orEmpty()
