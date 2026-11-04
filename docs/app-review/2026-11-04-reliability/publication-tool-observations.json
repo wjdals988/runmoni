@@ -1,0 +1,10 @@
+{
+  "phase": "public asset HEAD verification",
+  "initialAttempt": "HEAD request with --max-filesize 1048576 returned nonzero for an APK whose Content-Length exceeds that threshold",
+  "correction": "Removed size limit while retaining explicit curl --head --location; APK body never requested",
+  "finalStatus": 200,
+  "finalContentLength": 218627853,
+  "apkBodyDownloaded": false,
+  "appOrApkChanged": false,
+  "dependentStepsOnFirstAttempt": "No signed-ci proof existed, so copy/apply steps failed without updating dashboard metadata; rerun succeeded after HEAD correction"
+}
