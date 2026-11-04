@@ -136,7 +136,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onExplore = { tab = 1 }, onRecord = { selectedRecord = it }, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
+                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onExplore = { tab = 1 }, onRecord = { selectedRecord = it }, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
@@ -148,7 +148,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (chatOpen) ChatScreen(state, actions)
-        selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud) { selectedRecord = null } }
+        selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud, state.runPersistence) { selectedRecord = null } }
         state.error?.let { error -> AlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { DialogMessage(error) }, confirmButton = { TextButton(onClick = actions::dismissError) { Text("확인") } }) }
         }
     }
@@ -159,24 +159,24 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
     var finishConfirmation by rememberSaveable { mutableStateOf(false) }
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
+    val persistence = state.runPersistence
     val permissionMissing = state.locationAccess.precisePermissionGranted == false
     val gpsDisabled = state.locationAccess.gpsEnabled == false
     val accuracy = run.accuracyMeters?.takeIf { !permissionMissing && !gpsDisabled && it.isFinite() && it >= 0f }
-    val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐"; else -> run.gpsStatus }
+    val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐";
+        accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f)) {
             ScreenContent {
-                Text(if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
+                Text(if (persistence.finishing) "러닝 마무리 중"
+                    else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"
+                    else if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
                     style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                 FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
                     accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                 }
-                if (permissionMissing || gpsDisabled) LocationReadinessCard(permissionMissing, actions)
-                if (run.phase == RunPhase.PAUSED) SmallNote(if (run.pauseReason == PauseReason.AUTOMATIC)
-                    "멈춰 있어 러닝 시간을 잠시 멈췄어요. 움직임이 확인되면 자동으로 이어져요. 지금 시작하려면 ‘계속 달리기’를 누르세요."
-                    else "직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요.")
-                if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
+                if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 if (run.phase == RunPhase.IDLE) {
                     Text("시작하면 거리·시간·GPS 경로를 기록해요.", style = MaterialTheme.typography.bodyLarge)
                     RunwayArtwork(state.profile.avatar, compact = LocalDensity.current.fontScale >= 1.3f)
@@ -193,6 +193,15 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
+                RunPersistenceNotice(persistence, actions::retryRunPersistence)
+                if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
+                if (run.phase == RunPhase.PAUSED && !persistence.finishing && persistence.issue != RunPersistenceIssue.CHECKPOINT)
+                    SmallNote(when (run.pauseReason) {
+                        PauseReason.AUTOMATIC -> "멈춰 있어 러닝 시간을 잠시 멈췄어요. 움직임이 확인되면 자동으로 이어져요. 지금 시작하려면 ‘계속 달리기’를 누르세요."
+                        PauseReason.MANUAL -> "직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요."
+                        null -> "러닝이 멈춰 있어요. 저장 상태를 확인한 뒤 이어갈 수 있어요."
+                    })
+                if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
                 if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth().height(188.dp).clip(RoundedCornerShape(20.dp)))
                 TextButton(onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
@@ -209,16 +218,22 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
         }
         Surface(color = RunmoniColors.Paper, modifier = Modifier.fillMaxWidth().testTag("run_control_bar")) {
             Box(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
-                if (run.phase == RunPhase.IDLE) {
-                    Button(onClick = actions::startRun, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("start_run"), shape = RoundedCornerShape(50)) {
+                if (persistence.finishing) {
+                    Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RoundedCornerShape(50)) {
+                        Text(if (persistence.saving) "기기에 저장 중" else "저장 다시 시도", style = MaterialTheme.typography.titleMedium)
+                    }
+                } else if (run.phase == RunPhase.IDLE) {
+                    Button(onClick = actions::startRun, enabled = !persistence.blocksNewRun && !(persistence.saving && persistence.issue != null), modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("start_run"), shape = RoundedCornerShape(50)) {
                         Icon(Icons.Outlined.PlayArrow, null); Spacer(Modifier.width(8.dp)); Text("러닝 시작", style = MaterialTheme.typography.titleMedium)
                     }
                 } else AdaptiveActions(
                     first = { modifier -> Button(onClick = { when (run.phase) { RunPhase.RUNNING -> actions.pauseRun(); RunPhase.PAUSED -> actions.resumeRun(); else -> actions.recoverRun() } },
+                        enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized,
                         modifier = modifier.heightIn(min = 56.dp).testTag(when (run.phase) { RunPhase.RUNNING -> "pause_run"; RunPhase.PAUSED -> "resume_run"; else -> "recover_run" })) {
                         Text(when (run.phase) { RunPhase.RUNNING -> "일시정지"; RunPhase.PAUSED -> "계속 달리기"; else -> "이어 달리기" })
                     } },
-                    second = { modifier -> OutlinedButton(onClick = { finishConfirmation = true }, modifier = modifier.heightIn(min = 56.dp).testTag("finish_run")) { Text("러닝 마치기") } },
+                    second = { modifier -> OutlinedButton(onClick = { finishConfirmation = true }, enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized, modifier = modifier.heightIn(min = 56.dp).testTag("finish_run")) { Text("러닝 마치기") } },
                 )
                 }
             }

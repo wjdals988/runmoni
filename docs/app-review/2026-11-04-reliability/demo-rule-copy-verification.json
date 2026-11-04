@@ -1,0 +1,9 @@
+{
+  "source": "repository firebase/; copied unchanged into ignored test config directory",
+  "project": "demo-runmoni",
+  "uiEnabled": false,
+  "sha256": {
+    "firestore.rules": "9aac42292e3416e746dae5fb834df507f7f652fcaa7ef9d3103fc63a1e742740",
+    "firestore.indexes.json": "3fb4d54dfd497cba26ee1153cab48fc3793f013cf7399994670f01abe0384510"
+  }
+}

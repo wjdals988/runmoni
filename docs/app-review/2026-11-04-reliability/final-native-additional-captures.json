@@ -1,0 +1,27 @@
+[
+  {
+    "file": "final-native-closet-hierarchy-native-320-font2-fixture.png",
+    "sha256": "4573da63cfc9bf5c1069ed5943853b7d0950b83622470ef10bab12b310042be2",
+    "bytes": 53355
+  },
+  {
+    "file": "final-native-closet-hierarchy-native-320-font2-device.png",
+    "sha256": "d18714334381978bb8d3bd0316fc0c3a8e7e85873743a9ed6fcfd9e35f3eb3de",
+    "bytes": 51963
+  },
+  {
+    "file": "final-native-closet-closed-native-320-font2-device.png",
+    "sha256": "d3e040478c9690a35c3d66cc0672d4b645c2ff7e66caa7389fd520d315a65ced",
+    "bytes": 54692
+  },
+  {
+    "file": "final-native-home-action-unclipped-native-320-font2.json",
+    "sha256": "ba1aa75050bec0a93972ead809ceaa5f949063555850422377832556a70f888b",
+    "bytes": 132
+  },
+  {
+    "file": "final-native-navigation-label-baselines-native-320-font2.txt",
+    "sha256": "184b3fb1b7be5b577bd3af92d934fc4fb71f0969d859bef3a7db17c2a9de7390",
+    "bytes": 98
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "phase": "regression",
+  "selection": "com.runmoni.app.ui.RunReadinessTest,com.runmoni.app.ui.RunmoniUiTest#fiveTabsOpenTheirActualScreens,com.runmoni.app.ui.RunmoniUiTest#offlineRunActionsRequireFinishConfirmationAndShowSavedRecord,com.runmoni.app.ui.RunmoniUiTest#cloudBackupNeedsFreshConfirmationAfterAccountSwitch",
+  "startedAtUtc": "2026-11-03T16:42:42.271265+00:00",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 5,
+  "seconds": 101.894,
+  "captures": [
+    {
+      "file": "initial-regression-run-auto-paused-320-200.png",
+      "sha256": "c8a154069be77bfe4e28a1722335ae10136afdc90dfb6dd6d8742afa4e4ac454",
+      "bytes": 39232
+    },
+    {
+      "file": "initial-regression-run-auto-paused-360-100.png",
+      "sha256": "adc264850a51e848cd89f654b4d7732f2b8c14700f111a34ccfa3340f6615f16",
+      "bytes": 36246
+    },
+    {
+      "file": "initial-regression-run-gps-disabled-320-200.png",
+      "sha256": "9bd62dfa4d5eda807e8c52c50e059a592efbeef4f8f74c1db1ae93f0fec8a37a",
+      "bytes": 51661
+    },
+    {
+      "file": "initial-regression-run-gps-disabled-360-100.png",
+      "sha256": "44de5d9c7b5f32e872bbbee53d53b0d0c2ba963bf963d4777b227ebda6526e38",
+      "bytes": 48563
+    },
+    {
+      "file": "initial-regression-run-permission-320-200.png",
+      "sha256": "b0b5286978565a554500c4273cb6daa99715af16df55e35dda1fb0b9ee885dac",
+      "bytes": 52442
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

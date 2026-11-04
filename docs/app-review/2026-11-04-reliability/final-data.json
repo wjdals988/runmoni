@@ -1,0 +1,26 @@
+{
+  "phase": "data",
+  "selection": "com.runmoni.app.data.RunReliabilityTest,com.runmoni.app.data.LocalWalletDurabilityTest,com.runmoni.app.data.RunPersistenceTest,com.runmoni.app.tracking.RecorderServiceTest",
+  "startedAtUtc": "2026-11-03T17:16:24.664814+00:00",
+  "installedBinaryReference": "final-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 12,
+  "failures": 0,
+  "seconds": 76.154,
+  "captures": [],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

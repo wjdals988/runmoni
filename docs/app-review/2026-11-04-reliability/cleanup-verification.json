@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-11-04T06:03:57.394916+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "avdPid": 33576,
+  "beforeSettings": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "1.0",
+    "animator_duration_scale": "1.0",
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "stopResult": "OK: killing emulator, bye bye",
+  "ownedAvdStillRunning": false,
+  "localFirebasePortsListening": {
+    "8080": false,
+    "9099": false,
+    "4400": false,
+    "4500": false
+  },
+  "scope": "Owned process/port cleanup only; not evidence about security events or OS ANR cause"
+}

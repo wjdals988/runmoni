@@ -1,0 +1,62 @@
+{
+  "phase": "native",
+  "selection": "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest,com.runmoni.app.ui.RunReliabilityUiTest#savedRecordKeepsCreditRetrySeparateFromCloudBackup,com.runmoni.app.ui.RunReliabilityUiTest#linkingCommunityGoogleRequiresConfirmationAndKeepsExistingDataOnConflict,com.runmoni.app.ui.RunReliabilityUiTest#restoringCommunityGoogleIsExplicitAndSeparateFromCreatingOrLinkingAProfile",
+  "startedAtUtc": "2026-11-03T17:23:37.788536+00:00",
+  "installedBinaryReference": "final-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "2.0",
+    "density": "Physical density: 160\nOverride density: 240"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 4,
+  "failures": 0,
+  "seconds": 131.86,
+  "captures": [
+    {
+      "file": "final-native-community-google-link-conflict-fixture-360-100-device.png",
+      "sha256": "553addd798b68dfc86a99516ebe2aecf87c25b446f43997731628e3d5c067934",
+      "bytes": 60570
+    },
+    {
+      "file": "final-native-community-google-link-conflict-fixture-360-100.png",
+      "sha256": "6d0e3da2aab64f11f38592d9ed43e5da99b5030d6e6c528889f1ba31d50499fb",
+      "bytes": 66368
+    },
+    {
+      "file": "final-native-community-google-restore-pending-fixture-360-100-device.png",
+      "sha256": "a1c790f3615921363ddc57ca292c56aefcd774061d198e8e1ceabe9de0955c12",
+      "bytes": 57764
+    },
+    {
+      "file": "final-native-community-google-restore-pending-fixture-360-100.png",
+      "sha256": "46ab8017463a2a4851b1f7cc5f1bc01555038b2b779e0358f162322e2a36ed35",
+      "bytes": 61567
+    },
+    {
+      "file": "final-native-home-active-native-320-font2-device.png",
+      "sha256": "16108f1208a8f49a4c8133cebeeafd880d565c896dfdd703c7905dad9455f1ee",
+      "bytes": 50777
+    },
+    {
+      "file": "final-native-saved-record-credit-pending-320-200-device.png",
+      "sha256": "343eb1ff24458bf6072da79c3614dcabac0b57ea85d7e157a2e4266cfd6fab74",
+      "bytes": 51241
+    },
+    {
+      "file": "final-native-saved-record-credit-pending-320-200.png",
+      "sha256": "bd91aeb447a43e9367e6af66c26e4c1333cd8d736dbe1c856d8d64f03d6d57bd",
+      "bytes": 50160
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-11-04T06:03:48.507227+00:00",
+  "debugBuild": "0.3.2-dev/code14; TEST key; no Firebase configuration",
+  "actualMainActivity": true,
+  "rootImageInspection": true,
+  "photos": [
+    {
+      "file": "mainactivity-home-final.png",
+      "bytes": 50183,
+      "sha256": "d0abe3cd1eb79a906594afa635617b99a5b95d0a6b82129cdf4905b8bd454215",
+      "width": 480,
+      "height": 854
+    },
+    {
+      "file": "mainactivity-run.png",
+      "bytes": 50498,
+      "sha256": "beb29d667376b6d308309d08d0122d7f720bdd8d9ecb7403c15cabe29d9fa531",
+      "width": 480,
+      "height": 854
+    }
+  ],
+  "initialBlankFrame": "mainactivity-home.png retained; not accepted as UI evidence",
+  "runtimeFatalObserved": false,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false
+}

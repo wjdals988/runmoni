@@ -4,16 +4,12 @@ import android.content.Context
 import android.util.Log
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import androidx.credentials.exceptions.GetCredentialProviderConfigurationException
 import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.exceptions.GetCredentialInterruptedException
-import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
@@ -23,7 +19,6 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -158,20 +153,13 @@ class FirebaseCloudAccount(context: Context) {
         var stage = "ACCOUNT_PICKER"
         try {
             // Explicit button flow also supports adding an account on an empty device.
-            val googleOption = GetSignInWithGoogleOption.Builder(BuildConfig.FIREBASE_WEB_CLIENT_ID).build()
-            val request = GetCredentialRequest.Builder().addCredentialOption(googleOption).build()
             if (!isCurrentLogin(ticket)) return
             // The account picker is interactive; only the network Task has a 15-second timeout.
-            val result = CredentialManager.create(context).getCredential(context, request)
-            if (!isCurrentLogin(ticket)) return
-            stage = "GOOGLE_TOKEN"
-            val credential = result.credential
-            require(credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL)
-            val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            val credential = pickGoogleCredential(context) { stage = "GOOGLE_TOKEN" }
             if (!isCurrentLogin(ticket)) return
             stage = "FIREBASE_AUTH"
             val user = withTimeout(NETWORK_TIMEOUT_MILLIS) {
-                firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(googleCredential.idToken, null)).await().user
+                firebaseAuth.signInWithCredential(credential).await().user
             } ?: error("Missing authenticated account")
             synchronized(lock) {
                 if (!isCurrentLoginLocked(ticket)) return
@@ -199,6 +187,7 @@ class FirebaseCloudAccount(context: Context) {
                 is GetCredentialUnsupportedException -> "G03"
                 is GetCredentialInterruptedException -> "G04"
                 is GetCredentialException -> "G05"
+                is GoogleCredentialPickerBusyException -> "G07"
                 is GoogleIdTokenParsingException -> "G06"
                 is FirebaseNetworkException -> "F01"
                 is FirebaseTooManyRequestsException -> "F02"

@@ -1,0 +1,284 @@
+{
+  "artifact": "local 0.3.2-dev debug TEST-key APK; not public signed APK",
+  "apkBytes": 238717239,
+  "groups": {
+    "lib/x86_64": {
+      "compressedBytes": 44306440,
+      "uncompressedBytes": 44306440,
+      "entries": 5
+    },
+    "classes.dex": {
+      "compressedBytes": 41216884,
+      "uncompressedBytes": 41216884,
+      "entries": 1
+    },
+    "lib/arm64-v8a": {
+      "compressedBytes": 38630088,
+      "uncompressedBytes": 38630088,
+      "entries": 5
+    },
+    "lib/x86": {
+      "compressedBytes": 38228348,
+      "uncompressedBytes": 38228348,
+      "entries": 4
+    },
+    "lib/armeabi-v7a": {
+      "compressedBytes": 27019520,
+      "uncompressedBytes": 27019520,
+      "entries": 5
+    },
+    "classes9.dex": {
+      "compressedBytes": 14101288,
+      "uncompressedBytes": 14101288,
+      "entries": 1
+    },
+    "classes11.dex": {
+      "compressedBytes": 9705224,
+      "uncompressedBytes": 9705224,
+      "entries": 1
+    },
+    "assets": {
+      "compressedBytes": 8081777,
+      "uncompressedBytes": 8330587,
+      "entries": 76
+    },
+    "classes10.dex": {
+      "compressedBytes": 7771712,
+      "uncompressedBytes": 7771712,
+      "entries": 1
+    },
+    "classes12.dex": {
+      "compressedBytes": 3407264,
+      "uncompressedBytes": 3407264,
+      "entries": 1
+    },
+    "classes3.dex": {
+      "compressedBytes": 1316872,
+      "uncompressedBytes": 1316872,
+      "entries": 1
+    },
+    "resources.arsc": {
+      "compressedBytes": 830528,
+      "uncompressedBytes": 830528,
+      "entries": 1
+    },
+    "res": {
+      "compressedBytes": 646981,
+      "uncompressedBytes": 764558,
+      "entries": 627
+    },
+    "classes4.dex": {
+      "compressedBytes": 340920,
+      "uncompressedBytes": 340920,
+      "entries": 1
+    },
+    "classes8.dex": {
+      "compressedBytes": 254412,
+      "uncompressedBytes": 254412,
+      "entries": 1
+    },
+    "classes2.dex": {
+      "compressedBytes": 197628,
+      "uncompressedBytes": 197628,
+      "entries": 1
+    },
+    "classes7.dex": {
+      "compressedBytes": 168092,
+      "uncompressedBytes": 168092,
+      "entries": 1
+    },
+    "lib/mips64": {
+      "compressedBytes": 150256,
+      "uncompressedBytes": 150256,
+      "entries": 1
+    },
+    "google": {
+      "compressedBytes": 149286,
+      "uncompressedBytes": 411383,
+      "entries": 73
+    },
+    "lib/mips": {
+      "compressedBytes": 130556,
+      "uncompressedBytes": 130556,
+      "entries": 1
+    },
+    "lib/armeabi": {
+      "compressedBytes": 126980,
+      "uncompressedBytes": 126980,
+      "entries": 1
+    },
+    "classes5.dex": {
+      "compressedBytes": 123316,
+      "uncompressedBytes": 123316,
+      "entries": 1
+    },
+    "classes6.dex": {
+      "compressedBytes": 115240,
+      "uncompressedBytes": 115240,
+      "entries": 1
+    },
+    "okhttp3": {
+      "compressedBytes": 41543,
+      "uncompressedBytes": 41612,
+      "entries": 2
+    },
+    "kotlin": {
+      "compressedBytes": 10468,
+      "uncompressedBytes": 29945,
+      "entries": 7
+    },
+    "AndroidManifest.xml": {
+      "compressedBytes": 5288,
+      "uncompressedBytes": 24892,
+      "entries": 1
+    },
+    "META-INF": {
+      "compressedBytes": 4574,
+      "uncompressedBytes": 11286,
+      "entries": 88
+    },
+    "DebugProbesKt.bin": {
+      "compressedBytes": 777,
+      "uncompressedBytes": 1728,
+      "entries": 1
+    },
+    "play-services-auth-api-phone.properties": {
+      "compressedBytes": 60,
+      "uncompressedBytes": 94,
+      "entries": 1
+    },
+    "firebase-database-collection.properties": {
+      "compressedBytes": 56,
+      "uncompressedBytes": 94,
+      "entries": 1
+    },
+    "play-services-auth-base.properties": {
+      "compressedBytes": 56,
+      "uncompressedBytes": 86,
+      "entries": 1
+    },
+    "play-services-basement.properties": {
+      "compressedBytes": 53,
+      "uncompressedBytes": 82,
+      "entries": 1
+    },
+    "firebase-annotations.properties": {
+      "compressedBytes": 51,
+      "uncompressedBytes": 78,
+      "entries": 1
+    },
+    "firebase-auth-interop.properties": {
+      "compressedBytes": 51,
+      "uncompressedBytes": 80,
+      "entries": 1
+    },
+    "play-services-tasks.properties": {
+      "compressedBytes": 51,
+      "uncompressedBytes": 76,
+      "entries": 1
+    },
+    "play-services-base.properties": {
+      "compressedBytes": 50,
+      "uncompressedBytes": 74,
+      "entries": 1
+    },
+    "play-services-fido.properties": {
+      "compressedBytes": 50,
+      "uncompressedBytes": 74,
+      "entries": 1
+    },
+    "play-services-auth.properties": {
+      "compressedBytes": 48,
+      "uncompressedBytes": 74,
+      "entries": 1
+    },
+    "firebase-auth.properties": {
+      "compressedBytes": 45,
+      "uncompressedBytes": 64,
+      "entries": 1
+    },
+    "core-common.properties": {
+      "compressedBytes": 41,
+      "uncompressedBytes": 58,
+      "entries": 1
+    },
+    "recaptcha.properties": {
+      "compressedBytes": 40,
+      "uncompressedBytes": 56,
+      "entries": 1
+    },
+    "integrity.properties": {
+      "compressedBytes": 39,
+      "uncompressedBytes": 54,
+      "entries": 1
+    },
+    "googleid.properties": {
+      "compressedBytes": 37,
+      "uncompressedBytes": 52,
+      "entries": 1
+    }
+  },
+  "largestEntries": [
+    {
+      "path": "classes.dex",
+      "compressedBytes": 41216884,
+      "uncompressedBytes": 41216884
+    },
+    {
+      "path": "lib/x86_64/libnavermap.so",
+      "compressedBytes": 26138896,
+      "uncompressedBytes": 26138896
+    },
+    {
+      "path": "lib/x86/libnavermap.so",
+      "compressedBytes": 25475100,
+      "uncompressedBytes": 25475100
+    },
+    {
+      "path": "lib/arm64-v8a/libnavermap.so",
+      "compressedBytes": 24763736,
+      "uncompressedBytes": 24763736
+    },
+    {
+      "path": "lib/armeabi-v7a/libnavermap.so",
+      "compressedBytes": 18858132,
+      "uncompressedBytes": 18858132
+    },
+    {
+      "path": "lib/x86_64/liblkjingle_peerconnection_so.so",
+      "compressedBytes": 16070464,
+      "uncompressedBytes": 16070464
+    },
+    {
+      "path": "classes9.dex",
+      "compressedBytes": 14101288,
+      "uncompressedBytes": 14101288
+    },
+    {
+      "path": "lib/x86/liblkjingle_peerconnection_so.so",
+      "compressedBytes": 12619584,
+      "uncompressedBytes": 12619584
+    },
+    {
+      "path": "lib/arm64-v8a/liblkjingle_peerconnection_so.so",
+      "compressedBytes": 12098392,
+      "uncompressedBytes": 12098392
+    },
+    {
+      "path": "classes11.dex",
+      "compressedBytes": 9705224,
+      "uncompressedBytes": 9705224
+    },
+    {
+      "path": "classes10.dex",
+      "compressedBytes": 7771712,
+      "uncompressedBytes": 7771712
+    },
+    {
+      "path": "lib/armeabi-v7a/liblkjingle_peerconnection_so.so",
+      "compressedBytes": 6833332,
+      "uncompressedBytes": 6833332
+    }
+  ],
+  "scope": "ZIP metadata only; no extraction or new dependencies; no claimed optimization."
+}

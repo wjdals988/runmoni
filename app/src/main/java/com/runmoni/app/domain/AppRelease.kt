@@ -42,6 +42,13 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.2-dev", "2026-11-04", "기록 저장·크루 계정 연결 개선 · 실기기 검증 전", listOf(
+        "기록 저장 실패와 포인트 처리 지연을 구분하고 해당 작업을 다시 시도할 수 있어요.",
+        "종료 저장 중에는 러닝을 다시 시작하지 않으며 저장되지 않은 경로를 재시도해요.",
+        "크루 프로필에 Google 계정을 연결하거나 이미 연결한 프로필을 다시 찾는 경로를 추가했어요.",
+        "크루 연결과 기록 요약 백업을 구분해요. 실제 Google 로그인·다른 기기 복원은 별도 확인이 필요해요.",
+        "오래된 GPS 신호의 정확도·현재 페이스 표시를 정리해요. 미준비 의상은 계속 선택만 보관해요.",
+    )),
     AppVersionEntry("0.3.1-dev", "2026-11-03", "러닝·일정 중심 UI 개선 · 실기기 검증 전", listOf(
         "홈에서 러닝 시작·예정된 파티·최근 기록을 먼저 확인해요.",
         "크루와 파티를 일정·거리·페이스·인원으로 비교하는 목록으로 정리했어요.",

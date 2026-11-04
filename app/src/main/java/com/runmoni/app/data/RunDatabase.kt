@@ -29,10 +29,12 @@ interface RunDao {
     @Query("SELECT * FROM track_points WHERE runId = :id ORDER BY sequence") suspend fun points(id: String): List<StoredPoint>
     @Query("SELECT COUNT(*) FROM track_points WHERE runId = :id") suspend fun pointCount(id: String): Int
     @Upsert suspend fun save(run: StoredRun)
+    @Upsert suspend fun savePoints(points: List<StoredPoint>)
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun addPoint(point: StoredPoint)
     @Query("DELETE FROM runs WHERE id = :id") suspend fun delete(id: String)
     @Query("UPDATE runs SET synced = 1, mileage = :mileage WHERE id = :id") suspend fun markSynced(id: String, mileage: Int)
     @Transaction suspend fun append(run: StoredRun, point: StoredPoint) { save(run); addPoint(point) }
+    @Transaction suspend fun saveCheckpoint(run: StoredRun, points: List<StoredPoint>) { save(run); savePoints(points) }
 }
 
 @Database(entities = [StoredRun::class, StoredPoint::class], version = 1, exportSchema = false)

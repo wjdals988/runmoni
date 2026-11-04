@@ -1,0 +1,15 @@
+{
+  "verifiedAtUtc": "2026-11-03T16:34:23.807608+00:00",
+  "installed": {
+    "com.runmoni.app": {
+      "sha256": "11ea1db9e2d62e3bbfcf7d8a82c752594f4248cc07b80d5fb62380d19d90a8ed",
+      "matchesBuild": true
+    },
+    "com.runmoni.app.test": {
+      "sha256": "a88e972c92ba5d6d335d8bd2e014eff79b9a679dfa003e9e53de726b25370f62",
+      "matchesBuild": true
+    }
+  },
+  "versionCode": 14,
+  "versionName": "0.3.2-dev"
+}

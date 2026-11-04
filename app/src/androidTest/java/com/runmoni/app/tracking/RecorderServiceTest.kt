@@ -1,7 +1,12 @@
 package com.runmoni.app.tracking
 
 import android.Manifest
+import android.app.ActivityManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
@@ -12,17 +17,94 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.runmoni.app.MainActivity
+import com.runmoni.app.R
 import com.runmoni.app.RunmoniApplication
+import com.runmoni.app.data.LocalWallet
+import com.runmoni.app.domain.ActiveRun
 import com.runmoni.app.domain.RunPhase
 import com.runmoni.app.domain.PauseReason
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.UUID
 
 /** Real Android service + system test provider. Synthetic GPS is not outdoor accuracy evidence. */
 @RunWith(AndroidJUnit4::class)
 class RecorderServiceTest {
+    @Suppress("DEPRECATION")
+    @Test fun recoveryRetryAndLateIdleActionsStopTheirServiceAndRemoveTheRecorderNotification() {
+        val app = ApplicationProvider.getApplicationContext<RunmoniApplication>()
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+        val notifications = app.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val services = app.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val channel = "recorder-regression-${UUID.randomUUID()}"
+        val scenario = ActivityScenario.launch(MainActivity::class.java)
+        var originalActive: ActiveRun? = null
+        var ownsService = false
+        var createdChannel = false
+        fun recorderIsRunning() = services.getRunningServices(Int.MAX_VALUE).any {
+            it.service.className == RunTrackingService::class.java.name
+        }
+        try {
+            // This test never takes over a real run or an existing recorder service.
+            runBlocking { withTimeout(10_000) { app.runs.retryPersistence() } }
+            instrumentation.waitForIdleSync()
+            assertEquals("the synthetic recovery fixture requires an idle repository", RunPhase.IDLE, app.runs.active.value.phase)
+            assertFalse("another recorder service must not be running", recorderIsRunning())
+            assertTrue("notification permission is required to observe actual cleanup", notifications.areNotificationsEnabled())
+            assertFalse("do not replace an existing recorder notification", notifications.activeNotifications.any { it.id == 1001 })
+            val idle = app.runs.active.value
+            originalActive = idle
+            val originalProfile = LocalWallet(app).read()
+            val originalRows = runBlocking { app.runs.dao.records().first() }
+            val originalPoints = runBlocking { originalRows.associate { it.id to app.runs.dao.points(it.id) } }
+            assertNull("no persisted unfinished run may be replaced by a synthetic fixture", runBlocking { app.runs.dao.unfinished() })
+
+            notifications.createNotificationChannel(NotificationChannel(channel, "Recorder regression test", NotificationManager.IMPORTANCE_LOW))
+            createdChannel = true
+            val recovery = ActiveRun(id = "recorder-recovery-fixture", phase = RunPhase.RECOVERY,
+                startedAtMillis = 1000, distanceMeters = 12.0, activeDurationMillis = 6000, gpsStatus = "테스트 복구 대기")
+            listOf(recovery to RunTrackingService.RETRY, idle to RunTrackingService.PAUSE,
+                idle to RunTrackingService.RESUME).forEach { (fixture, action) ->
+                app.runs.active.value = fixture
+                // An actual notification is a completion barrier: an unprocessed command
+                // cannot pass merely because the service has not been created yet.
+                notifications.notify(1001, Notification.Builder(app, channel).setSmallIcon(R.drawable.ic_stat_runmoni)
+                    .setContentTitle("테스트 · 남아 있는 기록 알림").build())
+                until { notifications.activeNotifications.any { it.id == 1001 } }
+                ownsService = true
+                scenario.onActivity { RunTrackingService.command(it, action) }
+                until {
+                    instrumentation.waitForIdleSync()
+                    notifications.activeNotifications.none { it.id == 1001 } && !recorderIsRunning()
+                }
+                assertEquals("$action must preserve the inactive run state", fixture, app.runs.active.value)
+                assertFalse("$action must not leave a recording notification", notifications.activeNotifications.any { it.id == 1001 })
+                assertFalse("$action must stop the unneeded service", recorderIsRunning())
+            }
+            assertEquals(originalProfile, LocalWallet(app).read())
+            assertEquals(originalRows, runBlocking { app.runs.dao.records().first() })
+            assertEquals(originalPoints, runBlocking { originalRows.associate { it.id to app.runs.dao.points(it.id) } })
+            assertNull(runBlocking { app.runs.dao.unfinished() })
+        } finally {
+            try {
+                if (ownsService) {
+                    app.stopService(Intent(app, RunTrackingService::class.java))
+                    instrumentation.waitForIdleSync()
+                    notifications.cancel(1001)
+                    until { !recorderIsRunning() && notifications.activeNotifications.none { it.id == 1001 } }
+                }
+            } finally {
+                originalActive?.let { app.runs.active.value = it }
+                try { if (createdChannel) notifications.deleteNotificationChannel(channel) }
+                finally { scenario.close() }
+            }
+        }
+    }
+
     @Suppress("DEPRECATION")
     @Test fun foregroundRecorderStoresBackgroundLocationsAndSeparatesPause() {
         val app = ApplicationProvider.getApplicationContext<RunmoniApplication>()

@@ -36,6 +36,8 @@ sealed interface UiRequest {
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
     data object GoogleSignIn : UiRequest
+    data object LinkCommunityGoogle : UiRequest
+    data object RestoreCommunityGoogle : UiRequest
     data object LocationSettings : UiRequest
     data object AppPermissionSettings : UiRequest
     data class ExternalCapture(val packageName: String) : UiRequest
@@ -62,7 +64,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val wardrobeChanges = Mutex()
     private var focusedCrewForParties: String? = null
     private var connectionCheckGeneration = 0L
-    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
+    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), runPersistence = app.runs.persistence.value, apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
@@ -76,11 +78,26 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
         viewModelScope.launch { app.runs.active.collect { active -> mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) } } }
+        viewModelScope.launch { app.runs.persistence.collect { persistence ->
+            val resolvedCredit = state.value.runPersistence.creditPending && !persistence.creditPending
+            val before = state.value.profile
+            val local = if (resolvedCredit) withContext(Dispatchers.IO) { wallet.read() } else null
+            mutableState.update { previous -> previous.copy(runPersistence = persistence,
+                profile = if (local != null && previous.profile == before && (api.token.isBlank() || previous.communityGuest)) local else previous.profile) }
+        } }
+        viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
         viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
-        viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank() || it.communityGuest) wallet.read() else it.profile) } } }
+        viewModelScope.launch { app.runs.records.collect { records ->
+            val before = state.value.profile
+            val local = withContext(Dispatchers.IO) { wallet.read() }
+            // An IO snapshot must not undo a newer name, outfit or wallet update in the UI.
+            mutableState.update { it.copy(records = records, profile = if (it.profile == before && (api.token.isBlank() || it.communityGuest)) local else it.profile) }
+        } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
             if (firebaseMode || api.token.isBlank() || state.value.communityGuest) {
-                mutableState.update { it.copy(profile = wallet.read()) }
+                val before = state.value.profile
+                val local = withContext(Dispatchers.IO) { wallet.read() }
+                mutableState.update { if (it.profile == before && (firebaseMode || api.token.isBlank() || it.communityGuest)) it.copy(profile = local) else it }
             } else { RunSyncWorker.enqueue(app); refreshCommunity() }
         } }
         viewModelScope.launch { audio.status.collect { status ->
@@ -126,13 +143,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         mutableState.update { it.copy(locationAccess = LocationAccess(precisePermissionGranted, gpsEnabled)) }
     }
     fun beginWithPermission(recover: Boolean) { RunTrackingService.command(app, if (recover) RunTrackingService.RECOVER else RunTrackingService.START) }
-    override fun startRun() { requests.tryEmit(UiRequest.RunPermission(false)) }
-    override fun recoverRun() { requests.tryEmit(UiRequest.RunPermission(true)) }
+    override fun startRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(false)) }
+    override fun recoverRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(true)) }
     override fun openLocationSettings() { requests.tryEmit(UiRequest.LocationSettings) }
     override fun openAppPermissionSettings() { requests.tryEmit(UiRequest.AppPermissionSettings) }
     override fun pauseRun() { RunTrackingService.command(app, RunTrackingService.PAUSE) }
     override fun resumeRun() { RunTrackingService.command(app, RunTrackingService.RESUME) }
     override fun finishRun() { RunTrackingService.command(app, RunTrackingService.FINISH) }
+    override fun retryRunPersistence() { RunTrackingService.command(app, RunTrackingService.RETRY) }
+    override fun linkCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.LinkCommunityGoogle) }
+    override fun restoreCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.RestoreCommunityGoogle) }
     override fun dismissError() { mutableState.update { it.copy(error = null) } }
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
@@ -329,8 +349,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         )))
     }
     suspend fun googleSignIn(context: Context) {
+        if (state.value.communityGoogleLink.busy) return
         try { app.cloud.signIn(context) } catch (failure: CancellationException) { throw failure }
         catch (_: Exception) { permissionDenied("Google 로그인에 실패했습니다. 클라우드 연결 설정을 확인해 주세요.") }
+    }
+    suspend fun linkCommunityGoogle(context: Context, restore: Boolean = false) {
+        if (!firebaseMode || state.value.cloud.busy) return
+        try {
+            if (restore) firebaseRooms.restoreGoogleAccount(context) else firebaseRooms.linkGoogleAccount(context)
+            refreshCommunity()
+        } catch (cancelled: CancellationException) { throw cancelled }
+        catch (_: Exception) { permissionDenied("크루 프로필의 Google 연결을 확인하지 못했어요. 기존 프로필은 자동으로 바꾸지 않아요.") }
     }
     override fun signOutGoogle() = ignoreJob(work { app.cloud.signOut(app) })
     override fun backupCloudRun(runId: String, expectedUid: String) = ignoreJob(work {
