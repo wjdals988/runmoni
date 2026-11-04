@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.ClosetNavigationUiTest:..
+com.runmoni.app.ui.ConsumerClosetTest:.
+com.runmoni.app.ui.RunningKitColorsUiTest:....
+com.runmoni.app.ui.AvatarIntegrationTest:...
+
+Time: 310.485
+
+OK (10 tests)
+
+

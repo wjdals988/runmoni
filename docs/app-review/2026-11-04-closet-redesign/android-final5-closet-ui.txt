@@ -1,0 +1,24 @@
+
+com.runmoni.app.ui.ClosetNavigationUiTest:
+Error in rootClosetRemovesMainNavigationAndBackRestoresTheSelectedHistoryPeriod(com.runmoni.app.ui.ClosetNavigationUiTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.ClosetNavigationUiTest.rootClosetRemovesMainNavigationAndBackRestoresTheSelectedHistoryPeriod(ClosetNavigationUiTest.kt:66)
+.
+com.runmoni.app.ui.ConsumerClosetTest:.
+com.runmoni.app.ui.RunningKitColorsUiTest:....
+com.runmoni.app.ui.AvatarIntegrationTest:...
+
+Time: 317.195
+There was 1 failure:
+1) rootClosetRemovesMainNavigationAndBackRestoresTheSelectedHistoryPeriod(com.runmoni.app.ui.ClosetNavigationUiTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.ClosetNavigationUiTest.rootClosetRemovesMainNavigationAndBackRestoresTheSelectedHistoryPeriod(ClosetNavigationUiTest.kt:66)
+
+FAILURES!!!
+Tests run: 10,  Failures: 1
+
+

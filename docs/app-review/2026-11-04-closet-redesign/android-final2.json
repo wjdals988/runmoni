@@ -1,0 +1,21 @@
+{
+  "attempt": "android-final2",
+  "startedAtUtc": "2026-11-04T15:28:18.965555+00:00",
+  "binaryReference": "binary-build2.json",
+  "installedReference": "installed-build2.json",
+  "fixtureBackend": "firebase",
+  "firebaseConfigured": false,
+  "softwareNavigationRequired": true,
+  "groups": [],
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "failureType": "AssertionError",
+  "failure": "Exact private preference write",
+  "currentPreAttemptPreferencesRestoredExactly": false,
+  "restorationFailureType": "AssertionError",
+  "settingsRestoredExactly": true,
+  "driverSha256": "0cd4ed445a473a67ed0f21885b32a96fe2ba5aba81533c2249da9ee097b14857",
+  "finishedAtUtc": "2026-11-04T15:28:27.032853+00:00"
+}

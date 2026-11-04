@@ -1,0 +1,18 @@
+{
+  "verificationKind": "host output + independent source/visual review, not Android or user approval",
+  "clothingCases": 864,
+  "gearCases": 272,
+  "readyIdsIncludingDefaults": 36,
+  "nonDefaultRenderedIds": 23,
+  "totalStableIds": 58,
+  "pendingIds": 22,
+  "visualApproval": "pending",
+  "hostImages": {
+    "host-clothing-contact.png": "89b79138cab46fc59d9a9fe5d4e0fa2f16c08a8087ad411ec9b6b930ce2f67c0",
+    "host-gear-all-16cells.png": "554319148dee3765d057c55de4af3eb1325e083f69ceecd5bad698a7fe954907",
+    "host-gear-body-contact.png": "42ea03c4a378da459e7583d92aacae8a389ef87195424d425019fb0cdb39a47e",
+    "host-gear-head-contact.png": "32db6b47e68f8203bb78cdc5e20cd2e916083dafca5a98b2158cec6feda0547f"
+  },
+  "productionEquipmentSourceSha256": "b2197e1699463659e482e119329ca65c253e02b72ba0b89cb52e782e5e029387",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65"
+}

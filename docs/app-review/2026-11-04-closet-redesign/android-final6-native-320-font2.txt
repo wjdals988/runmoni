@@ -1,0 +1,34 @@
+
+com.runmoni.app.ui.RunmoniDialogDesignTest:...
+Error in arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest):
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:212)
+
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:
+Error in genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest):
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:91)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:170)
+
+com.runmoni.app.ui.RunningKitColorsNativeUiTest:.
+com.runmoni.app.ui.ConsumerClosetTest:.
+
+Time: 261.528
+There were 2 failures:
+1) arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest)
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:212)
+2) genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest)
+java.lang.AssertionError: Semantic Node has no parent layout with a Scroll SemanticsAction
+	at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:91)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:170)
+
+FAILURES!!!
+Tests run: 8,  Failures: 2
+
+

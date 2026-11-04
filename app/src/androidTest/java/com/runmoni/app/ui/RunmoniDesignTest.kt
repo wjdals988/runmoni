@@ -50,12 +50,15 @@ abstract class RunmoniDesignTestBase {
     protected fun noTextOverflow(context: String) {
         val matcher = SemanticsMatcher.keyIsDefined(SemanticsProperties.Text) and
             SemanticsMatcher.keyIsDefined(SemanticsActions.GetTextLayoutResult)
-        val nodes = compose.onAllNodes(matcher, useUnmergedTree = true)
-        val count = nodes.fetchSemanticsNodes().size
-        assertTrue("No rendered text in $context", count > 0)
-        for (index in 0 until count) {
+        compose.waitUntil(30_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        val nodes = compose.onAllNodes(matcher, useUnmergedTree = true).fetchSemanticsNodes()
+        assertTrue("No rendered text in $context", nodes.isNotEmpty())
+        // Read one stable snapshot on the UI thread. A loading label disappearing
+        // must not shift every subsequent indexed query to a different node.
+        compose.runOnIdle { for (node in nodes) {
             val layouts = mutableListOf<TextLayoutResult>()
-            nodes[index].performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
+            val action = requireNotNull(node.config[SemanticsActions.GetTextLayoutResult].action)
+            action(layouts)
             layouts.forEach {
                 // Fractional font metrics can round to a pixel boundary. Reject clipping
                 // beyond one physical pixel and all max-line truncation, without hiding it.
@@ -72,7 +75,7 @@ abstract class RunmoniDesignTestBase {
                 }
                 assertTrue("Text overflow in $context: ${it.layoutInput.text.text}; lines=$left..$right/$bottom; size=${it.size}; maxLines=${it.multiParagraph.didExceedMaxLines}", left >= -1f && dx <= 1f && dy <= 1f && !it.multiParagraph.didExceedMaxLines)
             }
-        }
+        } }
     }
 
     /** Compose-target capture. Use captureDevice separately to inspect OS overlays. */
@@ -177,8 +180,9 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
             compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         }
         compose.onNodeWithTag("closet_slot_costume").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_costume_1").performScrollTo().performClick()
-        compose.runOnIdle { assertEquals(1, state.value.profile.avatar.costume) }
+        compose.onNodeWithTag("closet_costume_1").assertDoesNotExist()
+        compose.onNodeWithTag("closet_costume_0").performScrollTo().assertIsEnabled()
+        compose.runOnIdle { assertEquals(0, state.value.profile.avatar.costume) }
         compose.onNodeWithTag("closet_slot_top").performScrollTo().performClick()
         compose.onNodeWithTag("closet_top_1").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(0, state.value.profile.avatar.costume) }
@@ -244,7 +248,9 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         assertEquals("", compose.onNodeWithTag("chat_input").fetchSemanticsNode().config[SemanticsProperties.EditableText].text)
         device.pressBack()
         assertTrue("Back did not close the keyboard", device.wait(Until.gone(By.pkg(imePackage)), 5000))
-        compose.onNodeWithTag("chat_filters").assertIsDisplayed()
+        compose.onNodeWithTag("chat_options").performClick()
+        compose.onNodeWithText("공지만 보기").assertIsDisplayed()
+        compose.onNodeWithText("전체 채팅 보기").performClick()
         compose.runOnIdle { assertEquals(0, closes) }
         device.pressBack()
         compose.runOnIdle { assertEquals(1, closes) }

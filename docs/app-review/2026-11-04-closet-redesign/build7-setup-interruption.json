@@ -1,0 +1,10 @@
+{
+  "phase": "old Build6 installed APK SHA verification after launcher became focused",
+  "reason": "Root interrupted setup after incorrectly assuming accessibility preflight was still pending; resumed setup from read-only guards.",
+  "preferenceFixtureWritten": false,
+  "apkInstallationAttempted": false,
+  "appTestExecuted": false,
+  "observedSetupPopupCaptures": [
+    "build7-setup-system-ui-1.png"
+  ]
+}

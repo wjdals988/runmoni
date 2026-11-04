@@ -1,0 +1,8 @@
+{
+  "phase": "before preference backup/write or APK installation",
+  "failure": "Android uiautomator returned null root during System UI startup; fresh tree success guard stopped bootstrap",
+  "appTestExecuted": false,
+  "preferencesChanged": false,
+  "apkInstallationAttempted": false,
+  "bootstrapSha256": "c424c7f21676cb975e9e6e284ec9b6989bda23f5617a2a9f7764218f32a49084"
+}

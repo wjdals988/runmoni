@@ -118,6 +118,7 @@ hw.lcd.density=160
 hw.gpu.enabled=yes
 hw.gpu.mode=swiftshader
 hw.keyboard=yes
+hw.mainKeys=no
 hw.audioInput=no
 hw.audioOutput=no
 hw.camera.back=none

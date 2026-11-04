@@ -1,0 +1,11 @@
+{
+  "priorAttempt": "android-final2.json",
+  "failureBoundary": "ADB exec-in returned0 without transferring stdin; blocked before instrumentation",
+  "instrumentationTestsExecuted": 0,
+  "privatePreAttemptXmlRecoveredExactly": true,
+  "xmlAndLocalProfileParseVerified": true,
+  "pendingPreferenceBackupPresent": false,
+  "transportUsed": "adb shell -T run-as dd, verified with public probe and exact readback",
+  "appLeftStopped": true,
+  "recoveredAtUtc": "2026-11-04T15:30:23.535971+00:00"
+}

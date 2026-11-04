@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
@@ -20,6 +21,54 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /** Callback/loading fixtures on Android, not proof of mask quality or durable saving. */
 class RunningKitColorsUiTest : RunmoniDesignTestBase() {
+    @Test fun changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint() {
+        val original = Profile(mileage = 777, avatar = AvatarStyle(shoes = 1,
+            runningKitColors = RunningKitColors(4, 2, 3)))
+        val state = mutableStateOf(AppState(profile = original))
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun setRunningKitColor(region: RunningKitRegion, color: Int) {
+                val p = state.value.profile
+                state.value = state.value.copy(profile = p.copy(avatar = p.avatar.copy(
+                    runningKitColors = p.avatar.runningKitColors.withColor(region, color))))
+            }
+        }
+        compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, actions) {} } }
+        compose.onNodeWithTag("closet_animation").performClick()
+        compose.onNodeWithTag("closet_slot_shoes").performScrollTo().performClick()
+        compose.waitUntil(30_000) { compose.onAllNodesWithTag("minimi_loading", useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        fun shoePixels(variant: Int, low: Float, high: Float): Int {
+            val bitmap = compose.onNodeWithTag("closet_preview_shoes_$variant", useUnmergedTree = true)
+                .captureToImage().asAndroidBitmap()
+            val hsv = FloatArray(3)
+            var count = 0
+            // Frame zero's forward shoe, excluding hair, skin and trousers.
+            for (y in bitmap.height * 7 / 8 until bitmap.height) {
+                for (x in bitmap.width * 5 / 8 until bitmap.width) {
+                    android.graphics.Color.colorToHSV(bitmap.getPixel(x, y), hsv)
+                    if (hsv[0] in low..high && hsv[1] > .3f && hsv[2] > .45f) count++
+                }
+            }
+            return count
+        }
+        compose.onNodeWithTag("closet_shoes_1").performScrollTo()
+        assertTrue("Selected shoe thumbnail retains custom blue", shoePixels(1, 200f, 240f) >= 2)
+        compose.onNodeWithTag("closet_shoes_3").performScrollTo()
+        assertEquals("Another shoe previews its own palette", 0, shoePixels(3, 200f, 240f))
+        assertTrue("Gold shoe thumbnail contains its default gold", shoePixels(3, 25f, 60f) >= 2)
+        compose.onNodeWithTag("closet_shoes_3").performScrollTo().performClick()
+        compose.runOnIdle { assertEquals(RunningKitColors(4, 2, 0), state.value.profile.avatar.runningKitColors) }
+        compose.waitUntil(30_000) { compose.onAllNodes(hasTestTag("kit_color_shoes_4") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("kit_color_shoes_4").performScrollTo().performClick()
+        compose.onNodeWithTag("closet_shoes_3").performScrollTo().performClick()
+        compose.runOnIdle { assertEquals(RunningKitColors(4, 2, 4), state.value.profile.avatar.runningKitColors) }
+        compose.onNodeWithTag("closet_shoes_2").performScrollTo().performClick()
+        compose.runOnIdle {
+            assertEquals(RunningKitColors(4, 2, 0), state.value.profile.avatar.runningKitColors)
+            assertEquals(777, state.value.profile.mileage)
+            assertTrue(state.value.profile.ownedItems.containsAll(original.ownedItems))
+        }
+    }
+
     @Test fun unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds() {
         val calls = AtomicInteger()
         val choices = mutableListOf<Pair<RunningKitRegion, Int>>()
@@ -76,7 +125,7 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("kit_color_top_1") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
         listOf(Viewport(320, 1f), Viewport(320, 2f), Viewport(240, 2f)).forEach { condition ->
             compose.runOnIdle { viewport.value = condition }
-            listOf("원본", "민트", "코랄", "블루", "퍼플", "골드").forEachIndexed { color, label ->
+            listOf("기본색", "민트", "코랄", "블루", "퍼플", "골드").forEachIndexed { color, label ->
                 compose.onNodeWithTag("kit_color_top_$color").performScrollTo().assertIsDisplayed()
                     .assertIsEnabled().assertHeightIsAtLeast(48.dp)
                     .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton))
@@ -94,11 +143,11 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
         }
     }
 
-    @Test fun closetColorChangesKeepItemSelectionsCostumeInventoryAndGender() {
+    @Test fun closetColorChangesKeepReadyItemSelectionsInventoryAndGender() {
         val original = Profile(name = "색상 검토 러너", mileage = 777,
-            avatar = AvatarStyle(hair = 2, top = 4, bottom = 2, shoes = 1, socks = 2, costume = 3,
+            avatar = AvatarStyle(hair = 2, top = 1, bottom = 1, shoes = 1, socks = 2,
                 gender = AvatarGender.FEMALE, runningKitColors = RunningKitColors(2, 3, 4)),
-            ownedItems = AvatarCatalogue.defaultOwned + setOf("hair:2", "top:4", "bottom:2", "shoes:1", "socks:2", "costume:3"))
+            ownedItems = AvatarCatalogue.defaultOwned + setOf("hair:2", "top:1", "bottom:1", "shoes:1", "socks:2", "costume:3"))
         val state = mutableStateOf(AppState(profile = original))
         val changes = mutableListOf<Pair<RunningKitRegion, Int>>()
         val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
@@ -119,7 +168,7 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
             compose.onNodeWithTag("kit_color_${key}_$color").performScrollTo().performClick().assertIsSelected()
             compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
             assertEquals(preview, compose.onNodeWithTag("closet_avatar_preview").getUnclippedBoundsInRoot())
-            compose.onNodeWithTag("kit_colors_scope").performScrollTo().assertTextContains("기본형", substring = true)
+            compose.onNodeWithTag("kit_colors_scope").performScrollTo().assertTextContains("선택한", substring = true)
             compose.runOnIdle { assertEquals(color, state.value.profile.avatar.runningKitColors.color(region)) }
         }
         compose.runOnIdle {

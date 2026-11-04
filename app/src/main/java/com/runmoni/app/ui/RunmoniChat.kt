@@ -4,11 +4,11 @@ package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -92,17 +93,18 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                 }
                 if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) Text("연결 확인 중 · 저장된 메시지", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.testTag("chat_connection_status"))
                 if (!compact) FlowRow(Modifier.testTag("chat_filters"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(selected = !noticesOnly, onClick = { noticesOnly = false }, label = { Text("전체 채팅") }, modifier = Modifier.heightIn(min = 48.dp))
-                    FilterChip(selected = noticesOnly, onClick = { noticesOnly = true }, label = { Text("공지") }, modifier = Modifier.heightIn(min = 48.dp))
+                    FilterChip(shape = RunmoniShapes.Action, selected = !noticesOnly, onClick = { noticesOnly = false }, label = { Text("전체 채팅") }, modifier = Modifier.heightIn(min = 48.dp))
+                    FilterChip(shape = RunmoniShapes.Action, selected = noticesOnly, onClick = { noticesOnly = true }, label = { Text("공지") }, modifier = Modifier.heightIn(min = 48.dp))
                 }
-                Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Box(Modifier.weight(1f).fillMaxWidth()) {
+                Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     if (messages.isEmpty()) {
                         if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) EmptyCard("메시지 연결 확인 중", "서버에서 받은 내용을 확인한 뒤 표시해요")
                         else EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 이야기를 남겨보세요", "이 채팅방의 실제 메시지만 표시해요")
                     }
                     messages.forEach { message ->
                         Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
-                        Surface(shape = RoundedCornerShape(18.dp), color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
+                        Surface(shape = RunmoniShapes.Surface, color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
                             contentColor = if (message.mine && !message.notice) RunmoniColors.OnDark else RunmoniColors.Navy,
                             modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
                             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -114,11 +116,23 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                         }
                     }
                 }
-                if (hasNewMessages && !compact) TextButton(onClick = { followLatest = true; hasNewMessages = false; scope.launch { scroll.animateScrollTo(scroll.maxValue) } }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("chat_jump_latest")) { Text("새 메시지 · 맨 아래로") }
+                // Keep the action available in small windows without taking
+                // height away from the message composer when the IME is open.
+                if (hasNewMessages) TextButton(shape = RunmoniShapes.Action,
+                    colors = ButtonDefaults.textButtonColors(containerColor = RunmoniColors.Paper, contentColor = RunmoniColors.Primary),
+                    onClick = { followLatest = true; hasNewMessages = false; scope.launch { scroll.animateScrollTo(scroll.maxValue) } },
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp).heightIn(min = 48.dp)
+                        .border(1.dp, RunmoniColors.Line, RunmoniShapes.Action).testTag("chat_jump_latest")
+                        .semantics { contentDescription = "새 메시지 · 맨 아래로" }) {
+                    Icon(Icons.Outlined.ArrowDownward, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("새 메시지")
+                }
+                }
                 if (canNotice && !compact) Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(notice, role = Role.Checkbox, onValueChange = { notice = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = notice, onCheckedChange = null); Text("공지로 보내기", style = MaterialTheme.typography.bodyMedium) }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, placeholder = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), maxLines = composerMaxLines, shape = RoundedCornerShape(16.dp))
-                    FilledIconButton(onClick = { followLatest = true; pending = input.trim(); actions.sendMessage(input.trim(), notice && canNotice); input = "" }, enabled = input.isNotBlank() && !state.busy, modifier = Modifier.size(52.dp).testTag("send_message")) { Icon(Icons.Outlined.Send, "메시지 보내기") }
+                    OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, placeholder = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), maxLines = composerMaxLines, shape = RunmoniShapes.Input)
+                    FilledIconButton(shape = RunmoniShapes.Action, onClick = { followLatest = true; pending = input.trim(); actions.sendMessage(input.trim(), notice && canNotice); input = "" }, enabled = input.isNotBlank() && !state.busy, modifier = Modifier.size(52.dp).testTag("send_message")) { Icon(Icons.Outlined.Send, "메시지 보내기") }
                 }
             }
         }

@@ -1,0 +1,30 @@
+{
+  "version": "0.3.4-dev",
+  "versionCode": 16,
+  "verificationKind": "real MainActivity + external Android input, offline local avatar fixture",
+  "avd": "Runmoni_Cloud_29",
+  "androidApi": 29,
+  "acceleration": "TCG",
+  "startedAtUtc": "2026-11-04T16:43:19.094425+00:00",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "installedAppSha256": "6bd5c56d46b4d7d05912d37d1d694585e84449305198fc00e903a10f59fbd3d4",
+  "binaryReference": "binary-build5.json",
+  "fixtureBackend": "firebase",
+  "firebaseConfigured": false,
+  "operations": [],
+  "captures": [],
+  "passed": false,
+  "failureType": "AssertionError",
+  "failure": "Visible action 나",
+  "currentPreAttemptXmlRestoredExactly": true,
+  "settingsRestored": {
+    "window_animation_scale": "1.0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "settingsRestoredCorrectly": true,
+  "driverSha256": "2aee34a3ac366ef4988f7b90d2e3386dc55b544f0eedf315483a80fb965fb678",
+  "finishedAtUtc": "2026-11-04T16:45:15.439950+00:00"
+}

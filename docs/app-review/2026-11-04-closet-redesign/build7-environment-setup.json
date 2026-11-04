@@ -1,0 +1,12 @@
+{
+  "ownedAvd": "Runmoni_Cloud_29",
+  "originalXmlPersistedExactly": true,
+  "launcherFocusedBeforeInstall": true,
+  "oldInstalledBinaryVerified": "binary-build6.json",
+  "baselineDefaultBoundsArchived": true,
+  "baselineNativeBackFocusArchived": true,
+  "systemUiHandling": {
+    "exactSystemUiAnrWaitOnly": true,
+    "actions": []
+  }
+}

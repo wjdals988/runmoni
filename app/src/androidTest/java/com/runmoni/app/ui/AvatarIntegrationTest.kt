@@ -15,6 +15,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.data.LocalWallet
 import com.runmoni.app.data.PilotClient
 import com.runmoni.app.domain.*
+import com.runmoni.app.avatar.AvatarArtwork
+import java.util.concurrent.atomic.AtomicInteger
 import org.json.JSONObject
 import org.junit.Assert.*
 import org.junit.Rule
@@ -29,14 +31,21 @@ class AvatarIntegrationTest {
         dir.mkdirs(); File(dir, name).outputStream().use { image.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }
 
-    @Test fun nativeEightFrameRendererAndAllGearProduceEightDistinctCaptures() {
+    @Test fun readyOutfitAndAvailableGearProduceEightDistinctRenderedCaptures() {
         val frame = mutableIntStateOf(0)
-        val avatar = AvatarStyle(hair = 2, face = 1, top = 4, bottom = 4, socks = 2, shoes = 1,
-            headwear = 1, ear = 1, eyewear = 1, wrist = 1, waist = 1, hydration = 1)
-        compose.setContent { RunmoniTheme { MiniMi(avatar, Modifier.size(192.dp, 224.dp).testTag("avatar_fixture"), running = true, frameOverride = frame.intValue) } }
+        val rendered = AtomicInteger(-1)
+        var avatar = AvatarStyle(top = 1, bottom = 1, shoes = 1)
+        for (slot in AvatarCatalogue.slots.filter { it.key in AvatarCatalogue.accessoryKeys || it.key == "headwear" }) {
+            val variant = slot.variants.indices.firstOrNull { it > 0 && AvatarArtwork.itemReady(slot.key, it, avatar.gender) }
+            if (variant != null) avatar = avatar.withItem(slot.key, variant)
+        }
+        for (slot in listOf("top", "bottom", "shoes")) assertTrue(AvatarArtwork.itemReady(slot, avatar.variantFor(slot), avatar.gender))
+        compose.setContent { RunmoniTheme { MiniMi(avatar, Modifier.size(192.dp, 224.dp).testTag("avatar_fixture"),
+            running = true, frameOverride = frame.intValue, onFrameRendered = { rendered.set(it) }) } }
         val hashes = mutableSetOf<Int>()
         for (f in 0..7) {
-            compose.runOnIdle { frame.intValue = f }
+            if (f != 0) compose.runOnIdle { rendered.set(-1); frame.intValue = f }
+            compose.waitUntil(30_000) { rendered.get() == f }
             val bitmap = compose.onNodeWithTag("avatar_fixture").captureToImage().asAndroidBitmap()
             val pixels = IntArray(bitmap.width * bitmap.height); bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
             hashes += pixels.contentHashCode(); save(bitmap, "native-run-$f.png")
@@ -44,31 +53,43 @@ class AvatarIntegrationTest {
         assertEquals(8, hashes.size)
     }
 
-    @Test fun nineTabsSelectClothesAndSimultaneousEquipmentThenExitSpecialCostume() {
-        val owned = AvatarCatalogue.slots.flatMap { s -> s.variants.indices.map { "${s.key}:$it" } }.toSet()
-        val state = mutableStateOf(AppState(profile = Profile(ownedItems = owned)))
+    @Test fun nineTabsExposeReadyItemsAndPreserveUnreadyStoredChoicesAndInventory() {
+        val owned = AvatarCatalogue.slots.flatMap { slot -> slot.variants.indices.map { "${slot.key}:$it" } }.toSet()
+        val original = Profile(mileage = 4242, ownedItems = owned, avatar = AvatarStyle(hair = 2, face = 1, socks = 2, costume = 1))
+        val state = mutableStateOf(AppState(profile = original))
         val actions = RunmoniUiTest.FakeActions(state)
         compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, actions) {} } }
         compose.onNodeWithTag("closet_animation").performClick()
-        fun pick(slot: String, v: Int) {
+        fun pick(slot: String, variant: Int) {
             if (slot in AvatarCatalogue.accessoryKeys) compose.onNodeWithTag("closet_slot_accessories").performScrollTo().performClick()
             compose.onNodeWithTag("closet_slot_$slot").performScrollTo().performClick()
-            compose.onNodeWithTag("closet_${slot}_$v").performScrollTo().performClick()
+            compose.onNodeWithTag("closet_${slot}_$variant").performScrollTo().assertIsEnabled().performClick()
         }
-        for ((slot,v) in listOf("hair" to 2, "face" to 1, "top" to 4, "bottom" to 4, "socks" to 2, "shoes" to 1,
-            "headwear" to 1, "ear" to 1, "eyewear" to 1, "wrist" to 1, "waist" to 1, "hydration" to 1)) pick(slot,v)
+        compose.onNodeWithTag("closet_slot_costume").performScrollTo().performClick()
+        compose.onNodeWithTag("closet_costume_1").assertDoesNotExist()
+        compose.runOnIdle { assertEquals(original, state.value.profile) }
+        pick("costume", 0)
+        for ((slot, variant) in listOf("top" to 1, "bottom" to 1, "shoes" to 1)) pick(slot, variant)
+        val availableGear = mutableMapOf<String, Int>()
+        for (slot in AvatarCatalogue.slots.filter { it.key in AvatarCatalogue.accessoryKeys || it.key == "headwear" }) {
+            val variant = slot.variants.indices.firstOrNull { it > 0 && AvatarArtwork.itemReady(slot.key, it, original.avatar.gender) }
+            if (variant != null) { pick(slot.key, variant); availableGear[slot.key] = variant }
+        }
         compose.runOnIdle {
-            val a = state.value.profile.avatar
-            assertEquals(4,a.top); assertEquals(4,a.bottom); assertEquals(2,a.socks)
-            for (slot in listOf("headwear","ear","eyewear","wrist","waist","hydration")) assertEquals(1,a.variantFor(slot))
+            val current = state.value.profile
+            assertEquals(0, current.avatar.costume)
+            assertEquals(1, current.avatar.top); assertEquals(1, current.avatar.bottom); assertEquals(1, current.avatar.shoes)
+            assertEquals(original.avatar.hair, current.avatar.hair)
+            assertEquals(original.avatar.face, current.avatar.face)
+            assertEquals(original.avatar.socks, current.avatar.socks)
+            availableGear.forEach { (slot, variant) -> assertEquals(variant, current.avatar.variantFor(slot)) }
+            assertEquals(original.mileage, current.mileage); assertEquals(original.ownedItems, current.ownedItems)
+            assertEquals(9, AvatarCatalogue.tabs.size)
         }
         compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
-        save(compose.onNodeWithTag("form_dialog").captureToImage().asAndroidBitmap(), "closet-running-gear.png")
-        pick("costume",1)
-        compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
-        save(compose.onNodeWithTag("form_dialog").captureToImage().asAndroidBitmap(), "closet-santa.png")
-        pick("top",1)
-        compose.runOnIdle { assertEquals(0,state.value.profile.avatar.costume); assertEquals(1,state.value.profile.avatar.wrist) }
+        compose.waitUntil(30_000) { compose.onAllNodesWithContentDescription("나의 러닝 미니미").fetchSemanticsNodes().isNotEmpty() }
+        save(compose.onNodeWithTag("form_dialog").captureToImage().asAndroidBitmap(), "closet-ready-outfit-gear.png")
+        compose.onNodeWithTag("open_avatar_reference").assertDoesNotExist()
     }
 
     @Test fun oldWalletMigratesAndEveryNewSlotSurvivesReloadWithoutChangingPoints() {

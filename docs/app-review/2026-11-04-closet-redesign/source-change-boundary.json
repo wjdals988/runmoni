@@ -1,0 +1,28 @@
+{
+  "baselineBinaryReference": "binary-build6.json",
+  "finalBinaryReference": "binary-build7.json",
+  "changes": [
+    {
+      "file": "app/src/main/java/com/runmoni/app/ui/RunmoniChat.kt",
+      "kind": "productSources",
+      "baselineSha256": "960ef1bfed171f4ba9f8dac72d7a1b55db7754d6f620658d492a98faa4ded6cf",
+      "finalSha256": "fc23e62c6cae72789839ce62f30609d12870f0c918181c2ff21c4ca47a5c14a3",
+      "baselineReconstructedExactly": true
+    },
+    {
+      "file": "app/src/androidTest/java/com/runmoni/app/ui/HierarchyClosetUxTest.kt",
+      "kind": "testSources",
+      "baselineSha256": "8ea02d91021566d094ea1a5912b07a406b625e5f54513fc4735f1e2d8da3250c",
+      "finalSha256": "8390e5b39e68cd11830844c7733d53a0705539d992f3710c7cca851d367365c1",
+      "baselineReconstructedExactly": true
+    },
+    {
+      "file": "app/src/androidTest/java/com/runmoni/app/ui/RunmoniDesignTest.kt",
+      "kind": "testSources",
+      "baselineSha256": "7bdef70f5ece7d1bd106c5aa56fb5ee2286da140a26230ba5e76e816f9f780cc",
+      "finalSha256": "783a499208365b3588e56a45af4319f2869c53edf7ac665e3935d93a4468a70f",
+      "baselineReconstructedExactly": true
+    }
+  ],
+  "note": "Only chat product UI and native test methods changed; prior renderer/closet/global methods retained. Native failures are not counted as passes."
+}

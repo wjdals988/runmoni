@@ -1,0 +1,33 @@
+{
+  "captures": [
+    {
+      "file": "fixture-closet-navigation-last-actions-device.png",
+      "binaryReference": "binary-build6.json",
+      "sha256": "e77d365f110a9bc5b7cf65022acd015c61b7af4068f758cb7de3798bf3b91e54",
+      "bytes": 63747,
+      "width": 480,
+      "height": 854,
+      "kind": "Android ComponentActivity UI fixture including real OS bars; not MainActivity or phone"
+    },
+    {
+      "file": "fixture-closet-navigation-native-320-font2-device.png",
+      "binaryReference": "binary-build7.json",
+      "sha256": "43965e54d0c53524f6453e0a93698040f2016da244eb673bf560b890742c6ed5",
+      "bytes": 60617,
+      "width": 480,
+      "height": 854,
+      "kind": "Android ComponentActivity UI fixture including real OS bars; not MainActivity or phone"
+    },
+    {
+      "file": "fixture-chat-ime-system-200.png",
+      "binaryReference": "binary-build7.json",
+      "sha256": "9b0963b637d9b80de4e3b01876a4d35e459a3968241f3f48c74d129ed4f109b9",
+      "bytes": 39085,
+      "width": 480,
+      "height": 854,
+      "kind": "Android ComponentActivity UI fixture including real OS bars; not MainActivity or phone"
+    }
+  ],
+  "publishedDashboardGallery": false,
+  "physicalDeviceVerified": false
+}

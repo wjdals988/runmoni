@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "version": "approved-wardrobe-v1",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "canvas": [
+    2048,
+    768
+  ],
+  "cell": [
+    256,
+    384
+  ],
+  "frames": 8,
+  "rows": 2,
+  "file": "coverage.png",
+  "sha256": "2d0e8375a5644311b1337cd369708d5ebf35e0cef3314d6d7c2145382d650115",
+  "handProtectionFile": "hand-protection.png",
+  "handProtectionSha256": "b51776de54ebdacd1cdfd06ea8eb2877dae97a69f576c4b296bc0a310fd9f267",
+  "encoding": "A255,R flags(short1,long2,leg4),G shade0..255,B cuff flags1..2. A0 copies original.",
+  "visualApproval": "pending",
+  "scope": "Fixed-frame clothing coverage only; no hidden skin, hair or body reconstruction."
+}
