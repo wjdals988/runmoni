@@ -1,0 +1,32 @@
+{
+  "observedAtUtc": "2026-11-03T16:32:19.436581+00:00",
+  "avdPid": 27054,
+  "phase": "debug APK installation before app launch",
+  "screenshot": "install-device-status.png",
+  "observedDialog": "System UI isn't responding",
+  "inspectedBy": "root image inspection",
+  "action": "Wait tap at x170/y489 on 480x854 screenshot",
+  "runmoniAnrVerified": false,
+  "causeVerified": false,
+  "recoveryVerified": false,
+  "installationResult": "pending",
+  "afterInstall": {
+    "observedAtUtc": "2026-11-03T16:36:20.939739+00:00",
+    "screenshot": "post-install-device.png",
+    "rootImageInspection": true,
+    "systemUiDialogVisible": false,
+    "appInstalledVersion": "0.3.2-dev/code14",
+    "bothInstalledApkHashesMatch": true,
+    "scope": "This frame has no system dialog; not a verified cause or general resolution."
+  },
+  "finalBootObservation": {
+    "atUtc": "2026-11-03T17:11:10.085488+00:00",
+    "avdPid": 33576,
+    "screenshot": "final-preinstall-system-ui-anr.png",
+    "observedDialog": "System UI isn't responding",
+    "phase": "Before final APK install and Runmoni launch",
+    "action": "Wait tap x170/y489",
+    "causeVerified": false,
+    "appAnrVerified": false
+  }
+}

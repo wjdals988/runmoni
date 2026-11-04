@@ -1,0 +1,7 @@
+Project emulator PID: 33576 boot_completed: 1
+Starting: Intent { cmp=com.runmoni.app/.MainActivity }
+Status: timeout
+LaunchState: UNKNOWN (-1)
+Activity: com.runmoni.app/.MainActivity
+WaitTime: 11949
+Complete

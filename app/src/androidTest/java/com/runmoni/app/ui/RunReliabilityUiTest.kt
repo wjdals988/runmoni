@@ -56,7 +56,8 @@ class RunReliabilityUiTest : RunmoniDesignTestBase() {
         }
         compose.setContent { ViewportBox(Viewport(320, 2f)) { RunmoniApp(state.value, actions) } }
         compose.onNodeWithTag("nav_run").performClick()
-        compose.onNode(hasText("기록 저장 확인 필요") and hasAnyAncestor(hasTestTag("run_persistence_notice"))).assertExists()
+        compose.onNodeWithText("기록 저장 확인 필요").assertExists()
+        compose.onNode(hasText("기기 저장을 다시 시도해 주세요") and hasAnyAncestor(hasTestTag("run_persistence_notice"))).assertExists()
         compose.onNodeWithText("직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요.").assertDoesNotExist()
         compose.onNodeWithText(state.value.runPersistence.message!!).assertExists()
         compose.onNodeWithTag("retry_run_save").performScrollTo().assertIsDisplayed().assertIsEnabled().assertHeightIsAtLeast(48.dp)
@@ -103,16 +104,22 @@ class RunReliabilityUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithText(state.value.runPersistence.message!!).assertExists()
         assertAbsentOrDisabled("resume_run")
         assertAbsentOrDisabled("finish_run")
+        compose.onNodeWithTag("retry_finish_run").assertIsDisplayed().assertIsEnabled()
+        assertControlAboveNavigation("retry_finish_run", 64)
         compose.onNodeWithTag("retry_run_save").performScrollTo().assertIsDisplayed().assertIsEnabled().assertHeightIsAtLeast(48.dp)
+        assertControlAboveNavigation("retry_finish_run", 64)
         noTextOverflow("finish save failure 320 / 2")
         captureReliability("run-finish-failed-320-200")
 
-        compose.onNodeWithTag("retry_run_save").performClick()
+        compose.onNodeWithTag("retry_finish_run").performClick()
         compose.runOnIdle {
             assertEquals(1, retries)
             assertEquals(0, delegate.resumes)
             assertEquals(0, delegate.finishes)
         }
+        compose.onNodeWithTag("retry_finish_run").assertIsDisplayed().assertIsNotEnabled()
+        assertControlAboveNavigation("retry_finish_run", 64)
+        compose.onNodeWithText("기기에 저장 중").assertExists()
         assertAbsentOrDisabled("retry_run_save")
         assertAbsentOrDisabled("resume_run")
         assertAbsentOrDisabled("finish_run")
@@ -161,7 +168,7 @@ class RunReliabilityUiTest : RunmoniDesignTestBase() {
                 RunmoniTheme { ScreenContent { RunPersistenceNotice(persistence) {} } }
             }
         }
-        compose.onNodeWithText("기록 저장 확인 필요").assertExists()
+        compose.onNodeWithText("기기 저장을 다시 시도해 주세요").assertExists()
         compose.onNodeWithText(persistence.message!!).assertExists()
         compose.onNodeWithText("기록은 저장됐어요 · 포인트 처리 필요").assertDoesNotExist()
         compose.onNodeWithTag("retry_run_save").performScrollTo().assertIsDisplayed().assertIsEnabled()

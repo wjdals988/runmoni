@@ -79,16 +79,25 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
         viewModelScope.launch { app.runs.active.collect { active -> mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) } } }
         viewModelScope.launch { app.runs.persistence.collect { persistence ->
+            val resolvedCredit = state.value.runPersistence.creditPending && !persistence.creditPending
+            val before = state.value.profile
+            val local = if (resolvedCredit) withContext(Dispatchers.IO) { wallet.read() } else null
             mutableState.update { previous -> previous.copy(runPersistence = persistence,
-                profile = if (previous.runPersistence.creditPending && !persistence.creditPending &&
-                    (api.token.isBlank() || previous.communityGuest)) wallet.read() else previous.profile) }
+                profile = if (local != null && previous.profile == before && (api.token.isBlank() || previous.communityGuest)) local else previous.profile) }
         } }
         viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
         viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
-        viewModelScope.launch { app.runs.records.collect { records -> mutableState.update { it.copy(records = records, profile = if (api.token.isBlank() || it.communityGuest) wallet.read() else it.profile) } } }
+        viewModelScope.launch { app.runs.records.collect { records ->
+            val before = state.value.profile
+            val local = withContext(Dispatchers.IO) { wallet.read() }
+            // An IO snapshot must not undo a newer name, outfit or wallet update in the UI.
+            mutableState.update { it.copy(records = records, profile = if (it.profile == before && (api.token.isBlank() || it.communityGuest)) local else it.profile) }
+        } }
         viewModelScope.launch { app.runs.lastFinished.filterNotNull().collect { record ->
             if (firebaseMode || api.token.isBlank() || state.value.communityGuest) {
-                mutableState.update { it.copy(profile = wallet.read()) }
+                val before = state.value.profile
+                val local = withContext(Dispatchers.IO) { wallet.read() }
+                mutableState.update { if (it.profile == before && (firebaseMode || api.token.isBlank() || it.communityGuest)) it.copy(profile = local) else it }
             } else { RunSyncWorker.enqueue(app); refreshCommunity() }
         } }
         viewModelScope.launch { audio.status.collect { status ->

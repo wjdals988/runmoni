@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-03T17:32:54.136423+00:00",
+  "startedAtUtc": "2026-11-03T17:32:28.513673+00:00",
+  "resumedActivityLines": [
+    "mResumedActivity: ActivityRecord{8c419dc u0 com.runmoni.app/.MainActivity t467}",
+    "ResumedActivity:ActivityRecord{8c419dc u0 com.runmoni.app/.MainActivity t467}",
+    "ResumedActivity: ActivityRecord{8c419dc u0 com.runmoni.app/.MainActivity t467}"
+  ],
+  "mainActivityResumed": true,
+  "requiresRootImageInspection": true,
+  "debugBuild": "0.3.2-dev/code14; local TEST key; Firebase configuration absent in this debug build",
+  "actualMainActivity": true,
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "androidRuntimeFatalObserved": false
+}

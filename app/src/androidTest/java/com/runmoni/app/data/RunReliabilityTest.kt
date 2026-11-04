@@ -199,8 +199,14 @@ class RunReliabilityTest {
         }
         val repository = RunRepository(db, faulty, credit = { _, _ -> if (failCredit) throw IllegalStateException("injected old credit failure") })
         try {
-            ready(repository)
-            assertEquals(RunPersistenceIssue.CREDIT, repository.persistence.value.issue)
+            // Recovery publishes initialized before the separate startup credit scan runs.
+            // Wait for this test's injected credit result, not that intermediate emission.
+            val pendingCredit = withTimeout(5000) {
+                repository.persistence.first {
+                    it.initialized && !it.saving && it.creditPending && "old-pending-credit" in it.pendingCreditRunIds
+                }
+            }
+            assertEquals(RunPersistenceIssue.CREDIT, pendingCredit.issue)
             repository.begin()
             val currentId = repository.active.value.id
             failCheckpoint = true

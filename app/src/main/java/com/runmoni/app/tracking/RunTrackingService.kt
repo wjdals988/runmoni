@@ -67,12 +67,12 @@ class RunTrackingService : Service(), LocationListener {
                     }
                 }
             }
-            PAUSE -> scope.launch { autoPause.reset(); recorderOperation { repository.pause() }; updateNotification() }
+            PAUSE -> scope.launch { autoPause.reset(); recorderOperation { repository.pause() }; stopIfFinished() }
             RESUME -> scope.launch {
                 autoPause.reset()
                 recorderOperation { repository.resume() }
                 if (repository.active.value.phase == RunPhase.RUNNING) { startLocation(); startTicker(); startPresence() }
-                updateNotification()
+                stopIfFinished()
             }
             FINISH -> scope.launch {
                 preferences.edit().putBoolean("publicLocation", false).apply()
@@ -84,7 +84,7 @@ class RunTrackingService : Service(), LocationListener {
             }
             RETRY -> scope.launch {
                 recorderOperation(repository.persistence.value.issue ?: RunPersistenceIssue.CHECKPOINT) { repository.retryPersistence() }
-                if (repository.active.value.phase == RunPhase.IDLE) stopIfFinished() else updateNotification()
+                stopIfFinished()
             }
         }
         // OS force-stop is not represented as continuous tracking.
@@ -198,11 +198,14 @@ class RunTrackingService : Service(), LocationListener {
         val paused = state.phase == RunPhase.PAUSED
         val pause = PendingIntent.getService(this, 1, Intent(this, javaClass).setAction(if (paused) RESUME else PAUSE), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         val storage = repository.persistence.value
-        val title = if (storage.finishing) "런모니 · 종료 기록 저장 확인" else if (storage.issue == RunPersistenceIssue.CHECKPOINT) "런모니 · 기록 저장 확인" else if (!paused) "런모니 · 러닝 기록 중" else if (state.pauseReason == PauseReason.AUTOMATIC) "런모니 · 자동 일시정지" else "런모니 · 일시정지"
+        val title = if (storage.finishing) "런모니 · 종료 기록 저장 확인" else if (storage.issue == RunPersistenceIssue.CHECKPOINT) "런모니 · 기록 저장 확인"
+            else if (state.phase == RunPhase.RECOVERY) "런모니 · 러닝 복구 확인" else if (state.phase == RunPhase.IDLE) "런모니 · 러닝 시작 준비"
+            else if (!paused) "런모니 · 러닝 기록 중" else if (state.pauseReason == PauseReason.AUTOMATIC) "런모니 · 자동 일시정지" else "런모니 · 일시정지"
         return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_stat_runmoni).setContentTitle(title)
             .setContentText(String.format(Locale.KOREA, "%.2f km · %d분", state.distanceMeters / 1000, state.activeDurationMillis / 60_000))
             .setContentIntent(open).setOngoing(true).apply {
-                if (!storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT) addAction(0, if (paused) "재개" else "일시정지", pause)
+                if (state.phase in setOf(RunPhase.RUNNING, RunPhase.PAUSED) && !storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT)
+                    addAction(0, if (paused) "재개" else "일시정지", pause)
             }.build()
     }
     private fun updateNotification() {
@@ -220,9 +223,10 @@ class RunTrackingService : Service(), LocationListener {
         if (wakeLock?.isHeld == true) wakeLock?.release()
     }
     private fun stopIfFinished() {
-        if (repository.active.value.phase == RunPhase.IDLE && !repository.persistence.value.finishing) {
+        if (repository.active.value.phase in setOf(RunPhase.IDLE, RunPhase.RECOVERY) && !repository.persistence.value.finishing) {
             stopRecordingResources()
             stopForeground(STOP_FOREGROUND_REMOVE)
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(1001)
             stopSelf()
         } else updateNotification()
     }

@@ -1,0 +1,87 @@
+{
+  "phase": "ui",
+  "selection": "com.runmoni.app.ui.RunReliabilityUiTest",
+  "startedAtUtc": "2026-11-03T17:18:17.782713+00:00",
+  "installedBinaryReference": "final-installed-verification.json",
+  "androidApi": "29",
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "physicalDeviceVerified": false,
+  "realGoogleLoginVerified": false,
+  "productionFirebaseWriteVerified": false,
+  "actualSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  },
+  "commandExitCode": 0,
+  "passed": true,
+  "tests": 7,
+  "failures": 0,
+  "seconds": 130.406,
+  "captures": [
+    {
+      "file": "final-ui-community-google-link-conflict-fixture-360-100-device.png",
+      "sha256": "885c7d3ffd13ff9ae3d93234e90f6ecb6bf348e761835dfd5d47c80ae2573f4c",
+      "bytes": 45369
+    },
+    {
+      "file": "final-ui-community-google-link-conflict-fixture-360-100.png",
+      "sha256": "f5d153ad61d1f88208bbdfbe520d09dae727f6772b82051e760c821d7f270bf9",
+      "bytes": 48485
+    },
+    {
+      "file": "final-ui-community-google-restore-pending-fixture-360-100-device.png",
+      "sha256": "3964637d2c12e08d0bd7356cf206aa4d8c594c558ae4affda36b570aca736b60",
+      "bytes": 44775
+    },
+    {
+      "file": "final-ui-community-google-restore-pending-fixture-360-100.png",
+      "sha256": "0d5d41b80744a544daead2ba26673c07d982e68adca14ed599be6b5c58bec3f6",
+      "bytes": 46935
+    },
+    {
+      "file": "final-ui-run-checkpoint-failed-320-200-device.png",
+      "sha256": "27bf77c87f4dadbbc18d1f33eb1ca6c5192bc066d7f8fabf50c241a22f7d3849",
+      "bytes": 48517
+    },
+    {
+      "file": "final-ui-run-checkpoint-failed-320-200.png",
+      "sha256": "ebf7b18ef4823315f36f4a27f98890094ba51930813d405eebefe92552a50dfe",
+      "bytes": 49474
+    },
+    {
+      "file": "final-ui-run-finish-failed-320-200-device.png",
+      "sha256": "366273f9c30dc9002d8e563829d742791dd2161ab5c957bf74af9bac2a5cccf5",
+      "bytes": 51024
+    },
+    {
+      "file": "final-ui-run-finish-failed-320-200.png",
+      "sha256": "83b191c7fddfc3fe10fba892c33b50a5021e5bfc21c88fd099e79cefe6093547",
+      "bytes": 52008
+    },
+    {
+      "file": "final-ui-run-recovery-read-failed-320-200-device.png",
+      "sha256": "9a49069da3b6698dd729085642eef832a7a72057670ef745cc518d7aff89109e",
+      "bytes": 43606
+    },
+    {
+      "file": "final-ui-run-recovery-read-failed-320-200.png",
+      "sha256": "bc1ffeab0ea72fac4467e27e36005763a16337d4f9d2155e59c6f0886e21a9a2",
+      "bytes": 44446
+    },
+    {
+      "file": "final-ui-saved-record-credit-pending-320-200-device.png",
+      "sha256": "925c1da52f64acfab4609a497c19c216851a48b55f506d27e2f51272270ed511",
+      "bytes": 52419
+    },
+    {
+      "file": "final-ui-saved-record-credit-pending-320-200.png",
+      "sha256": "ff726b041f38c5ae09541ef5074bb2e10b7738f78afc50195b6d46285d6e446f",
+      "bytes": 37733
+    }
+  ],
+  "restoredSettings": {
+    "fontScale": "1.0",
+    "density": "Physical density: 160"
+  }
+}

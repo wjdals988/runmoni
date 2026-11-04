@@ -294,7 +294,10 @@ class RunRepository internal constructor(
                 creditScanPending = false
             }
             val entries = pendingCredits.toMap()
-            entries.forEach { (id, points) -> credit(id, points); pendingCredits.remove(id) }
+            entries.forEach { (id, points) ->
+                withContext(Dispatchers.IO) { credit(id, points) }
+                pendingCredits.remove(id)
+            }
             persistenceState.update { it.copy(saving = false, creditPending = false, pendingCreditRunIds = emptySet(),
                 issue = it.issue.takeUnless { issue -> issue == RunPersistenceIssue.CREDIT }) }
         } catch (cancelled: CancellationException) {

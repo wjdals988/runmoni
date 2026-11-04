@@ -1,0 +1,165 @@
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.app.ui.RunReliabilityUiTest:
+INSTRUMENTATION_STATUS: test=linkingCommunityGoogleRequiresConfirmationAndKeepsExistingDataOnConflict
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=linkingCommunityGoogleRequiresConfirmationAndKeepsExistingDataOnConflict
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=currentStorageFailureTakesPriorityOverOlderPendingCredit
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=2
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.currentStorageFailureTakesPriorityOverOlderPendingCredit(RunReliabilityUiTest.kt:164)
+
+INSTRUMENTATION_STATUS: stream=
+Error in currentStorageFailureTakesPriorityOverOlderPendingCredit(com.runmoni.app.ui.RunReliabilityUiTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.currentStorageFailureTakesPriorityOverOlderPendingCredit(RunReliabilityUiTest.kt:164)
+
+INSTRUMENTATION_STATUS: test=currentStorageFailureTakesPriorityOverOlderPendingCredit
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=recoveryReadFailureBlocksNewRunUntilTheRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=3
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=recoveryReadFailureBlocksNewRunUntilTheRetrySucceeds
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=savedRecordKeepsCreditRetrySeparateFromCloudBackup
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=4
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=savedRecordKeepsCreditRetrySeparateFromCloudBackup
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=unfinishedFinalSaveCannotResumeOrSubmitAnotherFinish
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=5
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=unfinishedFinalSaveCannotResumeOrSubmitAnotherFinish
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=restoringCommunityGoogleIsExplicitAndSeparateFromCreatingOrLinkingAProfile
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=6
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: test=restoringCommunityGoogleIsExplicitAndSeparateFromCreatingOrLinkingAProfile
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stream=
+INSTRUMENTATION_STATUS: test=checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: class=com.runmoni.app.ui.RunReliabilityUiTest
+INSTRUMENTATION_STATUS: current=7
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: numtests=7
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false)) && (hasAnyAncestorThat(TestTag = 'run_persistence_notice')))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage(RunReliabilityUiTest.kt:59)
+
+INSTRUMENTATION_STATUS: stream=
+Error in checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage(com.runmoni.app.ui.RunReliabilityUiTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false)) && (hasAnyAncestorThat(TestTag = 'run_persistence_notice')))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage(RunReliabilityUiTest.kt:59)
+
+INSTRUMENTATION_STATUS: test=checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_RESULT: stream=
+
+Time: 121.157
+There were 2 failures:
+1) currentStorageFailureTakesPriorityOverOlderPendingCredit(com.runmoni.app.ui.RunReliabilityUiTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.currentStorageFailureTakesPriorityOverOlderPendingCredit(RunReliabilityUiTest.kt:164)
+2) checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage(com.runmoni.app.ui.RunReliabilityUiTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: ((Text + EditableText contains '기록 저장 확인 필요' (ignoreCase: false)) && (hasAnyAncestorThat(TestTag = 'run_persistence_notice')))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists(SemanticsNodeInteraction.kt:125)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertExists$default(SemanticsNodeInteraction.kt:124)
+	at com.runmoni.app.ui.RunReliabilityUiTest.checkpointFailureExplainsStoragePauseAndRetriesOnlyStorage(RunReliabilityUiTest.kt:59)
+
+FAILURES!!!
+Tests run: 7,  Failures: 2
+
+
+INSTRUMENTATION_CODE: -1

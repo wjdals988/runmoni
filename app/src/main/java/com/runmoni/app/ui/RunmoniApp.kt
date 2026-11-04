@@ -218,7 +218,12 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
         }
         Surface(color = RunmoniColors.Paper, modifier = Modifier.fillMaxWidth().testTag("run_control_bar")) {
             Box(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
-                if (run.phase == RunPhase.IDLE) {
+                if (persistence.finishing) {
+                    Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RoundedCornerShape(50)) {
+                        Text(if (persistence.saving) "기기에 저장 중" else "저장 다시 시도", style = MaterialTheme.typography.titleMedium)
+                    }
+                } else if (run.phase == RunPhase.IDLE) {
                     Button(onClick = actions::startRun, enabled = !persistence.blocksNewRun && !(persistence.saving && persistence.issue != null), modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("start_run"), shape = RoundedCornerShape(50)) {
                         Icon(Icons.Outlined.PlayArrow, null); Spacer(Modifier.width(8.dp)); Text("러닝 시작", style = MaterialTheme.typography.titleMedium)
                     }
