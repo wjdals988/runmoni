@@ -65,3 +65,14 @@ fun AvatarStyle.withItem(slot: String, variant: Int): AvatarStyle {
         else -> error("잘못된 아이템 슬롯")
     } }
 }
+
+/** Explicit wardrobe gesture, separate from decoding/migrating saved item IDs.
+ * A different garment starts in its own palette; selecting the same garment
+ * keeps the user's tint. Other regions and equipment are never reset.
+ */
+fun AvatarStyle.withSelectedItem(slot: String, variant: Int): AvatarStyle {
+    val selected = withItem(slot, variant)
+    val changed = variantFor(slot) != variant || slot in AvatarCatalogue.coveredSlots(costume)
+    val region = RunningKitRegion.entries.firstOrNull { it.wireKey == slot }
+    return if (changed && region != null) selected.copy(runningKitColors = runningKitColors.withColor(region, 0)) else selected
+}

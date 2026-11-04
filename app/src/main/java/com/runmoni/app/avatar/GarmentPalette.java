@@ -20,6 +20,18 @@ public final class GarmentPalette {
         return value >= 0 && value < COLORS ? value : ORIGINAL;
     }
 
+    /** A material shade, without changing alpha or choosing where it is allowed. */
+    public static int shade(int color, int shade) {
+        if (color <= ORIGINAL || color >= COLORS || shade < 0 || shade > 255)
+            throw new IllegalArgumentException("Invalid material shade");
+        int position=shade*4,index=position/255,fraction=position%255,rgb=0;
+        for (int shift=16;shift>=0;shift-=8) {
+            int a=(PALETTES[color][index]>>>shift)&255,b=(PALETTES[color][Math.min(index+1,4)]>>>shift)&255;
+            rgb|=((a*(255-fraction)+b*fraction+127)/255)<<shift;
+        }
+        return rgb;
+    }
+
     /** Approved running-kit mask: 1=top, 2=bottom, 3=shoe fabric.
      * This is a separate asset contract from the swimsuit mask below.
      */

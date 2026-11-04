@@ -3,6 +3,7 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.background
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.selection.selectable
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +51,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var partyNavigation by rememberSaveable { mutableStateOf<String?>(null) }
         var communityNavigationEpoch by rememberSaveable { mutableIntStateOf(0) }
         var settings by rememberSaveable { mutableStateOf(false) }
+        var closet by rememberSaveable { mutableStateOf(false) }
+        BackHandler(enabled = closet) { closet = false }
+        val mainStateHolder = rememberSaveableStateHolder()
         var signIn by rememberSaveable { mutableStateOf(false) }
         var appInformation by rememberSaveable { mutableStateOf(false) }
         var selectedRecord by remember { mutableStateOf<RunRecord?>(null) }
@@ -69,6 +74,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         val tabs = listOf("홈", "탐색", "러닝", "크루", "나")
         val icons = listOf(R.drawable.ic_nav_home, R.drawable.ic_nav_explore, R.drawable.ic_nav_run, R.drawable.ic_nav_crew, R.drawable.ic_nav_me)
         Box(Modifier.fillMaxSize()) {
+        if (!closet) mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
             modifier = if (chatOpen || settings) Modifier.clearAndSetSemantics { }.focusProperties { canFocus = false } else Modifier,
             containerColor = RunmoniColors.Cream,
@@ -115,10 +121,10 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                     .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center) {
                                     Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
-                                        if (index == 2) Box(Modifier.size(48.dp).clip(CircleShape).background(if (tab == index) RunmoniColors.Primary else RunmoniColors.Navy), contentAlignment = Alignment.Center) {
+                                        if (index == 2) Box(Modifier.size(48.dp).clip(RoundedCornerShape(10.dp)).background(if (tab == index) RunmoniColors.Primary else RunmoniColors.Navy), contentAlignment = Alignment.Center) {
                                             Icon(painterResource(icons[index]), null, Modifier.size(26.dp), tint = RunmoniColors.Lime)
                                         } else {
-                                            if (tab == index) Box(Modifier.width(64.dp).height(32.dp).clip(CircleShape).background(RunmoniColors.PrimarySoft))
+                                            if (tab == index) Box(Modifier.width(64.dp).height(32.dp).clip(RoundedCornerShape(8.dp)).background(RunmoniColors.PrimarySoft))
                                             Icon(painterResource(icons[index]), null, Modifier.size(23.dp),
                                                 tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
                                         }
@@ -140,10 +146,12 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
-                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = { selectedRecord = it }, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true })
+                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = { selectedRecord = it }, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true }, onCloset = { closet = true })
                 }
             }
         }
+        }
+        if (closet) ClosetDialog(state.profile, actions) { closet = false }
         if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true }, onAppInformation = { settings = false; appInformation = true }, updates = updates)
         if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
         if (signIn) SignInDialog(state, actions) { signIn = false }
@@ -184,7 +192,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
                         Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     }
-                } else Surface(shape = RoundedCornerShape(28.dp), color = RunmoniColors.Navy) {
+                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.Navy) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text("달린 거리 · km", color = RunmoniColors.Lime, style = MaterialTheme.typography.labelMedium)
                         DistanceNumber(distance(run.distanceMeters), RunmoniColors.OnDark, Modifier.testTag("run_distance"))
@@ -202,7 +210,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         null -> "러닝이 멈춰 있어요. 저장 상태를 확인한 뒤 이어갈 수 있어요."
                     })
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
-                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth().height(188.dp).clip(RoundedCornerShape(20.dp)))
+                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth().height(188.dp).clip(RunmoniShapes.Surface))
                 TextButton(onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
@@ -220,11 +228,11 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
             Box(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
                 if (persistence.finishing) {
                     Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RoundedCornerShape(50)) {
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RunmoniShapes.Action) {
                         Text(if (persistence.saving) "기기에 저장 중" else "저장 다시 시도", style = MaterialTheme.typography.titleMedium)
                     }
                 } else if (run.phase == RunPhase.IDLE) {
-                    Button(onClick = actions::startRun, enabled = !persistence.blocksNewRun && !(persistence.saving && persistence.issue != null), modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("start_run"), shape = RoundedCornerShape(50)) {
+                    Button(onClick = actions::startRun, enabled = !persistence.blocksNewRun && !(persistence.saving && persistence.issue != null), modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("start_run"), shape = RunmoniShapes.Action) {
                         Icon(Icons.Outlined.PlayArrow, null); Spacer(Modifier.width(8.dp)); Text("러닝 시작", style = MaterialTheme.typography.titleMedium)
                     }
                 } else AdaptiveActions(
@@ -243,7 +251,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
 
 @Composable
 private fun LocationReadinessCard(permissionMissing: Boolean, actions: AppActions) {
-    Surface(color = RunmoniColors.Mint, shape = RoundedCornerShape(20.dp)) {
+    Surface(color = RunmoniColors.Mint, shape = RunmoniShapes.Surface) {
         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (permissionMissing) "정확한 위치 권한이 필요해요" else "GPS가 꺼져 있어요", style = MaterialTheme.typography.titleMedium)
             Text(if (permissionMissing) "러닝 시작 시 위치 권한을 허용해 주세요. 권한 요청이 나오지 않으면 앱 설정에서 ‘정확한 위치’를 켜 주세요."
@@ -267,7 +275,7 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
     val thisRoom = audio.connected && audio.roomId == roomId
     val canBroadcast = audio.canDj && thisRoom
     LaunchedEffect(canBroadcast) { if (!canBroadcast) sourcePicker = false }
-    Surface(shape = RoundedCornerShape(20.dp), color = RunmoniColors.Paper) {
+    Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.Paper) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Outlined.Headphones, null); Spacer(Modifier.width(8.dp)); Text("음성 · 함께 듣기", style = MaterialTheme.typography.titleMedium) }
             Text(audio.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -303,9 +311,9 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
 }
 
 @Composable
-internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = 24.dp, content: @Composable ColumnScope.() -> Unit) {
+internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = 16.dp, content: @Composable ColumnScope.() -> Unit) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.widthIn(max = 640.dp).fillMaxSize().verticalScroll(rememberScrollState()).testTag("screen_scroll").padding(horizontal = 24.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(spacing), content = content)
+        Column(Modifier.widthIn(max = 640.dp).fillMaxSize().verticalScroll(rememberScrollState()).testTag("screen_scroll").padding(horizontal = 20.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(spacing), content = content)
     }
 }
 
@@ -316,12 +324,12 @@ internal fun ScreenHeading(title: String, subtitle: String) {
 
 @Composable
 internal fun SectionHeading(title: String, action: String? = null, onClick: () -> Unit = {}) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f).semantics { heading() }); if (action != null) TextButton(onClick = onClick, modifier = Modifier.heightIn(min = 48.dp)) { Text(action) } }
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() }); if (action != null) TextButton(shape = RunmoniShapes.Action, onClick = onClick, modifier = Modifier.heightIn(min = 48.dp)) { Text(action) } }
 }
 
 @Composable
 internal fun StatusPill(label: String, color: Color, tag: String = "") {
-    Surface(color = color.copy(alpha = 0.10f), shape = RoundedCornerShape(50), modifier = Modifier.testTag(tag)) { Row(Modifier.padding(horizontal = 10.dp, vertical = 7.dp), verticalAlignment = Alignment.CenterVertically) { Box(Modifier.size(5.dp).clip(CircleShape).background(color)); Spacer(Modifier.width(5.dp)); Text(label, color = color, style = MaterialTheme.typography.labelMedium) } }
+    Surface(color = color.copy(alpha = 0.10f), shape = RunmoniShapes.Status, modifier = Modifier.testTag(tag)) { Row(Modifier.padding(horizontal = 10.dp, vertical = 7.dp), verticalAlignment = Alignment.CenterVertically) { Box(Modifier.size(5.dp).clip(CircleShape).background(color)); Spacer(Modifier.width(5.dp)); Text(label, color = color, style = MaterialTheme.typography.labelMedium) } }
 }
 
 @Composable

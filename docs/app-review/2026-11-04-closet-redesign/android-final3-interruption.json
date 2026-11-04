@@ -1,0 +1,8 @@
+{
+  "attempt": "android-final3",
+  "reason": "Operator interrupted an inefficient test: success messages were allocated for every pixel",
+  "completedInstrumentationGroups": 0,
+  "wholePreAttemptPreferencesAndSettingsRestored": true,
+  "productAppSourceChanged": false,
+  "doNotCountAsPass": true
+}

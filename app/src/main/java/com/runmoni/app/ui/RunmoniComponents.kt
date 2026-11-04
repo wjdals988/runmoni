@@ -2,22 +2,48 @@ package com.runmoni.app.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 internal data class UiMetric(val label: String, val value: String, val unit: String = "", val tag: String = "")
+
+/** A page contains a few sections; rows inside a section share a tighter rhythm. */
+@Composable
+internal fun ScreenSection(
+    title: String,
+    modifier: Modifier = Modifier,
+    action: String? = null,
+    onAction: () -> Unit = {},
+    showDivider: Boolean = true,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    Column(modifier.fillMaxWidth().padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (showDivider) HorizontalDivider(color = RunmoniColors.Line)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(title, style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f).semantics { heading() })
+            if (action != null) TextButton(onClick = onAction, shape = RunmoniShapes.Action,
+                modifier = Modifier.heightIn(min = 48.dp)) { Text(action) }
+        }
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
+    }
+}
 
 /** Long confirmations must remain readable with the system font enlarged. */
 @Composable
@@ -72,7 +98,7 @@ internal fun MetricGroup(metrics: List<UiMetric>, onDark: Boolean = false) {
 
 @Composable
 internal fun MetricPanel(metrics: List<UiMetric>) {
-    Surface(color = RunmoniColors.Paper, shape = RoundedCornerShape(24.dp), border = BorderStroke(1.dp, RunmoniColors.Line)) {
+    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface, border = BorderStroke(1.dp, RunmoniColors.Line)) {
         Box(Modifier.fillMaxWidth().padding(20.dp)) { MetricGroup(metrics) }
     }
 }

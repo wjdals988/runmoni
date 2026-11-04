@@ -32,6 +32,15 @@ internal object RunmoniColors {
     val OnDarkMuted = Color(0xFFD6E5DA)
 }
 
+/** Shared geometry: readable controls and contained surfaces, without pill chrome. */
+internal object RunmoniShapes {
+    val Action = RoundedCornerShape(8.dp)
+    val Input = RoundedCornerShape(8.dp)
+    val Surface = RoundedCornerShape(12.dp)
+    val Status = RoundedCornerShape(4.dp)
+    val Dialog = RoundedCornerShape(16.dp)
+}
+
 private val AlignedText = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false),
     lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None))
 
@@ -75,12 +84,13 @@ internal fun RunmoniTheme(content: @Composable () -> Unit) {
             errorContainer = Color(0xFFFFEAE5),
             onErrorContainer = Color(0xFF74221C),
         ),
-        shapes = Shapes(small = RoundedCornerShape(12.dp), medium = RoundedCornerShape(20.dp), large = RoundedCornerShape(28.dp), extraLarge = RoundedCornerShape(32.dp)),
+        shapes = Shapes(extraSmall = RunmoniShapes.Status, small = RunmoniShapes.Action,
+            medium = RunmoniShapes.Surface, large = RunmoniShapes.Dialog, extraLarge = RunmoniShapes.Dialog),
         typography = Typography(
             displayLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 64.sp, lineHeight = 72.sp),
             displayMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 48.sp, lineHeight = 56.sp),
             displaySmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 40.sp, lineHeight = 48.sp),
-            headlineLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 32.sp, lineHeight = 40.sp),
+            headlineLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 28.sp, lineHeight = 36.sp),
             headlineMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 32.sp),
             headlineSmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 32.sp),
             titleLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp),

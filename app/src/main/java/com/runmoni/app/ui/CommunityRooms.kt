@@ -48,14 +48,14 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
     BackHandler(enabled = selectedCrewId != null && selectedPartyId == null) { selectedCrewId = null }
     Column(Modifier.fillMaxSize()) {
         if (selected != null) {
-            TextButton(onClick = { selectedCrewId = null }, contentPadding = PaddingValues(0.dp),
-                modifier = Modifier.padding(horizontal = 24.dp).heightIn(min = 48.dp).testTag("back_to_rooms")) {
+            TextButton(shape = RunmoniShapes.Action, onClick = { selectedCrewId = null }, contentPadding = PaddingValues(0.dp),
+                modifier = Modifier.padding(horizontal = 20.dp).heightIn(min = 48.dp).testTag("back_to_rooms")) {
                 Icon(Icons.Outlined.ArrowBack, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("크루")
             }
             HorizontalDivider(color = RunmoniColors.Line)
         }
         Box(Modifier.weight(1f)) {
-    ScreenContent(spacing = 20.dp) {
+    ScreenContent(spacing = 16.dp) {
         if (selected != null) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(selected.name, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
@@ -63,30 +63,34 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 if (selected.joined) Text(if (selected.isOwner) "크루장으로 활동 중" else "가입한 크루", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Primary)
             }
             if (!state.serverConnected && !state.busy) RoomConnectionNotice(state, actions)
-            if (!selected.joined) Button(onClick = { connected("join:${selected.id}") }, enabled = !state.busy,
+            if (!selected.joined) Button(shape = RunmoniShapes.Action, onClick = { connected("join:${selected.id}") }, enabled = !state.busy,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("join_crew_${selected.id}")) { Text("크루 가입하기") }
             DestinationTabs(listOf("파티", "소개 · 멤버"), detailSection, { detailSection = it }, "crew_detail")
             if (detailSection == 0) {
                 if (selected.joined) Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                    TextButton(onClick = { newParty = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("create_party_${selected.id}")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("파티 만들기") }
+                    TextButton(shape = RunmoniShapes.Action, onClick = { newParty = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("create_party_${selected.id}")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("파티 만들기") }
                 }
                 val events = state.parties.filter { it.crewId == selected.id && !it.cancelled }.sortedBy { it.startsAtMillis }
                 if (state.crewPartiesError != null) {
                     Text(state.crewPartiesError, color = MaterialTheme.colorScheme.error)
-                    TextButton(onClick = { actions.loadCrewParties(selected.id) }) { Text("파티 다시 불러오기") }
+                    TextButton(shape = RunmoniShapes.Action, onClick = { actions.loadCrewParties(selected.id) }) { Text("파티 다시 불러오기") }
                 }
                 if (events.size >= 50) SmallNote("크루별 기본 조회는50개까지예요. 참여한 파티도 함께 표시해요.")
                 if (events.isEmpty() && (state.busy || state.crewPartiesLoading)) LinearProgressIndicator(Modifier.fillMaxWidth())
                 else if (events.isEmpty() && state.serverConnected && state.crewPartiesError == null) EmptyCard("아직 파티가 없어요", if (selected.joined) "이 크루에서 함께 달릴 일정을 만들어보세요." else "크루에 가입하면 함께 달릴 파티를 만들고 참가할 수 있어요.")
                 Column { events.forEach { p -> PartySummary(p) { selectedPartyId = p.id } } }
             } else {
-                if (selected.description.isNotBlank()) Text(selected.description, style = MaterialTheme.typography.bodyLarge)
+                if (selected.description.isNotBlank()) ScreenSection("크루 소개", showDivider = false) {
+                    Text(selected.description, style = MaterialTheme.typography.bodyLarge)
+                }
                 if (selected.joined) {
-                    OutlinedButton(onClick = { actions.openChat("crew:${selected.id}", selected.name) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("크루 공지 · 채팅") }
+                    ScreenSection("참여 및 관리") {
+                    OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.openChat("crew:${selected.id}", selected.name) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("크루 공지 · 채팅") }
                     if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "crew:${selected.id}")
-                    if (selected.isOwner) OutlinedButton(onClick = { manageId = selected.id }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("manage_crew_members")) { Text("멤버 · DJ 관리") }
-                    else TextButton(onClick = { actions.leaveCrew(selected.id); selectedCrewId = null }, modifier = Modifier.heightIn(min = 48.dp).testTag("leave_crew_${selected.id}")) { Text("크루 탈퇴", color = MaterialTheme.colorScheme.error) }
+                    if (selected.isOwner) OutlinedButton(shape = RunmoniShapes.Action, onClick = { manageId = selected.id }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("manage_crew_members")) { Text("멤버 · DJ 관리") }
+                    else TextButton(shape = RunmoniShapes.Action, onClick = { actions.leaveCrew(selected.id); selectedCrewId = null }, modifier = Modifier.heightIn(min = 48.dp).testTag("leave_crew_${selected.id}")) { Text("크루 탈퇴", color = MaterialTheme.colorScheme.error) }
                     if (selected.isOwner) SmallNote("현재 크루장 권한은 다른 계정으로 이전할 수 없어요.")
+                    }
                 } else SmallNote("크루에 가입하면 공지와 채팅에 참여할 수 있어요.")
             }
         } else {
@@ -94,10 +98,12 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 Text("크루", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.weight(1f))
                 IconButton(onClick = actions::refreshCommunity, enabled = !state.busy, modifier = Modifier.size(48.dp).testTag("rooms_refresh")) { Icon(Icons.Outlined.Refresh, "크루 새로고침") }
             }
-            DestinationTabs(listOf("내 크루", "둘러보기"), section, { section = it }, "crews_section")
-            RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-                TextButton(onClick = { connected("create") }, enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("create_crew")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기") }
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                DestinationTabs(listOf("내 크루", "둘러보기"), section, { section = it }, "crews_section")
+                RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                    TextButton(shape = RunmoniShapes.Action, onClick = { connected("create") }, enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("create_crew")) { Icon(Icons.Outlined.Add, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기") }
+                }
             }
             if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             if (!state.serverConnected && !state.busy) RoomConnectionNotice(state, actions)
@@ -108,7 +114,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
             Column { crews.forEach { crew -> CrewRoomCard(crew) { selectedCrewId = crew.id; detailSection = 0 } } }
             val legacy = state.parties.filter { it.joined && state.crews.none { c -> c.id == it.crewId } }
             if (legacy.isNotEmpty()) {
-                TextButton(onClick = { legacyExpanded = !legacyExpanded }, modifier = Modifier.heightIn(min = 48.dp)) { Text("이전 버전 파티 관리") }
+                TextButton(shape = RunmoniShapes.Action, onClick = { legacyExpanded = !legacyExpanded }, modifier = Modifier.heightIn(min = 48.dp)) { Text("이전 버전 파티 관리") }
                 if (legacyExpanded) Column { legacy.forEach { p -> PartySummary(p) { selectedPartyId = p.id } } }
             }
         }

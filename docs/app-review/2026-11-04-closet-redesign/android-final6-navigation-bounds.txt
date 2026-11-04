@@ -1,0 +1,6 @@
+closet_shoes_3 topPx=567.0 bottomPx=631.0 safeBottomPx=806.0 systemNavigationTopPx=806 bottomInsetPx=48
+kit_color_shoes_5 topPx=732.0 bottomPx=780.0 safeBottomPx=806.0 systemNavigationTopPx=806 bottomInsetPx=48
+closet_top_3 topPx=567.0 bottomPx=631.0 safeBottomPx=806.0 systemNavigationTopPx=806 bottomInsetPx=48
+closet_shoes_3 topPx=686.0 bottomPx=782.0 safeBottomPx=782.0 systemNavigationTopPx=782 bottomInsetPx=72
+kit_color_shoes_5 topPx=696.0 bottomPx=782.0 safeBottomPx=782.0 systemNavigationTopPx=782 bottomInsetPx=72
+closet_top_3 topPx=686.0 bottomPx=782.0 safeBottomPx=782.0 systemNavigationTopPx=782 bottomInsetPx=72

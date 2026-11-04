@@ -1,0 +1,3 @@
+screenWidthDp=320 fontScale=2.0
+baselinePixels=[729.0, 729.0, 729.0, 729.0, 729.0]
+spanPixels=0.0

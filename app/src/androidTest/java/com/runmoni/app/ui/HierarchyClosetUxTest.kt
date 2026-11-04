@@ -167,7 +167,7 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("nav_me").performClick()
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
         val preview = compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot
-        compose.onNodeWithTag("closet_gender_female").performScrollTo().assertHeightIsAtLeast(48.dp).performClick().assertIsSelected()
+        compose.onNodeWithTag("closet_gender_female").assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick().assertIsSelected()
         compose.onNodeWithTag("closet_slot_accessories").performScrollTo().performClick().assertIsSelected()
         compose.onNodeWithTag("closet_slot_hydration").performScrollTo().performClick().assertIsSelected()
         compose.onNodeWithTag("closet_slot_ear").performScrollTo().performClick().assertIsSelected()
@@ -181,18 +181,22 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
             assertEquals(original.ownedItems + "top:1", state.value.profile.ownedItems)
         }
         compose.onNodeWithTag("closet_top_1").assertIsSelected()
-        compose.onNodeWithTag("closet_artwork_status").performScrollTo().assertTextContains("기본", substring = true)
+        compose.onNodeWithTag("closet_artwork_status").performScrollTo().assertTextContains("착용", substring = true)
         compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         assertEquals(preview, compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot)
         compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsSelected()
         noTextOverflow("native 320dp / font2 gender and free closet")
         capture("closet-hierarchy-native-320-font2-fixture")
         captureDevice("closet-hierarchy-native-320-font2-device")
-        compose.onNodeWithTag("closet_gender_male").performScrollTo().performClick().assertIsSelected()
+        compose.onNodeWithTag("closet_gender_male").assertIsDisplayed().performClick().assertIsSelected()
         compose.runOnIdle {
             assertEquals(original.avatar.copy(top = 1, gender = AvatarGender.MALE), state.value.profile.avatar)
             assertEquals(original.mileage, state.value.profile.mileage)
         }
+        compose.waitUntil(30_000) { compose.activity.hasWindowFocus() }
+        assertTrue("Native hierarchy Back requires app focus", compose.activity.hasWindowFocus())
+        File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review").apply { mkdirs() }
+            .resolve("native-hierarchy-back-focus.txt").writeText("appWindowFocusedBeforeNativeBack=true\n")
         assertTrue("KEYCODE_BACK DOWN/UP injection failed",
             UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK))
         compose.waitForIdle()
@@ -211,7 +215,7 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
         noTextOverflow("native 320dp / font2 main after closet")
         captureDevice("closet-closed-native-320-font2-device")
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_gender_male").performScrollTo().assertIsSelected()
+        compose.onNodeWithTag("closet_gender_male").assertIsDisplayed().assertIsSelected()
         compose.runOnIdle { assertEquals(1, state.value.profile.avatar.top) }
     }
 }

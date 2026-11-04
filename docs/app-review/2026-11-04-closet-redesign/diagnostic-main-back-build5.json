@@ -1,0 +1,10 @@
+{
+  "verificationKind": "diagnostic real MainActivity; no outfit mutation",
+  "appBinaryReference": "binary-build5.json",
+  "systemUiPopupAcknowledgedWithWaitBeforeFlow": true,
+  "actualAndroidBackReturnedFromClosetToProfile": true,
+  "mainWindowFocusedBeforeAndAfter": true,
+  "passed": true,
+  "fullHostFlowPassed": false,
+  "physicalDeviceVerified": false
+}

@@ -230,7 +230,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     } })
     override fun equipItem(slot: String, variant: Int) = ignoreJob(work { wardrobeChanges.withLock {
         require(AvatarCatalogue.valid(slot, variant)) { "올바른 아이템을 선택해 주세요." }
+        require(com.runmoni.app.avatar.AvatarArtwork.itemReady(slot, variant, state.value.profile.avatar.gender)) {
+            "아직 착용할 수 없는 아이템이에요. 기존 보유 내역은 그대로 보관돼요."
+        }
         val item = "$slot:$variant"
+        val current = state.value.profile.avatar
         if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) {
             if (item !in state.value.profile.ownedItems) {
                 val entry = api.request("GET", "/v1/shop/items").items().firstOrNull { it.optString("id") == item }
@@ -239,8 +243,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             }
             // Send only the selected slot: a slower purchase must not overwrite
             // a newer gender or equipment selection with an old full profile.
-            api.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put(slot, variant))); refreshNow()
-        } else mutateLocalProfile { it.copy(avatar = it.avatar.with(slot, variant), ownedItems = it.ownedItems + item) }
+            val patch = JSONObject().put(slot, variant)
+            RunningKitRegion.entries.firstOrNull { it.wireKey == slot }?.let { region ->
+                // Include zero for the new-item intent even when our last local
+                // color was already zero; a server snapshot may have changed it.
+                if (current.variantFor(slot) != variant || slot in AvatarCatalogue.coveredSlots(current.costume))
+                    patch.put("runningKitColors", JSONObject().put(region.wireKey, 0))
+            }
+            api.request("PATCH", "/v1/me", JSONObject().put("avatar", patch)); refreshNow()
+        } else mutateLocalProfile { it.copy(avatar = it.avatar.withSelectedItem(slot, variant), ownedItems = it.ownedItems + item) }
     } })
     override fun buyItem(slot: String, variant: Int) = equipItem(slot, variant)
     override fun deleteRun(id: String) = ignoreJob(work {
@@ -577,7 +588,6 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private fun roomScope(room: String): JSONObject { val (scope, id) = room.split(":", limit = 2); return JSONObject().put("scope_type", scope).put("scope_id", id) }
     private fun readLocalProfile(): Profile = wallet.read()
     private fun mutateLocalProfile(transform: (Profile) -> Profile) { val profile = wallet.update(transform); mutableState.update { it.copy(profile = profile) } }
-    private fun AvatarStyle.with(slot: String, variant: Int) = withItem(slot, variant)
     private fun ignoreJob(job: Job) = Unit
     override fun onCleared() { audio.close(); super.onCleared() }
 }

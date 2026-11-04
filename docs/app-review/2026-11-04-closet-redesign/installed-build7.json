@@ -1,0 +1,17 @@
+{
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "dc791196f5669a2c70a53d20062b42ecb8067c56b167260ac86950114d5f8a20",
+      "matchesBuild7": true
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "cfe37b525bea601ac8d906aabe25274e5122f3cb68a88e2217810bcc70204255",
+      "matchesBuild7": true
+    }
+  ],
+  "version": "0.3.4-dev",
+  "versionCode": 16,
+  "softwareNavigation": true
+}

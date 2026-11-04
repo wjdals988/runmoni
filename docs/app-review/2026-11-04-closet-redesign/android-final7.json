@@ -1,0 +1,35 @@
+{
+  "attempt": "android-final7",
+  "startedAtUtc": "2026-11-04T17:52:52.233181+00:00",
+  "binaryReference": "binary-build7.json",
+  "installedReference": "installed-build7.json",
+  "fixtureBackend": "firebase",
+  "firebaseConfigured": false,
+  "softwareNavigationRequired": true,
+  "baselineAndroidReference": "android-final6.json",
+  "baselineBinaryReference": "binary-build6.json",
+  "groups": [
+    {
+      "name": "native-320-font2",
+      "expected": 8,
+      "passed": true,
+      "actualPassedTests": 8,
+      "output": "android-final7-native-320-font2.txt",
+      "elapsedSeconds": 324.01
+    }
+  ],
+  "passed": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "systemUiHandling": {
+    "exactSystemUiAnrWaitOnly": true,
+    "actions": []
+  },
+  "fixtureFocusVerifiedBeforeNativeBack": true,
+  "hostMainReference": "main-final2.json",
+  "currentPreAttemptPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "620502abc5e2d5fb889938fab48614b8278c83d892ca8256b7f26982a365a4af",
+  "finishedAtUtc": "2026-11-04T18:10:54.369131+00:00"
+}

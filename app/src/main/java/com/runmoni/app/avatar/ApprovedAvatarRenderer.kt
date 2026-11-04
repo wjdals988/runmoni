@@ -13,8 +13,23 @@ import java.security.MessageDigest
 
 /** Artwork readiness is separate from inventory validity/ownership and never migrates a profile. */
 object AvatarArtwork {
-    fun itemReady(slot: String, variant: Int) = AvatarCatalogue.valid(slot, variant) && variant == 0
-    fun styleReady(style: AvatarStyle) = AvatarCatalogue.slots.all { itemReady(it.key, style.variantFor(it.key)) }
+    fun itemReady(slot: String, variant: Int, gender: AvatarGender = AvatarGender.MALE): Boolean {
+        if (!AvatarCatalogue.valid(slot, variant)) return false
+        if (variant == 0) return true
+        return when (slot) {
+            "top" -> variant in 1..3
+            "bottom" -> variant == 1
+            "shoes" -> variant in 1..3
+            "accessory" -> when (variant) {
+                1 -> itemReady("headwear", 3, gender)
+                2 -> itemReady("headwear", 1, gender)
+                3 -> itemReady("ear", 1, gender)
+                else -> false
+            }
+            else -> AvatarEquipmentLayers.supports(slot, variant, gender)
+        }
+    }
+    fun styleReady(style: AvatarStyle) = AvatarCatalogue.slots.all { itemReady(it.key, style.variantFor(it.key), style.gender) }
 }
 
 /** Approved whole-frame artwork. No v0.4 rig, body rotation or old-art fallback. */
@@ -48,24 +63,44 @@ class ApprovedAvatarRenderer(context: Context) {
         override fun sizeOf(key: String, value: Bitmap) = value.allocationByteCount
     }
 
-    /** Base outfit only until per-item frame layers exist. Readiness is disclosed in the closet. */
+    /** Compatibility entry point for the existing basic-fabric renderer tests. */
     @Synchronized
     fun render(frame: Int, running: Boolean, gender: AvatarGender = AvatarGender.MALE,
-        colors: RunningKitColors = RunningKitColors()): Bitmap {
+        colors: RunningKitColors = RunningKitColors()): Bitmap =
+        render(frame, running, AvatarStyle(gender = gender, runningKitColors = colors))
+
+    /** Whole original frames plus explicit clothes/gear; never the rejected body rig. */
+    @Synchronized
+    fun render(frame: Int, running: Boolean, style: AvatarStyle): Bitmap {
         val selected = if (running) Math.floorMod(frame, FRAMES) else 0
-        val row = gender.spriteRow
+        val row = style.gender.spriteRow
         val original = frames[row][selected] ?: Bitmap.createBitmap(source, selected * WIDTH, row * HEIGHT, WIDTH, HEIGHT).also {
             frames[row][selected] = it
         }
-        val kit = colors.normalized()
-        if (kit.isOriginal) return original
-        val mask = try { RunningKitArtwork.frameMask(applicationContext, row, selected) } catch (_: Exception) { return original }
-        val key = "${RunningKitArtwork.MASK_VERSION}|$row|$selected|${kit.top}|${kit.bottom}|${kit.shoes}"
+        val kit = style.runningKitColors.normalized()
+        // Unsupported saved IDs remain saved. They never select a substitute rig.
+        val covered = AvatarCatalogue.coveredSlots(style.costume)
+        fun ready(slot: String) = if (slot in covered) 0 else
+            style.variantFor(slot).takeIf { AvatarArtwork.itemReady(slot, it, style.gender) } ?: 0
+        val effective = AvatarStyle(gender = style.gender, top = ready("top"), bottom = ready("bottom"),
+            shoes = ready("shoes"), headwear = ready("headwear"), ear = ready("ear"),
+            eyewear = ready("eyewear"), wrist = ready("wrist"), waist = ready("waist"),
+            hydration = ready("hydration"), costume = style.costume, runningKitColors = kit)
+        val noGear = listOf("headwear", "ear", "eyewear", "wrist", "waist", "hydration").all { effective.variantFor(it) == 0 }
+        if (kit.isOriginal && effective.top == 0 && effective.bottom == 0 && effective.shoes == 0 && noGear) return original
+        val key = "${WardrobeCoverage.VERSION}|$selected|$effective"
         colored.get(key)?.let { return it }
+        val mask = RunningKitArtwork.frameMask(applicationContext, row, selected)
         val pixels = IntArray(WIDTH * HEIGHT)
         original.getPixels(pixels, 0, WIDTH, 0, 0, WIDTH, HEIGHT)
-        val changed = GarmentPalette.recolorRunningKit(pixels, mask, kit.top, kit.bottom, kit.shoes)
-        return Bitmap.createBitmap(changed, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888).also { colored.put(key, it) }
+        val needsCoverage = effective.top != 0 || effective.bottom != 0
+        val changed = if (needsCoverage) WardrobeClothing.render(pixels, mask,
+            WardrobeCoverage.frame(applicationContext, row, selected), effective.top, effective.bottom,
+            effective.shoes, kit.top, kit.bottom, kit.shoes, row, selected)
+        else WardrobeClothing.render(pixels, mask, IntArray(pixels.size), 0, 0, effective.shoes,
+            kit.top, kit.bottom, kit.shoes, row, selected)
+        val equipped = AvatarEquipmentLayers.render(changed, pixels, mask, selected, style.gender, effective)
+        return Bitmap.createBitmap(equipped, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888).also { colored.put(key, it) }
     }
 
     @Synchronized internal fun cachedColorBytes() = colored.size()
@@ -75,13 +110,16 @@ class ApprovedAvatarRenderer(context: Context) {
      */
     @Synchronized
     fun renderForDisplay(frame: Int, running: Boolean, gender: AvatarGender = AvatarGender.MALE,
-        colors: RunningKitColors = RunningKitColors()): Bitmap {
-        val image = render(frame, running, gender, colors)
-        if (gender != AvatarGender.FEMALE) return image
+        colors: RunningKitColors = RunningKitColors()): Bitmap =
+        renderForDisplay(frame, running, AvatarStyle(gender = gender, runningKitColors = colors))
+
+    @Synchronized
+    fun renderForDisplay(frame: Int, running: Boolean, style: AvatarStyle): Bitmap {
+        val image = render(frame, running, style)
+        if (style.gender != AvatarGender.FEMALE) return image
         val selected = if (running) Math.floorMod(frame, FRAMES) else 0
-        val kit = colors.normalized()
-        val original = image === frames[gender.spriteRow][selected]
-        val key = "display|${RunningKitArtwork.MASK_VERSION}|$selected|${kit.top}|${kit.bottom}|${kit.shoes}"
+        val original = image === frames[style.gender.spriteRow][selected]
+        val key = "display|${WardrobeCoverage.VERSION}|$selected|$style"
         (if (original) femaleDisplayBases[selected] else colored.get(key))?.let { return it }
         val pixels = IntArray(WIDTH * HEIGHT)
         image.getPixels(pixels, 0, WIDTH, 0, 0, WIDTH, HEIGHT)

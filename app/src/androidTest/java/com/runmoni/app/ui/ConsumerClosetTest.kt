@@ -2,6 +2,7 @@ package com.runmoni.app.ui
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
+import com.runmoni.app.avatar.AvatarArtwork
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -15,6 +16,8 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
         compose.setContent { RunmoniApp(state.value, actions) }
         compose.onNodeWithTag("nav_me").performClick()
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
+        compose.onNodeWithTag("nav_me").assertDoesNotExist()
+        compose.onNodeWithTag("open_avatar_reference").assertDoesNotExist()
         val preview = compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot
         capture("consumer-closet-native")
         AvatarCatalogue.tabs.forEach { (key, _) ->
@@ -28,6 +31,12 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
         }
         compose.onNodeWithTag("closet_slot_top").performScrollTo().performClick()
         compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsEnabled()
+        val lastReady = AvatarCatalogue.slots.first { it.key == "top" }.variants.indices.last {
+            AvatarArtwork.itemReady("top", it, original.avatar.gender)
+        }
+        compose.onNodeWithTag("closet_top_$lastReady").performScrollTo().assertIsEnabled()
+        assertClosetActionInsideSafeArea(compose, "closet_top_$lastReady")
+        compose.onNodeWithTag("closet_content_end").performScrollTo().assertIsDisplayed()
         noTextOverflow("consumer closet actual Android viewport")
         capture("consumer-closet-native-items")
         compose.onAllNodesWithText("닫기").assertCountEquals(1)

@@ -1,0 +1,45 @@
+{
+  "attempt": "android-final5",
+  "startedAtUtc": "2026-11-04T16:24:02.889431+00:00",
+  "binaryReference": "binary-build5.json",
+  "installedReference": "installed-build5.json",
+  "fixtureBackend": "firebase",
+  "firebaseConfigured": false,
+  "softwareNavigationRequired": true,
+  "groups": [
+    {
+      "name": "renderer",
+      "expected": 4,
+      "passed": true,
+      "actualPassedTests": 4,
+      "output": "android-final5-renderer.txt",
+      "elapsedSeconds": 327.74
+    },
+    {
+      "name": "source-color-regressions",
+      "expected": 7,
+      "passed": true,
+      "actualPassedTests": 7,
+      "output": "android-final5-source-color-regressions.txt",
+      "elapsedSeconds": 130.73
+    },
+    {
+      "name": "closet-ui",
+      "expected": 10,
+      "passed": false,
+      "actualPassedTests": null,
+      "output": "android-final5-closet-ui.txt",
+      "elapsedSeconds": 338.79
+    }
+  ],
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "failureType": "AssertionError",
+  "failure": "Instrumentation group failed: closet-ui",
+  "currentPreAttemptPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "801de349a1100de7029a24b9530c019faa647971b48ea5050fbf3f3f3a12241f",
+  "finishedAtUtc": "2026-11-04T16:37:36.515865+00:00"
+}

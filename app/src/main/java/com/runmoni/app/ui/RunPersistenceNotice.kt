@@ -1,7 +1,6 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +26,7 @@ internal fun RunPersistenceNotice(state: RunPersistenceState, onRetry: () -> Uni
             if (state.pendingCreditRunIds.isEmpty()) "이전 포인트 적립 확인 필요" else "기록은 저장됐어요 · 포인트 처리 필요"
         else -> "저장한 기록 확인 중"
     }
-    Surface(color = RunmoniColors.Mint, shape = RoundedCornerShape(20.dp),
+    Surface(color = RunmoniColors.Mint, shape = RunmoniShapes.Surface,
         modifier = Modifier.fillMaxWidth().testTag("run_persistence_notice")
             .semantics { liveRegion = LiveRegionMode.Polite }) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -36,7 +35,7 @@ internal fun RunPersistenceNotice(state: RunPersistenceState, onRetry: () -> Uni
                 "기기에 기록을 저장하고 있어요. 완료될 때까지 이 화면에서 기다려 주세요."
             else "중단된 러닝이 있는지 확인한 뒤 시작할 수 있어요."
             Text(description, style = MaterialTheme.typography.bodyMedium)
-            if (state.canRetry) OutlinedButton(onClick = onRetry,
+            if (state.canRetry) OutlinedButton(shape = RunmoniShapes.Action, onClick = onRetry,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("retry_run_save")) {
                 Text(if (state.issue == RunPersistenceIssue.CREDIT) "포인트 처리 다시 시도" else "저장 다시 시도")
             } else if (state.saving || !state.initialized || state.finishing)

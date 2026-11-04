@@ -35,7 +35,7 @@ private data class KitColorOption(val id: Int, val label: String, val swatch: Co
 
 // These are display samples of the fabric ramp, independent of inventory IDs.
 private val kitColorOptions = listOf(
-    KitColorOption(0, "원본", RunmoniColors.Cream),
+    KitColorOption(0, "기본색", RunmoniColors.Cream),
     KitColorOption(1, "민트", Color(0xFF21A3A8)),
     KitColorOption(2, "코랄", Color(0xFFF36870)),
     KitColorOption(3, "블루", Color(0xFF3487EC)),
@@ -50,7 +50,7 @@ private fun checkColor(swatch: Color): Color {
     return if (whiteContrast >= inkContrast) Color.White else RunmoniColors.Navy
 }
 
-/** The existing garment shape stays explicit; a fabric choice never selects an item. */
+/** A fabric choice changes the selected garment; it never changes the inventory item. */
 @Composable
 internal fun RunningKitColorControls(
     colors: RunningKitColors,
@@ -75,7 +75,7 @@ internal fun RunningKitColorControls(
     val selected = colors.normalized().color(region)
     val fontScale = LocalDensity.current.fontScale
     Column(modifier.fillMaxWidth().testTag("kit_colors_${region.wireKey}"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("기본 러닝복 색상", style = MaterialTheme.typography.titleSmall)
+        Text("색상", style = MaterialTheme.typography.titleSmall)
         BoxWithConstraints(Modifier.fillMaxWidth().selectableGroup()) {
             // Keep labels and 48dp targets, then wrap rather than shrinking text.
             val columns = (maxWidth.value / (60f + 28f * fontScale)).toInt().coerceIn(1, 3)
@@ -124,7 +124,7 @@ internal fun RunningKitColorControls(
                     Text("색상 다시 불러오기")
                 }
             }
-            true -> Text("색상은 기본형에 적용돼요", style = MaterialTheme.typography.bodySmall,
+            true -> Text("선택한 ${region.label}에 적용돼요", style = MaterialTheme.typography.bodySmall,
                 color = RunmoniColors.Muted, modifier = Modifier.testTag("kit_colors_scope"))
         }
     }

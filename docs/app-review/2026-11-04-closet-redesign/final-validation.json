@@ -1,0 +1,175 @@
+{
+  "passed": true,
+  "androidReference": "android-final7.json",
+  "baselineAndroidReference": "android-final6.json",
+  "baselineBinaryReference": "binary-build6.json",
+  "hostMainReference": "main-final2.json",
+  "binaryReference": "binary-build7.json",
+  "androidGroups": [
+    {
+      "name": "renderer",
+      "expected": 4,
+      "passed": true,
+      "actualPassedTests": 4,
+      "output": "android-final6-renderer.txt",
+      "elapsedSeconds": 332.72,
+      "androidReference": "android-final6.json",
+      "binaryReference": "binary-build6.json"
+    },
+    {
+      "name": "source-color-regressions",
+      "expected": 7,
+      "passed": true,
+      "actualPassedTests": 7,
+      "output": "android-final6-source-color-regressions.txt",
+      "elapsedSeconds": 120.82,
+      "androidReference": "android-final6.json",
+      "binaryReference": "binary-build6.json"
+    },
+    {
+      "name": "closet-ui",
+      "expected": 10,
+      "passed": true,
+      "actualPassedTests": 10,
+      "output": "android-final6-closet-ui.txt",
+      "elapsedSeconds": 330.37,
+      "androidReference": "android-final6.json",
+      "binaryReference": "binary-build6.json"
+    },
+    {
+      "name": "global-ui",
+      "expected": 5,
+      "passed": true,
+      "actualPassedTests": 5,
+      "output": "android-final6-global-ui.txt",
+      "elapsedSeconds": 242.27,
+      "androidReference": "android-final6.json",
+      "binaryReference": "binary-build6.json"
+    },
+    {
+      "name": "native-320-font2",
+      "expected": 8,
+      "passed": true,
+      "actualPassedTests": 8,
+      "output": "android-final7-native-320-font2.txt",
+      "elapsedSeconds": 324.01,
+      "androidReference": "android-final7.json",
+      "binaryReference": "binary-build7.json"
+    }
+  ],
+  "androidTestExecutions": 34,
+  "verificationReuse": {
+    "reason": "Only chat product UI and native test methods changed. Successful Build6 renderer/closet/global checks retained; failed native results excluded and all native8 rerun on Build7.",
+    "productSourcesChanged": [
+      "app/src/main/java/com/runmoni/app/ui/RunmoniChat.kt"
+    ],
+    "testSourcesChanged": [
+      "app/src/androidTest/java/com/runmoni/app/ui/RunmoniDesignTest.kt",
+      "app/src/androidTest/java/com/runmoni/app/ui/HierarchyClosetUxTest.kt"
+    ],
+    "baselinePassedExecutions": 26,
+    "finalNativeExecutions": 8,
+    "sourceChangeBoundaryReference": "source-change-boundary.json"
+  },
+  "nativeConfigurationNote": "ConsumerCloset repeated at default and actual320dp/font2; executions are not unique method count.26 baseline6 +8 final7 are different binaries, not one fresh34 run.",
+  "softwareNavigationInsetsPixels": [
+    48,
+    72
+  ],
+  "actualMainCaptures": [
+    {
+      "file": "main-final2-male-blue-outfit-closet.png",
+      "sha256": "f2586efc2c35b764ced248f099c1e14b3cc2ad9b45f9b605610f8a4a72552ba2",
+      "bytes": 68035,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": 801,
+      "hueRange": [
+        205,
+        235
+      ]
+    },
+    {
+      "file": "main-final2-male-blue-outfit-home.png",
+      "sha256": "2d6eecdf65205c1e6fe5071716d5f5525cd4d42a0f5ac3eec545419c33a232d4",
+      "bytes": 52100,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": 542,
+      "hueRange": [
+        205,
+        235
+      ]
+    },
+    {
+      "file": "main-final2-female-purple-outfit-closet.png",
+      "sha256": "a7573cf7bda47ea2f2bb4990a05f93f42be19eb957d7b589a471bdffcf5460cc",
+      "bytes": 70842,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": 497,
+      "hueRange": [
+        250,
+        295
+      ]
+    },
+    {
+      "file": "main-final2-female-purple-outfit-home.png",
+      "sha256": "ec824da4ebd0972c164ee42509530f49c9fd27e121fa536a1b300694d4c61e4e",
+      "bytes": 52693,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": 327,
+      "hueRange": [
+        250,
+        295
+      ]
+    },
+    {
+      "file": "main-final2-female-profile-sections.png",
+      "sha256": "d694be4c5197791c6ce7ec2417b9ee458ad3e5f11af758cf15dfafe20e4c8ff5",
+      "bytes": 47790,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": null,
+      "hueRange": null
+    },
+    {
+      "file": "main-final2-female-outfit-after-restart.png",
+      "sha256": "bc734e9587a3a92bcff142fc2ce766976b0e40cf99b22e49016be4c17aaffcd6",
+      "bytes": 70731,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "actualMatchingTopPixels": 497,
+      "hueRange": [
+        250,
+        295
+      ]
+    }
+  ],
+  "approvedSourceCopies": {
+    "docs/design/avatars/v0.3.0/running-motion-art-source.png": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+    "app/src/main/assets/avatars/v0.3.0/running-motion.png": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+    "app/src/main/assets/avatars/reference-review/approved-running.png": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65"
+  },
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "userVisualApproval": "pending",
+  "all58ArtworkComplete": false,
+  "readyIdsIncludingDefaults": 36,
+  "pendingIds": 22,
+  "priorFailuresCountedAsPass": false
+}

@@ -42,6 +42,13 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.4-dev", "2026-11-04", "옷장·앱 화면 개선 · 실기기 검증 전", listOf(
+        "옷장을 전체 화면으로 분리하고 하단 시스템 영역 위에서 마지막 품목까지 선택해요.",
+        "원화·수영복 시안 비교를 옷장에서 빼고 실제 착용 가능한 품목을 목록으로 정리해요.",
+        "준비된 의복·신발·장비는 현재 미니미와 홈에 반영해요. 미준비 아이템의 기존 보유 내역은 보관해요.",
+        "품목을 바꾸면 해당 부위의 기본색으로 입어요. 같은 품목을 다시 누르면 고른 색을 유지해요.",
+        "버튼 모서리를 줄이고 제목·구분선·여백으로 화면의 구역과 순서를 분명하게 해요.",
+    )),
     AppVersionEntry("0.3.3-dev", "2026-11-04", "기본 러닝복 색상 · 실기기 검증 전", listOf(
         "기본 상의·하의·신발의 천 색상을 각각 선택하고 기기에 저장해요.",
         "원본·민트·코랄·블루·퍼플·골드를 선택하고 남녀 기본형의 8프레임에서 확인해요.",

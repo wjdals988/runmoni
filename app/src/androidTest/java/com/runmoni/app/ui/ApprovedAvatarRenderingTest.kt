@@ -98,7 +98,7 @@ class ApprovedAvatarRenderingTest {
         }
     }
 
-    @Test fun unfinishedFreeItemCanBeSavedWithoutSpendingOrReplacingTheApprovedBase() {
+    @Test fun readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected() {
         val state = mutableStateOf(AppState(profile = Profile(mileage = 10_000)))
         compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, RunmoniUiTest.FakeActions(state)) {} } }
         val before = pixels(avatarBitmap(context, state.value.profile.avatar))
@@ -107,7 +107,9 @@ class ApprovedAvatarRenderingTest {
             assertEquals(10_000, state.value.profile.mileage)
             assertEquals(1, state.value.profile.avatar.top)
             assertTrue("top:1" in state.value.profile.ownedItems)
-            assertArrayEquals(before, pixels(avatarBitmap(context, state.value.profile.avatar)))
+            assertFalse("Selected ready shirt must be rendered", before.contentEquals(pixels(avatarBitmap(context, state.value.profile.avatar))))
         }
+        compose.onNodeWithTag("closet_top_4").assertDoesNotExist()
+        compose.onNodeWithTag("open_avatar_reference").assertDoesNotExist()
     }
 }

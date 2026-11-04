@@ -1,0 +1,66 @@
+{
+  "attempt": "android-final6",
+  "startedAtUtc": "2026-11-04T17:17:13.671533+00:00",
+  "binaryReference": "binary-build6.json",
+  "installedReference": "installed-build6.json",
+  "fixtureBackend": "firebase",
+  "firebaseConfigured": false,
+  "softwareNavigationRequired": true,
+  "groups": [
+    {
+      "name": "renderer",
+      "expected": 4,
+      "passed": true,
+      "actualPassedTests": 4,
+      "output": "android-final6-renderer.txt",
+      "elapsedSeconds": 332.72
+    },
+    {
+      "name": "source-color-regressions",
+      "expected": 7,
+      "passed": true,
+      "actualPassedTests": 7,
+      "output": "android-final6-source-color-regressions.txt",
+      "elapsedSeconds": 120.82
+    },
+    {
+      "name": "closet-ui",
+      "expected": 10,
+      "passed": true,
+      "actualPassedTests": 10,
+      "output": "android-final6-closet-ui.txt",
+      "elapsedSeconds": 330.37
+    },
+    {
+      "name": "global-ui",
+      "expected": 5,
+      "passed": true,
+      "actualPassedTests": 5,
+      "output": "android-final6-global-ui.txt",
+      "elapsedSeconds": 242.27
+    },
+    {
+      "name": "native-320-font2",
+      "expected": 8,
+      "passed": false,
+      "actualPassedTests": null,
+      "output": "android-final6-native-320-font2.txt",
+      "elapsedSeconds": 288.78
+    }
+  ],
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "systemUiHandling": {
+    "exactSystemUiAnrWaitOnly": true,
+    "actions": []
+  },
+  "failureType": "AssertionError",
+  "failure": "Instrumentation group failed: native-320-font2",
+  "failureScreenshot": "android-final6-failure-screen.png",
+  "currentPreAttemptPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "b29cbd976e40bff783bfc8f6d5c6d0d0f5861007bc85e62c4d144e2fda77315a",
+  "finishedAtUtc": "2026-11-04T17:40:31.624569+00:00"
+}
