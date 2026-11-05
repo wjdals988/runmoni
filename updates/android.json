@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.3.4-dev",
-    "versionCode": 16,
-    "fileName": "runmoni-0.3.4-dev.apk",
-    "sizeBytes": 219017510,
-    "sha256": "a1b078587c9357cef41aeaa884c41ee2735a6c83768f614e0354b757ba671947",
+    "version": "0.3.5-dev",
+    "versionCode": 17,
+    "fileName": "runmoni-0.3.5-dev.apk",
+    "sizeBytes": 219017566,
+    "sha256": "ad0c5cb66d2bda2917ed0a9b6551a3d5c69fbb1ef872d6ce5e60dc49c3883559",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "e2edc2a7ae349422763fc9727aa4e5360a4214e7",
+    "sourceRevision": "9d9d31dc358d9b0e47d34f73df4e9ad8276d80a9",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.4-dev/runmoni-0.3.4-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.4-dev",
-    "notes": "실기기 검증 전 개발 프리뷰입니다. 옷장을 루트 전체 화면과 단순 목록으로 개편하고 실제 OS 하단 영역 위에서 마지막 품목·색상을 선택하도록 개선했습니다. 승인 원본과58개 ID·0P·성별·보유권·포인트를 보존하며 기본13+비기본23=36개 ID를 표시합니다. 미준비22개·수영복 완성·새 사용자 시각 승인과 실제 휴대폰·Google·운영 두 기기 쓰기는 별도입니다. 기본 Firebase 옷장·색상은 기기 저장이며 새 규칙·보관키 변경은 없습니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.5-dev/runmoni-0.3.5-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.5-dev",
+    "notes": "로고가 있는 시작 화면을 추가하고 홈·설정·옷장의 반복 설명을 줄였습니다. 기록·보유 아이템·포인트는 유지합니다. 실기기 검증 전 개발 프리뷰이며 Android12이상 시작 화면·Google 로그인·운영 연결은 별도 확인이 필요합니다."
   },
   "schemaVersion": 1,
   "stable": null

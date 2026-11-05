@@ -1,8 +1,12 @@
-# 런모니 개발 이어가기 — 0.3.4-dev 공개 이후
+# 런모니 개발 이어가기 — 0.3.5-dev 공개 이후
 
-2026-11-05 한국 시간. 같은 보관키의 **0.3.4-dev/code16 실기기 검증 전 개발 프리뷰**를 공개했다. [게시 검증](RELEASE_REVIEW_0.3.4_20261104.md) · [옷장/화면 검토](CLOSET_REDESIGN_REVIEW_20261104.md) · [우선순위](DEVELOPMENT_PRIORITIES.md).
+2026-11-05 한국 시간. 현재 공개0.3.5-dev/code17, APK 실제 출처 `9d9d31dc358d9b0e47d34f73df4e9ad8276d80a9`,219017566bytes/SHA256 `ad0c5cb66d2bda2917ed0a9b6551a3d5c69fbb1ef872d6ce5e60dc49c3883559`. [게시 검증](RELEASE_REVIEW_0.3.5_20261105.md) · [우선순위](DEVELOPMENT_PRIORITIES.md).
 
-## 현재 완료 범위
+로고 시작 화면·홈/설정/옷장 문구·런처/앱 정보 아이콘을 정리했다. 서명CI42009532323 JVM84·lint오류0, Android22회/Main6장·API29 시작 화면/화면 복귀·원문/설정 복원과 운영 대시보드 PNG4장을 확인했다. app/test APK SHA가 같다. Android22회는 review3 13회 + review4 9회의 성공 원문을 대조해 채택했다. 최종 host 검토에서는 Android 검사를 다시 실행하지 않고 Main6장·시작 화면·같은 프로세스의 화면 복귀를 새로 수집했다.
+
+다음은 실제 휴대폰·Android12이상 시작/복귀·큰 글씨 확인, 남은22개 원화/사용자 검토와 기존 계정·GPS·운영 두 기기 검증이다. 이미 연결한36개·기본색/무료/성별·크루 계층을 다시 구현하지 않는다. 아래0.3.4 동작/검증 기록은 이전 기준으로 보존하며 최신 게시값은 이 절을 따른다.
+
+## 0.3.4까지 완료한 범위
 
 - [구현 PR](https://github.com/wjdals988/runmoni/pull/29) main 통합, [서명 CI41885534878](https://github.com/wjdals988/runmoni/actions/runs/41885534878), 실제 공개3자산/sidecar·HEAD200/크기를 확인했다. APK출처 **`e2edc2a7ae349422763fc9727aa4e5360a4214e7`**, **219017510bytes/SHA256 `a1b078587c9357cef41aeaa884c41ee2735a6c83768f614e0354b757ba671947`**. 후속 피드/문서 커밋으로 바꾸지 않는다.
 - 운영 대시보드 main CI/Production과 canonical HTML·다운로드·크기/해시·안내·실제 MainActivity PNG4장 바이트 일치를 확인했다. 다른8프로젝트·기존8내역/이전 갤러리3개 파일을 보존했다. preview16/stablenull은 이번 게시PR에서 갱신하며 canonical raw 전체 일치는 PR 최종 검증 기록에 남긴다.

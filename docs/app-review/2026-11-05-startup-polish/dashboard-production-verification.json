@@ -1,0 +1,103 @@
+{
+  "verifiedAtUtc": "2026-11-05T10:43:12.920454+00:00",
+  "dashboard": {
+    "repository": "wjdals988/mydashboard",
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/18",
+    "mergeRevision": "be2e7852ced2dd88e717f86bff3279d512ce3e5f",
+    "mainCi": {
+      "runId": 42012826438,
+      "conclusion": "success",
+      "url": "https://github.com/wjdals988/mydashboard/actions/runs/42012826438"
+    },
+    "productionDeployment": {
+      "id": 7571416876,
+      "state": "success",
+      "environmentUrl": "https://mydashboard-egedp02fl-wjdals988-6836s-projects.vercel.app"
+    },
+    "localNodeTests": {
+      "command": "npm test (repository coverage thresholds)",
+      "nodeVersion": "v24.19.0",
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "durationMilliseconds": 145.415077,
+      "coveragePercent": {
+        "lines": 92.69,
+        "branches": 86.14,
+        "functions": 100.0
+      }
+    }
+  },
+  "productionPage": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "checks": {
+      "http200": true,
+      "canonicalUrl": true,
+      "downloadAnchor": true,
+      "versionAndCode": true,
+      "fileSize": true,
+      "sha256": true,
+      "previewLabel": true,
+      "description": true,
+      "screenshotsProvenance": true,
+      "gallery_home": true,
+      "gallery_closet": true,
+      "gallery_settings": true,
+      "gallery_app-info": true
+    },
+    "responseSha256": "c6eab12f4147b2e3507999d13b60d07842b2d73726594ff30f6e32f3b6dd4b51"
+  },
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.3.5-dev/runmoni-0.3.5-dev.apk",
+    "fileName": "runmoni-0.3.5-dev.apk",
+    "version": "0.3.5-dev",
+    "versionCode": 17,
+    "size": "219,017,566 bytes",
+    "sha256": "ad0c5cb66d2bda2917ed0a9b6551a3d5c69fbb1ef872d6ce5e60dc49c3883559",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.5-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK",
+    "sourceRevision": "9d9d31dc358d9b0e47d34f73df4e9ad8276d80a9",
+    "sizeBytes": 219017566
+  },
+  "gallery": [
+    {
+      "path": "/reviews/runmoni/0.3.5-dev/home.png",
+      "httpStatus": 200,
+      "sizeBytes": 40548,
+      "sha256": "487f22b4dcabebad211a446516a5d730561bf4e935c65227c7779decc53de1ed",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.3.5-dev/closet.png",
+      "httpStatus": 200,
+      "sizeBytes": 63222,
+      "sha256": "6ceb493d833a34619addd3cdfd2d669d77e1aefbd282e8d4b08f25856bce3a60",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.3.5-dev/settings.png",
+      "httpStatus": 200,
+      "sizeBytes": 53884,
+      "sha256": "21415b280d9c26c09d68ef20fe3da90ba5d6264efed120bd7cc14f0a284cab39",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.3.5-dev/app-info.png",
+      "httpStatus": 200,
+      "sizeBytes": 46946,
+      "sha256": "1cd48ffb3d7f2c9439861c92243134b22a1dfa58546704d158a3b8d72b189479",
+      "matchesCommittedOriginal": true
+    }
+  ],
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false,
+  "productionPartyWritesVerified": false,
+  "latestRulesOwnerPublicationReported": true,
+  "latestRulesManagementApiVerified": false,
+  "limits": [
+    "Actual HTTP text/download anchor and PNG bytes verified; browser clicks/user visual approval not inferred.",
+    "Gallery is debug API29/TCG MainActivity without production Firebase configuration; not release APK/phone/Google/production execution.",
+    "No full APK body downloaded."
+  ]
+}
