@@ -135,7 +135,8 @@ class AppInformationTest : RunmoniDesignTestBase() {
         var checks = 0
         compose.setContent { RunmoniTheme { AppInformationDialog(updates.value, { checks++ }, {}) } }
         val packageInfo = InstrumentationRegistry.getInstrumentation().targetContext.let { it.packageManager.getPackageInfo(it.packageName, 0) }
-        compose.onNodeWithText("설치 버전 ${packageInfo.versionName} · 빌드 ${packageInfo.longVersionCode}").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("버전 ${packageInfo.versionName}").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("빌드 ${packageInfo.longVersionCode}").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("about_app_version").assertIsDisplayed()
         compose.onNodeWithTag("about_app_version_red_dot").assertDoesNotExist()
         compose.onNodeWithTag("check_app_update").performScrollTo().performClick()

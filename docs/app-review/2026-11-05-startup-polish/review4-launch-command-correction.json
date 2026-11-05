@@ -1,0 +1,9 @@
+{
+  "failure": "API29 Intent parser rejects --activity-new-task. Original launch stderr was suppressed, so review4 samples are only OS launcher, not splash evidence.",
+  "readOnlyParserCheck": "am to-intent-uri --activity-new-task returned IllegalArgumentException Unknown option; am to-intent-uri -f 0x10008000 returned validated MAIN/LAUNCHER component and launchFlags0x10008000.",
+  "correction": "Use validated flags, save launch stdout/stderr and require accepted command; sampling limit increased to30/20hostseconds without product delay.",
+  "productChanged": false,
+  "testsChanged": false,
+  "completedAndroidMethods": 22,
+  "repeatOnlyActualHostCapture": true
+}

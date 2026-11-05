@@ -1,0 +1,58 @@
+{
+  "installedReference": "review3-installed.json",
+  "version": "0.3.5-dev",
+  "versionCode": 17,
+  "startedAtUtc": "2026-11-05T09:45:05.342180+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "groups": [
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review3-startup.txt",
+      "elapsedSeconds": 82.3
+    },
+    {
+      "name": "settings-update",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-settings-update.txt",
+      "elapsedSeconds": 167.75
+    },
+    {
+      "name": "general",
+      "expected": 5,
+      "passed": true,
+      "actual": 5,
+      "output": "review3-general.txt",
+      "elapsedSeconds": 214.0
+    },
+    {
+      "name": "closet-navigation",
+      "expected": 2,
+      "passed": false,
+      "actual": null,
+      "output": "review3-closet-navigation.txt",
+      "elapsedSeconds": 137.31
+    }
+  ],
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "failureType": "AssertionError",
+  "failure": "Group failed: closet-navigation",
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "e4bdd52374fd8300d3857fa15fd3acca4a60cb1b253e7ab2e0df18a3338628ec",
+  "finishedAtUtc": "2026-11-05T09:56:14.756648+00:00"
+}

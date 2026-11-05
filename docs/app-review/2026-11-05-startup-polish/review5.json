@@ -1,0 +1,157 @@
+{
+  "installedReference": "review5-installed.json",
+  "version": "0.3.5-dev",
+  "versionCode": 17,
+  "startedAtUtc": "2026-11-05T10:09:14.094844+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "groups": [
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review3-startup.txt",
+      "elapsedSeconds": 82.3,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "settings-update",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-settings-update.txt",
+      "elapsedSeconds": 167.75,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "general",
+      "expected": 5,
+      "passed": true,
+      "actual": 5,
+      "output": "review3-general.txt",
+      "elapsedSeconds": 214.0,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "closet-navigation",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review4-closet-navigation.txt",
+      "elapsedSeconds": 130.99,
+      "sourceReview": "review4.json"
+    },
+    {
+      "name": "native-320-font2",
+      "expected": 7,
+      "passed": true,
+      "actual": 7,
+      "output": "review4-native-320-font2.txt",
+      "elapsedSeconds": 301.2,
+      "sourceReview": "review4.json"
+    }
+  ],
+  "captures": [
+    {
+      "file": "review5-closet.png",
+      "sha256": "6ceb493d833a34619addd3cdfd2d669d77e1aefbd282e8d4b08f25856bce3a60",
+      "bytes": 63222,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review5-home.png",
+      "sha256": "487f22b4dcabebad211a446516a5d730561bf4e935c65227c7779decc53de1ed",
+      "bytes": 40548,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review5-profile.png",
+      "sha256": "22e697f66cebd53ed44c5d95e29ddd57fa7a526321d4516bb23b5b4427d43534",
+      "bytes": 42226,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review5-settings.png",
+      "sha256": "21415b280d9c26c09d68ef20fe3da90ba5d6264efed120bd7cc14f0a284cab39",
+      "bytes": 53884,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review5-app-info.png",
+      "sha256": "1cd48ffb3d7f2c9439861c92243134b22a1dfa58546704d158a3b8d72b189479",
+      "bytes": 46946,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review5-resumed-profile.png",
+      "sha256": "e2ec6cf8ad10352a3c045d2d5c8bf1b990273257205657b121a05c580a676d54",
+      "bytes": 42184,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 2,
+  "passed": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "priorExecutionReuseNote": "All22 completed methods on exact same installed app/test SHA:13 from review3 and9 from review4. Only actual Main/splash capture rerun here; failed loading group and failed host command excluded.",
+  "navigationEvidenceSourceReview": "review4.json",
+  "nativeFixtureSourceReview": "review4.json",
+  "launchSamples": [
+    {
+      "file": "review5-launch-sample-0.png",
+      "sha256": "d798e7ab11c39fa429be2479428d60ee5ebe671c264b39bbffd45e45fd2188c4",
+      "hostCaptureOffsetMs": 6600,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review5-launch-sample-1.png",
+      "sha256": "6e365d761c0e806acf89821e4bccb80c80839733b4637ae37b7287f6e35e129d",
+      "hostCaptureOffsetMs": 11798,
+      "centerLauncherGreenPixels": 7990,
+      "surroundingCanvasMatches": true,
+      "splashCandidate": true
+    }
+  ],
+  "launchSampleNote": "Raw Android captures; host offsets include ADB overhead and are not total startup performance. Candidate requires visual inspection. API31 exit120ms is configuration, not measured here.",
+  "hotResume": {
+    "samePid": true,
+    "destinationPreserved": true,
+    "mainFocused": true
+  },
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "3bfd716a9e3132de057435161f3a8d8709e5f92f7923d676b98087fde0edf5ff",
+  "finishedAtUtc": "2026-11-05T10:15:21.848072+00:00"
+}

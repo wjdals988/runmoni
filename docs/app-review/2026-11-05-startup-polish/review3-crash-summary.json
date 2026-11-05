@@ -1,0 +1,7 @@
+{
+  "checkedCrashBuffer": true,
+  "androidRuntimeFatalExceptionPresent": false,
+  "outOfMemoryErrorPresent": false,
+  "rawCrashBufferPublished": false,
+  "scope": "Crash-buffer string checks only; absence is not proof of no runtime issue."
+}

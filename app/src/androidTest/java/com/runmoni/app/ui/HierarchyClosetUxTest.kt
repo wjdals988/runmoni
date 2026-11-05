@@ -181,7 +181,9 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
             assertEquals(original.ownedItems + "top:1", state.value.profile.ownedItems)
         }
         compose.onNodeWithTag("closet_top_1").assertIsSelected()
-        compose.onNodeWithTag("closet_artwork_status").performScrollTo().assertTextContains("착용", substring = true)
+        // Ordinary choices show their selected row rather than an equip tutorial.
+        compose.onNodeWithTag("closet_artwork_status").assertDoesNotExist()
+        compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsSelected()
         compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         assertEquals(preview, compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot)
         compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsSelected()

@@ -142,7 +142,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onExplore = { tab = 1 }, onRecord = { selectedRecord = it }, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
+                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = { selectedRecord = it }, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
@@ -336,7 +336,7 @@ internal fun StatusPill(label: String, color: Color, tag: String = "") {
 internal fun EmptyCard(title: String, message: String, action: String? = null, onClick: () -> Unit = {}) {
     Column(Modifier.fillMaxWidth().padding(vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = MaterialTheme.typography.titleLarge)
-        Text(message, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        if (message.isNotBlank()) Text(message, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         if (action != null) TextButton(onClick = onClick, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text(action); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(18.dp)) }
     }
 }

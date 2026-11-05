@@ -1,0 +1,24 @@
+
+com.runmoni.app.ui.AppInformationNativeTest:.
+com.runmoni.app.ui.RunmoniDialogDesignTest:...
+Error in arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:227)
+
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:.
+
+Time: 284.97
+There was 1 failure:
+1) arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 5000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:227)
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

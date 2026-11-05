@@ -1,0 +1,71 @@
+{
+  "installedReference": "review2-installed.json",
+  "version": "0.3.5-dev",
+  "versionCode": 17,
+  "startedAtUtc": "2026-11-05T09:13:16.225562+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build1.json",
+  "groups": [
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review1-startup.txt",
+      "elapsedSeconds": 90.94,
+      "sourceReview": "review1.json"
+    },
+    {
+      "name": "settings-update",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review1-settings-update.txt",
+      "elapsedSeconds": 165.97,
+      "sourceReview": "review1.json",
+      "harnessCountCorrectedFrom": 7,
+      "selectionCorrection": "The large-about method belongs to AppInformationNativeTest; it was not selected in review1. The six methods actually run passed. Native method runs below at real320dp/font2."
+    },
+    {
+      "name": "general",
+      "expected": 5,
+      "passed": true,
+      "actual": 5,
+      "output": "review2-general.txt",
+      "elapsedSeconds": 234.26
+    },
+    {
+      "name": "closet-navigation",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review2-closet-navigation.txt",
+      "elapsedSeconds": 118.11
+    },
+    {
+      "name": "native-320-font2",
+      "expected": 7,
+      "passed": false,
+      "actual": null,
+      "output": "review2-native-320-font2.txt",
+      "elapsedSeconds": 310.61
+    }
+  ],
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "priorExecutionReuseNote": "Eight successful methods from review1 plus14 new methods; same verified app/test binaries. review1 overall harness-count failure remains preserved.",
+  "failureType": "AssertionError",
+  "failure": "Group failed: native-320-font2",
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "291b5dc84a7322393eb9c596b1ed74da05acccec1d17098d6706ccd1e2967f22",
+  "finishedAtUtc": "2026-11-05T09:25:51.147032+00:00"
+}

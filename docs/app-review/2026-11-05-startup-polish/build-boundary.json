@@ -1,0 +1,30 @@
+{
+  "baseline": "binary-build1.json",
+  "final": "binary-build4.json",
+  "changedFiles": {
+    "productSources": [
+      "app/src/main/java/com/runmoni/app/ui/AppInformation.kt",
+      "app/src/main/java/com/runmoni/app/ui/CommunityRooms.kt"
+    ],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/ui/RunmoniDesignTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "baselinePassesAdoptedIntoFinal": false,
+  "intermediateBuild2": "Test-only build compiled, no instrumentation ran; boot/install supervisor stopped before installation to correct peer findings.",
+  "intermediateBuild3": "Successful intermediate compilation; no Android executions. Final direct-download text correction was made after its product compilation, so only build4 maps final source.",
+  "initialExecutionPlan": "All22 targeted Android methods freshly run on final app/test pair; no prior native failure or old graphics tests included.",
+  "finalExecutionAccounting": {
+    "samePair": true,
+    "appTestBuild": "binary-build4.json",
+    "review3PassedMethods": 13,
+    "review4PassedMethods": 9,
+    "finalHostReview": "review5.json",
+    "finalHostNoRepeatedAndroidMethods": true,
+    "failedGroupsIncluded": false
+  }
+}

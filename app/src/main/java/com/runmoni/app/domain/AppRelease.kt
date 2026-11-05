@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.5-dev", "2026-11-05", "시작 화면·화면 문구 정리 · 실기기 검증 전", listOf(
+        "앱을 열 때 런처와 같은 로고를 짧게 표시합니다.",
+        "홈·옷장·설정의 반복 안내를 줄이고 필요한 행동을 먼저 보여줍니다.",
+        "앱 정보와 연결 점검을 정리하고 기존 기록·미니미·업데이트 기능은 유지합니다.",
+    )),
     AppVersionEntry("0.3.4-dev", "2026-11-04", "옷장·앱 화면 개선 · 실기기 검증 전", listOf(
         "옷장을 전체 화면으로 분리하고 하단 시스템 영역 위에서 마지막 품목까지 선택해요.",
         "원화·수영복 시안 비교를 옷장에서 빼고 실제 착용 가능한 품목을 목록으로 정리해요.",

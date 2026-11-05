@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.StartupUiTest:..
+
+Time: 64.007
+
+OK (2 tests)
+
+

@@ -1,0 +1,2 @@
+elapsedMs=3474; IME=Rect(0, 413 - 480, 782); input=Rect(30, 302 - 360, 413)/174; send=Rect(372, 319 - 450, 397)/78
+elapsedMs=5332; IME=Rect(0, 413 - 480, 782); input=Rect(30, 239 - 360, 413)/174; send=Rect(372, 287 - 450, 365)/78

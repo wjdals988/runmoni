@@ -1,0 +1,121 @@
+{
+  "installedReference": "review4-installed.json",
+  "version": "0.3.5-dev",
+  "versionCode": 17,
+  "startedAtUtc": "2026-11-05T09:57:11.222971+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "groups": [
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review3-startup.txt",
+      "elapsedSeconds": 82.3,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "settings-update",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-settings-update.txt",
+      "elapsedSeconds": 167.75,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "general",
+      "expected": 5,
+      "passed": true,
+      "actual": 5,
+      "output": "review3-general.txt",
+      "elapsedSeconds": 214.0,
+      "sourceReview": "review3.json"
+    },
+    {
+      "name": "closet-navigation",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review4-closet-navigation.txt",
+      "elapsedSeconds": 130.99
+    },
+    {
+      "name": "native-320-font2",
+      "expected": 7,
+      "passed": true,
+      "actual": 7,
+      "output": "review4-native-320-font2.txt",
+      "elapsedSeconds": 301.2
+    }
+  ],
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "priorExecutionReuseNote": "13 completed methods from review3 on exact same installed app/test SHA, plus fresh closet2/native7. Failed loading-timeout group excluded; no source/assertion changes.",
+  "launchSamples": [
+    {
+      "file": "review4-launch-sample-0.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 2768,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review4-launch-sample-1.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 5014,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review4-launch-sample-2.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 7314,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review4-launch-sample-3.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 9983,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review4-launch-sample-4.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 12681,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review4-launch-sample-5.png",
+      "sha256": "c8f2e9608423b5717cca46feb98ad568f80fca96d8c504b4eb09b1747b77f28e",
+      "hostCaptureOffsetMs": 16236,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    }
+  ],
+  "launchSampleNote": "Raw Android captures; host offsets include ADB overhead and are not total startup performance. Candidate requires visual inspection. API31 exit120ms is configuration, not measured here.",
+  "failureType": "AssertionError",
+  "failure": "Visible action 나",
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "75531e7826d6208f6ec140c8f1e56db0c379b3bc29c77f340f0ac791e09aeb70",
+  "finishedAtUtc": "2026-11-05T10:08:36.764251+00:00"
+}

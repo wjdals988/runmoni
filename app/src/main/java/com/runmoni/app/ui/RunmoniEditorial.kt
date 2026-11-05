@@ -65,9 +65,10 @@ internal fun DestinationTabs(labels: List<String>, selected: Int, onSelect: (Int
 }
 
 @Composable
-internal fun RoomSearch(value: String, onChange: (String) -> Unit, label: String, tag: String) {
+internal fun RoomSearch(value: String, onChange: (String) -> Unit, label: String, tag: String,
+    placeholder: String = "이름 또는 지역") {
     OutlinedTextField(value = value, onValueChange = onChange, singleLine = true,
-        label = { Text(label) }, placeholder = { Text("이름 · 지역 · 페이스") }, leadingIcon = { Icon(Icons.Outlined.Search, null) },
+        label = { Text(label) }, placeholder = { Text(placeholder) }, leadingIcon = { Icon(Icons.Outlined.Search, null) },
         trailingIcon = if (value.isNotEmpty()) { { IconButton(onClick = { onChange("") }) { Icon(Icons.Outlined.Close, "검색어 지우기") } } } else null,
         modifier = Modifier.fillMaxWidth().testTag(tag), shape = RunmoniShapes.Input,
         colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = RunmoniColors.Paper, focusedContainerColor = RunmoniColors.Paper))
