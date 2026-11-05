@@ -1,6 +1,9 @@
 package com.runmoni.app
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ValueAnimator
 import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
@@ -19,6 +22,7 @@ import androidx.activity.viewModels
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.runmoni.app.ui.RunmoniApp
 import com.runmoni.app.ui.rememberAppUpdates
@@ -59,7 +63,11 @@ class MainActivity : ComponentActivity() {
     }
     private val capture = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> model.captureResult(result.resultCode, result.data, capturePackage) }
     override fun onCreate(savedInstanceState: Bundle?) {
+        // The system already painted the launcher theme. Restore the ordinary
+        // Activity theme for both fresh creation and saved-state recreation.
+        setTheme(R.style.Theme_Runmoni)
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
         enableEdgeToEdge()
         setContent {
@@ -93,6 +101,21 @@ class MainActivity : ComponentActivity() {
                     is UiRequest.ShareFile -> startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/gpx+xml").putExtra(Intent.EXTRA_STREAM, request.uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION), "러닝 코스 내보내기"))
                     is UiRequest.ShareText -> startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, request.text), "연결·휴대폰 점검 결과 공유"))
                 }
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun configurePlatformSplash() {
+        splashScreen.setOnExitAnimationListener { splash ->
+            if (!ValueAnimator.areAnimatorsEnabled()) splash.remove()
+            else {
+                var removed = false
+                fun removeSplash() { if (!removed) { removed = true; splash.remove() } }
+                splash.animate().alpha(0f).setDuration(120L)
+                    .setListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator) = removeSplash()
+                        override fun onAnimationCancel(animation: Animator) = removeSplash()
+                    }).start()
             }
         }
     }

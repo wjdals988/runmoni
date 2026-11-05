@@ -75,7 +75,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                     Text(state.crewPartiesError, color = MaterialTheme.colorScheme.error)
                     TextButton(shape = RunmoniShapes.Action, onClick = { actions.loadCrewParties(selected.id) }) { Text("파티 다시 불러오기") }
                 }
-                if (events.size >= 50) SmallNote("크루별 기본 조회는50개까지예요. 참여한 파티도 함께 표시해요.")
+                if (events.size >= 50) SmallNote("기본 목록 50개와 참가한 파티를 함께 보여요.")
                 if (events.isEmpty() && (state.busy || state.crewPartiesLoading)) LinearProgressIndicator(Modifier.fillMaxWidth())
                 else if (events.isEmpty() && state.serverConnected && state.crewPartiesError == null) EmptyCard("아직 파티가 없어요", if (selected.joined) "이 크루에서 함께 달릴 일정을 만들어보세요." else "크루에 가입하면 함께 달릴 파티를 만들고 참가할 수 있어요.")
                 Column { events.forEach { p -> PartySummary(p) { selectedPartyId = p.id } } }

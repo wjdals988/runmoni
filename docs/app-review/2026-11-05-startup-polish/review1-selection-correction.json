@@ -1,0 +1,11 @@
+{
+  "productOrApkChanged": false,
+  "actualTestFailures": 0,
+  "stoppedBy": "Strict harness expected7 but actual raw OK6",
+  "missingSelector": "AppInformationTest#largeAboutAndUpdateConfirmationRemainReadableAndScrollable",
+  "correctSelector": "AppInformationNativeTest",
+  "nextExecutionEnvironment": "actual320dp/font2 native group",
+  "reusedSuccessfulMethods": 8,
+  "remainingMethods": 14,
+  "wholeOriginalPreferencesRestoredExactly": true
+}

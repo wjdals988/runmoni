@@ -1,0 +1,23 @@
+
+com.runmoni.app.ui.ClosetNavigationUiTest:.
+Error in lastAvailableItemAndColorCanBeTouchedAboveSystemNavigation(com.runmoni.app.ui.ClosetNavigationUiTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:53)
+	at com.runmoni.app.ui.ClosetNavigationUiTest.lastAvailableItemAndColorCanBeTouchedAboveSystemNavigation(ClosetNavigationUiTest.kt:114)
+
+
+Time: 117.951
+There was 1 failure:
+1) lastAvailableItemAndColorCanBeTouchedAboveSystemNavigation(com.runmoni.app.ui.ClosetNavigationUiTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:53)
+	at com.runmoni.app.ui.ClosetNavigationUiTest.lastAvailableItemAndColorCanBeTouchedAboveSystemNavigation(ClosetNavigationUiTest.kt:114)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+

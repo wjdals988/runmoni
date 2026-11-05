@@ -259,7 +259,7 @@ class RunmoniUiTest {
         compose.onNodeWithTag("share_samsung_music").assertDoesNotExist()
     }
 
-    @Test fun closetDisplaysPricesAndDoesNotAllowInsufficientBalance() {
+    @Test fun freeWardrobePreservesPointsAndAppliesReadyItems() {
         val state = mutableStateOf(AppState(profile = Profile(mileage = 1500)))
         val actions = FakeActions(state)
         compose.setContent { RunmoniApp(state.value, actions) }
@@ -267,9 +267,12 @@ class RunmoniUiTest {
         compose.onNodeWithTag("open_closet").performClick()
         compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsEnabled()
         compose.onNodeWithTag("closet_top_2").performScrollTo().assertIsEnabled()
-        compose.onNodeWithTag("closet_top_3").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithTag("closet_top_3").performScrollTo().assertIsEnabled()
         compose.onNodeWithTag("closet_top_1").performScrollTo().performClick()
-        compose.runOnIdle { assertEquals(listOf("top:1"), actions.purchases); assertEquals(1000, state.value.profile.mileage) }
+        compose.runOnIdle {
+            assertEquals(1500, state.value.profile.mileage)
+            assertTrue("top:1" in state.value.profile.ownedItems)
+        }
         compose.onNodeWithTag("closet_top_1").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(1, state.value.profile.avatar.top) }
     }

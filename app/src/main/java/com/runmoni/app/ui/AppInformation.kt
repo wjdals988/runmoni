@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -43,13 +44,13 @@ data class AppUpdateUiState(
 ) {
     val updateAvailable: Boolean get() = release?.isNewerThan(BuildConfig.VERSION_CODE.toLong()) == true
     val description: String get() = when {
-        checking -> "새 버전을 확인하고 있어요"
-        updateAvailable && error != null -> "새 버전이 있어요 · 마지막 확인 기준"
-        updateAvailable -> "새 버전 ${release!!.version}이 있어요"
+        checking -> "업데이트 확인 중"
+        updateAvailable && error != null -> "새 버전 있음 · 이전 확인 결과"
+        updateAvailable -> "새 버전 ${release!!.version}"
         error != null -> "업데이트 정보를 다시 확인해 주세요"
-        release != null && release.versionCode < BuildConfig.VERSION_CODE -> "공개 버전보다 앞선 개발 빌드예요"
-        release != null -> "현재 공개 버전을 사용하고 있어요"
-        else -> "버전 내역과 업데이트 확인"
+        release != null && release.versionCode < BuildConfig.VERSION_CODE -> "공개 버전보다 앞선 개발 버전"
+        release != null -> "현재 공개 버전"
+        else -> "업데이트 내역 · 버전 확인"
     }
 }
 
@@ -115,7 +116,7 @@ internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag:
                 if (updates.updateAvailable) Badge(Modifier.testTag("${tag}_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" }, containerColor = MaterialTheme.colorScheme.error)
             }) { Icon(Icons.Outlined.Info, null, Modifier.size(28.dp)) }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("앱 정보 · ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.titleSmall)
+                Text("버전 ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.titleSmall)
                 Text(updates.description, style = MaterialTheme.typography.bodyMedium, color = if (updates.updateAvailable) RunmoniColors.Primary else RunmoniColors.Muted)
             }
             Icon(Icons.Outlined.ChevronRight, null, Modifier.size(24.dp))
@@ -135,23 +136,29 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
     }
     FormDialog("앱 정보", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.testTag("close_app_information")) { Text("닫기") } }) {
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Image(painterResource(R.drawable.ic_runmoni), null, Modifier.size(64.dp))
-            Column(Modifier.weight(1f)) { Text("런모니", style = MaterialTheme.typography.headlineSmall); Text("함께 달리고, 나답게 기록해요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted) }
+            Surface(Modifier.size(64.dp), shape = RunmoniShapes.Surface, color = colorResource(R.color.ic_launcher_background)) {
+                Box(contentAlignment = Alignment.Center) {
+                    Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.requiredSize(96.dp))
+                }
+            }
+            Column(Modifier.weight(1f)) {
+                Text("런모니", style = MaterialTheme.typography.headlineSmall)
+                if (BuildConfig.VERSION_NAME.contains('-')) Text("개발 프리뷰", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            }
         }
         AppVersionCard(updates, onClick = { if (updates.updateAvailable) updatePrompt = true else history = true }, tag = "about_app_version")
-        Text("설치 버전 ${BuildConfig.VERSION_NAME} · 빌드 ${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+        Text("빌드 ${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         if (updates.error != null) Text(updates.error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
         AdaptiveActions(
             first = { modifier -> Button(shape = RunmoniShapes.Action, onClick = { if (updates.updateAvailable) updatePrompt = true else onCheck() }, enabled = !updates.checking, modifier = modifier.heightIn(min = 48.dp).testTag("check_app_update")) { Text(if (updates.checking) "확인 중" else if (updates.updateAvailable) "새 버전 다운로드" else "업데이트 확인") } },
             second = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { history = true }, modifier = modifier.heightIn(min = 48.dp).testTag("open_version_history")) { Text("업데이트 내역") } },
         )
         if (updates.updateAvailable) TextButton(shape = RunmoniShapes.Action, onClick = onCheck, enabled = !updates.checking, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("recheck_app_update")) { Text("버전 정보 다시 확인") }
-        SmallNote("새 버전은 GitHub 공개 릴리스에서 확인해요. APK 다운로드와 설치는 직접 선택하며 러닝 기록을 멈추지 않아요.")
         HorizontalDivider()
-        AppLinkRow(Icons.Outlined.Dashboard, "런모니 대시보드", "소개와 APK 다운로드", "link_dashboard") { open("https://coldbrewventi.vercel.app/projects/runmoni") }
+        AppLinkRow(Icons.Outlined.Dashboard, "런모니 웹사이트", "앱 소개와 다운로드", "link_dashboard") { open("https://coldbrewventi.vercel.app/projects/runmoni") }
         AppLinkRow(Icons.Outlined.Code, "GitHub", "소스 코드와 공개 릴리스", "link_github") { open(AppRelease.REPOSITORY) }
         AppLinkRow(Icons.Outlined.Description, "오픈소스 라이선스", "라이브러리와 SDK 고지", "open_licenses") { licenses = true }
-        AppLinkRow(Icons.Outlined.BugReport, "문제 신고", "GitHub 신고 작성 화면 열기", "link_issue") {
+        AppLinkRow(Icons.Outlined.BugReport, "문제 신고", "GitHub에서 작성", "link_issue") {
             val body = "앱 버전: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nAndroid API: ${android.os.Build.VERSION.SDK_INT}\n\n문제 상황:\n\n재현 순서:\n1. \n\n기대 결과:\n\n실제 결과:\n\n개인 좌표·비밀번호·인증번호·토큰은 작성하지 마세요."
             open("${AppRelease.REPOSITORY}/issues/new?title=${Uri.encode("[Android] 문제 신고")}&body=${Uri.encode(body)}")
         }
@@ -160,7 +167,7 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
     if (licenses) OpenSourceLicensesDialog { licenses = false }
     if (updatePrompt) updates.release?.takeIf { it.isNewerThan(BuildConfig.VERSION_CODE.toLong()) }?.let { release ->
         AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { updatePrompt = false }, title = { Text("업데이트할까요?") },
-            text = { DialogMessage("현재 ${BuildConfig.VERSION_NAME}\n새 버전 ${release.version}\nAPK ${String.format(Locale.KOREA, "%.1f", release.sizeBytes / 1_048_576.0)} MB\n\nGitHub에서 APK를 다운로드한 뒤 Android 설치 확인을 진행해 주세요.") },
+            text = { DialogMessage("현재 ${BuildConfig.VERSION_NAME}\n새 버전 ${release.version}\nAPK ${String.format(Locale.KOREA, "%.1f", release.sizeBytes / 1_048_576.0)} MB\n\nGitHub에서 APK를 다운로드해요. 다운로드 후 직접 설치해 주세요.") },
             confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { open(release.downloadUrl); updatePrompt = false }, modifier = Modifier.testTag("confirm_download_update")) { Text("APK 다운로드") } },
             dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { updatePrompt = false }, modifier = Modifier.testTag("cancel_app_update")) { Text("나중에") } })
     }
@@ -172,7 +179,7 @@ private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> 
     FormDialog("업데이트 내역", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.testTag("close_version_history")) { Text("닫기") } }) {
         Text("현재 ${BuildConfig.VERSION_NAME} · 빌드 ${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.titleSmall)
         updates.release?.takeIf { it.isNewerThan(BuildConfig.VERSION_CODE.toLong()) && it.notes.isNotBlank() }?.let {
-            Text("공개 새 버전 ${it.version}", style = MaterialTheme.typography.titleMedium)
+            Text("새 버전 ${it.version}", style = MaterialTheme.typography.titleMedium)
             Text(it.notes, style = MaterialTheme.typography.bodyMedium)
             HorizontalDivider()
         }
@@ -188,11 +195,11 @@ private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> 
 @Composable
 internal fun MileageExplanationDialog(onDismiss: () -> Unit, serverWallet: Boolean = false) {
     FormDialog("러닝 마일리지", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.testTag("close_mileage_help")) { Text("알겠어요") } }) {
-        Text("내 미니미를 꾸미는 러닝 포인트예요", style = MaterialTheme.typography.titleMedium)
-        Text("${if (serverWallet) "현재는 초대 파일럿 서버의 지갑을 보고 있어요. 서버가 검증한 러닝 기록을 기준으로" else "현재는 기기의 지갑을 보고 있어요. 기기에 완료한 러닝을 기준으로"} 10m당 1P, 즉 1km당 100P를 받아요. 포인트는 계속 적립돼요. 지금은 테스트 기간이라 모든 아이템을0P로 선택할 수 있고 기존 포인트는 차감하지 않아요.", style = MaterialTheme.typography.bodyLarge)
-        if (serverWallet) SmallNote("기본 환산 기준이며 실제 지급은 GPS 검증과 서버의 일일 지급 한도에 따라 달라질 수 있어요.")
+        Text("달리면 쌓이는 포인트", style = MaterialTheme.typography.titleMedium)
+        Text("${if (serverWallet) "서버가 검증한 러닝" else "이 기기에 완료한 러닝"} 10m당 1P를 받아요. 지금은 모든 아이템이 무료라 포인트를 쓰지 않고 선택할 수 있어요.", style = MaterialTheme.typography.bodyLarge)
+        if (serverWallet) SmallNote("지급 포인트는 GPS 검증 결과와 서버의 일일 한도에 따라 달라질 수 있어요.")
         Text("1km → 100P\n5km → 500P\n10km → 1,000P", style = MaterialTheme.typography.titleSmall)
-        SmallNote("현금 전환·유료 결제·출금 기능은 없어요. ${if (serverWallet) "현재 포인트는 파일럿 서버 프로필에 보관되며 기기 포인트와 자동 합산되지 않아요." else "현재 포인트는 기기에 보관되며 파일럿 서버 포인트와 자동 합산되지 않아요."} Google 기록 요약 백업에는 포인트와 아이템이 포함되지 않아요.")
+        SmallNote("${if (serverWallet) "이 포인트는 테스트 서버에 보관되며 기기 포인트와 합산되지 않아요." else "이 포인트는 기기에 보관되며 테스트 서버 포인트와 합산되지 않아요."} Google 기록 요약 백업에는 포인트와 아이템이 포함되지 않아요. 현금 전환·결제·출금은 지원하지 않아요.")
     }
 }
 

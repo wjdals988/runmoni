@@ -25,34 +25,32 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
             }
             HorizontalDivider(color = RunmoniColors.Line)
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                EditorialHeading("", "연결 상태 확인")
-                Text("크루·파티 연결과 Google 계정을 확인하고, 휴대폰에서 해본 항목을 표시해 주세요.", color = RunmoniColors.Muted)
-                ScreenSection("크루·파티 서버", showDivider = false) {
+                ScreenSection("크루·파티 연결", showDivider = false) {
                     Text(when (state.deviceChecks.room) {
                         RoomCheck.NOT_CHECKED -> "아직 확인하지 않았어요"
                         RoomCheck.CHECKING -> "서버 응답을 확인하고 있어요…"
                         RoomCheck.FIREBASE_READY -> "크루·파티 목록을 불러왔어요"
-                        RoomCheck.UNCONFIGURED -> "이 빌드에는 크루·파티 연결 설정이 없어요 · 설정을 포함한 새 APK가 필요해요"
-                        RoomCheck.PUBLIC_READY -> "공용 주소에서 크루·파티 기능 응답을 확인했어요"
-                        RoomCheck.LOCAL_READY -> "로컬 테스트 서버 응답이에요 · 공용 서버는 별도로 필요해요"
-                        RoomCheck.UNREACHABLE -> if (state.communityBackend == CommunityBackend.FIREBASE) "크루·파티 목록에 연결하지 못했어요 · Firebase 설정·규칙·인덱스를 확인해 주세요" else "서버에 연결하지 못했어요 · 설정에서 서버 주소를 확인해 주세요"
-                        RoomCheck.UNSUPPORTED -> "크루·파티 기능을 지원하는 서버인지 확인이 필요해요"
+                        RoomCheck.UNCONFIGURED -> "연결 설정이 빠져 있어요. 설정을 포함한 새 APK가 필요해요."
+                        RoomCheck.PUBLIC_READY -> "공용 서버 응답을 확인했어요"
+                        RoomCheck.LOCAL_READY -> "로컬 테스트 서버에 연결됐어요. 공용 연결은 아직 확인하지 않았어요."
+                        RoomCheck.UNREACHABLE -> "크루·파티에 연결하지 못했어요. 네트워크와 연결 설정을 확인해 주세요."
+                        RoomCheck.UNSUPPORTED -> "이 서버에서는 크루·파티 기능을 확인할 수 없어요"
                     }, modifier = Modifier.testTag("room_check_status"))
-                    OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkRoomConnection, enabled = state.deviceChecks.room != RoomCheck.CHECKING, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_room_connection")) { Text("서버 연결 확인") }
-                    SmallNote("크루를 만들고 그 안에서 파티에 참가해 보세요. 다른 휴대폰과의 참여 내역·채팅 확인은 아래에 직접 표시해요.")
+                    OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkRoomConnection, enabled = state.deviceChecks.room != RoomCheck.CHECKING, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_room_connection")) { Text("연결 확인") }
+                    SmallNote("연결 응답만 확인해요. 파티 참가와 채팅은 아래에서 직접 확인해 주세요.")
                 }
                 ScreenSection("Google 계정") {
-                    Text(if (!state.cloud.configured) "이 빌드에는 Google 연결 설정이 없어요 · 설정을 포함한 새 APK가 필요해요" else state.cloud.status, modifier = Modifier.testTag("device_google_status"))
+                    Text(if (!state.cloud.configured) "Google 연결 설정이 빠져 있어요. 새 APK가 필요해요." else state.cloud.status, modifier = Modifier.testTag("device_google_status"))
                     if (state.cloud.configured) {
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::signInGoogle, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("device_google_sign_in")) { Text("Google 계정 선택·로그인") }
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkGoogleSession, enabled = state.cloud.uid.isNotBlank() && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_google_session")) { Text("계정 서버 응답 확인") }
+                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::signInGoogle, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("device_google_sign_in")) { Text("Google 로그인") }
+                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkGoogleSession, enabled = state.cloud.uid.isNotBlank() && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_google_session")) { Text("계정 연결 확인") }
                         Text(if (state.cloud.interactiveSignInAt > 0) "이번 실행에서 계정 선택·로그인 완료" else "이번 실행의 계정 선택·로그인은 아직 확인하지 않았어요", modifier = Modifier.testTag("interactive_login_status"))
                         Text(if (state.cloud.sessionCheckedAt > 0) "이번 실행에서 계정 서버 응답을 확인했어요" else "계정 서버 응답은 아직 확인하지 않았어요")
                     }
-                    SmallNote("Google 계정과 크루 닉네임은 따로 연결해요. 기록 요약 백업은 기록 상세에서 직접 확인해 주세요.")
+                    SmallNote("크루 프로필 연결과는 별도예요. 기록 요약 백업은 기록 상세에서 확인할 수 있어요.")
                 }
                 ScreenSection("내 휴대폰에서 확인") {
-                    SmallNote("아래 표시는 직접 확인한 결과예요. 자동 검사 결과와 구분해서 공유해요. 새 버전에서는 다시 확인해 주세요.")
+                    SmallNote("직접 확인한 항목을 체크해 주세요. 자동 검사와 구분해 공유돼요. 새 버전에서는 다시 확인해 주세요.")
                     Text(if (state.locationAccess.precisePermissionGranted == true && state.locationAccess.gpsEnabled == true) "정확한 위치 권한·GPS 켜짐" else "야외 기록 전 위치 권한·GPS를 확인해 주세요")
                     PhoneCheck.entries.forEach { check ->
                         val confirmed = check in state.deviceChecks.selfReported
@@ -62,7 +60,7 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                             Text(check.label, Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
                         }
                     }
-                    SmallNote("공유 내용: 앱 버전·공개 서명 지문·연결 결과·직접 확인 표시. 계정 이름·이메일·토큰·GPS 경로·서버 주소는 포함하지 않아요.")
+                    SmallNote("앱 버전·서명·연결 결과·체크한 항목을 공유해요. 계정 정보·토큰·서버 주소·GPS 경로는 포함하지 않아요.")
                     Button(shape = RunmoniShapes.Action, onClick = actions::shareDeviceChecks, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("share_device_checks")) { Text("점검 결과 공유") }
                 }
             }

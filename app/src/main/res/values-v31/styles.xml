@@ -1,0 +1,10 @@
+<resources>
+    <style name="Theme.Runmoni.Launch" parent="Theme.Runmoni">
+        <!-- Android 12+ owns this single splash; no second app-rendered screen. -->
+        <item name="android:windowBackground">@color/runmoni_canvas</item>
+        <item name="android:navigationBarColor">@color/runmoni_canvas</item>
+        <item name="android:windowSplashScreenBackground">@color/runmoni_canvas</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
+    </style>
+</resources>

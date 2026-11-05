@@ -1,0 +1,41 @@
+{
+  "version": "0.3.5-dev",
+  "versionCode": 17,
+  "startedAtUtc": "2026-11-05T09:05:52.728101+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build1.json",
+  "groups": [
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review1-startup.txt",
+      "elapsedSeconds": 90.94
+    },
+    {
+      "name": "settings-update",
+      "expected": 7,
+      "passed": false,
+      "actual": 6,
+      "output": "review1-settings-update.txt",
+      "elapsedSeconds": 165.97
+    }
+  ],
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "passed": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "failureType": "AssertionError",
+  "failure": "Group failed: settings-update",
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "619767a7be58fd327dd342e92f88763da75259878acb4888c5c2a38892e8ff5a",
+  "finishedAtUtc": "2026-11-05T09:11:30.098686+00:00"
+}

@@ -74,51 +74,49 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
             ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
             ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
             LocationSharingToggle(state, actions)
-            OutlinedButton(shape = RunmoniShapes.Action, onClick = { deviceChecks = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_device_checks")) { Text("연결·휴대폰 점검") }
         }
-        ScreenSection("Google 계정 · 기록 요약 백업") {
-            Text(state.cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
+        ScreenSection("기록 요약 백업") {
+            Text(if (state.cloud.configured) state.cloud.status else "이 앱에서는 Google 백업을 사용할 수 없어요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
             if (state.cloud.uid.isBlank()) {
                 OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.communityGoogleLink.busy && !state.busy, shape = RunmoniShapes.Action, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
-                if (!state.cloud.configured) SmallNote("클라우드 백업 연결을 준비 중이에요. 러닝 기록은 계속 기기에 저장할 수 있어요.")
             } else {
                 Text(state.cloud.accountLabel, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("cloud_account"))
-                OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().testTag("cloud_history")) { Text("백업한 기록 요약 보기") }
-                TextButton(shape = RunmoniShapes.Action, onClick = actions::signOutGoogle, enabled = !state.cloud.busy && !state.communityGoogleLink.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 계정 로그아웃") }
+                OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().testTag("cloud_history")) { Text("백업한 요약 보기") }
+                TextButton(shape = RunmoniShapes.Action, onClick = actions::signOutGoogle, enabled = !state.cloud.busy && !state.communityGoogleLink.busy, modifier = Modifier.testTag("google_sign_out")) { Text("Google 로그아웃") }
             }
-            SmallNote("기록 상세에서 요약을 1건씩 백업해요. GPS 경로·마일리지는 포함하지 않아요.")
+            SmallNote("기록 상세에서 요약을 백업할 수 있어요. 러닝 경로·포인트·옷장은 포함되지 않아요.")
         }
         ScreenSection("크루 프로필") {
             StatusPill(if (state.serverConnected && state.signedIn) "크루 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
-            Text(if (state.signedIn) "크루 프로필 연결됨" else "공개 크루를 둘러보고 닉네임으로 참여하세요", style = MaterialTheme.typography.bodyMedium)
-            SmallNote("기록 요약 백업과 크루 프로필은 별도예요. 위치 공유는 직접 켜야 해요.")
             if (state.communityBackend == CommunityBackend.FIREBASE) {
                 val link = state.communityGoogleLink
-                Text(link.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
-                    modifier = Modifier.testTag("community_google_status"))
+                if (link.linked || link.busy || link.status != CommunityGoogleLinkState().status)
+                    Text(link.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                        modifier = Modifier.testTag("community_google_status"))
                 if (link.linked && link.accountLabel.isNotBlank()) Text(link.accountLabel, style = MaterialTheme.typography.bodyMedium)
                 if (link.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
                 if (state.signedIn && !link.linked) OutlinedButton(shape = RunmoniShapes.Action, onClick = { linkCommunityGoogle = true }, enabled = !link.busy && !state.cloud.busy,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("link_community_google")) { Text("크루 프로필에 Google 연결") }
                 if (!state.signedIn) OutlinedButton(shape = RunmoniShapes.Action, onClick = { restoreCommunityGoogle = true }, enabled = state.cloud.configured && !link.busy && !state.cloud.busy,
                     modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("restore_community_google")) { Text("Google로 크루 프로필 다시 연결") }
-                SmallNote("Google을 연결한 크루 프로필만 다시 찾을 수 있어요. 기기의 GPS 기록·포인트·옷장은 이 연결로 복원되지 않아요.")
+                SmallNote("Google을 연결한 크루 소속과 권한을 다시 찾을 수 있어요. 기기의 러닝 경로·포인트·옷장은 이 연결로 복원되지 않아요.")
             }
             if (state.signedIn) OutlinedButton(shape = RunmoniShapes.Action, onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, enabled = !state.communityGoogleLink.busy && !state.cloud.busy,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "크루 프로필 연결 해제" else "파일럿 로그아웃") }
             else OutlinedButton(shape = RunmoniShapes.Action, onClick = onSignIn, enabled = !state.communityGoogleLink.busy && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
         }
-        ScreenSection("연결 및 앱 정보") {
-            TextButton(shape = RunmoniShapes.Action, onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "테스트 서버 설정 접기" else "테스트 서버 설정 펼치기") }
+        ScreenSection("도움말 및 앱 정보") {
+            OutlinedButton(shape = RunmoniShapes.Action, onClick = onAppInformation, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings_app_information")) { Icon(Icons.Outlined.Info, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("앱 정보 · 업데이트") }
+            OutlinedButton(shape = RunmoniShapes.Action, onClick = { deviceChecks = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_device_checks")) { Text("연결·휴대폰 점검") }
+            TextButton(shape = RunmoniShapes.Action, onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "개발용 연결 설정 닫기" else "개발용 연결 설정") }
             if (connectionDetails) {
-                Text(if (state.communityBackend == CommunityBackend.FIREBASE) "Firebase 크루·파티 사용 중" else "HTTP 테스트 서버 사용 중")
+                Text(if (state.communityBackend == CommunityBackend.FIREBASE) "연결 방식: Firebase" else "연결 방식: HTTP 테스트 서버")
                 if (state.communityBackend != CommunityBackend.FIREBASE) OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::useFirebaseCommunity, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("use_firebase_rooms")) { Text("Firebase 크루·파티 사용") }
                 SmallNote(state.serverStatus)
                 OutlinedTextField(shape = RunmoniShapes.Input, value = url, onValueChange = { url = it }, label = { Text("서버 연결 주소") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("server_url"))
                 Button(shape = RunmoniShapes.Action, onClick = { actions.configureServer(url.trim()) }, enabled = url.startsWith("http://") || url.startsWith("https://"), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("connect_server")) { Text("서버 연결") }
                 SmallNote("USB 연결 테스트는 localhost를 사용해요. 서버 주소는 Google 계정 설정과 별개예요.")
             }
-            OutlinedButton(shape = RunmoniShapes.Action, onClick = onAppInformation, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings_app_information")) { Icon(Icons.Outlined.Info, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("앱 정보 · 버전 · 지원") }
         }
         }
     }
@@ -148,10 +146,10 @@ internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () ->
     var adult by remember { mutableStateOf(false) }
     var submitted by remember { mutableStateOf(false) }
     LaunchedEffect(state.signedIn) { if (state.signedIn && submitted) onDismiss() }
-    FormDialog("함께 달릴 닉네임", onDismiss, confirm = {
+    FormDialog("크루에서 쓸 닉네임", onDismiss, confirm = {
         TextButton(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.connectCommunity(name.trim()) }, enabled = adult && name.trim().matches(Regex("[\\w가-힣 -]{2,24}")) && !state.busy, modifier = Modifier.testTag("confirm_sign_in")) { Text(if (state.busy) "연결 중" else "참여하기") }
     }) {
-        Text("닉네임으로 게스트 프로필을 연결하면 크루에 가입하고 파티에 참가할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
+        Text("크루 멤버에게 표시할 이름이에요.", style = MaterialTheme.typography.bodyMedium)
         OutlinedTextField(shape = RunmoniShapes.Input, value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().testTag("display_name"))
         Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }).testTag("adult_checkbox"), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = adult, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("만 19세 이상입니다", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
         SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 설정에서 Google 계정을 연결하기 전에는 기기 변경·재설치 후 참여 내역과 크루장 권한을 복구할 수 없어요. 기록 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
@@ -172,7 +170,7 @@ internal fun NewCrewDialog(actions: AppActions, state: AppState = AppState(), on
         FormField("크루 소개", description, { description = it.take(500) }, "crew_description", singleLine = false)
         FormField("활동 지역", region, { region = it.take(80) }, "crew_region")
         FormField("기본 페이스", pace, { pace = it.take(80) }, "crew_pace")
-        SmallNote("크루 목록에 이름·설명·지역·페이스가 표시돼요. 크루를 찾은 러너가 코드 없이 참여할 수 있어요.")
+        SmallNote("이름·소개·지역·페이스는 크루 목록에 공개돼요.")
     }
 }
 

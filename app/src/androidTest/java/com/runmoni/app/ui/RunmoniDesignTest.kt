@@ -224,14 +224,18 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         device.waitForIdle()
         var geometry = ""
         try {
-            compose.waitUntil(timeoutMillis = 5000) {
+            // Software-rendered devices can expose pre-resize accessibility bounds
+            // after the IME appears. Keep the full-height checks while allowing
+            // that transition to settle; retain every sample for diagnosis.
+            val started = android.os.SystemClock.elapsedRealtime()
+            compose.waitUntil(timeoutMillis = 30_000) {
                 val keyboardBounds = device.findObject(By.pkg(imePackage))?.visibleBounds
                 val keyboardTop = keyboardBounds?.top ?: 0
                 val inputBounds = device.findObject(By.res("chat_input"))?.visibleBounds
                 val sendBounds = device.findObject(By.res("send_message"))?.visibleBounds
-                geometry = "IME=$keyboardBounds; input=$inputBounds; send=$sendBounds"
                 val inputHeight = compose.onNodeWithTag("chat_input").fetchSemanticsNode().size.height
                 val sendHeight = compose.onNodeWithTag("send_message").fetchSemanticsNode().size.height
+                geometry += "elapsedMs=${android.os.SystemClock.elapsedRealtime() - started}; IME=$keyboardBounds; input=$inputBounds/$inputHeight; send=$sendBounds/$sendHeight\n"
                 keyboardTop > 0 && inputBounds != null && sendBounds != null &&
                     inputBounds.bottom <= keyboardTop && sendBounds.bottom <= keyboardTop &&
                     inputBounds.height() >= inputHeight - 1 && sendBounds.height() >= sendHeight - 1

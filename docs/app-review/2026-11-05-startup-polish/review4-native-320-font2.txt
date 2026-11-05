@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.AppInformationNativeTest:.
+com.runmoni.app.ui.RunmoniDialogDesignTest:....
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:.
+
+Time: 279.667
+
+OK (7 tests)
+
+

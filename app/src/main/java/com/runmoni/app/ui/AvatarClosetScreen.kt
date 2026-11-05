@@ -64,7 +64,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                     AvatarMini(profile.avatar, Modifier.width(previewHeight * 2f / 3f).height(previewHeight)
                         .testTag("closet_avatar_preview"), running = playing)
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("캐릭터", style = MaterialTheme.typography.titleSmall)
+                        Text("모두 무료", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                         GenderSelector(profile, actions, Modifier.fillMaxWidth())
                     }
                 }
@@ -74,17 +74,11 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                     Column(Modifier.weight(1f).widthIn(max = 640.dp).fillMaxWidth().align(Alignment.CenterHorizontally)
                         .verticalScroll(rememberScrollState()).testTag("closet_item_list")
                         .padding(horizontal = 20.dp), verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                        Row(Modifier.fillMaxWidth().padding(top = 20.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text(slot.label, modifier = Modifier.weight(1f).semantics { heading() }, style = MaterialTheme.typography.titleMedium)
-                            Text("모두 무료", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                        }
-                        if (!currentReady) Text("이전 선택은 보관 중이에요. 아래 아이템을 착용할 수 있어요.",
+                        Spacer(Modifier.height(12.dp))
+                        if (!currentReady) Text("이전 선택은 보관 중이에요",
                             style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                             modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp).testTag("closet_artwork_status"))
                         else if (covered) Text("아이템을 선택하면 세트가 해제돼요", style = MaterialTheme.typography.bodySmall,
-                            color = RunmoniColors.Muted, modifier = Modifier.padding(bottom = 12.dp).testTag("closet_artwork_status"))
-                        else Text(if (fabricRegion != null) "바꾸면 기본색으로 착용해요" else "선택하면 바로 착용해요", style = MaterialTheme.typography.bodySmall,
                             color = RunmoniColors.Muted, modifier = Modifier.padding(bottom = 12.dp).testTag("closet_artwork_status"))
                         ready.forEach { variant ->
                             val selected = current == variant && !covered
@@ -107,9 +101,6 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                             }
                             HorizontalDivider(color = RunmoniColors.Line, modifier = Modifier.padding(horizontal = 12.dp))
                         }
-                        if (ready.size <= 1 && slot.variants.size > ready.size) Text("추가 아이템을 준비 중이에요",
-                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
-                            modifier = Modifier.padding(top = 12.dp).testTag("closet_more_items_pending"))
                         if (fabricRegion != null && currentReady && !covered) {
                             Spacer(Modifier.height(20.dp))
                             RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor)
