@@ -1,12 +1,10 @@
 # 런모니 / Runmoni
 
-현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.4-dev`(code16)**입니다. [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.4-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.4_20261104.md).
+현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.5-dev`(code17)**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.3.5-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.5_20261105.md).
 
-옷장을 메인 하단 탭과 분리한 전체 화면·단순 목록으로 개편하고, 실제 시스템 하단 영역 위에서 마지막 품목·색상을 선택하도록 개선했습니다. 승인 원본과58개 저장 ID·0P·성별·보유권·포인트를 보존하며 기본13+비기본23=36개 ID가 실제 표시됩니다. 미준비22개 원화와 새 의복의 사용자 시각 승인·수영복·전체58종 완성은 별도입니다.
+기존 로고로 시작 화면을 추가하고 홈·설정·옷장의 반복 설명을 줄였습니다. 기록·보유 아이템·포인트와 기존 꾸미기 기능을 유지합니다. [실제 Android 실행/화면](docs/app-review/2026-11-05-startup-polish/review5.json).
 
-[이어서 개발](docs/DEVELOPMENT_CONTINUATION.md) · [우선순위](docs/DEVELOPMENT_PRIORITIES.md) · [실제 Android 실행·사진](docs/app-review/2026-11-04-closet-redesign/README.md). 사진은 API29/AOSP/TCG·로컬 TEST서명·Firebase미설정 build7 MainActivity이며 공개 서명 APK·실제 휴대폰·Google·운영 실행과 구분합니다. build6 기준26회+build7 native8회의 출처, 실패·복구, 실제 프로세스 재시작과 시도 전 원문 복원을 함께 기록했습니다.
-
-러닝 저장·복구와 크루 UID를 보존하는 Google 연결/기존 연결 프로필 복원을 유지합니다. 실제 휴대폰·Google·운영 두 기기 쓰기·야외GPS는 미검증입니다. 기본 Firebase 옷장·색상은 기기 저장이며 계정 연결만으로 원본GPS·포인트·전체 옷장을 복원하지 않습니다. 최신 Rules 게시 완료는 소유자 보고이며 이번 새 Rules·유료 서버·서명키 변경은 없습니다.
+실제 휴대폰·Google·운영 쓰기와 Android12이상 시작 화면 검증은 남아 있습니다. 미준비22개 원화·새 화면/의복의 사용자 시각 승인은 별도이며 Google 요약 백업이 GPS·포인트·옷장 전체 복원은 아닙니다. [이어서 개발](docs/DEVELOPMENT_CONTINUATION.md) · [우선순위](docs/DEVELOPMENT_PRIORITIES.md).
 
 ## 지금 구현한 범위
 
