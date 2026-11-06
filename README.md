@@ -1,8 +1,8 @@
 # 런모니 / Runmoni
 
-현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.5-dev`(code17)**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.3.5-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.5_20261105.md).
+현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.6-dev`(code18)**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.3.6-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.6_20261106.md).
 
-기존 로고로 시작 화면을 추가하고 홈·설정·옷장의 반복 설명을 줄였습니다. 기록·보유 아이템·포인트와 기존 꾸미기 기능을 유지합니다. [실제 Android 실행/화면](docs/app-review/2026-11-05-startup-polish/review5.json).
+처음에는 스플래시 뒤 Google 로그인·게스트 중 하나를 선택합니다. 한 번 선택하면 바로 시작하고 기존 사용자의 기록과 진행·복구 중인 러닝은 유지합니다. Google 요약 백업은 수동이며 게스트 선택으로 크루 계정이나 업로드를 자동 생성하지 않습니다. [실제 Android 실행/화면](docs/app-review/2026-11-06-entry-flow/README.md).
 
 실제 휴대폰·Google·운영 쓰기와 Android12이상 시작 화면 검증은 남아 있습니다. 미준비22개 원화·새 화면/의복의 사용자 시각 승인은 별도이며 Google 요약 백업이 GPS·포인트·옷장 전체 복원은 아닙니다. [이어서 개발](docs/DEVELOPMENT_CONTINUATION.md) · [우선순위](docs/DEVELOPMENT_PRIORITIES.md).
 
