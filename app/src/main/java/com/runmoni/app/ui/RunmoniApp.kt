@@ -2,7 +2,10 @@
 
 package com.runmoni.app.ui
 
+import android.content.res.Configuration
+
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
@@ -25,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -37,6 +41,8 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import com.runmoni.app.R
@@ -105,28 +111,39 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         }
         val tabs = listOf("홈", "탐색", "러닝", "크루", "나")
         val icons = listOf(R.drawable.ic_nav_home, R.drawable.ic_nav_explore, R.drawable.ic_nav_run, R.drawable.ic_nav_crew, R.drawable.ic_nav_me)
-        Box(Modifier.fillMaxSize()) {
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+        // Use this actual window's constraints: keep room for run data in
+        // low landscape or enlarged-text short windows. Other tabs and regular
+        // portrait keep their header/navigation; font scaling and recorder
+        // callbacks are unchanged. Version/settings remain on the other tabs.
+        val configuration = LocalConfiguration.current
+        val compactActiveRun = tab == 2 && state.activeRun.phase != RunPhase.IDLE &&
+            ((configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                maxWidth > maxHeight && maxHeight <= 360.dp) ||
+                (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp))
         if (!closet) mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
             modifier = if (chatOpen || settings) Modifier.clearAndSetSemantics { }.focusProperties { canFocus = false } else Modifier,
             containerColor = RunmoniColors.Cream,
             topBar = {
                 Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
-                    BoxWithConstraints(Modifier.fillMaxWidth()) {
-                        val separateVersion = maxWidth < 360.dp ||
-                            (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp)
-                        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                            .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
-                            Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
-                                    modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
-                                if (!separateVersion) AppVersionShortcut(updates) { appInformation = true }
-                                IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
-                                    Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                    if (!compactActiveRun) {
+                        BoxWithConstraints(Modifier.fillMaxWidth()) {
+                            val separateVersion = maxWidth < 360.dp ||
+                                (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp)
+                            Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                                .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
+                                Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
+                                        modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
+                                    if (!separateVersion) AppVersionShortcut(updates) { appInformation = true }
+                                    IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
+                                        Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                                    }
                                 }
-                            }
-                            if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                                AppVersionShortcut(updates) { appInformation = true }
+                                if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                                    AppVersionShortcut(updates) { appInformation = true }
+                                }
                             }
                         }
                     }
@@ -137,34 +154,90 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 Surface(color = RunmoniColors.Paper) {
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
-                        val navDensity = LocalDensity.current
-                        // Keep a full label line below equal 48dp icon areas. The
-                        // text's real scaled line height determines any extra height.
-                        val navContentHeight = maxOf(72.dp, 48.dp + 4.dp + with(navDensity) {
-                            MaterialTheme.typography.labelMedium.lineHeight.toDp()
-                        } + 8.dp)
-                        val navBottomInset = with(navDensity) { NavigationBarDefaults.windowInsets.getBottom(this).toDp() }
-                        NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset).selectableGroup(),
-                            containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
-                            tabs.forEachIndexed { index, label ->
-                                Column(Modifier.weight(1f).heightIn(min = navContentHeight)
-                                    .selectable(selected = tab == index, role = Role.Tab, onClick = {
-                                        if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
-                                        tab = index
-                                    }).testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index])
-                                    .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.Center) {
-                                    Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
-                                        if (tab == index) Box(Modifier.width(56.dp).height(36.dp)
-                                            .clip(RunmoniShapes.Action).background(RunmoniColors.PrimarySoft))
-                                        Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
-                                            tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                        if (compactActiveRun) {
+                            // NavigationBar keeps its80dp default height. Measure
+                            // the actual enlarged labels after OS horizontal
+                            // insets, then reserve exactly the space they need.
+                            BoxWithConstraints(Modifier.fillMaxWidth()
+                                .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom))) {
+                                val navDensity = LocalDensity.current
+                                val navLabelStyle = MaterialTheme.typography.labelMedium
+                                val textMeasurer = rememberTextMeasurer()
+                                val measuredLabels = tabs.flatMap { label ->
+                                    listOf(FontWeight.Medium, FontWeight.Bold).map { weight ->
+                                        textMeasurer.measure(AnnotatedString(label),
+                                            style = navLabelStyle.copy(fontWeight = weight),
+                                            maxLines = 1, softWrap = false)
                                     }
-                                    Spacer(Modifier.height(4.dp))
-                                    Text(label, style = MaterialTheme.typography.labelMedium.copy(
-                                        fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium), maxLines = 1, softWrap = false,
-                                        textAlign = TextAlign.Center, color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted,
-                                        modifier = Modifier.fillMaxWidth())
+                                }
+                                val labelWidth = with(navDensity) { measuredLabels.maxOf { it.size.width }.toDp() }
+                                val labelHeight = with(navDensity) { measuredLabels.maxOf { it.size.height }.toDp() }
+                                val navHeight = maxOf(48.dp, labelHeight + 8.dp)
+                                val itemWidth = maxWidth / tabs.size.toFloat()
+                                val showIcons = itemWidth >= labelWidth + 24.dp + 8.dp + 16.dp
+                                val labelOnlyWidth = maxOf(48.dp, labelWidth + 8.dp)
+                                val labelsFit = itemWidth >= labelOnlyWidth
+                                val navigationScroll = rememberScrollState()
+                                Row(Modifier.fillMaxWidth().height(navHeight)
+                                    .then(if (labelsFit) Modifier else Modifier.horizontalScroll(navigationScroll))
+                                    .selectableGroup()) {
+                                    tabs.forEachIndexed { index, label ->
+                                        // In a narrower multiwindow keep all five
+                                        // full labels, omitting decorative icons.
+                                        // Extreme widths/scales scroll48dp-or-wider
+                                        // tabs instead of clipping/shrinking text.
+                                        val item = if (labelsFit) Modifier.weight(1f) else Modifier.width(labelOnlyWidth)
+                                        Row(item.fillMaxHeight()
+                                            .clip(RunmoniShapes.Action)
+                                            .background(if (tab == index) RunmoniColors.PrimarySoft else Color.Transparent)
+                                            .selectable(selected = tab == index, role = Role.Tab, onClick = {
+                                                if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
+                                                tab = index
+                                            }).testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index])
+                                            .padding(horizontal = if (showIcons) 8.dp else 4.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(if (showIcons) 8.dp else 0.dp)) {
+                                            if (showIcons) Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
+                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                            Text(label, style = navLabelStyle.copy(
+                                                fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium),
+                                                modifier = Modifier.weight(1f), maxLines = 1, softWrap = false,
+                                                textAlign = if (showIcons) TextAlign.Start else TextAlign.Center,
+                                                color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            val navDensity = LocalDensity.current
+                            // Keep a full label line below equal 48dp icon areas. The
+                            // text's real scaled line height determines any extra height.
+                            val navContentHeight = maxOf(72.dp, 48.dp + 4.dp + with(navDensity) {
+                                MaterialTheme.typography.labelMedium.lineHeight.toDp()
+                            } + 8.dp)
+                            val navBottomInset = with(navDensity) { NavigationBarDefaults.windowInsets.getBottom(this).toDp() }
+                            NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset).selectableGroup(),
+                                containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
+                                tabs.forEachIndexed { index, label ->
+                                    Column(Modifier.weight(1f).heightIn(min = navContentHeight)
+                                        .selectable(selected = tab == index, role = Role.Tab, onClick = {
+                                            if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
+                                            tab = index
+                                        }).testTag(listOf("nav_home", "nav_explore", "nav_run", "nav_crew", "nav_me")[index])
+                                        .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center) {
+                                        Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
+                                            if (tab == index) Box(Modifier.width(56.dp).height(36.dp)
+                                                .clip(RunmoniShapes.Action).background(RunmoniColors.PrimarySoft))
+                                            Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
+                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                        }
+                                        Spacer(Modifier.height(4.dp))
+                                        Text(label, style = MaterialTheme.typography.labelMedium.copy(
+                                            fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium), maxLines = 1, softWrap = false,
+                                            textAlign = TextAlign.Center, color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted,
+                                            modifier = Modifier.fillMaxWidth())
+                                    }
                                 }
                             }
                         }
@@ -217,7 +290,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
     val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐";
         accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
-        Box(Modifier.weight(1f)) {
+        Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
             ScreenContent {
                 Text(if (persistence.finishing) "러닝 마무리 중"
                     else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"

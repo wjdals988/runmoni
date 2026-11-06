@@ -106,11 +106,16 @@ class AppInformationTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("nav_crew").performClick()
         compose.onNodeWithTag("crew_second").performScrollTo().performClick()
         compose.onNodeWithTag("create_party_second").assertIsDisplayed()
-        compose.onNodeWithText("공지 · 채팅").performClick()
+        compose.onNodeWithTag("crew_detail_1").performScrollTo().performClick()
+        compose.onNodeWithText("크루 공지 · 채팅").performScrollTo().performClick()
         compose.onNodeWithTag("chat_dialog").assertIsDisplayed()
+        compose.runOnIdle { assertEquals("crew:second", state.value.openedRoomId) }
         compose.onNodeWithTag("nav_crew").assertDoesNotExist()
         compose.onNodeWithTag("close_chat").performClick()
+        compose.onNodeWithTag("crew_detail_1").assertIsSelected()
+        compose.onNodeWithTag("crew_detail_0").performScrollTo().performClick()
         compose.onNodeWithTag("create_party_second").assertIsDisplayed()
+        compose.onNodeWithTag("create_party_first").assertDoesNotExist()
         compose.onNodeWithTag("nav_crew").assertIsSelected()
     }
 
