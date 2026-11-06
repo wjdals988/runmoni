@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.3.6-dev",
-    "versionCode": 18,
-    "fileName": "runmoni-0.3.6-dev.apk",
-    "sizeBytes": 219066718,
-    "sha256": "e05bc3be0fa4d4a4120ac2d01aea993662fb8abdcd647da4c094de3f838e61b1",
+    "version": "0.3.7-dev",
+    "versionCode": 19,
+    "fileName": "runmoni-0.3.7-dev.apk",
+    "sizeBytes": 219246942,
+    "sha256": "a864ed8cb0df6444a8074368a21892a8b6f46e97e1432ba2936360f3b0525a53",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "d27b31f85eafa42eb4c96fe17ff2483536d919f0",
+    "sourceRevision": "aa9f4e21983899d0d3d90a73ac41dc02f8662632",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.6-dev/runmoni-0.3.6-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.6-dev",
-    "notes": "처음에는 스플래시 뒤 Google 로그인·게스트를 선택하고, 선택을 마친 기기와 기존 사용자는 바로 시작합니다. 기록·포인트·꾸미기는 유지합니다. 실기기 검증 전 개발 프리뷰이며 실제 Google·운영 연결·Android12이상 실행은 별도 확인이 필요합니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.7-dev/runmoni-0.3.7-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.7-dev",
+    "notes": "전체 화면의 제목·행동 위계·여백·큰 글씨/키보드와 진행 중 러닝의 가로 가독성을 정리했습니다. 화면 끔 기록과 알림 일시정지/재개를 보강하고 종료는 앱에서 확인합니다. 기존 기록·포인트·꾸미기·Google/게스트 진입을 유지합니다. 실기기 검증 전 개발 프리뷰이며 휴대폰·야외 GPS·Doze/제조사 절전·Android12이상·Google/운영 쓰기·사용자 시각 승인은 미검증입니다."
   },
   "schemaVersion": 1,
   "stable": null

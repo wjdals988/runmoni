@@ -1,10 +1,10 @@
 # 런모니 / Runmoni
 
-현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.6-dev`(code18)**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.3.6-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.6_20261106.md).
+현재 공개 APK는 **실기기 검증 전 개발 프리뷰 `0.3.7-dev`(code19)**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.3.7-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.7_20261106.md).
 
-처음에는 스플래시 뒤 Google 로그인·게스트 중 하나를 선택합니다. 한 번 선택하면 바로 시작하고 기존 사용자의 기록과 진행·복구 중인 러닝은 유지합니다. Google 요약 백업은 수동이며 게스트 선택으로 크루 계정이나 업로드를 자동 생성하지 않습니다. [실제 Android 실행/화면](docs/app-review/2026-11-06-entry-flow/README.md).
+전체 페이지의 제목·행동 위계·여백·큰 글씨/IME를 정리하고 진행 중 러닝의 가로/font2 가독성과 화면 끔 기록·알림 일시정지/재개를 보강했습니다. Google/게스트 진입·기존 기록/포인트/꾸미기는 유지합니다.
 
-실제 휴대폰·Google·운영 쓰기와 Android12이상 시작 화면 검증은 남아 있습니다. 미준비22개 원화·새 화면/의복의 사용자 시각 승인은 별도이며 Google 요약 백업이 GPS·포인트·옷장 전체 복원은 아닙니다. [이어서 개발](docs/DEVELOPMENT_CONTINUATION.md) · [우선순위](docs/DEVELOPMENT_PRIORITIES.md).
+동일 제품 APK에서 기본56+원래 native 성공4+가로2(build3)와 test-only 새1(build4)=63회 메서드 통과를 확인했다. 원래 native1은 마지막 warning 부재 기대가 틀려 전체false다. 성공4만 유지하고 실패1은 제외했다. 제품 APK 바이트는 같은 test-only build4에서 그 한 메서드만 새로 확인했다. 한 번의 native5 전체통과를 주장하지 않는다. 가로2는 두 메서드가 실제 통과했지만 원래 parent 전체 결과는 finally 정책 복원 실패로 false다. effective bool은 같았으나 default가 disabled로 남았다. 원문 false를 보존하고 별도 후속 복원0제품검사로 원래 정책/통제 환경을 돌렸다.63회는 메서드 통과 합계이며 모든 parent 전체가 passed=true였다는 뜻이 아니다. UI13종/4조건·active 세로/가로2는 host-review6에서 실제 수집한15원본을 최종 host-review8가 명시적 출처로 재사용한다. 최종 host에서13종을 새로 촬영한 것이 아니며 BG2만 새로 실행한다. 갤러리는 홈/옷장 source6 원본과 최종 host의 새 러닝/알림(Main3/SystemUI1)이다. 다른 APK 사진·부분 BG는 합산하지 않는다. 실제 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze·제조사 절전·Android12이상 실행·공개 서명 APK의 실제 실행·사용자 시각 승인은 별도 미검증이다. [실제 Android/사진](docs/app-review/2026-11-06-ui-ux-pro-max/README.md) · [이어가기](docs/DEVELOPMENT_CONTINUATION.md) · [우선순위](docs/DEVELOPMENT_PRIORITIES.md).
 
 ## 지금 구현한 범위
 
