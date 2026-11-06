@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "observerBuild": "observer-build.json",
+  "raw": "observer-probe3.txt",
+  "scope": "Platform shell observer probe only; not a product Android test.",
+  "productInstrumentationTestsAdded": 0,
+  "packagedInProductApk": false,
+  "pathCompatibility": "Launcher ANDROID_DATA=/data/local/tmp makes legacy dump output nested; a fresh dangling link exposes the actual generated XML at the fixed client path. Both old paths are removed before each observation."
+}

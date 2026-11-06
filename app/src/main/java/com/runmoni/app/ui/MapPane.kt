@@ -60,8 +60,8 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
     var authFailed by remember { mutableStateOf(false) }
     val largeText = LocalDensity.current.fontScale >= 1.3f
     if (BuildConfig.NAVER_MAP_CLIENT_ID.isBlank() || authFailed) {
-        Box(modifier.background(RunmoniColors.Mint).testTag("route_canvas").semantics { contentDescription = if (usablePoints.isEmpty()) "아직 표시할 GPS 경로가 없습니다" else "GPS 경로 ${usablePoints.size}개 지점. 중단 구간은 연결하지 않습니다" }) {
-            RouteCanvas(usablePoints, Modifier.fillMaxSize())
+        Box(modifier.background(RunmoniColors.Paper).testTag("route_canvas").semantics { contentDescription = if (usablePoints.isEmpty()) "아직 표시할 GPS 경로가 없습니다" else "GPS 경로 ${usablePoints.size}개 지점. 중단 구간은 연결하지 않습니다" }) {
+            RouteCanvas(usablePoints, Modifier.fillMaxSize().padding(top = if (largeText) 64.dp else 44.dp, bottom = 8.dp))
             if (!largeText || usablePoints.isNotEmpty()) Text(if (authFailed) "GPS 경로 · 지도 인증 확인 필요" else "GPS 경로 · 지도 미연결", Modifier.align(Alignment.TopStart).padding(14.dp), style = MaterialTheme.typography.labelMedium)
             if (usablePoints.isEmpty()) Column(Modifier.align(Alignment.Center).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(if (points.isEmpty()) "아직 달린 경로가 없어요" else "GPS 정확도를 확인하고 있어요", style = MaterialTheme.typography.titleMedium)
@@ -165,9 +165,6 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
 @Composable
 private fun RouteCanvas(points: List<TrackPoint>, modifier: Modifier) {
     Canvas(modifier) {
-        val line = Color(0xFFD1E1D8)
-        for (column in 0..8) drawLine(line, Offset(size.width * column / 8, 0f), Offset(size.width * column / 8, size.height), 1f)
-        for (row in 0..6) drawLine(line, Offset(0f, size.height * row / 6), Offset(size.width, size.height * row / 6), 1f)
         val valid = points.filter { it.validForRoute() }
         if (valid.isEmpty()) return@Canvas
         val longitudeScale = cos(Math.toRadians(valid.first().latitude))

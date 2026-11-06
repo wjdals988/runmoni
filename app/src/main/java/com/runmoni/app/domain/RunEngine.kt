@@ -24,9 +24,10 @@ class RunEngine {
 
     fun tick(monotonicMillis: Long, running: Boolean) {
         lastClockMillis?.let { before ->
-            // A long sleep/kill is an unobserved gap, never invented exercise time.
+            // This clock belongs to one live session. Screen-off scheduling delays
+            // still count; restore() clears the clock to exclude process downtime.
             val delta = monotonicMillis - before
-            if (running && delta in 0..5_000) activeDurationMillis += delta
+            if (running && delta > 0) activeDurationMillis += delta
         }
         lastClockMillis = monotonicMillis
     }
@@ -70,6 +71,13 @@ class RunEngine {
         val distance = recent.sumOf { it.first }
         val millis = recent.sumOf { it.second }
         return if (distance >= 5 && millis > 0) ((millis / 1000.0) / distance * 1000).roundToInt().coerceIn(60, 3600) else null
+    }
+
+    /** Recent accepted route distance / fix time, not the GPS provider's raw speed. */
+    fun currentSpeedMetersPerSecond(): Double? {
+        val millis = recent.sumOf { it.second }
+        val distance = recent.sumOf { it.first }
+        return if (millis > 0) (distance / (millis / 1000.0)).takeIf { it.isFinite() && it >= 0 } else null
     }
 
     companion object {

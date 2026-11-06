@@ -24,9 +24,9 @@ import com.runmoni.app.domain.Crew
 @Composable
 internal fun EditorialHeading(eyebrow: String, title: String, description: String? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        if (eyebrow.any { it.code > 127 }) Text(eyebrow, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+        if (eyebrow.isNotBlank()) Text(eyebrow, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         Text(title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
-        if (description != null) Text(description, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        if (!description.isNullOrBlank()) Text(description, style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted)
     }
 }
 

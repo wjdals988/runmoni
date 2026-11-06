@@ -7,10 +7,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -33,9 +33,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
 import java.time.Instant
@@ -57,6 +60,8 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var signIn by rememberSaveable { mutableStateOf(false) }
         var appInformation by rememberSaveable { mutableStateOf(false) }
         var selectedRecord by remember { mutableStateOf<RunRecord?>(null) }
+        var finishRunId by rememberSaveable { mutableStateOf<String?>(null) }
+        var handledRunNavigationToken by rememberSaveable { mutableStateOf<Long?>(null) }
         var lastActiveId by remember { mutableStateOf(state.activeRun.id.takeIf { it.isNotBlank() }) }
         val chatOpen = state.openedRoomId.isNotBlank()
         val focusManager = LocalFocusManager.current
@@ -71,6 +76,33 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         LaunchedEffect(completedId, state.records) {
             completedId?.let { id -> state.records.firstOrNull { it.id == id }?.let { selectedRecord = it; completedId = null } }
         }
+        LaunchedEffect(state.runNavigationRequest, state.runPersistence.initialized, state.activeRun.id, state.activeRun.phase) {
+            val request = state.runNavigationRequest ?: return@LaunchedEffect
+            if (!state.runPersistence.initialized || request.token == handledRunNavigationToken) return@LaunchedEffect
+            handledRunNavigationToken = request.token
+            if (request.runId.isNotBlank() && state.activeRun.id == request.runId && state.activeRun.phase != RunPhase.IDLE) {
+                focusManager.clearFocus(force = true)
+                settings = false
+                closet = false
+                signIn = false
+                appInformation = false
+                selectedRecord = null
+                completedId = null
+                crewNavigation = null
+                partyNavigation = null
+                communityNavigationEpoch++
+                if (state.openedRoomId.isNotBlank()) actions.closeChat()
+                if (state.error != null) actions.dismissError()
+                tab = 2
+                finishRunId = request.runId.takeIf { request.confirmFinish && !state.runPersistence.finishing &&
+                    !(state.runPersistence.saving && state.runPersistence.issue != null) }
+            }
+            actions.consumeRunNavigation(request.token)
+        }
+        LaunchedEffect(state.activeRun.id, state.activeRun.phase, state.runPersistence.finishing) {
+            if (finishRunId != state.activeRun.id || state.activeRun.phase == RunPhase.IDLE || state.runPersistence.finishing)
+                finishRunId = null
+        }
         val tabs = listOf("홈", "탐색", "러닝", "크루", "나")
         val icons = listOf(R.drawable.ic_nav_home, R.drawable.ic_nav_explore, R.drawable.ic_nav_run, R.drawable.ic_nav_crew, R.drawable.ic_nav_me)
         Box(Modifier.fillMaxSize()) {
@@ -79,10 +111,12 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             modifier = if (chatOpen || settings) Modifier.clearAndSetSemantics { }.focusProperties { canFocus = false } else Modifier,
             containerColor = RunmoniColors.Cream,
             topBar = {
-                Column(Modifier.statusBarsPadding()) {
+                Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
                     BoxWithConstraints(Modifier.fillMaxWidth()) {
-                        val separateVersion = LocalDensity.current.fontScale >= 1.3f || maxWidth < 360.dp
-                        Column(Modifier.fillMaxWidth().padding(start = 24.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+                        val separateVersion = maxWidth < 360.dp ||
+                            (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp)
+                        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                            .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
                             Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
                                     modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
@@ -106,11 +140,11 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                         val navDensity = LocalDensity.current
                         // Keep a full label line below equal 48dp icon areas. The
                         // text's real scaled line height determines any extra height.
-                        val navContentHeight = maxOf(80.dp, 48.dp + 4.dp + with(navDensity) {
+                        val navContentHeight = maxOf(72.dp, 48.dp + 4.dp + with(navDensity) {
                             MaterialTheme.typography.labelMedium.lineHeight.toDp()
                         } + 8.dp)
                         val navBottomInset = with(navDensity) { NavigationBarDefaults.windowInsets.getBottom(this).toDp() }
-                        NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset),
+                        NavigationBar(modifier = Modifier.heightIn(min = navContentHeight + navBottomInset).selectableGroup(),
                             containerColor = RunmoniColors.Paper, tonalElevation = 0.dp) {
                             tabs.forEachIndexed { index, label ->
                                 Column(Modifier.weight(1f).heightIn(min = navContentHeight)
@@ -121,16 +155,14 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                     .padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center) {
                                     Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
-                                        if (index == 2) Box(Modifier.size(48.dp).clip(RoundedCornerShape(10.dp)).background(if (tab == index) RunmoniColors.Primary else RunmoniColors.Navy), contentAlignment = Alignment.Center) {
-                                            Icon(painterResource(icons[index]), null, Modifier.size(26.dp), tint = RunmoniColors.Lime)
-                                        } else {
-                                            if (tab == index) Box(Modifier.width(64.dp).height(32.dp).clip(RoundedCornerShape(8.dp)).background(RunmoniColors.PrimarySoft))
-                                            Icon(painterResource(icons[index]), null, Modifier.size(23.dp),
-                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
-                                        }
+                                        if (tab == index) Box(Modifier.width(56.dp).height(36.dp)
+                                            .clip(RunmoniShapes.Action).background(RunmoniColors.PrimarySoft))
+                                        Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
+                                            tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
                                     }
                                     Spacer(Modifier.height(4.dp))
-                                    Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1, softWrap = false,
+                                    Text(label, style = MaterialTheme.typography.labelMedium.copy(
+                                        fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium), maxLines = 1, softWrap = false,
                                         textAlign = TextAlign.Center, color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted,
                                         modifier = Modifier.fillMaxWidth())
                                 }
@@ -144,7 +176,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 when (tab) {
                     0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = { selectedRecord = it }, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
-                    2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
+                    2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onFinish = { finishRunId = state.activeRun.id })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
                     4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = { selectedRecord = it }, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true }, onCloset = { closet = true })
                 }
@@ -157,20 +189,31 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (chatOpen) ChatScreen(state, actions)
         selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud, state.runPersistence) { selectedRecord = null } }
-        state.error?.let { error -> AlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { DialogMessage(error) }, confirmButton = { TextButton(onClick = actions::dismissError) { Text("확인") } }) }
+        if (finishRunId != null && finishRunId == state.activeRun.id && state.activeRun.phase != RunPhase.IDLE &&
+            state.runPersistence.initialized && !state.runPersistence.finishing) {
+            AlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
+                text = { DialogMessage("${distance(state.activeRun.distanceMeters)} km · ${duration(state.activeRun.activeDurationMillis)}\n저장한 기록은 ‘나’에서 다시 볼 수 있어요.") },
+                confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null; actions.finishRun(state.activeRun.id) },
+                    enabled = !(state.runPersistence.saving && state.runPersistence.issue != null),
+                    modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } },
+                dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null }, modifier = Modifier.testTag("cancel_finish_run")) { Text("취소") } })
+        }
+        state.error?.let { error -> AlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { DialogMessage(error) }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = actions::dismissError) { Text("확인") } }) }
         }
     }
 }
 
 @Composable
-private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit) {
-    var finishConfirmation by rememberSaveable { mutableStateOf(false) }
+private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
     val persistence = state.runPersistence
     val permissionMissing = state.locationAccess.precisePermissionGranted == false
     val gpsDisabled = state.locationAccess.gpsEnabled == false
     val accuracy = run.accuracyMeters?.takeIf { !permissionMissing && !gpsDisabled && it.isFinite() && it >= 0f }
+    val speedKmh = run.currentSpeedMetersPerSecond?.times(3.6)?.takeIf {
+        run.phase == RunPhase.RUNNING && !permissionMissing && !gpsDisabled && accuracy != null && accuracy <= 30f && it.isFinite() && it >= 0
+    }
     val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐";
         accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
@@ -186,7 +229,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                 }
                 if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 if (run.phase == RunPhase.IDLE) {
-                    Text("시작하면 거리·시간·GPS 경로를 기록해요.", style = MaterialTheme.typography.bodyLarge)
+                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
                     RunwayArtwork(state.profile.avatar, compact = LocalDensity.current.fontScale >= 1.3f)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
@@ -198,10 +241,25 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         DistanceNumber(distance(run.distanceMeters), RunmoniColors.OnDark, Modifier.testTag("run_distance"))
                         HorizontalDivider(color = RunmoniColors.OnDark.copy(alpha = 0.2f))
                         MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"), UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = true)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text("현재 속도", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodyMedium)
+                            Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
+                                color = RunmoniColors.OnDark, style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.testTag("run_speed"))
+                        }
                         Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
+                if (state.runNotificationAccess.isBlocked) {
+                    Column(Modifier.fillMaxWidth().testTag("run_notification_blocked")
+                        .semantics { liveRegion = LiveRegionMode.Polite }, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("러닝 알림이 꺼져 있어요", style = MaterialTheme.typography.titleMedium)
+                        Text("상태 표시줄에서 기록을 보고 조작하려면 알림을 켜 주세요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                        TextButton(shape = RunmoniShapes.Action, onClick = actions::openRunNotificationSettings, contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
+                            modifier = Modifier.heightIn(min = 48.dp).testTag("run_notification_settings")) { Text("알림 설정") }
+                    }
+                }
                 if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 if (run.phase == RunPhase.PAUSED && !persistence.finishing && persistence.issue != RunPersistenceIssue.CHECKPOINT)
                     SmallNote(when (run.pauseReason) {
@@ -211,7 +269,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                     })
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
                 if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth().height(188.dp).clip(RunmoniShapes.Surface))
-                TextButton(onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
+                TextButton(shape = RunmoniShapes.Action, onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
                 }
@@ -221,11 +279,14 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                 }
                 val joined = state.parties.firstOrNull { it.joined && !it.cancelled }
                 if (state.communityBackend == CommunityBackend.HTTP && (joined != null || state.audio.roomId.isNotBlank())) AudioPanel(state.audio, actions, state.audio.roomId.ifBlank { "party:${joined!!.id}" })
-                else if (optionsExpanded) TextButton(onClick = onCrew, modifier = Modifier.heightIn(min = 48.dp)) { Icon(Icons.Outlined.Groups, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("함께 달릴 크루 둘러보기") }
+                else if (optionsExpanded) TextButton(shape = RunmoniShapes.Action, onClick = onCrew, modifier = Modifier.heightIn(min = 48.dp)) { Icon(Icons.Outlined.Groups, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text("함께 달릴 크루 둘러보기") }
             }
         }
         Surface(color = RunmoniColors.Paper, modifier = Modifier.fillMaxWidth().testTag("run_control_bar")) {
-            Box(Modifier.padding(horizontal = 20.dp, vertical = 12.dp)) {
+            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            HorizontalDivider(color = RunmoniColors.Line)
+            Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                .padding(horizontal = pageGutter(), vertical = 12.dp)) {
                 if (persistence.finishing) {
                     Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RunmoniShapes.Action) {
@@ -238,15 +299,15 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                 } else AdaptiveActions(
                     first = { modifier -> Button(onClick = { when (run.phase) { RunPhase.RUNNING -> actions.pauseRun(); RunPhase.PAUSED -> actions.resumeRun(); else -> actions.recoverRun() } },
                         enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized,
-                        modifier = modifier.heightIn(min = 56.dp).testTag(when (run.phase) { RunPhase.RUNNING -> "pause_run"; RunPhase.PAUSED -> "resume_run"; else -> "recover_run" })) {
+                        modifier = modifier.heightIn(min = 56.dp).testTag(when (run.phase) { RunPhase.RUNNING -> "pause_run"; RunPhase.PAUSED -> "resume_run"; else -> "recover_run" }), shape = RunmoniShapes.Action) {
                         Text(when (run.phase) { RunPhase.RUNNING -> "일시정지"; RunPhase.PAUSED -> "계속 달리기"; else -> "이어 달리기" })
                     } },
-                    second = { modifier -> OutlinedButton(onClick = { finishConfirmation = true }, enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized, modifier = modifier.heightIn(min = 56.dp).testTag("finish_run")) { Text("러닝 마치기") } },
+                    second = { modifier -> OutlinedButton(onClick = onFinish, enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized, modifier = modifier.heightIn(min = 56.dp).testTag("finish_run"), shape = RunmoniShapes.Action) { Text("러닝 마치기") } },
                 )
                 }
             }
+            }
         }
-    if (finishConfirmation) AlertDialog(onDismissRequest = { finishConfirmation = false }, title = { Text("오늘의 러닝을 마칠까요?") }, text = { DialogMessage("${distance(run.distanceMeters)} km · ${duration(run.activeDurationMillis)}\n저장한 기록은 ‘나’에서 다시 볼 수 있어요.") }, confirmButton = { TextButton(onClick = { finishConfirmation = false; actions.finishRun() }, modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } }, dismissButton = { TextButton(onClick = { finishConfirmation = false }) { Text("계속 뛰기") } })
 }
 
 @Composable
@@ -256,7 +317,7 @@ private fun LocationReadinessCard(permissionMissing: Boolean, actions: AppAction
             Text(if (permissionMissing) "정확한 위치 권한이 필요해요" else "GPS가 꺼져 있어요", style = MaterialTheme.typography.titleMedium)
             Text(if (permissionMissing) "러닝 시작 시 위치 권한을 허용해 주세요. 권한 요청이 나오지 않으면 앱 설정에서 ‘정확한 위치’를 켜 주세요."
                 else "GPS를 켜면 새 위치부터 경로를 기록해요. 신호가 없는 구간의 거리는 추정해 더하지 않아요.", style = MaterialTheme.typography.bodyMedium)
-            OutlinedButton(onClick = if (permissionMissing) actions::openAppPermissionSettings else actions::openLocationSettings,
+            OutlinedButton(shape = RunmoniShapes.Action, onClick = if (permissionMissing) actions::openAppPermissionSettings else actions::openLocationSettings,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag(if (permissionMissing) "app_permission_settings" else "location_settings")) {
                 Text(if (permissionMissing) "앱 권한 설정" else "위치 설정 열기")
             }
@@ -280,8 +341,8 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
             Row(verticalAlignment = Alignment.CenterVertically) { Icon(Icons.Outlined.Headphones, null); Spacer(Modifier.width(8.dp)); Text("음성 · 함께 듣기", style = MaterialTheme.typography.titleMedium) }
             Text(audio.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             AdaptiveActions(
-                first = { modifier -> Button(onClick = { if (thisRoom) actions.disconnectVoice() else actions.connectVoice(roomId) }, enabled = !audio.connecting, modifier = modifier.heightIn(min = 56.dp).testTag("join_voice")) { Text(if (thisRoom) "음성방 나가기" else if (audio.connecting) "연결 중" else "음성방 참여") } },
-                second = { modifier -> OutlinedButton(onClick = { actions.setMicrophone(!audio.microphoneEnabled) }, enabled = thisRoom, modifier = modifier.heightIn(min = 56.dp).testTag("toggle_microphone")) { Text(if (audio.microphoneEnabled) "마이크 켜짐" else "마이크 꺼짐") } },
+                first = { modifier -> Button(shape = RunmoniShapes.Action, onClick = { if (thisRoom) actions.disconnectVoice() else actions.connectVoice(roomId) }, enabled = !audio.connecting, modifier = modifier.heightIn(min = 56.dp).testTag("join_voice")) { Text(if (thisRoom) "음성방 나가기" else if (audio.connecting) "연결 중" else "음성방 참여") } },
+                second = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.setMicrophone(!audio.microphoneEnabled) }, enabled = thisRoom, modifier = modifier.heightIn(min = 56.dp).testTag("toggle_microphone")) { Text(if (audio.microphoneEnabled) "마이크 켜짐" else "마이크 꺼짐") } },
             )
             if (thisRoom) {
                 Text("음성 음량 · ${(audio.voiceVolume * 100).toInt()}%", style = MaterialTheme.typography.labelMedium)
@@ -292,39 +353,57 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
             Text(audio.sourceLabel, style = MaterialTheme.typography.bodyMedium)
             if (canBroadcast) {
                 AdaptiveActions(
-                    first = { modifier -> OutlinedButton(onClick = { actions.shareExternalMusic("com.google.android.apps.youtube.music") }, modifier = modifier.heightIn(min = 56.dp).testTag("share_youtube_music")) { Text("YouTube Music") } },
-                    second = { modifier -> OutlinedButton(onClick = { actions.shareExternalMusic("com.sec.android.app.music") }, modifier = modifier.heightIn(min = 56.dp).testTag("share_samsung_music")) { Text("Samsung Music") } },
+                    first = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.shareExternalMusic("com.google.android.apps.youtube.music") }, modifier = modifier.heightIn(min = 56.dp).testTag("share_youtube_music")) { Text("YouTube Music") } },
+                    second = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.shareExternalMusic("com.sec.android.app.music") }, modifier = modifier.heightIn(min = 56.dp).testTag("share_samsung_music")) { Text("Samsung Music") } },
                 )
                 AdaptiveActions(
-                    first = { modifier -> OutlinedButton(onClick = actions::selectMusicFile, modifier = modifier.heightIn(min = 48.dp).testTag("select_music")) { Text("음악 파일 선택") } },
-                    second = { modifier -> OutlinedButton(onClick = { sourcePicker = true }, modifier = modifier.heightIn(min = 48.dp).testTag("other_music_apps")) { Text("다른 음악 앱") } },
+                    first = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::selectMusicFile, modifier = modifier.heightIn(min = 48.dp).testTag("select_music")) { Text("음악 파일 선택") } },
+                    second = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { sourcePicker = true }, modifier = modifier.heightIn(min = 48.dp).testTag("other_music_apps")) { Text("다른 음악 앱") } },
                 )
-                if (audio.broadcasting) TextButton(onClick = actions::stopMusic, modifier = Modifier.testTag("stop_music")) { Text("음악 공유 중지") }
+                if (audio.broadcasting) TextButton(shape = RunmoniShapes.Action, onClick = actions::stopMusic, modifier = Modifier.heightIn(min = 48.dp).testTag("stop_music")) { Text("음악 공유 중지") }
                 SmallNote("외부 앱이 오디오 캡처를 허용해야 해요. 무음이거나 잠금 중 공유가 중단되면 안내 상태를 확인해 주세요.")
             } else if (thisRoom) SmallNote("음악 방송은 크루장과 DJ가 제어해요. 내 음량은 따로 바꿀 수 있어요.")
         }
     }
     if (sourcePicker && canBroadcast) AlertDialog(onDismissRequest = { sourcePicker = false }, title = { Text("공유할 음악 앱") }, text = { Column {
-        listOf("Spotify" to "com.spotify.music", "멜론" to "com.iloen.melon", "지니" to "com.ktmusic.geniemusic", "FLO" to "skplanet.musicmate").forEach { (name, packageName) -> TextButton(onClick = { actions.shareExternalMusic(packageName); sourcePicker = false }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("share_music_$packageName")) { Text(name) } }
+        listOf("Spotify" to "com.spotify.music", "멜론" to "com.iloen.melon", "지니" to "com.ktmusic.geniemusic", "FLO" to "skplanet.musicmate").forEach { (name, packageName) -> TextButton(shape = RunmoniShapes.Action, onClick = { actions.shareExternalMusic(packageName); sourcePicker = false }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("share_music_$packageName")) { Text(name) } }
         SmallNote("각 앱이 캡처를 허용해야 실제 오디오가 전달돼요. 지원 여부는 기기에서 확인해 주세요.")
-    } }, confirmButton = { TextButton(onClick = { sourcePicker = false }) { Text("닫기") } })
+    } }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { sourcePicker = false }) { Text("닫기") } })
 }
 
 @Composable
-internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = 16.dp, content: @Composable ColumnScope.() -> Unit) {
+internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = RunmoniLayout.PageGap, content: @Composable ColumnScope.() -> Unit) {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.widthIn(max = 640.dp).fillMaxSize().verticalScroll(rememberScrollState()).testTag("screen_scroll").padding(horizontal = 20.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(spacing), content = content)
+        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize()
+            .verticalScroll(rememberScrollState()).testTag("screen_scroll")
+            .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(spacing), content = content)
     }
 }
 
 @Composable
 internal fun ScreenHeading(title: String, subtitle: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) { Text(title, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() }); Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted) }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
+        if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+    }
 }
 
 @Composable
 internal fun SectionHeading(title: String, action: String? = null, onClick: () -> Unit = {}) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) { Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() }); if (action != null) TextButton(shape = RunmoniShapes.Action, onClick = onClick, modifier = Modifier.heightIn(min = 48.dp)) { Text(action) } }
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        if (action != null && (maxWidth < 320.dp || LocalDensity.current.fontScale >= 1.3f)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                TextButton(shape = RunmoniShapes.Action, onClick = onClick,
+                    modifier = Modifier.heightIn(min = 48.dp)) { Text(action) }
+            }
+        } else Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
+            if (action != null) TextButton(shape = RunmoniShapes.Action, onClick = onClick,
+                modifier = Modifier.heightIn(min = 48.dp)) { Text(action) }
+        }
+    }
 }
 
 @Composable
@@ -337,7 +416,7 @@ internal fun EmptyCard(title: String, message: String, action: String? = null, o
     Column(Modifier.fillMaxWidth().padding(vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(title, style = MaterialTheme.typography.titleLarge)
         if (message.isNotBlank()) Text(message, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-        if (action != null) TextButton(onClick = onClick, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text(action); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(18.dp)) }
+        if (action != null) TextButton(shape = RunmoniShapes.Action, onClick = onClick, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text(action); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(18.dp)) }
     }
 }
 
@@ -359,7 +438,7 @@ internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
     LaunchedEffect(state.signedIn) { if (!state.signedIn) confirmation = false }
     if (state.communityGuest) { SmallNote("크루에 가입해도 내 실시간 위치는 자동으로 공유되지 않아요."); return }
     ToggleRow("파일럿 위치 공유", if (state.signedIn) "초대받은 테스터에게 러닝 중 정밀 위치를 공유해요" else "초대 파일럿 로그인 후 이용할 수 있어요", state.publicLocation, { if (it) confirmation = true else actions.setPublicLocation(false) }, enabled = state.signedIn, tag = "share_location")
-    if (confirmation && state.signedIn) AlertDialog(onDismissRequest = { confirmation = false }, title = { Text("러닝 위치를 공유할까요?") }, text = { DialogMessage("진행 중 러닝의 정밀 좌표, 러너 이름, 미니미를 같은 초대 파일럿의 성인 테스터에게 보여줘요. 인터넷 전체에 공개되는 지도는 아니에요.\n\n러닝 중 15초마다 위치를 갱신해요. 공유를 끄거나 러닝을 마치면 공유를 중지해요. 마지막 갱신 후 45초가 지나면 위치가 만료돼요.") }, confirmButton = { TextButton(onClick = { confirmation = false; actions.setPublicLocation(true) }, modifier = Modifier.testTag("confirm_share_location")) { Text("위치 공유 켜기") } }, dismissButton = { TextButton(onClick = { confirmation = false }, modifier = Modifier.testTag("cancel_share_location")) { Text("공유하지 않기") } })
+    if (confirmation && state.signedIn) AlertDialog(onDismissRequest = { confirmation = false }, title = { Text("러닝 위치를 공유할까요?") }, text = { DialogMessage("진행 중 러닝의 정밀 좌표, 러너 이름, 미니미를 같은 초대 파일럿의 성인 테스터에게 보여줘요. 인터넷 전체에 공개되는 지도는 아니에요.\n\n러닝 중 15초마다 위치를 갱신해요. 공유를 끄거나 러닝을 마치면 공유를 중지해요. 마지막 갱신 후 45초가 지나면 위치가 만료돼요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false; actions.setPublicLocation(true) }, modifier = Modifier.testTag("confirm_share_location")) { Text("위치 공유 켜기") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false }, modifier = Modifier.testTag("cancel_share_location")) { Text("공유하지 않기") } })
 }
 
 @Composable

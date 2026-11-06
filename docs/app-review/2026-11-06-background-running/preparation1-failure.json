@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "stage": "installed package version guard",
+  "cause": "Review-driver regex retained escaped versionName0.3.6 although installed package is0.3.7/code19.",
+  "correction": "Only driver regex changed. Product app/test APK pair unchanged.",
+  "instrumentationExecuted": false,
+  "privateFixtureWritesAttempted": false,
+  "driver": "preparation1-driver.py",
+  "raw": "preparation1-failure.txt"
+}

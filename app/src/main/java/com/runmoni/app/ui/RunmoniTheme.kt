@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 internal object RunmoniColors {
-    val Cream = Color(0xFFF7F7F2)
+    val Cream = Color(0xFFF5F7F6)
     val Paper = Color(0xFFFFFFFF)
     val Coral = Color(0xFFF16D55)
     val Primary = Color(0xFF205641)
@@ -39,6 +39,15 @@ internal object RunmoniShapes {
     val Surface = RoundedCornerShape(12.dp)
     val Status = RoundedCornerShape(4.dp)
     val Dialog = RoundedCornerShape(16.dp)
+}
+
+internal object RunmoniLayout {
+    val ContentWidth = 640.dp
+    val DialogWidth = 560.dp
+    val Gutter = 20.dp
+    val WideGutter = 32.dp
+    val PageGap = 24.dp
+    val RowGap = 12.dp
 }
 
 private val AlignedText = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -98,7 +107,7 @@ internal fun RunmoniTheme(content: @Composable () -> Unit) {
             titleSmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp),
             bodyLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 16.sp, lineHeight = 24.sp),
             bodyMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 14.sp, lineHeight = 22.sp),
-            bodySmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 13.sp, lineHeight = 20.sp),
+            bodySmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 14.sp, lineHeight = 22.sp),
             labelLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, lineHeight = 22.sp),
             labelMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 18.sp),
             labelSmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 18.sp),

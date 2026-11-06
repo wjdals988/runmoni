@@ -1,0 +1,18 @@
+adb: device 'emulator-5556' not found
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+adb: device offline
+Project emulator PID: 464443 boot_completed: 1
+ERROR: null root node returned by UiTestAutomationBridge.
+Traceback (most recent call last):
+  File "/workspace/runmoni/work/background-running/boot-observer2.py", line 26, in <module>
+    assert any(re.fullmatch("System UI (?:isn't|isn’t) responding",n.get('text','')) for n in tree.iter('node'))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

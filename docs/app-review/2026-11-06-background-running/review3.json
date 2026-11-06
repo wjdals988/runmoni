@@ -1,0 +1,81 @@
+{
+  "installedReference": "review3-installed.json",
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "startedAtUtc": "2026-11-06T11:48:45.992974+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build2.json",
+  "groups": [
+    {
+      "name": "speed-recovery-data",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-speed-recovery-data.txt",
+      "elapsedSeconds": 21.58
+    },
+    {
+      "name": "recording-regression",
+      "expected": 9,
+      "passed": true,
+      "actual": 9,
+      "output": "review3-recording-regression.txt",
+      "elapsedSeconds": 22.39
+    },
+    {
+      "name": "notification-factory",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-notification-factory.txt",
+      "elapsedSeconds": 15.76
+    },
+    {
+      "name": "notification-ui",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-notification-ui.txt",
+      "elapsedSeconds": 128.97
+    },
+    {
+      "name": "entry-startup",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review3-entry-startup.txt",
+      "elapsedSeconds": 95.65
+    }
+  ],
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "passed": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "uiFixtures": [
+    {
+      "file": "review3-run-notification-blocked-320-200-fixture.png",
+      "sha256": "51271d2fa5ca8a9065816b76b46da68871a3f32f4db1adb2b1e2a3d4c3c5a8ff",
+      "kind": "ComponentActivity Compose-target viewport/font fixture; no actual GPS or Android notification interaction"
+    },
+    {
+      "file": "review3-run-speed-360-100-fixture.png",
+      "sha256": "4d1a6efa329a7278c4453d458ed8fd455d6a7fdd9b7e01356c739a1bb641d579",
+      "kind": "ComponentActivity Compose-target viewport/font fixture; no actual GPS or Android notification interaction"
+    },
+    {
+      "file": "review3-run-speed-320-200-fixture.png",
+      "sha256": "bd77e921e56b95741e6a63af4d8f64c0c9fbc890d99c2cf7da7df179de1865c3",
+      "kind": "ComponentActivity Compose-target viewport/font fixture; no actual GPS or Android notification interaction"
+    }
+  ],
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "20833cf202d1f9e532d26a36422139274956945e92357ecaf3ef675a6eea2276",
+  "finishedAtUtc": "2026-11-06T11:54:27.796712+00:00"
+}

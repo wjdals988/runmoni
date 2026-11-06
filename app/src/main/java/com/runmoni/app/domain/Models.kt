@@ -39,6 +39,7 @@ data class ActiveRun(
     val gpsStatus: String = "GPS 준비 전",
     val accuracyMeters: Float? = null,
     val pauseReason: PauseReason? = null,
+    val currentSpeedMetersPerSecond: Double? = null,
 )
 data class LocationAccess(val precisePermissionGranted: Boolean? = null, val gpsEnabled: Boolean? = null)
 /** Explicit artwork base, independent of hair, clothing and the saved equipment slots. */
@@ -143,6 +144,8 @@ data class AppState(
     val chatFromCache: Boolean = true,
     val chatCanNotice: Boolean = false,
     val entry: AppEntryState = AppEntryState(),
+    val runNotificationAccess: RunNotificationAccess = RunNotificationAccess(),
+    val runNavigationRequest: RunNavigationRequest? = null,
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)

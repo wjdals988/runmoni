@@ -1,0 +1,47 @@
+Warning: This version of UI Automator is deprecated. New tests should be written using
+UI Automator 2.0 which is available as part of the Android Testing Support Library.
+See https://developer.android.com/training/testing/ui-testing/uiautomator-testing.html
+for more details.
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.runmoni.review.LiveDump:
+INSTRUMENTATION_STATUS: id=UiAutomatorTestRunner
+INSTRUMENTATION_STATUS: test=testDumpLiveHierarchy
+INSTRUMENTATION_STATUS: class=com.runmoni.review.LiveDump
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+Failure in testDumpLiveHierarchy:
+junit.framework.AssertionFailedError: Fresh active-window hierarchy exists
+	at com.runmoni.review.LiveDump.testDumpLiveHierarchy(LiveDump.java:21)
+	at com.android.uiautomator.testrunner.UiAutomatorTestRunner.start(UiAutomatorTestRunner.java:160)
+	at com.android.uiautomator.testrunner.UiAutomatorTestRunner.run(UiAutomatorTestRunner.java:96)
+	at com.android.commands.uiautomator.RunTestCommand.run(RunTestCommand.java:91)
+	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:338)
+
+INSTRUMENTATION_STATUS: id=UiAutomatorTestRunner
+INSTRUMENTATION_STATUS: test=testDumpLiveHierarchy
+INSTRUMENTATION_STATUS: class=com.runmoni.review.LiveDump
+INSTRUMENTATION_STATUS: stack=junit.framework.AssertionFailedError: Fresh active-window hierarchy exists
+	at com.runmoni.review.LiveDump.testDumpLiveHierarchy(LiveDump.java:21)
+	at com.android.uiautomator.testrunner.UiAutomatorTestRunner.start(UiAutomatorTestRunner.java:160)
+	at com.android.uiautomator.testrunner.UiAutomatorTestRunner.run(UiAutomatorTestRunner.java:96)
+	at com.android.commands.uiautomator.RunTestCommand.run(RunTestCommand.java:91)
+	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:338)
+
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: -2
+INSTRUMENTATION_STATUS: stream=
+Test results for WatcherResultPrinter=.F
+Time: 10.384
+
+FAILURES!!!
+Tests run: 1,  Failures: 1,  Errors: 0
+
+
+INSTRUMENTATION_STATUS_CODE: -1

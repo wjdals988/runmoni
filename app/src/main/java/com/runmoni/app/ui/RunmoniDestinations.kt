@@ -13,11 +13,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
-import com.runmoni.app.avatar.AvatarArtwork
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -31,24 +33,26 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
         "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회" else null
     ScreenContent {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (!largeText) Text(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                Text("러닝", style = if (largeText) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.semantics { heading() })
-                if (!largeText && todaySummary != null) Text(todaySummary,
-                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (!largeText) Text(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                    Text("러닝", style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.semantics { heading() })
+                    if (!largeText && todaySummary != null) Text(todaySummary,
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                }
+                AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 88.dp).height(if (largeText) 76.dp else 112.dp), running = true, decorative = true)
             }
-            AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 96.dp).height(if (largeText) 76.dp else 128.dp), running = true, decorative = true)
+            Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
+                Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
+                Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
+                    modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp))
+            }
+            if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         }
-        Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-            modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
-            Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(10.dp))
-            Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
-                modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp))
-        }
-        if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         RunPersistenceNotice(state.runPersistence, onRetrySave)
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
@@ -57,7 +61,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         }
         if (state.records.isNotEmpty()) {
             ScreenSection(if (state.runPersistence.historyUnavailable) "마지막으로 불러온 러닝" else "최근 러닝") {
-            state.records.sortedByDescending { it.startedAtMillis }.take(2).forEach { record -> RecordRow(record) { onRecord(record) } }
+                Column { state.records.sortedByDescending { it.startedAtMillis }.take(2).forEach { record -> RecordRow(record) { onRecord(record) } } }
             }
         }
         ScreenSection("함께 달리기") {
@@ -70,7 +74,6 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit, onRooms: () -> Unit, onCrew: (String) -> Unit = { onRooms() }) {
     LaunchedEffect(Unit) { actions.refreshCommunity() }
     var layer by rememberSaveable { mutableIntStateOf(0) }
-    var kindFilter by rememberSaveable { mutableIntStateOf(0) }
     var query by rememberSaveable { mutableStateOf("") }
     var selectedParty by remember { mutableStateOf<Party?>(null) }
     var mapExpanded by rememberSaveable { mutableStateOf(false) }
@@ -79,10 +82,16 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
     val runners = state.liveRunners.filter { it.hasValidCoordinates() && mapClock - it.updatedAtMillis in 0L until 45_000L }
     val points = state.activeRun.points.ifEmpty { state.records.maxByOrNull { it.startedAtMillis }?.points.orEmpty() }
     ScreenContent {
-        EditorialHeading("", "탐색")
-        DestinationTabs(listOf("크루", "크루의 파티", "러너"), layer, { layer = it }, "explore_layer")
-        if (layer < 2) RoomSearch(query, { query = it }, if (layer == 0) "크루 검색" else "파티 검색", "explore_search",
-            placeholder = if (layer == 0) "이름 또는 지역" else "이름 또는 장소")
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Text("탐색", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.weight(1f).semantics { heading() })
+            IconButton(onClick = actions::refreshCommunity, enabled = !state.busy,
+                modifier = Modifier.size(48.dp).testTag("refresh_community")) { Icon(Icons.Outlined.Refresh, "목록 새로고침") }
+        }
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            DestinationTabs(listOf("크루", "크루의 파티", "러너"), layer, { layer = it }, "explore_layer")
+            if (layer < 2) RoomSearch(query, { query = it }, if (layer == 0) "크루 검색" else "파티 검색", "explore_search",
+                placeholder = if (layer == 0) "이름 또는 지역" else "이름 또는 장소")
+        }
         if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth().testTag("explore_loading"))
         else if (!state.serverConnected) CommunityUnavailable(actions)
         when (layer) {
@@ -90,27 +99,45 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
                 val crews = state.crews.filter { "${it.name} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
                 if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(if (query.isBlank()) "등록된 크루가 없어요" else "검색 결과가 없어요",
                     if (query.isBlank()) "크루 탭에서 새 크루를 만들 수 있어요." else "다른 이름이나 지역으로 검색해 보세요.", "크루 목록", onRooms)
-                Column { crews.forEach { crew -> CrewRoomCard(crew) { onCrew(crew.id) } } }
+                if (crews.isNotEmpty()) Column(Modifier.fillMaxWidth()) {
+                    if (!state.serverConnected || state.busy) Text("마지막으로 불러온 목록", style = MaterialTheme.typography.bodySmall,
+                        color = RunmoniColors.Muted, modifier = Modifier.padding(bottom = 8.dp))
+                    crews.forEach { crew -> CrewRoomCard(crew) { onCrew(crew.id) } }
+                }
             }
             1 -> {
                 val parties = state.parties.filter { p -> !p.cancelled && p.startsAtMillis >= mapClock && state.crews.any { it.id == p.crewId } && "${p.title} ${p.meetingLabel} ${p.paceLabel}".contains(query.trim(), true) }.sortedBy { it.startsAtMillis }
                 if (parties.isEmpty() && state.serverConnected && !state.busy) EmptyCard(if (query.isBlank()) "예정된 파티가 없어요" else "검색 결과가 없어요",
                     if (query.isBlank()) "가입한 크루에서 파티를 만들 수 있어요." else "다른 이름이나 장소로 검색해 보세요.", "크루 목록", onRooms)
-                Column { parties.forEach { party ->
-                    Text(state.crews.first { it.id == party.crewId }.name, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Primary)
-                    PartySummary(party) { selectedParty = party }
-                } }
+                if (parties.isNotEmpty()) Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    if (!state.serverConnected || state.busy) Text("마지막으로 불러온 목록", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                    parties.forEach { party ->
+                        Column(Modifier.fillMaxWidth()) {
+                            Text(state.crews.first { it.id == party.crewId }.name, style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Primary)
+                            PartySummary(party) { selectedParty = party }
+                        }
+                    }
+                }
             }
             2 -> {
-                SectionHeading(if (runners.isEmpty()) "러너 위치" else "위치를 공유한 러너 ${runners.size}명")
-                SmallNote("성인 파일럿 러너가 공유한 위치예요. 갱신 후 45초가 지나면 사라져요.")
-                LocationSharingToggle(state, actions)
-                if (runners.isEmpty() && state.serverConnected && !state.busy) SmallNote("표시할 위치가 없어요")
-                runners.forEach { runner ->
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        AvatarMini(runner.avatar, Modifier.size(64.dp), decorative = true)
-                        Column(Modifier.weight(1f)) { Text(runner.name, style = MaterialTheme.typography.titleMedium); Text(if (runner.memberCount > 1) "대표 미니미 · ${runner.memberCount}명" else "위치 공유 중", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium) }
-                        Text(clock(runner.updatedAtMillis), style = MaterialTheme.typography.labelMedium)
+                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    SectionHeading(if (runners.isEmpty()) "러너 위치" else "위치를 공유한 러너 ${runners.size}명")
+                    SmallNote("성인 파일럿 러너가 공유한 위치예요. 갱신 후 45초가 지나면 사라져요.")
+                    LocationSharingToggle(state, actions)
+                    if (runners.isEmpty() && state.serverConnected && !state.busy) SmallNote("표시할 위치가 없어요")
+                    runners.forEach { runner ->
+                        Row(Modifier.fillMaxWidth().padding(vertical = 12.dp).semantics(mergeDescendants = true) { },
+                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            AvatarMini(runner.avatar, Modifier.size(64.dp), decorative = true)
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text(runner.name, style = MaterialTheme.typography.titleMedium)
+                                FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text(if (runner.memberCount > 1) "대표 미니미 · ${runner.memberCount}명" else "위치 공유 중", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
+                                    Text(clock(runner.updatedAtMillis), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                                }
+                            }
+                        }
+                        HorizontalDivider(color = RunmoniColors.Line)
                     }
                 }
             }
@@ -122,22 +149,21 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
                 state.runPersistence.historyUnavailable -> "경로를 불러오지 못했어요"
                 else -> "표시할 경로가 없어요"
             }
-            DestinationRow("내가 달린 길", routeSummary, Icons.Outlined.Route, { mapExpanded = !mapExpanded }, Modifier.testTag("explore_route"))
+            DestinationRow("내가 달린 길", routeSummary, Icons.Outlined.Route, { mapExpanded = !mapExpanded }, Modifier.testTag("explore_route")
+                .semantics { stateDescription = if (mapExpanded) "펼침" else "접힘" })
             if (mapExpanded) MapPane(points, runners, Modifier.fillMaxWidth().height(240.dp).clip(RunmoniShapes.Surface))
         }
-        TextButton(shape = RunmoniShapes.Action, onClick = actions::refreshCommunity, enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("refresh_community")) { Icon(Icons.Outlined.Refresh, null); Spacer(Modifier.width(8.dp)); Text("목록 새로고침") }
     }
     selectedParty?.let { party -> PartyDialog(state, party, actions, onSignIn = onSignIn) { selectedParty = null } }
 }
 
 @Composable
 internal fun CommunityUnavailable(actions: AppActions) {
-    Surface(color = RunmoniColors.Mint, shape = RunmoniShapes.Surface) {
-        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("크루 목록을 불러오지 못했어요", style = MaterialTheme.typography.titleMedium)
-            Text("러닝과 내 기록은 계속 이용할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-            TextButton(shape = RunmoniShapes.Action, onClick = actions::refreshCommunity, enabled = true, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text("다시 불러오기"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp)) }
-        }
+    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp).semantics { liveRegion = LiveRegionMode.Polite },
+        verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("크루 목록을 불러오지 못했어요", style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text("러닝과 내 기록은 계속 이용할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        TextButton(shape = RunmoniShapes.Action, onClick = actions::refreshCommunity, enabled = true, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text("다시 불러오기"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp)) }
     }
 }
 
@@ -150,17 +176,17 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
     val records = state.records.filter { val date = localDate(it.startedAtMillis); when (period) { 0 -> date == reference; 1 -> date.year == reference.year && date.month == reference.month; else -> date.year == reference.year } }
     ScreenContent {
         EditorialHeading("", "프로필")
-        ScreenSection("미니미", showDivider = false) {
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             BoxWithConstraints(Modifier.fillMaxWidth()) {
                 val details: @Composable (Modifier) -> Unit = { modifier ->
-                    Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text(state.profile.name, style = MaterialTheme.typography.titleMedium)
+                    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
                         TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
                     }
                 }
                 if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
-                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        AvatarMini(state.profile.avatar, Modifier.align(Alignment.CenterHorizontally).width(72.dp).height(104.dp), running = true, decorative = true)
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
                         details(Modifier.fillMaxWidth())
                     }
                 } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -172,11 +198,13 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
         }
         ScreenSection("러닝 기록") {
             RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
-            DestinationTabs(listOf("일별", "월별", "연도별"), period, { period = it }, "history_period")
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { referenceEpoch = when (period) { 0 -> reference.minusDays(1); 1 -> reference.minusMonths(1); else -> reference.minusYears(1) }.toEpochDay() }, modifier = Modifier.size(48.dp).testTag("history_previous")) { Icon(Icons.Outlined.ChevronLeft, "이전 기간") }
-                Text(when (period) { 0 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일")); 1 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월")); else -> "${reference.year}년" }, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                IconButton(onClick = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() }, modifier = Modifier.size(48.dp).testTag("history_next")) { Icon(Icons.Outlined.ChevronRight, "다음 기간") }
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                DestinationTabs(listOf("일별", "월별", "연도별"), period, { period = it }, "history_period")
+                HistoryPeriodNavigation(
+                    label = when (period) { 0 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일")); 1 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월")); else -> "${reference.year}년" },
+                    onPrevious = { referenceEpoch = when (period) { 0 -> reference.minusDays(1); 1 -> reference.minusMonths(1); else -> reference.minusYears(1) }.toEpochDay() },
+                    onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
+                )
             }
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -185,7 +213,9 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             }
             HorizontalDivider(color = RunmoniColors.Line)
             if (records.isEmpty() && !state.runPersistence.historyUnavailable) EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 시작", onRun)
-            records.sortedByDescending { it.startedAtMillis }.forEach { record -> RecordRow(record) { onRecord(record) } }
+            if (records.isNotEmpty()) Column(Modifier.fillMaxWidth()) {
+                records.sortedByDescending { it.startedAtMillis }.forEach { record -> RecordRow(record) { onRecord(record) } }
+            }
         }
         ScreenSection("계정 및 앱 정보") {
             DestinationRow("설정", "계정과 러닝 옵션", Icons.Outlined.Settings, onSettings)
@@ -193,4 +223,30 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
         }
     }
     if (mileageHelp) MileageExplanationDialog(onDismiss = { mileageHelp = false }, serverWallet = state.signedIn && !state.communityGuest)
+}
+
+@Composable
+private fun HistoryPeriodNavigation(label: String, onPrevious: () -> Unit, onNext: () -> Unit) {
+    BoxWithConstraints(Modifier.fillMaxWidth()) {
+        val previous: @Composable () -> Unit = {
+            IconButton(onClick = onPrevious, modifier = Modifier.size(48.dp).testTag("history_previous")) {
+                Icon(Icons.Outlined.ChevronLeft, "이전 기간")
+            }
+        }
+        val next: @Composable () -> Unit = {
+            IconButton(onClick = onNext, modifier = Modifier.size(48.dp).testTag("history_next")) {
+                Icon(Icons.Outlined.ChevronRight, "다음 기간")
+            }
+        }
+        if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 320.dp) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(label, style = MaterialTheme.typography.titleMedium, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) { previous(); next() }
+            }
+        } else Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            previous()
+            Text(label, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+            next()
+        }
+    }
 }

@@ -1,0 +1,16 @@
+{
+  "scope": "Owned synthetic review run only; private SQLite copy before product-UI cleanup",
+  "finding": "Saved route excludes the pause boundary; injected fix need not be first native fix after re-subscription.",
+  "measurements": [
+    {
+      "pointCount": 161,
+      "storedDistance": 23.797325795477477,
+      "distanceWithinSegments": 23.79732579547748,
+      "segmentBoundaryDistancesExcluded": [
+        8874181.438807307,
+        7.932441931825558
+      ],
+      "matchesWithinCentimeter": true
+    }
+  ]
+}

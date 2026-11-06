@@ -8,102 +8,173 @@ import android.content.pm.ServiceInfo
 import android.location.*
 import android.os.*
 import android.speech.tts.TextToSpeech
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.runmoni.app.MainActivity
-import com.runmoni.app.R
 import com.runmoni.app.RunmoniApplication
-import com.runmoni.app.domain.RunPhase
-import com.runmoni.app.domain.PauseReason
-import com.runmoni.app.domain.AutoPauseController
-import com.runmoni.app.domain.RunPersistenceIssue
+import com.runmoni.app.domain.*
 import com.runmoni.app.data.PilotClient
 import com.runmoni.app.data.SecureSession
 import com.runmoni.app.BuildConfig
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
 import org.json.JSONObject
+import java.io.FileDescriptor
+import java.io.PrintWriter
 import java.util.Locale
 
+/** The recorder belongs to this location FGS, not to an Activity's visible lifecycle. */
 class RunTrackingService : Service(), LocationListener {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val repository get() = (application as RunmoniApplication).runs
     private val preferences by lazy { getSharedPreferences("runmoni", MODE_PRIVATE) }
+    private data class Command(val action: String, val expectedRunId: String?, val startId: Int)
+    private val commands = Channel<Command>(Channel.UNLIMITED)
+    private var destroyed = false
+    private var foreground = false
+    private var pendingCommands = 0
+    private var recordingRunId: String? = null
     private var tts: TextToSpeech? = null
     private var ticker: Job? = null
     private var presenceJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
+    private var renewWakeAt = 0L
+    private var locationSubscribed = false
     private var timerKilometer = 0
+    private var lastNotificationAt = 0L
     private val autoPause = AutoPauseController()
     private val manager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
-        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(NotificationChannel(CHANNEL, "러닝 기록", NotificationManager.IMPORTANCE_LOW))
+        RunNotifications.createChannel(this)
         tts = TextToSpeech(this) { status -> if (status == TextToSpeech.SUCCESS) tts?.language = Locale.KOREAN }
-    }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val action = intent?.action ?: return START_NOT_STICKY
-        when (action) {
-            START, RECOVER -> {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    repository.gpsStatus("정밀 위치 권한이 필요합니다."); stopSelf(); return START_NOT_STICKY
+        scope.launch {
+            for (command in commands) {
+                try { handle(command) }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) {
+                    if (repository.persistence.value.issue == null)
+                        repository.gpsStatus("러닝을 시작하지 못했어요. 앱에서 위치 권한과 저장 상태를 확인해 주세요.")
+                    syncResources(); updateNotification(true)
+                } finally {
+                    pendingCommands--
+                    if (!destroyed && pendingCommands == 0) stopIfFinished()
                 }
-                startForeground(1001, notification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
-                scope.launch {
-                    try {
-                        repository.begin(action == RECOVER)
-                        autoPause.reset()
-                        timerKilometer = (repository.active.value.distanceMeters / 1000).toInt()
-                        if (wakeLock?.isHeld == true) wakeLock?.release()
-                        wakeLock = (getSystemService(POWER_SERVICE) as PowerManager).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "runmoni:recording").apply { acquire(2 * 60 * 60 * 1000L) }
-                        startLocation(); startTicker(); startPresence()
-                    } catch (cancelled: CancellationException) { throw cancelled }
-                    catch (failure: Exception) {
-                        if (repository.persistence.value.issue == null) repository.gpsStatus(
-                            (failure as? IllegalStateException)?.message ?: "러닝을 시작하지 못했어요. 다시 확인해 주세요.")
-                        stopForeground(STOP_FOREGROUND_REMOVE)
-                        stopSelf()
-                    }
-                }
-            }
-            PAUSE -> scope.launch { autoPause.reset(); recorderOperation { repository.pause() }; stopIfFinished() }
-            RESUME -> scope.launch {
-                autoPause.reset()
-                recorderOperation { repository.resume() }
-                if (repository.active.value.phase == RunPhase.RUNNING) { startLocation(); startTicker(); startPresence() }
-                stopIfFinished()
-            }
-            FINISH -> scope.launch {
-                preferences.edit().putBoolean("publicLocation", false).apply()
-                presenceJob?.cancel()
-                stopRecordingResources()
-                recorderOperation(RunPersistenceIssue.FINISH) { repository.finish() }
-                withTimeoutOrNull(5000) { revokePresence() }
-                stopIfFinished()
-            }
-            RETRY -> scope.launch {
-                recorderOperation(repository.persistence.value.issue ?: RunPersistenceIssue.CHECKPOINT) { repository.retryPersistence() }
-                stopIfFinished()
             }
         }
-        // OS force-stop is not represented as continuous tracking.
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val action = intent?.action
+        if (action !in setOf(START, RECOVER, PAUSE, RESUME, FINISH, RETRY)) {
+            if (!foreground) stopSelfResult(startId)
+            return START_NOT_STICKY
+        }
+        if (action == START || action == RECOVER) {
+            if (!foreground) {
+                try {
+                    check(hasPreciseLocation())
+                    startForeground(RunNotifications.ID, notification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+                    foreground = true
+                } catch (_: RuntimeException) {
+                    repository.gpsStatus("앱을 열고 정밀 위치 권한을 확인한 뒤 다시 시작해 주세요.")
+                    stopSelfResult(startId)
+                    return START_NOT_STICKY
+                }
+            }
+        } else if (!foreground && action in setOf(PAUSE, RESUME)) {
+            // A delayed old PendingIntent may create a Service, but must not restart GPS.
+            stopSelfResult(startId)
+            return START_NOT_STICKY
+        }
+        pendingCommands++
+        if (commands.trySend(Command(action!!, intent?.getStringExtra(RunNotifications.RUN_ID), startId)).isFailure) pendingCommands--
+        // System/user process termination needs explicit recovery; it is not continuous tracking.
         return START_NOT_STICKY
     }
+
+    private suspend fun handle(command: Command) {
+        when (command.action) {
+            START, RECOVER -> {
+                if (!hasPreciseLocation()) {
+                    repository.gpsStatus("정밀 위치 권한을 확인한 뒤 다시 시작해 주세요.")
+                    if (recordingRunId != null) repository.pause(expectedRunId = recordingRunId)
+                    syncResources(); return
+                }
+                if (recordingRunId == repository.active.value.id && recordingRunId != null) {
+                    updateNotification(true); return
+                }
+                repository.begin(command.action == RECOVER)
+                recordingRunId = repository.active.value.id
+                autoPause.reset()
+                timerKilometer = (repository.active.value.distanceMeters / 1000).toInt()
+                syncResources(); startTicker(); startPresence()
+            }
+            PAUSE, RESUME -> {
+                val control = if (command.action == PAUSE) RunNotificationControl.PAUSE else RunNotificationControl.RESUME
+                if (!RunControlPolicy.allows(control, command.expectedRunId, recordingRunId, repository.active.value, repository.persistence.value)) return
+                autoPause.reset()
+                if (control == RunNotificationControl.PAUSE) recorderOperation { repository.pause(expectedRunId = command.expectedRunId) }
+                else if (hasPreciseLocation()) recorderOperation { repository.resume(expectedRunId = command.expectedRunId) }
+                else repository.gpsStatus("정밀 위치 권한을 확인한 뒤 계속 달릴 수 있어요.")
+                syncResources()
+            }
+            FINISH -> {
+                if (command.expectedRunId.isNullOrBlank() || command.expectedRunId != repository.active.value.id) return
+                preferences.edit().putBoolean("publicLocation", false).apply()
+                presenceJob?.cancel(); presenceJob = null
+                stopRecordingResources()
+                recorderOperation(RunPersistenceIssue.FINISH) { repository.finish(expectedRunId = command.expectedRunId) }
+                withTimeoutOrNull(5000) { revokePresence() }
+            }
+            RETRY -> {
+                recorderOperation(repository.persistence.value.issue ?: RunPersistenceIssue.CHECKPOINT) {
+                    repository.retryPersistence(expectedRunId = command.expectedRunId)
+                }
+                syncResources()
+            }
+        }
+        updateNotification(true)
+    }
+
+    private fun hasPreciseLocation() = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+    private fun syncResources() {
+        val run = repository.active.value
+        val storage = repository.persistence.value
+        val wantsFixes = !destroyed && foreground && recordingRunId == run.id && !storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT &&
+            (run.phase == RunPhase.RUNNING || run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC) && hasPreciseLocation()
+        if (wantsFixes) { if (!locationSubscribed) startLocation(); renewWakeLease() }
+        else { stopLocation(); releaseWakeLock() }
+    }
+
+    private fun renewWakeLease() {
+        val now = SystemClock.elapsedRealtime()
+        if (wakeLock == null) wakeLock = (getSystemService(POWER_SERVICE) as PowerManager)
+            .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "runmoni:recording").apply { setReferenceCounted(false) }
+        // Renew before expiry rather than relying on a sleeping CPU to notice an expired lease.
+        if (wakeLock?.isHeld != true || now >= renewWakeAt) {
+            wakeLock?.acquire(60 * 60 * 1000L)
+            renewWakeAt = now + 30 * 60 * 1000L
+        }
+    }
+
     private fun startTicker() {
-        ticker?.cancel()
+        if (ticker?.isActive == true) return
         ticker = scope.launch {
             while (isActive) {
                 delay(1000)
                 val run = repository.active.value
                 recorderOperation {
-                    applyAutoPause(autoPause.onTick(SystemClock.elapsedRealtime(), preferences.getBoolean("autoPause", false), run.phase, run.pauseReason))
+                    if (!hasPreciseLocation() && run.phase in setOf(RunPhase.RUNNING, RunPhase.PAUSED)) {
+                        autoPause.reset()
+                        repository.interruptLocation("정밀 위치 권한이 해제됐어요. 앱에서 권한을 확인해 주세요.")
+                        repository.pause(expectedRunId = recordingRunId)
+                    } else applyAutoPause(autoPause.onTick(SystemClock.elapsedRealtime(), preferences.getBoolean("autoPause", false), run.phase, run.pauseReason))
                     repository.tick()
                 }
-                updateNotification()
-                if (wakeLock?.isHeld != true) wakeLock?.acquire(2 * 60 * 60 * 1000L)
-                val state = repository.active.value
-                val km = (state.distanceMeters / 1000).toInt()
+                syncResources(); updateNotification()
+                val km = (repository.active.value.distanceMeters / 1000).toInt()
                 if (km > timerKilometer && preferences.getBoolean("voiceGuidance", true)) {
                     timerKilometer = km
                     tts?.speak("${km}킬로미터 달렸어요", TextToSpeech.QUEUE_FLUSH, null, "km:$km")
@@ -148,14 +219,18 @@ class RunTrackingService : Service(), LocationListener {
     @Suppress("MissingPermission")
     private fun startLocation() {
         try {
-            // Subscribe even while disabled so enabling GPS later delivers fixes without restarting the run.
             if (LocationManager.GPS_PROVIDER in manager.allProviders) {
                 manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 0f, this, Looper.getMainLooper())
+                locationSubscribed = true
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) repository.gpsStatus("기기의 GPS를 켜 주세요.")
             } else repository.gpsStatus("이 기기에서 GPS를 사용할 수 없어요.")
-            if (LocationManager.NETWORK_PROVIDER in manager.allProviders) manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000L, 0f, this, Looper.getMainLooper())
-        } catch (_: SecurityException) { repository.gpsStatus("위치 권한이 해제되었습니다.") }
+            if (LocationManager.NETWORK_PROVIDER in manager.allProviders) {
+                manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000L, 0f, this, Looper.getMainLooper())
+                locationSubscribed = true
+            }
+        } catch (_: SecurityException) { repository.gpsStatus("위치 권한이 해제됐어요.") }
     }
+
     override fun onLocationChanged(location: Location) {
         scope.launch {
             recorderOperation {
@@ -166,81 +241,99 @@ class RunTrackingService : Service(), LocationListener {
                     location.speed.takeIf { fresh && location.hasSpeed() }, location.accuracy.takeIf { fresh && location.hasAccuracy() }))
                 repository.location(location)
             }
+            syncResources(); updateNotification()
         }
     }
+
     private suspend fun applyAutoPause(decision: AutoPauseController.Decision) {
         if (repository.persistence.value.finishing || repository.persistence.value.issue == RunPersistenceIssue.CHECKPOINT) {
-            autoPause.reset()
-            return
+            autoPause.reset(); return
         }
         when (decision) {
-            AutoPauseController.Decision.PAUSE -> repository.pause(PauseReason.AUTOMATIC)
-            AutoPauseController.Decision.RESUME -> repository.resume()
+            AutoPauseController.Decision.PAUSE -> repository.pause(PauseReason.AUTOMATIC, expectedRunId = recordingRunId)
+            AutoPauseController.Decision.RESUME -> repository.resume(expectedRunId = recordingRunId)
             AutoPauseController.Decision.NONE -> return
         }
-        updateNotification()
+        syncResources(); updateNotification(true)
     }
+
     override fun onProviderDisabled(provider: String) {
         if (provider == LocationManager.GPS_PROVIDER) {
             autoPause.reset()
-            scope.launch { recorderOperation { repository.interruptLocation("GPS 꺼짐 · 기존 기록은 보존됩니다.") } }
+            scope.launch { recorderOperation { repository.interruptLocation("GPS 꺼짐 · 기존 기록은 보존돼요.") }; updateNotification(true) }
         }
     }
     override fun onProviderEnabled(provider: String) {
         if (provider == LocationManager.GPS_PROVIDER) {
             autoPause.reset()
-            scope.launch { recorderOperation { repository.interruptLocation("GPS 신호 기다리는 중") } }
+            scope.launch { recorderOperation { repository.interruptLocation("GPS 신호 기다리는 중") }; updateNotification(true) }
         }
     }
-    private fun notification(): Notification {
-        val state = repository.active.value
-        val open = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val paused = state.phase == RunPhase.PAUSED
-        val pause = PendingIntent.getService(this, 1, Intent(this, javaClass).setAction(if (paused) RESUME else PAUSE), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val storage = repository.persistence.value
-        val title = if (storage.finishing) "런모니 · 종료 기록 저장 확인" else if (storage.issue == RunPersistenceIssue.CHECKPOINT) "런모니 · 기록 저장 확인"
-            else if (state.phase == RunPhase.RECOVERY) "런모니 · 러닝 복구 확인" else if (state.phase == RunPhase.IDLE) "런모니 · 러닝 시작 준비"
-            else if (!paused) "런모니 · 러닝 기록 중" else if (state.pauseReason == PauseReason.AUTOMATIC) "런모니 · 자동 일시정지" else "런모니 · 일시정지"
-        return NotificationCompat.Builder(this, CHANNEL).setSmallIcon(R.drawable.ic_stat_runmoni).setContentTitle(title)
-            .setContentText(String.format(Locale.KOREA, "%.2f km · %d분", state.distanceMeters / 1000, state.activeDurationMillis / 60_000))
-            .setContentIntent(open).setOngoing(true).apply {
-                if (state.phase in setOf(RunPhase.RUNNING, RunPhase.PAUSED) && !storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT)
-                    addAction(0, if (paused) "재개" else "일시정지", pause)
-            }.build()
+
+    private fun notification(): Notification = RunNotifications.build(this, repository.active.value, repository.persistence.value)
+    private fun updateNotification(force: Boolean = false) {
+        if (!foreground || destroyed) return
+        val now = SystemClock.elapsedRealtime()
+        if (!force && now - lastNotificationAt < 1000) return
+        try { getSystemService(NotificationManager::class.java).notify(RunNotifications.ID, notification()); lastNotificationAt = now }
+        catch (_: SecurityException) { /* Notification permission is separate from local recording. */ }
     }
-    private fun updateNotification() {
-        try { (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).notify(1001, notification()) }
-        catch (_: SecurityException) { /* Notification permission does not change local durability. */ }
-    }
+
     private suspend fun recorderOperation(issue: RunPersistenceIssue = RunPersistenceIssue.CHECKPOINT, block: suspend () -> Unit) {
         try { block() }
         catch (cancelled: CancellationException) { throw cancelled }
         catch (_: Exception) { repository.reportOperationFailure(issue) }
     }
-    private fun stopRecordingResources() {
-        ticker?.cancel(); ticker = null
-        manager.removeUpdates(this)
-        if (wakeLock?.isHeld == true) wakeLock?.release()
+    private fun stopLocation() {
+        try { manager.removeUpdates(this) } catch (_: RuntimeException) { /* Cleanup must not prevent a durable finish. */ }
+        locationSubscribed = false
+    }
+    private fun releaseWakeLock() {
+        try { if (wakeLock?.isHeld == true) wakeLock?.release() } catch (_: RuntimeException) { }
+        renewWakeAt = 0L
+    }
+    private fun stopRecordingResources() { ticker?.cancel(); ticker = null; stopLocation(); releaseWakeLock() }
+    private fun stopIdleService() {
+        stopRecordingResources()
+        if (foreground) stopForeground(STOP_FOREGROUND_REMOVE)
+        foreground = false
+        recordingRunId = null
+        getSystemService(NotificationManager::class.java).cancel(RunNotifications.ID)
+        stopSelf()
     }
     private fun stopIfFinished() {
-        if (repository.active.value.phase in setOf(RunPhase.IDLE, RunPhase.RECOVERY) && !repository.persistence.value.finishing) {
-            stopRecordingResources()
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).cancel(1001)
-            stopSelf()
-        } else updateNotification()
+        if (repository.active.value.phase in setOf(RunPhase.IDLE, RunPhase.RECOVERY) && !repository.persistence.value.finishing)
+            stopIdleService()
+        else updateNotification(true)
     }
+
     override fun onDestroy() {
-        manager.removeUpdates(this); ticker?.cancel(); presenceJob?.cancel(); if (wakeLock?.isHeld == true) wakeLock?.release(); tts?.shutdown(); scope.cancel(); super.onDestroy()
+        destroyed = true
+        foreground = false
+        val id = recordingRunId
+        stopRecordingResources(); presenceJob?.cancel(); tts?.shutdown(); commands.close(); scope.cancel()
+        if (!id.isNullOrBlank()) repository.recorderStopped(id, SystemClock.elapsedRealtime())
+        super.onDestroy()
     }
+
+    override fun dump(fd: FileDescriptor, writer: PrintWriter, args: Array<out String>) {
+        val run = repository.active.value
+        writer.println("Runmoni recorder phase=${run.phase} foreground=$foreground locationSubscribed=$locationSubscribed wakeLockHeld=${wakeLock?.isHeld == true}")
+        writer.println("distanceMeters=${run.distanceMeters} activeDurationMillis=${run.activeDurationMillis} pointCount=${run.points.size} speedMetersPerSecond=${run.currentSpeedMetersPerSecond}")
+        writer.println("persistenceIssue=${repository.persistence.value.issue} finishing=${repository.persistence.value.finishing}")
+    }
+
     companion object {
         const val START = "runmoni.START"; const val RECOVER = "runmoni.RECOVER"
         const val PAUSE = "runmoni.PAUSE"; const val RESUME = "runmoni.RESUME"; const val FINISH = "runmoni.FINISH"
         const val RETRY = "runmoni.RETRY"
-        private const val CHANNEL = "runmoni-tracking"
-        fun command(context: Context, action: String) {
-            val intent = Intent(context, RunTrackingService::class.java).setAction(action)
-            if (action == START || action == RECOVER) ContextCompat.startForegroundService(context, intent) else context.startService(intent)
+        fun command(context: Context, action: String, expectedRunId: String? = null): Boolean {
+            val id = expectedRunId ?: (context.applicationContext as RunmoniApplication).runs.active.value.id
+            val intent = Intent(context, RunTrackingService::class.java).setAction(action).putExtra(RunNotifications.RUN_ID, id)
+            return try {
+                if (action == START || action == RECOVER) ContextCompat.startForegroundService(context, intent) else context.startService(intent)
+                true
+            } catch (_: RuntimeException) { false }
         }
     }
 }

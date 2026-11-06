@@ -33,6 +33,8 @@ import java.util.TimeZone
 
 sealed interface UiRequest {
     data class RunPermission(val recover: Boolean) : UiRequest
+    data object ResumeRunPermission : UiRequest
+    data object RunNotificationSettings : UiRequest
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
     data object GoogleSignIn : UiRequest
@@ -67,6 +69,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var selectedVoiceRoom = ""
     private var leaseId: String? = null
     private var pendingExternalLease: JSONObject? = null
+    private var runNavigationSerial = android.os.SystemClock.elapsedRealtimeNanos()
     private var pendingOperations = 0
     private val communityRefresh = Mutex()
     private val wardrobeChanges = Mutex()
@@ -162,15 +165,32 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     fun updateLocationAccess(precisePermissionGranted: Boolean, gpsEnabled: Boolean) {
         mutableState.update { it.copy(locationAccess = LocationAccess(precisePermissionGranted, gpsEnabled)) }
     }
-    fun beginWithPermission(recover: Boolean) { RunTrackingService.command(app, if (recover) RunTrackingService.RECOVER else RunTrackingService.START) }
+    fun updateRunNotificationAccess(enabled: Boolean) {
+        mutableState.update { it.copy(runNotificationAccess = RunNotificationAccess(checked = true, enabled = enabled)) }
+    }
+    fun openRunFromNotification(runId: String, confirmFinish: Boolean) {
+        if (runId.isBlank()) return
+        val request = RunNavigationRequest(++runNavigationSerial, runId, confirmFinish)
+        mutableState.update { it.copy(runNavigationRequest = request) }
+    }
+    override fun consumeRunNavigation(token: Long) {
+        mutableState.update { if (it.runNavigationRequest?.token == token) it.copy(runNavigationRequest = null) else it }
+    }
+    override fun openRunNotificationSettings() { requests.tryEmit(UiRequest.RunNotificationSettings) }
+    private fun commandRun(action: String, expectedRunId: String? = null) {
+        if (!RunTrackingService.command(app, action, expectedRunId)) permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
+    }
+    fun beginWithPermission(recover: Boolean) { commandRun(if (recover) RunTrackingService.RECOVER else RunTrackingService.START) }
+    fun resumeWithPermission() { commandRun(RunTrackingService.RESUME) }
     override fun startRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(false)) }
     override fun recoverRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(true)) }
     override fun openLocationSettings() { requests.tryEmit(UiRequest.LocationSettings) }
     override fun openAppPermissionSettings() { requests.tryEmit(UiRequest.AppPermissionSettings) }
-    override fun pauseRun() { RunTrackingService.command(app, RunTrackingService.PAUSE) }
-    override fun resumeRun() { RunTrackingService.command(app, RunTrackingService.RESUME) }
-    override fun finishRun() { RunTrackingService.command(app, RunTrackingService.FINISH) }
-    override fun retryRunPersistence() { RunTrackingService.command(app, RunTrackingService.RETRY) }
+    override fun pauseRun() { commandRun(RunTrackingService.PAUSE) }
+    override fun resumeRun() { requests.tryEmit(UiRequest.ResumeRunPermission) }
+    override fun finishRun() { commandRun(RunTrackingService.FINISH) }
+    override fun finishRun(expectedRunId: String) { commandRun(RunTrackingService.FINISH, expectedRunId) }
+    override fun retryRunPersistence() { commandRun(RunTrackingService.RETRY) }
     override fun linkCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.LinkCommunityGoogle) }
     override fun restoreCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.RestoreCommunityGoogle) }
     override fun dismissError() { mutableState.update { it.copy(error = null) } }

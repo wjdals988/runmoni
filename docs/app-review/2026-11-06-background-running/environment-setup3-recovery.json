@@ -1,0 +1,8 @@
+{
+  "ownedAvd": "Runmoni_Cloud_29",
+  "bootCompleted": true,
+  "launcherFocused": true,
+  "appReinstalled": false,
+  "onlyObserverPushed": true,
+  "previousHelperFailure": "Stale SystemUI-dialog window observation differed from a fresh accessibility tree; guard stopped before any dialog action."
+}

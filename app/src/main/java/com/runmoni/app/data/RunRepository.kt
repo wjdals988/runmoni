@@ -34,6 +34,8 @@ class RunRepository internal constructor(
     private val pendingCredits = linkedMapOf<String, Int>()
     private var creditScanPending = true
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val recorderCleanupLock = Any()
+    private var recorderCleanup: Job? = null
     private val initialization = CompletableDeferred<Unit>()
     val active = MutableStateFlow(ActiveRun())
     private val persistenceState = MutableStateFlow(RunPersistenceState())
@@ -77,11 +79,17 @@ class RunRepository internal constructor(
     }
 
     suspend fun begin(recover: Boolean = false) {
+        awaitRecorderCleanup()
         initialization.await()
         mutex.withLock {
             check(persistenceState.value.initialized) { "기기 기록을 다시 확인한 뒤 시작해 주세요." }
             check(pendingFinish == null) { "종료 기록을 먼저 저장해 주세요." }
             if (active.value.phase == RunPhase.RUNNING || active.value.phase == RunPhase.PAUSED) return@withLock
+            if (recover && stored != null && active.value.phase == RunPhase.RECOVERY && !checkpoint(force = true)) {
+                active.update { it.copy(phase = RunPhase.RECOVERY, pauseReason = null, accuracyMeters = null,
+                    currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null) }
+                throw IllegalStateException("기기 기록을 먼저 저장한 뒤 이어서 달려 주세요.")
+            }
             val unfinished = try { dao.unfinished() }
             catch (cancelled: CancellationException) {
                 persistenceState.update { it.copy(initialized = false, saving = false, issue = RunPersistenceIssue.RECOVERY) }
@@ -92,6 +100,7 @@ class RunRepository internal constructor(
                 throw IllegalStateException("기기 기록을 다시 확인한 뒤 시작해 주세요.", failure)
             }
             if (!recover && unfinished != null) throw IllegalStateException("이전 기록을 복구하거나 종료한 뒤 시작해 주세요.")
+            if (recover && unfinished == null) throw IllegalStateException("복구할 러닝 기록이 없어요. 새 러닝을 시작해 주세요.")
             val previous = unfinished.takeIf { recover }
             engine = RunEngine()
             val row = previous?.copy(interrupted = true) ?: StoredRun(UUID.randomUUID().toString(), System.currentTimeMillis())
@@ -173,40 +182,52 @@ class RunRepository internal constructor(
         checkpoint()
     }
 
-    suspend fun pause(reason: PauseReason = PauseReason.MANUAL) = mutex.withLock {
-        if (active.value.phase == RunPhase.PAUSED && reason == PauseReason.MANUAL) {
-            active.update { it.copy(pauseReason = reason) }
+    suspend fun pause(reason: PauseReason = PauseReason.MANUAL, expectedRunId: String? = null) {
+        awaitRecorderCleanup()
+        mutex.withLock {
+            if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
+            if (active.value.phase == RunPhase.PAUSED && reason == PauseReason.MANUAL) {
+                active.update { it.copy(pauseReason = reason) }
+            }
+            if (active.value.phase != RunPhase.RUNNING) return@withLock
+            engine.tick(SystemClock.elapsedRealtime(), true)
+            engine.breakSegment()
+            active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = reason, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
+            publish(); checkpoint()
         }
-        if (active.value.phase != RunPhase.RUNNING) return@withLock
-        engine.tick(SystemClock.elapsedRealtime(), true)
-        engine.breakSegment()
-        active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = reason, currentPaceSecondsPerKm = null)
-        publish(); checkpoint()
     }
-    suspend fun resume() = mutex.withLock {
-        if (active.value.phase != RunPhase.PAUSED) return@withLock
-        if (pendingFinish != null || !checkpoint(force = true)) return@withLock
-        engine.tick(SystemClock.elapsedRealtime(), false)
-        engine.breakSegment()
-        lastGpsSignalElapsedMillis = null
-        gpsSignalStale = true
-        active.value = active.value.copy(phase = RunPhase.RUNNING, pauseReason = null, accuracyMeters = null, gpsStatus = "GPS 재수신 중")
-        publish()
-    }
-    suspend fun finish() = mutex.withLock {
-        if (!persistenceState.value.initialized) return@withLock
-        if (pendingFinish != null) { finishPending(); return@withLock }
-        val row = stored ?: return@withLock
-        if (active.value.phase != RunPhase.RECOVERY) {
-            engine.tick(SystemClock.elapsedRealtime(), active.value.phase == RunPhase.RUNNING)
+    suspend fun resume(expectedRunId: String? = null) {
+        awaitRecorderCleanup()
+        mutex.withLock {
+            if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
+            if (active.value.phase != RunPhase.PAUSED) return@withLock
+            if (pendingFinish != null || !checkpoint(force = true)) return@withLock
+            engine.tick(SystemClock.elapsedRealtime(), false)
+            engine.breakSegment()
+            lastGpsSignalElapsedMillis = null
+            gpsSignalStale = true
+            active.value = active.value.copy(phase = RunPhase.RUNNING, pauseReason = null, accuracyMeters = null, gpsStatus = "GPS 재수신 중", currentSpeedMetersPerSecond = null)
             publish()
         }
-        val final = (stored ?: row).copy(finishedAtMillis = System.currentTimeMillis(), mileage = floor((stored ?: row).distanceMeters / 10).toInt())
-        // Freeze time, route and reward on the first finish attempt. A retry must not add time.
-        pendingFinish = final
-        active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null)
-        persistenceState.update { it.copy(finishing = true) }
-        finishPending()
+    }
+    suspend fun finish(expectedRunId: String? = null) {
+        awaitRecorderCleanup()
+        mutex.withLock {
+            if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
+            if (!persistenceState.value.initialized) return@withLock
+            if (pendingFinish != null) { finishPending(); return@withLock }
+            val row = stored ?: return@withLock
+            if (active.value.phase != RunPhase.RECOVERY) {
+                engine.tick(SystemClock.elapsedRealtime(), active.value.phase == RunPhase.RUNNING)
+                publish()
+            }
+            val final = (stored ?: row).copy(finishedAtMillis = System.currentTimeMillis(), mileage = floor((stored ?: row).distanceMeters / 10).toInt())
+            // Freeze time, route and reward on the first finish attempt. A retry must not add time.
+            pendingFinish = final
+            active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
+            persistenceState.update { it.copy(finishing = true) }
+            finishPending()
+        }
     }
 
     private suspend fun finishPending() {
@@ -234,14 +255,44 @@ class RunRepository internal constructor(
     }
 
     /** Retry only the unfinished local operation; cloud backup is a separate action. */
-    suspend fun retryPersistence() {
-        if (persistenceState.value.historyUnavailable) historyRetry.trySend(Unit)
+    suspend fun retryPersistence(expectedRunId: String? = null) {
+        awaitRecorderCleanup()
         initialization.await()
         mutex.withLock {
+            if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
+            if (persistenceState.value.historyUnavailable) historyRetry.trySend(Unit)
             if (!persistenceState.value.initialized && !loadRecovery()) return@withLock
             if (pendingFinish != null) { finishPending(); return@withLock }
             if (stored != null && !checkpoint(force = true)) return@withLock
             retryCredits()
+        }
+    }
+
+    /** Preserve this process's queued points when its recording service unexpectedly stops. */
+    fun recorderStopped(expectedRunId: String, stoppedElapsedMillis: Long): Job = synchronized(recorderCleanupLock) {
+        val previous = recorderCleanup
+        scope.launch(start = CoroutineStart.LAZY) {
+            previous?.join()
+            initialization.await()
+            mutex.withLock {
+                if (active.value.id != expectedRunId || pendingFinish != null ||
+                    active.value.phase !in setOf(RunPhase.RUNNING, RunPhase.PAUSED)) return@withLock
+                engine.tick(stoppedElapsedMillis, active.value.phase == RunPhase.RUNNING)
+                stored = stored?.copy(interrupted = true)
+                publish()
+                checkpoint(force = true)
+                gpsStatus("러닝 기록이 중단됐어요 · 공백 구간을 제외하고 이어갈 수 있어요")
+                active.update { it.copy(phase = RunPhase.RECOVERY, pauseReason = null,
+                    currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null) }
+            }
+        }.also { cleanup -> recorderCleanup = cleanup; cleanup.start() }
+    }
+
+    private suspend fun awaitRecorderCleanup() {
+        while (true) {
+            val cleanup = synchronized(recorderCleanupLock) { recorderCleanup } ?: return
+            cleanup.join()
+            if (synchronized(recorderCleanupLock) { recorderCleanup === cleanup }) return
         }
     }
 
@@ -267,7 +318,7 @@ class RunRepository internal constructor(
 
     private fun checkpointFailed() {
         engine.breakSegment()
-        active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null)
+        active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
         publish()
         persistenceState.update { it.copy(issue = RunPersistenceIssue.CHECKPOINT, saving = false, unsavedPointCount = checkpoints.unsavedPointCount) }
     }
@@ -313,7 +364,7 @@ class RunRepository internal constructor(
 
     fun gpsStatus(message: String) {
         gpsSignalStale = true
-        active.update { it.copy(gpsStatus = message, accuracyMeters = null, currentPaceSecondsPerKm = null) }
+        active.update { it.copy(gpsStatus = message, accuracyMeters = null, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null) }
     }
     suspend fun interruptLocation(message: String) = mutex.withLock {
         if (pendingFinish != null) return@withLock
@@ -332,9 +383,12 @@ class RunRepository internal constructor(
     private fun publish() {
         val row = stored ?: return
         val elapsed = (System.currentTimeMillis() - row.startedAtMillis).coerceAtLeast(0)
+        val liveFix = active.value.phase == RunPhase.RUNNING && !gpsSignalStale && lastGpsSignalElapsedMillis != null &&
+            !GpsSignalFreshness.isStale(lastGpsSignalElapsedMillis, SystemClock.elapsedRealtime())
         stored = row.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed, segment = engine.segment, splitsJson = JSONArray().apply { engine.splits.forEach { put(JSONObject().put("km", it.kilometer).put("duration", it.durationMillis)) } }.toString())
         active.value = active.value.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed,
-            currentPaceSecondsPerKm = if (active.value.phase == RunPhase.RUNNING && !gpsSignalStale) engine.currentPaceSecondsPerKm() else null)
+            currentPaceSecondsPerKm = if (liveFix) engine.currentPaceSecondsPerKm() else null,
+            currentSpeedMetersPerSecond = if (liveFix) engine.currentSpeedMetersPerSecond() else null)
     }
     private suspend fun toRecord(row: StoredRun) = recordWithPoints(row, dao.points(row.id).map { it.toDomain() })
     private fun recordWithPoints(row: StoredRun, points: List<TrackPoint>) = RunRecord(row.id, row.startedAtMillis, row.finishedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points, parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage)
