@@ -1,6 +1,8 @@
 package com.runmoni.app.domain
 
 interface AppActions {
+    fun startEntryGoogleSignIn() {}
+    fun continueAsGuest() {}
     fun startRun()
     fun pauseRun()
     fun resumeRun()

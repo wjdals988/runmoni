@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AppEntryPersistenceTest:....
+
+Time: 0.896
+
+OK (4 tests)
+
+

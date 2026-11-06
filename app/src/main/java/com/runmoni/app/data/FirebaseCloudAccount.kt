@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.MemoryCacheSettings
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
+import com.runmoni.app.domain.GoogleSignInOutcome
 import com.runmoni.app.BuildConfig
 import com.runmoni.app.domain.CloudAccountState
 import com.runmoni.app.domain.CloudRunSummary
@@ -138,10 +139,13 @@ class FirebaseCloudAccount(context: Context) {
         }
     }
 
-    suspend fun signIn(context: Context) {
-        val firebaseAuth = auth ?: return
+    suspend fun signIn(context: Context): GoogleSignInOutcome {
+        val firebaseAuth = auth ?: return GoogleSignInOutcome.Failure("이 빌드에서는 Google 로그인을 사용할 수 없어요. 게스트로 이용할 수 있어요.")
         val ticket = synchronized(lock) {
-            if (closed || !mutableState.value.configured) return
+            if (closed || !mutableState.value.configured)
+                return GoogleSignInOutcome.Failure("Google 로그인 설정을 확인하지 못했어요. 게스트로 이용할 수 있어요.")
+            if (activeLogin != null)
+                return GoogleSignInOutcome.Failure("다른 Google 계정 선택이 진행 중이에요. 먼저 연 선택을 마쳐 주세요.")
             firstAuthObservation = false
             sessionEpoch++
             operationSequence++
@@ -153,17 +157,19 @@ class FirebaseCloudAccount(context: Context) {
         var stage = "ACCOUNT_PICKER"
         try {
             // Explicit button flow also supports adding an account on an empty device.
-            if (!isCurrentLogin(ticket)) return
+            if (!isCurrentLogin(ticket)) return GoogleSignInOutcome.Failure("Google 로그인 상태가 바뀌었어요. 다시 시도해 주세요.")
             // The account picker is interactive; only the network Task has a 15-second timeout.
             val credential = pickGoogleCredential(context) { stage = "GOOGLE_TOKEN" }
-            if (!isCurrentLogin(ticket)) return
+            if (!isCurrentLogin(ticket)) return GoogleSignInOutcome.Failure("Google 로그인 상태가 바뀌었어요. 다시 시도해 주세요.")
             stage = "FIREBASE_AUTH"
             val user = withTimeout(NETWORK_TIMEOUT_MILLIS) {
                 firebaseAuth.signInWithCredential(credential).await().user
             } ?: error("Missing authenticated account")
-            synchronized(lock) {
-                if (!isCurrentLoginLocked(ticket)) return
-                require(firebaseAuth.currentUser?.uid == user.uid)
+            return synchronized(lock) {
+                if (!isCurrentLoginLocked(ticket)) return GoogleSignInOutcome.Failure("Google 로그인 상태가 바뀌었어요. 다시 시도해 주세요.")
+                require(user.uid.isNotBlank() && !user.isAnonymous &&
+                    user.providerData.any { it.providerId == com.google.firebase.auth.GoogleAuthProvider.PROVIDER_ID } &&
+                    firebaseAuth.currentUser?.uid == user.uid)
                 activeLogin = null
                 acceptedUid = user.uid
                 sessionEpoch++
@@ -172,11 +178,12 @@ class FirebaseCloudAccount(context: Context) {
                     interactiveSignInAt = System.currentTimeMillis(),
                     status = "Google 계정 연결됨 · 요약 백업과 조회는 수동으로 실행합니다",
                 )
+                GoogleSignInOutcome.Success
             }
         } catch (_: GetCredentialCancellationException) {
-            failLogin(ticket, "Google 계정 선택을 취소했습니다")
+            return failedSignIn(ticket, "Google 계정 선택을 취소했어요")
         } catch (_: TimeoutCancellationException) {
-            failLogin(ticket, "Google 계정 연결 응답 시간이 초과되었습니다 · 다시 시도해 주세요")
+            return failedSignIn(ticket, "Google 로그인 응답이 늦어지고 있어요. 다시 시도하거나 게스트로 이용해 주세요.")
         } catch (cancelled: CancellationException) {
             failLogin(ticket, "Google 계정 연결을 취소했습니다")
             throw cancelled
@@ -203,8 +210,13 @@ class FirebaseCloudAccount(context: Context) {
             }
             // Never log a Throwable, provider payload, email, UID, or token.
             Log.w("RunmoniCloud", "sign_in_failed stage=$stage issue=$issue")
-            failLogin(ticket, cloudSignInFailureMessage(issue))
+            return failedSignIn(ticket, cloudSignInFailureMessage(issue))
         }
+    }
+
+    private fun failedSignIn(ticket: Ticket, message: String): GoogleSignInOutcome {
+        failLogin(ticket, message)
+        return GoogleSignInOutcome.Failure(message)
     }
 
     private fun isCurrentLoginLocked(ticket: Ticket) = !closed && activeLogin == ticket && sessionEpoch == ticket.epoch

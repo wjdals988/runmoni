@@ -142,6 +142,7 @@ data class AppState(
     val communityBackend: CommunityBackend = CommunityBackend.HTTP,
     val chatFromCache: Boolean = true,
     val chatCanNotice: Boolean = false,
+    val entry: AppEntryState = AppEntryState(),
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)

@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.6-dev", "2026-11-06", "첫 로그인 선택 · 실기기 검증 전", listOf(
+        "스플래시 다음에 Google 로그인과 게스트 이용을 선택할 수 있어요.",
+        "한 번 선택하면 다음 실행부터 앱으로 바로 들어가요. 기존 기록과 꾸미기는 유지해요.",
+        "Google 로그인 후에도 요약 백업은 직접 실행하며 크루 프로필 연결은 별도로 선택해요.",
+    )),
     AppVersionEntry("0.3.5-dev", "2026-11-05", "시작 화면·화면 문구 정리 · 실기기 검증 전", listOf(
         "앱을 열 때 런처와 같은 로고를 짧게 표시합니다.",
         "홈·옷장·설정의 반복 안내를 줄이고 필요한 행동을 먼저 보여줍니다.",

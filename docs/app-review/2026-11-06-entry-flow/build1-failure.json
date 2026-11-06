@@ -1,0 +1,8 @@
+{
+  "buildSucceeded": false,
+  "stage": "compileDebugAndroidTestKotlin",
+  "failure": "Unresolved top-level import androidx.compose.ui.test.assertDoesNotExist; this assertion is a node member.",
+  "correction": "Removed only the incorrect test import. Product sources unchanged between builds.",
+  "androidInstrumentationRan": false,
+  "finalBuild": "binary-build2.json"
+}
