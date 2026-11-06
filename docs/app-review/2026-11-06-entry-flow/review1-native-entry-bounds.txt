@@ -1,0 +1,3 @@
+entry_google topPx=327.0 bottomPx=429.0 safeTopPx=36.0 safeBottomPx=782.0 navigationTopPx=782 bottomInsetPx=72
+entry_guest topPx=447.0 bottomPx=549.0 safeTopPx=36.0 safeBottomPx=782.0 navigationTopPx=782 bottomInsetPx=72
+entry_scope topPx=550.0 bottomPx=782.0 safeTopPx=36.0 safeBottomPx=782.0 navigationTopPx=782 bottomInsetPx=72

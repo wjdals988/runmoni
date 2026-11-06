@@ -24,7 +24,7 @@ import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
-import com.runmoni.app.ui.RunmoniApp
+import com.runmoni.app.ui.RunmoniRoot
 import com.runmoni.app.ui.rememberAppUpdates
 import kotlinx.coroutines.launch
 
@@ -70,10 +70,11 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
         enableEdgeToEdge()
+        model.onEntryHostCreated()
         setContent {
             val state by model.state.collectAsState()
             val updates = rememberAppUpdates()
-            RunmoniApp(state, model, updates.state, onCheckUpdates = { updates.check(force = true) })
+            RunmoniRoot(state, model, updates.state, onCheckUpdates = { updates.check(force = true) })
         }
         lifecycleScope.launch {
             model.requests.collect { request ->
@@ -90,6 +91,7 @@ class MainActivity : ComponentActivity() {
                     }
                     UiRequest.PickMusic -> musicFile.launch(arrayOf("audio/*"))
                     UiRequest.GoogleSignIn -> lifecycleScope.launch { model.googleSignIn(this@MainActivity) }
+                    is UiRequest.EntryGoogleSignIn -> lifecycleScope.launch { model.googleSignInForEntry(this@MainActivity, request.token) }
                     UiRequest.LinkCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity) }
                     UiRequest.RestoreCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity, restore = true) }
                     UiRequest.LocationSettings -> openSettings(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))

@@ -1,0 +1,177 @@
+{
+  "installedReference": "review1-installed.json",
+  "version": "0.3.6-dev",
+  "versionCode": 18,
+  "startedAtUtc": "2026-11-06T02:55:37.072876+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build2.json",
+  "groups": [
+    {
+      "name": "entry-storage",
+      "expected": 4,
+      "passed": true,
+      "actual": 4,
+      "output": "review1-entry-storage.txt",
+      "elapsedSeconds": 15.96
+    },
+    {
+      "name": "entry-ui",
+      "expected": 4,
+      "passed": true,
+      "actual": 4,
+      "output": "review1-entry-ui.txt",
+      "elapsedSeconds": 61.02
+    },
+    {
+      "name": "startup",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review1-startup.txt",
+      "elapsedSeconds": 60.42
+    },
+    {
+      "name": "settings-update",
+      "expected": 6,
+      "passed": true,
+      "actual": 6,
+      "output": "review1-settings-update.txt",
+      "elapsedSeconds": 117.71
+    },
+    {
+      "name": "native-large",
+      "expected": 2,
+      "passed": true,
+      "actual": 2,
+      "output": "review1-native-large.txt",
+      "elapsedSeconds": 50.17
+    }
+  ],
+  "captures": [
+    {
+      "file": "review1-entry.png",
+      "sha256": "3d436da0a80344e746612c0594dd1978348241ba26d3a5cda4c56288d6209228",
+      "bytes": 28417,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-home.png",
+      "sha256": "d4857a8e759b448825661fb705ae99a03f39e0097f9c3656017af629182fc811",
+      "bytes": 40619,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-profile.png",
+      "sha256": "0f52bf51233183d0dcd4a792634ee9557bd134db0c66f8d91f752e7253641d5b",
+      "bytes": 42221,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-settings.png",
+      "sha256": "7f66f631b3f98bb73163eff0da80e8f6012ac79ab5b8247d834f818b84b41dbc",
+      "bytes": 54035,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-app-info.png",
+      "sha256": "b7248a79327f51eec18285310a3d4d7418902c72c5b50b15b8c70cc6bd63c309",
+      "bytes": 47312,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-resumed-profile.png",
+      "sha256": "37eb4174cadae75d1d356131e800970700312dfed53e0b6639f2aed75e74fae5",
+      "bytes": 42417,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    },
+    {
+      "file": "review1-relaunched-home.png",
+      "sha256": "8d048ed0ea32c0c38030c74b6f697a6ed3c437d00afebac4c732941da841179a",
+      "bytes": 40757,
+      "width": 480,
+      "height": 854,
+      "activity": "com.runmoni.app/.MainActivity",
+      "mainWindowFocused": true,
+      "kind": "real MainActivity UI, offline review profile"
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 4,
+  "passed": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "nativeUiFixtures": [
+    {
+      "file": "review1-native-entry-fixture.png",
+      "sha256": "4a30a054bf7c1c62a81ff2d8cef062fad2b3a0161947131eb7fc3e77af03915f",
+      "kind": "ComponentActivity UI fixture; not MainActivity or actual Google authentication"
+    },
+    {
+      "file": "review1-native-about-fixture.png",
+      "sha256": "523c81950f8c6e24435c497ce8c64e9be1581f7708b178be0eb8ddb0fb182097",
+      "kind": "ComponentActivity UI fixture; not MainActivity or actual Google authentication"
+    }
+  ],
+  "launchSamples": [
+    {
+      "file": "review1-launch-sample-0.png",
+      "sha256": "cb7540288e7519c14ebdae6d771a716fbc3e731f50d72242d79bfcdfffa2a714",
+      "hostCaptureOffsetMs": 5527,
+      "centerLauncherGreenPixels": 0,
+      "surroundingCanvasMatches": false,
+      "splashCandidate": false
+    },
+    {
+      "file": "review1-launch-sample-1.png",
+      "sha256": "ae45c2260ddd78ce84ea32c9a535462a9b09a47df08a9174d20ffd442d9ac213",
+      "hostCaptureOffsetMs": 8591,
+      "centerLauncherGreenPixels": 7990,
+      "surroundingCanvasMatches": true,
+      "splashCandidate": true
+    }
+  ],
+  "launchSampleNote": "Raw Android captures; host offsets include ADB overhead and are not total startup performance. Candidate requires visual inspection. API31 exit120ms is configuration, not measured here.",
+  "hotResume": {
+    "samePid": true,
+    "destinationPreserved": true,
+    "mainFocused": true
+  },
+  "guestPersistence": {
+    "choiceStored": true,
+    "profilePreserved": true,
+    "relaunchBypassedEntry": true,
+    "newProcess": true
+  },
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "driverSha256": "34fea97c469e6edd335762c376b9e27329560cb684236a80755420de8fd238fe",
+  "finishedAtUtc": "2026-11-06T03:06:31.260315+00:00"
+}

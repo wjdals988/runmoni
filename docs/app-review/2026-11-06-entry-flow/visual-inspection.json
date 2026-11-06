@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "reviewReference": "review1.json",
+  "driverReference": "review1-executed-driver.py",
+  "visualInspectionPassed": true,
+  "nativeSplashVisualVerified": true,
+  "splashFile": "review1-launch-sample-1.png",
+  "userVisualApproval": false,
+  "rootViewedMainCaptures": [
+    "review1-entry.png",
+    "review1-home.png",
+    "review1-profile.png",
+    "review1-settings.png",
+    "review1-app-info.png",
+    "review1-resumed-profile.png",
+    "review1-relaunched-home.png"
+  ],
+  "peerVisualReview": "consumer_copy_ui inspected real entry/OSsplash + native320-font2 callback fixture, no concrete blocker; Google auth not performed"
+}

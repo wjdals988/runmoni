@@ -36,6 +36,7 @@ sealed interface UiRequest {
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
     data object GoogleSignIn : UiRequest
+    data class EntryGoogleSignIn(val token: Long) : UiRequest
     data object LinkCommunityGoogle : UiRequest
     data object RestoreCommunityGoogle : UiRequest
     data object LocationSettings : UiRequest
@@ -48,6 +49,13 @@ sealed interface UiRequest {
 class AppViewModel(application: Application) : AndroidViewModel(application), AppActions {
     private val app = application as RunmoniApplication
     private val preferences = app.getSharedPreferences("runmoni", Context.MODE_PRIVATE)
+    // Snapshot the local entry choice before opening Room or creating new local state.
+    private val entryStore = AppEntryStore(app)
+    private val entry = AppEntryController(entryStore.initialChoice(),
+        persistChoice = { choice -> withContext(Dispatchers.IO) { entryStore.save(choice) } },
+        onRememberFailure = { permissionDenied("선택을 기기에 저장하지 못했어요. 이번에는 계속 이용할 수 있지만 다음 실행에서 다시 선택할 수 있어요.") })
+    private var entryGoogleJob: Job? = null
+    private var pendingEntryGoogleToken: Long? = null
     private val session = SecureSession(app)
     private val wallet = LocalWallet(app)
     private val api = PilotClient(preferences.getString("apiUrl", BuildConfig.PILOT_API_URL)!!, session.read())
@@ -64,11 +72,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val wardrobeChanges = Mutex()
     private var focusedCrewForParties: String? = null
     private var connectionCheckGeneration = 0L
-    private val mutableState = MutableStateFlow(AppState(profile = readLocalProfile(), runPersistence = app.runs.persistence.value, apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
+    private val mutableState = MutableStateFlow(AppState(entry = entry.state.value, profile = readLocalProfile(), runPersistence = app.runs.persistence.value, apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
     init {
+        viewModelScope.launch { entry.state.collect { selection -> mutableState.update { it.copy(entry = selection) } } }
         if (firebaseMode) RunSyncWorker.cancel(app)
         val reported = preferences.getStringSet("phoneChecks.${BuildConfig.VERSION_CODE}", emptySet()).orEmpty()
         mutableState.update { it.copy(deviceChecks = DeviceChecks(selfReported = PhoneCheck.entries.filter { check -> check.name in reported }.toSet())) }
@@ -77,7 +86,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             if (leaseId == oldLeaseId) leaseId = null
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
-        viewModelScope.launch { app.runs.active.collect { active -> mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) } } }
+        viewModelScope.launch { app.runs.active.collect { active ->
+            mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) }
+            if (active.phase != RunPhase.IDLE) preserveEntryForExistingUse()
+        } }
         viewModelScope.launch { app.runs.persistence.collect { persistence ->
             val resolvedCredit = state.value.runPersistence.creditPending && !persistence.creditPending
             val before = state.value.profile
@@ -87,8 +99,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                     previous.profile.mergeWalletMileage(before, local) else previous.profile) }
         } }
         viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
-        viewModelScope.launch { app.cloud.state.collect { cloud -> mutableState.update { it.copy(cloud = cloud) } } }
+        viewModelScope.launch { app.cloud.state.collect { cloud ->
+            entry.setGoogleConfigured(cloud.configured)
+            mutableState.update { it.copy(cloud = cloud) }
+        } }
         viewModelScope.launch { app.runs.records.collect { records ->
+            if (records.isNotEmpty()) preserveEntryForExistingUse()
             val before = state.value.profile
             val local = withContext(Dispatchers.IO) { wallet.read() }
             // New clothes or a nickname must not discard a completed credit read.
@@ -405,6 +421,54 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             current.cloud.configured, current.cloud.uid.isNotBlank(), current.cloud.interactiveSignInAt,
             current.cloud.sessionCheckedAt, current.locationAccess.precisePermissionGranted == true, current.locationAccess.gpsEnabled == true, current.communityBackend,
         )))
+    }
+    override fun startEntryGoogleSignIn() {
+        val token = entry.beginGoogle() ?: return
+        pendingEntryGoogleToken = token
+        if (requests.subscriptionCount.value == 0 || !requests.tryEmit(UiRequest.EntryGoogleSignIn(token))) {
+            pendingEntryGoogleToken = null
+            viewModelScope.launch { entry.finishGoogle(token, GoogleSignInOutcome.Failure("로그인 화면을 준비하지 못했어요. 다시 눌러 주세요.")) }
+        }
+    }
+    override fun continueAsGuest() {
+        if (!entry.state.value.requiresChoice || entry.state.value.savingChoice) return
+        entryGoogleJob?.cancel()
+        entryGoogleJob = null
+        pendingEntryGoogleToken = null
+        viewModelScope.launch { entry.enterGuest() }
+    }
+    private suspend fun preserveEntryForExistingUse() {
+        if (!entry.state.value.requiresChoice || entry.state.value.savingChoice) return
+        entryGoogleJob?.cancel()
+        entryGoogleJob = null
+        pendingEntryGoogleToken = null
+        entry.preserveExistingUse()
+    }
+    fun onEntryHostCreated() {
+        // A request queued for an Activity destroyed during recreation must not
+        // leave the new screen permanently busy without an account picker.
+        val token = pendingEntryGoogleToken ?: return
+        if (entryGoogleJob?.isActive != true) {
+            entry.cancelGoogle(token)
+            pendingEntryGoogleToken = null
+        }
+    }
+    suspend fun googleSignInForEntry(context: Context, token: Long) {
+        if (!entry.isCurrentGoogle(token)) return
+        val job = currentCoroutineContext().job
+        entryGoogleJob = job
+        try {
+            val result = app.cloud.signIn(context)
+            entry.finishGoogle(token, result)
+        } catch (cancelled: CancellationException) {
+            entry.cancelGoogle(token)
+            throw cancelled
+        } catch (_: Exception) {
+            entry.finishGoogle(token, GoogleSignInOutcome.Failure("Google 로그인을 마치지 못했어요. 다시 시도하거나 게스트로 이용해 주세요."))
+        } finally {
+            if (entryGoogleJob === job) entryGoogleJob = null
+            if (pendingEntryGoogleToken == token) pendingEntryGoogleToken = null
+        }
     }
     suspend fun googleSignIn(context: Context) {
         if (state.value.communityGoogleLink.busy) return

@@ -1,0 +1,1 @@
+Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10008000 cmp=com.runmoni.app/.MainActivity }
