@@ -1,0 +1,12 @@
+{
+  "recordedAtUtc": "2026-11-06T17:59:44.629470+00:00",
+  "failedAt": "Owned AVD initial live accessibility dump before launcher confirmation",
+  "raw": "installation3-boot-attempt1-failure.txt",
+  "rawSha256": "e717fcc233e81252bb9cd5ab476542237f412815cf05530ae4ff64a477df7694",
+  "apkInstallAttempted": false,
+  "preinstallAppXmlBackupCreated": false,
+  "appDataResetCommandIssued": false,
+  "productBuildFailureClaimed": false,
+  "causeConfirmed": false,
+  "source": "boot-install3.py"
+}

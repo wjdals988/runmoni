@@ -1,0 +1,5 @@
+{
+  "reason": "Root source audit after launch found the intended resume-assertion replacement had not matched. Requested SIGINT completed normal finally cleanup; application code unchanged.",
+  "signal": "SIGINT to this single owned review driver",
+  "productFailureClaimed": false
+}

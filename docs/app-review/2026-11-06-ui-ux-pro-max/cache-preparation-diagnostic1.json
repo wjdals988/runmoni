@@ -1,0 +1,18 @@
+{
+  "scope": "Read-only cache absence guard; no product instrumentation methods executed by this probe",
+  "probes": [
+    {
+      "name": "direct-run-as-test",
+      "returnCode": 1,
+      "stdout": "",
+      "stderr": "run-as: exec failed for test: Permission denied\n"
+    },
+    {
+      "name": "app-shell-builtin-test",
+      "returnCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "applicationChanged": false
+}

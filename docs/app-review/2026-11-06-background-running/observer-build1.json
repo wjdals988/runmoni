@@ -1,0 +1,12 @@
+{
+  "tool": "Legacy platform UiAutomator shell observer",
+  "source": "observer1-LiveDump.java",
+  "sourceSha256": "29b98f645c43483772b4d2017263444d905d7d26cfb04abc2037e0abd6cbaa5f",
+  "jarSha256": "4062ebf568528fdfa4cccdb4b89946b9edc6b52c1a8d0d776739072daa7de1e7",
+  "jarBytes": 2172,
+  "builtOfflineFromCachedSdk": true,
+  "packagedInProductApk": false,
+  "executed": false,
+  "reason": "Observe live updates without waiting for an idle interval; no product cadence changes.",
+  "originalSourceName": "LiveDump.java"
+}

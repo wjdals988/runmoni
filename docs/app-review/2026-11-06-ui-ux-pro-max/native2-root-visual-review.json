@@ -1,0 +1,13 @@
+{
+  "reviewedAtUtc": "2026-11-06T19:27:55.315306+00:00",
+  "records": [
+    {
+      "file": "native2-closet-hierarchy-native-320-font2-fixture.png",
+      "sha256": "6fe8df2fe78de7e9e375b61905a54e06d41e40a172966bfd83d89d95e346103b",
+      "viewImageToolActuallyUsed": true
+    }
+  ],
+  "observation": "Female selected state, horizontal top category, truthful retained-legacy warning and selected mint top/checkmark are visible. This is a fake-callback Compose target; real saved wallet/GPS/auth not inferred.",
+  "scope": "Corrected native hierarchy fixture only, not MainActivity/whole-app approval",
+  "userVisualApproval": false
+}

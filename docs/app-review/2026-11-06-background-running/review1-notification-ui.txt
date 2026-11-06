@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunNotificationUiTest:......
+
+Time: 123.091
+
+OK (6 tests)
+
+

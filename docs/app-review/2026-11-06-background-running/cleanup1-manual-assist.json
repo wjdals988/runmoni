@@ -1,0 +1,11 @@
+{
+  "action": "One actual UI swipe within the owned review record dialog body",
+  "coordinates": [
+    240,
+    550,
+    240,
+    300
+  ],
+  "reason": "Original helper swipe began on the fixed dialog footer rather than its scrollable content.",
+  "scope": "Only the known review record; no direct DB edits or original user record deletion."
+}

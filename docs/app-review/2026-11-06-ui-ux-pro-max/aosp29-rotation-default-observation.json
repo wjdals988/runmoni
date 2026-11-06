@@ -1,0 +1,8 @@
+{
+  "observedAtUtc": "2026-11-06T18:30:23.495890+00:00",
+  "reference": "https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/android-10.0.0_r1/services/core/java/com/android/server/wm/WindowManagerShellCommand.java",
+  "sourceSha256": "ed00f0db57e0b857c0d68b1e309e2df2aab122124f885bce97f893643494a4bf",
+  "exactPublicSourceExcerpt": "private int runSetFixToUserRotation(PrintWriter pw) {\n        int displayId = Display.DEFAULT_DISPLAY;\n        String arg = getNextArgRequired();\n        if (\"-d\".equals(arg)) {\n            displayId = Integer.parseInt(getNextArgRequired());\n            arg = getNextArgRequired();\n        }\n\n        final @DisplayRotation.FixedToUserRotation  int fixedToUserRotation;\n        switch (arg) {\n            case \"enabled\":\n                fixedToUserRotation = DisplayRotation.FIXED_TO_USER_ROTATION_ENABLED;\n                break;\n            case \"disabled\":\n                fixedToUserRotation = DisplayRotation.FIXED_TO_USER_ROTATION_DISABLED;\n                break;\n            case \"default\":\n                fixedToUserRotation = DisplayRotation.FIXED_TO_USER_ROTATION_DISABLED;\n                break;\n            default:\n                getErrPrintWriter().println(\"Error: expecting enabled, disabled or default, but we \"\n                        + \"get \" + arg);\n                return -1;\n        }\n\n        mInternal.setRotateForApp(displayId, fixedToUserRotation);\n        return 0;\n    }\n\n",
+  "actualOwnedAvdEvidence": "landscape4.json",
+  "limitation": "Public AOSP r1 source corroborates the observed API29 command behavior; exact emulator framework build identity is not inferred from this source tag."
+}

@@ -1,0 +1,233 @@
+{
+  "condition": "smallLandscape",
+  "passed": true,
+  "visualInspectionPassed": false,
+  "captureKeys": [
+    "landscape"
+  ],
+  "steps": [
+    {
+      "configuration": {
+        "widthPx": 854,
+        "heightPx": 480,
+        "widthDp": 569.3333333333334,
+        "heightDp": 320.0,
+        "fontScale": 2,
+        "densityDpi": 240,
+        "nativeConfiguration": true,
+        "osStableFrame": {
+          "width": 854,
+          "height": 480,
+          "rotation": 1,
+          "bounds": [
+            0,
+            36,
+            782,
+            480
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+        }
+      },
+      "controls": [
+        {
+          "label": "닫기",
+          "textBounds": [
+            678,
+            54,
+            752,
+            114
+          ],
+          "buttonBounds": [
+            660,
+            42,
+            770,
+            126
+          ],
+          "exposedWidthDp": 73.33333333333333,
+          "exposedHeightDp": 56.0,
+          "osStableFrame": {
+            "width": 854,
+            "height": 480,
+            "rotation": 1,
+            "bounds": [
+              0,
+              36,
+              782,
+              480
+            ],
+            "measurement": "Actual WindowManager DisplayFrames.mStable",
+            "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+          },
+          "clickable": true,
+          "class": "android.view.View",
+          "checked": false,
+          "checkable": false,
+          "selectedRadioBoundsOnly": false,
+          "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+        },
+        {
+          "label": "남자",
+          "textBounds": [
+            57,
+            385,
+            129,
+            447
+          ],
+          "buttonBounds": [
+            42,
+            373,
+            144,
+            468
+          ],
+          "exposedWidthDp": 68.0,
+          "exposedHeightDp": 63.333333333333336,
+          "osStableFrame": {
+            "width": 854,
+            "height": 480,
+            "rotation": 1,
+            "bounds": [
+              0,
+              36,
+              782,
+              480
+            ],
+            "measurement": "Actual WindowManager DisplayFrames.mStable",
+            "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+          },
+          "clickable": false,
+          "class": "android.view.View",
+          "checked": true,
+          "checkable": true,
+          "selectedRadioBoundsOnly": true,
+          "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+        },
+        {
+          "label": "여자",
+          "textBounds": [
+            171,
+            385,
+            243,
+            447
+          ],
+          "buttonBounds": [
+            156,
+            373,
+            258,
+            467
+          ],
+          "exposedWidthDp": 68.0,
+          "exposedHeightDp": 62.666666666666664,
+          "osStableFrame": {
+            "width": 854,
+            "height": 480,
+            "rotation": 1,
+            "bounds": [
+              0,
+              36,
+              782,
+              480
+            ],
+            "measurement": "Actual WindowManager DisplayFrames.mStable",
+            "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+          },
+          "clickable": true,
+          "class": "android.view.View",
+          "checked": false,
+          "checkable": true,
+          "selectedRadioBoundsOnly": false,
+          "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+        },
+        {
+          "label": "골드 러닝화",
+          "textBounds": [
+            324,
+            378,
+            734,
+            441
+          ],
+          "buttonBounds": [
+            306,
+            361,
+            752,
+            457
+          ],
+          "exposedWidthDp": 297.3333333333333,
+          "exposedHeightDp": 64.0,
+          "osStableFrame": {
+            "width": 854,
+            "height": 480,
+            "rotation": 1,
+            "bounds": [
+              0,
+              36,
+              782,
+              480
+            ],
+            "measurement": "Actual WindowManager DisplayFrames.mStable",
+            "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+          },
+          "clickable": true,
+          "class": "android.view.View",
+          "checked": false,
+          "checkable": true,
+          "selectedRadioBoundsOnly": false,
+          "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+        },
+        {
+          "label": "골드",
+          "textBounds": [
+            592,
+            409,
+            743,
+            471
+          ],
+          "buttonBounds": [
+            535,
+            397,
+            752,
+            480
+          ],
+          "exposedWidthDp": 144.66666666666666,
+          "exposedHeightDp": 55.333333333333336,
+          "osStableFrame": {
+            "width": 854,
+            "height": 480,
+            "rotation": 1,
+            "bounds": [
+              0,
+              36,
+              782,
+              480
+            ],
+            "measurement": "Actual WindowManager DisplayFrames.mStable",
+            "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+          },
+          "clickable": true,
+          "class": "android.view.View",
+          "checked": false,
+          "checkable": true,
+          "selectedRadioBoundsOnly": false,
+          "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+        }
+      ],
+      "scrollRegionBounds": [
+        [
+          306,
+          132,
+          752,
+          246
+        ],
+        [
+          306,
+          246,
+          752,
+          480
+        ]
+      ],
+      "actionsAndLastListItemAboveOs": true,
+      "storedProfileChangedByThisCheck": false
+    }
+  ],
+  "updatedAtUtc": "2026-11-06T16:53:32.353672+00:00"
+}

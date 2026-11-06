@@ -1,0 +1,32 @@
+{
+  "condition": "systemDarkLightTheme",
+  "passed": true,
+  "visualInspectionPassed": false,
+  "captureKeys": [
+    "systemDark"
+  ],
+  "steps": [
+    {
+      "verified": true,
+      "nightMode": "yes",
+      "actualOsAcknowledged": true,
+      "sampleXY": [
+        474,
+        427
+      ],
+      "sampleRGB": [
+        245,
+        247,
+        246
+      ],
+      "appTheme": "existing light theme",
+      "statusAndNavigationIconsCaptured": true,
+      "iconContrastVisualInspectionPassed": false,
+      "temporaryEmulatorRootCommandForMode": true,
+      "actualNightConfigurationBitVerified": true,
+      "adbdPrivilegeChanged": false,
+      "diagnosticReference": "os-night-mode-diagnostic.json"
+    }
+  ],
+  "updatedAtUtc": "2026-11-06T17:12:37.494653+00:00"
+}

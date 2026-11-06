@@ -1,0 +1,14 @@
+{
+  "ownedAvd": "Runmoni_Cloud_29",
+  "launcherFocusedBeforeInstall": true,
+  "systemUiHandling": {
+    "exactSystemUiAnrWaitOnly": true,
+    "actions": [
+      {
+        "dialog": "System UI not responding",
+        "action": "Wait",
+        "screenshot": "background-setup-system-ui-1.png"
+      }
+    ]
+  }
+}

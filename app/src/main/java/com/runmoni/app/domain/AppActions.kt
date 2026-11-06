@@ -3,10 +3,13 @@ package com.runmoni.app.domain
 interface AppActions {
     fun startEntryGoogleSignIn() {}
     fun continueAsGuest() {}
+    fun openRunNotificationSettings() {}
+    fun consumeRunNavigation(token: Long) {}
     fun startRun()
     fun pauseRun()
     fun resumeRun()
     fun finishRun()
+    fun finishRun(expectedRunId: String) { finishRun() }
     fun recoverRun()
     fun retryRunPersistence() {}
     fun openLocationSettings()

@@ -1,0 +1,208 @@
+{
+  "name": "native2",
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "binaryReference": "binary-build4.json",
+  "reviewPhase": "native-continuation1",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-06T19:24:09.553085+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 1,
+  "actualPassedProductMethods": 1,
+  "groups": [
+    {
+      "name": "native-hierarchy",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native2-native-hierarchy.txt",
+      "startedAtUtc": "2026-11-06T19:25:26.690461+00:00",
+      "actual": 1,
+      "rawSha256": "9afecf05e4c2d3e4f6c146c387cad69442f5f698b1f7ad3e9774c49d1b4ab929",
+      "elapsedSeconds": 101.15,
+      "finishedAtUtc": "2026-11-06T19:27:07.841378+00:00",
+      "minimiReadinessRaw": "native2-native-hierarchy-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "64a97fb3f6b4ea922d9829089462f81c470d9cc3f0bddc93763d77ecc8a27485",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "native2-closet-hierarchy-native-320-font2-fixture.png",
+      "sha256": "6fe8df2fe78de7e9e375b61905a54e06d41e40a172966bfd83d89d95e346103b",
+      "bytes": 61010,
+      "width": 480,
+      "height": 746,
+      "sourceGroup": "native-hierarchy",
+      "sourceRaw": "native2-native-hierarchy.txt",
+      "sourceKind": "API29 ComponentActivity Compose-target fixture",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": true,
+      "nativeLandscape320ShortSideFont2Group": false
+    }
+  ],
+  "executedDriver": "native2-executed-driver.py",
+  "executedDriverSha256": "e8e5cf4b70f02e65d5bf79b851da6263ea41635728da7d2ed4a4b11e1bada955",
+  "observerHelper": "native2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native cases run existing 320dp/font2 height, safe-area, and scroll/semantics assertions; no additional OS touch or authentication is inferred."
+  ],
+  "updatedAtUtc": "2026-11-06T19:27:53.744153+00:00",
+  "binaryReferenceSha256": "8f3073bdb18ffaef063a4d7f42dc8992718e16076005826681ddd268177bdb7b",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "8868750e841f8466e156947727b9f6d9a458765ea20837bae0a9a7a67adf9260"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "cf655003b791434003879472d66fa9454fff070680c88ed1fe27ad7e8d0be6ee"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "native2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "native2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T19:27:53.744147+00:00"
+}

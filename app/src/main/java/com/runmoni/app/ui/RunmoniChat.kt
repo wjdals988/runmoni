@@ -3,6 +3,7 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import android.animation.ValueAnimator
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -23,6 +24,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -69,23 +71,26 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
     LaunchedEffect(canNotice) { if (!canNotice) notice = false }
     BoxWithConstraints(Modifier.fillMaxSize().background(RunmoniColors.Cream)
         .pointerInput(state.openedRoomId) { detectTapGestures { focusManager.clearFocus() } }
-        .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime)).padding(12.dp)) {
+        .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
+        .padding(vertical = 8.dp)) {
         val compact = imeVisible || maxHeight < 480.dp
         val composerMaxLines = if (maxHeight < 300.dp) 1 else if (compact) 2 else 4
         LaunchedEffect(maxHeight, compact) { if (followLatest) { withFrameNanos { }; scroll.scrollTo(scroll.maxValue) } }
-        Surface(Modifier.widthIn(max = 640.dp).fillMaxSize().align(Alignment.Center).testTag("chat_dialog").semantics {
+        Surface(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize().align(Alignment.Center).testTag("chat_dialog").semantics {
             testTagsAsResourceId = true; paneTitle = "채팅 · ${state.openedRoomTitle}"
         }, color = RunmoniColors.Cream) {
-            Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp)) {
+                Row(Modifier.fillMaxWidth().heightIn(min = if (compact) 48.dp else 64.dp), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (notice) "공지 작성 · ${state.openedRoomTitle}" else state.openedRoomTitle,
-                        style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(1f), maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
+                        style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.weight(1f).semantics { heading() },
+                        maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
                     Box {
                         IconButton(onClick = { menuExpanded = true }, modifier = Modifier.size(48.dp).testTag("chat_options")) { Icon(Icons.Outlined.MoreVert, "채팅 보기와 공지 설정") }
                         DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
-                            DropdownMenuItem(text = { Text("전체 채팅 보기") }, onClick = { noticesOnly = false; menuExpanded = false }, trailingIcon = { if (!noticesOnly) Icon(Icons.Outlined.Check, null) })
-                            DropdownMenuItem(text = { Text("공지만 보기") }, onClick = { noticesOnly = true; menuExpanded = false }, trailingIcon = { if (noticesOnly) Icon(Icons.Outlined.Check, null) })
+                            DropdownMenuItem(text = { Text("전체 채팅 보기") }, onClick = { noticesOnly = false; menuExpanded = false }, trailingIcon = { if (!noticesOnly) Icon(Icons.Outlined.Check, null) }, modifier = Modifier.semantics { stateDescription = if (!noticesOnly) "선택됨" else "선택 안 됨" })
+                            DropdownMenuItem(text = { Text("공지만 보기") }, onClick = { noticesOnly = true; menuExpanded = false }, trailingIcon = { if (noticesOnly) Icon(Icons.Outlined.Check, null) }, modifier = Modifier.semantics { stateDescription = if (noticesOnly) "선택됨" else "선택 안 됨" })
                             if (canNotice) DropdownMenuItem(text = { Text("공지로 보내기") }, onClick = { notice = !notice; menuExpanded = false }, trailingIcon = { if (notice) Icon(Icons.Outlined.Check, null) }, modifier = Modifier.semantics { stateDescription = if (notice) "선택됨" else "선택 안 됨" })
                         }
                     }
@@ -96,42 +101,51 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                     FilterChip(shape = RunmoniShapes.Action, selected = !noticesOnly, onClick = { noticesOnly = false }, label = { Text("전체 채팅") }, modifier = Modifier.heightIn(min = 48.dp))
                     FilterChip(shape = RunmoniShapes.Action, selected = noticesOnly, onClick = { noticesOnly = true }, label = { Text("공지") }, modifier = Modifier.heightIn(min = 48.dp))
                 }
+                HorizontalDivider(color = RunmoniColors.Line)
                 Box(Modifier.weight(1f).fillMaxWidth()) {
-                Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    if (messages.isEmpty()) {
-                        if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) EmptyCard("메시지 불러오는 중", "")
-                        else EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 메시지를 보내보세요", "")
-                    }
-                    messages.forEach { message ->
-                        Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
-                        Surface(shape = RunmoniShapes.Surface, color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
-                            contentColor = if (message.mine && !message.notice) RunmoniColors.OnDark else RunmoniColors.Navy,
-                            modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
-                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                Text(if (message.notice) "공지 · ${message.author}" else message.author, style = MaterialTheme.typography.labelMedium)
-                                Text(message.body, style = MaterialTheme.typography.bodyLarge)
-                                Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall, color = if (message.mine && !message.notice) RunmoniColors.OnDarkMuted else RunmoniColors.Muted)
+                    Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        if (messages.isEmpty()) {
+                            if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) EmptyCard("메시지 불러오는 중", "")
+                            else EmptyCard(if (noticesOnly) "아직 공지가 없어요" else "첫 메시지를 보내보세요", "")
+                        }
+                        messages.forEach { message ->
+                            key(message.id) {
+                                Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
+                                    Surface(shape = RunmoniShapes.Surface,
+                                        color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
+                                        contentColor = if (message.mine && !message.notice) RunmoniColors.OnDark else RunmoniColors.Navy,
+                                        modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
+                                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                            Text(if (message.notice) "공지 · ${message.author}" else message.author, style = MaterialTheme.typography.labelLarge)
+                                            Text(message.body, style = MaterialTheme.typography.bodyLarge)
+                                            Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall,
+                                                color = if (message.mine && !message.notice) RunmoniColors.OnDarkMuted else RunmoniColors.Muted)
+                                        }
+                                    }
+                                }
                             }
                         }
-                        }
+                        Spacer(Modifier.height(24.dp))
+                    }
+                    // Keep the action available in small windows without taking
+                    // height away from the message composer when the IME is open.
+                    if (hasNewMessages) TextButton(shape = RunmoniShapes.Action,
+                        colors = ButtonDefaults.textButtonColors(containerColor = RunmoniColors.Paper, contentColor = RunmoniColors.Primary),
+                        onClick = { followLatest = true; hasNewMessages = false; scope.launch {
+                            if (ValueAnimator.areAnimatorsEnabled()) scroll.animateScrollTo(scroll.maxValue) else scroll.scrollTo(scroll.maxValue)
+                        } },
+                        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp).heightIn(min = 48.dp)
+                            .border(1.dp, RunmoniColors.Outline, RunmoniShapes.Action).testTag("chat_jump_latest")
+                            .semantics { contentDescription = "새 메시지 · 맨 아래로" }) {
+                        Icon(Icons.Outlined.ArrowDownward, null, Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("새 메시지")
                     }
                 }
-                // Keep the action available in small windows without taking
-                // height away from the message composer when the IME is open.
-                if (hasNewMessages) TextButton(shape = RunmoniShapes.Action,
-                    colors = ButtonDefaults.textButtonColors(containerColor = RunmoniColors.Paper, contentColor = RunmoniColors.Primary),
-                    onClick = { followLatest = true; hasNewMessages = false; scope.launch { scroll.animateScrollTo(scroll.maxValue) } },
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp).heightIn(min = 48.dp)
-                        .border(1.dp, RunmoniColors.Line, RunmoniShapes.Action).testTag("chat_jump_latest")
-                        .semantics { contentDescription = "새 메시지 · 맨 아래로" }) {
-                    Icon(Icons.Outlined.ArrowDownward, null, Modifier.size(20.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text("새 메시지")
-                }
-                }
-                if (canNotice && !compact) Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(notice, role = Role.Checkbox, onValueChange = { notice = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = notice, onCheckedChange = null); Text("공지로 보내기", style = MaterialTheme.typography.bodyMedium) }
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, placeholder = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), maxLines = composerMaxLines, shape = RunmoniShapes.Input)
+                if (canNotice && !compact) Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(notice, role = Role.Checkbox, onValueChange = { notice = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = notice, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("공지로 보내기", style = MaterialTheme.typography.bodyMedium) }
+                HorizontalDivider(color = RunmoniColors.Line)
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, label = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), textStyle = MaterialTheme.typography.bodyLarge, maxLines = composerMaxLines, shape = RunmoniShapes.Input)
                     FilledIconButton(shape = RunmoniShapes.Action, onClick = { followLatest = true; pending = input.trim(); actions.sendMessage(input.trim(), notice && canNotice); input = "" }, enabled = input.isNotBlank() && !state.busy, modifier = Modifier.size(52.dp).testTag("send_message")) { Icon(Icons.Outlined.Send, "메시지 보내기") }
                 }
             }

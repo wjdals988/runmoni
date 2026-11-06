@@ -1,0 +1,7 @@
+{
+  "stoppedOwnedAvd": "Runmoni_Cloud_29",
+  "ownedPid": 57724,
+  "stopCommandExitCode": 0,
+  "stopOutput": "Quarantined stale lock for terminated PID 57724 ; userdata untouched\nStopped Runmoni_Cloud_29 PID 57724",
+  "verifiedAtUtc": "2026-11-06T20:59:22.712332+00:00"
+}

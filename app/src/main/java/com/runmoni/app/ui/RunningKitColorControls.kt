@@ -79,12 +79,13 @@ internal fun RunningKitColorControls(
         BoxWithConstraints(Modifier.fillMaxWidth().selectableGroup()) {
             // Keep labels and 48dp targets, then wrap rather than shrinking text.
             val columns = (maxWidth.value / (60f + 28f * fontScale)).toInt().coerceIn(1, 3)
-            Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 kitColorOptions.chunked(columns).forEach { row ->
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         row.forEach { option ->
                             val isSelected = selected == option.id
                             Row(Modifier.weight(1f).heightIn(min = 48.dp)
+                                .background(if (isSelected) RunmoniColors.PrimarySoft else Color.Transparent, RunmoniShapes.Action)
                                 .selectable(selected = isSelected, enabled = available == true, role = Role.RadioButton,
                                     onClick = { onSelect(region, option.id) })
                                 .semantics { contentDescription = "${region.label} 색상" }

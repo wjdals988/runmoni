@@ -1,0 +1,33 @@
+
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:
+Error in genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest):
+java.lang.AssertionError: Failed: assertDoesNotExist.
+Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'closet_artwork_status')
+Node found:
+Node #496 at (l=30.0, t=440.0, r=450.0, b=564.0)px, Tag: 'closet_artwork_status'
+Text = '[미리보기가 없는 이전 선택은 보관 중이에요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 5 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertDoesNotExist(SemanticsNodeInteraction.kt:100)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:185)
+
+
+Time: 74.83
+There was 1 failure:
+1) genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest)
+java.lang.AssertionError: Failed: assertDoesNotExist.
+Reason: Did not expect any node but found '1' node that satisfies: (TestTag = 'closet_artwork_status')
+Node found:
+Node #496 at (l=30.0, t=440.0, r=450.0, b=564.0)px, Tag: 'closet_artwork_status'
+Text = '[미리보기가 없는 이전 선택은 보관 중이에요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 5 siblings
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.assertDoesNotExist(SemanticsNodeInteraction.kt:100)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:185)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

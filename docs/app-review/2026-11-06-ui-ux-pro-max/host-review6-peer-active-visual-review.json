@@ -1,0 +1,12 @@
+{
+  "reportedAtUtc": "2026-11-06T20:06:09.967990+00:00",
+  "reviewer": "/root/benchmark_design_review",
+  "files": [
+    "host-review6-main-native-320dp-font2.png",
+    "host-review6-main-running-landscape-font2.png"
+  ],
+  "p0P1BlockerObserved": false,
+  "observation": "Actual portrait/landscape active distance0.03+heading/unit, pause/finish and all five full tab labels are visible and OS-safe. The previous host5 core-distance clipping is absent in these new frames.",
+  "limits": "Separate photos do not prove simultaneous whole metrics, outdoor GPS, finish/save or process recovery.",
+  "userVisualApproval": false
+}

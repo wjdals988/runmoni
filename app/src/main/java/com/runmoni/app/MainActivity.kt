@@ -20,10 +20,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.SystemBarStyle
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import com.runmoni.app.tracking.RunNotifications
 import com.runmoni.app.ui.RunmoniRoot
 import com.runmoni.app.ui.rememberAppUpdates
 import kotlinx.coroutines.launch
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
     private val model: AppViewModel by viewModels()
     private var pendingPermission: UiRequest? = null
     private var capturePackage = ""
+    private var handledRunNotificationEvent: String? = null
     private val locationChanges = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) { refreshLocationAccess() }
     }
@@ -42,6 +45,10 @@ class MainActivity : ComponentActivity() {
             is UiRequest.RunPermission -> {
                 if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(pending.recover)
                 else model.permissionDenied("러닝 코스를 기록하려면 정밀 위치 권한이 필요합니다. 설정에서 허용해 주세요.")
+            }
+            UiRequest.ResumeRunPermission -> {
+                if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.resumeWithPermission()
+                else model.permissionDenied("다시 달리려면 정밀 위치 권한을 허용해 주세요.")
             }
             is UiRequest.MicrophonePermission -> {
                 if (hasPermission(Manifest.permission.RECORD_AUDIO)) {
@@ -69,8 +76,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
-        enableEdgeToEdge()
+        // The product currently has a light canvas in both system appearances.
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
+        )
         model.onEntryHostCreated()
+        RunNotifications.createChannel(this)
+        handledRunNotificationEvent = savedInstanceState?.getString("handledRunNotificationEvent")
+        handleRunNotification(intent, force = false)
         setContent {
             val state by model.state.collectAsState()
             val updates = rememberAppUpdates()
@@ -80,8 +94,10 @@ class MainActivity : ComponentActivity() {
             model.requests.collect { request ->
                 when (request) {
                     is UiRequest.RunPermission -> {
-                        if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(request.recover)
-                        else requestPermissions(request, listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION) + notificationPermission())
+                        requestRunningPermissions(request)
+                    }
+                    UiRequest.ResumeRunPermission -> {
+                        requestRunningPermissions(request)
                     }
                     is UiRequest.MicrophonePermission -> {
                         // A listener can enter without microphone access.
@@ -94,6 +110,8 @@ class MainActivity : ComponentActivity() {
                     is UiRequest.EntryGoogleSignIn -> lifecycleScope.launch { model.googleSignInForEntry(this@MainActivity, request.token) }
                     UiRequest.LinkCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity) }
                     UiRequest.RestoreCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity, restore = true) }
+                    UiRequest.RunNotificationSettings -> openSettings(Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, packageName).putExtra(Settings.EXTRA_CHANNEL_ID, RunNotifications.CHANNEL))
                     UiRequest.LocationSettings -> openSettings(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     UiRequest.AppPermissionSettings -> openSettings(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
                     is UiRequest.ExternalCapture -> {
@@ -121,6 +139,40 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleRunNotification(intent, force = true)
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("handledRunNotificationEvent", handledRunNotificationEvent)
+        super.onSaveInstanceState(outState)
+    }
+    private fun handleRunNotification(source: Intent?, force: Boolean) {
+        if (source?.action != RunNotifications.OPEN_RUN) return
+        val event = source.getStringExtra(RunNotifications.EVENT)
+        if (!force && event != null && event == handledRunNotificationEvent) return
+        handledRunNotificationEvent = event
+        model.openRunFromNotification(source.getStringExtra(RunNotifications.RUN_ID).orEmpty(),
+            source.getBooleanExtra(RunNotifications.CONFIRM_FINISH, false))
+        source.removeExtra(RunNotifications.RUN_ID)
+        source.removeExtra(RunNotifications.CONFIRM_FINISH)
+        source.action = Intent.ACTION_MAIN
+        source.data = null
+    }
+    private fun requestRunningPermissions(request: UiRequest) {
+        val missing = mutableListOf<String>()
+        if (!hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) missing += listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        val preferences = getSharedPreferences("runmoni", MODE_PRIVATE)
+        if (Build.VERSION.SDK_INT >= 33 && !hasPermission(Manifest.permission.POST_NOTIFICATIONS) &&
+            !preferences.getBoolean("runNotificationPermissionAskedV1", false)) {
+            preferences.edit().putBoolean("runNotificationPermissionAskedV1", true).apply()
+            missing += Manifest.permission.POST_NOTIFICATIONS
+        }
+        if (missing.isNotEmpty()) requestPermissions(request, missing)
+        else if (request is UiRequest.RunPermission) model.beginWithPermission(request.recover)
+        else model.resumeWithPermission()
+    }
     override fun onStart() {
         super.onStart()
         ContextCompat.registerReceiver(this, locationChanges, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION), ContextCompat.RECEIVER_NOT_EXPORTED)
@@ -129,6 +181,7 @@ class MainActivity : ComponentActivity() {
     override fun onStop() { unregisterReceiver(locationChanges); super.onStop() }
     private fun refreshLocationAccess() {
         val manager = getSystemService(LOCATION_SERVICE) as LocationManager
+        model.updateRunNotificationAccess(RunNotifications.enabled(this))
         model.updateLocationAccess(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION),
             runCatching { manager.isProviderEnabled(LocationManager.GPS_PROVIDER) }.getOrDefault(false))
     }

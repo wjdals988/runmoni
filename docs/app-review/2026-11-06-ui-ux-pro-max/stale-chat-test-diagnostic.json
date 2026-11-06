@@ -1,0 +1,16 @@
+{
+  "sourceBaseline": "64a00578904381ba9d48b72ceada3eb773329ba0",
+  "oldTestExpected": "공지 · 채팅",
+  "actualLabel": "크루 공지 · 채팅",
+  "actualLabelAlreadyPresentInBaseline": true,
+  "actualDetailsTab": "crew_detail_1",
+  "productBehaviorChangedByCorrection": false,
+  "assertionsAdded": [
+    "Same crew room ID after opening chat",
+    "Details section preserved after closing chat",
+    "Returning to party section still shows second crew, never first crew"
+  ],
+  "failedReviewReference": "android-review2.json",
+  "failedGroup": "app-information",
+  "failedGroupNotAddedToPassingTotal": true
+}

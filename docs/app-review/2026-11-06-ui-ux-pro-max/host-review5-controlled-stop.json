@@ -1,0 +1,15 @@
+{
+  "requestedAtUtc": "2026-11-06T17:35:20.678166+00:00",
+  "signal": "SIGINT",
+  "scope": "Exact owned UI host-review5 collector",
+  "reason": "Root manually confirmed P1 active-landscape readability issue. Stop this old candidate before changing product source.",
+  "lastObservedPhase": "ui-condition-smallLandscape",
+  "lastObservedChecks": [
+    "home-and-screen-off",
+    "actual-notification-pause-resume",
+    "actual-notification-content-tap"
+  ],
+  "waitingContinuationStoppedBeforeAnyAndroidReview4": true,
+  "productSourceModified": false,
+  "cleanupResultNotAssumed": true
+}

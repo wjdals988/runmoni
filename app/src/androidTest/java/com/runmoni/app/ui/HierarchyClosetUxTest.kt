@@ -181,8 +181,14 @@ class HierarchyClosetLargeTextUxTest : RunmoniDesignTestBase() {
             assertEquals(original.ownedItems + "top:1", state.value.profile.ownedItems)
         }
         compose.onNodeWithTag("closet_top_1").assertIsSelected()
-        // Ordinary choices show their selected row rather than an equip tutorial.
-        compose.onNodeWithTag("closet_artwork_status").assertDoesNotExist()
+        // The fixture keeps legacy hair/socks without artwork. A ready top
+        // must not erase those selections or suppress their honest status.
+        compose.onNodeWithTag("closet_artwork_status").performScrollTo().assertIsDisplayed()
+            .assertTextEquals("미리보기가 없는 이전 선택은 보관 중이에요")
+        compose.runOnIdle {
+            assertEquals(original.avatar.hair, state.value.profile.avatar.hair)
+            assertEquals(original.avatar.socks, state.value.profile.avatar.socks)
+        }
         compose.onNodeWithTag("closet_top_1").performScrollTo().assertIsSelected()
         compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         assertEquals(preview, compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot)

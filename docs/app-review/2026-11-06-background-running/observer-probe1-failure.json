@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "stage": "shell observer preflight",
+  "raw": "observer-probe1.txt",
+  "productAndroidTestsExecuted": 0,
+  "cause": "SDK hierarchy dump did not create the expected file; ordinary group execution has not begun.",
+  "applicationCodeChanged": false
+}

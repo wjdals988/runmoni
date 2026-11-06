@@ -1,3 +1,4 @@
+@file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.BorderStroke
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -22,6 +24,33 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 internal data class UiMetric(val label: String, val value: String, val unit: String = "", val tag: String = "")
+
+@Composable
+internal fun pageGutter() = if (LocalConfiguration.current.screenWidthDp >= 600)
+    RunmoniLayout.WideGutter else RunmoniLayout.Gutter
+
+/** Full-screen destinations own their system insets; the toolbar owns no insets. */
+@Composable
+internal fun PageTopBar(
+    title: String,
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier,
+    closeLabel: String = "닫기",
+    closeTag: String = "",
+    actions: @Composable RowScope.() -> Unit = {},
+) {
+    Box(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+        Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+            .heightIn(min = 64.dp).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(title, style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f).semantics { heading() })
+            actions()
+            TextButton(onClick = onClose, shape = RunmoniShapes.Action,
+                modifier = Modifier.heightIn(min = 48.dp).testTag(closeTag)) { Text(closeLabel) }
+        }
+    }
+}
 
 /** A page contains a few sections; rows inside a section share a tighter rhythm. */
 @Composable
@@ -33,14 +62,9 @@ internal fun ScreenSection(
     showDivider: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(modifier.fillMaxWidth().padding(top = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         if (showDivider) HorizontalDivider(color = RunmoniColors.Line)
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(title, style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.weight(1f).semantics { heading() })
-            if (action != null) TextButton(onClick = onAction, shape = RunmoniShapes.Action,
-                modifier = Modifier.heightIn(min = 48.dp)) { Text(action) }
-        }
+        SectionHeading(title, action, onAction)
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
     }
 }
@@ -58,7 +82,7 @@ internal fun DialogMessage(message: String) {
 internal fun AdaptiveActions(first: @Composable (Modifier) -> Unit, second: @Composable (Modifier) -> Unit) {
     val fontScale = LocalDensity.current.fontScale
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        if (maxWidth < 300.dp || fontScale >= 1.3f) {
+        if (maxWidth < 300.dp || (fontScale >= 1.3f && maxWidth < 480.dp)) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 first(Modifier.fillMaxWidth())
                 second(Modifier.fillMaxWidth())
@@ -80,8 +104,12 @@ internal fun MetricGroup(metrics: List<UiMetric>, onDark: Boolean = false) {
     @Composable fun Metric(metric: UiMetric, modifier: Modifier = Modifier) {
         Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(metric.label, style = MaterialTheme.typography.labelMedium, color = muted)
-            Text(metric.value, style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"), color = ink, modifier = Modifier.testTag(metric.tag))
-            if (metric.unit.isNotEmpty()) Text(metric.unit, style = MaterialTheme.typography.labelMedium, color = muted)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(metric.value, style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"), color = ink,
+                    modifier = Modifier.testTag(metric.tag).alignByBaseline())
+                if (metric.unit.isNotEmpty()) Text(metric.unit, style = MaterialTheme.typography.bodyMedium, color = muted,
+                    modifier = Modifier.alignByBaseline())
+            }
         }
     }
     BoxWithConstraints(Modifier.fillMaxWidth()) {

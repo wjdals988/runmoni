@@ -1,0 +1,15 @@
+{
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "bootCompleted": true,
+  "launcherObserved": true,
+  "apkInstalledOrDataCleared": false,
+  "systemUiWaitActions": [
+    {
+      "action": "Wait",
+      "dialog": "System UI not responding",
+      "file": "ui-recovery-boot-system-ui-wait-1.png"
+    }
+  ]
+}

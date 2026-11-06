@@ -1,0 +1,8 @@
+
+com.runmoni.app.data.RunSpeedPersistenceTest:......
+
+Time: 7.029
+
+OK (6 tests)
+
+

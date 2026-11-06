@@ -1,0 +1,11 @@
+{
+  "requestedAtUtc": "2026-11-06T18:08:16.458512+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "target": "com.android.systemui",
+  "oldPid": 2612,
+  "operation": "Kill only this persistent system UI process to let Android restart it",
+  "reason": "Actual crash buffer contains ImageWallpaper native SIGSEGV in the emulator EGL path, while Launcher has no focused window and the observer has no active root.",
+  "packageOrUserDataCleared": false,
+  "newApkInstalledBeforeThisOperation": false,
+  "recoverySuccessNotAssumed": true
+}

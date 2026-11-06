@@ -1,0 +1,2812 @@
+{
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "avd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "passed": true,
+  "startedAtUtc": "2026-11-06T20:31:15.104366+00:00",
+  "captures": [
+    {
+      "file": "host-review6-ui-home.png",
+      "sha256": "420bab24e710601b25fb592c6fa3c17864ff6715bee8cf5bac775c3312144b61",
+      "bytes": 37085,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            32,
+            86,
+            65
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-explore.png",
+      "sha256": "dbdefe131966e28f07924bf272497ddc04b9bf7a6fa7a87af2262b2a198cc65b",
+      "bytes": 36805,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-running.png",
+      "sha256": "6615a288ac29c8b7c8850bab3100e26c74a25a95cd82cadf37a1e62c1a244d30",
+      "bytes": 50249,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-crew.png",
+      "sha256": "09eb5b49cc0f6e8df454c12a1cb49008f27db326451a13dcfd63316b188c621f",
+      "bytes": 33134,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-profile.png",
+      "sha256": "d948ab4ffe4c5094f86b8905eba848b5a914ace46a49e3bba336b073f5f4966a",
+      "bytes": 45328,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            233,
+            239,
+            223
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-settings.png",
+      "sha256": "b8844330574a35379c5228fb0129a318f7e27bdcc2526a0d835f5301eec9016f",
+      "bytes": 50895,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-closet.png",
+      "sha256": "0127a3f4dc59f8d94a7ee204a600c906c153c3498413f7082b47efb80a2bdf45",
+      "bytes": 59898,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            233,
+            239,
+            223
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-about.png",
+      "sha256": "296a620c1877660bec159a7373ee1c386ec13a443584dbdc407deaa5e6516ac1",
+      "bytes": 44669,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-largeText.png",
+      "sha256": "dbc8955a067e603725f02ae338fde3979426803d0918bf89949a04f237364a93",
+      "bytes": 61673,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            233,
+            239,
+            223
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-landscape.png",
+      "sha256": "63f4aeda10feb54b87b06415b676304baf8a7169287473b7e75deb7dbcb93564",
+      "bytes": 72277,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 427,
+          "y": 240,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 213,
+          "y": 160,
+          "rgb": [
+            233,
+            239,
+            223
+          ]
+        },
+        {
+          "x": 640,
+          "y": 320,
+          "rgb": [
+            233,
+            239,
+            223
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-systemDark.png",
+      "sha256": "cbd46b22366e962dcb24645baa158cd35258d1545310fb706e13850c018ee3a0",
+      "bytes": 37071,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            32,
+            86,
+            65
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-ime.png",
+      "sha256": "a9013d585ed94806d710934024c3a3bb8d4154ff419a5dc69811fd41ac9ecff8",
+      "bytes": 43375,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            236,
+            239,
+            241
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-ui-modal.png",
+      "sha256": "afc679bf60a589abcd5865491c7e34728ea24e733b998266dd6ad2d09be5c684",
+      "bytes": 45160,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            32,
+            86,
+            65
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-main-native-320dp-font2.png",
+      "sha256": "e89a7a46f597c971458db56934b9ca326871a7754f9e41312cda81d660b26b7f",
+      "bytes": 41700,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            63,
+            85,
+            57
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            32,
+            86,
+            65
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review6-main-running-landscape-font2.png",
+      "sha256": "222b7f021c7b9ddd2106517b27d3e4daf4a78ba0ed275cf77f3abeddcd7c0b62",
+      "bytes": 38531,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 427,
+          "y": 240,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 213,
+          "y": 160,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 640,
+          "y": 320,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    {
+      "file": "host-review8-main-running.png",
+      "sha256": "e0689d1e65bf1b94a86dc88c807b25da007a07ba4269640b59f4c0b2549f1ca5",
+      "bytes": 39863,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-systemui-running.png",
+      "sha256": "5098b5dc642fb50ed9ec21c768269d98ed947a7e713b183e063ec1c1f7245ace",
+      "bytes": 106489,
+      "width": 480,
+      "height": 854,
+      "kind": "system",
+      "sourceKind": "actual Android SystemUI",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-systemui-paused.png",
+      "sha256": "62bd2e9ce63d93ae0a63c74175efaf86731708f866fef7cb532caf071ef54ec1",
+      "bytes": 103692,
+      "width": 480,
+      "height": 854,
+      "kind": "system",
+      "sourceKind": "actual Android SystemUI",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-main-finish-confirmation.png",
+      "sha256": "33fb14a14d3d6c9758a0cf109ed51029bdc0e6f77f45aab90b96969cefb3159e",
+      "bytes": 44621,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            102,
+            102,
+            102
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            102,
+            102,
+            102
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-main-saved.png",
+      "sha256": "c6211438d069c9c78400054d4fe38b889672f85f13e9778ca499971090a344a9",
+      "bytes": 33388,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-main-recovery.png",
+      "sha256": "4b6c2290f467276506a18fc3e48633cc226571b0c2ec5f1a9e85ed46334de400",
+      "bytes": 48648,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            245,
+            247,
+            246
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review8-main-recovery-saved.png",
+      "sha256": "30b30b5c34b286340a5b54278c5b6718938c37e82292d96fb9f7b6498a9f5819",
+      "bytes": 37576,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 240,
+          "y": 427,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 120,
+          "y": 284,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "x": 360,
+          "y": 569,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    }
+  ],
+  "checks": [
+    {
+      "name": "home-and-screen-off",
+      "before": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 7.932441931825827,
+        "activeDurationMillis": 85141,
+        "pointCount": 83,
+        "speedMetersPerSecond": 0.0
+      },
+      "after": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 93818,
+        "pointCount": 92,
+        "speedMetersPerSecond": 1.5864883863651653
+      },
+      "powerAsleep": true
+    },
+    {
+      "name": "actual-notification-pause-resume",
+      "paused": {
+        "phase": "PAUSED",
+        "foreground": true,
+        "locationSubscribed": false,
+        "wakeLockHeld": false,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 221378,
+        "pointCount": 216,
+        "speedMetersPerSecond": null
+      },
+      "afterPauseFixes": {
+        "phase": "PAUSED",
+        "foreground": true,
+        "locationSubscribed": false,
+        "wakeLockHeld": false,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 221378,
+        "pointCount": 216,
+        "speedMetersPerSecond": null
+      },
+      "resumed": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 31.729767727303305,
+        "activeDurationMillis": 230137,
+        "pointCount": 224,
+        "speedMetersPerSecond": 0.9915552414782284
+      }
+    },
+    {
+      "name": "actual-notification-content-tap",
+      "returnedFromSettingsToRunning": true
+    },
+    {
+      "name": "force-stop-and-new-process-recovery",
+      "beforeStop": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 15.864883863651652,
+        "activeDurationMillis": 30446,
+        "pointCount": 28,
+        "speedMetersPerSecond": 0.7211310847114387
+      },
+      "automaticRestartObserved": false,
+      "newProcessVerified": true,
+      "committed": {
+        "testRunId": "413f49d9-8f3d-422d-bdd0-dc4bc933354b",
+        "pointCount": 30,
+        "segmentCount": 1,
+        "distanceMeters": 15.864883863651652,
+        "activeDurationMillis": 32441,
+        "finished": false,
+        "interrupted": false,
+        "pointSequencesContiguous": true,
+        "distanceWithinSegmentsMeters": 15.864883863651652,
+        "excludedSegmentBoundaryCount": 0,
+        "distanceMatchesSegments": true
+      },
+      "saved": {
+        "testRunId": "413f49d9-8f3d-422d-bdd0-dc4bc933354b",
+        "pointCount": 30,
+        "segmentCount": 1,
+        "distanceMeters": 15.864883863651652,
+        "activeDurationMillis": 32441,
+        "finished": true,
+        "interrupted": true,
+        "pointSequencesContiguous": true,
+        "distanceWithinSegmentsMeters": 15.864883863651652,
+        "excludedSegmentBoundaryCount": 0,
+        "distanceMatchesSegments": true
+      }
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "physicalDeviceVerified": false,
+  "outdoorGpsVerified": false,
+  "dozeVerified": false,
+  "oemBatteryPolicyVerified": false,
+  "android31RuntimeVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "name": "host-review8",
+  "phase": "complete-passed-awaiting-root-visual-review",
+  "completed": true,
+  "executedDriver": "host-review8-executed-driver.py",
+  "executedDriverSha256": "a261c199e087e764f2bbffeb0a4b50b60e3164529819855eb2f0c63a9a80470a",
+  "helpers": {
+    "background": {
+      "file": "work/background-running/host-review5.py",
+      "executedCopy": "host-review8-executed-background-helper.py",
+      "sha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109"
+    },
+    "preservation": {
+      "file": "work/ui-ux-pro-max/android-review.py",
+      "executedCopy": "host-review8-executed-preservation-helper.py",
+      "sha256": "e8e5cf4b70f02e65d5bf79b851da6263ea41635728da7d2ed4a4b11e1bada955"
+    }
+  },
+  "uiChecks": {
+    "passed": true,
+    "visualInspectionPassed": false,
+    "captures": {
+      "home": {
+        "file": "host-review6-ui-home.png",
+        "sha256": "420bab24e710601b25fb592c6fa3c17864ff6715bee8cf5bac775c3312144b61",
+        "bytes": 37085,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              32,
+              86,
+              65
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "explore": {
+        "file": "host-review6-ui-explore.png",
+        "sha256": "dbdefe131966e28f07924bf272497ddc04b9bf7a6fa7a87af2262b2a198cc65b",
+        "bytes": 36805,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "running": {
+        "file": "host-review6-ui-running.png",
+        "sha256": "6615a288ac29c8b7c8850bab3100e26c74a25a95cd82cadf37a1e62c1a244d30",
+        "bytes": 50249,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "crew": {
+        "file": "host-review6-ui-crew.png",
+        "sha256": "09eb5b49cc0f6e8df454c12a1cb49008f27db326451a13dcfd63316b188c621f",
+        "bytes": 33134,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "profile": {
+        "file": "host-review6-ui-profile.png",
+        "sha256": "d948ab4ffe4c5094f86b8905eba848b5a914ace46a49e3bba336b073f5f4966a",
+        "bytes": 45328,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              233,
+              239,
+              223
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "settings": {
+        "file": "host-review6-ui-settings.png",
+        "sha256": "b8844330574a35379c5228fb0129a318f7e27bdcc2526a0d835f5301eec9016f",
+        "bytes": 50895,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "closet": {
+        "file": "host-review6-ui-closet.png",
+        "sha256": "0127a3f4dc59f8d94a7ee204a600c906c153c3498413f7082b47efb80a2bdf45",
+        "bytes": 59898,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              233,
+              239,
+              223
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "about": {
+        "file": "host-review6-ui-about.png",
+        "sha256": "296a620c1877660bec159a7373ee1c386ec13a443584dbdc407deaa5e6516ac1",
+        "bytes": 44669,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "largeText": {
+        "file": "host-review6-ui-largeText.png",
+        "sha256": "dbc8955a067e603725f02ae338fde3979426803d0918bf89949a04f237364a93",
+        "bytes": 61673,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              233,
+              239,
+              223
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "landscape": {
+        "file": "host-review6-ui-landscape.png",
+        "sha256": "63f4aeda10feb54b87b06415b676304baf8a7169287473b7e75deb7dbcb93564",
+        "bytes": 72277,
+        "width": 854,
+        "height": 480,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 427,
+            "y": 240,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 213,
+            "y": 160,
+            "rgb": [
+              233,
+              239,
+              223
+            ]
+          },
+          {
+            "x": 640,
+            "y": 320,
+            "rgb": [
+              233,
+              239,
+              223
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "systemDark": {
+        "file": "host-review6-ui-systemDark.png",
+        "sha256": "cbd46b22366e962dcb24645baa158cd35258d1545310fb706e13850c018ee3a0",
+        "bytes": 37071,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              32,
+              86,
+              65
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "ime": {
+        "file": "host-review6-ui-ime.png",
+        "sha256": "a9013d585ed94806d710934024c3a3bb8d4154ff419a5dc69811fd41ac9ecff8",
+        "bytes": 43375,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              245,
+              247,
+              246
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              236,
+              239,
+              241
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      },
+      "modal": {
+        "file": "host-review6-ui-modal.png",
+        "sha256": "afc679bf60a589abcd5865491c7e34728ea24e733b998266dd6ad2d09be5c684",
+        "bytes": 45160,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": false,
+        "nonBlankFrameVerified": true,
+        "frameSamples": [
+          {
+            "x": 240,
+            "y": 427,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          },
+          {
+            "x": 120,
+            "y": 284,
+            "rgb": [
+              32,
+              86,
+              65
+            ]
+          },
+          {
+            "x": 360,
+            "y": 569,
+            "rgb": [
+              255,
+              255,
+              255
+            ]
+          }
+        ],
+        "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+        "displayPowerStateObservedBeforeCapture": "ON",
+        "wakefulnessObservedBeforeCapture": "Awake",
+        "frameAttempt": 1,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "originHostReference": "host-review6.json",
+        "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+      }
+    },
+    "conditions": {
+      "nativeFont2": {
+        "passed": true,
+        "captureKeys": [
+          "largeText"
+        ],
+        "evidenceReference": "host-review6-ui-nativeFont2.json",
+        "evidenceSha256": "3ea7973ac4d6d04b9a8acee2835db10c3b60d3ed2b310e9befdcc6c09325f6fe",
+        "visualInspectionPassed": false
+      },
+      "smallLandscape": {
+        "passed": true,
+        "captureKeys": [
+          "landscape"
+        ],
+        "evidenceReference": "host-review6-ui-smallLandscape.json",
+        "evidenceSha256": "c588a4a1e4e33f746e19f9b9e619a726b1398fadc43eea6ef49f0263190eb7eb",
+        "visualInspectionPassed": false
+      },
+      "systemDarkLightTheme": {
+        "passed": true,
+        "captureKeys": [
+          "systemDark"
+        ],
+        "evidenceReference": "host-review6-ui-systemDarkLightTheme.json",
+        "evidenceSha256": "71a42bb9d72685563cc55b674694ea858f2b12bc8b3ffc181dbdadf2601cd57a",
+        "visualInspectionPassed": false
+      },
+      "imeAndModal": {
+        "passed": true,
+        "captureKeys": [
+          "ime",
+          "modal"
+        ],
+        "evidenceReference": "host-review6-ui-imeAndModal.json",
+        "evidenceSha256": "ead46fdec1a9de2469629fe9119e9b1223094a97b958adc9d9f0b0b4822912cf",
+        "visualInspectionPassed": false
+      }
+    }
+  },
+  "userVisualApproval": false,
+  "signedReleaseRuntimeVerified": false,
+  "fixtureScope": "Actual Firebase-disabled debug MainActivity; no fake server/CRUD; anonymous local name only",
+  "updatedAtUtc": "2026-11-06T20:55:04.947008+00:00",
+  "binaryReferenceSha256": "8f3073bdb18ffaef063a4d7f42dc8992718e16076005826681ddd268177bdb7b",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "observer": {
+    "jarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+    "sourceSha256": "b5a85e5ad931f1bed19c4ee62247452f2a0af3515db792a3561566a1bed7bf4b",
+    "idleWaitMillis": 0,
+    "disableIme": false,
+    "packagedInProductApk": false,
+    "countsAsProductInstrumentationTests": false,
+    "buildReference": "docs/app-review/2026-11-06-background-running/observer-build.json"
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "8868750e841f8466e156947727b9f6d9a458765ea20837bae0a9a7a67adf9260"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "cf655003b791434003879472d66fa9454fff070680c88ed1fe27ad7e8d0be6ee"
+    }
+  ],
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "privateEnvironmentBackup": {
+    "file": "host-review8-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateBeforeSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "preInstallPrivateSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "databaseCheckpoints": [
+    {
+      "label": "baseline",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    },
+    {
+      "label": "first-saved",
+      "runCount": 1,
+      "pointCount": 775,
+      "contentSha256": "c7567b6169d90b243c32d8d25ac6676b96aabae56f46b5f45610a0acbc8c21fe"
+    },
+    {
+      "label": "cleanup-check",
+      "runCount": 1,
+      "pointCount": 775,
+      "contentSha256": "c7567b6169d90b243c32d8d25ac6676b96aabae56f46b5f45610a0acbc8c21fe"
+    },
+    {
+      "label": "after-ui-cleanup",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    },
+    {
+      "label": "force-stop-committed",
+      "runCount": 1,
+      "pointCount": 30,
+      "contentSha256": "d5bf18cb085297c3dbb167cf38f33245edcc9daef827c07c56def67ddadd6f06"
+    },
+    {
+      "label": "force-stop-final",
+      "runCount": 1,
+      "pointCount": 30,
+      "contentSha256": "14b190b8f3b425fb2e527413d548a5155dc8a61c28f34aa7a42d3ba3a6903753"
+    },
+    {
+      "label": "cleanup-check",
+      "runCount": 1,
+      "pointCount": 30,
+      "contentSha256": "14b190b8f3b425fb2e527413d548a5155dc8a61c28f34aa7a42d3ba3a6903753"
+    },
+    {
+      "label": "after-ui-cleanup",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    },
+    {
+      "label": "cleanup-check",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    },
+    {
+      "label": "after-ui-cleanup",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    }
+  ],
+  "databaseBaseline": {
+    "runCount": 0,
+    "pointCount": 0,
+    "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "nativeLargeText": {
+    "widthDp": 320,
+    "fontScale": 2,
+    "verified": true,
+    "configuration": {
+      "widthPx": 480,
+      "heightPx": 854,
+      "widthDp": 320.0,
+      "heightDp": 569.3333333333334,
+      "fontScale": 2,
+      "densityDpi": 240,
+      "nativeConfiguration": true,
+      "osStableFrame": {
+        "width": 480,
+        "height": 854,
+        "rotation": 0,
+        "bounds": [
+          0,
+          36,
+          480,
+          782
+        ],
+        "measurement": "Actual WindowManager DisplayFrames.mStable",
+        "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+      }
+    },
+    "controls": [
+      {
+        "label": "일시정지",
+        "textBounds": [
+          166,
+          522,
+          314,
+          582
+        ],
+        "buttonBounds": [
+          30,
+          510,
+          450,
+          594
+        ],
+        "exposedWidthDp": 280.0,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            36,
+            480,
+            782
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      {
+        "label": "러닝 마치기",
+        "textBounds": [
+          143,
+          618,
+          338,
+          678
+        ],
+        "buttonBounds": [
+          30,
+          606,
+          450,
+          690
+        ],
+        "exposedWidthDp": 280.0,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            36,
+            480,
+            782
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      }
+    ],
+    "measurement": "Actual native configuration and exposed OS-safe clickable bounds",
+    "distanceGeometry": {
+      "literal": "0.03",
+      "exposedBoundsPx": [
+        60,
+        319,
+        212,
+        407
+      ],
+      "scrollBodyBoundsPx": [
+        0,
+        36,
+        480,
+        490
+      ],
+      "exposedMetricFullyInsideViewport": true,
+      "unclippedNaturalTextSizeMeasured": false,
+      "measurementLimit": "UIAutomator exposed bounds strictly inside the scroll viewport. Root must view the raw image; separate native regressions inspect the full measured text size."
+    }
+  },
+  "landscape": {
+    "widthPx": 854,
+    "heightPx": 480,
+    "widthDp": 569.3333333333334,
+    "heightDp": 320.0,
+    "fontScale": 2,
+    "densityDpi": 240,
+    "nativeConfiguration": true,
+    "osStableFrame": {
+      "width": 854,
+      "height": 480,
+      "rotation": 1,
+      "bounds": [
+        0,
+        36,
+        782,
+        480
+      ],
+      "measurement": "Actual WindowManager DisplayFrames.mStable",
+      "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+    },
+    "verified": true,
+    "actionsAndListAboveOs": true,
+    "runningControlsVerified": true
+  },
+  "systemDark": {
+    "verified": true,
+    "nightMode": "yes",
+    "actualOsAcknowledged": true,
+    "sampleXY": [
+      474,
+      427
+    ],
+    "sampleRGB": [
+      245,
+      247,
+      246
+    ],
+    "appTheme": "existing light theme",
+    "statusAndNavigationIconsCaptured": true,
+    "iconContrastVisualInspectionPassed": false,
+    "temporaryEmulatorRootCommandForMode": true,
+    "actualNightConfigurationBitVerified": true,
+    "adbdPrivilegeChanged": false,
+    "diagnosticReference": "os-night-mode-diagnostic.json"
+  },
+  "runningLandscape": {
+    "verified": true,
+    "configuration": {
+      "widthPx": 854,
+      "heightPx": 480,
+      "widthDp": 569.3333333333334,
+      "heightDp": 320.0,
+      "fontScale": 2,
+      "densityDpi": 240,
+      "nativeConfiguration": true,
+      "osStableFrame": {
+        "width": 854,
+        "height": 480,
+        "rotation": 1,
+        "bounds": [
+          0,
+          36,
+          782,
+          480
+        ],
+        "measurement": "Actual WindowManager DisplayFrames.mStable",
+        "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+      }
+    },
+    "controls": [
+      {
+        "label": "일시정지",
+        "textBounds": [
+          132,
+          316,
+          280,
+          376
+        ],
+        "buttonBounds": [
+          30,
+          304,
+          382,
+          388
+        ],
+        "exposedWidthDp": 234.66666666666666,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 854,
+          "height": 480,
+          "rotation": 1,
+          "bounds": [
+            0,
+            36,
+            782,
+            480
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      {
+        "label": "러닝 마치기",
+        "textBounds": [
+          479,
+          316,
+          674,
+          376
+        ],
+        "buttonBounds": [
+          400,
+          304,
+          752,
+          388
+        ],
+        "exposedWidthDp": 234.66666666666666,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 854,
+          "height": 480,
+          "rotation": 1,
+          "bounds": [
+            0,
+            36,
+            782,
+            480
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      }
+    ],
+    "bodyRegions": [
+      [
+        0,
+        36,
+        782,
+        284
+      ]
+    ],
+    "capture": {
+      "file": "host-review6-main-running-landscape-font2.png",
+      "sha256": "222b7f021c7b9ddd2106517b27d3e4daf4a78ba0ed275cf77f3abeddcd7c0b62",
+      "bytes": 38531,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": false,
+      "nonBlankFrameVerified": true,
+      "frameSamples": [
+        {
+          "x": 427,
+          "y": 240,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 213,
+          "y": 160,
+          "rgb": [
+            25,
+            45,
+            37
+          ]
+        },
+        {
+          "x": 640,
+          "y": 320,
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "frameSampleMethod": "three raw PNG pixel probes; at least one non-black sample; no image modification",
+      "displayPowerStateObservedBeforeCapture": "ON",
+      "wakefulnessObservedBeforeCapture": "Awake",
+      "frameAttempt": 1,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "originHostReference": "host-review6.json",
+      "originHostSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6"
+    },
+    "distanceGeometry": {
+      "literal": "0.03",
+      "exposedBoundsPx": [
+        60,
+        139,
+        268,
+        259
+      ],
+      "scrollBodyBoundsPx": [
+        0,
+        36,
+        782,
+        284
+      ],
+      "exposedMetricFullyInsideViewport": true,
+      "unclippedNaturalTextSizeMeasured": false,
+      "measurementLimit": "UIAutomator exposed bounds strictly inside the scroll viewport. Root must view the raw image; separate native regressions inspect the full measured text size."
+    },
+    "measurementLimit": "Exposed controls and body geometry; root visual inspection remains separate"
+  },
+  "importedUiCaptureSource": {
+    "reference": "host-review6.json",
+    "sha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6",
+    "captureCount": 13,
+    "captureKeys": [
+      "about",
+      "closet",
+      "crew",
+      "explore",
+      "home",
+      "ime",
+      "landscape",
+      "largeText",
+      "modal",
+      "profile",
+      "running",
+      "settings",
+      "systemDark"
+    ],
+    "activeCaptureCount": 2,
+    "activeFiles": [
+      "host-review6-main-native-320dp-font2.png",
+      "host-review6-main-running-landscape-font2.png"
+    ],
+    "metadataFields": [
+      "nativeLargeText",
+      "runningLandscape",
+      "landscape",
+      "systemDark",
+      "uiChecks.conditions"
+    ],
+    "currentHostModeChangeClaimed": false
+  },
+  "observerDumps": 63,
+  "systemActionTaps": [
+    {
+      "label": "일시정지",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        84,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        46,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "systemUiFocusedImmediatelyBeforeTap": true,
+      "noInterveningScreenshotAfterHierarchy": true,
+      "tapDispatched": true,
+      "expectedPhase": "PAUSED",
+      "observedPhase": "PAUSED"
+    },
+    {
+      "label": "재개",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        58,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        33,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "systemUiFocusedImmediatelyBeforeTap": true,
+      "noInterveningScreenshotAfterHierarchy": true,
+      "tapDispatched": true,
+      "expectedPhase": "RUNNING",
+      "observedPhase": "RUNNING"
+    },
+    {
+      "label": "러닝 중",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.TextView",
+      "resourceId": "android:id/title",
+      "bounds": [
+        20,
+        332,
+        460,
+        351
+      ],
+      "clickable": "false",
+      "climb": false,
+      "resolvedXY": [
+        240,
+        341
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "systemUiFocusedImmediatelyBeforeTap": true,
+      "noInterveningScreenshotAfterHierarchy": true,
+      "tapDispatched": true,
+      "activityCall": 1,
+      "expectedMainAnchor": "러닝 기록 중",
+      "pollingBudgetIsLatencySla": false,
+      "observedMainAnchor": "러닝 기록 중",
+      "elapsedHostSeconds": 13.699
+    },
+    {
+      "label": "종료",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        88,
+        400,
+        138,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        113,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "systemUiFocusedImmediatelyBeforeTap": true,
+      "noInterveningScreenshotAfterHierarchy": true,
+      "tapDispatched": true,
+      "activityCall": 2,
+      "expectedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "pollingBudgetIsLatencySla": false,
+      "observedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "elapsedHostSeconds": 13.719
+    },
+    {
+      "label": "종료",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        88,
+        400,
+        138,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        113,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "systemUiFocusedImmediatelyBeforeTap": true,
+      "noInterveningScreenshotAfterHierarchy": true,
+      "tapDispatched": true,
+      "activityCall": 3,
+      "expectedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "pollingBudgetIsLatencySla": false,
+      "observedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "elapsedHostSeconds": 18.139
+    }
+  ],
+  "notificationAcknowledgements": [
+    {
+      "label": "일시정지",
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "phase": "PAUSED",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        84,
+        448
+      ],
+      "resolvedXY": [
+        46,
+        424
+      ],
+      "climb": false
+    },
+    {
+      "label": "재개",
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "phase": "RUNNING",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        58,
+        448
+      ],
+      "resolvedXY": [
+        33,
+        424
+      ],
+      "climb": false
+    }
+  ],
+  "notificationActivityCallCount": 3,
+  "notificationActivityAcknowledgements": [
+    {
+      "label": "러닝 중",
+      "call": 1,
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "expectedMainAnchor": "러닝 기록 중",
+      "mainWindowFocused": true,
+      "class": "android.widget.TextView",
+      "resourceId": "android:id/title",
+      "bounds": [
+        20,
+        332,
+        460,
+        351
+      ],
+      "resolvedXY": [
+        240,
+        341
+      ],
+      "climb": false
+    },
+    {
+      "label": "종료",
+      "call": 2,
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "expectedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "mainWindowFocused": true,
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        88,
+        400,
+        138,
+        448
+      ],
+      "resolvedXY": [
+        113,
+        424
+      ],
+      "climb": false
+    },
+    {
+      "label": "종료",
+      "call": 3,
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "expectedMainAnchor": "오늘의 러닝을 마칠까요?",
+      "mainWindowFocused": true,
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        88,
+        400,
+        138,
+        448
+      ],
+      "resolvedXY": [
+        113,
+        424
+      ],
+      "climb": false
+    }
+  ],
+  "finishCancellationAcknowledgement": {
+    "dialogDismissed": true,
+    "phase": "RUNNING",
+    "foreground": true,
+    "captureOrStateFromPriorHost": false
+  },
+  "firstSavedRun": {
+    "testRunId": "1159fa6e-72bc-46e9-9250-097fd5c720c9",
+    "pointCount": 775,
+    "segmentCount": 2,
+    "distanceMeters": 31.729767727303305,
+    "activeDurationMillis": 798020,
+    "finished": true,
+    "interrupted": false,
+    "pointSequencesContiguous": true,
+    "distanceWithinSegmentsMeters": 31.729767727303305,
+    "excludedSegmentBoundaryCount": 1,
+    "distanceMatchesSegments": true
+  },
+  "databaseAfterCleanup": {
+    "runCount": 0,
+    "pointCount": 0,
+    "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "ownReviewRunsRemoved": true,
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsRestoreCommandFailures": [],
+  "sourceMapsFinal": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "helperSourcesUnchanged": true,
+  "driverSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T20:55:04.946992+00:00"
+}

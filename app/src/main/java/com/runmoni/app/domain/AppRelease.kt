@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.7-dev", "2026-11-06", "앱 화면 개선·백그라운드 러닝 · 실기기 검증 전", listOf(
+        "홈·탐색·크루·옷장·설정의 제목, 목록과 조작을 같은 기준으로 정리했어요.",
+        "앱을 내려놓거나 화면을 꺼도 러닝 기록을 이어가요. 현재 속도도 볼 수 있어요.",
+        "러닝 알림에서 거리·시간·속도·페이스를 보고 일시정지·재개할 수 있어요.",
+        "알림에서 종료를 선택하면 앱에서 확인한 뒤 저장해요. 강제 종료 뒤에는 저장한 지점에서 복구해요.",
+    )),
     AppVersionEntry("0.3.6-dev", "2026-11-06", "첫 로그인 선택 · 실기기 검증 전", listOf(
         "스플래시 다음에 Google 로그인과 게스트 이용을 선택할 수 있어요.",
         "한 번 선택하면 다음 실행부터 앱으로 바로 들어가요. 기존 기록과 꾸미기는 유지해요.",

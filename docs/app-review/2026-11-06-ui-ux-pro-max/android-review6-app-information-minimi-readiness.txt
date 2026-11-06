@@ -1,0 +1,2 @@
+version shortcut and update prompt: waitMillis=50; timeoutMillis=120000
+about information: waitMillis=784; timeoutMillis=120000

@@ -1,0 +1,9 @@
+Project emulator PID: 456273 boot_completed: 1
+Traceback (most recent call last):
+  File "/workspace/runmoni/docs/app-review/2026-11-06-background-running/android-review-driver.py", line 68, in <module>
+    package_info=sh('dumpsys','package','com.runmoni.app');guard(re.search(r'versionName=0\.3\.6-dev(?:\s|$)',package_info) is not None and re.search(r'versionCode=19(?:\s|$)',package_info) is not None,'Actual installed package version19')
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/runmoni/docs/app-review/2026-11-06-background-running/android-review-driver.py", line 10, in guard
+    if not x:raise AssertionError(label)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Actual installed package version19

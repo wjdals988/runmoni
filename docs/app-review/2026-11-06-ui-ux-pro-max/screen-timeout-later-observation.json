@@ -1,0 +1,15 @@
+{
+  "observedAtUtc": "2026-11-06T17:24:13.538356+00:00",
+  "readOnly": true,
+  "settingsWritten": false,
+  "screenOffTimeoutMillis": 2147483647,
+  "currentPowerLines": [
+    "mWakefulness=Awake",
+    "Display Power: state=ON"
+  ],
+  "blackCaptureReference": "host-review5-main-running-visual-rejection.json",
+  "historicalPowerAtBlackCaptureObserved": false,
+  "causeConfirmed": false,
+  "countsAsProductTest": false,
+  "limitation": "Current timeout and power are later observations. They do not establish why the earlier frame was black."
+}

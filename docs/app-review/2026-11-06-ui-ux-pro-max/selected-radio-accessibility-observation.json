@@ -1,0 +1,37 @@
+{
+  "observedAtUtc": "2026-11-06T16:38:26.633859+00:00",
+  "source": "Read existing output of the active host2 observer; no new dump or input triggered",
+  "xmlSha256": "8c71d2cff5db08ecc402b03ad5effe0968224f54750b9927230dfa9f6d2174ac",
+  "freshObserverExecutionTriggered": false,
+  "genderNodes": [
+    {
+      "text": "남자",
+      "class": "android.widget.TextView",
+      "package": "com.runmoni.app",
+      "checkable": "false",
+      "checked": "false",
+      "clickable": "false",
+      "enabled": "true",
+      "focusable": "false",
+      "selected": "false",
+      "bounds": "[205,173][231,195]"
+    },
+    {
+      "text": "여자",
+      "class": "android.widget.TextView",
+      "package": "com.runmoni.app",
+      "checkable": "false",
+      "checked": "false",
+      "clickable": "false",
+      "enabled": "true",
+      "focusable": "false",
+      "selected": "false",
+      "bounds": "[369,174][395,196]"
+    }
+  ],
+  "countsAsProductTest": false,
+  "limitations": [
+    "The existing observer XML may lag current UI; this is not a failure-time snapshot or a tap/selection success.",
+    "Only public gender label/role/state/bounds are retained; full hierarchy is not published."
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "recordedAtUtc": "2026-11-06T18:09:39.131041+00:00",
+  "raw": "installation3-boot-attempt2-failure.txt",
+  "rawSha256": "34a1385d2c13d18186921231e670702037f0eedacc2399e35a002eca43b3831a",
+  "apkInstallAttempted": false,
+  "preinstallAppXmlBackupCreated": false,
+  "appDataResetCommandIssued": false,
+  "reason": "Initial observer had no active window; later WindowManager focus was null while Launcher was resumed. A separate system ImageWallpaper/EGL native crash was observed.",
+  "productBuildFailureClaimed": false
+}

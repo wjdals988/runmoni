@@ -50,7 +50,17 @@ abstract class RunmoniDesignTestBase {
     protected fun noTextOverflow(context: String) {
         val matcher = SemanticsMatcher.keyIsDefined(SemanticsProperties.Text) and
             SemanticsMatcher.keyIsDefined(SemanticsActions.GetTextLayoutResult)
-        compose.waitUntil(30_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        // Readiness precedes the text-layout audit; it is not a startup-speed SLA.
+        // Allow a wider preparation window on the software AOSP emulator.
+        // Keep the layout assertions intact and retain the actual wait time.
+        val loadingWaitStarted = android.os.SystemClock.uptimeMillis()
+        try {
+            compose.waitUntil(120_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        } finally {
+            val target = InstrumentationRegistry.getInstrumentation().targetContext
+            File(target.cacheDir, "design-review").apply { mkdirs() }
+                .resolve("minimi-readiness.txt").appendText("$context: waitMillis=${android.os.SystemClock.uptimeMillis() - loadingWaitStarted}; timeoutMillis=120000\n")
+        }
         val nodes = compose.onAllNodes(matcher, useUnmergedTree = true).fetchSemanticsNodes()
         assertTrue("No rendered text in $context", nodes.isNotEmpty())
         // Read one stable snapshot on the UI thread. A loading label disappearing

@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.HierarchyClosetUxTest:...
+
+Time: 97.304
+
+OK (3 tests)
+
+

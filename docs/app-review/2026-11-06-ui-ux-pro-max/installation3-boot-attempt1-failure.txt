@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/workspace/runmoni/work/ui-ux-pro-max/boot-install3.py", line 5, in <module>
+    exec(compile(source,str(W/'boot-recovery.py'),'exec'))
+  File "/workspace/runmoni/work/ui-ux-pro-max/boot-recovery.py", line 19, in <module>
+    root=m.tree()
+         ^^^^^^^^
+  File "/workspace/runmoni/work/background-running/host-review5.py", line 181, in tree
+    guard('dumped to:' in result.lower() and 'FAILURES!!!' not in result and re.search(r'OK \(1 tests?\)', result) is not None, 'Fresh live accessibility observer dump')
+  File "/workspace/runmoni/work/background-running/host-review5.py", line 41, in guard
+    raise AssertionError(label)
+AssertionError: Fresh live accessibility observer dump

@@ -1,0 +1,13 @@
+{
+  "attempt": "host5",
+  "completed": false,
+  "passed": false,
+  "reason": "Managed execution environment disconnected during actual SystemUI interaction; driver finally/result JSON did not complete.",
+  "lastLogStage": "host5-systemui-running.png",
+  "logPreservedInIgnoredWork": true,
+  "executedDriver": "host5-executed-driver.py",
+  "restorationVerified": false,
+  "automaticCleanupClaimed": false,
+  "productFailureClaimed": false,
+  "continuation": "Restore the interrupted fixture and remove only its bounded synthetic run through product UI after the next owned AVD startup. Prior tests are baseline results; final full-page UI changes need fresh validation."
+}

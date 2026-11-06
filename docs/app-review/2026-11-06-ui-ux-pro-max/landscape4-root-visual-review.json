@@ -1,0 +1,39 @@
+{
+  "passedVisualInspection": true,
+  "records": [
+    {
+      "file": "landscape4-active-landscape-native-font2-run_distance-fixture.png",
+      "sha256": "5824f8a2294b23a2a23f85398d027fc32c0746ffb666977a7773868883fc4c9b",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T18:30:48.615478+00:00",
+      "observation": "Target metric line fully visible above fixed pause/finish and all five navigation labels; other scrolling content can be clipped at viewport edge. Actual ComponentActivity fake callback fixture, not MainActivity/FGS/GPS.",
+      "userVisualApproval": false
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_duration-fixture.png",
+      "sha256": "fb1974f146fa8067250def64c76f1eea3cb93b53804825505b35eb80e1472ecb",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T18:30:48.615554+00:00",
+      "observation": "Target metric line fully visible above fixed pause/finish and all five navigation labels; other scrolling content can be clipped at viewport edge. Actual ComponentActivity fake callback fixture, not MainActivity/FGS/GPS.",
+      "userVisualApproval": false
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_pace-fixture.png",
+      "sha256": "2f884caa93ca23f4a079ab6a0546493caf8cc3259fc57baa36d2755501f93d54",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T18:30:48.615605+00:00",
+      "observation": "Target metric line fully visible above fixed pause/finish and all five navigation labels; other scrolling content can be clipped at viewport edge. Actual ComponentActivity fake callback fixture, not MainActivity/FGS/GPS.",
+      "userVisualApproval": false
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_speed-fixture.png",
+      "sha256": "548d74872aa4885c68a6c48c72f68cb063794aab2170c698c40358a1495d9a22",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T18:30:48.615647+00:00",
+      "observation": "Target metric line fully visible above fixed pause/finish and all five navigation labels; other scrolling content can be clipped at viewport edge. Actual ComponentActivity fake callback fixture, not MainActivity/FGS/GPS.",
+      "userVisualApproval": false
+    }
+  ],
+  "userVisualApproval": false,
+  "scope": "Four actual native landscape metric fixtures only; no actual MainActivity or whole-app approval"
+}
