@@ -1,0 +1,18 @@
+{
+  "reviewedAtUtc": "2026-11-06T19:12:20.353972+00:00",
+  "records": [
+    {
+      "file": "native1-closet-navigation-native-320-font2-fixture.png",
+      "sha256": "46fd1d185fc9841808aff12df489ee446576c842270cb8f825aa01c767891f2b",
+      "viewImageToolActuallyUsed": true
+    },
+    {
+      "file": "native1-entry-native-320-font2-fixture.png",
+      "sha256": "ca34e5e095f50b8d403798f5300b5e9ff18e616af28dbd3a7ba13933c8f0ff38",
+      "viewImageToolActuallyUsed": true
+    }
+  ],
+  "scope": "Two selected actual320dp/font2 ComponentActivity Compose-target crops, not full MainActivity or real Google authentication",
+  "observation": "Closet final palette and selected state visible; Google and guest actions plus storage explanation visible after scrolling. Korean word wrapping at200percent remains a P2 copy/layout refinement.",
+  "userVisualApproval": false
+}

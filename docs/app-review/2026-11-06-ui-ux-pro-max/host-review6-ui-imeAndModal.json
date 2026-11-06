@@ -1,0 +1,147 @@
+{
+  "condition": "imeAndModal",
+  "passed": true,
+  "visualInspectionPassed": false,
+  "captureKeys": [
+    "ime",
+    "modal"
+  ],
+  "steps": [
+    {
+      "actualImeShownAndHidden": true,
+      "draftPreservedAfterHide": true,
+      "draftCommitted": false,
+      "nameSaveActionAfterHide": {
+        "label": "이름 저장",
+        "textBounds": [
+          210,
+          251,
+          270,
+          273
+        ],
+        "buttonBounds": [
+          20,
+          238,
+          460,
+          286
+        ],
+        "exposedWidthDp": 440.0,
+        "exposedHeightDp": 48.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            24,
+            480,
+            806
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,24][480,806]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      "modalScrollRegion": [
+        [
+          20,
+          124,
+          460,
+          721
+        ]
+      ],
+      "modalSupportAction": {
+        "label": "문제 신고",
+        "textBounds": [
+          80,
+          651,
+          144,
+          675
+        ],
+        "buttonBounds": [
+          44,
+          639,
+          436,
+          713
+        ],
+        "exposedWidthDp": 392.0,
+        "exposedHeightDp": 74.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            24,
+            480,
+            806
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,24][480,806]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      "modalContentGeometryChangedAfterScroll": true,
+      "modalCloseAction": {
+        "label": "닫기",
+        "textBounds": [
+          401,
+          747,
+          429,
+          769
+        ],
+        "buttonBounds": [
+          386,
+          734,
+          444,
+          782
+        ],
+        "exposedWidthDp": 58.0,
+        "exposedHeightDp": 48.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            24,
+            480,
+            806
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,24][480,806]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      "outsideTap": {
+        "dialogBounds": [
+          20,
+          48,
+          460,
+          794
+        ],
+        "resolvedXY": [
+          2,
+          421
+        ],
+        "dismissed": true
+      }
+    }
+  ],
+  "updatedAtUtc": "2026-11-06T19:49:00.449343+00:00"
+}

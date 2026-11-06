@@ -1,0 +1,39 @@
+{
+  "observedAtUtc": "2026-11-06T19:16:04.465198+00:00",
+  "parentReference": "native1.json",
+  "parentSha256": "21189ba631a39c5becb6e459539291b0a67cb52d3121d7de6109a562082fe405",
+  "observedAfterFailedAttemptBeforeAnyCorrection": true,
+  "notFailureTimeSnapshot": true,
+  "sourceMaps": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  }
+}

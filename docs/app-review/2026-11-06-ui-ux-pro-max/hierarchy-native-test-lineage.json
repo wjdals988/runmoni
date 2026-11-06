@@ -1,0 +1,16 @@
+{
+  "observedAtUtc": "2026-11-06T19:17:02.052197+00:00",
+  "changedFile": "app/src/androidTest/java/com/runmoni/app/ui/HierarchyClosetUxTest.kt",
+  "beforeSha256": "1d10e590293123a545ccdf2bfc31fde76cabe3c96896de26ace170af06fadad2",
+  "afterSha256": "fbfd482037236a5c66c9680c944a1cc1929e7e1145302ba61a7533d49c7e1c82",
+  "oldBlock": "        // Ordinary choices show their selected row rather than an equip tutorial.\n        compose.onNodeWithTag(\"closet_artwork_status\").assertDoesNotExist()",
+  "newBlock": "        // The fixture keeps legacy hair/socks without artwork. A ready top\n        // must not erase those selections or suppress their honest status.\n        compose.onNodeWithTag(\"closet_artwork_status\").performScrollTo().assertIsDisplayed()\n            .assertTextEquals(\"미리보기가 없는 이전 선택은 보관 중이에요\")\n        compose.runOnIdle {\n            assertEquals(original.avatar.hair, state.value.profile.avatar.hair)\n            assertEquals(original.avatar.socks, state.value.profile.avatar.socks)\n        }",
+  "singleBlockReplacementVerified": true,
+  "normalHierarchyClassPrefixUnchanged": true,
+  "normalHierarchyClassPrefixSha256": "3cdb759f5058ec08442f389948d649d85f00559bce547dc4303744cfa65524c0",
+  "productSourceChanged": false,
+  "reason": "The fixture intentionally retains unsupported hair2/socks2; selecting a ready top cannot make the entire style ready. Keep original selections and require truthful warning instead of expecting it absent.",
+  "failedParentReference": "native1.json",
+  "postSourceVerificationReference": "native1-post-source-verification.json",
+  "patch": "hierarchy-native-test-correction.patch"
+}

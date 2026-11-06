@@ -1,0 +1,1409 @@
+{
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "avd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build2.json",
+  "passed": false,
+  "startedAtUtc": "2026-11-06T17:02:14.095248+00:00",
+  "captures": [
+    {
+      "file": "host-review2-ui-home.png",
+      "sha256": "4e1ad6ae495b4919e3f21e5bd5bb91ddc7cff5b2c77ff67bd76f7e9ba3184707",
+      "bytes": 37102,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-explore.png",
+      "sha256": "6eafc7838fd8bb961af80a187d26c9a2f1144ca7b20605d0ed77d82afcf79205",
+      "bytes": 36813,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-running.png",
+      "sha256": "a4bbd94f18f10e98b4d373b65dfef6405e061ee319582ba0462d522df65578d3",
+      "bytes": 50107,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-crew.png",
+      "sha256": "356330ad4dd52cbdf79f209d1cd33ebb696c4e4224c39c24b45421518c8ca276",
+      "bytes": 33153,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-profile.png",
+      "sha256": "440069105d607941d5c256451dfc5834f3dcca8f5408a8d548a5ef3b56b7819b",
+      "bytes": 45124,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-settings.png",
+      "sha256": "be95a9cfa076ad22f4cc517586bd55856fdb825e85b14b2fa5216336af2d4cce",
+      "bytes": 50690,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-closet.png",
+      "sha256": "d68f472f086fed59ee8abc37b779bb05faa4c6db010b34f60be5a3683a19c155",
+      "bytes": 59977,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review2-ui-about.png",
+      "sha256": "035623d7b77a162f87b747bcf10fc63c3e1c011621f3c04645f18f81eb5b1ad2",
+      "bytes": 44579,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false,
+      "captureCollectedInThisAttempt": false,
+      "originHostReference": "host-review2.json",
+      "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+    },
+    {
+      "file": "host-review5-ui-largeText.png",
+      "sha256": "8af20ced0b0ca4ee08260d10261b7c359ccdfef03949f20ab6b91e95c3e0945e",
+      "bytes": 59932,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-ui-landscape.png",
+      "sha256": "f8bb531138e85f0c308229a5f24331015c873cda074cda00c8162c275323f5c4",
+      "bytes": 74167,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-ui-systemDark.png",
+      "sha256": "9e6d8000c31c1f4edffe15a95cecb0511c0bd67ccb388f6405661c5ea4c04373",
+      "bytes": 37205,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-ui-ime.png",
+      "sha256": "9b223c1854719c8558158c1ada67f3677e3dca2f1c84a5568dccab03f827e2b4",
+      "bytes": 43408,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-ui-ime-hidden-draft-preserved.png",
+      "sha256": "3378c35a8aec0b62bcbf0ef4f9e6d4c8c631bd2bca6f27aa72a6be7dd036ec07",
+      "bytes": 51280,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-ui-modal.png",
+      "sha256": "9605ba7ba913bef5c68f9f4d8e795fb1716275603bccbee43f595f14fb7bebf7",
+      "bytes": 45173,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-main-running.png",
+      "sha256": "847478f5a4c9472e99bd579e5148f99adeed811e6ee9ef10b26698fb5dd7d35e",
+      "bytes": 1699,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-systemui-running.png",
+      "sha256": "3c1af8fa8c67623aeedd3cea5e6283a4fc476782bf165efc8e2754a56a17a722",
+      "bytes": 103059,
+      "width": 480,
+      "height": 854,
+      "kind": "system",
+      "sourceKind": "actual Android SystemUI",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-systemui-paused.png",
+      "sha256": "adb83d56e0863826cda6e3ba356a776b26b652a41570180c6d94ea061e6bca70",
+      "bytes": 103559,
+      "width": 480,
+      "height": 854,
+      "kind": "system",
+      "sourceKind": "actual Android SystemUI",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-main-native-320dp-font2.png",
+      "sha256": "be48c548de7fe9f9124beaef6edb746a82fd243ab57db4c3a7189867ba302b40",
+      "bytes": 46329,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    {
+      "file": "host-review5-main-running-landscape-font2.png",
+      "sha256": "99063d5fbac878b01ec4c5c12e68258912c183d2c963d3a9de7b0d81e7902c93",
+      "bytes": 42169,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    }
+  ],
+  "checks": [
+    {
+      "name": "home-and-screen-off",
+      "before": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 7.932441931825827,
+        "activeDurationMillis": 89448,
+        "pointCount": 90,
+        "speedMetersPerSecond": 0.0
+      },
+      "after": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 97452,
+        "pointCount": 98,
+        "speedMetersPerSecond": 1.5864883863651653
+      },
+      "powerAsleep": true
+    },
+    {
+      "name": "actual-notification-pause-resume",
+      "paused": {
+        "phase": "PAUSED",
+        "foreground": true,
+        "locationSubscribed": false,
+        "wakeLockHeld": false,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 301903,
+        "pointCount": 291,
+        "speedMetersPerSecond": null
+      },
+      "afterPauseFixes": {
+        "phase": "PAUSED",
+        "foreground": true,
+        "locationSubscribed": false,
+        "wakeLockHeld": false,
+        "distanceMeters": 23.797325795477477,
+        "activeDurationMillis": 301903,
+        "pointCount": 291,
+        "speedMetersPerSecond": null
+      },
+      "resumed": {
+        "phase": "RUNNING",
+        "foreground": true,
+        "locationSubscribed": true,
+        "wakeLockHeld": true,
+        "distanceMeters": 31.729767727303305,
+        "activeDurationMillis": 313755,
+        "pointCount": 303,
+        "speedMetersPerSecond": 0.7932441931825827
+      }
+    },
+    {
+      "name": "actual-notification-content-tap",
+      "returnedFromSettingsToRunning": true
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 3,
+  "physicalDeviceVerified": false,
+  "outdoorGpsVerified": false,
+  "dozeVerified": false,
+  "oemBatteryPolicyVerified": false,
+  "android31RuntimeVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "name": "host-review5",
+  "phase": "complete-failed",
+  "completed": true,
+  "executedDriver": "host-review5-executed-driver.py",
+  "executedDriverSha256": "70eeb054e9a765b4a7bbac1c8c1e56b230ea60dcf3792e402eec1e395f1d0245",
+  "helpers": {
+    "background": {
+      "file": "work/background-running/host-review5.py",
+      "executedCopy": "host-review5-executed-background-helper.py",
+      "sha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109"
+    },
+    "preservation": {
+      "file": "work/ui-ux-pro-max/android-review.py",
+      "executedCopy": "host-review5-executed-preservation-helper.py",
+      "sha256": "2592224d896d84907544e16648609d20a6bbaeeb0cd048c7cbf2786482670b1f"
+    }
+  },
+  "uiChecks": {
+    "passed": false,
+    "visualInspectionPassed": false,
+    "captures": {
+      "home": {
+        "file": "host-review2-ui-home.png",
+        "sha256": "4e1ad6ae495b4919e3f21e5bd5bb91ddc7cff5b2c77ff67bd76f7e9ba3184707",
+        "bytes": 37102,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "explore": {
+        "file": "host-review2-ui-explore.png",
+        "sha256": "6eafc7838fd8bb961af80a187d26c9a2f1144ca7b20605d0ed77d82afcf79205",
+        "bytes": 36813,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "running": {
+        "file": "host-review2-ui-running.png",
+        "sha256": "a4bbd94f18f10e98b4d373b65dfef6405e061ee319582ba0462d522df65578d3",
+        "bytes": 50107,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "crew": {
+        "file": "host-review2-ui-crew.png",
+        "sha256": "356330ad4dd52cbdf79f209d1cd33ebb696c4e4224c39c24b45421518c8ca276",
+        "bytes": 33153,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "profile": {
+        "file": "host-review2-ui-profile.png",
+        "sha256": "440069105d607941d5c256451dfc5834f3dcca8f5408a8d548a5ef3b56b7819b",
+        "bytes": 45124,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "settings": {
+        "file": "host-review2-ui-settings.png",
+        "sha256": "be95a9cfa076ad22f4cc517586bd55856fdb825e85b14b2fa5216336af2d4cce",
+        "bytes": 50690,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "closet": {
+        "file": "host-review2-ui-closet.png",
+        "sha256": "d68f472f086fed59ee8abc37b779bb05faa4c6db010b34f60be5a3683a19c155",
+        "bytes": 59977,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "about": {
+        "file": "host-review2-ui-about.png",
+        "sha256": "035623d7b77a162f87b747bcf10fc63c3e1c011621f3c04645f18f81eb5b1ad2",
+        "bytes": 44579,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false,
+        "captureCollectedInThisAttempt": false,
+        "originHostReference": "host-review2.json",
+        "originHostSha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0"
+      },
+      "largeText": {
+        "file": "host-review5-ui-largeText.png",
+        "sha256": "8af20ced0b0ca4ee08260d10261b7c359ccdfef03949f20ab6b91e95c3e0945e",
+        "bytes": 59932,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": true,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false
+      },
+      "landscape": {
+        "file": "host-review5-ui-landscape.png",
+        "sha256": "f8bb531138e85f0c308229a5f24331015c873cda074cda00c8162c275323f5c4",
+        "bytes": 74167,
+        "width": 854,
+        "height": 480,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": true,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false
+      },
+      "systemDark": {
+        "file": "host-review5-ui-systemDark.png",
+        "sha256": "9e6d8000c31c1f4edffe15a95cecb0511c0bd67ccb388f6405661c5ea4c04373",
+        "bytes": 37205,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": true,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false
+      },
+      "ime": {
+        "file": "host-review5-ui-ime.png",
+        "sha256": "9b223c1854719c8558158c1ada67f3677e3dca2f1c84a5568dccab03f827e2b4",
+        "bytes": 43408,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": true,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false
+      },
+      "modal": {
+        "file": "host-review5-ui-modal.png",
+        "sha256": "9605ba7ba913bef5c68f9f4d8e795fb1716275603bccbee43f595f14fb7bebf7",
+        "bytes": 45173,
+        "width": 480,
+        "height": 854,
+        "kind": "main",
+        "sourceKind": "actual Android MainActivity",
+        "expectedWindowFocused": true,
+        "syntheticGps": false,
+        "captureCollectedInThisAttempt": true,
+        "firebaseConfigured": false,
+        "signedReleaseRuntimeVerified": false
+      }
+    },
+    "conditions": {
+      "nativeFont2": {
+        "passed": true,
+        "captureKeys": [
+          "largeText"
+        ],
+        "evidenceReference": "host-review5-ui-nativeFont2.json",
+        "evidenceSha256": "5159589912f5387b434ec0a5d703fad9449125fe47a4f013432ef5bd16c47ab3",
+        "visualInspectionPassed": false
+      },
+      "smallLandscape": {
+        "passed": true,
+        "captureKeys": [
+          "landscape"
+        ],
+        "evidenceReference": "host-review5-ui-smallLandscape.json",
+        "evidenceSha256": "3d9c13710d794e4d39bdf4374e6055d1dacb04182061a48b5ce36ecdf41eb2bb",
+        "visualInspectionPassed": false
+      },
+      "systemDarkLightTheme": {
+        "passed": true,
+        "captureKeys": [
+          "systemDark"
+        ],
+        "evidenceReference": "host-review5-ui-systemDarkLightTheme.json",
+        "evidenceSha256": "73661b941c0157de2f7a2486546fe02eef1233757696eebf1e3d613303b94535",
+        "visualInspectionPassed": false
+      },
+      "imeAndModal": {
+        "passed": true,
+        "captureKeys": [
+          "ime",
+          "modal"
+        ],
+        "evidenceReference": "host-review5-ui-imeAndModal.json",
+        "evidenceSha256": "0e9de17e146d65b374d7edd339764e64b5d852d2928825a7fa2857f49e115679",
+        "visualInspectionPassed": false
+      }
+    }
+  },
+  "userVisualApproval": false,
+  "signedReleaseRuntimeVerified": false,
+  "fixtureScope": "Actual Firebase-disabled debug MainActivity; no fake server/CRUD; anonymous local name only",
+  "updatedAtUtc": "2026-11-06T17:40:07.552323+00:00",
+  "binaryReferenceSha256": "8b33ccfd32c5a119e74eb0340ecfc23a9eb805b45776bb12eefe14a91aaa6d81",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 52,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "observer": {
+    "jarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+    "sourceSha256": "b5a85e5ad931f1bed19c4ee62247452f2a0af3515db792a3561566a1bed7bf4b",
+    "idleWaitMillis": 0,
+    "disableIme": false,
+    "packagedInProductApk": false,
+    "countsAsProductInstrumentationTests": false,
+    "buildReference": "docs/app-review/2026-11-06-background-running/observer-build.json"
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "f65a7e62bfb8238c9165a69144b8264af9a8d5e31f72a5bca81a0a0d12fe945b"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "60e2b3c7de9b7f3cf630b2613f505f3b849295a3224ae12da0d751f1ec0ca244"
+    }
+  ],
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "privateEnvironmentBackup": {
+    "file": "host-review5-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateBeforeSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "preInstallPrivateSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "databaseCheckpoints": [
+    {
+      "label": "baseline",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    },
+    {
+      "label": "cleanup-check",
+      "runCount": 1,
+      "pointCount": 980,
+      "contentSha256": "41c4a0d3e29a3b7d222c96fb33ab0bfe944b5280972cbbb95897ba112f410d62"
+    },
+    {
+      "label": "cleanup-finished",
+      "runCount": 1,
+      "pointCount": 980,
+      "contentSha256": "75493929728444d5e044eda601700a391a3db777488e01550f06c198edde6a21"
+    },
+    {
+      "label": "after-ui-cleanup",
+      "runCount": 0,
+      "pointCount": 0,
+      "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+    }
+  ],
+  "databaseBaseline": {
+    "runCount": 0,
+    "pointCount": 0,
+    "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "importedUiCaptureSource": {
+    "reference": "host-review2.json",
+    "sha256": "75961c5dcd072d15c85892a8fe4a1f9e45214e9119d183a06a4636f6ea0ff7d0",
+    "count": 8,
+    "keys": [
+      "home",
+      "explore",
+      "running",
+      "crew",
+      "profile",
+      "settings",
+      "closet",
+      "about"
+    ]
+  },
+  "observerDumps": 103,
+  "uiScrollGestures": [
+    {
+      "label": "골드 러닝화",
+      "bodyBounds": [
+        0,
+        451,
+        480,
+        782
+      ],
+      "resolvedFrom": [
+        240,
+        770
+      ],
+      "resolvedTo": [
+        240,
+        463
+      ]
+    },
+    {
+      "label": "골드 러닝화",
+      "bodyBounds": [
+        0,
+        451,
+        480,
+        782
+      ],
+      "resolvedFrom": [
+        240,
+        770
+      ],
+      "resolvedTo": [
+        240,
+        463
+      ]
+    },
+    {
+      "label": "골드",
+      "bodyBounds": [
+        0,
+        451,
+        480,
+        782
+      ],
+      "resolvedFrom": [
+        240,
+        770
+      ],
+      "resolvedTo": [
+        240,
+        463
+      ]
+    },
+    {
+      "label": "골드 러닝화",
+      "bodyBounds": [
+        306,
+        246,
+        752,
+        480
+      ],
+      "resolvedFrom": [
+        529,
+        468
+      ],
+      "resolvedTo": [
+        529,
+        258
+      ]
+    },
+    {
+      "label": "골드 러닝화",
+      "bodyBounds": [
+        306,
+        246,
+        752,
+        480
+      ],
+      "resolvedFrom": [
+        529,
+        468
+      ],
+      "resolvedTo": [
+        529,
+        258
+      ]
+    },
+    {
+      "label": "골드",
+      "bodyBounds": [
+        306,
+        246,
+        752,
+        480
+      ],
+      "resolvedFrom": [
+        529,
+        468
+      ],
+      "resolvedTo": [
+        529,
+        258
+      ]
+    },
+    {
+      "label": "골드",
+      "bodyBounds": [
+        306,
+        246,
+        752,
+        480
+      ],
+      "resolvedFrom": [
+        529,
+        468
+      ],
+      "resolvedTo": [
+        529,
+        258
+      ]
+    },
+    {
+      "label": "골드",
+      "bodyBounds": [
+        306,
+        246,
+        752,
+        480
+      ],
+      "resolvedFrom": [
+        529,
+        468
+      ],
+      "resolvedTo": [
+        529,
+        258
+      ]
+    },
+    {
+      "label": "문제 신고",
+      "bodyBounds": [
+        20,
+        124,
+        460,
+        721
+      ],
+      "resolvedFrom": [
+        240,
+        713
+      ],
+      "resolvedTo": [
+        240,
+        132
+      ]
+    }
+  ],
+  "landscape": {
+    "widthPx": 854,
+    "heightPx": 480,
+    "widthDp": 569.3333333333334,
+    "heightDp": 320.0,
+    "fontScale": 2,
+    "densityDpi": 240,
+    "nativeConfiguration": true,
+    "osStableFrame": {
+      "width": 854,
+      "height": 480,
+      "rotation": 1,
+      "bounds": [
+        0,
+        36,
+        782,
+        480
+      ],
+      "measurement": "Actual WindowManager DisplayFrames.mStable",
+      "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+    },
+    "verified": true,
+    "actionsAndListAboveOs": true,
+    "runningControlsVerified": true
+  },
+  "osNightModeCommands": [
+    {
+      "before": "no",
+      "requested": "yes",
+      "observedAfter": "yes",
+      "commandOutput": "Night mode: yes",
+      "temporarySu0Command": true,
+      "adbdPrivilegeChanged": false,
+      "packagePermissionGrantedForNightMode": false,
+      "diagnosticReference": "os-night-mode-diagnostic.json"
+    },
+    {
+      "before": "yes",
+      "requested": "no",
+      "observedAfter": "no",
+      "commandOutput": "Night mode: no",
+      "temporarySu0Command": true,
+      "adbdPrivilegeChanged": false,
+      "packagePermissionGrantedForNightMode": false,
+      "diagnosticReference": "os-night-mode-diagnostic.json"
+    }
+  ],
+  "systemDark": {
+    "verified": true,
+    "nightMode": "yes",
+    "actualOsAcknowledged": true,
+    "sampleXY": [
+      474,
+      427
+    ],
+    "sampleRGB": [
+      245,
+      247,
+      246
+    ],
+    "appTheme": "existing light theme",
+    "statusAndNavigationIconsCaptured": true,
+    "iconContrastVisualInspectionPassed": false,
+    "temporaryEmulatorRootCommandForMode": true,
+    "actualNightConfigurationBitVerified": true,
+    "adbdPrivilegeChanged": false,
+    "diagnosticReference": "os-night-mode-diagnostic.json"
+  },
+  "systemActionTaps": [
+    {
+      "label": "일시정지",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        84,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        46,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": false,
+      "tapDispatched": true,
+      "expectedPhase": "PAUSED",
+      "lastObservedPhase": "RUNNING"
+    },
+    {
+      "label": "일시정지",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        84,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        46,
+        424
+      ],
+      "tapAttempt": 2,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "tapDispatched": true,
+      "expectedPhase": "PAUSED",
+      "observedPhase": "PAUSED"
+    },
+    {
+      "label": "재개",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        58,
+        448
+      ],
+      "clickable": "true",
+      "climb": false,
+      "resolvedXY": [
+        33,
+        424
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "acknowledged": true,
+      "tapDispatched": true,
+      "expectedPhase": "RUNNING",
+      "observedPhase": "RUNNING"
+    },
+    {
+      "label": "러닝 중",
+      "matchedAttribute": "text",
+      "package": "com.android.systemui",
+      "class": "android.widget.TextView",
+      "resourceId": "android:id/title",
+      "bounds": [
+        20,
+        332,
+        460,
+        351
+      ],
+      "clickable": "false",
+      "climb": false,
+      "resolvedXY": [
+        240,
+        341
+      ],
+      "tapAttempt": 1,
+      "maximumAttempts": 1,
+      "acknowledged": false,
+      "tapDispatched": true
+    }
+  ],
+  "notificationAcknowledgements": [
+    {
+      "label": "일시정지",
+      "tapAttempt": 2,
+      "maximumAttempts": 3,
+      "phase": "PAUSED",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        84,
+        448
+      ],
+      "resolvedXY": [
+        46,
+        424
+      ],
+      "climb": false
+    },
+    {
+      "label": "재개",
+      "tapAttempt": 1,
+      "maximumAttempts": 3,
+      "phase": "RUNNING",
+      "class": "android.widget.Button",
+      "resourceId": "android:id/action0",
+      "bounds": [
+        8,
+        400,
+        58,
+        448
+      ],
+      "resolvedXY": [
+        33,
+        424
+      ],
+      "climb": false
+    }
+  ],
+  "nativeLargeText": {
+    "widthDp": 320,
+    "fontScale": 2,
+    "verified": true,
+    "configuration": {
+      "widthPx": 480,
+      "heightPx": 854,
+      "widthDp": 320.0,
+      "heightDp": 569.3333333333334,
+      "fontScale": 2,
+      "densityDpi": 240,
+      "nativeConfiguration": true,
+      "osStableFrame": {
+        "width": 480,
+        "height": 854,
+        "rotation": 0,
+        "bounds": [
+          0,
+          36,
+          480,
+          782
+        ],
+        "measurement": "Actual WindowManager DisplayFrames.mStable",
+        "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+      }
+    },
+    "controls": [
+      {
+        "label": "일시정지",
+        "textBounds": [
+          166,
+          450,
+          314,
+          510
+        ],
+        "buttonBounds": [
+          30,
+          438,
+          450,
+          522
+        ],
+        "exposedWidthDp": 280.0,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            36,
+            480,
+            782
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      {
+        "label": "러닝 마치기",
+        "textBounds": [
+          143,
+          546,
+          338,
+          606
+        ],
+        "buttonBounds": [
+          30,
+          534,
+          450,
+          618
+        ],
+        "exposedWidthDp": 280.0,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 480,
+          "height": 854,
+          "rotation": 0,
+          "bounds": [
+            0,
+            36,
+            480,
+            782
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=480 h=854 r=0\nmStable=[0,36][480,782]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      }
+    ],
+    "measurement": "Actual native configuration and exposed OS-safe clickable bounds"
+  },
+  "runningLandscape": {
+    "verified": true,
+    "configuration": {
+      "widthPx": 854,
+      "heightPx": 480,
+      "widthDp": 569.3333333333334,
+      "heightDp": 320.0,
+      "fontScale": 2,
+      "densityDpi": 240,
+      "nativeConfiguration": true,
+      "osStableFrame": {
+        "width": 854,
+        "height": 480,
+        "rotation": 1,
+        "bounds": [
+          0,
+          36,
+          782,
+          480
+        ],
+        "measurement": "Actual WindowManager DisplayFrames.mStable",
+        "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+      }
+    },
+    "controls": [
+      {
+        "label": "일시정지",
+        "textBounds": [
+          132,
+          244,
+          280,
+          304
+        ],
+        "buttonBounds": [
+          30,
+          232,
+          382,
+          316
+        ],
+        "exposedWidthDp": 234.66666666666666,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 854,
+          "height": 480,
+          "rotation": 1,
+          "bounds": [
+            0,
+            36,
+            782,
+            480
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      },
+      {
+        "label": "러닝 마치기",
+        "textBounds": [
+          479,
+          244,
+          674,
+          304
+        ],
+        "buttonBounds": [
+          400,
+          232,
+          752,
+          316
+        ],
+        "exposedWidthDp": 234.66666666666666,
+        "exposedHeightDp": 56.0,
+        "osStableFrame": {
+          "width": 854,
+          "height": 480,
+          "rotation": 1,
+          "bounds": [
+            0,
+            36,
+            782,
+            480
+          ],
+          "measurement": "Actual WindowManager DisplayFrames.mStable",
+          "rawExcerpt": "DisplayFrames w=854 h=480 r=1\nmStable=[0,36][782,480]"
+        },
+        "clickable": true,
+        "class": "android.view.View",
+        "checked": false,
+        "checkable": false,
+        "selectedRadioBoundsOnly": false,
+        "measurementLimit": "Accessibility exposed geometry. The source Role.RadioButton can export a generic checked View container with a separate text child and no click action. Only exact gender labels with a single checked/enabled/focusable container use that bounds-only exception. This inspection never taps or changes gender; visual text clipping requires separate root image inspection"
+      }
+    ],
+    "bodyRegions": [
+      [
+        0,
+        126,
+        782,
+        212
+      ]
+    ],
+    "capture": {
+      "file": "host-review5-main-running-landscape-font2.png",
+      "sha256": "99063d5fbac878b01ec4c5c12e68258912c183d2c963d3a9de7b0d81e7902c93",
+      "bytes": 42169,
+      "width": 854,
+      "height": 480,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "captureCollectedInThisAttempt": true,
+      "firebaseConfigured": false,
+      "signedReleaseRuntimeVerified": false
+    },
+    "measurementLimit": "Exposed controls and body geometry; root visual inspection remains separate"
+  },
+  "failureType": "KeyboardInterrupt",
+  "failure": "Review operation failed; inspect private diagnostics without publishing personal data",
+  "privateFailureScreenshot": {
+    "file": "host-review5-private-failure.png",
+    "keptOutsideGit": true
+  },
+  "databaseAfterCleanup": {
+    "runCount": 0,
+    "pointCount": 0,
+    "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "ownReviewRunsRemoved": true,
+  "preInstallPreferencesRestoredExactly": true,
+  "settingsRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsRestoreCommandFailures": [],
+  "sourceMapsFinal": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 52,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "helperSourcesUnchanged": true,
+  "driverSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T17:40:07.552305+00:00"
+}

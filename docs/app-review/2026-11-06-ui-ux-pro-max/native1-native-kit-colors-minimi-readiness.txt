@@ -1,0 +1,1 @@
+native320dp/font2 basic running kit colors: waitMillis=8; timeoutMillis=120000

@@ -1,0 +1,15 @@
+{
+  "reviewedAtUtc": "2026-11-06T17:21:55.206182+00:00",
+  "file": "host-review5-main-running.png",
+  "sha256": "847478f5a4c9472e99bd579e5148f99adeed811e6ee9ef10b26698fb5dd7d35e",
+  "bytes": 1699,
+  "width": 480,
+  "height": 854,
+  "viewedWithTool": true,
+  "galleryEligible": false,
+  "rootVisualFinding": "Actual captured PNG is an all-black frame. MainActivity focus metadata alone does not establish visible app content. This file is rejected as visual evidence for the running screen.",
+  "causeConfirmed": false,
+  "productFailureClaimed": false,
+  "imageModified": false,
+  "replacementCaptureVerified": false
+}

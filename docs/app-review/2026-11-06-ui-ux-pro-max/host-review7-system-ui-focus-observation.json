@@ -1,0 +1,14 @@
+{
+  "observedAtUtc": "2026-11-06T20:31:15.000120+00:00",
+  "parentReference": "host-review7.json",
+  "parentSha256": "4d9e867905c8fdfb28aa0c8cc4b406ce16e4856f7f064bba90820fd3a09b4cb3",
+  "failure": "Original exact SystemUI label: \uc77c\uc2dc\uc815\uc9c0",
+  "privateFailureScreenshot": {
+    "file": "host-review7-private-failure.png",
+    "keptOutsideGit": true
+  },
+  "privateFailureImageActuallyViewed": true,
+  "observation": "Failure image shows Main RUNNING, not the SystemUI shade. The retry searched for a SystemUI label without reopening the shade. The prior target was resolved before an intervening screencap; missed input/focus timing cause is not conclusively established.",
+  "productSourceChanged": false,
+  "plannedCollectorCorrection": "Reopen shade per attempt; measure frame before live hierarchy; verify SystemUI focus and inject exact original-node center without intervening screencap. Poll observed state without a latency SLA."
+}

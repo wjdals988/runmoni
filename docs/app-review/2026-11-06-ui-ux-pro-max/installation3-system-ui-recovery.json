@@ -1,0 +1,22 @@
+{
+  "observedAtUtc": "2026-11-06T18:09:39.666671+00:00",
+  "focusAfterSystemUiRestart": [
+    "mCurrentFocus=Window{a38618e u0 com.android.launcher3/com.android.launcher3.Launcher}"
+  ],
+  "sanitizedCrashLines": [
+    "11-06 17:55:23.664  2115  2324 F libc    : Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x30 in tid 2324 (ImageWallpaper), pid 2115 (ndroid.systemui)",
+    "11-06 17:55:24.707  2542  2542 F DEBUG   : pid: 2115, tid: 2324, name: ImageWallpaper  >>> com.android.systemui <<<",
+    "11-06 17:55:26.142  2542  2542 F DEBUG   :       #10 pc 0000000000011815  /vendor/lib64/egl/libEGL_emulation.so (void std::__1::vector<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>, std::__1::allocator<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>>::__push_back_slow_path<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>>(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>>&&)+133) (BuildId: 3e3b67829ce59a3304b4a4e82d8a3d93)",
+    "11-06 17:55:26.143  2542  2542 F DEBUG   :       #11 pc 0000000000010140  /vendor/lib64/egl/libEGL_emulation.so (getExtStringArray()+944) (BuildId: 3e3b67829ce59a3304b4a4e82d8a3d93)",
+    "11-06 17:55:26.143  2542  2542 F DEBUG   :       #12 pc 000000000000fa21  /vendor/lib64/egl/libEGL_emulation.so (getGLString(int)+273) (BuildId: 3e3b67829ce59a3304b4a4e82d8a3d93)",
+    "11-06 17:55:26.143  2542  2542 F DEBUG   :       #13 pc 000000000000f848  /vendor/lib64/egl/libEGL_emulation.so (eglMakeCurrent+2760) (BuildId: 3e3b67829ce59a3304b4a4e82d8a3d93)",
+    "11-06 17:55:26.174  2542  2542 F DEBUG   :       #30 pc 0000000000237ab4  /system/product/priv-app/SystemUI/SystemUI.apk (com.android.systemui.ImageWallpaper$GLEngine.lambda$onSurfaceCreated$3$ImageWallpaper$GLEngine+4)",
+    "11-06 17:55:26.174  2542  2542 F DEBUG   :       #33 pc 000000000022aed8  /system/product/priv-app/SystemUI/SystemUI.apk (com.android.systemui.-$$Lambda$ImageWallpaper$GLEngine$WwPnKXUZbkazdjOcqYKAzWQFvTQ.run+8)"
+  ],
+  "launcherDataCleared": false,
+  "runmoniDataCleared": false,
+  "newApkInstalledBeforeRecovery": false,
+  "activeLauncherWindowObserved": true,
+  "productTestCount": 0,
+  "allFutureGraphicsStabilityClaimed": false
+}

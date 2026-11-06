@@ -1,0 +1,17 @@
+{
+  "reportedAtUtc": "2026-11-06T18:47:12.536557+00:00",
+  "reviewer": "/root/benchmark_design_review",
+  "source": "Actual collaboration follow-up report after independently opening all four existing images with image tools",
+  "reference": "landscape4-root-visual-review.json",
+  "targets": [
+    "run_distance",
+    "run_duration",
+    "run_pace",
+    "run_speed"
+  ],
+  "p0P1BlockerObserved": false,
+  "newP2IssueObserved": false,
+  "observation": "Each target value and unit is fully visible above pause/finish, five tab icons/labels and right OS bar; partial other metrics at scroll edges are not counted as blockers. Four metrics were viewed separately, not simultaneously.",
+  "scope": "Actual API29 native landscape/font2 ComponentActivity/fake callback fixtures only. Actual MainActivity/FGS, environment restoration and whole-app success remain separate.",
+  "userVisualApproval": false
+}

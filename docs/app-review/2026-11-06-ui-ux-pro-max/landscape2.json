@@ -1,0 +1,165 @@
+{
+  "name": "landscape2",
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "binaryReference": "binary-build3.json",
+  "reviewPhase": "landscape2",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-06T18:16:56.706843+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 2,
+  "actualPassedProductMethods": 0,
+  "groups": [
+    {
+      "name": "active-run-landscape",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.ActiveLandscapeNativeUiTest"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": false,
+        "nativeLandscape320ShortSideRequiredByClass": true,
+        "widthPx": 854,
+        "heightPx": 480,
+        "effectiveDensityDpi": 240,
+        "shortSideDp": 320.0,
+        "nativeLandscape": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "landscape2-active-run-landscape.txt",
+      "startedAtUtc": "2026-11-06T18:19:43.362458+00:00",
+      "actual": null,
+      "rawSha256": "6db3133a22033d07eb4bc25616b002eeb420662113d04260509685e76b838ada",
+      "elapsedSeconds": 44.0,
+      "finishedAtUtc": "2026-11-06T18:20:27.367420+00:00"
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "landscape2-executed-driver.py",
+  "executedDriverSha256": "777e403e9b5aa36b0c1006faac4ced6bee57729ae51c4f0942902a8f9acdc8d2",
+  "observerHelper": "landscape2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native cases run existing 320dp/font2 height, safe-area, and scroll/semantics assertions; no additional OS touch or authentication is inferred."
+  ],
+  "updatedAtUtc": "2026-11-06T18:21:13.081462+00:00",
+  "binaryReferenceSha256": "4a57ba7f0bae254b3bcd593354eb81ecca132405e14d06cd985be019fb621d1d",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "8868750e841f8466e156947727b9f6d9a458765ea20837bae0a9a7a67adf9260"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "9c2436f1aacc901345e4f314117b65d0e96a60fb0c5b1d37b2af27636f628305"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "landscape2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "landscape2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "failureType": "AssertionError",
+  "failure": "Only actual static-context readiness metrics may be exported",
+  "privateFailureScreenshot": "landscape2-private-failure.png",
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T18:21:13.081455+00:00"
+}

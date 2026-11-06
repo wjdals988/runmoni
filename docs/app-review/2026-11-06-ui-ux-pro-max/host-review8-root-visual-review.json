@@ -1,0 +1,214 @@
+{
+  "passedVisualInspection": true,
+  "completed": true,
+  "userVisualApproval": false,
+  "sourceHost": "host-review8.json",
+  "uiThirteenVisualInspectionCompleted": true,
+  "importedActualImageReviews": 15,
+  "freshActualImageReviews": 7,
+  "records": [
+    {
+      "file": "host-review6-ui-home.png",
+      "sha256": "420bab24e710601b25fb592c6fa3c17864ff6715bee8cf5bac775c3312144b61",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:30:53.022559+00:00",
+      "observation": "Actual Main home: version, approved-source minimi, primary run action, secondary crew route, section divider and five tabs visible without overlap.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-explore.png",
+      "sha256": "dbdefe131966e28f07924bf272497ddc04b9bf7a6fa7a87af2262b2a198cc65b",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:30:53.022617+00:00",
+      "observation": "Actual Main explore: three scope tabs/search/retry and real empty route section visible; unconfigured debug connection error is explicit and not treated as empty production data.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-running.png",
+      "sha256": "6615a288ac29c8b7c8850bab3100e26c74a25a95cd82cadf37a1e62c1a244d30",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:32:40.379159+00:00",
+      "observation": "Actual idle run: GPS-before state, background/local-storage explanation, approved-source avatar, options and fixed start action above app/OS navigation are visible. This is not an active GPS capture.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-crew.png",
+      "sha256": "09eb5b49cc0f6e8df454c12a1cb49008f27db326451a13dcfd63316b188c621f",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:32:40.379219+00:00",
+      "observation": "Actual crew page: my/browse depth, search/create and explicit unconfigured debug connection/retry state visible; no fabricated rooms/production success inferred.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-profile.png",
+      "sha256": "d948ab4ffe4c5094f86b8905eba848b5a914ace46a49e3bba336b073f5f4966a",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:32:40.379271+00:00",
+      "observation": "Actual review alias/profile: preserved4P, customize action, record periods/month and zero real local data shown. The bottom empty-state heading is a scroll boundary, not a proven blocked action.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-settings.png",
+      "sha256": "b8844330574a35379c5228fb0129a318f7e27bdcc2526a0d835f5301eec9016f",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:35:37.994873+00:00",
+      "observation": "Actual full-screen settings: profile/save, running/location toggles, notification status and backup sections separated by rules/spacing. Disabled Google backup is explicitly explained for this unconfigured debug. Close/action targets visible; lower contents scroll.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-closet.png",
+      "sha256": "0127a3f4dc59f8d94a7ee204a600c906c153c3498413f7082b47efb80a2bdf45",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:35:37.994951+00:00",
+      "observation": "Actual full-screen closet: approved-source preview, gender controls, horizontal categories, four ready tops and six fabric colors visible above OS bar without app navigation obstruction. Selected item and selected mint color have checkmarks; current preview reflects mint. No unapproved swimwear comparison entry.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-about.png",
+      "sha256": "296a620c1877660bec159a7373ee1c386ec13a443584dbdc407deaa5e6516ac1",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:36:27.561897+00:00",
+      "observation": "Actual About: actual0.3.7-dev/build19, explicit update connection failure instead of latest claim, update/history actions and fixed close visible. P2: weak modal/background separation and underlying tab label fragments outside footer. No background focus/touch leak inferred from pixels; partial license row is a scroll boundary.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-largeText.png",
+      "sha256": "dbc8955a067e603725f02ae338fde3979426803d0918bf89949a04f237364a93",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:40:24.288353+00:00",
+      "observation": "Actual Main closet at native320dp/font2: male/female, play/close, horizontal category and final palette rows plus application explanation remain above the OS bar. Blue selected chip/check visible. This verifies the closet part; active-run portion of nativeFont2 condition remains separate.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-landscape.png",
+      "sha256": "63f4aeda10feb54b87b06415b676304baf8a7169287473b7e75deb7dbcb93564",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:43:08.417775+00:00",
+      "observation": "Actual Main small-landscape closet: preview and male/female stay in left sidebar; selected shoe category and last color gold are visible on right above/outside the right OS bar; play/close remain visible. Lower explanatory text crosses the scroll viewport edge and is not an obstructed action.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-systemDark.png",
+      "sha256": "cbd46b22366e962dcb24645baa158cd35258d1545310fb706e13850c018ee3a0",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:46:02.438881+00:00",
+      "observation": "Actual Main home during separately recorded OS night=yes: intended light canvas and dark status/navigation glyphs, version/actions/body remain legible. Pixel appearance alone is not treated as OS-night evidence; the condition JSON records actual mode/night bit. No new dark app theme is inferred.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-ime.png",
+      "sha256": "a9013d585ed94806d710934024c3a3bb8d4154ff419a5dc69811fd41ac9ecff8",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:46:38.959947+00:00",
+      "observation": "Actual Main settings with actual AOSP IME visible: name draft and save action remain above keyboard; close remains at top. Keyboard focus/composing text are visible. Draft retention after hiding is a separate observed condition, not inferred solely from this image.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-ui-modal.png",
+      "sha256": "afc679bf60a589abcd5865491c7e34728ea24e733b998266dd6ad2d09be5c684",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T19:48:58.381638+00:00",
+      "observation": "Actual About scrolled to lower support/report row: content moved, report action and fixed close are visible. P2 weak outer/background separation persists. This is an About modal, not a crew creation or finish confirmation. Outside-tap result is separate condition evidence.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-main-native-320dp-font2.png",
+      "sha256": "e89a7a46f597c971458db56934b9ca326871a7754f9e41312cda81d660b26b7f",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:02:57.254978+00:00",
+      "observation": "Actual Main active portrait320dp/font2: distance0.03 and its unit/heading are fully visible in scroll body; fixed pause/finish stack and all five full tab labels remain above OS bar. Header/version yield space while active. Time heading is partly at scroll boundary; simultaneous full metrics not inferred.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review6-main-running-landscape-font2.png",
+      "sha256": "222b7f021c7b9ddd2106517b27d3e4daf4a78ba0ed275cf77f3abeddcd7c0b62",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:06:09.967682+00:00",
+      "observation": "Actual Main active landscape/font2: full0.03 distance and heading/unit fit above side-by-side pause/finish, all five icon+label tabs and right OS bar. The former active-landscape core-metric clipping P1 is not visible. Other metrics require scrolling, not simultaneous full display.",
+      "reviewRetainedFrom": "host-review6-root-visual-review.json",
+      "reviewRetainedSourceSha256": "8a170eb6ed588d3fd132b5d27f2c919a1e19e31073a173f37a07893fcb35e801",
+      "reviewActuallyRepeatedInCurrentAttempt": false
+    },
+    {
+      "file": "host-review8-main-running.png",
+      "sha256": "e0689d1e65bf1b94a86dc88c807b25da007a07ba4269640b59f4c0b2549f1ca5",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:34:34.126793+00:00",
+      "observation": "Fresh actual Main active run0.01km/00:58 inspected; metrics and pause/finish/five tabs are visible. Synthetic GPS, not phone/production. Valid non-black raw capture."
+    },
+    {
+      "file": "host-review8-systemui-running.png",
+      "sha256": "5098b5dc642fb50ed9ec21c768269d98ed947a7e713b183e063ec1c1f7245ace",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:36:35.386471+00:00",
+      "observation": "Fresh actual Android SystemUI notification: Runmoni RUNNING0.02km/02:43/current0.0kmh/unknown pace, pause/finish actions visible. This is an unlocked AOSP/TCG synthetic-GPS screenshot, not phone/Google/production evidence."
+    },
+    {
+      "file": "host-review8-systemui-paused.png",
+      "sha256": "62bd2e9ce63d93ae0a63c74175efaf86731708f866fef7cb532caf071ef54ec1",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:38:05.994622+00:00",
+      "observation": "Fresh actual Android SystemUI pause state:0.02km/03:41, explicit paused message and resume/finish controls. It corroborates the separate live state acknowledgement; no phone/latency SLA inferred."
+    },
+    {
+      "file": "host-review8-main-finish-confirmation.png",
+      "sha256": "33fb14a14d3d6c9758a0cf109ed51029bdc0e6f77f45aab90b96969cefb3159e",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:46:28.855344+00:00",
+      "observation": "Fresh actual notification-to-Main finish confirmation shows0.03km/09:54 with cancel and save+finish, readable dimmed backdrop. Separate live ACK records confirmation, actual cancel dialog dismissal and foreground run continuation."
+    },
+    {
+      "file": "host-review8-main-saved.png",
+      "sha256": "c6211438d069c9c78400054d4fe38b889672f85f13e9778ca499971090a344a9",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:48:40.079048+00:00",
+      "observation": "Fresh actual saved-run detail:0.03km/13:18, two separated real local synthetic segments, device-saved status, GPX export/delete/close visible. Logical snapshot separately proves775points/2segments/distance31.7297677m matches within-segment sum and one excluded pause boundary. P2 FormDialog outer depth/tab fragments also visible here; no action blocker."
+    },
+    {
+      "file": "host-review8-main-recovery.png",
+      "sha256": "4b6c2290f467276506a18fc3e48633cc226571b0c2ec5f1a9e85ed46334de400",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:53:24.434430+00:00",
+      "observation": "Fresh actual new-process Main recovery:0.02km/00:32, no current speed, explicit gap-exclusion explanation and continue/finish actions visible above tabs. Service absence and unchanged saved data are separate runtime checks, not inferred only from pixels."
+    },
+    {
+      "file": "host-review8-main-recovery-saved.png",
+      "sha256": "30b30b5c34b286340a5b54278c5b6718938c37e82292d96fb9f7b6498a9f5819",
+      "viewImageToolActuallyUsed": true,
+      "reviewedAtUtc": "2026-11-06T20:54:07.802045+00:00",
+      "observation": "Fresh actual recovered saved-run detail shows0.02km/00:32 and explicit interruption/gap exclusion, device-saved state and visible export/delete/close. Separate committed-vs-saved check proves30 identical points/15.8648839m/32441ms and interrupted=true, with no automatic FGS restart."
+    }
+  ],
+  "overallRuntimeReviewStillPending": false,
+  "allCapturedImagesViewedSoFar": true,
+  "sourceRuntimePassed": true,
+  "scope": "UI13 and active2 retained from actual source6 views; all7 fresh host8 BG captures actually viewed. Agent review, not user approval."
+}

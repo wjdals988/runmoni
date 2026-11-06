@@ -1,0 +1,9 @@
+
+com.runmoni.app.data.RunReliabilityTest:......
+com.runmoni.app.data.RunPersistenceTest:...
+
+Time: 9.341
+
+OK (9 tests)
+
+

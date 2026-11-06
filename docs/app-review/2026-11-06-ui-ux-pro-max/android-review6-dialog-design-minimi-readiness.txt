@@ -1,0 +1,2 @@
+large settings: waitMillis=42; timeoutMillis=120000
+large closet: waitMillis=9667; timeoutMillis=120000

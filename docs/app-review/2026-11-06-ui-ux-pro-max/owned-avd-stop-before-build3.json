@@ -1,0 +1,11 @@
+{
+  "stoppedAtUtc": "2026-11-06T17:41:57.464204+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "ownedPid": 23998,
+  "ownedProcessActive": false,
+  "onlyOwnedProcessTargeted": true,
+  "host5OriginalXmlAndLogicalDatabaseRestoredExactly": true,
+  "host5ControlledEnvironmentRestoredExactly": true,
+  "applicationOrTestBuildStartedBeforeStop": false
+}

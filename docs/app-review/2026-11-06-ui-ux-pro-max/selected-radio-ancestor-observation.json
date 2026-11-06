@@ -1,0 +1,243 @@
+{
+  "observedAtUtc": "2026-11-06T16:39:28.864487+00:00",
+  "source": "Read existing output of active host2 observer; no new dump or input",
+  "xmlSha256": "c048af1bcdb8d4f8d9cddf50f6ae97e0fa60a9d19417fd8cf66cb852748b61c0",
+  "freshObserverExecutionTriggered": false,
+  "genderNodes": [
+    {
+      "label": "남자",
+      "ancestorsIncludingLabel": [
+        {
+          "class": "android.widget.TextView",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[201,236][273,298]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "true",
+          "checked": "true",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "true",
+          "selected": "false",
+          "bounds": "[170,224][304,319]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[170,224][450,319]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,36][480,782]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "androidx.compose.ui.platform.ComposeView",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        }
+      ]
+    },
+    {
+      "label": "여자",
+      "ancestorsIncludingLabel": [
+        {
+          "class": "android.widget.TextView",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[347,236][419,298]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "true",
+          "checked": "false",
+          "clickable": "true",
+          "enabled": "true",
+          "focusable": "true",
+          "selected": "false",
+          "bounds": "[316,224][450,318]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[170,224][450,319]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,36][480,782]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.view.View",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "androidx.compose.ui.platform.ComposeView",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        },
+        {
+          "class": "android.widget.FrameLayout",
+          "package": "com.runmoni.app",
+          "checkable": "false",
+          "checked": "false",
+          "clickable": "false",
+          "enabled": "true",
+          "focusable": "false",
+          "selected": "false",
+          "bounds": "[0,0][480,782]"
+        }
+      ]
+    }
+  ],
+  "countsAsProductTest": false,
+  "limitations": [
+    "Existing XML can lag current UI. It is not a failure-time snapshot, fresh test, or selection success.",
+    "Only public gender labels and ancestor role/state/bounds are retained; full XML remains private."
+  ]
+}

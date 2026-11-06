@@ -1,0 +1,12 @@
+{
+  "tool": "Legacy platform UiAutomator shell observer revision2",
+  "source": "LiveDump.java",
+  "sourceSha256": "b5a85e5ad931f1bed19c4ee62247452f2a0af3515db792a3561566a1bed7bf4b",
+  "jarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "jarBytes": 2368,
+  "builtOfflineFromCachedSdk": true,
+  "packagedInProductApk": false,
+  "executed": false,
+  "reason": "Direct hierarchy API with basename + bounded null/empty root retry; standard DumpCommand idle wait is not used. No product cadence changes.",
+  "aospReference": "https://android.googlesource.com/platform/frameworks/base/+/refs/tags/android-10.0.0_r47/cmds/uiautomator/library/core-src/com/android/uiautomator/core/UiDevice.java"
+}

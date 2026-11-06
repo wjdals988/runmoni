@@ -1,0 +1,268 @@
+{
+  "name": "landscape4",
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "binaryReference": "binary-build3.json",
+  "reviewPhase": "landscape2",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-06T18:22:58.727655+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 2,
+  "actualPassedProductMethods": 2,
+  "groups": [
+    {
+      "name": "active-run-landscape",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.ActiveLandscapeNativeUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": false,
+        "nativeLandscape320ShortSideRequiredByClass": true,
+        "widthPx": 854,
+        "heightPx": 480,
+        "effectiveDensityDpi": 240,
+        "shortSideDp": 320.0,
+        "nativeLandscape": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "landscape4-active-run-landscape.txt",
+      "startedAtUtc": "2026-11-06T18:25:39.665409+00:00",
+      "actual": 2,
+      "rawSha256": "a4f013e4af12e133307b7117b5311d11ebdcbf69ff2ce365bdc009610a2fe930",
+      "elapsedSeconds": 93.99,
+      "finishedAtUtc": "2026-11-06T18:27:13.663253+00:00",
+      "minimiReadinessRaw": "landscape4-active-run-landscape-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "db69bef75e5baf50189973526455853bede74f1fdfe4fdfc76412e36f1749d00",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "landscape4-active-landscape-native-font2-run_distance-fixture.png",
+      "sha256": "5824f8a2294b23a2a23f85398d027fc32c0746ffb666977a7773868883fc4c9b",
+      "bytes": 34661,
+      "width": 854,
+      "height": 480,
+      "sourceGroup": "active-run-landscape",
+      "sourceRaw": "landscape4-active-run-landscape.txt",
+      "sourceKind": "API29 ComponentActivity device screenshot with native landscape/font2; fake callbacks",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": true
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_duration-fixture.png",
+      "sha256": "fb1974f146fa8067250def64c76f1eea3cb93b53804825505b35eb80e1472ecb",
+      "bytes": 35883,
+      "width": 854,
+      "height": 480,
+      "sourceGroup": "active-run-landscape",
+      "sourceRaw": "landscape4-active-run-landscape.txt",
+      "sourceKind": "API29 ComponentActivity device screenshot with native landscape/font2; fake callbacks",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": true
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_pace-fixture.png",
+      "sha256": "2f884caa93ca23f4a079ab6a0546493caf8cc3259fc57baa36d2755501f93d54",
+      "bytes": 36877,
+      "width": 854,
+      "height": 480,
+      "sourceGroup": "active-run-landscape",
+      "sourceRaw": "landscape4-active-run-landscape.txt",
+      "sourceKind": "API29 ComponentActivity device screenshot with native landscape/font2; fake callbacks",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": true
+    },
+    {
+      "file": "landscape4-active-landscape-native-font2-run_speed-fixture.png",
+      "sha256": "548d74872aa4885c68a6c48c72f68cb063794aab2170c698c40358a1495d9a22",
+      "bytes": 38099,
+      "width": 854,
+      "height": 480,
+      "sourceGroup": "active-run-landscape",
+      "sourceRaw": "landscape4-active-run-landscape.txt",
+      "sourceKind": "API29 ComponentActivity device screenshot with native landscape/font2; fake callbacks",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": true
+    }
+  ],
+  "executedDriver": "landscape4-executed-driver.py",
+  "executedDriverSha256": "f9351feb2e5c98392c83c8a4210ded1c2769a28f61bd7e7e496358285dedf50f",
+  "observerHelper": "landscape4-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native cases run existing 320dp/font2 height, safe-area, and scroll/semantics assertions; no additional OS touch or authentication is inferred."
+  ],
+  "updatedAtUtc": "2026-11-06T18:27:25.834617+00:00",
+  "binaryReferenceSha256": "4a57ba7f0bae254b3bcd593354eb81ecca132405e14d06cd985be019fb621d1d",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "8868750e841f8466e156947727b9f6d9a458765ea20837bae0a9a7a67adf9260"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "9c2436f1aacc901345e4f314117b65d0e96a60fb0c5b1d37b2af27636f628305"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "fixedToUserRotation": {
+    "before": false,
+    "beforePolicy": "default",
+    "forcedEnabledForLandscape": true,
+    "restoredExactly": false,
+    "restorationScope": "Effective value and default/disabled/enabled policy only; full display-settings file bytes are not claimed identical",
+    "after": false,
+    "afterPolicy": "disabled"
+  },
+  "privateEnvironmentBackup": {
+    "file": "landscape4-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "landscape4-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": false,
+  "settingsPermissionsPowerRestoredExactly": false,
+  "environmentRestoreFailureType": "AssertionError",
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-06T18:27:25.834610+00:00"
+}

@@ -1,0 +1,44 @@
+
+com.runmoni.app.ui.ActiveLandscapeNativeUiTest:
+Error in allFiveTabsRemainReachableAndNavigationDoesNotPauseOrFinishTheRun(com.runmoni.app.ui.ActiveLandscapeNativeUiTest):
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.requireNativeWindow(ActiveLandscapeNativeUiTest.kt:23)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.allFiveTabsRemainReachableAndNavigationDoesNotPauseOrFinishTheRun(ActiveLandscapeNativeUiTest.kt:84)
+
+Error in distanceTimePaceAndSpeedEachFitEntirelyAboveFixedActionsAtNativeFont2(com.runmoni.app.ui.ActiveLandscapeNativeUiTest):
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.requireNativeWindow(ActiveLandscapeNativeUiTest.kt:23)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.distanceTimePaceAndSpeedEachFitEntirelyAboveFixedActionsAtNativeFont2(ActiveLandscapeNativeUiTest.kt:67)
+
+
+Time: 15.159
+There were 2 failures:
+1) allFiveTabsRemainReachableAndNavigationDoesNotPauseOrFinishTheRun(com.runmoni.app.ui.ActiveLandscapeNativeUiTest)
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.requireNativeWindow(ActiveLandscapeNativeUiTest.kt:23)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.allFiveTabsRemainReachableAndNavigationDoesNotPauseOrFinishTheRun(ActiveLandscapeNativeUiTest.kt:84)
+2) distanceTimePaceAndSpeedEachFitEntirelyAboveFixedActionsAtNativeFont2(com.runmoni.app.ui.ActiveLandscapeNativeUiTest)
+java.lang.AssertionError: expected:<2> but was:<1>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.requireNativeWindow(ActiveLandscapeNativeUiTest.kt:23)
+	at com.runmoni.app.ui.ActiveLandscapeNativeUiTest.distanceTimePaceAndSpeedEachFitEntirelyAboveFixedActionsAtNativeFont2(ActiveLandscapeNativeUiTest.kt:67)
+
+FAILURES!!!
+Tests run: 2,  Failures: 2
+
+

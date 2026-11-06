@@ -1,0 +1,7 @@
+{
+  "stoppedAtUtc": "2026-11-06T18:22:24.253765+00:00",
+  "lastObservedPhase": "created",
+  "exactInterruptionPhaseClaimed": false,
+  "reason": "Peer identified that effective fixed-to-user-rotation bool may collapse default vs disabled policy; stop before mutation to preserve original tri-state policy.",
+  "lastObservedActualPassedProductMethods": 0
+}

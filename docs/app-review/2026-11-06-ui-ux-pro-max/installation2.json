@@ -1,0 +1,14 @@
+{
+  "version": "0.3.7-dev",
+  "versionCode": 19,
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "existingAppApkShaVerifiedUnchanged": true,
+  "appInstallSkippedBecauseByteIdentical": true,
+  "updatedTestInstallSucceeded": true,
+  "preInstallPreferencesPreservedExactly": true,
+  "uninstallOrDataReset": false,
+  "binaryReference": "binary-build2.json",
+  "installedHashesWillBeCheckedBeforeAndroidTests": true
+}

@@ -1,0 +1,10 @@
+{
+  "requestedAtUtc": "2026-11-06T16:42:39.563006+00:00",
+  "signal": "SIGINT",
+  "scope": "Exact owned host-review3 collector; AVD retained",
+  "lastObservedPhase": "anonymous-local-fixture-ready-points-and-owned-preserved",
+  "reason": "Root found a collector-only wrong constant name a.SOURCE_MAPS; the imported module defines a.MAPS. Stop before continuing the known-invalid import path.",
+  "productFailureClaimed": false,
+  "productOrTestApkChanged": false,
+  "cleanupResultNotAssumed": true
+}

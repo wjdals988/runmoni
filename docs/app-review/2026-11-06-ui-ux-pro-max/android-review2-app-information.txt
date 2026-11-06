@@ -1,0 +1,33 @@
+
+com.runmoni.app.ui.AppInformationTest:.....
+Error in fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls(com.runmoni.app.ui.AppInformationTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains '공지 · 채팅' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:393)
+	at androidx.compose.ui.test.Actions_androidKt.performClickImpl(Actions.android.kt:20)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:53)
+	at com.runmoni.app.ui.AppInformationTest.fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls(AppInformationTest.kt:109)
+..
+
+Time: 163.814
+There was 1 failure:
+1) fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls(com.runmoni.app.ui.AppInformationTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + EditableText contains '공지 · 채팅' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:393)
+	at androidx.compose.ui.test.Actions_androidKt.performClickImpl(Actions.android.kt:20)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:53)
+	at com.runmoni.app.ui.AppInformationTest.fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls(AppInformationTest.kt:109)
+
+FAILURES!!!
+Tests run: 8,  Failures: 1
+
+

@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-11-06T20:18:36.914624+00:00",
+  "parentReference": "host-review6.json",
+  "parentSha256": "a01839f0090457a2e90580ea1c03ed94e7bd40dcf3974790db29ebd494b318c6",
+  "failure": "Visible exact action: \uc800\uc7a5\ud558\uace0 \ub9c8\uce58\uae30",
+  "privateFailureImage": {
+    "file": "host-review6-private-failure.png",
+    "keptOutsideGit": true
+  },
+  "privateFailureImageSha256": "2dd7c5d96c424e134302d3ea00745de0fbaeafdf149905c2ab3cd6f340ee1d17",
+  "privateFailureImageActuallyViewed": true,
+  "observation": "Second finish tap after cancellation left the SystemUI shade open. Save confirmation was not visible; missed input vs notification delivery vs application handling cause remains unknown.",
+  "firstFinishDialogActuallyViewed": "host-review6-main-finish-confirmation.png",
+  "completedUiCaptureCount": 13,
+  "completedActiveMetricCaptureCount": 2,
+  "backgroundScenarioSuccessClaimed": false,
+  "productSourceChanged": false,
+  "plannedCollectorChange": "Bounded original-target activity-tap acknowledgement/retries, consistent with existing pause/resume ACK logic. Preserve failed attempts; no latency SLA."
+}

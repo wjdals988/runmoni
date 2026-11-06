@@ -1,0 +1,1 @@
+native 320dp / font2 active Home action: waitMillis=14511; timeoutMillis=120000

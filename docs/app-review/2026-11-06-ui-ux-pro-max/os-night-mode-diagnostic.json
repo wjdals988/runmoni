@@ -1,0 +1,93 @@
+{
+  "startedAtUtc": "2026-11-06T16:59:44.727950+00:00",
+  "scope": "Owned API29 AOSP emulator only; temporary OS night mode diagnostic",
+  "productTestCount": 0,
+  "productOrTestApkChanged": false,
+  "preferencesWritten": false,
+  "photosCollected": 0,
+  "passed": true,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "beforeMode": {
+    "getter": "Night mode: no",
+    "observed": "no",
+    "dumpsysModeLines": [
+      "  mNightMode=1 (no)  mNightModeLocked=true mCarModeEnabled=false mComputedNightMode=false mCarModeEnableFlags=0 mEnableCarDockLaunch=true",
+      "  mCurUiMode=0x11 mUiModeLocked=false mSetUiMode=0x11"
+    ]
+  },
+  "ordinaryShellAfterYes": {
+    "getter": "Night mode: no",
+    "observed": "no",
+    "dumpsysModeLines": [
+      "  mNightMode=1 (no)  mNightModeLocked=true mCarModeEnabled=false mComputedNightMode=false mCarModeEnableFlags=0 mEnableCarDockLaunch=true",
+      "  mCurUiMode=0x11 mUiModeLocked=false mSetUiMode=0x11"
+    ]
+  },
+  "temporaryRootCommand": {
+    "returnCode": 0,
+    "output": "Night mode: yes"
+  },
+  "temporaryRootAfterYes": {
+    "getter": "Night mode: yes",
+    "observed": "yes",
+    "dumpsysModeLines": [
+      "  mNightMode=2 (yes)  mNightModeLocked=true mCarModeEnabled=false mComputedNightMode=false mCarModeEnableFlags=0 mEnableCarDockLaunch=true",
+      "  mCurUiMode=0x21 mUiModeLocked=false mSetUiMode=0x21"
+    ]
+  },
+  "actualRootModeYesObserved": true,
+  "rootRestoreCommand": {
+    "returnCode": 0,
+    "output": "Night mode: no"
+  },
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "restoreCommandFailures": [],
+  "preferencesPreservedExactly": true,
+  "afterMode": {
+    "getter": "Night mode: no",
+    "observed": "no",
+    "dumpsysModeLines": [
+      "  mNightMode=1 (no)  mNightModeLocked=true mCarModeEnabled=false mComputedNightMode=false mCarModeEnableFlags=0 mEnableCarDockLaunch=true",
+      "  mCurUiMode=0x11 mUiModeLocked=false mSetUiMode=0x11"
+    ]
+  },
+  "finishedAtUtc": "2026-11-06T17:00:28.393052+00:00",
+  "limitations": [
+    "OS mode diagnostic only; no product screen, touch, authentication, or background running test is counted.",
+    "su0 is one temporary emulator command; adbd mode, package permissions, system policy resources and app data were not changed.",
+    "Original private environment snapshots stay in ignored WORK. Only public OS mode lines are retained here."
+  ]
+}
