@@ -120,3 +120,5 @@ host-review6의 [별도 관찰](host-review6-activity-notification-observation.j
 승인 원본3복사본 SHA256 `f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65`, 58ID/9분류/13슬롯·준비36(기존13+추가23)/미준비22·0P·성별·기존 선택/보유권/포인트/저장을 보존했다. 이번 UI 적용을 새58종 원화 완성·사용자 시각 승인으로 표시하지 않는다. 작은 한글 조사 줄바꿈이나 앱정보 배경 분리는 P2 개선 대상으로 보되 정상 스크롤 경계의 부분 노출을 P1로 세지 않는다.
 
 실제 휴대폰/Google/운영 쓰기·야외 GPS/화면 끔 장기 관찰·Doze/OEM 절전·배터리·Android12 이상 실행·사용자 시각 승인은 별도다. 현재 공개 APK `0.3.6-dev`의 실제 출처 `d27b31f85eafa42eb4c96fe17ff2483536d919f0`를 이 debug 문서나 새 main으로 바꾸지 않는다. 새 공개 APK의 sourceRevision은 이후 실제 서명 CI/공개 자산에서 확인한 값으로 기록하며 이 로컬 sourceCommitAtBuild를 공개 APK 출처로 사용하지 않는다.
+
+최종 후속 검토: 앱 정보와 저장된 기록 상세의 FormDialog 배경 구분·바깥 탭 글리프 일부 노출, 일부 큰 글씨 한글 줄바꿈은 P2로 남긴다. 조작 차단이나 포커스 누출이 입증된 것은 아니다. host-review7도 SystemUI 포커스/입력 뒤 상태를 관찰하지 못해 실패했고 원문 false와 검토행 정리·정확 복원을 보존한다. 최종 host8에서 수집기만 보강해 BG2를 새로 검증했으며 host7을 통과로 계산하지 않았다.
