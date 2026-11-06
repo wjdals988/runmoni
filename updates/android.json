@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.3.5-dev",
-    "versionCode": 17,
-    "fileName": "runmoni-0.3.5-dev.apk",
-    "sizeBytes": 219017566,
-    "sha256": "ad0c5cb66d2bda2917ed0a9b6551a3d5c69fbb1ef872d6ce5e60dc49c3883559",
+    "version": "0.3.6-dev",
+    "versionCode": 18,
+    "fileName": "runmoni-0.3.6-dev.apk",
+    "sizeBytes": 219066718,
+    "sha256": "e05bc3be0fa4d4a4120ac2d01aea993662fb8abdcd647da4c094de3f838e61b1",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "9d9d31dc358d9b0e47d34f73df4e9ad8276d80a9",
+    "sourceRevision": "d27b31f85eafa42eb4c96fe17ff2483536d919f0",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.5-dev/runmoni-0.3.5-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.5-dev",
-    "notes": "로고가 있는 시작 화면을 추가하고 홈·설정·옷장의 반복 설명을 줄였습니다. 기록·보유 아이템·포인트는 유지합니다. 실기기 검증 전 개발 프리뷰이며 Android12이상 시작 화면·Google 로그인·운영 연결은 별도 확인이 필요합니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.6-dev/runmoni-0.3.6-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.6-dev",
+    "notes": "처음에는 스플래시 뒤 Google 로그인·게스트를 선택하고, 선택을 마친 기기와 기존 사용자는 바로 시작합니다. 기록·포인트·꾸미기는 유지합니다. 실기기 검증 전 개발 프리뷰이며 실제 Google·운영 연결·Android12이상 실행은 별도 확인이 필요합니다."
   },
   "schemaVersion": 1,
   "stable": null
