@@ -1,3 +1,10 @@
+# 0.3.7-dev 공개 — 2026-11-07 한국 시간
+
+- 전체 화면의 위계·정렬·큰 글씨/키보드 조작과 백그라운드 러닝·알림 제어를 같은 보관키 개발 프리뷰로 공개했다. 실제 APK출처 `aa9f4e21983899d0d3d90a73ac41dc02f8662632`,219246942bytes/SHA256 `a864ed8cb0df6444a8074368a21892a8b6f46e97e1432ba2936360f3b0525a53`를 후속 문서/피드 커밋으로 바꾸지 않는다.
+- 서명 CI42293094340의 새 JVM115·실패/오류/skip0, release lint오류0/경고69와 실제 패키지/서명/non-debuggable/내장출처·공개3자산/sidecar/HEAD200을 대조했다. 로컬 debug의 JVM115는 build3 실제 실행을 build4가 재사용한 결과이며 CI 실행과 합산하지 않는다.
+- Android63회는 같은 제품 APK의 기본56+native4+가로2와 검사 기대 수정 뒤 새1이다. 서로 다른 test APK3/4의 계보와 원래 실패 parent/별도 후속 복원을 보존했다. source6의 실제 UI13/활성2 원본을 재사용하고 host8에서 BG2를 새로 실행했다. 상세 실행·실패·시각 검토는 [게시 근거](docs/RELEASE_REVIEW_0.3.7_20261106.md)에 기록했다.
+- 대시보드 CI/Production/main·운영13항목·PNG4장 바이트와 로컬 Node23회 통과를 확인했다. preview19/stable null의 canonical raw 전체 JSON은 이 문서/피드 PR 병합 뒤 대조한다. 휴대폰·Google·운영 쓰기·야외GPS·Doze/OEM·Android12이상·공개 서명 APK 실행·사용자 시각 승인은 미확인이다.
+
 # 0.3.7-dev 최종 로컬 검토 — 2026-11-07 한국 시간
 
 - 전체 UI와 백그라운드 러닝 검토를 완료했다. build3의 새 JVM115회(실패/오류/skip0), debug lint 오류0/경고39를 유지한다. build4는 제품 APK가 같고 검사 기대 한 블록만 수정했으며 JVM/lint는 UP-TO-DATE이므로 새 실행으로 세지 않는다.
