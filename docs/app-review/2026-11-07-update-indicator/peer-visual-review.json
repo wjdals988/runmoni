@@ -1,0 +1,32 @@
+{
+  "reviewedAtUtc": "2026-11-07T12:50:22.762272+00:00",
+  "reviewer": "benchmark_design_review",
+  "mode": "Read-only independent local image inspection",
+  "images": [
+    {
+      "file": "android-review3-version-shortcut-home-fixture.png",
+      "sha256": "f40347f829ebb9eecc8401beb4fd4808ea8740858f987c356c46c2c183f297a1",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "native1-update-header-native-320-font2-ltr-fixture.png",
+      "sha256": "dd75b9f5d4f579f122b197cdd8d7bb45cb5f4f790e5bc2a531706e5665ebbc02",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "native1-update-header-native-320-font2-rtl-fixture.png",
+      "sha256": "519e270d49c6e4c725fc224ccec23fd2fe12ab6389cc63c80e282311125bd10b",
+      "actuallyViewedWithViewImage": true
+    }
+  ],
+  "newP0P1Found": false,
+  "observations": [
+    "Full installed version string, red dot and settings are visibly separated in normal and actual320dp/font2 LTR/RTL fixtures.",
+    "Five tabs and OS regions are separate. RTL is a local direction override.",
+    "LTR avatar loading indicator is not an artwork-readiness approval."
+  ],
+  "userVisualApproval": false,
+  "productionApkExecutionVerified": false,
+  "mainActivityExecutionVerified": false,
+  "future99Published": false
+}

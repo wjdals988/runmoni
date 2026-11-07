@@ -1,3 +1,10 @@
+# 0.3.8-dev 공개 — 2026.11.07 한국 시간
+
+- 레드닷/버전 간격 수정. 0.3.8-dev/code20, 219,246,942bytes, SHA256 `c4b484900795defb6d2d5b47d7f9b3545ed99174a07445c2e52edf51937ac76c`, 실제 APK 출처 C `f55bdd6343770847e2284a75faf40063c22a5951`; 출처는 후속 문서D로 바꾸지 않는다.
+- 서명 CI42373912871의 실제 JVM115·실패/오류/skip0·release lint오류0/경고69. 로컬 JVM115/debug lint0/39는 build1 실제 실행이며 같은 제품 APK의 test-only build2가 UP-TO-DATE로 재사용했다. 새115회로 합산하지 않는다. Android는 같은 build2 pair의 기본9+실제320dp/font2 native2=11회다.
+- root5/갤러리4는 ComponentActivity/합성99 픽스처이며 MainActivity가 아니다. 제품검사 전0회 중단/8중1실패·사진상태 제외/blank 정정·복원 이력은 [게시 근거](docs/RELEASE_REVIEW_0.3.8_20261107.md)에 보존한다.
+- 운영13항목/PNG4장·CI/Production/main을 대조했다. preview20/stable null의 canonical raw는 PR 병합 뒤 확인한다. 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31+·공개 서명 APK 실행·사용자 시각 승인은 미검증이다.
+
 # 0.3.8-dev 로컬 검토 완료 — 2026-11-07 한국 시간
 
 - 같은 제품 APK에서 Android 기본9+실제320dp/글씨2배 native2=11회가 같은 build2 앱/test pair로 통과했다. 점/버전/설정의 경계·LTR/RTL·표시 상태·명시적 확인 뒤 링크와 줄 경계12행을 확인했다. 기존0.3.7 BG2/63회와 합산하지 않는다.

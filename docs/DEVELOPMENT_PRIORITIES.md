@@ -1,17 +1,16 @@
-# 개발 우선순위 — 0.3.7-dev 공개 이후 (2026-11-07 한국 시간)
+# 개발 우선순위 — 0.3.8-dev 공개 이후 (2026.11.07 한국 시간)
 
-현재 공개0.3.7-dev/code19, APK 출처 `aa9f4e21983899d0d3d90a73ac41dc02f8662632`,219246942bytes/SHA256 `a864ed8cb0df6444a8074368a21892a8b6f46e97e1432ba2936360f3b0525a53`. [게시 검증](RELEASE_REVIEW_0.3.7_20261106.md) · [이어가기](DEVELOPMENT_CONTINUATION.md).
+0.3.8-dev/code20, 219,246,942bytes, SHA256 `c4b484900795defb6d2d5b47d7f9b3545ed99174a07445c2e52edf51937ac76c`, 실제 APK 출처 C `f55bdd6343770847e2284a75faf40063c22a5951`. [게시 검증](RELEASE_REVIEW_0.3.8_20261107.md) · [이어가기](DEVELOPMENT_CONTINUATION.md).
 
 |우선순위|현재 확인|다음 작업|
 |---|---|---|
-|P0 UI/조작|동일 제품: build3 기본56+native4+가로2 및 test-only build4 새1=63·source6 UI13/조건4·active2 원본 재사용|휴대폰/다른 크기·TalkBack·사용자 시각 승인, 재현 장애 우선 수정|
-|P0 러닝/알림|새 합성 GPS/API29/TCG BG2·SystemUI·공백 제외/복구·앱 XML/DB/통제 환경 복원|야외 GPS·잠금/장시간·권한/알림 거부·Doze/OEM·Android12이상|
-|P0 게시|같은 키 APK/3자산/HEAD·운영13항목/Main3/SystemUI1·CI/Production/main|preview19/stable null PR 병합 뒤 canonical raw 전체 JSON 대조|
-|P0/P1 계정·크루|Google/게스트 진입·UID 보존 연결·크루와 하위 파티 유지|실제 Google·기기 변경·운영 쓰기/권한·크루장 승계/신고·차단|
-|P1 원화|승인 원본·36개 표시·58ID/13슬롯/0P/성별·보유권·포인트 유지|미준비22개 원화·조합·사용자 시각 검토|
-|P2 가독성/깊이|실제 시각 검토와 수치 bounds를 구분|한글 줄바꿈·모달 배경 구분. 바깥 터치/포커스 누출 재현 시 P1|
+|P0 레드닷|0.3.8 간격 수정/9+2=11·root5·운영반영 완료|휴대폰/다른 글씨 크기·사용자 검토|
+|P1 F03|후보 분석만/준비36·미준비22 유지|남자 색상·성별별 준비판정, 양말16셀 원화/계약부터 검토|
+|P0 실기기·운영|CI 설정과 실제 인증/장시간 실행 구분|휴대폰/Google·운영 쓰기·야외 GPS·Doze/OEM·API31+|
+|P2 UI 깊이|기존 정보/기록 FormDialog의 배경 구분 후속 유지|재현/사용자 시각 검토 뒤 개선|
+|게시 마감|동일키/운영13항목/PNG4·preview20 준비|문서PR 병합 뒤 canonical raw 전체 응답/PR 기록|
 
-실제 휴대폰·Google·운영 쓰기·야외GPS·장시간 Doze/OEM·Android12이상·공개 서명 APK 실행·사용자 시각 승인은 미확인이다. 이전 부분 통과·실패·검사 수정·복원 범위는 [게시 검증](RELEASE_REVIEW_0.3.7_20261106.md)에 보존했으며 새 성공 횟수에 합산하지 않는다. 아래 날짜별 내역은 당시 근거다.
+휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31+·공개 서명 APK 실행·사용자 시각 승인은 미검증이다. 과거 내역은 아래 그대로 보존한다.
 
 ## 이번 사용자 보고 반영 결과 — 2026-11-04 UTC
 
