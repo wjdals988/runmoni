@@ -1,0 +1,13 @@
+{
+  "recordedAtUtc": "2026-11-07T12:17:49.686498+00:00",
+  "failedAttempt": "android-review1.json",
+  "failedAttemptSha256": "22fe6757957f76e5e27d0925090ba11240d805de7b840a54005bef6dd65ff30b",
+  "failureBeforeProductMethods": true,
+  "installedVersionNameObservedAfterFailure": "0.3.8-dev",
+  "installedVersionCodeObservedAfterFailure": 20,
+  "oldCollectorRequiredLiteralVersionCode": 19,
+  "correction": "Read expected versionCode from CODE=20; keep actual installed APK SHA and version-name checks",
+  "appOrTestSourcesChanged": false,
+  "productMethodsExecutedInFailedAttempt": 0,
+  "restorationNotApplicableBeforeMutation": true
+}

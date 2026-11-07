@@ -1,0 +1,36 @@
+{
+  "recordedAtUtc": "2026-11-07T12:41:48.991449+00:00",
+  "performedAfterBothParentCompletion": true,
+  "sourceMaps": {
+    "productSources": {
+      "fileCount": 71,
+      "matches": true
+    },
+    "testSources": {
+      "fileCount": 53,
+      "matches": true
+    },
+    "resources": {
+      "fileCount": 18,
+      "matches": true
+    },
+    "rendererAssets": {
+      "fileCount": 79,
+      "matches": true
+    },
+    "approvedSourceCopies": {
+      "fileCount": 3,
+      "matches": true
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true
+    }
+  },
+  "parentReferences": {
+    "android-review3.json": "064dc4741ad782c605f3d1d7ffefc554076461a8a28d8d2c3ade0deb0cfa22b0",
+    "native1.json": "9e77ad3421b0625be8c25c96f9edda056e1cc9512aa4b980ce91041aa19b64f7"
+  },
+  "timing": "Separate root measurement after both completed/restored parents; original collector records Before/After only, no sourceMapsFinal field is synthesized",
+  "fullOsEqualityClaimed": false
+}

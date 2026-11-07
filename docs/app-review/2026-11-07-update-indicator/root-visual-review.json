@@ -1,0 +1,51 @@
+{
+  "passedVisualInspection": true,
+  "userVisualApproval": false,
+  "recordedAtUtc": "2026-11-07T12:41:48.994797+00:00",
+  "scope": "Only five actually viewed accepted Android ComponentActivity UI fixtures; not MainActivity or signed release execution, no physical device or Google authentication",
+  "images": [
+    {
+      "file": "android-review3-version-shortcut-home-fixture.png",
+      "sha256": "f40347f829ebb9eecc8401beb4fd4808ea8740858f987c356c46c2c183f297a1",
+      "actuallyViewedWithViewImage": true,
+      "observation": "Normal full-device fixture: installed version, dot and settings visibly separate."
+    },
+    {
+      "file": "android-review3-version-shortcut-confirmation-fixture.png",
+      "sha256": "031b7dfd0274436641eed430c3800d10e60bba4752a9a201d6a9e392f42e8c59",
+      "actuallyViewedWithViewImage": true,
+      "observation": "Full-device confirmation fixture with synthetic99, visible explicit later/download actions."
+    },
+    {
+      "file": "android-review3-about-information-fixture.png",
+      "sha256": "9e0086ff0807512014b34bb762d6a87c93e5587a3fe35559fa0b62d97c5edc18",
+      "actuallyViewedWithViewImage": true,
+      "observation": "Compose-target crop of scrolled support/error fixture; partial prior row is a scroll edge, not proof of the whole version label."
+    },
+    {
+      "file": "native1-update-header-native-320-font2-ltr-fixture.png",
+      "sha256": "dd75b9f5d4f579f122b197cdd8d7bb45cb5f4f790e5bc2a531706e5665ebbc02",
+      "actuallyViewedWithViewImage": true,
+      "observation": "Actual OS320dp/font2, LTR local direction: full version and dot separate below logo/settings. Avatar loading indicator is visible; no avatar readiness approval from this frame."
+    },
+    {
+      "file": "native1-update-header-native-320-font2-rtl-fixture.png",
+      "sha256": "519e270d49c6e4c725fc224ccec23fd2fe12ab6389cc63c80e282311125bd10b",
+      "actuallyViewedWithViewImage": true,
+      "observation": "Actual OS320dp/font2, RTL local direction: full version and trailing dot separate from settings. Avatar has rendered; logical direction override is not an OS locale test."
+    }
+  ],
+  "excludedFromGallery": [
+    {
+      "file": "android-review3-settings-update-notice-fixture-not-a-published-release.png",
+      "sha256": "107818bcdfe88fe24a7d8ec5168d869fa765af9db124747685a34ebde24506aa",
+      "reason": "Actual body pixels match Home exactly, not the intended settings state; do not use as settings-screen evidence."
+    }
+  ],
+  "initialBlankClassificationCorrected": true,
+  "correctionEvidence": "Image body0,80..width,height-80 has3617colors and identical SHAa6b40ec521d169a460e0231603976bccb966db83dd916b6ecc7207b179afc415 across home-dot, settings-notice and version-shortcut-home captures. They are not blank. Screen-state capture timing cause remains unconfirmed.",
+  "remainingLimits": [
+    "Line geometry audits do not directly prove every glyph pixel or all parent clipping. Root images cover the selected states only.",
+    "Existing modal backdrop separation/large-text Korean wrapping followups remain; no all-screen visual approval."
+  ]
+}

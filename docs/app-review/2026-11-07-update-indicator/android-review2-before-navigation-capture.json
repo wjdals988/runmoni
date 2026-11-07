@@ -1,0 +1,8 @@
+{
+  "file": "android-review2-failed-group-home-before-navigation.png",
+  "sha256": "b338db15fa37a9d8044fc265a0b2553b8c103fd592c22bca94708f9922ef62f7",
+  "sourceRaw": "android-review2-app-information.txt",
+  "source": "Fresh failed group cache: screenshot taken before tab navigation/assertion failure, not exact failure-time frame",
+  "testsGroupPassed": false,
+  "productMethodsCountedAsPassed": 0
+}
