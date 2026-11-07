@@ -21,6 +21,8 @@
 
 ## 변경 이력
 
+- 2026.11.07 공개:0.3.8-dev/code20 레드닷 간격 수정. APK출처 `f55bdd6343770847e2284a75faf40063c22a5951`는 후속 문서D로 바꾸지 않는다. CI42373912871 JVM115·Android9+2=11·ComponentActivity/합성99 root5/갤러리4·복원/운영13항목 확인. 로컬build2 JVM/lint는build1 재사용. 준비36/미준비22 유지, F03는 후보분석만. 실기기/Google/절전/API31+/사용자승인 별도. [게시근거](docs/RELEASE_REVIEW_0.3.8_20261107.md).
+
 - 2026-11-07 게시 완료: 전체 UI·백그라운드 러닝/알림 개선0.3.7-dev/code19를 같은 보관키 개발 프리뷰로 공개했다. APK 실제 출처 `aa9f4e21983899d0d3d90a73ac41dc02f8662632`를 후속 문서/피드 커밋으로 바꾸지 않는다. [게시 검증](docs/RELEASE_REVIEW_0.3.7_20261106.md)·[다음 우선순위](docs/DEVELOPMENT_PRIORITIES.md)를 읽는다. 서명CI JVM115/Android63(56+4+1+2)·source6 UI15장 재사용/새 BG2·운영 페이지와 PNG4장을 확인했다. 상세 실패/검사 수정/복원 범위는 원문을 보존한다. 승인 원본·58ID/13슬롯/0P/성별·기존 데이터/키/Rules를 유지하며 휴대폰·Google·야외GPS·Doze/OEM·API31+·사용자 시각 승인은 별도다.
 
 - 2026-11-06 최신 사용자 지시: ui-ux-pro-max (nextlevelbuilder/ui-ux-pro-max-skill)를 앱 전체 페이지에 적용하고 다음 작업·커밋/푸시/PR·대시보드 배포를 이어간다. [MASTER](design-system/runmoni/MASTER.md)와 [실제 검색/채택 근거](docs/design/ui-ux-pro-max/README.md)를 우선 읽는다. 자동 marketing/AI-native 추천은 제품 불일치로 거절했고 기존 녹색/시스템폰트·승인미니미를 보존한다. 공통 위계/정렬/폭/여백/48dp·작은 화면/큰 글씨·IME/상태/전체 동선을 개선한다. 미게시0.3.7/code19에 기존 BG 변경을 포함하되 이전115/33은 baseline으로만 보존하고 전체 UI 새 실행과 합산하지 않는다. host5 환경 중단은 finally/정확 복원이 미완료이며, 다음 AVD에서 검토행/전체XML 복원과 원래 설정 미확인을 구분한다. 기존 main통합·동일키 개발 APK/운영 대시보드/피드 승인과 데이터/원본/출처·순차 작업 제약을 유지한다.

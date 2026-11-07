@@ -1,14 +1,12 @@
-# 런모니 개발 이어가기 — 0.3.7-dev 공개 이후
+# 런모니 개발 이어가기 — 0.3.8-dev 공개 이후
 
-2026-11-07 한국 시간. 현재 공개0.3.7-dev/code19, APK 실제 출처는 `aa9f4e21983899d0d3d90a73ac41dc02f8662632`다. 후속 문서·피드 커밋으로 출처를 바꾸지 않는다. [APK·서명·검증·실패 이력](RELEASE_REVIEW_0.3.7_20261106.md)과 [실제 화면](UI_UX_PRO_MAX_REVIEW_20261106.md)을 시작점으로 사용한다.
+2026.11.07 한국 시간. 0.3.8-dev/code20, 219,246,942bytes, SHA256 `c4b484900795defb6d2d5b47d7f9b3545ed99174a07445c2e52edf51937ac76c`, 실제 APK 출처 C `f55bdd6343770847e2284a75faf40063c22a5951`. [게시 검증](RELEASE_REVIEW_0.3.8_20261107.md) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.8-dev/runmoni-0.3.8-dev.apk). 출처 C는 후속 문서D로 바꾸지 않는다.
 
-전체 UI의 위계·정렬·48dp 조작·큰 글씨/키보드와 활성 러닝 가로 수치 표시를 개선했다. 화면 끔 기록, 알림 일시정지/재개·현재 러닝 확인 후 종료, 강제 종료 뒤 공백 제외 복구를 보강했다. [MASTER](../design-system/runmoni/MASTER.md)와 [스킬 검색·채택 근거](design/ui-ux-pro-max/README.md)를 따른다.
+레드닷 간격 수정과 기본9+native2=11·전체 XML/프로필/통제 환경 복원을 확인했다. 로컬 JVM115/debug lint0/39는 build1 실제 실행이며 같은 제품 APK의 test-only build2가 UP-TO-DATE로 재사용했다. 새115회로 합산하지 않는다. Android는 같은 build2 pair의 기본9+실제320dp/font2 native2=11회다. root5장/갤러리4장은 ComponentActivity/합성99 픽스처이며 MainActivity가 아니다.
 
-서명 CI의 새 JVM115가 통과했고 release lint오류0/경고69를 확인했다. 로컬 Android63은 같은 제품에서 기본56+native4+가로2(build3), 검사 기대 수정 뒤 새1(build4)로 구성한다. 로컬 JVM115는 build3 실제 실행을 유지했으며 build4의 새 실행으로 세지 않는다. UI13/활성2 사진은 source6 원본 재사용이고 BG2는 host8의 새 실행이다. 실패 parent와 별도 복원 범위는 게시 검증에서 확인한다.
+서명 CI42373912871의 실제 JVM115·실패/오류/skip0·release lint오류0/경고69. 대시보드13항목/PNG4장·main CI/Production을 확인했다. preview20/stable null의 canonical raw 전체 응답은 문서PR 병합 뒤 확인해 PR에 남긴다.0.3.7의63/BG2와 과거 APK 출처는 보존하며 새 실행에 합산하지 않는다.
 
-운영 대시보드의 새 APK/페이지13항목·실제 Main3/SystemUI1 응답을 확인했다. preview19/stable null의 canonical raw 최종 결과는 문서/피드 PR에 남긴다. 승인 원본·58ID/9탭/13슬롯·준비36/미준비22·0P/성별·기존 데이터·키/Rules를 유지했다.
-
-다음은 [우선순위](DEVELOPMENT_PRIORITIES.md)의 휴대폰/Google·야외GPS·장시간 잠금/절전·API31+ 확인, 미준비 원화, 크루 운영 기능이다. 사용자 시각 승인은 별도이며 결과 대기로 독립 개발 전체를 멈추지 않는다. 아래0.3.4 내역은 당시 근거로 보존한다.
+F03는 읽기 전용 후보 분석만 진행했다. 남자 bottom2/3 색상·성별별 준비판정을 검토하며 양말은16셀 원화/계약이 필요하다. 준비36/미준비22·승인 원본·58ID/9탭/13슬롯·0P/성별·보유권/포인트를 유지한다. 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31+·공개 서명 APK 실행·사용자 시각 승인은 미검증이다. [우선순위](DEVELOPMENT_PRIORITIES.md)를 따라 독립 개발을 이어간다. 아래는 당시 이력이다.
 
 ## 0.3.4까지 완료한 범위
 
