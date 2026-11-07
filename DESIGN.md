@@ -1,3 +1,7 @@
+## 2026-11-07 업데이트 표시 간격
+
+우상단의 새 버전 점은 버전 버튼 내부의 독립된 공간을 사용한다. 텍스트 위에 부유 배지를 겹치지 않고8dp 간격·6dp 점·48dp 조작과 논리적 trailing 방향을 유지한다. 업데이트 상태는 버튼에서 한 번 안내한다. 기존 ui-ux-pro-max/awesome-design-md의 조작·가독성 기준과 [MASTER](design-system/runmoni/MASTER.md)를 따른다.
+
 ## 2026-11-06 ui-ux-pro-max 전체 화면 적용
 
 [MASTER](design-system/runmoni/MASTER.md)를 현재 공통 기준으로 삼는다. [스킬 실제 검색과 채택/기각](docs/design/ui-ux-pro-max/README.md)을 기록했으며 Jetpack Compose/native48dp·접근성·위계·조작/안전영역 지침을 적용한다. 자동 추천2회는 홍보페이지/AI-native로 잘못 연결돼 검증된 제품 스타일 일치를 찾지 못했다. 따라서 기존 녹색/시스템한글폰트/승인원본을 유지하고 실제 적합한 native/Compose 결과와 스킬 기본 규칙으로 구성한다.

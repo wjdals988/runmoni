@@ -1,0 +1,13 @@
+{
+  "recordedAtUtc": "2026-11-07T12:24:18.213553+00:00",
+  "failedGroup": "android-review2-app-information.txt",
+  "failedGroupSha256": "8875f53e7bf652d85cc9299bcfc12892479e1dd11dd5c450cfadf2684bdb8718",
+  "observedRowFromSameGroupOtherPassingTest": "version shortcut and update prompt: v0.3.8-dev; size=56 x 18; paragraph=428.0x18.0; lines=0.0..56.0/18.0; delta=0.0,0.0; maxLines=false",
+  "measurementIsFromExactFailureTime": false,
+  "rootViewedCapture": "android-review2-failed-group-home-before-navigation.png",
+  "rootViewedCaptureIsExactFailureTime": false,
+  "interpretation": "Paragraph width includes unused space. Inspect actual visible glyph line bounds using existing noTextOverflow policy, not raw hasVisualOverflow alone. Do not infer exact failing-case numeric bounds from this other row.",
+  "correctionScope": "Test diagnostics and matching the existing line-bound audit only; product APK unchanged",
+  "previousGroupPassed": false,
+  "previousSuccessfulMethodsCounted": 0
+}

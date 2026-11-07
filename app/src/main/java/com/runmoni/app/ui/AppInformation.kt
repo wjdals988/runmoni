@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.BuildConfig
 import com.runmoni.app.R
@@ -101,13 +102,20 @@ fun rememberAppUpdates(): AppUpdateController {
 
 @Composable
 internal fun AppVersionShortcut(updates: AppUpdateUiState, onClick: () -> Unit) {
-    TextButton(shape = RunmoniShapes.Action, onClick = onClick, modifier = Modifier.heightIn(min = 48.dp).testTag("top_app_version")) {
-        BadgedBox(badge = {
+    TextButton(shape = RunmoniShapes.Action, onClick = onClick,
+        modifier = Modifier.heightIn(min = 48.dp).testTag("top_app_version").semantics {
+            if (updates.updateAvailable) stateDescription = "새 버전 업데이트 가능"
+        }) {
+        // Reserve layout space for the dot. A floating badge on the text can
+        // overlap the last glyph or escape into the adjacent settings action.
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelMedium,
+                maxLines = 1, softWrap = false, modifier = Modifier.testTag("top_app_version_label"))
             if (updates.updateAvailable) Badge(
-                Modifier.testTag("top_app_version_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" },
+                Modifier.size(6.dp).testTag("top_app_version_red_dot"),
                 containerColor = MaterialTheme.colorScheme.error,
             )
-        }) { Text("v${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.labelMedium) }
+        }
     }
 }
 

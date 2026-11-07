@@ -1,0 +1,27 @@
+
+com.runmoni.app.ui.AppInformationTest:....
+Error in topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation(com.runmoni.app.ui.AppInformationTest):
+java.lang.AssertionError: Installed version must remain readable
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at com.runmoni.app.ui.AppInformationTestKt.assertVersionIndicatorClearance(AppInformationTest.kt:40)
+	at com.runmoni.app.ui.AppInformationTestKt.access$assertVersionIndicatorClearance(AppInformationTest.kt:1)
+	at com.runmoni.app.ui.AppInformationTest.topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation(AppInformationTest.kt:120)
+...
+
+Time: 132.286
+There was 1 failure:
+1) topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation(com.runmoni.app.ui.AppInformationTest)
+java.lang.AssertionError: Installed version must remain readable
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertFalse(Assert.java:65)
+	at com.runmoni.app.ui.AppInformationTestKt.assertVersionIndicatorClearance(AppInformationTest.kt:40)
+	at com.runmoni.app.ui.AppInformationTestKt.access$assertVersionIndicatorClearance(AppInformationTest.kt:1)
+	at com.runmoni.app.ui.AppInformationTest.topRightUpdateDotLeadsToVisibleSettingsNoticeAndConfirmation(AppInformationTest.kt:120)
+
+FAILURES!!!
+Tests run: 8,  Failures: 1
+
+

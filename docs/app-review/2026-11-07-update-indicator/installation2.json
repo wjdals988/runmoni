@@ -1,0 +1,30 @@
+{
+  "version": "0.3.8-dev",
+  "versionCode": 20,
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "existingMainApkSha256Verified": "a036ba1eb48d5591777cb42878cc2e93ccfb686aef5cef924e563117027f605c",
+  "appApkInstalledOrReplaced": false,
+  "testApkReplaceInstallSucceeded": true,
+  "preInstallPreferencesPreservedExactly": true,
+  "preInstallXmlSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "uninstallOrDataReset": false,
+  "binaryReference": "binary-build2.json",
+  "installedHashesWillBeCheckedBeforeAndroidTests": true,
+  "bootObservation": {
+    "avd": "Runmoni_Cloud_29",
+    "api": 29,
+    "acceleration": "TCG",
+    "bootCompleted": true,
+    "launcherObserved": true,
+    "apkInstalledOrDataCleared": false,
+    "systemUiWaitActions": [
+      {
+        "action": "Wait",
+        "dialog": "System UI not responding",
+        "file": "update-indicator-boot2-system-ui-wait-1.png"
+      }
+    ]
+  }
+}
