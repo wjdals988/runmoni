@@ -1,8 +1,17 @@
 package com.runmoni.app.ui
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.BuildConfig
@@ -20,6 +29,51 @@ private fun newerReleaseFixture(): AppUpdateUiState {
         "runmoni-$version.apk", 200_000_000, "a".repeat(64), AppRelease.RELEASE_CERTIFICATE,
         true, "com.runmoni.app", "${AppRelease.REPOSITORY}/releases/download/v$version/runmoni-$version.apk",
         "${AppRelease.REPOSITORY}/releases/tag/v$version", "업데이트 알림을 검증하는 합성 데이터입니다."))
+}
+
+/** Bounds and full glyph layout, not merely the presence of a red-dot node. */
+private fun assertVersionIndicatorClearance(compose: ComposeContentTestRule, direction: LayoutDirection, settings: Boolean = false) {
+    val label = compose.onNodeWithTag("top_app_version_label", useUnmergedTree = true)
+    val layouts = mutableListOf<TextLayoutResult>()
+    label.performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
+    val layout = layouts.single()
+    assertFalse("Installed version must remain readable", layout.hasVisualOverflow)
+    assertEquals(1, layout.lineCount)
+    val text = label.fetchSemanticsNode().boundsInRoot
+    val dot = compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+    val action = compose.onNodeWithTag("top_app_version").assertHeightIsAtLeast(48.dp)
+        .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "새 버전 업데이트 가능"))
+        .fetchSemanticsNode().boundsInRoot
+    val minimumGap = 4f * layout.layoutInput.density.density
+    assertTrue("Dot needs visible space beside the version", if (direction == LayoutDirection.Ltr)
+        dot.left - text.right >= minimumGap else text.left - dot.right >= minimumGap)
+    assertTrue("Entire dot stays inside its own action", dot.left >= action.left && dot.top >= action.top && dot.right <= action.right && dot.bottom <= action.bottom)
+    if (settings) {
+        val gear = compose.onNodeWithTag("settings_button").assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        assertFalse("Version action must not overlap settings", action.overlaps(gear))
+        assertFalse("Dot must not overlap settings", dot.overlaps(gear))
+    }
+}
+
+class AppVersionShortcutLayoutTest : RunmoniDesignTestBase() {
+    @Test fun updateIndicatorKeepsItsOwnSpaceInBothDirectionsAndLargeText() {
+        val direction = mutableStateOf(LayoutDirection.Ltr)
+        val scale = mutableStateOf(1f)
+        val updates = mutableStateOf(newerReleaseFixture())
+        compose.setContent {
+            val density = LocalDensity.current.density
+            CompositionLocalProvider(LocalDensity provides Density(density, scale.value), LocalLayoutDirection provides direction.value) {
+                RunmoniTheme { AppVersionShortcut(updates.value) {} }
+            }
+        }
+        for (readingDirection in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) for (fontScale in listOf(1f, 2f)) {
+            compose.runOnIdle { direction.value = readingDirection; scale.value = fontScale; updates.value = newerReleaseFixture() }
+            assertVersionIndicatorClearance(compose, readingDirection)
+            compose.runOnIdle { updates.value = AppUpdateUiState() }
+            compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertDoesNotExist()
+            compose.onNodeWithTag("top_app_version").assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.StateDescription))
+        }
+    }
 }
 
 class AppInformationTest : RunmoniDesignTestBase() {
@@ -63,7 +117,7 @@ class AppInformationTest : RunmoniDesignTestBase() {
         // The same global entry point must work from every tab.
         listOf("explore", "run", "crew", "me", "home").forEach {
             compose.onNodeWithTag("nav_$it").performClick()
-            compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
+            assertVersionIndicatorClearance(compose, LayoutDirection.Ltr, settings = true)
         }
         compose.onNodeWithTag("settings_button").performClick()
         compose.onNodeWithTag("settings_app_update").assertIsDisplayed()
@@ -184,6 +238,28 @@ class AppInformationTest : RunmoniDesignTestBase() {
 
 /** Must run in the native 320dp/font2 pass, not a local density override. */
 class AppInformationNativeTest : RunmoniDesignTestBase() {
+    @Test fun enlargedHeaderIndicatorStaysSeparateAndOpensTheUpdatePrompt() {
+        val config = InstrumentationRegistry.getInstrumentation().targetContext.resources.configuration
+        assertTrue(config.screenWidthDp in 315..325 && config.fontScale >= 1.9f)
+        val direction = mutableStateOf(LayoutDirection.Ltr)
+        val state = mutableStateOf(AppState())
+        compose.setContent {
+            CompositionLocalProvider(LocalLayoutDirection provides direction.value) {
+                RunmoniApp(state.value, RunmoniUiTest.FakeActions(state), newerReleaseFixture())
+            }
+        }
+        for (readingDirection in listOf(LayoutDirection.Ltr, LayoutDirection.Rtl)) {
+            compose.runOnIdle { direction.value = readingDirection }
+            assertVersionIndicatorClearance(compose, readingDirection, settings = true)
+            captureDevice("update-header-native-320-font2-${readingDirection.name.lowercase()}-fixture")
+        }
+        compose.onNodeWithTag("top_app_version").performClick()
+        compose.onNodeWithTag("confirm_download_update").assertIsDisplayed()
+        compose.onNodeWithTag("cancel_app_update").performClick()
+        compose.onNodeWithTag("close_app_information").performClick()
+        assertVersionIndicatorClearance(compose, LayoutDirection.Rtl, settings = true)
+    }
+
     @Test fun largeAboutAndUpdateConfirmationRemainReadableAndScrollable() {
         val config = InstrumentationRegistry.getInstrumentation().targetContext.resources.configuration
         assertTrue(config.screenWidthDp in 315..325 && config.fontScale >= 1.9f)
