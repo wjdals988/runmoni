@@ -37,7 +37,22 @@ private fun assertVersionIndicatorClearance(compose: ComposeContentTestRule, dir
     val layouts = mutableListOf<TextLayoutResult>()
     label.performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
     val layout = layouts.single()
-    assertFalse("Installed version must remain readable", layout.hasVisualOverflow)
+    // As in noTextOverflow(), paragraph width can include unused layout space.
+    // Audit actual glyph lines, retaining the existing one-physical-pixel
+    // rounding tolerance and rejecting every max-line truncation.
+    val left = layout.getLineLeft(0)
+    val right = layout.getLineRight(0)
+    val bottom = layout.getLineBottom(0)
+    val target = InstrumentationRegistry.getInstrumentation().targetContext
+    File(target.cacheDir, "design-review").apply { mkdirs() }
+        .resolve("update-indicator-layout.jsonl").appendText(org.json.JSONObject()
+            .put("direction", direction.name).put("fontScale", layout.layoutInput.density.fontScale)
+            .put("sizeWidthPx", layout.size.width).put("sizeHeightPx", layout.size.height)
+            .put("paragraphWidthPx", layout.multiParagraph.width).put("rawHasVisualOverflow", layout.hasVisualOverflow)
+            .put("lineLeftPx", left).put("lineRightPx", right).put("lineBottomPx", bottom)
+            .put("maxLinesExceeded", layout.multiParagraph.didExceedMaxLines).toString() + "\n")
+    assertTrue("Installed version must remain readable: lines=$left..$right/$bottom; size=${layout.size}",
+        left >= -1f && right <= layout.size.width + 1f && bottom <= layout.size.height + 1f && !layout.multiParagraph.didExceedMaxLines)
     assertEquals(1, layout.lineCount)
     val text = label.fetchSemanticsNode().boundsInRoot
     val dot = compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertIsDisplayed().fetchSemanticsNode().boundsInRoot
