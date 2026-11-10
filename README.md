@@ -1,3 +1,16 @@
+# 런모니 / Runmoni — 현재 공개0.3.9-dev
+
+현재 공개 APK는 **실기기 검증 전 개발 프리뷰0.3.9-dev(code21)**다. [구현 PR](https://github.com/wjdals988/runmoni/pull/39) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.9-dev/runmoni-0.3.9-dev.apk) · [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.9-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.9_20261110.md).
+
+현재 세션을 확인하는 러닝 위젯, OSM 실제 배경·구간 분리 지도, GPX/계정 요약 백업/삭제에 접근하는 독립 기록 페이지와 홈·프로필 위계를 반영했다. 새 러닝/GPS 자동 시작이나 기존 기록·보유권·포인트 초기화는 추가하지 않았다. 실제 타일 지도 조회 영역은 제공자에게 드러나며 Google 요약 백업과 기기 원본 GPS/포인트 보관은 별개다. 0.3.9-dev/code21, 219,456,174bytes, SHA256 `57895b0237d09ba91b6c73a47da42e67bd8485ccd31f0406cb0ea0a8c1d965a3`, 실제 APK 출처 C `fc08fe08bd0cb87770be56350684f55a41a37c85`. 서명 CI42771920281 JVM141·실패/오류/skip0, release lint오류0/경고73. source6 로컬 TEST debug는 JVM141·실패/오류/skip0, lint오류0/경고43이다. Android는 source4 핵심16 보존과 source6 새3개(러닝1·5탭1·실제320dp/font2 상세1)를 구분한다. 단일 source6에서19개를 새 실행한 것이 아니다. 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31이상·공개 서명 APK 직접 실행·사용자 시각 승인은 별도 미검증이다.
+
+live7는 제한된 실제 Android debug 관측이고 공개 APK 직접 실행은 아니다. 실제 Main/런처/SystemUI는 Firebase를 비활성화하고 세션 전용 제공 CA·프록시를 쓴 local debug7/API29/AOSP/TCG·합성 GPS 근거다. 제품 배포 TLS 설정은 바꾸지 않았다. 새 네이티브 HTTPS 타일6개는 live2의 독립 관측이며 live7는 그 캐시를 재사용할 수 있다. 공개 서명 APK·일반 휴대폰의 TLS 실행을 대신하지 않는다.
+
+
+---
+
+아래는 이전 공개/개발 시점의 보존 이력이며 현재 상태는 위 게시 검증을 따른다.
+
 # 런모니 / Runmoni
 
 현재 공개 APK는 **실기기 검증 전 개발 프리뷰0.3.8-dev(code20)**입니다. [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.8-dev/runmoni-0.3.8-dev.apk) · [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.8-dev) · [대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.8_20261107.md).

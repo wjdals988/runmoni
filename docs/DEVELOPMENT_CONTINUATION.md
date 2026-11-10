@@ -1,3 +1,16 @@
+# 런모니 개발 이어가기 — 0.3.9-dev 공개 이후
+
+2026.11.10 한국 시간. 0.3.9-dev/code21, 219,456,174bytes, SHA256 `57895b0237d09ba91b6c73a47da42e67bd8485ccd31f0406cb0ea0a8c1d965a3`, 실제 APK 출처 C `fc08fe08bd0cb87770be56350684f55a41a37c85`. 서명 CI42771920281 JVM141·실패/오류/skip0, release lint오류0/경고73. source6 로컬 TEST debug는 JVM141·실패/오류/skip0, lint오류0/경고43이다. Android는 source4 핵심16 보존과 source6 새3개(러닝1·5탭1·실제320dp/font2 상세1)를 구분한다. 단일 source6에서19개를 새 실행한 것이 아니다. 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31이상·공개 서명 APK 직접 실행·사용자 시각 승인은 별도 미검증이다. [게시 검증](RELEASE_REVIEW_0.3.9_20261110.md) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.9-dev/runmoni-0.3.9-dev.apk). 후속 문서/피드 커밋으로 출처 C를 바꾸지 않는다.
+
+현재 세션을 확인하는 러닝 위젯, OSM 실제 배경·구간 분리 지도, GPX/계정 요약 백업/삭제에 접근하는 독립 기록 페이지와 홈·프로필 위계를 반영했다. 새 러닝/GPS 자동 시작이나 기존 기록·보유권·포인트 초기화는 추가하지 않았다. 실제 Main/런처/SystemUI는 Firebase를 비활성화하고 세션 전용 제공 CA·프록시를 쓴 local debug7/API29/AOSP/TCG·합성 GPS 근거다. 제품 배포 TLS 설정은 바꾸지 않았다. 새 네이티브 HTTPS 타일6개는 live2의 독립 관측이며 live7는 그 캐시를 재사용할 수 있다. 공개 서명 APK·일반 휴대폰의 TLS 실행을 대신하지 않는다. 최종 제한 동선은 강제종료 뒤 오래된 위젯 재개 버튼의 실제 입력 거절을 새로 검증하지 않았다. live1/live2/live3/live4/live5/live6는 실패 이력이며 새 성공으로 바꾸지 않는다. 알림 일시정지/재개의 실제 탭과 ACK는 전체 실패·복원이 완료된 live6의 하위 관측만 보존한다. 최종 live7의 notificationRetainedFrom 파일/SHA256와 일치시키며, 최종 동선에서는 알림 제어를 다시 실행하지 않았다. 이전 실패 시도의 하위 관측만 별도로 보존한다: 실제 위젯 일시정지/재개(live2.json, live3.json, live4.json). 화면 끔 합성 GPS 진행(live1.json, live2.json, live3.json, live4.json). 이를 live7에서 다시 실행하거나 전체 시나리오 통과로 집계하지 않는다. preview21/stable null의 canonical raw 확인은 문서/피드 병합 뒤 별도 기록한다.
+
+다음은 휴대폰의 장시간/화면 끔 GPS·위젯·절전·Google/운영 검증, Naver 인증/터치 전달, 준비된36개 사용자 검토와 남은22개 원화, 크루 운영 권한을 진행한다. 완료한0P·성별·알림/위젯을 다시 구현하지 않는다. [우선순위](DEVELOPMENT_PRIORITIES.md).
+
+
+---
+
+아래는 이전 공개/개발 시점의 보존 이력이며 현재 상태는 위 게시 검증을 따른다.
+
 # 런모니 개발 이어가기 — 0.3.8-dev 공개 이후
 
 2026.11.07 한국 시간. 0.3.8-dev/code20, 219,246,942bytes, SHA256 `c4b484900795defb6d2d5b47d7f9b3545ed99174a07445c2e52edf51937ac76c`, 실제 APK 출처 C `f55bdd6343770847e2284a75faf40063c22a5951`. [게시 검증](RELEASE_REVIEW_0.3.8_20261107.md) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.8-dev/runmoni-0.3.8-dev.apk). 출처 C는 후속 문서D로 바꾸지 않는다.
