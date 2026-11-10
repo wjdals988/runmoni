@@ -1,0 +1,75 @@
+{
+  "version": "0.3.9-dev",
+  "versionCode": 21,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "key": "home",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-10-running-experience/live7-main-home.png",
+      "sha256": "ef25006ef97d03cdfbc2ad2953562e985c247bffcb553ed7d71f7c7b8ddbc9ec",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "caption": "홈 · 실제 앱",
+      "alt": "홈 · 실제 앱",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "record",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-10-running-experience/live7-main-record-footer.png",
+      "sha256": "72980261acf9aa31e166c70c3d39cb7e07edc85715c1dd5796079a1f603ccd67",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "caption": "기록 지도·하단 조작 · 실제 앱 / 합성 GPS",
+      "alt": "기록 지도·하단 조작 · 실제 앱 / 합성 GPS",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "mapAttributionVisible": true
+    },
+    {
+      "key": "widget",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-10-running-experience/live7-launcher-running.png",
+      "sha256": "1c556fa4274b39b01175748e1503d9763b655cd20a98f6b729dc43b38a2ebde5",
+      "width": 480,
+      "height": 854,
+      "source": "Launcher",
+      "caption": "러닝 위젯 · 실제 Android 홈 화면",
+      "alt": "러닝 위젯 · 실제 Android 홈 화면",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "notification",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-10-running-experience/live7-systemui-running.png",
+      "sha256": "c26cbff42957fca9c7e2d7d57ea98a81d85dbbe01df7280d761cadc4242efc8d",
+      "width": 480,
+      "height": 854,
+      "source": "SystemUI",
+      "caption": "러닝 알림 · 실제 시스템 화면",
+      "alt": "러닝 알림 · 실제 시스템 화면",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "runtimeConfigurationDifferences": [
+    "Local TEST debug signature/build type",
+    "Firebase disabled for local review; actual Google/production writes unverified",
+    "Session-only debug CA overlay and inherited guest proxy; production main TLS unchanged",
+    "Local generated Git revision is the precommit parent, not the eventual release source"
+  ],
+  "sourceComparison": {
+    "releaseSourceRevision": "fc08fe08bd0cb87770be56350684f55a41a37c85",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "/workspace/runmoni/work/running-experience/source-comparison-release.json",
+      "sha256": "0bf322c7f2cc434655796b23d57a14ec15c16d3204078fdcb9d7559230085dac"
+    }
+  },
+  "liveProof": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-10-running-experience/live7.json",
+    "sha256": "5705a47d1602ca6de1602285d8867550930da89baf735cba96842bd267e83d20"
+  }
+}
