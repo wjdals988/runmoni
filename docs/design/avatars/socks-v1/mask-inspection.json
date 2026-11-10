@@ -1,0 +1,1066 @@
+{
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "maskSha256": "dd1dbf5f762e9d219d347d5879a2eeedac7de4397275dbd19645eda8fe4b64a5",
+  "visibleAnkleSha256": "2ab1059280b651f21f19130b243bf5808ed655de8fe5e087ea0c9322fcec6ea2",
+  "shoeProtectionSha256": "efb5967982f68cbc38c5e007bff14623b16901a4d0ca4c1c82698d96c917cd14",
+  "knownPixelChecks": 17,
+  "visualApproval": "pending",
+  "cells": [
+    {
+      "gender": "male",
+      "frame": 0,
+      "pixels": {
+        "crew": 746,
+        "knee": 1644,
+        "crewCuff": 215,
+        "kneeCuff": 226,
+        "rib": 211
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 401,
+          "knee": 873
+        },
+        "B": {
+          "crew": 345,
+          "knee": 771
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 8812,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            151,
+            297
+          ],
+          "ankle": [
+            172,
+            335
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            113,
+            299
+          ],
+          "ankle": [
+            76,
+            308
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 1,
+      "pixels": {
+        "crew": 748,
+        "knee": 1376,
+        "crewCuff": 225,
+        "kneeCuff": 239,
+        "rib": 199
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 542,
+          "knee": 1116
+        },
+        "B": {
+          "crew": 206,
+          "knee": 368
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 6580,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            177,
+            301
+          ],
+          "ankle": [
+            128,
+            323
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            135,
+            320
+          ],
+          "ankle": [
+            144,
+            349
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 2,
+      "pixels": {
+        "crew": 715,
+        "knee": 1420,
+        "crewCuff": 222,
+        "kneeCuff": 103,
+        "rib": 197
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 441,
+          "knee": 858
+        },
+        "B": {
+          "crew": 274,
+          "knee": 582
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 7180,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            163,
+            300
+          ],
+          "ankle": [
+            106,
+            307
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            138,
+            315
+          ],
+          "ankle": [
+            130,
+            346
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 3,
+      "pixels": {
+        "crew": 921,
+        "knee": 1911,
+        "crewCuff": 245,
+        "kneeCuff": 254,
+        "rib": 240
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 485,
+          "knee": 997
+        },
+        "B": {
+          "crew": 436,
+          "knee": 914
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 8311,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            157,
+            293
+          ],
+          "ankle": [
+            179,
+            335
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            114,
+            294
+          ],
+          "ankle": [
+            74,
+            304
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 4,
+      "pixels": {
+        "crew": 765,
+        "knee": 1666,
+        "crewCuff": 218,
+        "kneeCuff": 226,
+        "rib": 211
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 378,
+          "knee": 856
+        },
+        "B": {
+          "crew": 387,
+          "knee": 810
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 8507,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            170,
+            296
+          ],
+          "ankle": [
+            188,
+            336
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            128,
+            298
+          ],
+          "ankle": [
+            90,
+            307
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 5,
+      "pixels": {
+        "crew": 675,
+        "knee": 1469,
+        "crewCuff": 178,
+        "kneeCuff": 216,
+        "rib": 195
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 320,
+          "knee": 718
+        },
+        "B": {
+          "crew": 355,
+          "knee": 751
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 5234,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            178,
+            300
+          ],
+          "ankle": [
+            145,
+            318
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            121,
+            318
+          ],
+          "ankle": [
+            104,
+            351
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 6,
+      "pixels": {
+        "crew": 688,
+        "knee": 1386,
+        "crewCuff": 186,
+        "kneeCuff": 169,
+        "rib": 195
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 448,
+          "knee": 927
+        },
+        "B": {
+          "crew": 240,
+          "knee": 482
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 7428,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            155,
+            300
+          ],
+          "ankle": [
+            112,
+            316
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            134,
+            319
+          ],
+          "ankle": [
+            125,
+            349
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "male",
+      "frame": 7,
+      "pixels": {
+        "crew": 749,
+        "knee": 1694,
+        "crewCuff": 223,
+        "kneeCuff": 237,
+        "rib": 213
+      },
+      "minimumFabricY": 267,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 354,
+          "knee": 858
+        },
+        "B": {
+          "crew": 395,
+          "knee": 836
+        }
+      },
+      "visibleAnklePixels": 0,
+      "ankleComponents": [],
+      "shoeProtectionPixels": 8480,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            151,
+            290
+          ],
+          "ankle": [
+            170,
+            332
+          ],
+          "radius": 14
+        },
+        {
+          "id": "B",
+          "knee": [
+            106,
+            295
+          ],
+          "ankle": [
+            69,
+            303
+          ],
+          "radius": 14
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 0,
+      "pixels": {
+        "crew": 877,
+        "knee": 1786,
+        "crewCuff": 204,
+        "kneeCuff": 238,
+        "rib": 183
+      },
+      "minimumFabricY": 250,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 359,
+          "knee": 822
+        },
+        "B": {
+          "crew": 248,
+          "knee": 694
+        }
+      },
+      "visibleAnklePixels": 270,
+      "ankleComponents": [
+        {
+          "pixels": 100,
+          "accepted": true,
+          "bounds": [
+            75,
+            275,
+            83,
+            292
+          ]
+        },
+        {
+          "pixels": 170,
+          "accepted": true,
+          "bounds": [
+            176,
+            306,
+            194,
+            322
+          ]
+        },
+        {
+          "pixels": 8,
+          "accepted": false,
+          "bounds": [
+            186,
+            323,
+            189,
+            327
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 7721,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            158,
+            279
+          ],
+          "ankle": [
+            180,
+            315
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            116,
+            277
+          ],
+          "ankle": [
+            80,
+            286
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 1,
+      "pixels": {
+        "crew": 767,
+        "knee": 1204,
+        "crewCuff": 157,
+        "kneeCuff": 104,
+        "rib": 197
+      },
+      "minimumFabricY": 274,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 535,
+          "knee": 882
+        },
+        "B": {
+          "crew": 106,
+          "knee": 273
+        }
+      },
+      "visibleAnklePixels": 126,
+      "ankleComponents": [
+        {
+          "pixels": 61,
+          "accepted": true,
+          "bounds": [
+            135,
+            323,
+            146,
+            329
+          ]
+        },
+        {
+          "pixels": 65,
+          "accepted": true,
+          "bounds": [
+            132,
+            283,
+            140,
+            297
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 5686,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            189,
+            275
+          ],
+          "ankle": [
+            142,
+            293
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            151,
+            298
+          ],
+          "ankle": [
+            144,
+            329
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 2,
+      "pixels": {
+        "crew": 623,
+        "knee": 1337,
+        "crewCuff": 210,
+        "kneeCuff": 177,
+        "rib": 175
+      },
+      "minimumFabricY": 274,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 259,
+          "knee": 746
+        },
+        "B": {
+          "crew": 188,
+          "knee": 465
+        }
+      },
+      "visibleAnklePixels": 176,
+      "ankleComponents": [
+        {
+          "pixels": 97,
+          "accepted": true,
+          "bounds": [
+            125,
+            320,
+            143,
+            328
+          ]
+        },
+        {
+          "pixels": 79,
+          "accepted": true,
+          "bounds": [
+            119,
+            270,
+            126,
+            285
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 6101,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            167,
+            276
+          ],
+          "ankle": [
+            114,
+            283
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            144,
+            299
+          ],
+          "ankle": [
+            136,
+            326
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 3,
+      "pixels": {
+        "crew": 912,
+        "knee": 1861,
+        "crewCuff": 217,
+        "kneeCuff": 253,
+        "rib": 198
+      },
+      "minimumFabricY": 250,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 375,
+          "knee": 867
+        },
+        "B": {
+          "crew": 300,
+          "knee": 757
+        }
+      },
+      "visibleAnklePixels": 237,
+      "ankleComponents": [
+        {
+          "pixels": 81,
+          "accepted": true,
+          "bounds": [
+            70,
+            274,
+            76,
+            290
+          ]
+        },
+        {
+          "pixels": 156,
+          "accepted": true,
+          "bounds": [
+            173,
+            305,
+            192,
+            321
+          ]
+        },
+        {
+          "pixels": 2,
+          "accepted": false,
+          "bounds": [
+            185,
+            321,
+            185,
+            322
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 7608,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            153,
+            276
+          ],
+          "ankle": [
+            177,
+            315
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            112,
+            276
+          ],
+          "ankle": [
+            76,
+            286
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 4,
+      "pixels": {
+        "crew": 773,
+        "knee": 1635,
+        "crewCuff": 191,
+        "kneeCuff": 235,
+        "rib": 183
+      },
+      "minimumFabricY": 250,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 309,
+          "knee": 790
+        },
+        "B": {
+          "crew": 246,
+          "knee": 627
+        }
+      },
+      "visibleAnklePixels": 218,
+      "ankleComponents": [
+        {
+          "pixels": 153,
+          "accepted": true,
+          "bounds": [
+            182,
+            305,
+            201,
+            321
+          ]
+        },
+        {
+          "pixels": 65,
+          "accepted": true,
+          "bounds": [
+            88,
+            275,
+            95,
+            289
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 7813,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            168,
+            277
+          ],
+          "ankle": [
+            188,
+            315
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            127,
+            277
+          ],
+          "ankle": [
+            95,
+            287
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 5,
+      "pixels": {
+        "crew": 457,
+        "knee": 774,
+        "crewCuff": 101,
+        "kneeCuff": 65,
+        "rib": 122
+      },
+      "minimumFabricY": 274,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 376,
+          "knee": 693
+        },
+        "B": {
+          "crew": 0,
+          "knee": 0
+        }
+      },
+      "visibleAnklePixels": 81,
+      "ankleComponents": [
+        {
+          "pixels": 81,
+          "accepted": true,
+          "bounds": [
+            143,
+            281,
+            154,
+            296
+          ]
+        },
+        {
+          "pixels": 9,
+          "accepted": false,
+          "bounds": [
+            117,
+            332,
+            120,
+            336
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 5653,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            194,
+            275
+          ],
+          "ankle": [
+            149,
+            289
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            141,
+            296
+          ],
+          "ankle": [
+            134,
+            329
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 6,
+      "pixels": {
+        "crew": 889,
+        "knee": 1366,
+        "crewCuff": 224,
+        "kneeCuff": 141,
+        "rib": 183
+      },
+      "minimumFabricY": 280,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 623,
+          "knee": 1060
+        },
+        "B": {
+          "crew": 139,
+          "knee": 425
+        }
+      },
+      "visibleAnklePixels": 153,
+      "ankleComponents": [
+        {
+          "pixels": 60,
+          "accepted": true,
+          "bounds": [
+            107,
+            285,
+            113,
+            298
+          ]
+        },
+        {
+          "pixels": 93,
+          "accepted": true,
+          "bounds": [
+            116,
+            322,
+            136,
+            329
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 6968,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            160,
+            285
+          ],
+          "ankle": [
+            115,
+            296
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            140,
+            302
+          ],
+          "ankle": [
+            132,
+            332
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    },
+    {
+      "gender": "female",
+      "frame": 7,
+      "pixels": {
+        "crew": 682,
+        "knee": 1471,
+        "crewCuff": 175,
+        "kneeCuff": 214,
+        "rib": 164
+      },
+      "minimumFabricY": 250,
+      "visibleSegmentContributions": {
+        "A": {
+          "crew": 194,
+          "knee": 628
+        },
+        "B": {
+          "crew": 233,
+          "knee": 588
+        }
+      },
+      "visibleAnklePixels": 255,
+      "ankleComponents": [
+        {
+          "pixels": 73,
+          "accepted": true,
+          "bounds": [
+            68,
+            274,
+            75,
+            290
+          ]
+        },
+        {
+          "pixels": 182,
+          "accepted": true,
+          "bounds": [
+            172,
+            297,
+            191,
+            315
+          ]
+        },
+        {
+          "pixels": 2,
+          "accepted": false,
+          "bounds": [
+            188,
+            308,
+            188,
+            309
+          ]
+        },
+        {
+          "pixels": 8,
+          "accepted": false,
+          "bounds": [
+            185,
+            311,
+            188,
+            316
+          ]
+        }
+      ],
+      "shoeProtectionPixels": 7609,
+      "protectedIntersection": 0,
+      "seedAxes": [
+        {
+          "id": "A",
+          "knee": [
+            153,
+            277
+          ],
+          "ankle": [
+            174,
+            314
+          ],
+          "radius": 24
+        },
+        {
+          "id": "B",
+          "knee": [
+            106,
+            277
+          ],
+          "ankle": [
+            75,
+            287
+          ],
+          "radius": 24
+        }
+      ],
+      "visualApproval": "pending"
+    }
+  ]
+}

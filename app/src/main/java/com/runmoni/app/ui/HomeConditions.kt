@@ -35,6 +35,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.runmoni.app.data.RunningWeatherRepository
+import com.runmoni.app.domain.RunningWeatherAdvice
 import com.runmoni.app.domain.RunningWeatherGuidance
 import com.runmoni.app.domain.RunningWeatherState
 import com.runmoni.app.domain.WeatherCaution
@@ -116,56 +117,65 @@ internal fun HomeDateTime(nowMillis: Long, modifier: Modifier = Modifier, temper
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+/** Standalone composition kept for isolated state/error verification. The home
+ * hero uses the same values beside the avatar and the full-width details below
+ * its primary action; neither surface starts another location request. */
 @Composable
 internal fun HomeConditions(state: RunningWeatherState, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
     val now = rememberHomeClock()
-    val uri = LocalUriHandler.current
+    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        HomeWeatherSummary(state, now)
+        HomeWeatherDetails(state, now, onRefresh)
+    }
+}
+
+/** Essential values and clothing fit beside the avatar without fixed line caps. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, modifier: Modifier = Modifier) {
     val snapshot = state.snapshot
-    val loading = state.phase == WeatherPhase.LOCATING || state.phase == WeatherPhase.LOADING
-    val current = snapshot?.isCurrent(now) == true
-    val failed = state.phase in setOf(WeatherPhase.PERMISSION_REQUIRED, WeatherPhase.LOCATION_DISABLED, WeatherPhase.UNAVAILABLE)
-    // A previously valid cache remains visible after failure, but no fresh recommendation is claimed.
-    val advice = if (current && state.phase == WeatherPhase.READY) snapshot?.let { RunningWeatherGuidance.from(it, now) } else null
-    val clock = DateTimeFormatter.ofPattern("HH:mm", Locale.KOREAN)
-    Column(modifier.fillMaxWidth().testTag("home_weather"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    val advice = weatherAdvice(state, nowMillis)
+    Column(modifier.fillMaxWidth().testTag("home_weather_summary"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (snapshot != null) {
+            Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC), style = MaterialTheme.typography.headlineSmall,
+                color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC), style = MaterialTheme.typography.titleLarge,
-                    color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
                 Text(String.format(Locale.KOREAN, "바람 %.1f m/s", snapshot.windMetersPerSecond),
-                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                    style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                    modifier = Modifier.testTag("home_weather_wind"))
                 snapshot.precipitationNextHourMm?.let { rain ->
-                    Text(String.format(Locale.KOREAN, "1시간 강수 %.1f mm", rain), style = MaterialTheme.typography.bodyMedium,
-                        color = RunmoniColors.Muted)
+                    Text(String.format(Locale.KOREAN, "1시간 강수 %.1f mm", rain), style = MaterialTheme.typography.bodySmall,
+                        color = RunmoniColors.Muted, modifier = Modifier.testTag("home_weather_rain"))
                 }
             }
+            if (advice != null) Text(advice.attire, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy,
+                modifier = Modifier.testTag("home_attire_guidance"))
             val forecast = Instant.ofEpochMilli(snapshot.forecastAtMillis).atZone(ZoneId.systemDefault())
-            val today = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
-            val forecastTime = forecast.format(if (forecast.toLocalDate() == today) clock else DateTimeFormatter.ofPattern("M/d HH:mm", Locale.KOREAN))
+            val today = Instant.ofEpochMilli(nowMillis).atZone(ZoneId.systemDefault()).toLocalDate()
+            val format = DateTimeFormatter.ofPattern(if (forecast.toLocalDate() == today) "HH:mm" else "M/d HH:mm", Locale.KOREAN)
             val place = if (state.phase == WeatherPhase.READY) "현재 위치 근처" else "마지막 확인 위치"
-            Text("$place · $forecastTime 예보" + if (!current) " · 이전 정보" else "",
-                style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-        }
-        val status = when (state.phase) {
-            WeatherPhase.IDLE -> "지금 달릴 날씨와 옷차림을 확인해 보세요."
-            WeatherPhase.LOCATING -> "현재 위치를 확인하고 있어요…"
-            WeatherPhase.LOADING -> "근처 날씨를 확인하고 있어요…"
-            WeatherPhase.PERMISSION_REQUIRED -> state.message ?: "위치 권한을 허용하면 근처 날씨를 볼 수 있어요."
-            WeatherPhase.LOCATION_DISABLED -> state.message ?: "기기의 위치를 켜고 다시 확인해 주세요."
-            WeatherPhase.UNAVAILABLE -> if (snapshot == null) state.message ?: "날씨를 불러오지 못했어요."
-                else "갱신하지 못했어요. 표시된 이전 예보와 현재 상황을 함께 확인해 주세요."
-            WeatherPhase.READY -> if (!current) "이전 예보예요. 현재 날씨를 다시 확인해 주세요." else null
-        }
-        if (status != null) Text(status, style = MaterialTheme.typography.bodyMedium,
-            color = if (failed) RunmoniColors.CoralInk else RunmoniColors.Muted,
-            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }.testTag("home_weather_status"))
+            Text("$place · ${forecast.format(format)} 예보" + if (!snapshot.isCurrent(nowMillis)) " · 이전 정보" else "",
+                style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                modifier = Modifier.testTag("home_weather_forecast"))
+        } else WeatherStatus(state, nowMillis)
+    }
+}
+
+/** Longer warnings and 48dp controls retain the full page width, rather than
+ * forcing a provider button or safety guidance into the avatar's narrow column. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+    val uri = LocalUriHandler.current
+    val snapshot = state.snapshot
+    val advice = weatherAdvice(state, nowMillis)
+    val loading = state.phase == WeatherPhase.LOCATING || state.phase == WeatherPhase.LOADING
+    Column(modifier.fillMaxWidth().testTag("home_weather"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        if (snapshot != null) WeatherStatus(state, nowMillis)
         if (advice != null) {
             Text(advice.headline, style = MaterialTheme.typography.titleSmall,
                 color = if (advice.caution == WeatherCaution.HIGH) RunmoniColors.CoralInk else RunmoniColors.Navy,
                 modifier = Modifier.testTag("home_running_guidance"))
-            Text(advice.attire, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
-                modifier = Modifier.testTag("home_attire_guidance"))
             advice.detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted) }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -183,5 +193,32 @@ internal fun HomeConditions(state: RunningWeatherState, onRefresh: () -> Unit, m
                 else "기온·바람·강수 기준 안내예요. 미세먼지·노면·컨디션은 따로 살펴주세요.",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         }
+    }
+}
+
+private fun weatherAdvice(state: RunningWeatherState, nowMillis: Long): RunningWeatherAdvice? {
+    val snapshot = state.snapshot ?: return null
+    return if (state.phase == WeatherPhase.READY && snapshot.isCurrent(nowMillis))
+        RunningWeatherGuidance.from(snapshot, nowMillis) else null
+}
+
+@Composable
+private fun WeatherStatus(state: RunningWeatherState, nowMillis: Long) {
+    val snapshot = state.snapshot
+    val status = when (state.phase) {
+        WeatherPhase.IDLE -> "지금 달릴 날씨와 옷차림을 확인해 보세요."
+        WeatherPhase.LOCATING -> "현재 위치를 확인하고 있어요…"
+        WeatherPhase.LOADING -> "근처 날씨를 확인하고 있어요…"
+        WeatherPhase.PERMISSION_REQUIRED -> state.message ?: "위치 권한을 허용하면 근처 날씨를 볼 수 있어요."
+        WeatherPhase.LOCATION_DISABLED -> state.message ?: "기기의 위치를 켜고 다시 확인해 주세요."
+        WeatherPhase.UNAVAILABLE -> if (snapshot == null) state.message ?: "날씨를 불러오지 못했어요."
+            else "갱신하지 못했어요. 표시된 이전 예보와 현재 상황을 함께 확인해 주세요."
+        WeatherPhase.READY -> if (snapshot?.isCurrent(nowMillis) != true) "이전 예보예요. 현재 날씨를 다시 확인해 주세요." else null
+    }
+    if (status != null) {
+        val failed = state.phase in setOf(WeatherPhase.PERMISSION_REQUIRED, WeatherPhase.LOCATION_DISABLED, WeatherPhase.UNAVAILABLE)
+        Text(status, style = MaterialTheme.typography.bodyMedium,
+            color = if (failed) RunmoniColors.CoralInk else RunmoniColors.Muted,
+            modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }.testTag("home_weather_status"))
     }
 }

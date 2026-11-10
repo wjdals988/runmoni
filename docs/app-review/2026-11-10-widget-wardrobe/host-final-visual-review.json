@@ -1,0 +1,13 @@
+{
+  "maskSha256": "dd1dbf5f762e9d219d347d5879a2eeedac7de4397275dbd19645eda8fe4b64a5",
+  "hostMaterialResult": "host-material-final.json",
+  "sourceHashes": {
+    "scripts/avatar/VerifyExpandedWardrobe.java": "e63b00cd592a53ffe418a79b544cb24e1251c93cc06b1a843cc54c54a7f43439",
+    "scripts/avatar/build-sock-masks.py": "d34aba18c606e4d25fce1b71614779608e9ec43f8482f073e10bcfb8c8e2bbd1"
+  },
+  "staticReviewedByRootAndPeer": true,
+  "additionalVisualBlockerFound": false,
+  "userApproval": false,
+  "androidExecution": false,
+  "scope": "Latest crew/knee 16-cell host strips; female tights overlay, original dark outline/white stripe and frame5 shoe occlusion preserved. Not motion or Android review."
+}

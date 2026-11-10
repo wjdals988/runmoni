@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.4.1-dev", "2026-11-10", "위젯 글자·새 양말과 의상 · 실기기 검증 전", listOf(
+        "위젯 크기와 글자 크기에 맞춰 정보와 조작을 배치해요.",
+        "홈 미니미 옆에서 기온·바람·강수와 옷차림을 확인해요.",
+        "크루 양말·니삭스와 남자 그린·코랄 쇼츠를 실제 미니미에 입힐 수 있어요.",
+    )),
     AppVersionEntry("0.4.0-dev", "2026-11-10", "팝업·프로필·러너 지도 · 실기기 검증 전", listOf(
         "팝업의 상단 닫기와 본문 스크롤을 정리하고 아이콘을 통일했어요.",
         "홈에서 시각과 근처 예보, 러닝·옷차림 안내를 확인할 수 있어요.",

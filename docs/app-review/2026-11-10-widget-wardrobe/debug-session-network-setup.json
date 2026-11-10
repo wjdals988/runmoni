@@ -1,0 +1,16 @@
+{
+  "observedAtUtc": "2026-11-10T16:38:30.237851+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "appLocalDebugOverridesOnly": true,
+  "providedCaSha256": "7fa2d7d439db8bfa7c191457e61af5e3f4eb412314eb148766ac09e93786e4c3",
+  "apkRawCaShaMatchesProvidedCa": true,
+  "compiledApkDebugOverrideVerified": true,
+  "guestProxyDerivedFromInheritedHttpsProxy": true,
+  "guestProxyHostResolvedForGuestDns": true,
+  "hostProxyAndNoProxyEnvironmentPreserved": true,
+  "tlsVerificationDisabled": false,
+  "systemCaStoreModifiedByThisMethod": false,
+  "releaseNetworkSecurityConfigChanged": false,
+  "nativeMapHttpsVerified": false,
+  "restorationPending": true
+}

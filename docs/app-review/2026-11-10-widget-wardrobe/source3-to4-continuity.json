@@ -1,0 +1,19 @@
+{
+  "productApkBitIdentical": true,
+  "changedSourcePaths": {
+    "productSources": [],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/ui/HomeWeatherLayoutTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "retainedPassedGroupsFromFailedWholeAttempt": "android-review2.json",
+  "retainedPassedProductMethods": 11,
+  "oldWholeAttemptPassed": false,
+  "samePairAll23FreshClaimed": false,
+  "remainingFreshMethodsPlanned": 5,
+  "reason": "Displayed forecast contained previous-info suffix, but the new test used exact matching instead of substring=true. Test only corrected."
+}

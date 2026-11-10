@@ -1,0 +1,19 @@
+{
+  "productApkBitIdentical": true,
+  "changedSourcePaths": {
+    "productSources": [],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/avatar/ExpandedWardrobeTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "retainedPassedGroupsFromFailedWholeAttempt": "android-review1.json",
+  "retainedPassedProductMethods": 7,
+  "oldWholeAttemptPassed": false,
+  "samePairAll23FreshClaimed": false,
+  "remainingFreshMethodsPlanned": 16,
+  "reason": "Existing JSON codec canonicalizes legacy ear/headwear null into the effective default0. Test expectation corrected; product unchanged."
+}

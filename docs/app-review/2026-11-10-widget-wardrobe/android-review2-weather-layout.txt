@@ -1,0 +1,39 @@
+
+com.runmoni.app.ui.HomeWeatherLayoutTest:.
+Error in failedRefreshAndOldForecastKeepValuesWithoutFreshClothingAdvice(com.runmoni.app.ui.HomeWeatherLayoutTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '이전 정보' (ignoreCase: false))
+Semantics of the node:
+Node #207 at (l=132.0, t=246.0, r=280.0, b=290.0)px, Tag: 'home_weather_forecast'
+Text = '[현재 위치 근처 · 14:17 예보 · 이전 정보]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 3 siblings
+Selector used: (TestTag = 'home_weather_forecast')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.HomeWeatherLayoutTest.failedRefreshAndOldForecastKeepValuesWithoutFreshClothingAdvice(HomeWeatherLayoutTest.kt:89)
+
+
+Time: 45.147
+There was 1 failure:
+1) failedRefreshAndOldForecastKeepValuesWithoutFreshClothingAdvice(com.runmoni.app.ui.HomeWeatherLayoutTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '이전 정보' (ignoreCase: false))
+Semantics of the node:
+Node #207 at (l=132.0, t=246.0, r=280.0, b=290.0)px, Tag: 'home_weather_forecast'
+Text = '[현재 위치 근처 · 14:17 예보 · 이전 정보]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 3 siblings
+Selector used: (TestTag = 'home_weather_forecast')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.HomeWeatherLayoutTest.failedRefreshAndOldForecastKeepValuesWithoutFreshClothingAdvice(HomeWeatherLayoutTest.kt:89)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+

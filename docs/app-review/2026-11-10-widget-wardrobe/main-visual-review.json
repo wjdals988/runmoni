@@ -1,0 +1,42 @@
+{
+  "observedAtUtc": "2026-11-10T16:53:49.219613+00:00",
+  "source": "actual Android MainActivity, local TEST debug/API29/TCG",
+  "executionProof": "live2.json",
+  "executionProofSha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf",
+  "images": [
+    {
+      "file": "live2-male-crew.png",
+      "sha256": "4fbf8e12c4e5dd135ebef03369168d6902e1b8f74e07c9e3ad62832f8f724281",
+      "actuallyViewedWithViewImageByRoot": true,
+      "independentlyViewedByAvatarItemReviewAgent": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-home-weather.png",
+      "sha256": "ee04003b95ba7ea776e8e080ddf29601388d3cd829775832003d2212b8b0190a",
+      "actuallyViewedWithViewImageByRoot": true,
+      "independentlyViewedByAvatarItemReviewAgent": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-female-knee.png",
+      "sha256": "e32f8ac3a6050f2dd1d5310fa583da02cb5bdef89a36a9d1b745d3e6d50c15bb",
+      "actuallyViewedWithViewImageByRoot": true,
+      "independentlyViewedByAvatarItemReviewAgent": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-male-coral.png",
+      "sha256": "522b55d4c7d8c37be0b2c2de6372d1b6d3b31cdb814133faf5c542551725f4d5",
+      "actuallyViewedWithViewImageByRoot": true,
+      "independentlyViewedByAvatarItemReviewAgent": true,
+      "privacyReviewed": true
+    }
+  ],
+  "weatherBesideAvatarVisuallyConfirmed": true,
+  "additionalStaticVisualBlockerFound": false,
+  "userVisualApproval": false,
+  "allEightMotionFramesVisuallyApproved": false,
+  "lastOffscreenColorRowReachabilityInferredFromPhoto": false,
+  "scope": "Four unmodified focused actual Main screenshots. No real account/name/history/raw GPS visible; synthetic guest and Seoul GPS. Female tights overlay; original face/body impression retained. Separate instrumentation verifies material and selection; photos do not establish physical-phone, signed APK or motion-loop approval."
+}

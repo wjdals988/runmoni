@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "maskVersion": "approved-socks-v1",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "fabricMaskSha256": "462433ce98a7a2f52c98823d851bed462418bbab18f4262c75f6113456e74bb5",
+  "wardrobeMaskSha256": "2d0e8375a5644311b1337cd369708d5ebf35e0cef3314d6d7c2145382d650115",
+  "canvas": [2048, 768],
+  "cell": [256, 384],
+  "frames": 8,
+  "rows": 2,
+  "coordinateSystem": "Original 256x384 cell-local integer pixels; male row0, female row1. A/B are per-cell visible segments, not persistent rig or near/far limb identities.",
+  "authoring": "Manually proposed knee-to-ankle seed axes read against the immutable original. Seeds and output need per-frame visual review; these are not measured anatomical landmarks or user approval. No hidden leg/body pixels are synthesized.",
+  "visualApproval": "pending",
+  "eligibility": {
+    "male": "Existing wardrobe coverage bit4 only, excluding all fabric labels and source transparent pixels.",
+    "female": "Existing fabric region2 plus a separate fixed visible-ankle mask. Ankles are existing source pixels within authored ROIs, selected only during compilation; no hidden skin is inferred. This remains a sock overlay on original tights.",
+    "invariants": "Never extend source alpha or touch independently protected source shoe fabric, coral/red footwear, neutral white soles/trim, ink outline, face, hair, or original files. Occluded leg segments may have zero labels."
+  },
+  "visibleAnkleRules": {
+    "minimumAlpha": 200,
+    "hueDegreesExclusiveLowerInclusiveUpper": [13, 55],
+    "minimumSaturation": 0.16,
+    "minimumValue": 0.18,
+    "minimumComponentPixels": 40,
+    "connectivity": 8,
+    "scope": "Female authored lower-leg ROIs only. Smaller components, including the eleven-pixel frame5 fragment, remain unchanged. Every selected ankle pixel belongs to both lengths."
+  },
+  "shoeProtectionRules": {
+    "minimumY": 250,
+    "redHueInclusiveRanges": [[0, 13], [345, 360]],
+    "redMinimumSaturationExclusive": 0.16,
+    "redMinimumValueExclusive": 0.18,
+    "neutralMaximumSaturation": 0.20,
+    "neutralMinimumValue": 0.60,
+    "inkMaximumLuminance": 24,
+    "scope": "Independent protection from original lower-body pixels: existing shoe-fabric region3 OR coral/red hue OR neutral white OR dark ink; source alpha must be nonzero."
+  },
+  "knownPixels": [
+    {"gender": "female", "frame": 0, "point": [184, 315], "sourceRgba": [253, 171, 82, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 0, "point": [211, 338], "sourceRgba": [244, 135, 121, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 1, "point": [135, 290], "sourceRgba": [226, 155, 93, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 1, "point": [163, 347], "sourceRgba": [252, 84, 75, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 2, "point": [137, 325], "sourceRgba": [246, 158, 83, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 2, "point": [150, 345], "sourceRgba": [254, 93, 78, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 3, "point": [182, 315], "sourceRgba": [253, 223, 188, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 3, "point": [206, 338], "sourceRgba": [252, 190, 181, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 4, "point": [191, 315], "sourceRgba": [254, 200, 154, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 4, "point": [216, 338], "sourceRgba": [255, 255, 255, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 5, "point": [148, 289], "sourceRgba": [226, 138, 88, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 5, "point": [140, 345], "sourceRgba": [249, 83, 71, 253], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 5, "point": [118, 333], "sourceRgba": [245, 201, 173, 253], "visibleAnkle": false, "shoeProtected": false},
+    {"gender": "female", "frame": 6, "point": [124, 326], "sourceRgba": [248, 158, 63, 252], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 6, "point": [151, 346], "sourceRgba": [251, 90, 83, 252], "visibleAnkle": false, "shoeProtected": true},
+    {"gender": "female", "frame": 7, "point": [181, 308], "sourceRgba": [253, 173, 100, 253], "visibleAnkle": true, "shoeProtected": false},
+    {"gender": "female", "frame": 7, "point": [206, 333], "sourceRgba": [251, 251, 252, 253], "visibleAnkle": false, "shoeProtected": true}
+  ],
+  "recipes": {
+    "crew": {"flag": 1, "start": 0.55, "end": 1.0, "cuff": [0.55, 0.66]},
+    "knee": {"flag": 2, "start": 0.12, "end": 1.0, "cuff": [0.12, 0.23]},
+    "ribHalfWidth": 1.5,
+    "sourceShadeRanges": {"male": [25, 245], "female": [0, 255]}
+  },
+  "manualOcclusionReviewFrames": [1, 2, 5, 6],
+  "cells": [
+    {"gender": "male", "frame": 0, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [151, 297], "ankle": [172, 335], "radius": 14}, {"id": "B", "knee": [113, 299], "ankle": [76, 308], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 1, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [177, 301], "ankle": [128, 323], "radius": 14}, {"id": "B", "knee": [135, 320], "ankle": [144, 349], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 2, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [163, 300], "ankle": [106, 307], "radius": 14}, {"id": "B", "knee": [138, 315], "ankle": [130, 346], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 3, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [157, 293], "ankle": [179, 335], "radius": 14}, {"id": "B", "knee": [114, 294], "ankle": [74, 304], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 4, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [170, 296], "ankle": [188, 336], "radius": 14}, {"id": "B", "knee": [128, 298], "ankle": [90, 307], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 5, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [178, 300], "ankle": [145, 318], "radius": 14}, {"id": "B", "knee": [121, 318], "ankle": [104, 351], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 6, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [155, 300], "ankle": [112, 316], "radius": 14}, {"id": "B", "knee": [134, 319], "ankle": [125, 349], "radius": 14}], "excludePolygons": []},
+    {"gender": "male", "frame": 7, "minimumFabricY": 267, "legs": [{"id": "A", "knee": [151, 290], "ankle": [170, 332], "radius": 14}, {"id": "B", "knee": [106, 295], "ankle": [69, 303], "radius": 14}], "excludePolygons": []},
+    {"gender": "female", "frame": 0, "minimumFabricY": 250, "legs": [{"id": "A", "knee": [158, 279], "ankle": [180, 315], "radius": 24}, {"id": "B", "knee": [116, 277], "ankle": [80, 286], "radius": 24}], "visibleAnkleBoxes": [[176, 306, 194, 327], [75, 275, 83, 292]], "excludePolygons": []},
+    {"gender": "female", "frame": 1, "minimumFabricY": 274, "legs": [{"id": "A", "knee": [189, 275], "ankle": [142, 293], "radius": 24}, {"id": "B", "knee": [151, 298], "ankle": [144, 329], "radius": 24}], "visibleAnkleBoxes": [[131, 283, 140, 297], [135, 323, 146, 329]], "excludePolygons": []},
+    {"gender": "female", "frame": 2, "minimumFabricY": 274, "legs": [{"id": "A", "knee": [167, 276], "ankle": [114, 283], "radius": 24}, {"id": "B", "knee": [144, 299], "ankle": [136, 326], "radius": 24}], "visibleAnkleBoxes": [[124, 320, 143, 328], [119, 270, 126, 285]], "excludePolygons": []},
+    {"gender": "female", "frame": 3, "minimumFabricY": 250, "legs": [{"id": "A", "knee": [153, 276], "ankle": [177, 315], "radius": 24}, {"id": "B", "knee": [112, 276], "ankle": [76, 286], "radius": 24}], "visibleAnkleBoxes": [[173, 305, 192, 322], [70, 274, 76, 290]], "excludePolygons": []},
+    {"gender": "female", "frame": 4, "minimumFabricY": 250, "legs": [{"id": "A", "knee": [168, 277], "ankle": [188, 315], "radius": 24}, {"id": "B", "knee": [127, 277], "ankle": [95, 287], "radius": 24}], "visibleAnkleBoxes": [[182, 305, 201, 322], [88, 275, 95, 289]], "excludePolygons": []},
+    {"gender": "female", "frame": 5, "minimumFabricY": 274, "legs": [{"id": "A", "knee": [194, 275], "ankle": [149, 289], "radius": 24}, {"id": "B", "knee": [141, 296], "ankle": [134, 329], "radius": 24}], "visibleAnkleBoxes": [[143, 281, 154, 296], [117, 331, 120, 336]], "excludePolygons": []},
+    {"gender": "female", "frame": 6, "minimumFabricY": 280, "legs": [{"id": "A", "knee": [160, 285], "ankle": [115, 296], "radius": 24}, {"id": "B", "knee": [140, 302], "ankle": [132, 332], "radius": 24}], "visibleAnkleBoxes": [[116, 322, 136, 329], [107, 285, 113, 298]], "excludePolygons": []},
+    {"gender": "female", "frame": 7, "minimumFabricY": 250, "legs": [{"id": "A", "knee": [153, 277], "ankle": [174, 314], "radius": 24}, {"id": "B", "knee": [106, 277], "ankle": [75, 287], "radius": 24}], "visibleAnkleBoxes": [[172, 297, 191, 316], [68, 274, 75, 290]], "excludePolygons": []}
+  ]
+}

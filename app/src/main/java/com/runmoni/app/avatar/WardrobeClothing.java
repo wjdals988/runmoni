@@ -16,6 +16,9 @@ public final class WardrobeClothing {
         int selectedBottom = GarmentPalette.checkedColor(bottomColor);
         int selectedShoes = GarmentPalette.checkedColor(shoeColor);
         if (selectedTop == 0) selectedTop = top == 1 ? 1 : top == 2 ? 3 : top == 3 ? 5 : 0;
+        // These IDs reuse the approved men's shorts. The women's original is
+        // full tights: do not advertise or fabricate a shorter silhouette.
+        if (selectedBottom == 0 && row == 0) selectedBottom = bottom == 2 ? 1 : bottom == 3 ? 2 : 0;
         if (selectedShoes == 0) selectedShoes = shoes == 1 ? 2 : shoes == 2 ? 3 : shoes == 3 ? 5 : 0;
         int[] result = GarmentPalette.recolorRunningKit(source, fabric, selectedTop, selectedBottom, selectedShoes);
         int pose = Math.floorMod(frame,8), startY = row==0 ? 190 : 177, endY=WAIST_Y[row][pose]-3;

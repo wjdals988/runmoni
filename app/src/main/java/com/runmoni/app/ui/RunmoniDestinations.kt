@@ -38,34 +38,45 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     ScreenContent {
         Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface,
             modifier = Modifier.fillMaxWidth().testTag("home_run_hero")) {
-            Column(Modifier.padding(if (largeText) 16.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        HomeDateTime(homeClock, temperatureC = state.weather.snapshot?.takeIf {
-                            state.weather.phase == WeatherPhase.READY && it.isCurrent(homeClock)
-                        }?.temperatureC)
-                        Text("러닝", style = MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.semantics { heading() })
-                        if (!largeText && todaySummary != null) Text(todaySummary,
-                            style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+            BoxWithConstraints(Modifier.padding(if (largeText) 16.dp else 20.dp)) {
+                // 320dp phones have 240dp inside both page and hero gutters.
+                // Reserve 80dp for the sprite and leave 148dp for readable text.
+                val besideAvatar = maxWidth >= 240.dp && !largeText
+                val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    if (besideAvatar) {
+                        HomeHeading(homeClock, todaySummary)
+                        Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
+                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            AvatarMini(state.profile.avatar, Modifier.width(avatarWidth).height(avatarWidth * 1.5f)
+                                .testTag("home_avatar"), running = true, decorative = true)
+                            HomeWeatherSummary(state.weather, homeClock, Modifier.weight(1f))
+                        }
+                    } else {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            HomeHeading(homeClock, if (largeText) null else todaySummary, Modifier.weight(1f))
+                            AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 80.dp)
+                                .height(if (largeText) 84.dp else 120.dp).testTag("home_avatar"),
+                                running = true, decorative = true)
+                        }
                     }
-                    Box(Modifier.width(if (largeText) 64.dp else 104.dp).height(if (largeText) 84.dp else 120.dp)
-                        .background(RunmoniColors.SecondaryMint, RunmoniShapes.Surface), contentAlignment = Alignment.Center) {
-                        AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 88.dp).height(if (largeText) 76.dp else 112.dp), running = true, decorative = true)
+                    Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.DeepGreen, contentColor = RunmoniColors.OnDark),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
+                        Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
+                        Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
+                            modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                        if (!largeText) { Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp)) }
                     }
+                    if (!besideAvatar) Box(Modifier.fillMaxWidth().testTag("home_avatar_conditions_stacked")) {
+                        HomeWeatherSummary(state.weather, homeClock)
+                    }
+                    if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
                 }
-                Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.DeepGreen, contentColor = RunmoniColors.OnDark),
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
-                    Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
-                    Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
-                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-                    if (!largeText) { Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp)) }
-                }
-                if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
             }
         }
-        HomeConditions(state.weather, onWeather)
+        HomeWeatherDetails(state.weather, homeClock, onWeather)
         RunPersistenceNotice(state.runPersistence, onRetrySave)
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
@@ -80,6 +91,16 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         ScreenSection("함께 달리기") {
             DestinationRow("크루 찾기", "", Icons.Outlined.Groups, onCrew, Modifier.testTag("home_find_rooms"))
         }
+    }
+}
+
+@Composable
+private fun HomeHeading(homeClock: Long, todaySummary: String?, modifier: Modifier = Modifier) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        HomeDateTime(homeClock)
+        Text("러닝", style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.semantics { heading() })
+        if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
     }
 }
 

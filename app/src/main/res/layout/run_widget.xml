@@ -7,23 +7,23 @@
     <TextView android:id="@+id/run_widget_title"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="@string/run_widget_preview_title" android:textSize="12sp"
-        android:textColor="#D5ED98" android:textStyle="bold" android:includeFontPadding="false"
+        android:textColor="#D5ED98" android:textStyle="bold" android:includeFontPadding="true" android:fallbackLineSpacing="true"
         android:maxLines="2" />
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:baselineAligned="true" android:layout_marginTop="2dp">
         <TextView android:id="@+id/run_widget_distance"
             android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
             android:text="@string/run_widget_preview_distance" android:textSize="20sp" android:textStyle="bold"
-            android:textColor="#FFFFFF" android:includeFontPadding="false" android:fontFeatureSettings="tnum" />
+            android:textColor="#FFFFFF" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:fontFeatureSettings="tnum" />
         <TextView android:id="@+id/run_widget_duration"
             android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp"
             android:text="@string/run_widget_preview_duration" android:textSize="14sp"
-            android:textColor="#FFFFFF" android:includeFontPadding="false" android:fontFeatureSettings="tnum" />
+            android:textColor="#FFFFFF" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:fontFeatureSettings="tnum" />
     </LinearLayout>
     <TextView android:id="@+id/run_widget_speed"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp"
         android:text="@string/run_widget_preview_speed" android:textSize="12sp"
-        android:textColor="#D6E5DA" android:includeFontPadding="false" />
+        android:textColor="#D6E5DA" android:includeFontPadding="true" android:fallbackLineSpacing="true" />
     <LinearLayout android:id="@+id/run_widget_actions"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
         android:orientation="horizontal" android:visibility="gone">
@@ -41,5 +41,5 @@
     <TextView android:id="@+id/run_widget_footer"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
         android:text="@string/run_widget_preview_footer" android:textSize="11sp"
-        android:textColor="#D6E5DA" android:includeFontPadding="false" android:maxLines="2" />
+        android:textColor="#D6E5DA" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
 </LinearLayout>

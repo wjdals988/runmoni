@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-11-10T17:04:16.654856+00:00",
+  "executionProof": "widget2.json",
+  "rootActuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "additionalStaticVisualBlockerFound": false,
+  "userVisualApproval": false,
+  "scope": "Two independent real Launcher3 idle widget placements at systemfont1 and2. Unmodified PNGs, no real account/history/location visible. Visible widget text and app-open controls fit. Native factory7 separately checks glyph ink/48dp/144state-size-font cases. No same-widget resize, real running controls or phone execution inferred.",
+  "images": [
+    {
+      "file": "widget2-idle-font1.png",
+      "sha256": "85d0d71c680efb06917b3d7672b53711e5c0c22cbda49a7328c76a550fee229c"
+    },
+    {
+      "file": "widget2-idle-font2.png",
+      "sha256": "b17c0789ff6a72d275e363b060fd1e5b7e0ee396bfd4ab8670a51adc6a18d7f0"
+    }
+  ]
+}

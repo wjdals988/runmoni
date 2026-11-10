@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/run_widget_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="8dp"
+    android:background="@drawable/run_widget_surface">
+    <TextView android:id="@+id/run_widget_title"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/run_widget_preview_title" android:textSize="12sp"
+        android:textColor="#D5ED98" android:textStyle="bold"
+        android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
+    <TextView android:id="@+id/run_widget_distance"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="2dp"
+        android:text="@string/run_widget_preview_distance" android:textSize="16sp" android:textStyle="bold"
+        android:textColor="#FFFFFF" android:includeFontPadding="true" android:fallbackLineSpacing="true"
+        android:fontFeatureSettings="tnum" />
+    <TextView android:id="@+id/run_widget_duration"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/run_widget_preview_duration" android:textSize="12sp"
+        android:textColor="#FFFFFF" android:includeFontPadding="true" android:fallbackLineSpacing="true"
+        android:fontFeatureSettings="tnum" />
+    <TextView android:id="@+id/run_widget_speed"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+        android:textSize="12sp" android:textColor="#D6E5DA" />
+    <LinearLayout android:id="@+id/run_widget_actions"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+        android:orientation="horizontal" android:visibility="gone">
+        <Button android:id="@+id/run_widget_control" style="@style/RunWidgetAction"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+            android:text="@string/run_widget_pause" />
+        <Button android:id="@+id/run_widget_finish" style="@style/RunWidgetAction"
+            android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="8dp"
+            android:text="@string/run_widget_finish" android:contentDescription="@string/run_widget_finish_description"
+            android:background="@drawable/run_widget_secondary_action" android:textColor="#FFFFFF" />
+    </LinearLayout>
+    <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+        android:text="@string/run_widget_open" />
+    <TextView android:id="@+id/run_widget_footer"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:visibility="gone"
+        android:textSize="11sp" android:textColor="#D6E5DA" />
+</LinearLayout>
