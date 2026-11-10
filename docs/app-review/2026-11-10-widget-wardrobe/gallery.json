@@ -1,0 +1,80 @@
+{
+  "version": "0.4.1-dev",
+  "versionCode": 23,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "1eff94141c9449c6f707bfae6ff2472cd68e2386",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "release-source-comparison.json",
+      "sha256": "3192114b16c81210f87ee0819b95c3f5419ca0696e95850deac943d12dd9bc26"
+    }
+  },
+  "images": [
+    {
+      "file": "live2-home-weather.png",
+      "sha256": "ee04003b95ba7ea776e8e080ddf29601388d3cd829775832003d2212b8b0190a",
+      "width": 480,
+      "height": 854,
+      "key": "home-weather",
+      "caption": "미니미 옆 날씨",
+      "alt": "기온·바람·강수·옷차림이 미니미 옆에 보이는 실제 홈, 서울 합성 위치와 UTC 시각",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf"
+      }
+    },
+    {
+      "file": "live2-male-crew.png",
+      "sha256": "4fbf8e12c4e5dd135ebef03369168d6902e1b8f74e07c9e3ad62832f8f724281",
+      "width": 480,
+      "height": 854,
+      "key": "male-crew",
+      "caption": "크루 양말·그린 쇼츠",
+      "alt": "선택한 크루 양말과 남자 그린 쇼츠가 미니미에 반영된 실제 옷장",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf"
+      }
+    },
+    {
+      "file": "live2-female-knee.png",
+      "sha256": "e32f8ac3a6050f2dd1d5310fa583da02cb5bdef89a36a9d1b745d3e6d50c15bb",
+      "width": 480,
+      "height": 854,
+      "key": "female-knee",
+      "caption": "여자 니삭스",
+      "alt": "기존 여자 타이츠 위 니삭스와 선택행이 보이는 실제 옷장",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf"
+      }
+    },
+    {
+      "file": "live2-male-coral.png",
+      "sha256": "522b55d4c7d8c37be0b2c2de6372d1b6d3b31cdb814133faf5c542551725f4d5",
+      "width": 480,
+      "height": 854,
+      "key": "male-coral",
+      "caption": "코랄 쇼츠",
+      "alt": "니삭스를 유지하면서 남자 코랄 쇼츠를 선택한 실제 옷장",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf"
+      }
+    }
+  ]
+}

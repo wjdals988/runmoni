@@ -1,0 +1,42 @@
+{
+  "version": "0.4.1-dev",
+  "versionCode": 23,
+  "sourceRevision": "1eff94141c9449c6f707bfae6ff2472cd68e2386",
+  "ciRun": 42861574401,
+  "runtimeReadme": {
+    "file": "README.md",
+    "sha256": "bd11122b2846ac4df0ab9fddb57b7b77c8641440341d116943a3f10f7ea61835"
+  },
+  "androidUniqueMethods": {
+    "source2Retained": 7,
+    "source3Retained": 11,
+    "source4Fresh": 5,
+    "singleLatestPairAll23Claimed": false
+  },
+  "localJvmFreshReference": "binary-build2.json",
+  "localJvmReusedBy": [
+    "binary-build3.json",
+    "binary-build4.json"
+  ],
+  "mainProof": {
+    "file": "live2.json",
+    "sha256": "cba4228de6ca14acdd5e3e3448dd251187254af2855efd05fd657cd988b297bf"
+  },
+  "priorMainAttempts": [
+    {
+      "file": "live1.json",
+      "sha256": "72147e5b60d070be8c150c721808e6385c8aa4213dcb439e5f40415515b96d93",
+      "passed": false,
+      "completed": true,
+      "captures": 1,
+      "observedUiSelections": 2,
+      "aggregatedIntoCompletedMain": false
+    }
+  ],
+  "launcherProof": {
+    "file": "widget2.json",
+    "sha256": "bf938e25ca0bb44df10184ed2a42146f8aff6fc4880efecbd6de8bb00af58d3e"
+  },
+  "canonicalRawVerifiedByThisHelper": false,
+  "userVisualApproval": false
+}

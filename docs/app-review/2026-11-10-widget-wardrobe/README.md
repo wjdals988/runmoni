@@ -70,9 +70,11 @@
 
 [프록시 소유5키 복원](debug-session-network-restoration.json)과 [전용 AVD 종료](session-cleanup.json)를 확인했다. 종료한 소유 PID는672492, 관측 상태Z다. 다른 AVD 종료나 모든 OS 파일 바이트 동일성은 주장하지 않는다. 제공 CA는 앱 전용 로컬 TEST debug override였으며 시스템 신뢰 저장소와 release TLS 설정은 바꾸지 않았다.
 
-## 배포 출처
+## 실제 게시 출처
 
-위 결과는 로컬 검토 단계다. 공개 서명 APK는 검토한 실제 main C에서 별도 CI로 만들고 서명·버전·embedded C·3자산/sidecar/HEAD와 대시보드·canonical 피드의 실제 완료 근거를 후속 게시 문서에 기록한다. 로컬 build 당시의 기존 Git parent와 미커밋 source map을 새 APK 출처로 바꾸어 쓰지 않는다.
+같은 보관키의 [0.4.1-dev 릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.4.1-dev)와 [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni)를 확인했다. 실제 APK 출처 C는 `1eff94141c9449c6f707bfae6ff2472cd68e2386`, 219,772,021bytes, SHA256 `4866a905339fe50763a30bbfe9df4954cbf74cbfbdbc2be112bd25bef9e7614b`다. [서명 CI](signed-ci-verification.json)는 새 JVM167·실패/오류/skip0, release lint오류0·경고75이며 로컬 build2 새167과 별도 실행이다. 두 결과를334개 고유 검사로 합산하지 않는다. [공개3자산](publication-verification.json)과 [HEAD200/크기](public-apk-head-verification.json)를 확인했다.
+
+[실행 입력과 실제 C 전체 비교](release-source-comparison.json)·[실제 Main4장 manifest](gallery.json)·[대시보드 운영 검증](dashboard-production-verification.json)·[새 Node23 원문](dashboard-node-tests.log)을 연결한다. 운영13항목/원본Main PNG4, main CI42866079843·Production7689395596, 다른8프로젝트/옛15개내역/옛PNG4 보존을 확인했다. [종합 게시 문서](../../RELEASE_REVIEW_0.4.1_20261110.md)의 별도 문서/피드 D는 C를 대체하지 않는다. preview23/stable null의 canonical raw 전체 바이트는 해당 문서/피드 병합 후 별도 확인하며, 병합 PR의 최종 댓글에 실제 결과를 남긴다.
 
 ## 해석의 경계
 

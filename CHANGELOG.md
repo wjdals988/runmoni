@@ -1,3 +1,9 @@
+# 0.4.1-dev 공개 — 2026.11.11 한국 시간
+
+<!-- verified-release-0.4.1-v1 -->
+- 위젯 크기/글자 설정별 표시·48dp 앱 열기, 미니미 옆 날씨와 새 양말2종·남자 쇼츠2종을 반영했다. 같은 보관키/code23, 219,772,021bytes, 실제 APK출처 `1eff94141c9449c6f707bfae6ff2472cd68e2386`, SHA256 `4866a905339fe50763a30bbfe9df4954cbf74cbfbdbc2be112bd25bef9e7614b`. 서명 CI42861574401 새 JVM167/lint오류0·경고75, 운영13항목/원본PNG4를 확인했다.
+- [게시 근거](docs/RELEASE_REVIEW_0.4.1_20261110.md). Android 보존7(source2)+11(source3)·새5(source4), local JVM build2 새167와3/4 재사용, host 최종208·이전2차 시각 실패, 실제 Main4/별도 idle Launcher2를 구분한다. preview23/stable null은 이 변경에서 준비하며 canonical raw는 병합 후 별도 확인한다. 이번 새 Rules 변경은 없고 휴대폰·Google·운영 공유·절전·API31이상·새 의복 사용자 승인은 별도다. 기존 원본/데이터/ID/키/과거 APK출처를 보존했다.
+
 # 0.4.1-dev 개발 — 2026.11.10 한국 시간
 
 - 로컬 완료: 새 JVM167/lint0·경고45(build2), test-only build3/4는 JVM 재사용. 같은 제품 APK의 Android 보존7+11·새5(서로 다른 검사 APK), 최종 host208, 실제 Main4장/선택저장7회·별도 idle Launcher2장과 원래 데이터/캐시/설정·프록시 복원/전용 AVD 종료를 확인했다. [실제 실패/정정·사진·경계](docs/app-review/2026-11-10-widget-wardrobe/README.md). 새 서명 APK·공개 업데이트 검증은 후속 게시 근거를 따른다.
