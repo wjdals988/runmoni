@@ -47,7 +47,7 @@ internal object RunNotifications {
             .putExtra(RUN_ID, id).putExtra(CONFIRM_FINISH, confirm).putExtra(EVENT, android.os.SystemClock.elapsedRealtimeNanos().toString())
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP), FLAGS)
 
-    private fun control(context: Context, id: String, action: String): PendingIntent = PendingIntent.getService(context, 0,
+    internal fun control(context: Context, id: String, action: String): PendingIntent = PendingIntent.getService(context, 0,
         Intent(context, RunTrackingService::class.java).setAction(action).setData(identity(id, action))
             .putExtra(RUN_ID, id), FLAGS)
 

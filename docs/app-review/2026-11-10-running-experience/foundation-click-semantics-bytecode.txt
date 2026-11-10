@@ -1,0 +1,31 @@
+Compiled from "Clickable.kt"
+final class androidx.compose.foundation.AbstractClickableNode$applySemantics$1 extends kotlin.jvm.internal.Lambda implements kotlin.jvm.functions.Function0<java.lang.Boolean> {
+  final androidx.compose.foundation.AbstractClickableNode this$0;
+
+  androidx.compose.foundation.AbstractClickableNode$applySemantics$1(androidx.compose.foundation.AbstractClickableNode);
+    Code:
+       0: aload_0
+       1: aload_1
+       2: putfield      #13                 // Field this$0:Landroidx/compose/foundation/AbstractClickableNode;
+       5: aload_0
+       6: iconst_0
+       7: invokespecial #16                 // Method kotlin/jvm/internal/Lambda."<init>":(I)V
+      10: return
+
+  public final java.lang.Boolean invoke();
+    Code:
+       0: aload_0
+       1: getfield      #13                 // Field this$0:Landroidx/compose/foundation/AbstractClickableNode;
+       4: invokevirtual #28                 // Method androidx/compose/foundation/AbstractClickableNode.getOnClick:()Lkotlin/jvm/functions/Function0;
+       7: invokeinterface #31,  1           // InterfaceMethod kotlin/jvm/functions/Function0.invoke:()Ljava/lang/Object;
+      12: pop
+      13: iconst_1
+      14: invokestatic  #37                 // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      17: areturn
+
+  public java.lang.Object invoke();
+    Code:
+       0: aload_0
+       1: invokevirtual #39                 // Method invoke:()Ljava/lang/Boolean;
+       4: areturn
+}

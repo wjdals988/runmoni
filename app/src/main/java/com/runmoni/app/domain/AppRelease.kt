@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.3.9-dev", "2026-11-10", "러닝 위젯·경로 지도·기록 페이지 · 실기기 검증 전", listOf(
+        "홈 화면 위젯에서 진행 중 거리·시간을 보고 일시정지·재개할 수 있어요. 종료는 앱에서 확인해요.",
+        "러닝 기록을 전체 페이지로 열고 실제 지도 위에서 경로를 확인할 수 있어요.",
+        "홈과 기록 요약에 색감을 더하고 중요한 버튼과 구역을 구분했어요.",
+    )),
     AppVersionEntry("0.3.8-dev", "2026-11-07", "업데이트 표시 간격 수정 · 실기기 검증 전", listOf(
         "우상단 새 버전 표시가 버전 글자나 설정 버튼과 겹치지 않게 간격을 확보했어요.",
         "버전 영역을 누르면 새 버전을 확인하고 다운로드할 수 있어요.",

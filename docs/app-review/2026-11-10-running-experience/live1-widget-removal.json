@@ -1,0 +1,21 @@
+{
+  "verifiedAtUtc": "2026-11-10T05:06:26.233816+00:00",
+  "newReviewWidgetId": 4,
+  "beforeIds": [
+    2
+  ],
+  "afterPinIds": [
+    2,
+    4
+  ],
+  "afterRemovalIds": [
+    2
+  ],
+  "newReviewWidgetRemoved": true,
+  "originalRunmoniWidgetIdsPreserved": true,
+  "originalOtherWidgetIdsPreserved": true,
+  "removalMethod": "Actual Launcher3 drag-and-drop onto observed Remove target250,55; service IDs verified after animation settled",
+  "immediatePostGesturePollStillContainedId": true,
+  "failedAttemptRetained": "live1.json",
+  "dataRepairProof": "live1-data-repair1.json"
+}

@@ -3,18 +3,14 @@ package com.runmoni.app.ui
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MyLocation
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -24,17 +20,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -51,23 +42,18 @@ import com.naver.maps.map.overlay.PathOverlay
 import com.runmoni.app.BuildConfig
 import com.runmoni.app.domain.LiveRunner
 import com.runmoni.app.domain.TrackPoint
-import kotlin.math.cos
+import com.runmoni.app.domain.RouteGeometry
+import com.runmoni.app.domain.RouteViewport
+import com.runmoni.app.domain.Mercator
 
 @Composable
-internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = emptyList(), modifier: Modifier = Modifier) {
-    val usablePoints = remember(points) { points.filter { it.validForRoute() } }
+internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = emptyList(), modifier: Modifier = Modifier, fitRoute: Boolean = false) {
+    val geometry = remember(points) { RouteGeometry.from(points) }
+    val usablePoints = remember(geometry) { geometry.points.map { it.point } }
     val validRunners = remember(runners) { runners.filter { it.hasValidCoordinates() } }
     var authFailed by remember { mutableStateOf(false) }
-    val largeText = LocalDensity.current.fontScale >= 1.3f
-    if (BuildConfig.NAVER_MAP_CLIENT_ID.isBlank() || authFailed) {
-        Box(modifier.background(RunmoniColors.Paper).testTag("route_canvas").semantics { contentDescription = if (usablePoints.isEmpty()) "아직 표시할 GPS 경로가 없습니다" else "GPS 경로 ${usablePoints.size}개 지점. 중단 구간은 연결하지 않습니다" }) {
-            RouteCanvas(usablePoints, Modifier.fillMaxSize().padding(top = if (largeText) 64.dp else 44.dp, bottom = 8.dp))
-            if (!largeText || usablePoints.isNotEmpty()) Text(if (authFailed) "GPS 경로 · 지도 인증 확인 필요" else "GPS 경로 · 지도 미연결", Modifier.align(Alignment.TopStart).padding(14.dp), style = MaterialTheme.typography.labelMedium)
-            if (usablePoints.isEmpty()) Column(Modifier.align(Alignment.Center).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(if (points.isEmpty()) "아직 달린 경로가 없어요" else "GPS 정확도를 확인하고 있어요", style = MaterialTheme.typography.titleMedium)
-                if (!largeText) Text(if (points.isEmpty()) "러닝을 시작하면 실제 경로가 쌓여요" else "정확도 30m 이내의 좌표만 경로에 표시해요", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-            }
-        }
+    if (LocalMapTileSource.current != null || BuildConfig.NAVER_MAP_CLIENT_ID.isBlank() || authFailed) {
+        RouteTileMap(points, validRunners, modifier, fitRoute)
         return
     }
     val context = LocalContext.current
@@ -84,6 +70,15 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
     val paths = remember { mutableListOf<PathOverlay>() }
     val markers = remember { mutableListOf<Marker>() }
     var cameraPositioned by remember { mutableStateOf(false) }
+    var mapSize by remember { mutableStateOf(IntSize.Zero) }
+    val tileSize = 256.0 * LocalDensity.current.density
+    fun positionCamera(ready: NaverMap) {
+        val fitted = if (fitRoute) RouteViewport.fit(geometry.points, mapSize.width.toDouble(), mapSize.height.toDouble(),
+            32.0 * context.resources.displayMetrics.density, tileSize) else null
+        if (fitted != null) ready.moveCamera(CameraUpdate.scrollAndZoomTo(
+            LatLng(Mercator.latitude(fitted.centerY), Mercator.longitude(fitted.centerX)), fitted.zoom))
+        else usablePoints.lastOrNull()?.let { ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(it.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), it.longitude), 15.5)) }
+    }
     DisposableEffect(view, lifecycle) {
         var started = false
         var resumed = false
@@ -117,23 +112,35 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
             view.onDestroy()
         }
     }
-    Box(modifier.testTag("naver_map")) {
+    Box(modifier.testTag("naver_map").onSizeChanged { mapSize = it }) {
         AndroidView(factory = { view.apply { getMapAsync { map = it } } }, modifier = Modifier.fillMaxSize())
-        if (usablePoints.isNotEmpty()) FilledTonalIconButton(onClick = { usablePoints.lastOrNull()?.let { map?.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(it.latitude, it.longitude), 15.5)) } }, modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp)) { Icon(Icons.Outlined.MyLocation, "GPS 경로 위치로 이동") }
+        if (usablePoints.isNotEmpty()) FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { map?.let(::positionCamera) }, modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp).size(48.dp)) { Icon(Icons.Outlined.MyLocation, if (fitRoute) "전체 러닝 경로 보기" else "GPS 경로 위치로 이동") }
     }
-    LaunchedEffect(map, usablePoints, validRunners) {
+    LaunchedEffect(map, geometry, validRunners, mapSize, fitRoute) {
         val ready = map ?: return@LaunchedEffect
-        ready.uiSettings.isZoomControlEnabled = false
+        ready.uiSettings.isZoomControlEnabled = true
+        // Embedded history leaves the page's one-finger vertical scroll usable.
+        // SDK pinch zoom and the full-route action remain available.
+        ready.uiSettings.isScrollGesturesEnabled = !fitRoute
+        ready.uiSettings.isZoomGesturesEnabled = true
         paths.forEach { it.map = null }; paths.clear()
-        usablePoints.groupBy { it.segment }.values.forEach { segment ->
+        geometry.segments.forEach { segment ->
             if (segment.size > 1) paths += PathOverlay().apply {
-                coords = segment.map { LatLng(it.latitude, it.longitude) }
+                coords = segment.map { LatLng(it.point.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), it.point.longitude) }
                 color = RunmoniColors.Primary.toArgb()
                 width = 10
                 this.map = ready
             }
         }
         markers.forEach { it.map = null }; markers.clear()
+        listOfNotNull(usablePoints.firstOrNull()?.let { "시작" to it }, usablePoints.lastOrNull()?.let { "도착" to it })
+            .forEach { (label, point) ->
+                markers += Marker().apply {
+                    position = LatLng(point.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), point.longitude)
+                    captionText = label
+                    this.map = ready
+                }
+            }
         validRunners.forEach { runner ->
             markers += Marker().apply {
                 position = LatLng(runner.latitude, runner.longitude)
@@ -145,10 +152,10 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
         }
         val current = usablePoints.lastOrNull()
         if (current != null) {
-            ready.locationOverlay.position = LatLng(current.latitude, current.longitude)
+            ready.locationOverlay.position = LatLng(current.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), current.longitude)
             ready.locationOverlay.isVisible = true
-            if (!cameraPositioned) {
-                ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(current.latitude, current.longitude), 15.5))
+            if (!cameraPositioned || fitRoute) {
+                positionCamera(ready)
                 cameraPositioned = true
             }
         } else {
@@ -161,36 +168,5 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
         }
     }
 }
-
-@Composable
-private fun RouteCanvas(points: List<TrackPoint>, modifier: Modifier) {
-    Canvas(modifier) {
-        val valid = points.filter { it.validForRoute() }
-        if (valid.isEmpty()) return@Canvas
-        val longitudeScale = cos(Math.toRadians(valid.first().latitude))
-        val minX = valid.minOf { it.longitude * longitudeScale }
-        val maxX = valid.maxOf { it.longitude * longitudeScale }
-        val minY = valid.minOf { it.latitude }
-        val maxY = valid.maxOf { it.latitude }
-        val pad = 40.dp.toPx()
-        val availableWidth = (size.width - 2 * pad).coerceAtLeast(1f)
-        val availableHeight = (size.height - 2 * pad).coerceAtLeast(1f)
-        val scale = minOf(availableWidth / (maxX - minX).coerceAtLeast(0.00015), availableHeight / (maxY - minY).coerceAtLeast(0.00015))
-        fun at(point: TrackPoint) = Offset(
-            (size.width / 2 + (point.longitude * longitudeScale - (minX + maxX) / 2) * scale).toFloat(),
-            (size.height / 2 - (point.latitude - (minY + maxY) / 2) * scale).toFloat(),
-        )
-        valid.groupBy { it.segment }.values.forEach { segment ->
-            val route = Path()
-            segment.forEachIndexed { index, point -> val p = at(point); if (index == 0) route.moveTo(p.x, p.y) else route.lineTo(p.x, p.y) }
-            drawPath(route, Color.White, style = Stroke(9.dp.toPx(), cap = StrokeCap.Round))
-            drawPath(route, RunmoniColors.Primary, style = Stroke(5.dp.toPx(), cap = StrokeCap.Round))
-        }
-        drawCircle(Color.White, 8.dp.toPx(), at(valid.last()))
-        drawCircle(RunmoniColors.Primary, 5.dp.toPx(), at(valid.last()))
-    }
-}
-
-private fun TrackPoint.validForRoute() = latitude.isFinite() && longitude.isFinite() && latitude in -90.0..90.0 && longitude in -180.0..180.0 && accuracyMeters.isFinite() && accuracyMeters in 0f..30f
 
 internal fun LiveRunner.hasValidCoordinates() = latitude.isFinite() && longitude.isFinite() && latitude in -90.0..90.0 && longitude in -180.0..180.0

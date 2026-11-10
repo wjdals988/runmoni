@@ -65,7 +65,32 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         val mainStateHolder = rememberSaveableStateHolder()
         var signIn by rememberSaveable { mutableStateOf(false) }
         var appInformation by rememberSaveable { mutableStateOf(false) }
-        var selectedRecord by remember { mutableStateOf<RunRecord?>(null) }
+        var selectedRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        var recordSnapshot by remember { mutableStateOf<RunRecord?>(null) }
+        var deletingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        fun openRecord(record: RunRecord) {
+            recordSnapshot = record
+            selectedRecordId = record.id
+            deletingRecordId = null
+            settings = false
+            closet = false
+            appInformation = false
+            signIn = false
+        }
+        fun closeRecord() {
+            selectedRecordId = null
+            recordSnapshot = null
+            deletingRecordId = null
+        }
+        val selectedRecord = state.records.firstOrNull { it.id == selectedRecordId }
+            ?: recordSnapshot?.takeIf { it.id == selectedRecordId }
+        LaunchedEffect(selectedRecordId, deletingRecordId, state.records, state.busy,
+            state.runPersistence.initialized, state.runPersistence.historyUnavailable) {
+            // Keep failures visible; return only after canonical removal.
+            if (deletingRecordId != null && deletingRecordId == selectedRecordId &&
+                state.runPersistence.initialized && !state.runPersistence.historyUnavailable &&
+                !state.busy && state.records.none { it.id == deletingRecordId }) closeRecord()
+        }
         var finishRunId by rememberSaveable { mutableStateOf<String?>(null) }
         var handledRunNavigationToken by rememberSaveable { mutableStateOf<Long?>(null) }
         var lastActiveId by remember { mutableStateOf(state.activeRun.id.takeIf { it.isNotBlank() }) }
@@ -80,7 +105,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             } else if (state.activeRun.id.isNotBlank()) lastActiveId = state.activeRun.id
         }
         LaunchedEffect(completedId, state.records) {
-            completedId?.let { id -> state.records.firstOrNull { it.id == id }?.let { selectedRecord = it; completedId = null } }
+            completedId?.let { id -> state.records.firstOrNull { it.id == id }?.let { openRecord(it); completedId = null } }
         }
         LaunchedEffect(state.runNavigationRequest, state.runPersistence.initialized, state.activeRun.id, state.activeRun.phase) {
             val request = state.runNavigationRequest ?: return@LaunchedEffect
@@ -92,7 +117,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 closet = false
                 signIn = false
                 appInformation = false
-                selectedRecord = null
+                closeRecord()
                 completedId = null
                 crewNavigation = null
                 partyNavigation = null
@@ -121,7 +146,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             ((configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 maxWidth > maxHeight && maxHeight <= 360.dp) ||
                 (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp))
-        if (!closet) mainStateHolder.SaveableStateProvider("main_navigation") {
+        if (!closet && selectedRecordId == null) mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
             modifier = if (chatOpen || settings) Modifier.clearAndSetSemantics { }.focusProperties { canFocus = false } else Modifier,
             containerColor = RunmoniColors.Cream,
@@ -247,11 +272,11 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = { selectedRecord = it }, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
+                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onFinish = { finishRunId = state.activeRun.id })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
-                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = { selectedRecord = it }, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true }, onCloset = { closet = true })
+                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true }, onCloset = { closet = true })
                 }
             }
         }
@@ -261,7 +286,29 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
         if (signIn) SignInDialog(state, actions) { signIn = false }
         if (chatOpen) ChatScreen(state, actions)
-        selectedRecord?.let { record -> RecordDialog(state.records.firstOrNull { it.id == record.id } ?: record, actions, state.cloud, state.runPersistence) { selectedRecord = null } }
+        if (selectedRecordId != null) {
+            if (selectedRecord != null) {
+                val recordActions = object : AppActions by actions {
+                    override fun deleteRun(id: String) {
+                        if (id == selectedRecordId && state.records.any { it.id == id } && !state.busy) {
+                            deletingRecordId = id
+                            actions.deleteRun(id)
+                        }
+                    }
+                }
+                RunRecordScreen(selectedRecord, recordActions, state.cloud, state.runPersistence,
+                    operationBusy = state.busy, onBack = ::closeRecord)
+            } else {
+                BackHandler(onBack = ::closeRecord)
+                Surface(Modifier.fillMaxSize(), color = RunmoniColors.Cream) {
+                    Column(Modifier.safeDrawingPadding().padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        TextButton(onClick = ::closeRecord, modifier = Modifier.heightIn(min = 48.dp).testTag("close_record")) { Text("뒤로") }
+                        Text(if (state.runPersistence.initialized) "이 기기에서 기록을 찾을 수 없어요." else "기록을 불러오는 중이에요.",
+                            style = MaterialTheme.typography.bodyLarge)
+                    }
+                }
+            }
+        }
         if (finishRunId != null && finishRunId == state.activeRun.id && state.activeRun.phase != RunPhase.IDLE &&
             state.runPersistence.initialized && !state.runPersistence.finishing) {
             AlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
@@ -333,6 +380,11 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                             modifier = Modifier.heightIn(min = 48.dp).testTag("run_notification_settings")) { Text("알림 설정") }
                     }
                 }
+                if (run.phase != RunPhase.IDLE && !state.runNotificationAccess.isBlocked) {
+                    Text("상단 알림을 펼치면 일시정지·재개할 수 있어요. 종료는 앱에서 확인해요.",
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                        modifier = Modifier.testTag("run_notification_guide"))
+                }
                 if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 if (run.phase == RunPhase.PAUSED && !persistence.finishing && persistence.issue != RunPersistenceIssue.CHECKPOINT)
                     SmallNote(when (run.pauseReason) {
@@ -347,6 +399,14 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
                 }
                 if (optionsExpanded) {
+                    OutlinedButton(onClick = actions::addRunWidget, shape = RunmoniShapes.Action,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("add_run_widget")) {
+                        Icon(Icons.Outlined.Widgets, null, Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("홈 화면에 러닝 위젯 추가")
+                    }
+                    Text("러닝을 시작한 뒤 홈 화면에서도 기록을 확인해요.",
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     ToggleRow("자동 일시정지", "정확한 GPS로 10초 동안 멈춤이 확인되면 시간을 멈추고, 움직이면 이어가요", state.autoPause, actions::setAutoPause)
                     ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
                 }

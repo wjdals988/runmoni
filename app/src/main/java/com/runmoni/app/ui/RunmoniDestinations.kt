@@ -2,6 +2,7 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -33,25 +34,32 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
         "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회" else null
     ScreenContent {
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (!largeText) Text(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                    Text("러닝", style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.semantics { heading() })
-                    if (!largeText && todaySummary != null) Text(todaySummary,
-                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface,
+            modifier = Modifier.fillMaxWidth().testTag("home_run_hero")) {
+            Column(Modifier.padding(if (largeText) 16.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (!largeText) Text(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                        Text("러닝", style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.semantics { heading() })
+                        if (!largeText && todaySummary != null) Text(todaySummary,
+                            style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                    }
+                    Box(Modifier.width(if (largeText) 64.dp else 104.dp).height(if (largeText) 84.dp else 120.dp)
+                        .background(RunmoniColors.SecondaryMint, RunmoniShapes.Surface), contentAlignment = Alignment.Center) {
+                        AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 88.dp).height(if (largeText) 76.dp else 112.dp), running = true, decorative = true)
+                    }
                 }
-                AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 88.dp).height(if (largeText) 76.dp else 112.dp), running = true, decorative = true)
+                Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.DeepGreen, contentColor = RunmoniColors.OnDark),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
+                    Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
+                    Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
+                        modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                    if (!largeText) { Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp)) }
+                }
+                if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
             }
-            Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
-                Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
-                Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
-                    modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-                Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp))
-            }
-            if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         }
         RunPersistenceNotice(state.runPersistence, onRetrySave)
 
@@ -150,7 +158,7 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
                 else -> "표시할 경로가 없어요"
             }
             DestinationRow("내가 달린 길", routeSummary, Icons.Outlined.Route, { mapExpanded = !mapExpanded }, Modifier.testTag("explore_route")
-                .semantics { stateDescription = if (mapExpanded) "펼침" else "접힘" })
+                .semantics { stateDescription = if (mapExpanded) "펼침" else "접힘" }, iconContainer = RunmoniColors.LimeWash)
             if (mapExpanded) MapPane(points, runners, Modifier.fillMaxWidth().height(240.dp).clip(RunmoniShapes.Surface))
         }
     }
@@ -159,11 +167,15 @@ internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () ->
 
 @Composable
 internal fun CommunityUnavailable(actions: AppActions) {
-    Column(Modifier.fillMaxWidth().padding(vertical = 8.dp).semantics { liveRegion = LiveRegionMode.Polite },
+    Column(Modifier.fillMaxWidth().background(RunmoniColors.CoralWash, RunmoniShapes.Surface).padding(16.dp)
+        .semantics { liveRegion = LiveRegionMode.Polite },
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("크루 목록을 불러오지 못했어요", style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text("크루 목록을 불러오지 못했어요", style = MaterialTheme.typography.titleMedium, color = RunmoniColors.CoralInk,
+            modifier = Modifier.semantics { heading() })
         Text("러닝과 내 기록은 계속 이용할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-        TextButton(shape = RunmoniShapes.Action, onClick = actions::refreshCommunity, enabled = true, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text("다시 불러오기"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp)) }
+        TextButton(shape = RunmoniShapes.Action, onClick = actions::refreshCommunity, enabled = true,
+            colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.CoralInk),
+            contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text("다시 불러오기"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp)) }
     }
 }
 
@@ -181,20 +193,24 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                 val details: @Composable (Modifier) -> Unit = { modifier ->
                     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
-                        TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true }, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+                        TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true },
+                            colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.CoralInk),
+                            contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
                     }
                 }
                 if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
                     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
+                        ProfileArtwork(state.profile.avatar)
                         details(Modifier.fillMaxWidth())
                     }
                 } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    AvatarMini(state.profile.avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
+                    ProfileArtwork(state.profile.avatar)
                     details(Modifier.weight(1f))
                 }
             }
-            FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
+            FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action,
+                colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
         }
         ScreenSection("러닝 기록") {
             RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
@@ -206,10 +222,21 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
                 )
             }
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.fillMaxWidth().background(RunmoniColors.MintWash, RunmoniShapes.Surface).padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                DistanceNumber(if (state.runPersistence.historyUnavailable && state.records.isEmpty()) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.Navy, maxSize = 48f)
-                Text(if (state.runPersistence.historyUnavailable) "마지막으로 불러온 기록 기준" else "km · 러닝 ${records.size}회", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                val unavailable = state.runPersistence.historyUnavailable && state.records.isEmpty()
+                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.DeepGreen, maxSize = 48f)
+                Text("km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                HorizontalDivider(color = RunmoniColors.SecondaryMint, modifier = Modifier.padding(vertical = 4.dp))
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(if (unavailable) "러닝 —회" else "러닝 ${records.size}회", style = MaterialTheme.typography.titleMedium,
+                        color = RunmoniColors.Primary, modifier = Modifier.testTag("history_run_count"))
+                    Text(if (unavailable) "시간 —" else "시간 ${duration(records.sumOf { it.activeDurationMillis })}",
+                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.CoralInk,
+                        modifier = Modifier.testTag("history_active_duration"))
+                }
+                if (state.runPersistence.historyUnavailable) Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             }
             HorizontalDivider(color = RunmoniColors.Line)
             if (records.isEmpty() && !state.runPersistence.historyUnavailable) EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 시작", onRun)
@@ -223,6 +250,14 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
         }
     }
     if (mileageHelp) MileageExplanationDialog(onDismiss = { mileageHelp = false }, serverWallet = state.signedIn && !state.communityGuest)
+}
+
+@Composable
+private fun ProfileArtwork(avatar: AvatarStyle) {
+    Box(Modifier.width(88.dp).height(120.dp).background(RunmoniColors.MintWash, RunmoniShapes.Surface),
+        contentAlignment = Alignment.Center) {
+        AvatarMini(avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
+    }
 }
 
 @Composable

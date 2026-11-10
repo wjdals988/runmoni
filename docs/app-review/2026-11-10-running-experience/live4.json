@@ -1,0 +1,629 @@
+{
+  "captures": [
+    {
+      "file": "live4-main-home.png",
+      "sha256": "0a5dc43bf1aa19268c75bec55d00c6d0b23276c022bdee7ee0ededf2940c41e1",
+      "bytes": 38809,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true
+    },
+    {
+      "file": "live4-pin-prompt.png",
+      "sha256": "143480b11cece5f1ccc92cc284c5ab4ecbb17011cfdbbd0eab7faffcde306103",
+      "bytes": 45374,
+      "width": 480,
+      "height": 854,
+      "kind": "launcher",
+      "sourceKind": "raw Android screenshot; foreground kind unverified",
+      "expectedWindowFocused": false,
+      "syntheticGps": true
+    },
+    {
+      "file": "live4-main-running-map.png",
+      "sha256": "4cd230dbc576e0cce90a87e3ed611e83a0fd1f2518961b149f80693f4e11dce6",
+      "bytes": 68419,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": true
+    },
+    {
+      "file": "live4-launcher-running.png",
+      "sha256": "975c11f9044317938d7bfcee304380f1ab5767c5573fb0b77cc391b7328afc5d",
+      "bytes": 166771,
+      "width": 480,
+      "height": 854,
+      "kind": "launcher",
+      "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "launcherResumedActivityVerified": true
+    },
+    {
+      "file": "live4-launcher-paused.png",
+      "sha256": "f4faa3c7f113a7e670070903e209fd9c0db452d29b22628dec9dd9e164f4d693",
+      "bytes": 166974,
+      "width": 480,
+      "height": 854,
+      "kind": "launcher",
+      "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+      "expectedWindowFocused": true,
+      "syntheticGps": true,
+      "launcherResumedActivityVerified": true
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "version": "0.3.9-dev",
+  "versionCode": 21,
+  "passed": false,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "syntheticGps": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "android31RuntimeVerified": false,
+  "dozeVerified": false,
+  "startedAtUtc": "2026-11-10T06:00:26.845255+00:00",
+  "stage": "complete",
+  "priorFailureReference": "live3.json",
+  "priorFailureSha256": "bd6924d2a40d66dcd8cb0804f644a8f7968a857faff0b6bf25232336a1ca39ed",
+  "priorFailureRetained": true,
+  "controllerScope": "Fresh full workflow; no prior failed runtime success imported",
+  "executedDriverSha256": "e3984aa7901f4fc629f5c5025394e2ea50f4b1807f1fc629e1f5ab83d13816d4",
+  "helperSha256": "8730900361d152490b1ddbc1054e288cc7b69925e90be7676dc4a9ae1a59a2f4",
+  "privateEnvironmentBefore": {
+    "file": "live4-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "collectorWaits": [
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.224,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 2.926,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.242,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 22.246,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 러닝 옵션",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.008,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 홈 화면에 러닝 위젯 추가",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.932,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual pin-created Runmoni widget",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 0.473,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.281,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 0.269,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Main navigation after closing an actual retained record page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.221,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Idle running screen",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.223,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 러닝 시작",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.803,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Running recorder resources settled",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 3.779,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Expected capture page: 러닝 기록 중",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 20.62,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Running recorder resources settled",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.472,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.576,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.863,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Manual pause completed checkpoint and released recording resources",
+      "budgetSeconds": 10,
+      "elapsedHostSeconds": 1.095,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.389,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Running recorder resources settled",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.442,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Owned AVD screen asleep",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 1.401,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Running recorder resources settled",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.279,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.681,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.508,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual SystemUI shade focused",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 1.691,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Owned recorder title and app label visible",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 15.42,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.714,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual SystemUI shade focused",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 0.983,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Owned recorder title and app label visible",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 10.316,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.538,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.268,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 22.6,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Own unfinished run recovery screen",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 11.349,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 러닝 마치기",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.11,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 저장하고 마치기",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.025,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Own recovery saved without new GPS",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.891,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.727,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.219,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 22.478,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Main navigation after closing an actual retained record page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 12.688,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Own record detail",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.0,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 기록 삭제",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.247,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Own record delete confirmation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.18,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Visible exact app action: 삭제",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.331,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Own record page closed after canonical deletion",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 17.16,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.889,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.256,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Original widget IDs after actual Remove animation",
+      "budgetSeconds": 45,
+      "elapsedHostSeconds": 3.947,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.207,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalWidgetCacheSha256": "5bee6e3869e53d2d783d7d36b0d720772f4ed1b1b869734a1a01fb58ab2d3050",
+  "databaseBefore": {
+    "runs": 0,
+    "points": 0,
+    "sha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "launcherWidgetLifecycle": {
+    "beforeIds": {
+      "all": [
+        2
+      ],
+      "runmoni": []
+    },
+    "afterPinIds": {
+      "all": [
+        2,
+        6
+      ],
+      "runmoni": [
+        6
+      ]
+    },
+    "newReviewWidgetId": 6,
+    "actualOsPinAction": "ADD AUTOMATICALLY",
+    "originalWidgetIdsPreserved": true,
+    "newReviewWidgetRemoved": true,
+    "originalRunmoniWidgetIdsPreserved": true,
+    "originalOtherWidgetIdsPreserved": true,
+    "afterRemovalIds": {
+      "all": [
+        2
+      ],
+      "runmoni": []
+    },
+    "removalMethod": "Actual Launcher3 drag onto observed Remove target; wait for service IDs"
+  },
+  "profileNameTemporarilyAnonymized": true,
+  "observerDumps": 43,
+  "running": {
+    "phase": "RUNNING",
+    "foreground": true,
+    "locationSubscribed": true,
+    "wakeLockHeld": true,
+    "distanceMeters": 21.153178485286375,
+    "activeDurationMillis": 44727,
+    "pointCount": 44,
+    "speedMetersPerSecond": 0.0
+  },
+  "actualWidgetTaps": [
+    {
+      "resource": "run_widget_control",
+      "bounds": [
+        31,
+        108,
+        101,
+        156
+      ]
+    },
+    {
+      "resource": "run_widget_control",
+      "bounds": [
+        31,
+        108,
+        101,
+        156
+      ]
+    }
+  ],
+  "widgetPause": {
+    "phase": "PAUSED",
+    "foreground": true,
+    "locationSubscribed": false,
+    "wakeLockHeld": false,
+    "distanceMeters": 21.153178485286375,
+    "activeDurationMillis": 129211,
+    "pointCount": 126,
+    "speedMetersPerSecond": null
+  },
+  "widgetResume": {
+    "phase": "RUNNING",
+    "foreground": true,
+    "locationSubscribed": true,
+    "wakeLockHeld": true,
+    "distanceMeters": 21.153178485286375,
+    "activeDurationMillis": 130789,
+    "pointCount": 128,
+    "speedMetersPerSecond": 0.0
+  },
+  "screenOffBackgroundSyntheticGps": {
+    "before": {
+      "phase": "RUNNING",
+      "foreground": true,
+      "locationSubscribed": true,
+      "wakeLockHeld": true,
+      "distanceMeters": 21.153178485286375,
+      "activeDurationMillis": 132537,
+      "pointCount": 129,
+      "speedMetersPerSecond": 0.0
+    },
+    "after": {
+      "phase": "RUNNING",
+      "foreground": true,
+      "locationSubscribed": true,
+      "wakeLockHeld": true,
+      "distanceMeters": 31.729767727303305,
+      "activeDurationMillis": 144577,
+      "pointCount": 141,
+      "speedMetersPerSecond": 0.96150811291063
+    },
+    "outdoorOrDozeClaimed": false
+  },
+  "failureType": "AssertionError",
+  "failure": "Desired action exists inside the own recorder scope",
+  "restorationAttempts": [
+    {
+      "step": "cleanup-own-runs",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:07:41.271155+00:00",
+      "elapsedHostSeconds": 232.701,
+      "finishedAtUtc": "2026-11-10T06:11:33.971663+00:00"
+    },
+    {
+      "step": "remove-review-widget",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:11:33.974686+00:00",
+      "elapsedHostSeconds": 28.342,
+      "finishedAtUtc": "2026-11-10T06:12:02.317194+00:00"
+    },
+    {
+      "step": "force-stop-after-ui-cleanup",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:02.319800+00:00",
+      "elapsedHostSeconds": 0.889,
+      "finishedAtUtc": "2026-11-10T06:12:03.208850+00:00"
+    },
+    {
+      "step": "verify-original-database",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:03.211016+00:00",
+      "elapsedHostSeconds": 1.535,
+      "finishedAtUtc": "2026-11-10T06:12:04.746439+00:00"
+    },
+    {
+      "step": "restore-original-preferences",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:04.748899+00:00",
+      "elapsedHostSeconds": 1.567,
+      "finishedAtUtc": "2026-11-10T06:12:06.316146+00:00"
+    },
+    {
+      "step": "restore-original-widget-cache",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:06.318512+00:00",
+      "elapsedHostSeconds": 1.295,
+      "finishedAtUtc": "2026-11-10T06:12:07.614013+00:00"
+    },
+    {
+      "step": "verify-original-widget-ids",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:07.616378+00:00",
+      "elapsedHostSeconds": 0.219,
+      "finishedAtUtc": "2026-11-10T06:12:07.835384+00:00"
+    },
+    {
+      "step": "restore-controlled-environment",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T06:12:07.837557+00:00",
+      "elapsedHostSeconds": 13.845,
+      "finishedAtUtc": "2026-11-10T06:12:21.682287+00:00"
+    }
+  ],
+  "databaseAfterCleanup": {
+    "runCount": 0,
+    "pointCount": 0,
+    "contentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70"
+  },
+  "databaseExactlyRestored": true,
+  "preferencesExactlyRestored": true,
+  "widgetCacheExactlyRestored": true,
+  "launcherWidgetIdsExactlyRestored": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "environmentRestoreFailures": [],
+  "privateEnvironmentAfter": {
+    "file": "live4-private-environment-after.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "completed": true,
+  "finishedAtUtc": "2026-11-10T06:12:21.685034+00:00"
+}

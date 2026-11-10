@@ -16,8 +16,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import android.view.WindowManager
 import androidx.compose.ui.text.TextLayoutResult
@@ -36,7 +34,7 @@ import java.io.File
 
 /** Offline visual/accessibility fixtures. Never claim real GPS or Firebase verification. */
 abstract class RunmoniDesignTestBase {
-    @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
+    @get:Rule val compose = OfflineMapComposeRule()
     protected data class Viewport(val width: Int = 360, val scale: Float = 1f)
 
     @Composable protected fun ViewportBox(viewport: Viewport, content: @Composable () -> Unit) {

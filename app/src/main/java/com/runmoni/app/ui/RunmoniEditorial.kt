@@ -2,6 +2,7 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -39,9 +40,12 @@ internal fun RunwayArtwork(avatar: AvatarStyle, modifier: Modifier = Modifier, c
 }
 
 @Composable
-internal fun DestinationRow(title: String, subtitle: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier) {
+internal fun DestinationRow(title: String, subtitle: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier,
+    iconContainer: Color = RunmoniColors.MintWash, iconTint: Color = RunmoniColors.Primary) {
     Row(modifier.fillMaxWidth().heightIn(min = 72.dp).clickable(role = Role.Button, onClick = onClick).padding(vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Icon(icon, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
+        Box(Modifier.size(40.dp).background(iconContainer, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+            Icon(icon, null, tint = iconTint, modifier = Modifier.size(24.dp))
+        }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium)
             if (subtitle.isNotBlank()) Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -78,16 +82,24 @@ internal fun RoomSearch(value: String, onChange: (String) -> Unit, label: String
 internal fun CrewRoomCard(crew: Crew, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().heightIn(min = 48.dp)
         .clickable(role = Role.Button, onClickLabel = "크루 보기", onClick = onClick).testTag("crew_${crew.id}")) {
-        Column(Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(crew.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                Icon(Icons.Outlined.ChevronRight, null, tint = RunmoniColors.Muted, modifier = Modifier.size(24.dp))
+        Row(Modifier.padding(vertical = 16.dp), verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(Modifier.size(40.dp).background(if (crew.joined || crew.isOwner) RunmoniColors.SecondaryMint else RunmoniColors.MintWash,
+                RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+                Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
             }
-            Text("${crew.region.ifBlank { "지역 자유" }} · ${crew.paceLabel} · ${crew.memberCount}명", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-            if (crew.description.isNotBlank()) Text(crew.description, style = MaterialTheme.typography.bodyMedium,
-                color = RunmoniColors.Muted, maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
-            if (crew.joined || crew.isOwner) {
-                Text(if (crew.isOwner) "크루장" else "가입한 크루", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Primary)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(crew.name, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                    Icon(Icons.Outlined.ChevronRight, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
+                }
+                Text("${crew.region.ifBlank { "지역 자유" }} · ${crew.paceLabel} · ${crew.memberCount}명", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                if (crew.description.isNotBlank()) Text(crew.description, style = MaterialTheme.typography.bodyMedium,
+                    color = RunmoniColors.Muted, maxLines = 2, overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis)
+                if (crew.joined || crew.isOwner) {
+                    Text(if (crew.isOwner) "크루장" else "가입한 크루", style = MaterialTheme.typography.labelMedium,
+                        color = if (crew.isOwner) RunmoniColors.CoralInk else RunmoniColors.Primary)
+                }
             }
         }
         HorizontalDivider(color = RunmoniColors.Line)
