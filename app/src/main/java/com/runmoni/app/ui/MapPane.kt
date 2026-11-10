@@ -4,7 +4,9 @@ import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FilledTonalIconButton
@@ -18,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -25,6 +28,10 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -45,15 +52,21 @@ import com.runmoni.app.domain.TrackPoint
 import com.runmoni.app.domain.RouteGeometry
 import com.runmoni.app.domain.RouteViewport
 import com.runmoni.app.domain.Mercator
+import com.runmoni.app.domain.RouteMapCenter
+import com.runmoni.app.domain.RouteMapBounds
 
 @Composable
-internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = emptyList(), modifier: Modifier = Modifier, fitRoute: Boolean = false) {
+internal fun MapPane(
+    points: List<TrackPoint>, runners: List<LiveRunner> = emptyList(), modifier: Modifier = Modifier,
+    fitRoute: Boolean = false, interactiveMap: Boolean = false, followCenter: RouteMapCenter? = null,
+    onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
+) {
     val geometry = remember(points) { RouteGeometry.from(points) }
     val usablePoints = remember(geometry) { geometry.points.map { it.point } }
     val validRunners = remember(runners) { runners.filter { it.hasValidCoordinates() } }
     var authFailed by remember { mutableStateOf(false) }
     if (LocalMapTileSource.current != null || BuildConfig.NAVER_MAP_CLIENT_ID.isBlank() || authFailed) {
-        RouteTileMap(points, validRunners, modifier, fitRoute)
+        RouteTileMap(points, validRunners, modifier, fitRoute, interactiveMap, followCenter, onBoundsChanged)
         return
     }
     val context = LocalContext.current
@@ -70,14 +83,59 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
     val paths = remember { mutableListOf<PathOverlay>() }
     val markers = remember { mutableListOf<Marker>() }
     var cameraPositioned by remember { mutableStateOf(false) }
+    var manualCamera by remember(fitRoute, interactiveMap) { mutableStateOf(false) }
     var mapSize by remember { mutableStateOf(IntSize.Zero) }
     val tileSize = 256.0 * LocalDensity.current.density
-    fun positionCamera(ready: NaverMap) {
+    val actualCenter = followCenter?.takeIf { it.valid() }
+    val currentOnBoundsChanged by rememberUpdatedState(onBoundsChanged)
+    fun positionCamera(ready: NaverMap): Boolean {
         val fitted = if (fitRoute) RouteViewport.fit(geometry.points, mapSize.width.toDouble(), mapSize.height.toDouble(),
             32.0 * context.resources.displayMetrics.density, tileSize) else null
-        if (fitted != null) ready.moveCamera(CameraUpdate.scrollAndZoomTo(
-            LatLng(Mercator.latitude(fitted.centerY), Mercator.longitude(fitted.centerX)), fitted.zoom))
-        else usablePoints.lastOrNull()?.let { ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(it.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), it.longitude), 15.5)) }
+        val target = fitted ?: actualCenter?.viewport() ?: geometry.points.lastOrNull()?.let { RouteViewport.follow(it) }
+            ?: (if (interactiveMap) RouteViewport.world() else null)
+            ?: validRunners.firstOrNull()?.let { RouteViewport(Mercator.x(it.longitude), Mercator.y(it.latitude), 14.0) }
+        if (target == null) return false
+        ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(Mercator.latitude(target.centerY), Mercator.longitude(target.centerX)), target.zoom))
+        cameraPositioned = true
+        return true
+    }
+    fun changeCamera(zoomDelta: Double = 0.0, dx: Double = 0.0, dy: Double = 0.0): Boolean {
+        val ready = map ?: return false
+        val camera = ready.cameraPosition
+        val next = RouteViewport(Mercator.x(camera.target.longitude), Mercator.y(camera.target.latitude), camera.zoom).pan(dx, dy, tileSize)
+        manualCamera = true
+        ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(Mercator.latitude(next.centerY), Mercator.longitude(next.centerX)),
+            (camera.zoom + zoomDelta).coerceIn(ready.minZoom, ready.maxZoom)))
+        return true
+    }
+    val recenterLabel = if (fitRoute) "전체 러닝 경로 보기" else if (actualCenter != null) "내 위치로 이동" else "처음 지도 영역 보기"
+    val mapActions = listOf(
+        CustomAccessibilityAction("지도 확대") { changeCamera(zoomDelta = 1.0) },
+        CustomAccessibilityAction("지도 축소") { changeCamera(zoomDelta = -1.0) },
+        CustomAccessibilityAction("서쪽으로 이동") { changeCamera(dx = mapSize.width * .35) },
+        CustomAccessibilityAction("동쪽으로 이동") { changeCamera(dx = -mapSize.width * .35) },
+        CustomAccessibilityAction("북쪽으로 이동") { changeCamera(dy = mapSize.height * .35) },
+        CustomAccessibilityAction("남쪽으로 이동") { changeCamera(dy = -mapSize.height * .35) },
+        CustomAccessibilityAction(recenterLabel) { manualCamera = false; map?.let(::positionCamera) ?: false },
+    )
+    DisposableEffect(map, mapSize, tileSize) {
+        val ready = map
+        val idle = NaverMap.OnCameraIdleListener {
+            if (ready != null) {
+                val camera = ready.cameraPosition
+                RouteViewport(Mercator.x(camera.target.longitude), Mercator.y(camera.target.latitude), camera.zoom)
+                    .bounds(mapSize.width.toDouble(), mapSize.height.toDouble(), tileSize)?.let { currentOnBoundsChanged?.invoke(it) }
+            }
+        }
+        val changed = NaverMap.OnCameraChangeListener { reason, _ ->
+            if (reason == CameraUpdate.REASON_GESTURE) manualCamera = true
+        }
+        ready?.addOnCameraIdleListener(idle)
+        ready?.addOnCameraChangeListener(changed)
+        onDispose {
+            ready?.removeOnCameraIdleListener(idle)
+            ready?.removeOnCameraChangeListener(changed)
+        }
     }
     DisposableEffect(view, lifecycle) {
         var started = false
@@ -112,17 +170,28 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
             view.onDestroy()
         }
     }
-    Box(modifier.testTag("naver_map").onSizeChanged { mapSize = it }) {
-        AndroidView(factory = { view.apply { getMapAsync { map = it } } }, modifier = Modifier.fillMaxSize())
-        if (usablePoints.isNotEmpty()) FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { map?.let(::positionCamera) }, modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp).size(48.dp)) { Icon(Icons.Outlined.MyLocation, if (fitRoute) "전체 러닝 경로 보기" else "GPS 경로 위치로 이동") }
+    Column(modifier.testTag("naver_map")) {
+        Box(Modifier.weight(1f).fillMaxWidth().onSizeChanged { mapSize = it }.semantics {
+            contentDescription = "지도. 드래그로 이동하고 두 손가락으로 확대하거나 축소합니다."
+            customActions = mapActions
+        }) {
+            AndroidView(factory = { view.apply { getMapAsync { map = it } } }, modifier = Modifier.fillMaxSize())
+            Box(Modifier.align(Alignment.TopEnd).padding(8.dp)) { MapOptionsMenu(mapActions, enabled = map != null) }
+            if (usablePoints.isNotEmpty() || actualCenter != null || interactiveMap || validRunners.isNotEmpty())
+                FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { manualCamera = false; map?.let(::positionCamera) },
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp).size(48.dp)) { Icon(Icons.Outlined.MyLocation, recenterLabel) }
+        }
+        if (fitRoute && !interactiveMap) MapPageScrollHint()
     }
-    LaunchedEffect(map, geometry, validRunners, mapSize, fitRoute) {
+    LaunchedEffect(map, geometry, validRunners, mapSize, fitRoute, interactiveMap, actualCenter) {
         val ready = map ?: return@LaunchedEffect
-        ready.uiSettings.isZoomControlEnabled = true
-        // Embedded history leaves the page's one-finger vertical scroll usable.
-        // SDK pinch zoom and the full-route action remain available.
-        ready.uiSettings.isScrollGesturesEnabled = !fitRoute
+        ready.uiSettings.isZoomControlEnabled = false
+        ready.uiSettings.isScrollGesturesEnabled = true
         ready.uiSettings.isZoomGesturesEnabled = true
+        // Keep the run/discovery map north-up and flat so viewport geography
+        // and the raster fallback use the same drag/pinch model.
+        ready.uiSettings.isRotateGesturesEnabled = false
+        ready.uiSettings.isTiltGesturesEnabled = false
         paths.forEach { it.map = null }; paths.clear()
         geometry.segments.forEach { segment ->
             if (segment.size > 1) paths += PathOverlay().apply {
@@ -154,18 +223,10 @@ internal fun MapPane(points: List<TrackPoint>, runners: List<LiveRunner> = empty
         if (current != null) {
             ready.locationOverlay.position = LatLng(current.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), current.longitude)
             ready.locationOverlay.isVisible = true
-            if (!cameraPositioned || fitRoute) {
-                positionCamera(ready)
-                cameraPositioned = true
-            }
         } else {
             ready.locationOverlay.isVisible = false
-            if (!cameraPositioned && validRunners.isNotEmpty()) {
-                val runner = validRunners.first()
-                ready.moveCamera(CameraUpdate.scrollAndZoomTo(LatLng(runner.latitude, runner.longitude), 14.0))
-                cameraPositioned = true
-            }
         }
+        if (!manualCamera || !cameraPositioned) positionCamera(ready)
     }
 }
 

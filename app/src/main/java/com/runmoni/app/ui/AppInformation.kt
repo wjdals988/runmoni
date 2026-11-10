@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -140,11 +141,14 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
     var licenses by remember { mutableStateOf(false) }
     var updatePrompt by remember { mutableStateOf(promptUpdateInitially && updates.updateAvailable) }
     var linkError by remember { mutableStateOf<String?>(null) }
+    val infoScroll = rememberScrollState()
+    val updateRelease = updates.release?.takeIf { it.isNewerThan(BuildConfig.VERSION_CODE.toLong()) }
+    val showingUpdatePrompt = updatePrompt && updateRelease != null
     val open: (String) -> Unit = { url ->
         if (onExternalLink != null) onExternalLink(url)
         else if (!openAppLink(context, url)) linkError = "링크를 열 앱이 없어요. 브라우저를 사용할 수 있는지 확인해 주세요."
     }
-    FormDialog("앱 정보", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp).testTag("close_app_information")) { Text("닫기") } }) {
+    if (!history && !licenses && !showingUpdatePrompt && linkError == null) FormDialog("앱 정보", onDismiss, dismissLabel = null, closeTag = "close_app_information", scrollState = infoScroll) {
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Surface(Modifier.size(64.dp), shape = RunmoniShapes.Surface, color = colorResource(R.color.ic_launcher_background)) {
                 Box(contentAlignment = Alignment.Center) {
@@ -175,19 +179,19 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
         }
     }
     if (history) AppVersionHistoryDialog(updates) { history = false }
-    if (licenses) OpenSourceLicensesDialog { licenses = false }
-    if (updatePrompt) updates.release?.takeIf { it.isNewerThan(BuildConfig.VERSION_CODE.toLong()) }?.let { release ->
-        AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { updatePrompt = false }, title = { Text("업데이트할까요?") },
+    else if (licenses) OpenSourceLicensesDialog { licenses = false }
+    else if (showingUpdatePrompt) updateRelease?.let { release ->
+        DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { updatePrompt = false }, title = { Text("업데이트할까요?") },
             text = { DialogMessage("현재 ${BuildConfig.VERSION_NAME}\n새 버전 ${release.version}\nAPK ${String.format(Locale.KOREA, "%.1f", release.sizeBytes / 1_048_576.0)} MB\n\nGitHub에서 APK를 다운로드해요. 다운로드 후 직접 설치해 주세요.") },
             confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { open(release.downloadUrl); updatePrompt = false }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_download_update")) { Text("APK 다운로드") } },
             dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { updatePrompt = false }, modifier = Modifier.heightIn(min = 48.dp).testTag("cancel_app_update")) { Text("나중에") } })
     }
-    linkError?.let { AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { linkError = null }, title = { Text("링크를 열지 못했어요") }, text = { DialogMessage(it) }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { linkError = null }) { Text("확인") } }) }
+    else linkError?.let { DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { linkError = null }, title = { Text("링크를 열지 못했어요") }, text = { DialogMessage(it) }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { linkError = null }) { Text("확인") } }) }
 }
 
 @Composable
 private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> Unit) {
-    FormDialog("업데이트 내역", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp).testTag("close_version_history")) { Text("닫기") } }) {
+    FormDialog("업데이트 내역", onDismiss, dismissLabel = null, closeTag = "close_version_history") {
         Text("현재 ${BuildConfig.VERSION_NAME} · 빌드 ${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.titleSmall)
         updates.release?.takeIf { it.isNewerThan(BuildConfig.VERSION_CODE.toLong()) && it.notes.isNotBlank() }?.let {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -209,7 +213,7 @@ private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> 
 
 @Composable
 internal fun MileageExplanationDialog(onDismiss: () -> Unit, serverWallet: Boolean = false) {
-    FormDialog("러닝 마일리지", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp).testTag("close_mileage_help")) { Text("알겠어요") } }) {
+    FormDialog("러닝 마일리지", onDismiss, dismissLabel = null, closeTag = "close_mileage_help") {
         Text("달리면 쌓이는 포인트", style = MaterialTheme.typography.titleMedium)
         Text("${if (serverWallet) "서버가 검증한 러닝" else "이 기기에 완료한 러닝"} 10m당 1P를 받아요. 지금은 모든 아이템이 무료라 포인트를 쓰지 않고 선택할 수 있어요.", style = MaterialTheme.typography.bodyLarge)
         if (serverWallet) SmallNote("지급 포인트는 GPS 검증 결과와 서버의 일일 한도에 따라 달라질 수 있어요.")
@@ -235,7 +239,8 @@ private fun OpenSourceLicensesDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val entries = remember { runCatching { context.assets.open("open-source-licenses.json").bufferedReader().use { JSONArray(it.readText()) } }.getOrElse { JSONArray() } }
     var selectedText by remember { mutableStateOf<String?>(null) }
-    FormDialog("오픈소스 라이선스", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp).testTag("close_licenses")) { Text("닫기") } }) {
+    val listScroll = rememberScrollState()
+    if (selectedText == null) FormDialog("오픈소스 라이선스", onDismiss, dismissLabel = null, closeTag = "close_licenses", scrollState = listScroll) {
         Text("앱에 포함된 라이브러리와 SDK", style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         SmallNote("오픈소스와 별도 약관을 사용하는 SDK를 구분해 표시해요. 각 항목을 선택하면 고지와 원문 링크를 볼 수 있어요.")
         if (entries.length() == 0) Text("고지 목록을 읽지 못했어요. GitHub의 THIRD_PARTY_NOTICES.md를 확인해 주세요.")
@@ -248,7 +253,7 @@ private fun OpenSourceLicensesDialog(onDismiss: () -> Unit) {
     }
     selectedText?.let { raw ->
         val entry = JSONObjectCompat(raw)
-        FormDialog(entry.name, { selectedText = null }, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = { selectedText = null }) { Text("닫기") } }) {
+        FormDialog(entry.name, { selectedText = null }, dismissLabel = null, closeTag = "close_license_detail") {
             Text(entry.license, style = MaterialTheme.typography.titleSmall)
             Text(entry.notice, style = MaterialTheme.typography.bodyMedium)
             if (entry.url.startsWith("https://")) OutlinedButton(shape = RunmoniShapes.Action, onClick = { openAppLink(context, entry.url) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) { Text("고지 원문 열기") }

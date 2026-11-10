@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.ModalDismissLandscapeUiTest:.
+
+Time: 16.291
+
+OK (1 test)
+
+

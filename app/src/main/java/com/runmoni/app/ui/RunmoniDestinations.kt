@@ -27,8 +27,10 @@ import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }, onRetrySave: () -> Unit = {}) {
-    val today = LocalDate.now()
+internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }, onRetrySave: () -> Unit = {}, onWeather: () -> Unit = {}, onWeatherEntry: () -> Unit = {}) {
+    val homeClock = rememberHomeClock()
+    val today = java.time.Instant.ofEpochMilli(homeClock).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+    LaunchedEffect(Unit) { onWeatherEntry() }
     val todaysRuns = state.records.filter { localDate(it.startedAtMillis) == today }
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
@@ -39,7 +41,9 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
             Column(Modifier.padding(if (largeText) 16.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (!largeText) Text(today.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                        HomeDateTime(homeClock, temperatureC = state.weather.snapshot?.takeIf {
+                            state.weather.phase == WeatherPhase.READY && it.isCurrent(homeClock)
+                        }?.temperatureC)
                         Text("러닝", style = MaterialTheme.typography.headlineLarge,
                             modifier = Modifier.semantics { heading() })
                         if (!largeText && todaySummary != null) Text(todaySummary,
@@ -61,6 +65,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                 if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
             }
         }
+        HomeConditions(state.weather, onWeather)
         RunPersistenceNotice(state.runPersistence, onRetrySave)
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
@@ -80,89 +85,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 
 @Composable
 internal fun ExploreScreen(state: AppState, actions: AppActions, onSignIn: () -> Unit, onRooms: () -> Unit, onCrew: (String) -> Unit = { onRooms() }) {
-    LaunchedEffect(Unit) { actions.refreshCommunity() }
-    var layer by rememberSaveable { mutableIntStateOf(0) }
-    var query by rememberSaveable { mutableStateOf("") }
-    var selectedParty by remember { mutableStateOf<Party?>(null) }
-    var mapExpanded by rememberSaveable { mutableStateOf(false) }
-    var mapClock by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(Unit) { while (true) { delay(5000); mapClock = System.currentTimeMillis() } }
-    val runners = state.liveRunners.filter { it.hasValidCoordinates() && mapClock - it.updatedAtMillis in 0L until 45_000L }
-    val points = state.activeRun.points.ifEmpty { state.records.maxByOrNull { it.startedAtMillis }?.points.orEmpty() }
-    ScreenContent {
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text("탐색", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.weight(1f).semantics { heading() })
-            IconButton(onClick = actions::refreshCommunity, enabled = !state.busy,
-                modifier = Modifier.size(48.dp).testTag("refresh_community")) { Icon(Icons.Outlined.Refresh, "목록 새로고침") }
-        }
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            DestinationTabs(listOf("크루", "크루의 파티", "러너"), layer, { layer = it }, "explore_layer")
-            if (layer < 2) RoomSearch(query, { query = it }, if (layer == 0) "크루 검색" else "파티 검색", "explore_search",
-                placeholder = if (layer == 0) "이름 또는 지역" else "이름 또는 장소")
-        }
-        if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth().testTag("explore_loading"))
-        else if (!state.serverConnected) CommunityUnavailable(actions)
-        when (layer) {
-            0 -> {
-                val crews = state.crews.filter { "${it.name} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
-                if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(if (query.isBlank()) "등록된 크루가 없어요" else "검색 결과가 없어요",
-                    if (query.isBlank()) "크루 탭에서 새 크루를 만들 수 있어요." else "다른 이름이나 지역으로 검색해 보세요.", "크루 목록", onRooms)
-                if (crews.isNotEmpty()) Column(Modifier.fillMaxWidth()) {
-                    if (!state.serverConnected || state.busy) Text("마지막으로 불러온 목록", style = MaterialTheme.typography.bodySmall,
-                        color = RunmoniColors.Muted, modifier = Modifier.padding(bottom = 8.dp))
-                    crews.forEach { crew -> CrewRoomCard(crew) { onCrew(crew.id) } }
-                }
-            }
-            1 -> {
-                val parties = state.parties.filter { p -> !p.cancelled && p.startsAtMillis >= mapClock && state.crews.any { it.id == p.crewId } && "${p.title} ${p.meetingLabel} ${p.paceLabel}".contains(query.trim(), true) }.sortedBy { it.startsAtMillis }
-                if (parties.isEmpty() && state.serverConnected && !state.busy) EmptyCard(if (query.isBlank()) "예정된 파티가 없어요" else "검색 결과가 없어요",
-                    if (query.isBlank()) "가입한 크루에서 파티를 만들 수 있어요." else "다른 이름이나 장소로 검색해 보세요.", "크루 목록", onRooms)
-                if (parties.isNotEmpty()) Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    if (!state.serverConnected || state.busy) Text("마지막으로 불러온 목록", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                    parties.forEach { party ->
-                        Column(Modifier.fillMaxWidth()) {
-                            Text(state.crews.first { it.id == party.crewId }.name, style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Primary)
-                            PartySummary(party) { selectedParty = party }
-                        }
-                    }
-                }
-            }
-            2 -> {
-                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    SectionHeading(if (runners.isEmpty()) "러너 위치" else "위치를 공유한 러너 ${runners.size}명")
-                    SmallNote("성인 파일럿 러너가 공유한 위치예요. 갱신 후 45초가 지나면 사라져요.")
-                    LocationSharingToggle(state, actions)
-                    if (runners.isEmpty() && state.serverConnected && !state.busy) SmallNote("표시할 위치가 없어요")
-                    runners.forEach { runner ->
-                        Row(Modifier.fillMaxWidth().padding(vertical = 12.dp).semantics(mergeDescendants = true) { },
-                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            AvatarMini(runner.avatar, Modifier.size(64.dp), decorative = true)
-                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Text(runner.name, style = MaterialTheme.typography.titleMedium)
-                                FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                    Text(if (runner.memberCount > 1) "대표 미니미 · ${runner.memberCount}명" else "위치 공유 중", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
-                                    Text(clock(runner.updatedAtMillis), style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                                }
-                            }
-                        }
-                        HorizontalDivider(color = RunmoniColors.Line)
-                    }
-                }
-            }
-        }
-        ScreenSection("내 러닝 코스") {
-            val routeSummary = when {
-                state.activeRun.points.isNotEmpty() -> "현재 러닝 경로"
-                points.isNotEmpty() -> "최근 러닝 경로"
-                state.runPersistence.historyUnavailable -> "경로를 불러오지 못했어요"
-                else -> "표시할 경로가 없어요"
-            }
-            DestinationRow("내가 달린 길", routeSummary, Icons.Outlined.Route, { mapExpanded = !mapExpanded }, Modifier.testTag("explore_route")
-                .semantics { stateDescription = if (mapExpanded) "펼침" else "접힘" }, iconContainer = RunmoniColors.LimeWash)
-            if (mapExpanded) MapPane(points, runners, Modifier.fillMaxWidth().height(240.dp).clip(RunmoniShapes.Surface))
-        }
-    }
-    selectedParty?.let { party -> PartyDialog(state, party, actions, onSignIn = onSignIn) { selectedParty = null } }
+    RunnerDiscoveryScreen(state, actions, onProfile = onSignIn)
 }
 
 @Composable
@@ -180,7 +103,7 @@ internal fun CommunityUnavailable(actions: AppActions) {
 }
 
 @Composable
-internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Unit, onRecord: (RunRecord) -> Unit, onSettings: () -> Unit, updates: AppUpdateUiState, onAppInformation: () -> Unit, onCloset: () -> Unit) {
+internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Unit, onRecord: (RunRecord) -> Unit, onSettings: () -> Unit, updates: AppUpdateUiState, onAppInformation: () -> Unit, onCloset: () -> Unit, onProfile: () -> Unit = {}) {
     var mileageHelp by rememberSaveable { mutableStateOf(false) }
     var period by rememberSaveable { mutableIntStateOf(1) }
     var referenceEpoch by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
@@ -193,6 +116,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                 val details: @Composable (Modifier) -> Unit = { modifier ->
                     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
+                        TextButton(onClick = onProfile, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("open_unified_profile")) { Text("프로필 편집") }
                         TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true },
                             colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.CoralInk),
                             contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }

@@ -64,7 +64,10 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         BackHandler(enabled = closet) { closet = false }
         val mainStateHolder = rememberSaveableStateHolder()
         var signIn by rememberSaveable { mutableStateOf(false) }
+        var profileFromSettings by rememberSaveable { mutableStateOf(false) }
         var appInformation by rememberSaveable { mutableStateOf(false) }
+        var appInformationFromSettings by rememberSaveable { mutableStateOf(false) }
+        val settingsScroll = rememberScrollState()
         var selectedRecordId by rememberSaveable { mutableStateOf<String?>(null) }
         var recordSnapshot by remember { mutableStateOf<RunRecord?>(null) }
         var deletingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -117,6 +120,8 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 closet = false
                 signIn = false
                 appInformation = false
+                appInformationFromSettings = false
+                profileFromSettings = false
                 closeRecord()
                 completedId = null
                 crewNavigation = null
@@ -161,13 +166,13 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
                                     Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
                                         modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
-                                    if (!separateVersion) AppVersionShortcut(updates) { appInformation = true }
+                                    if (!separateVersion) AppVersionShortcut(updates) { appInformationFromSettings = false; appInformation = true }
                                     IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
                                         Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
                                     }
                                 }
                                 if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                                    AppVersionShortcut(updates) { appInformation = true }
+                                    AppVersionShortcut(updates) { appInformationFromSettings = false; appInformation = true }
                                 }
                             }
                         }
@@ -272,19 +277,20 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         ) { padding ->
             Box(Modifier.fillMaxSize().padding(padding)) {
                 when (tab) {
-                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
-                    1 -> ExploreScreen(state, actions, onSignIn = { signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
+                    0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onWeather = actions::refreshWeather, onWeatherEntry = actions::prepareHomeConditions, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
+                    1 -> ExploreScreen(state, actions, onSignIn = { profileFromSettings = false; signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onFinish = { finishRunId = state.activeRun.id })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
-                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformation = true }, onCloset = { closet = true })
+                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformationFromSettings = false; appInformation = true }, onCloset = { closet = true }, onProfile = { profileFromSettings = false; signIn = true })
                 }
             }
         }
         }
         if (closet) ClosetDialog(state.profile, actions) { closet = false }
-        if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { settings = false; signIn = true }, onAppInformation = { settings = false; appInformation = true }, updates = updates)
-        if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
-        if (signIn) SignInDialog(state, actions) { signIn = false }
+        if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { profileFromSettings = true; settings = false; signIn = true }, onAppInformation = { appInformationFromSettings = true; settings = false; appInformation = true }, updates = updates, onOpenProfile = { profileFromSettings = true; settings = false; signIn = true }, scrollState = settingsScroll)
+        if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false; if (appInformationFromSettings) settings = true; appInformationFromSettings = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
+        if (signIn) SignInDialog(state, actions) { signIn = false; if (profileFromSettings) settings = true; profileFromSettings = false }
+        RunnerSharingConsent(state, actions)
         if (chatOpen) ChatScreen(state, actions)
         if (selectedRecordId != null) {
             if (selectedRecord != null) {
@@ -311,14 +317,14 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         }
         if (finishRunId != null && finishRunId == state.activeRun.id && state.activeRun.phase != RunPhase.IDLE &&
             state.runPersistence.initialized && !state.runPersistence.finishing) {
-            AlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
+            DismissibleAlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
                 text = { DialogMessage("${distance(state.activeRun.distanceMeters)} km · ${duration(state.activeRun.activeDurationMillis)}\n저장한 기록은 ‘나’에서 다시 볼 수 있어요.") },
                 confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null; actions.finishRun(state.activeRun.id) },
                     enabled = !(state.runPersistence.saving && state.runPersistence.issue != null),
                     modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } },
                 dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null }, modifier = Modifier.testTag("cancel_finish_run")) { Text("취소") } })
         }
-        state.error?.let { error -> AlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { DialogMessage(error) }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = actions::dismissError) { Text("확인") } }) }
+        state.error?.let { error -> DismissibleAlertDialog(onDismissRequest = actions::dismissError, title = { Text("확인이 필요해요") }, text = { DialogMessage(error) }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = actions::dismissError) { Text("확인") } }) }
         }
     }
 }
@@ -498,7 +504,7 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
             } else if (thisRoom) SmallNote("음악 방송은 크루장과 DJ가 제어해요. 내 음량은 따로 바꿀 수 있어요.")
         }
     }
-    if (sourcePicker && canBroadcast) AlertDialog(onDismissRequest = { sourcePicker = false }, title = { Text("공유할 음악 앱") }, text = { Column {
+    if (sourcePicker && canBroadcast) DismissibleAlertDialog(onDismissRequest = { sourcePicker = false }, title = { Text("공유할 음악 앱") }, text = { Column {
         listOf("Spotify" to "com.spotify.music", "멜론" to "com.iloen.melon", "지니" to "com.ktmusic.geniemusic", "FLO" to "skplanet.musicmate").forEach { (name, packageName) -> TextButton(shape = RunmoniShapes.Action, onClick = { actions.shareExternalMusic(packageName); sourcePicker = false }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("share_music_$packageName")) { Text(name) } }
         SmallNote("각 앱이 캡처를 허용해야 실제 오디오가 전달돼요. 지원 여부는 기기에서 확인해 주세요.")
     } }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { sourcePicker = false }) { Text("닫기") } })
@@ -567,11 +573,8 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
 
 @Composable
 internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
-    var confirmation by remember { mutableStateOf(false) }
-    LaunchedEffect(state.signedIn) { if (!state.signedIn) confirmation = false }
-    if (state.communityGuest) { SmallNote("크루에 가입해도 내 실시간 위치는 자동으로 공유되지 않아요."); return }
-    ToggleRow("파일럿 위치 공유", if (state.signedIn) "초대받은 테스터에게 러닝 중 정밀 위치를 공유해요" else "초대 파일럿 로그인 후 이용할 수 있어요", state.publicLocation, { if (it) confirmation = true else actions.setPublicLocation(false) }, enabled = state.signedIn, tag = "share_location")
-    if (confirmation && state.signedIn) AlertDialog(onDismissRequest = { confirmation = false }, title = { Text("러닝 위치를 공유할까요?") }, text = { DialogMessage("진행 중 러닝의 정밀 좌표, 러너 이름, 미니미를 같은 초대 파일럿의 성인 테스터에게 보여줘요. 인터넷 전체에 공개되는 지도는 아니에요.\n\n러닝 중 15초마다 위치를 갱신해요. 공유를 끄거나 러닝을 마치면 공유를 중지해요. 마지막 갱신 후 45초가 지나면 위치가 만료돼요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false; actions.setPublicLocation(true) }, modifier = Modifier.testTag("confirm_share_location")) { Text("위치 공유 켜기") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false }, modifier = Modifier.testTag("cancel_share_location")) { Text("공유하지 않기") } })
+    ToggleRow("근처 위치 공유", "러닝 중 약 100m 단위로 공유해요", state.publicLocation,
+        actions::setPublicLocation, enabled = state.signedIn && !state.sharing.busy, tag = "share_location")
 }
 
 @Composable

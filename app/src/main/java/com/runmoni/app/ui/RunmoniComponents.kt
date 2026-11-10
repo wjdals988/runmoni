@@ -72,9 +72,7 @@ internal fun ScreenSection(
 /** Long confirmations must remain readable with the system font enlarged. */
 @Composable
 internal fun DialogMessage(message: String) {
-    Column(Modifier.fillMaxWidth().heightIn(max = 360.dp).verticalScroll(rememberScrollState()).testTag("dialog_message")) {
-        Text(message, style = MaterialTheme.typography.bodyLarge)
-    }
+    Text(message, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.fillMaxWidth().testTag("dialog_message"))
 }
 
 /** Change layout before enlarged labels compete for horizontal space. */

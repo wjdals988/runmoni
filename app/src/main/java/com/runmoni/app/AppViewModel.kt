@@ -33,6 +33,7 @@ import java.util.TimeZone
 
 sealed interface UiRequest {
     data class RunPermission(val recover: Boolean) : UiRequest
+    data class PreviewLocation(val weather: Boolean) : UiRequest
     data object ResumeRunPermission : UiRequest
     data object RunNotificationSettings : UiRequest
     data object PinRunWidget : UiRequest
@@ -63,6 +64,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val wallet = LocalWallet(app)
     private val api = PilotClient(preferences.getString("apiUrl", BuildConfig.PILOT_API_URL)!!, session.read())
     private val firebaseRooms = app.community
+    private val weatherLocations = WeatherLocationRepository(app)
+    private val weatherRepository = RunningWeatherRepository(app)
+    private var weatherJob: Job? = null
+    private var profileOperation = 0L
+    private var nicknameCheckJob: Job? = null
+    private var nicknameCheckOperation = 0L
+    private var discoveryJob: Job? = null
+    private var discoveryBounds: RouteMapBounds? = null
+    private var discoveryVisible = false
     private var firebaseMode = preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http"
     private var communityGeneration = 0L
     private val audio = AudioController(app)
@@ -81,6 +91,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
     init {
+        viewModelScope.launch { app.runnerSharing.state.collect { sharing ->
+            mutableState.update { it.copy(sharing = sharing, publicLocation = if (firebaseMode) sharing.enabled else it.publicLocation) }
+        } }
         viewModelScope.launch { entry.state.collect { selection -> mutableState.update { it.copy(entry = selection) } } }
         if (firebaseMode) RunSyncWorker.cancel(app)
         val reported = preferences.getStringSet("phoneChecks.${BuildConfig.VERSION_CODE}", emptySet()).orEmpty()
@@ -91,7 +104,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
         viewModelScope.launch { app.runs.active.collect { active ->
-            mutableState.update { it.copy(activeRun = active, publicLocation = preferences.getBoolean("publicLocation", false)) }
+            mutableState.update { it.copy(activeRun = active, sharingConsentRunId = it.sharingConsentRunId?.takeIf { id -> id == active.id && active.phase == RunPhase.RUNNING }, publicLocation = if (firebaseMode) app.runnerSharing.state.value.enabled else preferences.getBoolean("publicLocation", false)) }
             if (active.phase != RunPhase.IDLE) preserveEntryForExistingUse()
         } }
         viewModelScope.launch { app.runs.persistence.collect { persistence ->
@@ -199,24 +212,158 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
     override fun setPublicLocation(enabled: Boolean) {
-        if (enabled && firebaseMode) { permissionDenied("현재 크루·파티 연결에서는 실시간 위치 공유를 지원하지 않아요. 내 GPS 기록은 기기에 저장돼요."); return }
-        if (enabled && state.value.communityGuest) { permissionDenied("현재 크루 프로필에서는 실시간 위치 공유를 사용할 수 없어요."); return }
-        if (enabled && api.token.isBlank()) { permissionDenied("초대코드로 로그인한 뒤 위치 공유를 켜 주세요."); return }
-        preferences.edit().putBoolean("publicLocation", enabled).apply()
-        mutableState.update { it.copy(publicLocation = enabled) }
-        if (!enabled && !firebaseMode && api.token.isNotBlank()) work { api.request("DELETE", "/v1/presence"); refreshNow() }
-    }
-    override fun updateProfile(name: String) = ignoreJob(work {
-        require(name.trim().length in 1..30) { "이름은 1~30자로 입력해 주세요." }
-        if (firebaseMode) {
-            if (state.value.signedIn) require(name.trim().matches(Regex("[\\w가-힣 -]{2,24}"))) { "크루 프로필 이름은 2~24자의 한글·영문·숫자·공백으로 입력해 주세요." }
-            if (state.value.signedIn) firebaseRooms.updateNickname(name.trim())
-            mutateLocalProfile { it.copy(name = name.trim()) }
-            return@work
+        if (!enabled) {
+            app.runnerSharing.stop()
+            preferences.edit().putBoolean("publicLocation", false).apply()
+            mutableState.update { it.copy(publicLocation = false, sharingConsentRunId = null) }
+            return
         }
-        if (api.token.isNotBlank()) { api.request("PATCH", "/v1/me", JSONObject().put("nickname", name.trim())); if (state.value.communityGuest) mutateLocalProfile { it.copy(name = name.trim()) }; refreshNow() }
-        else mutateLocalProfile { it.copy(name = name.trim()) }
-    })
+        if (!firebaseMode || !state.value.signedIn || firebaseRooms.uid.isBlank()) {
+            permissionDenied("근처 위치 공유는 프로필 연결 후 사용할 수 있어요."); return
+        }
+        val run = state.value.activeRun
+        if (run.phase != RunPhase.RUNNING) { permissionDenied("러닝을 시작한 뒤 위치 공유를 켜 주세요."); return }
+        mutableState.update { it.copy(sharingConsentRunId = run.id, sharingConsentNonce = it.sharingConsentNonce + 1) }
+    }
+    override fun dismissSharingConsent(requestNonce: Long) { mutableState.update { if (it.sharingConsentNonce == requestNonce) it.copy(sharingConsentRunId = null) else it } }
+    override fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {
+        if (!adultConfirmed || state.value.communityUid != firebaseRooms.uid || requestNonce != state.value.sharingConsentNonce || !firebaseMode || !state.value.signedIn || state.value.sharingConsentRunId != runId ||
+            state.value.activeRun.id != runId || state.value.activeRun.phase != RunPhase.RUNNING) return
+        dismissSharingConsent(requestNonce)
+        app.runnerSharing.enable(runId, adultConfirmed)
+    }
+    private fun hasPreviewLocationPermission() = listOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION).any {
+        androidx.core.content.ContextCompat.checkSelfPermission(app, it) == android.content.pm.PackageManager.PERMISSION_GRANTED
+    }
+    override fun prepareHomeConditions() {
+        if (hasPreviewLocationPermission() && weatherJob?.isActive != true) loadPreviewLocation(weather = true)
+    }
+    override fun refreshWeather() = requestPreviewLocation(weather = true)
+    override fun locateExplore() = requestPreviewLocation(weather = false)
+    private fun requestPreviewLocation(weather: Boolean) {
+        if (hasPreviewLocationPermission()) loadPreviewLocation(weather)
+        else requests.tryEmit(UiRequest.PreviewLocation(weather))
+    }
+    fun previewPermissionResult(weather: Boolean, allowed: Boolean) {
+        if (allowed) loadPreviewLocation(weather)
+        else if (weather) mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.PERMISSION_REQUIRED, message = "위치를 허용하면 근처 예보를 확인할 수 있어요.")) }
+        else mutableState.update { it.copy(discovery = it.discovery.copy(error = "현재 위치로 이동하려면 위치 권한을 허용해 주세요.")) }
+    }
+    private fun loadPreviewLocation(weather: Boolean) {
+        if (weatherJob?.isActive == true) return
+        weatherJob = viewModelScope.launch {
+            if (weather) mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.LOCATING, message = null)) }
+            try {
+                val location = weatherLocations.currentLocation()
+                mutableState.update { it.copy(discoveryCenter = RouteMapCenter(location.latitude, location.longitude)) }
+                if (weather) {
+                    mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.LOADING)) }
+                    val snapshot = weatherRepository.load(location)
+                    mutableState.update { it.copy(weather = RunningWeatherState(WeatherPhase.READY, snapshot)) }
+                }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (failure: Exception) {
+                if (weather) {
+                    val phase = (failure as? WeatherLocationException)?.let { WeatherPhase.valueOf(it.reason.name) } ?: WeatherPhase.UNAVAILABLE
+                    mutableState.update { it.copy(weather = it.weather.copy(phase = phase, message = failure.message ?: "예보를 확인하지 못했어요.")) }
+                } else mutableState.update { it.copy(discovery = it.discovery.copy(error = "현재 위치를 확인하지 못했어요. 위치 서비스와 권한을 확인해 주세요.")) }
+            }
+        }
+    }
+    fun onUiStopped() {
+        weatherJob?.cancel(); weatherJob = null
+        mutableState.update { if (it.weather.phase in listOf(WeatherPhase.LOCATING, WeatherPhase.LOADING)) it.copy(weather = it.weather.copy(phase = WeatherPhase.IDLE)) else it }
+        setDiscoveryVisible(false)
+    }
+    override fun setDiscoveryVisible(visible: Boolean) {
+        if (discoveryVisible == visible) return
+        discoveryVisible = visible
+        if (visible) refreshRunners() else { discoveryJob?.cancel(); discoveryJob = null }
+    }
+    override fun setDiscoveryBounds(bounds: RouteMapBounds) {
+        if (discoveryBounds == bounds) return
+        discoveryBounds = bounds
+        if (discoveryVisible) refreshRunners()
+    }
+    override fun refreshRunners() {
+        discoveryJob?.cancel()
+        discoveryJob = viewModelScope.launch {
+            while (isActive && discoveryVisible) {
+                val bounds = discoveryBounds
+                val uid = firebaseRooms.uid
+                val generation = communityGeneration
+                if (bounds == null) { delay(500); continue }
+                if (!firebaseMode || !state.value.signedIn || uid.isBlank()) {
+                    mutableState.update { it.copy(discovery = RunnerDiscoveryUi(error = "러너를 보려면 프로필을 연결해 주세요."), liveRunners = emptyList()) }
+                    delay(15_000); continue
+                }
+                mutableState.update { it.copy(discovery = it.discovery.copy(loading = true, error = null)) }
+                try {
+                    val result = app.runnerPresence.discover(bounds)
+                    if (discoveryVisible && generation == communityGeneration && uid == firebaseRooms.uid && discoveryBounds == bounds)
+                        mutableState.update { it.copy(liveRunners = result.runners, discovery = RunnerDiscoveryUi(
+                            checkedAtMillis = result.checkedAtMillis, partial = result.partial, requiresZoom = result.requiresZoom)) }
+                } catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) {
+                    if (discoveryVisible && generation == communityGeneration && uid == firebaseRooms.uid) mutableState.update { it.copy(
+                        discovery = it.discovery.copy(loading = false, error = "러너 위치를 확인하지 못했어요. 연결·기기 시각·서버 규칙과 색인을 확인해 주세요.")) }
+                }
+                delay(15_000)
+            }
+        }
+    }
+    override fun checkNickname(name: String) {
+        val checkTicket = ++nicknameCheckOperation
+        nicknameCheckJob?.cancel()
+        val uid = firebaseRooms.uid
+        val generation = communityGeneration
+        mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(checking = true, check = null, error = null)) }
+        nicknameCheckJob = viewModelScope.launch {
+            try {
+                val result = firebaseRooms.checkNickname(name)
+                if (firebaseMode && checkTicket == nicknameCheckOperation && generation == communityGeneration && uid == firebaseRooms.uid)
+                    mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(check = result)) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (failure: Exception) {
+                if (checkTicket == nicknameCheckOperation && generation == communityGeneration && uid == firebaseRooms.uid) mutableState.update {
+                    it.copy(unifiedProfile = it.unifiedProfile.copy(error = failure.message ?: "닉네임을 확인하지 못했어요.")) }
+            } finally {
+                if (checkTicket == nicknameCheckOperation && generation == communityGeneration && uid == firebaseRooms.uid) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(checking = false)) }
+            }
+        }
+    }
+    override fun saveUnifiedProfile(name: String, expectedUid: String) {
+        if (firebaseMode && (expectedUid != firebaseRooms.uid || expectedUid != state.value.communityUid)) {
+            mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(error = "연결 상태가 바뀌었어요. 프로필을 다시 열어 주세요.")) }
+            return
+        }
+        saveProfile(name, expectedUid)
+    }
+    override fun updateProfile(name: String) = saveProfile(name, firebaseRooms.uid)
+    private fun saveProfile(name: String, expectedUid: String) {
+        if (state.value.unifiedProfile.saving) return
+        val ticket = ++profileOperation
+        val uid = firebaseRooms.uid
+        val generation = communityGeneration
+        mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = true, error = null)) }
+        viewModelScope.launch {
+            try {
+                val normalized = NicknamePolicy.requireValid(name).nickname
+                if (firebaseMode && state.value.signedIn) firebaseRooms.updateNickname(normalized, expectedUid = expectedUid)
+                else if (!firebaseMode && api.token.isNotBlank()) api.request("PATCH", "/v1/me", JSONObject().put("nickname", normalized))
+                if (ticket != profileOperation || generation != communityGeneration || uid != firebaseRooms.uid) return@launch
+                mutateLocalProfile { it.copy(name = normalized) }
+                mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(
+                    connectedNickname = if (it.signedIn) normalized else null, savedSerial = it.unifiedProfile.savedSerial + 1)) }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (failure: Exception) {
+                if (ticket == profileOperation && generation == communityGeneration) mutableState.update {
+                    it.copy(unifiedProfile = it.unifiedProfile.copy(error = failure.message ?: "프로필을 저장하지 못했어요.")) }
+            } finally {
+                if (ticket == profileOperation) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = false)) }
+            }
+        }
+    }
     override fun setAvatarGender(gender: AvatarGender) = ignoreJob(work { wardrobeChanges.withLock {
         if (!firebaseMode && api.token.isNotBlank() && !state.value.communityGuest) {
             api.request("PATCH", "/v1/me", JSONObject().put("avatar", JSONObject().put("gender", gender.wireValue)))
@@ -315,6 +462,12 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             val uri = URI(url.trim())
             require(uri.userInfo == null && uri.query == null && uri.fragment == null && uri.host != null && uri.scheme in setOf("http", "https")) { "올바른 서버 주소를 입력해 주세요." }
             require(uri.scheme == "https" || uri.host in setOf("127.0.0.1", "localhost", "10.0.2.2")) { "로컬 주소 외에는 HTTPS 주소를 사용해 주세요." }
+            if (firebaseMode || api.baseUrl != url.trim().trimEnd('/')) {
+                app.runnerSharing.stop()
+                profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+                mutableState.update { it.copy(communityUid = "", sharingConsentRunId = null,
+                    unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
+            }
             if (firebaseMode) {
                 firebaseMode = false; communityGeneration++; connectionCheckGeneration++
                 preferences.edit { putString("communityBackend", "http") }
@@ -341,10 +494,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun connectCommunity(name: String) = ignoreJob(work {
         val generation = communityGeneration
         if (firebaseMode) {
-            firebaseRooms.connect(name.trim())
+            firebaseRooms.connect(NicknamePolicy.requireValid(name).nickname)
             if (!firebaseMode || generation != communityGeneration) return@work
-            mutateLocalProfile { it.copy(name = name.trim()) }
+            mutateLocalProfile { it.copy(name = NicknamePolicy.requireValid(name).nickname) }
             refreshNow()
+            mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(savedSerial = it.unifiedProfile.savedSerial + 1)) }
             return@work
         }
         val result = api.connectCommunity(name.trim())
@@ -353,7 +507,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         api.token = result.getString("access_token"); session.write(api.token)
         currentUserId = result.getJSONObject("user").getString("id")
         preferences.edit().putString("userId", currentUserId).apply()
-        mutateLocalProfile { it.copy(name = name.trim()) }
+        mutateLocalProfile { it.copy(name = NicknamePolicy.requireValid(name).nickname) }
         mutableState.update { it.copy(signedIn = true, communityGuest = true, publicLocation = false) }
         refreshNow()
     })
@@ -365,6 +519,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         mutableState.update { it.copy(signedIn = true, communityGuest = false) }; refreshNow(); RunSyncWorker.enqueue(app)
     })
     override fun signOut() = ignoreJob(work {
+        app.runnerSharing.stop(); profileOperation++; nicknameCheckJob?.cancel()
         if (firebaseMode) {
             firebaseRooms.signOut(); communityGeneration++
             mutableState.update { it.copy(signedIn = false, communityGuest = true, openedRoomId = "", openedRoomTitle = "", messages = emptyList(), crewMembers = emptyMap(), crews = emptyList(), parties = emptyList(), serverConnected = false) }
@@ -377,6 +532,10 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     })
     override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
     override fun useFirebaseCommunity() = ignoreJob(work {
+        app.runnerSharing.stop()
+        profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+        mutableState.update { it.copy(sharingConsentRunId = null,
+            unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
         val previous = PilotClient(api.baseUrl, api.token)
         val previousHttp = !firebaseMode
         firebaseMode = true; communityGeneration++; connectionCheckGeneration++
@@ -499,6 +658,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     suspend fun linkCommunityGoogle(context: Context, restore: Boolean = false) {
         if (!firebaseMode || state.value.cloud.busy) return
+        // An identity operation never carries public-location consent to its result.
+        app.runnerSharing.stop()
+        mutableState.update { it.copy(sharingConsentRunId = null) }
         try {
             if (restore) firebaseRooms.restoreGoogleAccount(context) else firebaseRooms.linkGoogleAccount(context)
             refreshCommunity()
@@ -523,6 +685,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val generation = communityGeneration
         if (firebaseMode) {
             val focusedAtStart = focusedCrewForParties
+            val accepted = firebaseRooms.uid
+            if (state.value.communityUid != accepted) {
+                app.runnerSharing.stop()
+                profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+                mutableState.update { it.copy(communityUid = accepted, sharingConsentRunId = null, unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
+            }
+            val profileVersionAtRead = profileOperation
             val snapshot = firebaseRooms.snapshot()
             var scopedError: String? = null
             val focused = focusedCrewForParties?.takeIf { id -> snapshot.crews.any { it.id == id } }
@@ -530,12 +699,21 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 catch (cancelled: CancellationException) { throw cancelled }
                 catch (_: Exception) { scopedError = "크루의 파티를 불러오지 못했어요. 다시 시도해 주세요."; emptyList() }
             val visibleParties = (snapshot.parties + scoped).distinctBy { it.id }
+            if (snapshot.signedIn && snapshot.nickname != null && profileVersionAtRead == profileOperation && !state.value.unifiedProfile.saving) {
+                val before = wallet.read()
+                if (before.name != snapshot.nickname) {
+                    if (!preferences.contains("legacyLocalNicknameBeforeUnifiedV1")) preferences.edit().putString("legacyLocalNicknameBeforeUnifiedV1", before.name).apply()
+                    mutateLocalProfile { it.copy(name = snapshot.nickname) }
+                }
+            }
             if (!firebaseMode || generation != communityGeneration || focusedAtStart != focusedCrewForParties) return@withLock
             mutableState.update {
                 val openedId = it.openedRoomId.substringAfter(':')
                 val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || visibleParties.any { r -> r.id == openedId && r.joined }
                 it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = visibleParties, crewPartiesError = scopedError,
-                    signedIn = snapshot.signedIn, communityGuest = true, publicLocation = false, liveRunners = emptyList(),
+                    signedIn = snapshot.signedIn, communityGuest = true, communityUid = firebaseRooms.uid,
+                    unifiedProfile = if (profileVersionAtRead == profileOperation) it.unifiedProfile.copy(connectedNickname = snapshot.nickname, connectedNicknameKey = snapshot.nicknameKey) else it.unifiedProfile,
+                    publicLocation = app.runnerSharing.state.value.enabled,
                     serverConnected = true, serverStatus = "크루·파티 목록을 불러왔어요",
                     openedRoomId = if (stillMember) it.openedRoomId else "", openedRoomTitle = if (stillMember) it.openedRoomTitle else "",
                     messages = if (stillMember) it.messages else emptyList(), audio = it.audio.copy(canDj = false, status = "현재 크루·파티에서는 채팅을 이용해 주세요 · 음성 서버는 별도예요"))
@@ -675,5 +853,5 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private fun readLocalProfile(): Profile = wallet.read()
     private fun mutateLocalProfile(transform: (Profile) -> Profile) { val profile = wallet.update(transform); mutableState.update { it.copy(profile = profile) } }
     private fun ignoreJob(job: Job) = Unit
-    override fun onCleared() { audio.close(); super.onCleared() }
+    override fun onCleared() { weatherJob?.cancel(); discoveryJob?.cancel(); audio.close(); super.onCleared() }
 }

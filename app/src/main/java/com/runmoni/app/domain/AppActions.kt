@@ -1,6 +1,15 @@
 package com.runmoni.app.domain
 
 interface AppActions {
+    fun prepareHomeConditions() {}
+    fun refreshWeather() {}
+    fun locateExplore() {}
+    fun setDiscoveryVisible(visible: Boolean) {}
+    fun setDiscoveryBounds(bounds: RouteMapBounds) {}
+    fun refreshRunners() {}
+    fun checkNickname(name: String) {}
+    fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {}
+    fun dismissSharingConsent(requestNonce: Long) {}
     fun startEntryGoogleSignIn() {}
     fun continueAsGuest() {}
     fun openRunNotificationSettings() {}
@@ -19,6 +28,7 @@ interface AppActions {
     fun setAutoPause(enabled: Boolean)
     fun setVoiceGuidance(enabled: Boolean)
     fun setPublicLocation(enabled: Boolean)
+    fun saveUnifiedProfile(name: String, expectedUid: String) { updateProfile(name) }
     fun updateProfile(name: String)
     fun setAvatarGender(gender: AvatarGender) {}
     fun setRunningKitColor(region: RunningKitRegion, color: Int) {}

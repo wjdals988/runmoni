@@ -1,0 +1,21 @@
+{
+  "productApkBitIdentical": true,
+  "productApkSha256": "94ad940181699408a755ad432365d5b1c7a21a1b906fc5523540fbfcb7696f75",
+  "changedSourcePaths": {
+    "productSources": [],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/ui/CommunityRoomsTest.kt",
+      "app/src/androidTest/java/com/runmoni/app/ui/ModalDismissUiTest.kt",
+      "app/src/androidTest/java/com/runmoni/app/ui/RunmoniUiTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "retainedPassedGroupsFromFailedWholeAttempt": "android-review2.json",
+  "retainedPassedProductMethods": 13,
+  "oldWholeAttemptPassed": false,
+  "remainingFreshMethodsPlanned": 16,
+  "samePairAll52FreshClaimed": false
+}

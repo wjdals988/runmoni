@@ -146,6 +146,14 @@ data class AppState(
     val entry: AppEntryState = AppEntryState(),
     val runNotificationAccess: RunNotificationAccess = RunNotificationAccess(),
     val runNavigationRequest: RunNavigationRequest? = null,
+    val weather: RunningWeatherState = RunningWeatherState(),
+    val discoveryCenter: RouteMapCenter? = null,
+    val discovery: RunnerDiscoveryUi = RunnerDiscoveryUi(),
+    val sharing: RunnerSharingUi = RunnerSharingUi(),
+    val communityUid: String = "",
+    val unifiedProfile: UnifiedProfileUi = UnifiedProfileUi(),
+    val sharingConsentRunId: String? = null,
+    val sharingConsentNonce: Long = 0,
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)

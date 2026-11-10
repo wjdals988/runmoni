@@ -1,0 +1,9 @@
+
+com.runmoni.app.data.RunningWeatherParserTest:....
+com.runmoni.app.ui.HomeWeatherUiTest:.
+
+Time: 15.134
+
+OK (5 tests)
+
+

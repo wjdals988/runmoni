@@ -1,0 +1,55 @@
+{
+  "buildSucceeded": false,
+  "jvm": {
+    "tests": 164,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lintErrors": [
+    {
+      "id": "SuspiciousIndentation",
+      "severity": "Error",
+      "message": "Suspicious indentation: This is conditionally executed; expected it to be indented",
+      "locations": [
+        {
+          "file": "/workspace/runmoni/app/src/main/java/com/runmoni/app/ui/AppInformation.kt",
+          "line": "152",
+          "column": "5"
+        },
+        {
+          "file": "/workspace/runmoni/app/src/main/java/com/runmoni/app/ui/AppInformation.kt",
+          "line": "151",
+          "column": "5",
+          "message": "Previous statement here"
+        }
+      ]
+    },
+    {
+      "id": "UseSdkSuppress",
+      "severity": "Error",
+      "message": "Don't use @RequiresApi from tests; use @SdkSuppress on `ModalDismissNativeUiTest` instead",
+      "locations": [
+        {
+          "file": "/workspace/runmoni/app/src/androidTest/java/com/runmoni/app/ui/ModalDismissUiTest.kt",
+          "line": "118",
+          "column": "1"
+        }
+      ]
+    },
+    {
+      "id": "UseSdkSuppress",
+      "severity": "Error",
+      "message": "Don't use @RequiresApi from tests; use @SdkSuppress on `ModalDismissLandscapeUiTest` instead",
+      "locations": [
+        {
+          "file": "/workspace/runmoni/app/src/androidTest/java/com/runmoni/app/ui/ModalDismissUiTest.kt",
+          "line": "173",
+          "column": "1"
+        }
+      ]
+    }
+  ],
+  "lintWarnings": 45,
+  "androidProductMethodsExecuted": 0
+}

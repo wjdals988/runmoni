@@ -62,4 +62,40 @@ class RouteViewportTest {
         assertNull(RouteViewport.fit(emptyList(), 320.0, 240.0))
         assertTrue(RouteGeometry.from(emptyList()).segments.isEmpty())
     }
+    @Test fun oneFingerPanMovesTheGeographicContentWithTheFinger() {
+        val view = RouteViewport(.8, .4, 14.0)
+        val before = view.screen(.80001, .40002, 400.0, 300.0)
+        val after = view.pan(48.0, -32.0).screen(.80001, .40002, 400.0, 300.0)
+        assertEquals(before.x + 48, after.x, 1e-7)
+        assertEquals(before.y - 32, after.y, 1e-7)
+        assertEquals(view, view.pan(Double.NaN, 0.0))
+        assertEquals(view, view.zoomAt(2.0, Double.NaN, 100.0, 400.0, 300.0))
+        val focusX = 120.0; val focusY = 110.0
+        val combined = view.zoomAt(2.0, focusX, focusY, 400.0, 300.0).pan(30.0, -20.0)
+            .screen(.80001, .40002, 400.0, 300.0)
+        assertEquals(focusX + (before.x - focusX) * 2 + 30, combined.x, 1e-7)
+        assertEquals(focusY + (before.y - focusY) * 2 - 20, combined.y, 1e-7)
+    }
+    @Test fun visibleBoundsMatchAllFourScreenCornersAndCrossTheDateLine() {
+        val view = RouteViewport(.9999, .4, 10.0)
+        val bounds = view.bounds(400.0, 300.0)!!
+        assertTrue(bounds.crossesAntimeridian)
+        assertTrue(bounds.contains(Mercator.latitude(.4), 179.99))
+        assertTrue(bounds.contains(Mercator.latitude(.4), -179.99))
+        assertFalse(bounds.contains(Mercator.latitude(.4), 0.0))
+        assertTrue(RouteMapBounds(-10.0, -180.0, 10.0, -170.0).contains(0.0, 180.0))
+        assertTrue(RouteMapBounds(-10.0, 170.0, 10.0, 180.0).contains(0.0, -180.0))
+        val northWest = view.screen(Mercator.x(bounds.west), Mercator.y(bounds.north), 400.0, 300.0)
+        val southEast = view.screen(Mercator.x(bounds.east), Mercator.y(bounds.south), 400.0, 300.0)
+        assertEquals(0.0, northWest.x, 1e-7); assertEquals(0.0, northWest.y, 1e-7)
+        assertEquals(400.0, southEast.x, 1e-7); assertEquals(300.0, southEast.y, 1e-7)
+    }
+    @Test fun aWorldBrowseViewportHasNoInventedUserLocationAndRejectsInvalidHostCenter() {
+        val world = RouteViewport.world().bounds(320.0, 480.0)!!
+        assertEquals(-180.0, world.west, 0.0); assertEquals(180.0, world.east, 0.0)
+        assertFalse(world.crossesAntimeridian)
+        assertNull(RouteMapCenter(Double.NaN, 126.0).viewport())
+        assertNull(RouteMapCenter(37.5, 181.0).viewport())
+        assertEquals(15.5, RouteMapCenter(37.5, 126.0).viewport()!!.zoom, 0.0)
+    }
 }

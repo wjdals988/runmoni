@@ -26,7 +26,10 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.withTimeoutOrNull
 
-data class FirebaseRoomSnapshot(val crews: List<Crew>, val parties: List<Party>, val signedIn: Boolean)
+data class FirebaseRoomSnapshot(
+    val crews: List<Crew>, val parties: List<Party>, val signedIn: Boolean,
+    val nickname: String? = null, val nicknameKey: String? = null,
+)
 data class FirebaseRoomMessages(val messages: List<ChatMessage>, val fromCache: Boolean)
 
 /** Spark-compatible rooms. Identity is separate from Google summary backup; no reward/GPS writes. */
@@ -75,9 +78,14 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     init { auth?.addAuthStateListener(authListener) }
     val configured get() = database != null && auth != null
     val uid get() = synchronized(lock) { acceptedUid.takeIf { auth?.currentUser?.uid == it }.orEmpty() }
+    /** Uses the existing accepted identity. Reading this never signs in or creates an account. */
+    internal fun presenceFirestore(): FirebaseFirestore? = synchronized(lock) {
+        database?.takeIf { !closed && acceptedUid.isNotBlank() && auth?.currentUser?.uid == acceptedUid }
+    }
     private fun db() = database ?: error("크루·파티 연결 설정이 없는 빌드예요. 설정을 포함한 새 APK가 필요해요.")
     private fun identity(): String = uid.takeIf { it.isNotBlank() } ?: error("닉네임으로 크루 프로필을 먼저 연결해 주세요.")
     private fun profile(user: String) = db().collection("communityProfiles").document(user)
+    private fun nickname(key: String) = db().collection("communityNicknames").document(key)
     private fun room(id: String) = db().collection("communityRooms").document(id.also { require(it.matches(Regex("[A-Za-z0-9]{20}"))) { "크루·파티 주소를 확인해 주세요." } })
     private fun member(id: String, user: String) = room(id).collection("members").document(user)
 
@@ -272,7 +280,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     }
 
     suspend fun connect(nickname: String) {
-        require(nickname.matches(Regex("[\\w가-힣 -]{2,24}"))) { "닉네임은 2~24자로 입력해 주세요." }
+        val requested = NicknamePolicy.requireValid(nickname)
         val currentAuth = auth ?: error("Firebase 설정을 포함한 새 APK가 필요해요.")
         val ticket = synchronized(lock) {
             check(!closed && !activeLogin && activeGoogle == null) { "크루 프로필 연결이 끝난 뒤 다시 시도해 주세요." }
@@ -290,15 +298,18 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                 }
             }
                 ?: error("크루 프로필을 연결하지 못했어요.")
-            synchronized(lock) { check(currentConnectLocked(ticket, user)) { "크루 프로필 연결이 바뀌었어요." } }
+            synchronized(lock) {
+                check(currentConnectLocked(ticket, user)) { "크루 프로필 연결이 바뀌었어요." }
+                // Auth has completed for this explicit connect request. Keep
+                // that verified UID if the later reservation commit times out;
+                // a retry must not abandon its possibly committed nickname.
+                // Profile existence, not this UID alone, determines signedIn.
+                acceptedUid = user.uid
+            }
             network {
-                val ref = profile(user.uid)
-                val existing = ref.get(Source.SERVER).await()
-                synchronized(lock) { check(currentConnectLocked(ticket, user)) { "크루 프로필 연결이 바뀌었어요." } }
-                if (existing.exists()) ref.update(mapOf("nickname" to nickname, "updatedAt" to FieldValue.serverTimestamp())).await()
-                else ref.set(mapOf("nickname" to nickname, "createdAt" to FieldValue.serverTimestamp(),
-                    "updatedAt" to FieldValue.serverTimestamp(), "joinedRoomIds" to emptyList<String>(),
-                    "lastRoomId" to "", "createdRoomCount" to 0, "lastRoomCreatedAt" to Timestamp(0, 0))).await()
+                claimNickname(user.uid, requested) {
+                    synchronized(lock) { currentConnectLocked(ticket, user) }
+                }
             }
             synchronized(lock) {
                 check(currentConnectLocked(ticket, user)) { "크루 프로필 연결이 바뀌었어요." }
@@ -326,8 +337,71 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         auth?.signOut()
         mutableGoogleLink.value = CommunityGoogleLinkState(status = "크루 프로필 연결을 해제했어요 · Google에 연결했던 프로필은 같은 Google 계정으로 다시 연결할 수 있어요")
     }
-    suspend fun updateNickname(nickname: String) = network {
-        profile(identity()).update(mapOf("nickname" to nickname, "updatedAt" to FieldValue.serverTimestamp())).await()
+    /** Checking is read-only and never creates a guest account or reserves a name. */
+    suspend fun checkNickname(value: String): NicknameCheck {
+        val requested = NicknamePolicy.requireValid(value)
+        val user = uid
+        if (!configured || user.isBlank()) return NicknameCheck(requested.nickname, requested.key, "", NicknameAvailability.UNVERIFIED)
+        return network {
+            val claim = nickname(requested.key).get(Source.SERVER).await()
+            check(uid == user) { "프로필 연결이 바뀌었어요. 닉네임을 다시 확인해 주세요." }
+            NicknameCheck(requested.nickname, requested.key, user, when {
+                !claim.exists() -> NicknameAvailability.AVAILABLE
+                claim.getString("uid") == user -> NicknameAvailability.OWNED
+                else -> NicknameAvailability.TAKEN
+            })
+        }
+    }
+
+    /** Legacy display names remain readable until the user explicitly saves/claims one. */
+    suspend fun currentNickname(): String? {
+        val user = uid
+        if (user.isBlank()) return null
+        return network {
+            val document = profile(user).get(Source.SERVER).await()
+            check(uid == user) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+            document.getString("nickname")?.takeIf { document.exists() }
+        }
+    }
+
+    /** Availability checks are deliberately not accepted as proof: saving rechecks atomically. */
+    suspend fun updateNickname(value: String, expectedUid: String? = null) = network {
+        val requested = NicknamePolicy.requireValid(value)
+        val user = identity()
+        check(expectedUid == null || expectedUid == user) { "프로필 연결이 바뀌었어요. 닉네임을 다시 확인해 주세요." }
+        val generation = synchronized(lock) { epoch }
+        claimNickname(user, requested) {
+            synchronized(lock) { !closed && epoch == generation && !activeLogin && activeGoogle == null && uid == user }
+        }
+    }
+
+    private suspend fun claimNickname(user: String, requested: NormalizedNickname, current: () -> Boolean) {
+        check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+        db().runTransaction { transaction ->
+            check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+            val own = profile(user)
+            val oldProfile = transaction.get(own)
+            val next = nickname(requested.key)
+            val nextClaim = transaction.get(next)
+            val previousKey = oldProfile.getString("nicknameKey")
+            val previous = previousKey?.takeIf { it != requested.key }?.let { nickname(it) }
+            val previousClaim = previous?.let { transaction.get(it) }
+            if (nextClaim.exists() && nextClaim.getString("uid") != user) throw NicknameTakenException()
+            check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+            val now = FieldValue.serverTimestamp()
+            if (oldProfile.exists()) transaction.update(own, mapOf(
+                "nickname" to requested.nickname, "nicknameKey" to requested.key, "updatedAt" to now))
+            else transaction.set(own, mapOf("nickname" to requested.nickname, "nicknameKey" to requested.key,
+                "createdAt" to now, "updatedAt" to now, "joinedRoomIds" to emptyList<String>(),
+                "lastRoomId" to "", "createdRoomCount" to 0, "lastRoomCreatedAt" to Timestamp(0, 0)))
+            if (nextClaim.exists()) transaction.update(next, mapOf("nickname" to requested.nickname, "updatedAt" to now))
+            else transaction.set(next, mapOf("uid" to user, "nickname" to requested.nickname, "createdAt" to now, "updatedAt" to now))
+            if (previous != null && previousClaim?.getString("uid") == user) transaction.delete(previous)
+            Unit
+        }.await()
+        // A timed-out/cancelled SDK write may finish remotely. Never apply its
+        // result to a different local account; a refresh reconciles the old UID.
+        check(current()) { "프로필 연결이 바뀌었어요. 저장 결과를 다시 확인해 주세요." }
     }
 
     suspend fun snapshot(): FirebaseRoomSnapshot {
@@ -368,7 +442,8 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         deleted += joined.filter { rooms[it]?.getString("status") == "deleted" }.take(DELETED_CLEANUP_LIMIT)
         val visible = rooms.values.filter { it.getString("status") != "deleted" }
         FirebaseRoomSnapshot(visible.filter { it.getString("kind") == "crew" }.map { crew(it, current, it.id in joined) },
-            visible.filter { it.getString("kind") == "party" }.map { party(it, current, it.id in joined) }, own != null)
+            visible.filter { it.getString("kind") == "party" }.map { party(it, current, it.id in joined) }, own != null,
+            nickname = own?.getString("nickname"), nicknameKey = own?.getString("nicknameKey"))
         }
         // Keep optional maintenance outside the authoritative read's 15s budget.
         // Its own timeout cannot turn a successful snapshot into a failed read.
@@ -393,9 +468,13 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     }
 
     suspend fun members(id: String): List<CrewMember> = network {
-        identity()
+        val current = identity()
+        val currentName = profile(current).get(Source.SERVER).await().getString("nickname")
         room(id).collection("members").limit(100).get(Source.SERVER).await().documents.map {
-            CrewMember(it.id, it.getString("nickname").orEmpty(), it.getString("role") == "owner", it.getString("role") == "dj")
+            // Historical member snapshots are not rewritten as a side effect of
+            // editing a profile. My own current name is available privately.
+            CrewMember(it.id, if (it.id == current) currentName ?: it.getString("nickname").orEmpty() else it.getString("nickname").orEmpty(),
+                it.getString("role") == "owner", it.getString("role") == "dj")
         }
     }
 

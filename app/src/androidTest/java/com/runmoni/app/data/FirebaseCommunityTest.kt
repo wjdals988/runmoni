@@ -37,7 +37,8 @@ class FirebaseCommunityTest {
         }
         try {
             val a = client("a"); val b = client("b"); val c = client("c")
-            a.connect("검토러너A"); b.connect("검토러너B"); c.connect("검토러너C")
+            val nickA = "검토A${suffix.takeLast(6)}"
+            a.connect(nickA); b.connect("검토B${suffix.takeLast(6)}"); c.connect("검토C${suffix.takeLast(6)}")
             assertTrue(a.uid.isNotBlank()); assertNotEquals(a.uid, b.uid)
             val crew = a.createCrew(NewCrew("Firebase 검토 크루", "에뮬레이터에서 확인", "서울", "자유 페이스"))
             b.join(crew.id); c.join(crew.id)
@@ -59,7 +60,7 @@ class FirebaseCommunityTest {
                     do { value = events.receive() } while (value.messages.none { it.body == "실시간 확인 $suffix" })
                     value
                 }
-                assertTrue(received.messages.any { it.notice && it.author == "검토러너A" })
+                assertTrue(received.messages.any { it.notice && it.author == nickA })
                 assertFalse(b.canAnnounce(crew.id))
                 assertTrue(runCatching { b.sendMessage(crew.id, "권한 없는 공지", true) }.isFailure)
                 a.setDj(crew.id, b.uid, true)

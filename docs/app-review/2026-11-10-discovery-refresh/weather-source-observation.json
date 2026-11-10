@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-11-10T08:24:31.924923+00:00",
+  "syntheticPublicLocation": true,
+  "requests": [
+    {
+      "url": "https://api.met.no/doc/TermsOfService",
+      "status": 200,
+      "bytes": 16680,
+      "lastModified": null,
+      "expires": null
+    },
+    {
+      "url": "https://api.met.no/weatherapi/locationforecast/2.0/documentation",
+      "status": 200,
+      "bytes": 37793,
+      "lastModified": null,
+      "expires": "Tue, 10 Nov 2026 08:24:30 GMT"
+    },
+    {
+      "url": "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=37.57&lon=126.98",
+      "status": 200,
+      "bytes": 40093,
+      "lastModified": "Tue, 10 Nov 2026 08:07:52 GMT",
+      "expires": "Tue, 10 Nov 2026 08:39:16 GMT"
+    }
+  ]
+}

@@ -1,5 +1,15 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="@android:color/transparent" android:strokeColor="#FFFFFF" android:strokeWidth="6.5" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M36,64V58C36,52 40,48 46,48H62C68,48 72,44 72,38" />
-    <path android:fillColor="@android:color/transparent" android:strokeColor="#FFFFFF" android:strokeWidth="4" android:pathData="M42,70A6,6 0,1 1,30,70A6,6 0,1 1,42,70" />
-    <path android:fillColor="#FFFFFF" android:pathData="M78,38A6,6 0,1 1,66,38A6,6 0,1 1,78,38" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Same geometry as the full-color launcher; Android supplies the themed tint. -->
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF" android:strokeWidth="6"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M37,63V58C37,51 42,47 49,47H61C68,47 72,43 72,36" />
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF" android:strokeWidth="3"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M43.5,71A6.5,6.5 0,1 1,30.5,71A6.5,6.5 0,1 1,43.5,71Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M78.5,36A6.5,6.5 0,1 1,65.5,36A6.5,6.5 0,1 1,78.5,36Z" />
 </vector>

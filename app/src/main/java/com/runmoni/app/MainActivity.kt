@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
         refreshLocationAccess()
         val pending = pendingPermission; pendingPermission = null
         when (pending) {
+            is UiRequest.PreviewLocation -> model.previewPermissionResult(pending.weather,
+                hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) || hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
             is UiRequest.RunPermission -> {
                 if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(pending.recover)
                 else model.permissionDenied("러닝 코스를 기록하려면 정밀 위치 권한이 필요합니다. 설정에서 허용해 주세요.")
@@ -93,6 +95,8 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch {
             model.requests.collect { request ->
                 when (request) {
+                    is UiRequest.PreviewLocation -> requestPermissions(request,
+                        listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION))
                     is UiRequest.RunPermission -> {
                         requestRunningPermissions(request)
                     }
@@ -182,7 +186,7 @@ class MainActivity : ComponentActivity() {
         ContextCompat.registerReceiver(this, locationChanges, IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION), ContextCompat.RECEIVER_NOT_EXPORTED)
     }
     override fun onResume() { super.onResume(); refreshLocationAccess() }
-    override fun onStop() { unregisterReceiver(locationChanges); super.onStop() }
+    override fun onStop() { model.onUiStopped(); unregisterReceiver(locationChanges); super.onStop() }
     private fun refreshLocationAccess() {
         val manager = getSystemService(LOCATION_SERVICE) as LocationManager
         model.updateRunNotificationAccess(RunNotifications.enabled(this))

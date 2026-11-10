@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AppInformationTest:........
+
+Time: 160.048
+
+OK (8 tests)
+
+

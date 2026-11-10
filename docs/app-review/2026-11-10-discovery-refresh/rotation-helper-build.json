@@ -1,0 +1,27 @@
+{
+  "purpose": "Restore only fixed-to-user-rotation DEFAULT mode0 on owned default display0; API29 wm shell exposes enabled/disabled only",
+  "source": {
+    "file": "RotationPolicy.java",
+    "sha256": "9206cc69cf88758f42736489bc90c10045ca107fec83445eeac4ceec796d6fdd"
+  },
+  "jar": {
+    "hostFile": "work/discovery-refresh/rotation-policy.jar",
+    "deviceFile": "/data/local/tmp/runmoni-rotation-policy.jar",
+    "sha256": "ee6cffafa4e2fe92d3cafa77a3ba028abc08bc3744433d8b1db3d494fb2ab3e9",
+    "bytes": 1520
+  },
+  "build": {
+    "jdk": "21.0.13+9",
+    "javacRelease": 8,
+    "d8BuildTools": "36.0.0",
+    "dexMinApi": 26,
+    "buildCompleted": true,
+    "avdStoppedBeforeCompilation": true
+  },
+  "appApkChanged": false,
+  "apkOrUserDataReset": false,
+  "networkOrFirewallModified": false,
+  "runtimeSupportedOnApi29": false,
+  "runtimeFailure": "NoSuchMethodException: IWindowManager.setFixedToUserRotation(int,int). Absent in API29 AIDL; helper terminated before invocation. No rotation change observed.",
+  "supersededBy": "rotation-recovery2-executed-driver.py"
+}

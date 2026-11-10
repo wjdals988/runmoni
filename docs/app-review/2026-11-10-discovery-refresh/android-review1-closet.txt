@@ -1,0 +1,35 @@
+
+com.runmoni.app.ui.ConsumerClosetTest:
+Error in fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(com.runmoni.app.ui.ConsumerClosetTest):
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'nav_me')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:263)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:84)
+	at com.runmoni.app.ui.ConsumerClosetTest.fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(ConsumerClosetTest.kt:61)
+
+
+Time: 100.308
+There was 1 failure:
+1) fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(com.runmoni.app.ui.ConsumerClosetTest)
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'nav_me')
+However, the unmerged tree contains '1' node that matches. Are you missing `useUnmergedNode = true` in your finder?
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:263)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:84)
+	at com.runmoni.app.ui.ConsumerClosetTest.fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(ConsumerClosetTest.kt:61)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

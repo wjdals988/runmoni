@@ -121,6 +121,7 @@ class RunTrackingService : Service(), LocationListener {
             }
             FINISH -> {
                 if (command.expectedRunId.isNullOrBlank() || command.expectedRunId != repository.active.value.id) return
+                (application as com.runmoni.app.RunmoniApplication).runnerSharing.stopForRun(recordingRunId)
                 preferences.edit().putBoolean("publicLocation", false).apply()
                 presenceJob?.cancel(); presenceJob = null
                 stopRecordingResources()
@@ -272,6 +273,8 @@ class RunTrackingService : Service(), LocationListener {
 
     private fun notification(): Notification = RunNotifications.build(this, repository.active.value, repository.persistence.value)
     private fun updateNotification(force: Boolean = false) {
+        (application as com.runmoni.app.RunmoniApplication).runnerSharing.observe(repository.active.value,
+            live = foreground && !destroyed && recordingRunId == repository.active.value.id && recordingRunId != null, ownerRunId = recordingRunId)
         if (!foreground || destroyed) return
         com.runmoni.app.widget.RunWidgetPublisher.publish(this, repository.active.value, repository.persistence.value,
             live = recordingRunId == repository.active.value.id && recordingRunId != null)
@@ -296,6 +299,7 @@ class RunTrackingService : Service(), LocationListener {
     }
     private fun stopRecordingResources() { ticker?.cancel(); ticker = null; stopLocation(); releaseWakeLock() }
     private fun stopIdleService() {
+        (application as com.runmoni.app.RunmoniApplication).runnerSharing.stopForRun(recordingRunId)
         com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
         stopRecordingResources()
         if (foreground) stopForeground(STOP_FOREGROUND_REMOVE)
@@ -311,6 +315,7 @@ class RunTrackingService : Service(), LocationListener {
     }
 
     override fun onDestroy() {
+        (application as com.runmoni.app.RunmoniApplication).runnerSharing.observe(repository.active.value, live = false, ownerRunId = recordingRunId)
         com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
         destroyed = true
         foreground = false

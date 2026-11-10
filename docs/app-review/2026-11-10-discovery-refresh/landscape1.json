@@ -1,0 +1,222 @@
+{
+  "name": "landscape1",
+  "version": "0.4.0-dev",
+  "versionCode": 22,
+  "binaryReference": "binary-build8.json",
+  "reviewPhase": "landscape",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-10T10:38:20.020721+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 1,
+  "actualPassedProductMethods": 1,
+  "groups": [
+    {
+      "name": "landscape-modal",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.ModalDismissLandscapeUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": false,
+        "nativeLandscape320ShortSideRequiredByClass": true,
+        "widthPx": 854,
+        "heightPx": 480,
+        "effectiveDensityDpi": 240,
+        "shortSideDp": 320.0,
+        "nativeLandscape": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "landscape1-landscape-modal.txt",
+      "startedAtUtc": "2026-11-10T10:40:09.588692+00:00",
+      "actual": 1,
+      "rawSha256": "a1e3f9717f7a6a40422786577a2edf07b568c99bf5eaad7b81739464793f094d",
+      "elapsedSeconds": 30.97,
+      "finishedAtUtc": "2026-11-10T10:40:40.562274+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "landscape1-modal-close-landscape-font2-fixture.png",
+      "sha256": "e0137b6e2ff1dc614964322fbe57dcb8ed30c2f6019e246e2eacf6a80d8359f8",
+      "bytes": 22973,
+      "width": 854,
+      "height": 480,
+      "sourceGroup": "landscape-modal",
+      "sourceRaw": "landscape1-landscape-modal.txt",
+      "sourceKind": "API29 ComponentActivity device screenshot with native320dp short side landscape/font2; unavailable tiles/fake callbacks",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": true
+    }
+  ],
+  "executedDriver": "landscape1-executed-driver.py",
+  "executedDriverSha256": "bd2dfa54ba282623679fd30b26dc34e2ea90190e08828a978283d7b195384a0c",
+  "observerHelper": "landscape1-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native modal cases inspect actual OS/IME insets and injected test controls at320dp/font2. They do not verify phone authentication."
+  ],
+  "updatedAtUtc": "2026-11-10T10:41:25.489243+00:00",
+  "binaryReferenceSha256": "5c69d87bb46d7df3bf80f1c1bd16a21186b311ccabaadfae4c6c1cfb9c6d5fea",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "94ad940181699408a755ad432365d5b1c7a21a1b906fc5523540fbfcb7696f75"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "251bb491944d91159e71497dae288a874ce66776f80a6182e87439b626bedc1f"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "fixedToUserRotation": {
+    "before": false,
+    "beforePolicy": "default",
+    "forcedEnabledForLandscape": true,
+    "restoredExactly": false,
+    "restorationScope": "Effective value and default/disabled/enabled policy only; full display-settings file bytes are not claimed identical",
+    "after": false,
+    "afterPolicy": "disabled"
+  },
+  "privateEnvironmentBackup": {
+    "file": "landscape1-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "landscape1-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "rotationRestoreFailureType": "AssertionError",
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-10T10:41:25.489235+00:00"
+}

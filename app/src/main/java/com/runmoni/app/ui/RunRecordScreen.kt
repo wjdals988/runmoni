@@ -200,7 +200,7 @@ private fun RunRecordPageContent(
                 latestActions.backupCloudRun(backupId, expectedUid)
             }
         }
-        AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { if (backupRequest === expectedRequest) { backupFor = null; backupRequest = null } },
+        DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { if (backupRequest === expectedRequest) { backupFor = null; backupRequest = null } },
             title = { Text("이 계정에 기록 요약을 백업할까요?") },
             text = { DialogMessage("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") },
             confirmButton = {
@@ -226,7 +226,7 @@ private fun RunRecordPageContent(
                 latestActions.deleteRun(deleteId)
             }
         }
-        AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { if (deleteRequest === expectedRequest) { deleteFor = null; deleteRequest = null } },
+        DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { if (deleteRequest === expectedRequest) { deleteFor = null; deleteRequest = null } },
             title = { Text("이 기록을 삭제할까요?") },
             text = { DialogMessage("삭제한 기기 기록은 복구할 수 없어요. 클라우드에 백업한 요약은 계정 설정에서 별도로 삭제해 주세요.") },
             confirmButton = {
