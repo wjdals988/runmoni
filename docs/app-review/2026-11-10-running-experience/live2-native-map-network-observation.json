@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-11-10T05:33:03.369066+00:00",
+  "scope": "Current live2 native app requests; overall live2 completion is separate",
+  "actualCachePngCount": 6,
+  "actualCacheMetadataCount": 6,
+  "allSavedByAppDuringCurrentAttempt": true,
+  "savedAtMillisRange": [
+    1794288531148,
+    1794288539923
+  ],
+  "hostSeededMapTiles": false,
+  "realGeographicalBasemapVisuallyInspected": true,
+  "appCodeUsesHttpsTileUrl": true,
+  "appLocalDebugSessionCaAndInheritedProxyUsed": true,
+  "releaseNetworkSecurityConfigUnchanged": true,
+  "rawTileFilesPublished": false,
+  "sourceRuntimeImage": "live2-main-running-map.png",
+  "partialRunningImageMustNotBeUsedAsStandaloneGalleryWithoutVisibleAttribution": true
+}

@@ -1,0 +1,8 @@
+Synthetic record/account callback fixture; actual user lambda snapshots, not live ClickableNode actions.
+first-confirm-visible record=record-page-a uid=account-a tuples=[] focus=false confirmNodeIds=[88]
+second-confirm-visible-before-record-change record=record-page-a uid=account-b tuples=[] focus=false confirmNodeIds=[177]
+record-changed-before-old-callback record=record-page-b uid=account-b tuples=[] focus=true confirmNodeIds=[]
+after-old-record-callback record=record-page-b uid=account-b tuples=[] focus=true confirmNodeIds=[]
+after-record-change activityFocus=true
+before-fresh-touch activityFocus=true bounds=Rect.fromLTRB(20.0, 734.0, 460.0, 782.0)
+fresh-touch-completed record=record-page-b uid=account-b tuples=[] focus=false confirmNodeIds=[266]

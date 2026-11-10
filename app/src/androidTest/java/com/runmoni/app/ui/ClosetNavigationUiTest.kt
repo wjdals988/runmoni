@@ -1,10 +1,8 @@
 package com.runmoni.app.ui
 
 import android.view.KeyEvent
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,7 +15,7 @@ import org.junit.Test
 import java.io.File
 
 /** Compares unclipped physical window positions, not just partially-visible semantics. */
-internal fun assertClosetActionInsideSafeArea(compose: AndroidComposeTestRule<*, ComponentActivity>, tag: String) {
+internal fun assertClosetActionInsideSafeArea(compose: OfflineMapComposeRule, tag: String) {
     val target = compose.onNodeWithTag(tag).assertIsDisplayed().assertHeightIsAtLeast(48.dp).fetchSemanticsNode()
     val safe = compose.onNodeWithTag("closet_safe_content").fetchSemanticsNode()
     val list = compose.onNodeWithTag("closet_item_list").fetchSemanticsNode()

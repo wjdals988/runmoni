@@ -112,6 +112,10 @@ class MainActivity : ComponentActivity() {
                     UiRequest.RestoreCommunityGoogle -> lifecycleScope.launch { model.linkCommunityGoogle(this@MainActivity, restore = true) }
                     UiRequest.RunNotificationSettings -> openSettings(Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
                         .putExtra(Settings.EXTRA_APP_PACKAGE, packageName).putExtra(Settings.EXTRA_CHANNEL_ID, RunNotifications.CHANNEL))
+                    UiRequest.PinRunWidget -> {
+                        if (!com.runmoni.app.widget.RunWidgetPublisher.requestPin(this@MainActivity))
+                            model.permissionDenied("홈 화면을 길게 누른 뒤 ‘위젯’에서 런모니를 추가해 주세요.")
+                    }
                     UiRequest.LocationSettings -> openSettings(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     UiRequest.AppPermissionSettings -> openSettings(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
                     is UiRequest.ExternalCapture -> {

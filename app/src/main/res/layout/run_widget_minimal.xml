@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/run_widget_root"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:padding="8dp"
+    android:background="@drawable/run_widget_surface">
+    <TextView android:id="@+id/run_widget_title"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/run_widget_preview_title" android:textSize="12sp"
+        android:textColor="#D5ED98" android:textStyle="bold" android:includeFontPadding="false" android:maxLines="2" />
+    <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+        android:text="@string/run_widget_open" android:textSize="12sp" />
+    <TextView android:id="@+id/run_widget_footer"
+        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
+        android:text="@string/run_widget_preview_footer" android:textSize="11sp"
+        android:textColor="#D6E5DA" android:includeFontPadding="false" android:maxLines="2" />
+</LinearLayout>

@@ -35,6 +35,7 @@ sealed interface UiRequest {
     data class RunPermission(val recover: Boolean) : UiRequest
     data object ResumeRunPermission : UiRequest
     data object RunNotificationSettings : UiRequest
+    data object PinRunWidget : UiRequest
     data class MicrophonePermission(val roomId: String? = null) : UiRequest
     data object PickMusic : UiRequest
     data object GoogleSignIn : UiRequest
@@ -177,6 +178,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         mutableState.update { if (it.runNavigationRequest?.token == token) it.copy(runNavigationRequest = null) else it }
     }
     override fun openRunNotificationSettings() { requests.tryEmit(UiRequest.RunNotificationSettings) }
+    override fun addRunWidget() { requests.tryEmit(UiRequest.PinRunWidget) }
     private fun commandRun(action: String, expectedRunId: String? = null) {
         if (!RunTrackingService.command(app, action, expectedRunId)) permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
     }

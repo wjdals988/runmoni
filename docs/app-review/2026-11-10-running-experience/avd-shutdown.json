@@ -1,0 +1,9 @@
+{
+  "verifiedAtUtc": "2026-11-10T06:55:59.098916+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "ownedPid": 578460,
+  "activeOwnedAvdPids": [],
+  "stoppedBeforeBuildAndTransfer": true,
+  "helperStatusAfterStop": "No running emulator owned by this helper; expected absence exit1",
+  "userdataReset": false
+}

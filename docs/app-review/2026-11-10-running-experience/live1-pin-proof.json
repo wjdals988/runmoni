@@ -1,0 +1,22 @@
+{
+  "observedAtUtc": "2026-11-10T04:38:26.910075+00:00",
+  "actualOsPinAction": "ADD AUTOMATICALLY",
+  "actualOsPinPackage": "com.android.launcher3",
+  "beforeWidgetIds": {
+    "all": [
+      2
+    ],
+    "runmoni": []
+  },
+  "afterWidgetIds": {
+    "all": [
+      2,
+      4
+    ],
+    "runmoni": [
+      4
+    ]
+  },
+  "newReviewWidgetId": 4,
+  "originalWidgetIdsPreserved": true
+}

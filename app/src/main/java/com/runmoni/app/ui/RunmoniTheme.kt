@@ -30,6 +30,13 @@ internal object RunmoniColors {
     val Lime = Color(0xFFD7F58A)
     val OnDark = Color(0xFFFFFFFF)
     val OnDarkMuted = Color(0xFFD6E5DA)
+    // Local emphasis surfaces; keep the page canvas and existing roles stable.
+    val DeepGreen = Color(0xFF173E30)
+    val MintWash = Color(0xFFE0F0E8)
+    val SecondaryMint = Color(0xFFC5E1D2)
+    val LimeWash = Color(0xFFF0F5D8)
+    val CoralWash = Color(0xFFFBE7DE)
+    val CoralInk = Color(0xFF8D402B)
 }
 
 /** Shared geometry: readable controls and contained surfaces, without pill chrome. */

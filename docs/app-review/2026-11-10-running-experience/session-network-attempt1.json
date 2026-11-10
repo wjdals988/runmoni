@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-11-10T05:15:00.659219+00:00",
+  "setupSucceeded": false,
+  "certificateInstalled": false,
+  "proxyConfigured": false,
+  "normalRemountFailed": true,
+  "automaticVerityChangeReportedByRemount": true,
+  "enableVerityCommandOutput": "Overlayfs teardown failed with error Device or resource busy\nSuccessfully enabled verity\nNow reboot your device for settings to take effect\n",
+  "ownedWritableAvdStopped": true,
+  "appCodeOrReleaseTlsConfigChanged": false,
+  "nextMethod": "App-local debug-overrides using supplied session CA; no system trust mutation"
+}

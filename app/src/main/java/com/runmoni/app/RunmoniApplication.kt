@@ -13,5 +13,7 @@ class RunmoniApplication : Application() {
         super.onCreate()
         // Exact sharing always needs fresh consent after process restart.
         getSharedPreferences("runmoni", MODE_PRIVATE).edit().putBoolean("publicLocation", false).apply()
+        // A new process has no live recorder. Old widget controls must be stale.
+        com.runmoni.app.widget.RunWidgetPublisher.processStarted(this)
     }
 }

@@ -1,0 +1,32 @@
+{
+  "from": "source-freeze4.json",
+  "to": "source-freeze6.json",
+  "changedFiles": [
+    "app/src/main/java/com/runmoni/app/ui/RouteTileMap.kt"
+  ],
+  "exactOnlyChangesVerifiedByReconstructingPriorSha256": true,
+  "diff": "--- source4/RouteTileMap.kt\n+++ source6/RouteTileMap.kt\n@@ -212,9 +212,9 @@\n                 }\n             }\n             if (route.isEmpty() && validRunners.isEmpty()) Text(\n-                if (points.isEmpty() && fitRoute) \"위치가 저장되지 않은 기록이에요\" else \"표시할 수 있는 위치가 없어요\",\n+                if (points.isEmpty() && fitRoute) \"위치가 저장되지 않은 기록이에요\" else \"위치 정보 없음\",\n                 style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,\n-                modifier = Modifier.align(Alignment.Center).padding(12.dp).testTag(\"map_location_empty\"))\n+                modifier = Modifier.align(Alignment.Center).padding(horizontal = 12.dp, vertical = if (fitRoute) 12.dp else 4.dp).testTag(\"map_location_empty\"))\n             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).testTag(\"map_tiles_loading\"))\n         }\n         TextButton(onClick = { uri.openUri(\"https://www.openstreetmap.org/copyright\") },\n",
+  "preservedSource4Groups": [
+    {
+      "proof": "android-review5.json",
+      "group": "route-map",
+      "methods": 4
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "record-page",
+      "methods": 4
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "record-navigation",
+      "methods": 2
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "widget-factory",
+      "methods": 6
+    }
+  ],
+  "boundary": "16 successful source4 methods preserved as prior evidence; not a fresh source6 execution. Only live empty-map copy/padding changed; record empty text/padding preserved. Source6 retests running9viewport + fiveTabs9viewport andnative1."
+}

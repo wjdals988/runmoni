@@ -1,0 +1,33 @@
+
+com.runmoni.app.ui.RunRecordScreenUiTest:
+Error in backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges(com.runmoni.app.ui.RunRecordScreenUiTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'confirm_cloud_backup')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:393)
+	at androidx.compose.ui.test.Actions_androidKt.performClickImpl(Actions.android.kt:20)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:53)
+	at com.runmoni.app.ui.RunRecordScreenUiTest.backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges(RunRecordScreenUiTest.kt:100)
+
+
+Time: 22.751
+There was 1 failure:
+1) backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges(com.runmoni.app.ui.RunRecordScreenUiTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'confirm_cloud_backup')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:393)
+	at androidx.compose.ui.test.Actions_androidKt.performClickImpl(Actions.android.kt:20)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:53)
+	at com.runmoni.app.ui.RunRecordScreenUiTest.backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges(RunRecordScreenUiTest.kt:100)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

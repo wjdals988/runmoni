@@ -273,6 +273,8 @@ class RunTrackingService : Service(), LocationListener {
     private fun notification(): Notification = RunNotifications.build(this, repository.active.value, repository.persistence.value)
     private fun updateNotification(force: Boolean = false) {
         if (!foreground || destroyed) return
+        com.runmoni.app.widget.RunWidgetPublisher.publish(this, repository.active.value, repository.persistence.value,
+            live = recordingRunId == repository.active.value.id && recordingRunId != null)
         val now = SystemClock.elapsedRealtime()
         if (!force && now - lastNotificationAt < 1000) return
         try { getSystemService(NotificationManager::class.java).notify(RunNotifications.ID, notification()); lastNotificationAt = now }
@@ -294,6 +296,7 @@ class RunTrackingService : Service(), LocationListener {
     }
     private fun stopRecordingResources() { ticker?.cancel(); ticker = null; stopLocation(); releaseWakeLock() }
     private fun stopIdleService() {
+        com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
         stopRecordingResources()
         if (foreground) stopForeground(STOP_FOREGROUND_REMOVE)
         foreground = false
@@ -308,6 +311,7 @@ class RunTrackingService : Service(), LocationListener {
     }
 
     override fun onDestroy() {
+        com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
         destroyed = true
         foreground = false
         val id = recordingRunId

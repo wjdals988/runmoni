@@ -1,0 +1,9 @@
+{
+  "dependency": "androidx.compose.foundation:foundation-android:1.7.0",
+  "transformedClassesJarSha256": "2070cc1e856984525697ec0302fb780d59290188f5666a8b1d8b61d17149eef8",
+  "tool": "cached JDK21 javap, read-only",
+  "bytecodeFile": "foundation-click-semantics-bytecode.txt",
+  "semanticsActionReadsNodesCurrentOnClick": true,
+  "specificRuntimeNodeReuseProven": false,
+  "productionBusinessCallbackSnapshotProvenByThisInspection": false
+}

@@ -1,6 +1,5 @@
 package com.runmoni.app.ui
 
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -12,7 +11,6 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.assert
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -197,7 +195,7 @@ class AppEntryNativeUiTest : RunmoniDesignTestBase() {
 
 /** Uses full physical bounds so a partially clipped action cannot pass as displayed. */
 private fun assertEntryInsideSafeArea(
-    compose: AndroidComposeTestRule<*, ComponentActivity>,
+    compose: OfflineMapComposeRule,
     tag: String,
     isAction: Boolean = true,
 ) {

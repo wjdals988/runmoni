@@ -1,0 +1,32 @@
+{
+  "from": "source-freeze4.json",
+  "to": "source-freeze5.json",
+  "changedFiles": [
+    "app/src/main/java/com/runmoni/app/ui/RouteTileMap.kt"
+  ],
+  "exactOnlyChangeVerifiedByReconstructingPriorSha256": true,
+  "diff": "--- source4/RouteTileMap.kt\n+++ source5/RouteTileMap.kt\n@@ -212,7 +212,7 @@\n                 }\n             }\n             if (route.isEmpty() && validRunners.isEmpty()) Text(\n-                if (points.isEmpty() && fitRoute) \"위치가 저장되지 않은 기록이에요\" else \"표시할 수 있는 위치가 없어요\",\n+                if (points.isEmpty() && fitRoute) \"위치가 저장되지 않은 기록이에요\" else \"위치 정보 없음\",\n                 style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,\n                 modifier = Modifier.align(Alignment.Center).padding(12.dp).testTag(\"map_location_empty\"))\n             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).testTag(\"map_tiles_loading\"))\n",
+  "reusedSource4Groups": [
+    {
+      "proof": "android-review5.json",
+      "group": "route-map",
+      "methods": 4
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "record-page",
+      "methods": 4
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "record-navigation",
+      "methods": 2
+    },
+    {
+      "proof": "android-review5.json",
+      "group": "widget-factory",
+      "methods": 6
+    }
+  ],
+  "reusedResultScope": "These16 passed on source4; not claimed as a fresh source5 execution. Final source5 reruns affected running9viewport cases and5tabs9viewport cases plus native1."
+}

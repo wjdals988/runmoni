@@ -1,0 +1,17 @@
+{
+  "verifiedAtUtc": "2026-11-10T04:52:57.156086+00:00",
+  "attempt": "live1",
+  "failedAttemptRetained": true,
+  "databaseExactlyRestored": true,
+  "databaseContentSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "originalRunCount": 0,
+  "originalPointCount": 0,
+  "originalDatabaseCopiedBack": false,
+  "preferencesExactlyRestored": true,
+  "preferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "widgetCacheExactlyRestored": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "environmentComparisonReference": "native1 exact-restored private after snapshot",
+  "originalFailureNotHidden": "Default HOME page had no review widget; cleanup wait collided with the profile section title after actual deletion.",
+  "reviewWidgetRemovalStillRequired": true
+}

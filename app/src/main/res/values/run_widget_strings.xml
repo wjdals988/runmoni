@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="run_widget_label">런모니 러닝</string>
+    <string name="run_widget_description">진행 중인 러닝의 최근 정보와 일시정지·재개. 종료 전에는 앱에서 확인합니다.</string>
+    <string name="run_widget_preview_title">런모니</string>
+    <string name="run_widget_preview_distance">— km</string>
+    <string name="run_widget_preview_duration">—</string>
+    <string name="run_widget_preview_speed">현재 속도 —</string>
+    <string name="run_widget_pause">멈춤</string>
+    <string name="run_widget_finish">종료</string>
+    <string name="run_widget_finish_description">러닝 종료 확인창 열기</string>
+    <string name="run_widget_open">앱에서 확인</string>
+    <string name="run_widget_preview_footer">러닝 시작 준비</string>
+</resources>

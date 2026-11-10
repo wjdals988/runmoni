@@ -4,6 +4,7 @@ interface AppActions {
     fun startEntryGoogleSignIn() {}
     fun continueAsGuest() {}
     fun openRunNotificationSettings() {}
+    fun addRunWidget() {}
     fun consumeRunNavigation(token: Long) {}
     fun startRun()
     fun pauseRun()

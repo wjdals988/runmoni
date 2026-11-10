@@ -1,0 +1,159 @@
+{
+  "name": "android-review2",
+  "version": "0.3.9-dev",
+  "versionCode": 21,
+  "binaryReference": "binary-build1.json",
+  "reviewPhase": "record-backup-reproduce1",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-10T03:14:00.385693+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 1,
+  "actualPassedProductMethods": 0,
+  "groups": [
+    {
+      "name": "record-backup-reproduce",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.RunRecordScreenUiTest#backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review2-record-backup-reproduce.txt",
+      "startedAtUtc": "2026-11-10T03:14:46.887552+00:00",
+      "actual": null,
+      "rawSha256": "fc2227dbcbd7895017a9fd8553c011ba4f40b37a3ff0defedcbeeda25205d4d1",
+      "elapsedSeconds": 41.04,
+      "finishedAtUtc": "2026-11-10T03:15:27.933167+00:00"
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "android-review2-executed-driver.py",
+  "executedDriverSha256": "c41996727785dac4fb23554315fc241fa15f9d1c2e897a4f1b244f92fe94b968",
+  "observerHelper": "android-review2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native cases run existing 320dp/font2 height, safe-area, and scroll/semantics assertions; no additional OS touch or authentication is inferred."
+  ],
+  "updatedAtUtc": "2026-11-10T03:15:54.787777+00:00",
+  "binaryReferenceSha256": "0f6652d997307234beda2828415b0b737114edeef20afecb1dbb1be016975bfc",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 61,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "aed99cbde5f81880c913e96838f577e607f3a4da78f03f1803ff3fd9791907e6"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "2cc259e95b898e0f01e120154e0df15fc1e5a0330cff0087fa3883475e92f2fe"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "android-review2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "android-review2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "failureType": "AssertionError",
+  "failure": "Fresh product group failed: record-backup-reproduce",
+  "privateFailureScreenshot": "android-review2-private-failure.png",
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-10T03:15:54.787768+00:00"
+}
