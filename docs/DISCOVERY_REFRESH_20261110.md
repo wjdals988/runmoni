@@ -1,13 +1,17 @@
+# 게시 상태 — 0.4.0-dev/code22 (2026.11.10 한국 시간)
+
+같은 키 APK·운영 대시보드 게시 완료. [게시 검증](RELEASE_REVIEW_0.4.0_20261110.md)을 따른다. 새 운영 Rules/index 게시와 실사용 확인은 아래 소유자 안내가 필요하다. 아래는 구현 설계와 각 단계의 검토 기록이다.
+
 # 지도·날씨·프로필 개선 — 2026.11.10 한국 시간
 
 0.4.0-dev/code22 검토 범위다. 기존0.3.9 APK의 실제 출처fc08fe08과 서명·다운로드는 새 검증 자산이 공개되기 전 유지한다.
 
 |문제|구현|검증 경계|
 |---|---|---|
-|앱정보/긴 양식 닫기 접근 실패|고정48dp X·IME 안전영역·단일 스크롤·부모/스크롤 복귀|네이티브320dp/font2·가로·실제 키보드 검사 예정|
-|제각각 아이콘|직접 작성한8개 벡터의 선형/경로 심볼 통일|정적XML·선폭/안전영역 확인, 실제 실행 별도|
-|날짜만 보이는 홈|현재 분 시각·옆 기온 요약·MET 예보/출처/옷차림|호스트의 합성 공공좌표 HTTP200 확인, 휴대폰 현위치 별도|
-|지도 버튼 의존|핀치·드래그·follow해제/복귀·지도 옵션 대체 조작|자동 픽스처는 inert tile, 실지도 HTTPS 별도|
+|앱정보/긴 양식 닫기 접근 실패|고정48dp X·IME 안전영역·단일 스크롤·부모/스크롤 복귀|실제 세로2·가로 제품 UI1 확인. 가로 전체 driver 실패/별도 복원은 실행 근거 참고|
+|제각각 아이콘|직접 작성한8개 벡터의 선형/경로 심볼 통일|정적XML·Main4장 확인. API31이상 themed icon·실기기는 별도|
+|날짜만 보이는 홈|현재 분 시각·옆 기온 요약·MET 예보/출처/옷차림|호스트 HTTP200·Main의 네이티브 예보/시각/기온 출력 확인. 휴대폰 현위치 별도|
+|지도 버튼 의존|핀치·드래그·follow해제/복귀·지도 옵션 대체 조작|자동 픽스처는 inert tile. Main의 실제 배경/출처 출력 확인; 새 HTTP 상태 측정과 구분|
 |프로필 이름 분리|같은 편집·NFC/소문자 예약키·원자적 선점/rename|새 예약 충돌 보호, 과거 모든중복 해소 아님|
 |탐색의 크루 목록|지도/공개한 러너만; 크루→파티는 크루 탭|가짜 러너/임의현위치 없음; 새 Rules/index 게시 필요|
 
@@ -26,6 +30,23 @@
 로컬/CI demo 검사와 운영 게시가 다르다. 새 규칙: firebase/firestore.rules 전체. 색인: firebase/firestore.indexes.json의 runnerPresence(latBand ASC,lonBand ASC,expiresAt ASC) 포함 전체. 기존 summary/community 규칙을 지우거나 테스트모드로 바꾸지 않는다. 운영 project는 runmoni-3c08e다. 현재 세션 관리 인증 없음으로 운영 게시/운영 쓰기는 미확인이다.
 
 소유자 콘솔에서 Firestore Rules에 전체 파일을 게시하고 Indexes에서 위 색인 및 기존 색인을 유지한다. Firebase CLI를 이미 인증한 환경에서는 저장소 firebase 폴더에서 `firebase deploy --only firestore:rules,firestore:indexes --project runmoni-3c08e`로 두 파일을 게시할 수 있다. 비밀번호·키·서비스 계정을 채팅에 보내지 않는다. 색인이 Building이면 완료까지 대기한다. 새 예약 규칙을 게시한 뒤에는0.3.9이하 앱의 새 닉네임 생성·변경이 거절될 수 있으므로0.4.0 APK를 먼저 설치한다. 기존 UID·소속·기록을 지우는 작업은 아니다. 새 규칙 전에는 닉네임 저장/공유가 거절될 수 있고 앱은 실패를 빈 러너 결과나 성공으로 바꾸지 않는다.
+
+### 소유자 콘솔에서 적용하는 순서
+
+1. 대시보드의 **0.4.0-dev/code22** APK를 먼저 설치한다. 기존 Google/익명 로그인 설정이나 서명 지문은 이번 작업 때문에 다시 만들지 않는다.
+2. [Firebase 콘솔](https://console.firebase.google.com/project/runmoni-3c08e/firestore/rules)에서 프로젝트 `runmoni-3c08e`의 **Firestore Database → Rules**를 연다. [새 규칙 전체 파일](https://github.com/wjdals988/runmoni/blob/main/firebase/firestore.rules)을 전체 복사해 편집기 내용을 바꾸고 **Publish/게시**한다. 일부 match만 추가하거나 테스트 모드로 바꾸지 않는다.
+3. **Firestore Database → Indexes → Composite indexes → Create index**에서 아래 색인을 추가한다. 기존 `communityRooms` 색인은 유지한다. [전체 색인 정의](https://github.com/wjdals988/runmoni/blob/main/firebase/firestore.indexes.json)와 대조한다.
+
+   |항목|값|
+   |---|---|
+   |Collection ID|`runnerPresence`|
+   |Field 1|`latBand` / Ascending|
+   |Field 2|`lonBand` / Ascending|
+   |Field 3|`expiresAt` / Ascending|
+   |Query scope|Collection|
+
+4. 새 색인이 **Building**에서 **Enabled**가 될 때까지 기다린다. 관리자 키·비밀번호를 채팅이나 Git에 올릴 필요는 없다.
+5. 서로 다른 계정의 휴대폰 두 대에서 같은 닉네임 저장 시 한쪽이 거절되는지, 공유 동의 후 러닝 중 약100m 표시가 나오는지, 일시정지/종료/공유 해제 후 사라지는지 확인한다. Google 로그인·장시간 BG/화면 끔은 별도로 확인한다. 콘솔 게시 완료 보고만으로 이 실사용 결과를 통과 처리하지 않는다.
 
 ## 현재 실행 근거
 

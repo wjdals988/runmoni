@@ -1,0 +1,80 @@
+{
+  "version": "0.4.0-dev",
+  "versionCode": 22,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "eafdb48d80558114c7322072319c709c67fc3e82",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "release-source-comparison.json",
+      "sha256": "01e81adfc1801f79a8e854fe30e65c3539b2b7723c6f82b9868d41c847f5e3dc"
+    }
+  },
+  "images": [
+    {
+      "file": "live1-home-weather.png",
+      "sha256": "06a3ca96ae3ef9a9cde255c4312730aed2b781f3f3ac67dc558b8592014726c1",
+      "width": 480,
+      "height": 854,
+      "key": "home-weather",
+      "caption": "홈 시각·기온·예보",
+      "alt": "서울 테스트 위치의 날짜·시각·기온과 MET 예보·옷차림이 보이는 실제 홈 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "6bb97d54b1cb6bcd050187295cdb3f5de6cd112a087ca070ba80ee42019f6c86"
+      }
+    },
+    {
+      "file": "live1-explore-map.png",
+      "sha256": "be84a2932d961dd8a8f1380dde10e64e8111e99dd76e25fb091e1607e11cabe2",
+      "width": 480,
+      "height": 854,
+      "key": "explore-map",
+      "caption": "탐색 지도",
+      "alt": "서울 테스트 위치와 OSM 출처가 보이는 실제 탐색 지도, 크루 목록은 크루 탭으로 이동",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "6bb97d54b1cb6bcd050187295cdb3f5de6cd112a087ca070ba80ee42019f6c86"
+      }
+    },
+    {
+      "file": "live1-unified-profile.png",
+      "sha256": "843a583fbaf9ef22dd9f2bf2bbba6890295f77fd6b89d6e5c48bc0bf7fae9246",
+      "width": 480,
+      "height": 854,
+      "key": "unified-profile",
+      "caption": "통합 프로필",
+      "alt": "테스트 게스트 RunnerReview의 닉네임을 편집하는 실제 통합 프로필 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "6bb97d54b1cb6bcd050187295cdb3f5de6cd112a087ca070ba80ee42019f6c86"
+      }
+    },
+    {
+      "file": "live1-app-information.png",
+      "sha256": "72d47c8dfcbcfbc2cf5be31b4b737bc264e854f3aa3d797174ecff776792a823",
+      "width": 480,
+      "height": 854,
+      "key": "app-information",
+      "caption": "앱 정보·닫기",
+      "alt": "0.4.0-dev 버전명과 상단 닫기가 보이는 실제 앱 정보 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "6bb97d54b1cb6bcd050187295cdb3f5de6cd112a087ca070ba80ee42019f6c86"
+      }
+    }
+  ]
+}

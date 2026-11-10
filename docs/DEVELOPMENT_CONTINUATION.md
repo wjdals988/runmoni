@@ -1,3 +1,7 @@
+# 최신 게시 — 0.4.0-dev/code22 (2026.11.10 한국 시간)
+
+[게시 검증](RELEASE_REVIEW_0.4.0_20261110.md)을 시작점으로 쓴다. 실제 APK출처 `eafdb48d80558114c7322072319c709c67fc3e82`, 서명CI42808717611·운영 대시보드 갱신 완료. 새 Firestore 규칙/색인 운영 적용과 두 기기 검증은 [안내](DISCOVERY_REFRESH_20261110.md#firebase-운영-적용)를 따른다. 휴대폰/Google 결과 대기로 독립 원화·크루 승계/신고·차단 개선을 멈추지 않는다. 아래는 각 개발 시점의 이력이다.
+
 # 런모니 개발 이어가기 — 0.3.9-dev 공개 이후
 
 2026.11.10 한국 시간. 0.3.9-dev/code21, 219,456,174bytes, SHA256 `57895b0237d09ba91b6c73a47da42e67bd8485ccd31f0406cb0ea0a8c1d965a3`, 실제 APK 출처 C `fc08fe08bd0cb87770be56350684f55a41a37c85`. 서명 CI42771920281 JVM141·실패/오류/skip0, release lint오류0/경고73. source6 로컬 TEST debug는 JVM141·실패/오류/skip0, lint오류0/경고43이다. Android는 source4 핵심16 보존과 source6 새3개(러닝1·5탭1·실제320dp/font2 상세1)를 구분한다. 단일 source6에서19개를 새 실행한 것이 아니다. 휴대폰·Google 로그인·운영 쓰기·야외 GPS·Doze/OEM·API31이상·공개 서명 APK 직접 실행·사용자 시각 승인은 별도 미검증이다. [게시 검증](RELEASE_REVIEW_0.3.9_20261110.md) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.9-dev/runmoni-0.3.9-dev.apk). 후속 문서/피드 커밋으로 출처 C를 바꾸지 않는다.
