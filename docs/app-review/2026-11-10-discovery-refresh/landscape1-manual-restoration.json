@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "completed": true,
+  "observedAtUtc": "2026-11-10T11:10:08.510866+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "executedDriver": "rotation-recovery3-executed-driver.py",
+  "executedDriverSha256": "2b028a533d09472db8ad3f2edfa9cd15b44a5778bee0d75026fee515216fa011",
+  "driverSourceUnchanged": true,
+  "priorAttempt": {
+    "file": "landscape1.json",
+    "sha256": "eedb3f2404e4510272b173e6c0d304317f7d37a96c0d9b6d83244e2640779b38",
+    "wholeAttemptPassed": false,
+    "productMethodsPassed": 1
+  },
+  "recoveryAttempt2": {
+    "file": "rotation-recovery2.json",
+    "sha256": "1c7ef3c0d2af018496e65a6913d1778d85e1be28223ce98c017254b757e9a6cd",
+    "wholeAttemptPassed": false,
+    "reason": "Framework restarted and single policy byte restored; later accessibility observer timed out"
+  },
+  "before": {
+    "effective": false,
+    "persistedPolicy": "disabled"
+  },
+  "target": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "after": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "policyAndEffectiveRestoredExactly": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "databaseExactlyRestored": true,
+  "appOrTestApkChanged": false,
+  "userDataReset": false,
+  "networkOrFirewallModified": false,
+  "allOsBytesExactlyRestoredClaimed": false,
+  "onlyOwnedAttributeChanged": true,
+  "otherFileBytesPreserved": true,
+  "displayFileOwnerModePreserved": true,
+  "frameworkRestarted": true,
+  "frameworkPidBefore": "1951",
+  "frameworkPidAfter": "3707",
+  "binaryReference": "binary-build8.json",
+  "binaryReferenceSha256": "5c69d87bb46d7df3bf80f1c1bd16a21186b311ccabaadfae4c6c1cfb9c6d5fea",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "94ad940181699408a755ad432365d5b1c7a21a1b906fc5523540fbfcb7696f75"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "251bb491944d91159e71497dae288a874ce66776f80a6182e87439b626bedc1f"
+    }
+  ],
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  }
+}

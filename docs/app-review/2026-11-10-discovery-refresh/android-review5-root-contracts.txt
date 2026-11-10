@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunmoniUiTest:..........
+
+Time: 152.446
+
+OK (10 tests)
+
+

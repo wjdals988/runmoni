@@ -3,12 +3,12 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Send
@@ -20,7 +20,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
@@ -34,8 +33,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.Dialog
 import com.runmoni.app.domain.*
 import com.runmoni.app.avatar.AvatarArtwork
 import java.time.LocalDateTime
@@ -46,9 +43,8 @@ import android.app.TimePickerDialog
 import androidx.activity.compose.BackHandler
 
 @Composable
-internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}, updates: AppUpdateUiState = AppUpdateUiState()) {
+internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () -> Unit, onSignIn: () -> Unit, onAppInformation: () -> Unit = {}, updates: AppUpdateUiState = AppUpdateUiState(), onOpenProfile: () -> Unit = {}, scrollState: androidx.compose.foundation.ScrollState? = null) {
     var url by remember(state.apiUrl) { mutableStateOf(state.apiUrl) }
-    var name by remember(state.profile.name) { mutableStateOf(state.profile.name) }
     var cloudHistory by remember(state.cloud.uid) { mutableStateOf(false) }
     var connectionDetails by remember { mutableStateOf(false) }
     var deviceChecks by remember { mutableStateOf(false) }
@@ -66,15 +62,15 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
             HorizontalDivider(color = RunmoniColors.Line)
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 val gutter = if (LocalConfiguration.current.screenWidthDp >= 600) 32.dp else 20.dp
-                Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().align(Alignment.TopCenter).verticalScroll(rememberScrollState())
+                Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().align(Alignment.TopCenter).verticalScroll(scrollState ?: rememberScrollState())
                     .padding(horizontal = gutter, vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
                     if (updates.updateAvailable) {
                         AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
                         HorizontalDivider(color = RunmoniColors.Line)
                     }
-                    ScreenSection("내 프로필", showDivider = false) {
-                        OutlinedTextField(shape = RunmoniShapes.Input, value = name, onValueChange = { if (it.length <= 30) name = it }, label = { Text("러너 이름") }, singleLine = true, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("profile_name"))
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.updateProfile(name.trim()) }, enabled = name.isNotBlank(), modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("save_profile")) { Text("이름 저장") }
+                    ScreenSection("프로필", showDivider = false) {
+                        DestinationRow("프로필", "닉네임과 계정", Icons.Outlined.AccountCircle,
+                            onOpenProfile, Modifier.testTag("settings_profile"))
                     }
                     ScreenSection("러닝과 위치") {
                         ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
@@ -97,8 +93,8 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                         }
                         SmallNote("기록 상세에서 요약을 백업할 수 있어요. 러닝 경로·포인트·옷장은 포함되지 않아요.")
                     }
-                    ScreenSection("크루 프로필") {
-                        StatusPill(if (state.serverConnected && state.signedIn) "크루 프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
+                    ScreenSection("온라인 계정") {
+                        StatusPill(if (state.serverConnected && state.signedIn) "프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
                         if (state.communityBackend == CommunityBackend.FIREBASE) {
                             val link = state.communityGoogleLink
                             if (link.linked || link.busy || link.status != CommunityGoogleLinkState().status)
@@ -107,13 +103,13 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                             if (link.linked && link.accountLabel.isNotBlank()) Text(link.accountLabel, style = MaterialTheme.typography.bodyMedium)
                             if (link.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
                             if (state.signedIn && !link.linked) OutlinedButton(shape = RunmoniShapes.Action, onClick = { linkCommunityGoogle = true }, enabled = !link.busy && !state.cloud.busy,
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("link_community_google")) { Text("크루 프로필에 Google 연결") }
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("link_community_google")) { Text("Google로 계정 보관") }
                             if (!state.signedIn) OutlinedButton(shape = RunmoniShapes.Action, onClick = { restoreCommunityGoogle = true }, enabled = state.cloud.configured && !link.busy && !state.cloud.busy,
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("restore_community_google")) { Text("Google로 크루 프로필 다시 연결") }
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("restore_community_google")) { Text("기존 온라인 계정 복구") }
                             SmallNote("Google을 연결한 크루 소속과 권한을 다시 찾을 수 있어요. 기기의 러닝 경로·포인트·옷장은 이 연결로 복원되지 않아요.")
                         }
                         if (state.signedIn) OutlinedButton(shape = RunmoniShapes.Action, onClick = { if (state.communityBackend == CommunityBackend.FIREBASE) disconnectRoom = true else actions.signOut() }, enabled = !state.communityGoogleLink.busy && !state.cloud.busy,
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "크루 프로필 연결 해제" else "파일럿 로그아웃") }
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "온라인 연결 해제" else "파일럿 로그아웃") }
                         else OutlinedButton(shape = RunmoniShapes.Action, onClick = onSignIn, enabled = !state.communityGoogleLink.busy && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
                     }
                     ScreenSection("도움말 및 앱 정보") {
@@ -134,17 +130,17 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         }
     }
     if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
-    if (linkCommunityGoogle) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { linkCommunityGoogle = false },
+    if (linkCommunityGoogle) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { linkCommunityGoogle = false },
         title = { Text("현재 크루 프로필에 Google을 연결할까요?") },
         text = { DialogMessage("현재 크루 소속과 크루장·주최자 권한을 그대로 유지해요. 이미 다른 프로필에 사용한 Google 계정은 자동으로 합치지 않아요.\n\n이 연결은 기기의 GPS 기록·포인트·옷장 백업과는 별도예요.") },
         confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { linkCommunityGoogle = false; actions.linkCommunityGoogle() }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_link_community_google")) { Text("Google 계정 선택") } },
         dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { linkCommunityGoogle = false }) { Text("취소") } })
-    if (restoreCommunityGoogle) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { restoreCommunityGoogle = false },
+    if (restoreCommunityGoogle) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { restoreCommunityGoogle = false },
         title = { Text("기존 크루 프로필을 다시 연결할까요?") },
         text = { DialogMessage("이전에 크루 프로필에 연결한 같은 Google 계정을 선택해 주세요. 기존 크루 소속과 권한을 확인하며 새 프로필을 만들거나 다른 프로필과 합치지 않아요.\n\n기기의 GPS 기록·포인트·옷장은 이 연결로 복원되지 않아요.") },
         confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { restoreCommunityGoogle = false; actions.restoreCommunityGoogle() }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_restore_community_google")) { Text("Google 계정 선택") } },
         dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { restoreCommunityGoogle = false }) { Text("취소") } })
-    if (disconnectRoom) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { disconnectRoom = false }, title = { Text("크루 프로필 연결을 해제할까요?") },
+    if (disconnectRoom) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { disconnectRoom = false }, title = { Text("크루 프로필 연결을 해제할까요?") },
         text = { DialogMessage(if (state.communityGoogleLink.linked)
             "연결을 해제하면 이 기기에서 크루·파티를 이용하려면 같은 Google 계정으로 크루 프로필을 다시 연결해야 해요. 기기 러닝 기록과 포인트, 기록 요약 백업 로그인은 유지돼요."
             else "Google을 연결하지 않은 익명 프로필의 크루·파티 참여 내역과 크루장·주최자 권한은 다시 복구할 수 없어요. 기기 러닝 기록과 기록 요약 백업 로그인은 유지돼요.") },
@@ -154,19 +150,7 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
 
 @Composable
 internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () -> Unit) {
-    var name by remember { mutableStateOf(state.profile.name) }
-    var adult by remember { mutableStateOf(false) }
-    var submitted by remember { mutableStateOf(false) }
-    LaunchedEffect(state.signedIn) { if (state.signedIn && submitted) onDismiss() }
-    FormDialog("크루에서 쓸 닉네임", onDismiss, confirm = {
-        TextButton(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.connectCommunity(name.trim()) }, enabled = adult && name.trim().matches(Regex("[\\w가-힣 -]{2,24}")) && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_sign_in")) { Text(if (state.busy) "연결 중" else "참여하기") }
-    }) {
-        Text("크루 멤버에게 표시할 이름이에요.", style = MaterialTheme.typography.bodyMedium)
-        OutlinedTextField(shape = RunmoniShapes.Input, value = name, onValueChange = { if (it.length <= 24) name = it }, label = { Text("닉네임 · 2~24자") }, singleLine = true, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("display_name"))
-        Row(Modifier.fillMaxWidth().heightIn(min = 56.dp).toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }).testTag("adult_checkbox"), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = adult, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("만 19세 이상입니다", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f)) }
-        SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "이 기기의 익명 프로필로 참여해요. 설정에서 Google 계정을 연결하기 전에는 기기 변경·재설치 후 참여 내역과 크루장 권한을 복구할 수 없어요. 기록 요약 백업과는 별도예요." else "게스트 연결은 180일간 유효해요. 연결 해제·기기 변경·재설치 후에는 이 프로필의 참여 내역을 복구할 수 없어요.")
-        FormRequestStatus(submitted, state.busy, state.error, "sign_in")
-    }
+    UnifiedProfileDialog(state, actions, onDismiss)
 }
 
 @Composable
@@ -234,7 +218,7 @@ internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppStat
 internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAccountState = CloudAccountState(), persistence: RunPersistenceState = RunPersistenceState(initialized = true), onDismiss: () -> Unit) {
     var deleteConfirmation by remember { mutableStateOf(false) }
     var backupConfirmation by remember(cloud.uid, record.id) { mutableStateOf(false) }
-    FormDialog("나의 러닝 기록", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss) { Text("닫기") } }) {
+    if (!backupConfirmation && !deleteConfirmation) FormDialog("나의 러닝 기록", onDismiss, dismissLabel = null, closeTag = "close_record") {
         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         Text("${distance(record.distanceMeters)} km", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.testTag("record_distance"))
         Text("러닝 시간 ${duration(record.activeDurationMillis)} · 평균 ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km", modifier = Modifier.testTag("record_duration_pace"))
@@ -261,14 +245,15 @@ internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAc
         }
         TextButton(shape = RunmoniShapes.Action, onClick = { deleteConfirmation = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("delete_run")) { Text("기록 삭제", color = MaterialTheme.colorScheme.error) }
     }
-    if (backupConfirmation && cloud.uid.isNotBlank()) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { backupConfirmation = false }, title = { Text("이 계정에 기록 요약을 백업할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false; actions.backupCloudRun(record.id, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_cloud_backup")) { Text("이 계정에 백업") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false }) { Text("취소") } })
-    if (deleteConfirmation) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { deleteConfirmation = false }, title = { Text("이 기록을 삭제할까요?") }, text = { DialogMessage("삭제한 기기 기록은 복구할 수 없어요. 클라우드에 백업한 요약은 계정 설정에서 별도로 삭제해 주세요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { actions.deleteRun(record.id); onDismiss() }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_run")) { Text("삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { deleteConfirmation = false }) { Text("취소") } })
+    if (backupConfirmation && cloud.uid.isNotBlank()) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { backupConfirmation = false }, title = { Text("이 계정에 기록 요약을 백업할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false; actions.backupCloudRun(record.id, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_cloud_backup")) { Text("이 계정에 백업") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false }) { Text("취소") } })
+    if (deleteConfirmation) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { deleteConfirmation = false }, title = { Text("이 기록을 삭제할까요?") }, text = { DialogMessage("삭제한 기기 기록은 복구할 수 없어요. 클라우드에 백업한 요약은 계정 설정에서 별도로 삭제해 주세요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { actions.deleteRun(record.id); onDismiss() }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_run")) { Text("삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { deleteConfirmation = false }) { Text("취소") } })
 }
 
 @Composable
 internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions, onDismiss: () -> Unit) {
     var pendingDelete by remember(cloud.uid) { mutableStateOf<CloudRunSummary?>(null) }
-    FormDialog("백업한 기록 요약", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss) { Text("닫기") } }) {
+    val summariesScroll = key(cloud.uid) { rememberScrollState() }
+    if (pendingDelete == null) FormDialog("백업한 기록 요약", onDismiss, dismissLabel = null, closeTag = "close_cloud_summaries", scrollState = summariesScroll) {
         Text(cloud.accountLabel, style = MaterialTheme.typography.titleMedium)
         Text(cloud.status, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         SmallNote("최근 50건의 자가 기록 요약이에요. 경로 원본은 이 기기에만 있어요. 요약으로 경로를 복구하거나 마일리지를 적립하지 않아요.")
@@ -295,7 +280,7 @@ internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions,
             HorizontalDivider(color = RunmoniColors.Line)
         }
     }
-    pendingDelete?.let { summary -> AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n선택한 클라우드 요약만 삭제해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null }) { Text("취소") } }) }
+    pendingDelete?.let { summary -> DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n선택한 클라우드 요약만 삭제해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null }) { Text("취소") } }) }
 }
 
 @Composable
@@ -303,7 +288,7 @@ internal fun CrewMembersDialog(state: AppState, crewId: String, actions: AppActi
     LaunchedEffect(crewId) { actions.loadCrewMembers(crewId) }
     val crew = state.crews.firstOrNull { it.id == crewId }
     val members = state.crewMembers[crewId].orEmpty()
-    FormDialog("멤버 · DJ 관리", onDismiss, dismissLabel = null, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = onDismiss) { Text("닫기") } }) {
+    FormDialog("멤버 · DJ 관리", onDismiss, dismissLabel = null, closeTag = "close_crew_members") {
         if (members.isEmpty()) SmallNote("표시할 멤버가 없어요. 크루 정보를 새로고침해 주세요.")
         members.forEach { member ->
             BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -327,43 +312,6 @@ internal fun CrewMembersDialog(state: AppState, crewId: String, actions: AppActi
             HorizontalDivider(color = RunmoniColors.Line)
         }
         SmallNote(if (state.communityBackend == CommunityBackend.FIREBASE) "DJ는 공지를 작성할 수 있어요. 크루 관리 권한은 크루장에게 있어요." else "DJ는 음악 공유를 제어할 수 있어요. 크루 관리 권한은 크루장에게 있어요.")
-    }
-}
-
-/** The dialog window owns system/IME insets once; its body has the remaining height. */
-@Composable
-internal fun FormDialog(title: String, onDismiss: () -> Unit, confirm: @Composable () -> Unit, dismissLabel: String? = "취소", content: @Composable ColumnScope.() -> Unit) {
-    val bodyScroll = rememberScrollState()
-    val compactScroll = rememberScrollState()
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
-        BoxWithConstraints(Modifier.fillMaxSize()
-            .pointerInput(onDismiss) { detectTapGestures(onTap = { onDismiss() }) }
-            .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
-            .padding(horizontal = 20.dp, vertical = 12.dp), contentAlignment = Alignment.Center) {
-            // With a keyboard in a short window the whole form remains scrollable, including
-            // its actions. Only modifiers change, preserving the focused input's composition.
-            val scrollWholeForm = maxHeight < 320.dp || (LocalDensity.current.fontScale >= 1.3f && maxHeight < 440.dp)
-            Surface(Modifier.widthIn(max = 560.dp).fillMaxWidth().heightIn(max = maxHeight).testTag("form_dialog")
-                .pointerInput(Unit) { detectTapGestures(onTap = {}) },
-                shape = RunmoniShapes.Dialog, color = RunmoniColors.Paper) {
-                Column(Modifier.fillMaxWidth().heightIn(max = maxHeight)
-                    .then(if (scrollWholeForm) Modifier.verticalScroll(compactScroll) else Modifier)) {
-                    Text(title, style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.fillMaxWidth().padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 16.dp).semantics { heading() })
-                    Column(Modifier.fillMaxWidth()
-                        .then(if (scrollWholeForm) Modifier else Modifier.weight(1f, fill = false).verticalScroll(bodyScroll))
-                        .padding(horizontal = 24.dp, vertical = 8.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp), content = content)
-                    HorizontalDivider(color = RunmoniColors.Line)
-                    FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (dismissLabel != null) TextButton(shape = RunmoniShapes.Action, onClick = onDismiss,
-                            modifier = Modifier.heightIn(min = 48.dp)) { Text(dismissLabel) }
-                        Box(Modifier.heightIn(min = 48.dp), contentAlignment = Alignment.Center) { confirm() }
-                    }
-                }
-            }
-        }
     }
 }
 

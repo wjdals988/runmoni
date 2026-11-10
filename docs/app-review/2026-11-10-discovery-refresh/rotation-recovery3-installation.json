@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "completed": true,
+  "observedAtUtc": "2026-11-10T11:10:08.510866+00:00",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "executedDriver": "rotation-recovery3-executed-driver.py",
+  "executedDriverSha256": "2b028a533d09472db8ad3f2edfa9cd15b44a5778bee0d75026fee515216fa011",
+  "driverSourceUnchanged": true,
+  "binaryReference": "binary-build8.json",
+  "binaryReferenceSha256": "5c69d87bb46d7df3bf80f1c1bd16a21186b311ccabaadfae4c6c1cfb9c6d5fea",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "94ad940181699408a755ad432365d5b1c7a21a1b906fc5523540fbfcb7696f75"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "251bb491944d91159e71497dae288a874ce66776f80a6182e87439b626bedc1f"
+    }
+  ],
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 92,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 71,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 26,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 80,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "appOrTestApkChanged": false,
+  "userDataReset": false,
+  "networkOrFirewallModified": false,
+  "rotationRestoration": {
+    "file": "landscape1-manual-restoration.json",
+    "sha256": "13ece35c50b39fe6fda62ee1cf10e546218878c7b65adb7838e931f8df22f1fc"
+  },
+  "currentRotation": {
+    "effective": false,
+    "persistedPolicy": "default"
+  }
+}

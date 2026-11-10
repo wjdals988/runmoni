@@ -1,3 +1,15 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="108" android:viewportHeight="108">
-    <path android:fillColor="@android:color/transparent" android:strokeColor="#FFFFFF" android:strokeWidth="10" android:strokeLineCap="round" android:strokeLineJoin="round" android:pathData="M24,91L24,27C24,19 30,16 39,16L53,16C70,16 78,24 78,38C78,51 69,59 53,59L25,59M50,59L82,91" />
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <!-- Notification alpha mask: the launcher route/waypoint mark without adaptive padding. -->
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF" android:strokeWidth="2.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M5.2,15.6V13.6C5.2,10.8 7.2,9.2 10,9.2H14.8C17.6,9.2 19.2,7.6 19.2,4.8" />
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF" android:strokeWidth="1.6"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M7.8,18.8A2.6,2.6 0,1 1,2.6,18.8A2.6,2.6 0,1 1,7.8,18.8Z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M21.8,4.8A2.6,2.6 0,1 1,16.6,4.8A2.6,2.6 0,1 1,21.8,4.8Z" />
 </vector>

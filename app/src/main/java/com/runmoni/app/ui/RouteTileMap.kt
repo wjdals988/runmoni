@@ -2,11 +2,7 @@ package com.runmoni.app.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroid
-import androidx.compose.foundation.gestures.calculatePan
-import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +29,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -47,13 +45,18 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.delay
 
 /** Tests provide an inert unavailable source; it must never be described as a
  * successful online basemap. Null uses the real bounded OSM repository. */
 internal val LocalMapTileSource = staticCompositionLocalOf<MapTileSource?> { null }
 
 @Composable
-internal fun RouteTileMap(points: List<TrackPoint>, runners: List<LiveRunner>, modifier: Modifier, fitRoute: Boolean) {
+internal fun RouteTileMap(
+    points: List<TrackPoint>, runners: List<LiveRunner>, modifier: Modifier, fitRoute: Boolean,
+    interactiveMap: Boolean = false, followCenter: RouteMapCenter? = null,
+    onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
+) {
     val context = LocalContext.current
     val source = LocalMapTileSource.current ?: remember(context) { MapTileRepository.get(context) }
     val geometry = remember(points) { RouteGeometry.from(points) }
@@ -68,8 +71,8 @@ internal fun RouteTileMap(points: List<TrackPoint>, runners: List<LiveRunner>, m
     } }
     val captionBackground = remember { android.graphics.Paint().apply { color = android.graphics.Color.argb(240, 255, 255, 255) } }
     var canvasSize by remember { mutableStateOf(IntSize.Zero) }
-    var viewport by remember(fitRoute) { mutableStateOf<RouteViewport?>(null) }
-    var manual by remember(fitRoute) { mutableStateOf(false) }
+    var viewport by remember(fitRoute, interactiveMap) { mutableStateOf<RouteViewport?>(null) }
+    var manual by remember(fitRoute, interactiveMap) { mutableStateOf(false) }
     var attempt by remember { mutableIntStateOf(0) }
     var loading by remember { mutableStateOf(false) }
     val images = remember(source) { mutableStateMapOf<MapTileKey, MapTileResult>() }
@@ -77,11 +80,55 @@ internal fun RouteTileMap(points: List<TrackPoint>, runners: List<LiveRunner>, m
     val mapWidth = canvasSize.width.toDouble()
     val mapHeight = canvasSize.height.toDouble()
     val padding = 16.0 * LocalDensity.current.density
-    fun reset(): RouteViewport? = if (fitRoute) RouteViewport.fit(route, mapWidth, mapHeight, padding, tileSize)
-        else route.lastOrNull()?.let { RouteViewport.follow(it) }
-            ?: validRunners.firstOrNull()?.let { RouteViewport(Mercator.x(it.longitude), Mercator.y(it.latitude), 14.0) }
-    LaunchedEffect(route, validRunners, canvasSize, fitRoute) {
+    val actualCenter = followCenter?.takeIf { it.valid() }
+    val currentOnBoundsChanged by rememberUpdatedState(onBoundsChanged)
+    fun reset(): RouteViewport? = when {
+        fitRoute && route.isNotEmpty() -> RouteViewport.fit(route, mapWidth, mapHeight, padding, tileSize)
+        actualCenter != null -> actualCenter.viewport()
+        route.isNotEmpty() -> RouteViewport.follow(route.last())
+        interactiveMap -> RouteViewport.world() // A browse view, never a fake user fix.
+        validRunners.isNotEmpty() -> validRunners.first().let { RouteViewport(Mercator.x(it.longitude), Mercator.y(it.latitude), 14.0) }
+        else -> null
+    }
+    fun zoomMap(factor: Double): Boolean {
+        val before = viewport ?: return false
+        val after = before.zoomAt(factor, mapWidth / 2, mapHeight / 2, mapWidth, mapHeight, tileSize)
+        if (after == before) return false
+        manual = true; viewport = after
+        return true
+    }
+    fun panMap(x: Double, y: Double): Boolean {
+        val before = viewport ?: return false
+        manual = true; viewport = before.pan(x, y, tileSize)
+        return true
+    }
+    fun recenter(): Boolean {
+        val next = reset() ?: return false
+        manual = false; viewport = next
+        return true
+    }
+    val recenterLabel = when {
+        fitRoute -> "전체 러닝 경로 보기"
+        actualCenter != null -> "내 위치로 이동"
+        route.isNotEmpty() -> "경로 위치로 이동"
+        else -> "처음 지도 영역 보기"
+    }
+    val mapActions = listOf(
+        CustomAccessibilityAction("지도 확대") { zoomMap(2.0) },
+        CustomAccessibilityAction("지도 축소") { zoomMap(.5) },
+        CustomAccessibilityAction("서쪽으로 이동") { panMap(mapWidth * .35, 0.0) },
+        CustomAccessibilityAction("동쪽으로 이동") { panMap(-mapWidth * .35, 0.0) },
+        CustomAccessibilityAction("북쪽으로 이동") { panMap(0.0, mapHeight * .35) },
+        CustomAccessibilityAction("남쪽으로 이동") { panMap(0.0, -mapHeight * .35) },
+        CustomAccessibilityAction(recenterLabel) { recenter() },
+    )
+    LaunchedEffect(route, validRunners, canvasSize, fitRoute, interactiveMap, actualCenter) {
         if (canvasSize.width > 0 && canvasSize.height > 0 && (!manual || viewport == null)) viewport = reset()
+    }
+    LaunchedEffect(viewport, canvasSize, tileSize) {
+        val bounds = viewport?.bounds(mapWidth, mapHeight, tileSize) ?: return@LaunchedEffect
+        delay(250) // Bounds observers do not poll a backend on every pointer event.
+        currentOnBoundsChanged?.invoke(bounds)
     }
     val placements = remember(viewport, canvasSize, tileSize) { viewport?.tiles(mapWidth, mapHeight, tileSize).orEmpty() }
     val requested = remember(placements) { placements.map { it.tile }.distinct() }
@@ -112,48 +159,33 @@ internal fun RouteTileMap(points: List<TrackPoint>, runners: List<LiveRunner>, m
                     Icon(Icons.Outlined.Refresh, "배경 지도 다시 불러오기")
                 }
             }
-            FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = {
-                manual = true
-                viewport = viewport?.zoomAt(2.0, mapWidth / 2, mapHeight / 2, mapWidth, mapHeight, tileSize)
-            }, enabled = viewport != null && viewport!!.zoom < 18, modifier = Modifier.size(48.dp).testTag("map_zoom_in")) { Icon(Icons.Outlined.Add, "지도 확대") }
-            FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = {
-                manual = true
-                viewport = viewport?.zoomAt(.5, mapWidth / 2, mapHeight / 2, mapWidth, mapHeight, tileSize)
-            }, enabled = viewport != null && viewport!!.zoom > 0, modifier = Modifier.size(48.dp).testTag("map_zoom_out")) { Icon(Icons.Outlined.Remove, "지도 축소") }
-            FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { manual = false; viewport = reset() }, enabled = route.isNotEmpty() || validRunners.isNotEmpty(),
+            if (interactiveMap && route.isEmpty() && actualCenter == null) Text("내 위치 확인 전",
+                style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted, modifier = Modifier.padding(horizontal = 8.dp))
+            MapOptionsMenu(mapActions, enabled = viewport != null)
+            FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { recenter() }, enabled = viewport != null,
                 modifier = Modifier.size(48.dp).testTag("map_recenter")) {
-                Icon(Icons.Outlined.MyLocation, if (fitRoute) "전체 러닝 경로 보기" else "현재 GPS 위치로 이동")
+                Icon(Icons.Outlined.MyLocation, recenterLabel)
             }
         }
         Box(Modifier.weight(1f).fillMaxWidth().clipToBounds().onSizeChanged { canvasSize = it }
-            .pointerInput(tileSize, fitRoute) {
-                fun transform(centroid: Offset, pan: Offset, zoom: Float) {
+            .pointerInput(tileSize, fitRoute, interactiveMap, viewport != null) {
+                if (viewport == null) return@pointerInput
+                detectTransformGestures { centroid, pan, zoom, _ ->
                     viewport?.let { current ->
                         manual = true
-                        viewport = current.pan(pan.x.toDouble(), pan.y.toDouble(), tileSize)
-                            .zoomAt(zoom.toDouble(), centroid.x.toDouble(), centroid.y.toDouble(),
-                                size.width.toDouble(), size.height.toDouble(), tileSize)
+                        viewport = current.zoomAt(zoom.toDouble(), centroid.x.toDouble(), centroid.y.toDouble(),
+                            size.width.toDouble(), size.height.toDouble(), tileSize)
+                            .pan(pan.x.toDouble(), pan.y.toDouble(), tileSize)
                     }
                 }
-                // Both history and live maps are embedded in scrolling pages.
-                // Only two-finger gestures consume movement; one finger keeps
-                // the page and its controls below the map reachable.
-                awaitEachGesture {
-                    awaitFirstDown(requireUnconsumed = false)
-                    do {
-                        val event = awaitPointerEvent()
-                        if (event.changes.count { it.pressed && it.previousPressed } >= 2) {
-                            transform(event.calculateCentroid(), event.calculatePan(), event.calculateZoom())
-                            event.changes.forEach { it.consume() }
-                        }
-                    } while (event.changes.any { it.pressed })
-                }
             }.testTag("route_map_viewport").semantics {
-                contentDescription = if (route.isEmpty() && validRunners.isEmpty()) "표시할 위치가 없습니다" else
+                contentDescription = if (route.isEmpty() && validRunners.isEmpty() && actualCenter == null && !interactiveMap) "표시할 위치가 없습니다" else
                     (if (route.isNotEmpty()) "실제 GPS 경로 ${route.size}개 지점. 시작과 끝을 표시하고 중단 구간은 연결하지 않습니다."
-                        else "위치를 공유한 러너 ${validRunners.size}명.") +
+                        else if (validRunners.isNotEmpty()) "위치를 공유한 러너 ${validRunners.size}명."
+                        else if (actualCenter != null) "확인된 위치 주변 지도." else "세계 지도. 내 위치는 확인되지 않았습니다.") +
                         (if (failed) " 배경 지도 연결 실패. 위치 표시는 유지합니다." else if (loading) " 배경 지도를 불러오는 중입니다." else "") +
-                        " 두 손가락으로 지도를 이동하거나 확대합니다."
+                        " 드래그로 지도를 이동하고 두 손가락으로 확대하거나 축소합니다."
+                customActions = mapActions
             }) {
             Canvas(Modifier.fillMaxSize()) {
                 val view = viewport ?: return@Canvas
@@ -211,15 +243,54 @@ internal fun RouteTileMap(points: List<TrackPoint>, runners: List<LiveRunner>, m
                     caption(if (runner.memberCount > 1) "${runner.name} · ${runner.memberCount}명" else runner.name, position, below = true)
                 }
             }
-            if (route.isEmpty() && validRunners.isEmpty()) Text(
+            if (route.isEmpty() && validRunners.isEmpty() && actualCenter == null && !interactiveMap) Text(
                 if (points.isEmpty() && fitRoute) "위치가 저장되지 않은 기록이에요" else "위치 정보 없음",
                 style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
                 modifier = Modifier.align(Alignment.Center).padding(horizontal = 12.dp, vertical = if (fitRoute) 12.dp else 4.dp).testTag("map_location_empty"))
             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).testTag("map_tiles_loading"))
         }
+        if (fitRoute && !interactiveMap) MapPageScrollHint()
         TextButton(onClick = { uri.openUri("https://www.openstreetmap.org/copyright") },
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("osm_attribution"), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
             Text("© OpenStreetMap contributors", style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
+
+@Composable
+internal fun MapPageScrollHint() {
+    Text("본문은 바깥에서 스크롤", style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp).testTag("map_page_scroll_hint"))
+}
+
+private class MapMenuLifetime { var active = true }
+
+/** Pointer alternative to pinch/drag without permanent +/- buttons. A delayed
+ * item/dismiss callback cannot act on a reopened menu or a disposed map. */
+@Composable
+internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: Boolean = true) {
+    var expanded by remember { mutableStateOf(false) }
+    var request by remember { mutableIntStateOf(0) }
+    val latestActions by rememberUpdatedState(actions)
+    val lifetime = remember { MapMenuLifetime() }
+    DisposableEffect(lifetime) { onDispose { lifetime.active = false } }
+    val currentRequest = request
+    Box {
+        FilledTonalIconButton(shape = RunmoniShapes.Action, enabled = enabled,
+            onClick = { request++; expanded = true }, modifier = Modifier.size(48.dp).testTag("map_options")) {
+            Icon(Icons.Outlined.MoreVert, "지도 옵션")
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = {
+            if (lifetime.active && request == currentRequest) expanded = false
+        }) {
+            actions.forEach { action ->
+                DropdownMenuItem(text = { Text(action.label) }, modifier = Modifier.heightIn(min = 48.dp), onClick = {
+                    if (lifetime.active && expanded && request == currentRequest) {
+                        expanded = false
+                        latestActions.singleOrNull { it.label == action.label }?.action?.invoke()
+                    }
+                })
+            }
         }
     }
 }

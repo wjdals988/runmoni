@@ -1,0 +1,8 @@
+
+com.runmoni.app.data.FirebaseNicknameTest:.
+
+Time: 15.107
+
+OK (1 test)
+
+

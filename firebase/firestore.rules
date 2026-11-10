@@ -52,6 +52,7 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function validRoomId(id) { return id is string && id.matches('^[A-Za-z0-9]{20}$'); }
     function profilePath(uid) { return /databases/$(database)/documents/communityProfiles/$(uid); }
+    function nicknamePath(key) { return /databases/$(database)/documents/communityNicknames/$(key); }
     function roomPath(id) { return /databases/$(database)/documents/communityRooms/$(id); }
     function memberPath(id, uid) { return /databases/$(database)/documents/communityRooms/$(id)/members/$(uid); }
     function messagePath(id, mid) { return /databases/$(database)/documents/communityRooms/$(id)/messages/$(mid); }
@@ -71,14 +72,36 @@ service cloud.firestore {
       return request.query.limit != null && request.query.limit > 0 && request.query.limit <= maximum;
     }
     function validNickname(name) { return name is string && name.matches('^[A-Za-z0-9_가-힣 -]{2,24}$'); }
+    function validNewNickname(name) {
+      return name is string && name.size() >= 2 && name.size() <= 16
+        && name.matches('^[A-Za-z0-9_가-힣-]+( [A-Za-z0-9_가-힣-]+)*$')
+        && name.matches('.*[A-Za-z0-9가-힣].*');
+    }
     function validProfile(d) {
       return d.keys().hasAll(['nickname', 'createdAt', 'updatedAt', 'joinedRoomIds', 'lastRoomId', 'createdRoomCount', 'lastRoomCreatedAt'])
-        && d.keys().hasOnly(['nickname', 'createdAt', 'updatedAt', 'joinedRoomIds', 'lastRoomId', 'createdRoomCount', 'lastRoomCreatedAt'])
+        && d.keys().hasOnly(['nickname', 'nicknameKey', 'createdAt', 'updatedAt', 'joinedRoomIds', 'lastRoomId', 'createdRoomCount', 'lastRoomCreatedAt'])
         && validNickname(d.nickname) && d.createdAt is timestamp && d.updatedAt == request.time
+        && (!('nicknameKey' in d) || (validNewNickname(d.nickname) && d.nicknameKey is string && d.nicknameKey == d.nickname.lower()))
         && d.joinedRoomIds is list && d.joinedRoomIds.size() <= 100
         && d.joinedRoomIds.toSet().size() == d.joinedRoomIds.size()
         && d.lastRoomId is string && d.createdRoomCount is int && d.createdRoomCount >= 0 && d.createdRoomCount <= 1000000
         && d.lastRoomCreatedAt is timestamp;
+    }
+    function claimedNicknameAfter(d, uid) {
+      return 'nicknameKey' in d && validNewNickname(d.nickname) && d.nicknameKey == d.nickname.lower()
+        && getAfter(nicknamePath(d.nicknameKey)).data.uid == uid
+        && getAfter(nicknamePath(d.nicknameKey)).data.nickname == d.nickname
+        && getAfter(nicknamePath(d.nicknameKey)).data.updatedAt == request.time;
+    }
+    function previousNicknameReleased(uid) {
+      let key = resource.data.get('nicknameKey', '');
+      return key == '' || key == request.resource.data.nicknameKey
+        || !exists(nicknamePath(key)) || get(nicknamePath(key)).data.uid != uid
+        || !existsAfter(nicknamePath(key));
+    }
+    function profileNicknameUpdate(uid) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname', 'nicknameKey', 'updatedAt'])
+        && claimedNicknameAfter(request.resource.data, uid) && previousNicknameReleased(uid);
     }
     function profileMembershipUpdate(uid) {
       let old = resource.data;
@@ -103,12 +126,35 @@ service cloud.firestore {
       allow get: if isOwner(uid);
       allow list, delete: if false;
       allow create: if isOwner(uid) && validProfile(request.resource.data)
+        && claimedNicknameAfter(request.resource.data, uid)
         && request.resource.data.createdAt == request.time && request.resource.data.joinedRoomIds.size() == 0
         && request.resource.data.lastRoomId == '' && request.resource.data.createdRoomCount == 0
         && request.resource.data.lastRoomCreatedAt == timestamp.value(0);
       allow update: if isOwner(uid) && validProfile(request.resource.data)
         && request.resource.data.createdAt == resource.data.createdAt
-        && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nickname', 'updatedAt']) || profileMembershipUpdate(uid));
+        // Legacy names stay readable and usable; new names cannot bypass a reservation.
+        && (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt'])
+          || profileNicknameUpdate(uid) || profileMembershipUpdate(uid));
+    }
+    match /communityNicknames/{key} {
+      function validClaim(d) {
+        return d.keys().hasAll(['uid', 'nickname', 'createdAt', 'updatedAt'])
+          && d.keys().hasOnly(['uid', 'nickname', 'createdAt', 'updatedAt'])
+          && isOwner(d.uid) && validNewNickname(d.nickname) && key == d.nickname.lower()
+          && d.createdAt is timestamp && d.updatedAt == request.time
+          && getAfter(profilePath(d.uid)).data.nicknameKey == key
+          && getAfter(profilePath(d.uid)).data.nickname == d.nickname;
+      }
+      // Availability is an authenticated, exact-key read; profiles and directory lists remain private.
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if validClaim(request.resource.data) && request.resource.data.createdAt == request.time;
+      allow update: if isOwner(resource.data.uid) && validClaim(request.resource.data)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isOwner(resource.data.uid)
+        && existsAfter(profilePath(resource.data.uid))
+        && getAfter(profilePath(resource.data.uid)).data.get('nicknameKey', '') != key;
     }
     function linkedAfter(id) { return id in getAfter(profilePath(request.auth.uid)).data.joinedRoomIds; }
     function validRoom(d) {
@@ -209,7 +255,74 @@ service cloud.firestore {
       }
     }
 
-    // Wallets, rewards, original tracks, presence and every other path stay denied.
+    // Public discovery stores approximate cells only. Consent authority is private.
+    function runnerConsentPath(uid) { return /databases/$(database)/documents/runnerConsents/$(uid); }
+    function validRunnerToken(token) { return token is string && token.matches('^[A-Za-z0-9_-]{16,64}$'); }
+    function validRunnerConsent(d) {
+      return d.keys().hasAll(['runSessionToken', 'enabled', 'updatedAt'])
+        && d.keys().hasOnly(['runSessionToken', 'enabled', 'updatedAt'])
+        && validRunnerToken(d.runSessionToken) && d.enabled is bool && d.updatedAt == request.time;
+    }
+    function runnerAvatar(d) {
+      let fields = ['hair', 'headwear', 'face', 'top', 'bottom', 'costume', 'socks', 'shoes', 'ear', 'eyewear', 'wrist', 'waist', 'hydration', 'gender', 'colors'];
+      return d is map && d.keys().hasAll(fields) && d.keys().hasOnly(fields)
+        && d.gender in ['male', 'female']
+        && d.hair is int && d.hair >= 0 && d.hair <= 3
+        && d.headwear is int && d.headwear >= 0 && d.headwear <= 3
+        && d.face is int && d.face >= 0 && d.face <= 3
+        && d.top is int && d.top >= 0 && d.top <= 5
+        && d.bottom is int && d.bottom >= 0 && d.bottom <= 5
+        && d.costume is int && d.costume >= 0 && d.costume <= 5
+        && d.socks is int && d.socks >= 0 && d.socks <= 3
+        && d.shoes is int && d.shoes >= 0 && d.shoes <= 3
+        && d.ear is int && d.ear >= 0 && d.ear <= 3
+        && d.eyewear is int && d.eyewear >= 0 && d.eyewear <= 3
+        && d.wrist is int && d.wrist >= 0 && d.wrist <= 3
+        && d.waist is int && d.waist >= 0 && d.waist <= 3
+        && d.hydration is int && d.hydration >= 0 && d.hydration <= 3
+        && d.colors is map && d.colors.keys().hasAll(['top', 'bottom', 'shoes'])
+        && d.colors.keys().hasOnly(['top', 'bottom', 'shoes'])
+        && d.colors.top is int && d.colors.top >= 0 && d.colors.top <= 5
+        && d.colors.bottom is int && d.colors.bottom >= 0 && d.colors.bottom <= 5
+        && d.colors.shoes is int && d.colors.shoes >= 0 && d.colors.shoes <= 5;
+    }
+    function validRunnerPresence(uid, d) {
+      let fields = ['runSessionToken', 'latitudeE3', 'longitudeE3', 'latBand', 'lonBand', 'nickname', 'avatar', 'visibility', 'adultConfirmed', 'updatedAt', 'expiresAt'];
+      let consent = getAfter(runnerConsentPath(uid)).data;
+      return d.keys().hasAll(fields) && d.keys().hasOnly(fields)
+        && d.latitudeE3 is int && d.latitudeE3 >= -85000 && d.latitudeE3 <= 85000
+        && d.longitudeE3 is int && d.longitudeE3 >= -180000 && d.longitudeE3 <= 179999
+        && d.latBand is int && d.latBand == math.floor(d.latitudeE3 / 1000.0)
+        && d.lonBand is int && d.lonBand == math.floor(d.longitudeE3 / 1000.0)
+        && d.visibility == 'approximate' && d.adultConfirmed == true
+        && validRunnerToken(d.runSessionToken)
+        && consent.enabled == true && consent.runSessionToken == d.runSessionToken
+        && validNickname(d.nickname) && d.nickname == get(profilePath(uid)).data.nickname
+        && runnerAvatar(d.avatar) && d.updatedAt == request.time
+        && d.expiresAt is timestamp
+        && d.expiresAt >= request.time + duration.value(45, 's')
+        && d.expiresAt <= request.time + duration.value(75, 's');
+    }
+    match /runnerConsents/{uid} {
+      allow get: if isOwner(uid);
+      allow list, delete: if false;
+      allow create: if isOwner(uid) && validRunnerConsent(request.resource.data)
+        && (!request.resource.data.enabled || exists(profilePath(uid)));
+      allow update: if isOwner(uid) && validRunnerConsent(request.resource.data)
+        && (request.resource.data.enabled ? exists(profilePath(uid))
+          : request.resource.data.runSessionToken == resource.data.runSessionToken);
+    }
+    match /runnerPresence/{uid} {
+      allow get: if isOwner(uid) || (signedIn() && exists(profilePath(request.auth.uid)) && resource.data.expiresAt > request.time);
+      // The client must use a future expiry lower bound. Reading every marker
+      // and filtering expired data locally is deliberately not sufficient.
+      allow list: if signedIn() && exists(profilePath(request.auth.uid)) && boundedList(100)
+        && resource.data.expiresAt > request.time;
+      allow create, update: if isOwner(uid) && exists(profilePath(uid)) && validRunnerPresence(uid, request.resource.data);
+      allow delete: if isOwner(uid);
+    }
+
+    // Wallets, rewards, original tracks and every other path stay denied.
     match /{document=**} {
       allow read, write: if false;
     }

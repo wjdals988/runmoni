@@ -1,12 +1,41 @@
 {
-  "indexes": [{
-    "collectionGroup": "communityRooms",
-    "queryScope": "COLLECTION",
-    "fields": [
-      {"fieldPath": "visibility", "order": "ASCENDING"},
-      {"fieldPath": "kind", "order": "ASCENDING"},
-      {"fieldPath": "createdAt", "order": "DESCENDING"}
-    ]
-  }],
+  "indexes": [
+    {
+      "collectionGroup": "communityRooms",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "visibility",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "kind",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "runnerPresence",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "latBand",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lonBand",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "expiresAt",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

@@ -21,10 +21,11 @@ import com.runmoni.app.domain.*
 internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, onSignIn: () -> Unit = {}, onDismiss: () -> Unit) {
     val party = state.parties.firstOrNull { it.id == original.id } ?: original
     val crew = state.crews.firstOrNull { it.id == party.crewId }
-    var confirmation by remember { mutableStateOf(false) }
+    var confirmation by remember(party.id, state.communityUid) { mutableStateOf(false) }
+    val partyScroll = rememberScrollState()
     val initiallyPresent = remember { state.parties.any { it.id == original.id } }
     LaunchedEffect(state.parties) { if (initiallyPresent && state.parties.none { it.id == original.id }) onDismiss() }
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
+    if (!confirmation) Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
         Surface(Modifier.fillMaxSize().testTag("party_detail"), color = RunmoniColors.Cream) {
             Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
@@ -40,7 +41,7 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                 HorizontalDivider(color = RunmoniColors.Line)
                 Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize()
-                        .verticalScroll(rememberScrollState()).testTag("party_content")
+                        .verticalScroll(partyScroll).testTag("party_content")
                         .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
                         verticalArrangement = Arrangement.spacedBy(RunmoniLayout.PageGap)) {
                         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -95,7 +96,7 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
             }
         }
     }
-    if (confirmation) AlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { confirmation = false }, title = { Text("파티를 삭제할까요?") },
+    if (confirmation) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { confirmation = false }, title = { Text("파티를 삭제할까요?") },
         text = { DialogMessage("크루의 파티 목록에서 사라지고 더 이상 참가하거나 채팅할 수 없어요. 대화 기록과 내 러닝 기록은 보관돼요.") },
         confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false; actions.deleteParty(party.id) }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_party")) { Text("삭제", color = MaterialTheme.colorScheme.error) } },
         dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = false }, modifier = Modifier.heightIn(min = 48.dp).testTag("cancel_delete_party")) { Text("유지하기") } })

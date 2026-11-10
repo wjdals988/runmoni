@@ -141,6 +141,8 @@ class AppInformationTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("confirm_download_update").assertIsDisplayed()
         compose.onNodeWithTag("cancel_app_update").performClick()
         compose.onNodeWithTag("close_app_information").performClick()
+        compose.onNodeWithTag("settings_screen").assertIsDisplayed()
+        compose.runOnIdle { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.onNodeWithTag("top_app_version_red_dot", useUnmergedTree = true).assertExists()
     }
 

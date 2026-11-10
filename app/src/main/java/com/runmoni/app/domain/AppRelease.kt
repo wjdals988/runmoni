@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.4.0-dev", "2026-11-10", "팝업·프로필·러너 지도 · 실기기 검증 전", listOf(
+        "팝업의 상단 닫기와 본문 스크롤을 정리하고 아이콘을 통일했어요.",
+        "홈에서 시각과 근처 예보, 러닝·옷차림 안내를 확인할 수 있어요.",
+        "탐색은 드래그·핀치 지도와 동의한 러너의 약 100m 위치 공유로 정리했어요.",
+        "닉네임을 한 곳에서 편집하고 온라인 예약으로 중복을 확인해요. 새 서버 규칙·색인 게시가 필요해요.",
+    )),
     AppVersionEntry("0.3.9-dev", "2026-11-10", "러닝 위젯·경로 지도·기록 페이지 · 실기기 검증 전", listOf(
         "홈 화면 위젯에서 진행 중 거리·시간을 보고 일시정지·재개할 수 있어요. 종료는 앱에서 확인해요.",
         "러닝 기록을 전체 페이지로 열고 실제 지도 위에서 경로를 확인할 수 있어요.",

@@ -1,0 +1,2 @@
+consumer closet actual Android viewport: waitMillis=42; timeoutMillis=120000
+consumer settings actual Android viewport: waitMillis=43; timeoutMillis=120000

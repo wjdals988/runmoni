@@ -1,0 +1,1 @@
+native320/font2 information fixed close: waitMillis=40; timeoutMillis=120000

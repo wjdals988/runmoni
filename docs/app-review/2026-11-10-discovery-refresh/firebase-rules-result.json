@@ -1,0 +1,25 @@
+{
+  "project": "demo-runmoni",
+  "remoteFirebaseModified": false,
+  "firstAttempt": {
+    "tests": 160,
+    "pass": 159,
+    "fail": 1,
+    "reason": "Local helper error before the server permission assertion; rules unchanged"
+  },
+  "secondAttempt": {
+    "tests": 160,
+    "pass": 160,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceHashes": {
+    "firebase/firestore.rules": "8af3d6cf02774567818a0980b70cdb43f1a7c6489f6d613199669b285d13b183",
+    "firebase/firestore.indexes.json": "56ca284f22e3906cd44db0508fef0e053f647456b716c1031c9a5991a6b236e8",
+    "firebase/tests/community.rules.test.mjs": "936ce248860b0aca0e1494341fb161ed970a8783f38c7513217b1ed70f705774",
+    "firebase/tests/firestore.rules.test.mjs": "3800375b7612599dd752260c3c565c59f912edfa52201a8861496f5d4113ffab",
+    "firebase/tests/nickname.rules.test.mjs": "ab54e0fa43638dd36079b09fd02afe12f5afb571be16325639fc439e4f03f640",
+    "firebase/tests/presence.rules.test.mjs": "d2641a9e564275c8f543aa031763ac1411e12b737f330c8ba3814c56e41f36a0"
+  }
+}

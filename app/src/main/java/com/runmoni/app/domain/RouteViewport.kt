@@ -59,19 +59,58 @@ data class MapTileKey(val zoom: Int, val x: Int, val y: Int) {
 data class RouteTilePlacement(val tile: MapTileKey, val left: Double, val top: Double, val size: Double)
 data class RouteScreenPoint(val x: Double, val y: Double)
 
+/** An actual location supplied by the host; invalid fixes are ignored by UI. */
+data class RouteMapCenter(val latitude: Double, val longitude: Double, val zoom: Double = 15.5) {
+    fun valid(): Boolean = latitude.isFinite() && longitude.isFinite() && zoom.isFinite() &&
+        latitude in -90.0..90.0 && longitude in -180.0..180.0 && zoom in 0.0..18.0
+    fun viewport(): RouteViewport? = if (valid()) RouteViewport(Mercator.x(longitude), Mercator.y(latitude), zoom) else null
+}
+
+/** Visible geography, including a date-line crossing rather than a huge
+ * longitude box. A whole-world viewport uses west=-180/east=180. */
+data class RouteMapBounds(val south: Double, val west: Double, val north: Double, val east: Double,
+    val crossesAntimeridian: Boolean = west > east) {
+    fun contains(latitude: Double, longitude: Double): Boolean {
+        if (!latitude.isFinite() || !longitude.isFinite() || latitude !in south..north || longitude !in -180.0..180.0) return false
+        fun within(value: Double) = if (crossesAntimeridian) value >= west || value <= east else value in west..east
+        return within(longitude) || when (longitude) {
+            180.0 -> within(-180.0)
+            -180.0 -> within(180.0)
+            else -> false
+        }
+    }
+}
+
 data class RouteViewport(val centerX: Double, val centerY: Double, val zoom: Double) {
     private fun scale(tileSize: Double) = tileSize * 2.0.pow(zoom)
     fun screen(x: Double, y: Double, width: Double, height: Double, tileSize: Double = 256.0): RouteScreenPoint =
         RouteScreenPoint(width / 2 + (Mercator.around(x, centerX) - centerX) * scale(tileSize), height / 2 + (y - centerY) * scale(tileSize))
-    fun pan(dx: Double, dy: Double, tileSize: Double = 256.0) = copy(
-        centerX = centerX - dx / scale(tileSize), centerY = (centerY - dy / scale(tileSize)).coerceIn(0.0, 1.0))
+    fun pan(dx: Double, dy: Double, tileSize: Double = 256.0): RouteViewport {
+        if (!dx.isFinite() || !dy.isFinite() || !tileSize.isFinite() || tileSize <= 0) return this
+        val x = centerX - dx / scale(tileSize)
+        return copy(centerX = x - floor(x), centerY = (centerY - dy / scale(tileSize)).coerceIn(0.0, 1.0))
+    }
     fun zoomAt(factor: Double, x: Double, y: Double, width: Double, height: Double, tileSize: Double = 256.0): RouteViewport {
-        if (!factor.isFinite() || factor <= 0) return this
+        if (!factor.isFinite() || factor <= 0 || !x.isFinite() || !y.isFinite() || !width.isFinite() ||
+            !height.isFinite() || width <= 0 || height <= 0 || !tileSize.isFinite() || tileSize <= 0) return this
         val next = (zoom + log2(factor)).coerceIn(0.0, 18.0)
         val oldScale = scale(tileSize)
         val newScale = tileSize * 2.0.pow(next)
         return RouteViewport(centerX + (x - width / 2) * (1 / oldScale - 1 / newScale),
             (centerY + (y - height / 2) * (1 / oldScale - 1 / newScale)).coerceIn(0.0, 1.0), next)
+    }
+
+    fun bounds(width: Double, height: Double, tileSize: Double = 256.0): RouteMapBounds? {
+        if (!width.isFinite() || !height.isFinite() || width <= 0 || height <= 0 || !tileSize.isFinite() || tileSize <= 0 ||
+            !centerX.isFinite() || !centerY.isFinite() || !zoom.isFinite()) return null
+        val span = width / scale(tileSize)
+        val halfHeight = height / (2 * scale(tileSize))
+        val north = Mercator.latitude(centerY - halfHeight)
+        val south = Mercator.latitude(centerY + halfHeight)
+        if (span >= 1.0) return RouteMapBounds(south, -180.0, north, 180.0)
+        val west = centerX - span / 2
+        val east = centerX + span / 2
+        return RouteMapBounds(south, Mercator.longitude(west), north, Mercator.longitude(east), floor(west) != floor(east))
     }
 
     /** Only rectangles intersecting the visible canvas. Lower raster resolution
@@ -114,5 +153,6 @@ data class RouteViewport(val centerX: Double, val centerY: Double, val zoom: Dou
             return RouteViewport((minX + maxX) / 2, (minY + maxY) / 2, log2(scale / tileSize).coerceIn(0.0, 18.0))
         }
         fun follow(point: RouteMapPoint) = RouteViewport(point.x, point.y, 16.0)
+        fun world() = RouteViewport(.5, .5, 0.0)
     }
 }

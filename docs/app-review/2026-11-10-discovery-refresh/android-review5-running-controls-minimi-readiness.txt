@@ -1,0 +1,9 @@
+running 320 / 1.0: waitMillis=39; timeoutMillis=120000
+running 320 / 1.5: waitMillis=24; timeoutMillis=120000
+running 320 / 2.0: waitMillis=11; timeoutMillis=120000
+running 360 / 1.0: waitMillis=49; timeoutMillis=120000
+running 360 / 1.5: waitMillis=26; timeoutMillis=120000
+running 360 / 2.0: waitMillis=23; timeoutMillis=120000
+running 411 / 1.0: waitMillis=13; timeoutMillis=120000
+running 411 / 1.5: waitMillis=18; timeoutMillis=120000
+running 411 / 2.0: waitMillis=11; timeoutMillis=120000

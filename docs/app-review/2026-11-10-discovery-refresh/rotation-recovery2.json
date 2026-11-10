@@ -1,0 +1,42 @@
+{
+  "passed": false,
+  "completed": true,
+  "executedDriver": "rotation-recovery2-executed-driver.py",
+  "executedDriverSha256": "b65a754354c330c9a352d98012dffdcba0c3e0ec167a428240f3da6342fa7fdc",
+  "startedAtUtc": "2026-11-10T11:03:11.379181+00:00",
+  "appOrTestApkChanged": false,
+  "userDataReset": false,
+  "networkOrFirewallModified": false,
+  "allOsBytesExactlyRestoredClaimed": false,
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-10T11:06:28.271380+00:00",
+  "priorAttempt": {
+    "file": "landscape1.json",
+    "sha256": "eedb3f2404e4510272b173e6c0d304317f7d37a96c0d9b6d83244e2640779b38",
+    "wholeAttemptPassed": false,
+    "productMethodsPassed": 1
+  },
+  "before": {
+    "effective": false,
+    "persistedPolicy": "disabled"
+  },
+  "target": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "beforeDisplayFileSha256": "37c0dd5078b73bbd26552582a706fd07af64c70e479a1c94e9fcaa6cfcbd56d6",
+  "beforeDisplayFileStat": "1000:1000:600",
+  "frameworkPidBefore": "1951",
+  "onlyOwnedAttributeChanged": true,
+  "otherFileBytesPreserved": true,
+  "displayFileOwnerModePreserved": true,
+  "restoredDisplayFileSha256": "cb131f4c234f6c81b3bf18963d8f12493bc5c8778b64345ad4edb5f34a645046",
+  "frameworkPidAfter": "3707",
+  "frameworkRestarted": true,
+  "failureType": "TimeoutExpired",
+  "failure": "Inspect preserved local recovery log",
+  "driverSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-10T11:06:28.271368+00:00"
+}

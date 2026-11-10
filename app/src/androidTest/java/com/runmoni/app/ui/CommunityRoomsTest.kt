@@ -25,10 +25,10 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("crew_${crew.id}").performScrollTo().performClick()
         compose.onNodeWithTag("join_crew_${crew.id}").performScrollTo().performClick()
         compose.onNodeWithTag("invite_code").assertDoesNotExist()
-        compose.onNodeWithTag("display_name").performTextClearance()
-        compose.onNodeWithTag("display_name").performTextInput("방문 러너")
-        compose.onNodeWithTag("adult_checkbox").performScrollTo().performClick()
-        compose.onNodeWithTag("confirm_sign_in").performClick()
+        compose.onNodeWithTag("profile_name").performTextClearance()
+        compose.onNodeWithTag("profile_name").performTextInput("방문 러너")
+        compose.onNode(isToggleable()).performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().assertIsDisplayed().assertIsEnabled().performClick()
         compose.runOnIdle { assertEquals("" to "방문 러너", actions.login); state.value = state.value.copy(signedIn = true, communityGuest = true) }
         compose.waitForIdle()
         compose.runOnIdle { assertEquals(listOf(crew.id), actions.joinedCrews); state.value = state.value.copy(crews = listOf(crew.copy(joined = true))) }

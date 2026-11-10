@@ -1,0 +1,35 @@
+{
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "reviewScope": "Root viewed four original MainActivity PNGs with view_image; guest RunnerReview and synthetic public Seoul GPS only, no real profile or running records. Device UTC/API29/TCG/local TEST debug, not signed-release runtime.",
+  "images": [
+    {
+      "file": "live1-home-weather.png",
+      "sha256": "06a3ca96ae3ef9a9cde255c4312730aed2b781f3f3ac67dc558b8592014726c1",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity"
+    },
+    {
+      "file": "live1-explore-map.png",
+      "sha256": "be84a2932d961dd8a8f1380dde10e64e8111e99dd76e25fb091e1607e11cabe2",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity"
+    },
+    {
+      "file": "live1-unified-profile.png",
+      "sha256": "843a583fbaf9ef22dd9f2bf2bbba6890295f77fd6b89d6e5c48bc0bf7fae9246",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity"
+    },
+    {
+      "file": "live1-app-information.png",
+      "sha256": "72d47c8dfcbcfbc2cf5be31b4b737bc264e854f3aa3d797174ecff776792a823",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity"
+    }
+  ]
+}

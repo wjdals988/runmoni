@@ -10,6 +10,7 @@ const RID='A'.repeat(20), PID='B'.repeat(20);
 const zero=Timestamp.fromMillis(0);
 const db=(uid)=>uid ? env.authenticatedContext(uid,{firebase:{sign_in_provider:'anonymous'}}).firestore() : env.unauthenticatedContext().firestore();
 const profile=(d,u)=>doc(d,'communityProfiles',u);
+const nickname=(d,key)=>doc(d,'communityNicknames',key);
 const room=(d,id=RID)=>doc(d,'communityRooms',id);
 const member=(d,u,id=RID)=>doc(d,'communityRooms',id,'members',u);
 const message=(d,id='M'.repeat(20),rid=RID)=>doc(d,'communityRooms',rid,'messages',id);
@@ -23,7 +24,10 @@ beforeEach(async()=>env.clearFirestore());
 after(async()=>env?.cleanup());
 async function connect(u){
   const d=db(u);
-  await setDoc(profile(d,u),{nickname:u,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),joinedRoomIds:[],lastRoomId:'',createdRoomCount:0,lastRoomCreatedAt:zero});
+  const b=writeBatch(d), key=u.toLowerCase();
+  b.set(profile(d,u),{nickname:u,nicknameKey:key,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),joinedRoomIds:[],lastRoomId:'',createdRoomCount:0,lastRoomCreatedAt:zero});
+  b.set(nickname(d,key),{uid:u,nickname:u,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  await b.commit();
   return d;
 }
 function roomData(u,overrides={}){
@@ -152,7 +156,11 @@ test('members cannot falsify nickname or reset throttle without a corresponding 
  const {a,b}=await basic();await join(b,'bobby');
  await assertFails(updateDoc(member(b,'bobby'),{nickname:'alice'}));
  await assertFails(updateDoc(member(b,'bobby'),{lastMessageAt:serverTimestamp(),lastMessageId:'Z'.repeat(20)}));
- await updateDoc(profile(b,'bobby'),{nickname:'새이름',updatedAt:serverTimestamp()});
+ const rename=writeBatch(b);
+ rename.update(profile(b,'bobby'),{nickname:'새이름',nicknameKey:'새이름',updatedAt:serverTimestamp()});
+ rename.set(nickname(b,'새이름'),{uid:'bobby',nickname:'새이름',createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+ rename.delete(nickname(b,'bobby'));
+ await rename.commit();
  await assertSucceeds(send(b,'bobby',{nickname:'새이름'}));
 });
 for(const [name,override] of [ ['extra wallet field',{mileage:99999}],['private visibility',{visibility:'private'}],['owner spoof',{ownerUid:'bobby'}],
