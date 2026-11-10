@@ -1,0 +1,25 @@
+
+com.runmoni.app.avatar.ExpandedWardrobeTest:..
+Error in newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending(com.runmoni.app.avatar.ExpandedWardrobeTest):
+java.lang.AssertionError: expected:<AvatarStyle(hair=0, top=3, bottom=2, shoes=2, accessory=0, eyewear=0, wrist=2, waist=0, hydration=0, face=0, socks=1, headwear=3, ear=null, costume=0, gender=MALE, runningKitColors=RunningKitColors(top=3, bottom=4, shoes=5))> but was:<AvatarStyle(hair=0, top=3, bottom=2, shoes=2, accessory=0, eyewear=0, wrist=2, waist=0, hydration=0, face=0, socks=1, headwear=3, ear=0, costume=0, gender=MALE, runningKitColors=RunningKitColors(top=3, bottom=4, shoes=5))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.avatar.ExpandedWardrobeTest.newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending(ExpandedWardrobeTest.kt:190)
+.
+
+Time: 187.653
+There was 1 failure:
+1) newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending(com.runmoni.app.avatar.ExpandedWardrobeTest)
+java.lang.AssertionError: expected:<AvatarStyle(hair=0, top=3, bottom=2, shoes=2, accessory=0, eyewear=0, wrist=2, waist=0, hydration=0, face=0, socks=1, headwear=3, ear=null, costume=0, gender=MALE, runningKitColors=RunningKitColors(top=3, bottom=4, shoes=5))> but was:<AvatarStyle(hair=0, top=3, bottom=2, shoes=2, accessory=0, eyewear=0, wrist=2, waist=0, hydration=0, face=0, socks=1, headwear=3, ear=0, costume=0, gender=MALE, runningKitColors=RunningKitColors(top=3, bottom=4, shoes=5))>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at com.runmoni.app.avatar.ExpandedWardrobeTest.newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending(ExpandedWardrobeTest.kt:190)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+

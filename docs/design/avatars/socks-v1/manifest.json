@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "maskVersion": "approved-socks-v1",
+  "canvas": [
+    2048,
+    768
+  ],
+  "cell": [
+    256,
+    384
+  ],
+  "frames": 8,
+  "rows": 2,
+  "sourceAsset": "avatars/v0.3.0/running-motion.png",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "fabricMaskSha256": "462433ce98a7a2f52c98823d851bed462418bbab18f4262c75f6113456e74bb5",
+  "wardrobeMaskSha256": "2d0e8375a5644311b1337cd369708d5ebf35e0cef3314d6d7c2145382d650115",
+  "annotationSha256": "2a1ea6488843e237f84871810a3fd88c4447bea8860589787211348d12d997a7",
+  "maskFile": "sock-mask.png",
+  "maskSha256": "dd1dbf5f762e9d219d347d5879a2eeedac7de4397275dbd19645eda8fe4b64a5",
+  "minimumFabricY": [
+    267,
+    267,
+    267,
+    267,
+    267,
+    267,
+    267,
+    267,
+    250,
+    274,
+    274,
+    250,
+    250,
+    274,
+    280,
+    250
+  ],
+  "visibleAnkleFile": "ankle-coverage.png",
+  "visibleAnkleSha256": "2ab1059280b651f21f19130b243bf5808ed655de8fe5e087ea0c9322fcec6ea2",
+  "shoeProtectionFile": "shoe-protection.png",
+  "shoeProtectionSha256": "efb5967982f68cbc38c5e007bff14623b16901a4d0ca4c1c82698d96c917cd14",
+  "knownPixels": [
+    {
+      "gender": "female",
+      "frame": 0,
+      "point": [
+        184,
+        315
+      ],
+      "sourceRgba": [
+        253,
+        171,
+        82,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 0,
+      "point": [
+        211,
+        338
+      ],
+      "sourceRgba": [
+        244,
+        135,
+        121,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 1,
+      "point": [
+        135,
+        290
+      ],
+      "sourceRgba": [
+        226,
+        155,
+        93,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 1,
+      "point": [
+        163,
+        347
+      ],
+      "sourceRgba": [
+        252,
+        84,
+        75,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 2,
+      "point": [
+        137,
+        325
+      ],
+      "sourceRgba": [
+        246,
+        158,
+        83,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 2,
+      "point": [
+        150,
+        345
+      ],
+      "sourceRgba": [
+        254,
+        93,
+        78,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 3,
+      "point": [
+        182,
+        315
+      ],
+      "sourceRgba": [
+        253,
+        223,
+        188,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 3,
+      "point": [
+        206,
+        338
+      ],
+      "sourceRgba": [
+        252,
+        190,
+        181,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 4,
+      "point": [
+        191,
+        315
+      ],
+      "sourceRgba": [
+        254,
+        200,
+        154,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 4,
+      "point": [
+        216,
+        338
+      ],
+      "sourceRgba": [
+        255,
+        255,
+        255,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 5,
+      "point": [
+        148,
+        289
+      ],
+      "sourceRgba": [
+        226,
+        138,
+        88,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 5,
+      "point": [
+        140,
+        345
+      ],
+      "sourceRgba": [
+        249,
+        83,
+        71,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 5,
+      "point": [
+        118,
+        333
+      ],
+      "sourceRgba": [
+        245,
+        201,
+        173,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 6,
+      "point": [
+        124,
+        326
+      ],
+      "sourceRgba": [
+        248,
+        158,
+        63,
+        252
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 6,
+      "point": [
+        151,
+        346
+      ],
+      "sourceRgba": [
+        251,
+        90,
+        83,
+        252
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    },
+    {
+      "gender": "female",
+      "frame": 7,
+      "point": [
+        181,
+        308
+      ],
+      "sourceRgba": [
+        253,
+        173,
+        100,
+        253
+      ],
+      "visibleAnkle": true,
+      "shoeProtected": false
+    },
+    {
+      "gender": "female",
+      "frame": 7,
+      "point": [
+        206,
+        333
+      ],
+      "sourceRgba": [
+        251,
+        251,
+        252,
+        253
+      ],
+      "visibleAnkle": false,
+      "shoeProtected": true
+    }
+  ],
+  "encoding": "A255,R flags(crew1/knee2),G shade0..255,B cuff flags(crew1/knee2)+rib4. A0 copies input.",
+  "visualApproval": "pending",
+  "scope": {
+    "male": "Existing wardrobe coverage bit4 only, excluding all fabric labels and source transparent pixels.",
+    "female": "Existing fabric region2 plus a separate fixed visible-ankle mask. Ankles are existing source pixels within authored ROIs, selected only during compilation; no hidden skin is inferred. This remains a sock overlay on original tights.",
+    "invariants": "Never extend source alpha or touch independently protected source shoe fabric, coral/red footwear, neutral white soles/trim, ink outline, face, hair, or original files. Occluded leg segments may have zero labels."
+  },
+  "authoring": "Fixed source-bound labels from manually proposed axes; no rig, hidden skin, or new source pixels."
+}

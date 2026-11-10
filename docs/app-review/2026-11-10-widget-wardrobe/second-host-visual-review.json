@@ -1,0 +1,16 @@
+{
+  "maskSha256": "c9eb5a40cb7e50b3b8ab2c4948556042fd6bc1cc4f8dde5eef03aa5292d8eff6",
+  "materialResult": {
+    "cases": 208,
+    "changedPixelsAcrossCases": 245392,
+    "alphaPreserved": true,
+    "maskAndInputPreserved": true,
+    "identityAndShoesPreservedBySocks": true,
+    "independentShoeProtectionPreserved": true,
+    "androidExecution": false,
+    "visualApproval": "pending"
+  },
+  "visuallyAccepted": false,
+  "userApproval": false,
+  "issue": "Female folded frames1/2/5/6 wide mask touches thigh above shin; explicit per-cell fabric minimum Y is required, while known visible ankles remain unchanged."
+}

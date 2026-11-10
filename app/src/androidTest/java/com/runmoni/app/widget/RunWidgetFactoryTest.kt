@@ -1,6 +1,8 @@
 package com.runmoni.app.widget
 
 import android.app.PendingIntent
+import android.appwidget.AppWidgetHostView
+import android.content.ComponentName
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Rect
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -42,7 +45,8 @@ class RunWidgetFactoryTest {
         val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { this.fontScale = fontScale })
         lateinit var view: View
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            view = RunWidgetViews.create(display, state, live, minimal).apply(display, null)
+            view = (if (minimal) RunWidgetViews.forSize(display, state, live, 128, 140)
+                else RunWidgetViews.create(display, state, live, minimal = false)).apply(display, null)
             val density = display.resources.displayMetrics.density
             view.measure(View.MeasureSpec.makeMeasureSpec(((if (minimal) 128 else 180) * density).toInt(), View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(((if (minimal) 140 else 200) * density).toInt(), View.MeasureSpec.AT_MOST))
@@ -116,7 +120,9 @@ class RunWidgetFactoryTest {
         assertTrue(button.left >= view.paddingLeft)
         assertTrue(button.right <= view.width - view.paddingRight)
         assertTrue(button.bottom <= view.height - view.paddingBottom)
-        assertTrue(view.findViewById<View>(R.id.run_widget_footer).bottom <= view.height - view.paddingBottom)
+        view.findViewById<View>(R.id.run_widget_footer)?.takeIf { it.visibility == View.VISIBLE }?.let {
+            assertTrue(it.bottom <= view.height - view.paddingBottom)
+        }
         assertTrue(view.contentDescription.toString().contains("1.23 km"))
         assertTrue(view.contentDescription.toString().contains("01:15"))
     }
@@ -141,41 +147,126 @@ class RunWidgetFactoryTest {
     }
 
     @Test fun narrowWidgetMatrixMeasuresWholeTextAndButtonsAtNormalAndEnlargedFontSizes() {
-        val state = snapshot()
-        created += RunWidgetViews.open(context, state)
-        created += RunWidgetViews.control(context, state.runId, RunWidgetControl.PAUSE)
-        created += RunNotifications.activity(context, state.runId, true)
+        val states = listOf(
+            null to false,
+            snapshot() to true,
+            snapshot(run.copy(phase = RunPhase.PAUSED, pauseReason = PauseReason.AUTOMATIC)) to true,
+            snapshot(run.copy(phase = RunPhase.RECOVERY)) to false,
+            snapshot().copy(blocked = true, finishing = true) to true,
+            snapshot(run.copy(distanceMeters = 123_456_789.0, activeDurationMillis = 123L * 3600_000 + 45 * 60_000 + 56_000)) to true,
+        )
+        for ((state, _) in states) rememberIntents(state)
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            for (widthDp in listOf(128, 160, 180)) for (scale in listOf(1f, 1.3f, 1.5f)) {
+            // 112x124 also represents a 128x140 cell with the common 8dp
+            // launcher margins removed. The padding-specific test below uses
+            // this platform's actual value rather than assuming all hosts do.
+            val sizes = listOf(96 to 96, 112 to 124, 128 to 140, 160 to 156, 180 to 156, 256 to 220)
+            for ((state, live) in states) for ((widthDp, heightDp) in sizes) for (scale in listOf(1f, 1.3f, 1.5f, 2f)) {
                 val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = scale })
                 val density = display.resources.displayMetrics.density
                 val expectedWidth = (widthDp * density).toInt()
-                val maximumHeight = (156 * density).toInt()
-                val remote = RunWidgetViews.forSize(display, state, live = true, widthDp = widthDp, heightDp = 156)
+                val maximumHeight = (heightDp * density).toInt()
+                val remote = RunWidgetViews.forSize(display, state, live, widthDp, heightDp)
                 val root = remote.apply(display, FrameLayout(display)) as ViewGroup
                 root.measure(View.MeasureSpec.makeMeasureSpec(expectedWidth, View.MeasureSpec.EXACTLY),
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
-                val label = "width=${widthDp}dp fontScale=$scale"
-                assertTrue("Widget exceeds launcher bounds: $label", root.measuredHeight <= maximumHeight)
-                fun inspect(view: View) {
-                    if (view.visibility != View.VISIBLE) return
-                    val rect = Rect().also { view.getDrawingRect(it); root.offsetDescendantRectToMyCoords(view, it) }
-                    assertTrue("Clipped child at $label: $rect", rect.left >= 0 && rect.top >= 0 && rect.right <= expectedWidth && rect.bottom <= maximumHeight)
-                    if (view is Button) {
-                        assertTrue("Button height at $label", view.height >= 48 * density)
-                        assertTrue("Button width at $label", view.width >= 48 * density)
-                    }
-                    if (view is TextView && view.text.isNotEmpty()) {
-                        val layout = requireNotNull(view.layout)
-                        assertEquals("Truncated text at $label", view.text.length, layout.getLineEnd(layout.lineCount - 1))
-                        assertTrue("Text height at $label", layout.getLineBottom(layout.lineCount - 1) <= view.height - view.compoundPaddingTop - view.compoundPaddingBottom)
-                    }
-                    if (view is ViewGroup) (0 until view.childCount).forEach { inspect(view.getChildAt(it)) }
+                val label = "${widthDp}x${heightDp}dp fontScale=$scale phase=${state?.phase} live=$live"
+                assertFits(root, expectedWidth, maximumHeight, density, label)
+                // Measure the final result exactly as a launcher does too.
+                root.measure(View.MeasureSpec.makeMeasureSpec(expectedWidth, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(maximumHeight, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, root.measuredWidth, root.measuredHeight)
+                assertFits(root, expectedWidth, maximumHeight, density, label + " exact host")
+                assertTrue(root.contentDescription.toString().contains(RunWidgetContent.from(state, live).title))
+                if (widthDp == 256 && heightDp == 220 && scale == 1f && state == snapshot())
+                    assertEquals("A roomy widget retains direct controls", View.VISIBLE, root.findViewById<View>(R.id.run_widget_actions).visibility)
+                if (widthDp == 128 && heightDp == 140 && scale == 1f && state == snapshot()) {
+                    assertEquals("Default widget retains distance", View.VISIBLE, root.findViewById<View>(R.id.run_widget_distance).visibility)
+                    assertEquals("Default widget retains duration", View.VISIBLE, root.findViewById<View>(R.id.run_widget_duration).visibility)
+                    assertEquals("Default widget retains direct controls", View.VISIBLE, root.findViewById<View>(R.id.run_widget_actions).visibility)
                 }
-                (0 until root.childCount).forEach { inspect(root.getChildAt(it)) }
-                if (widthDp == 180 && scale == 1f) assertEquals("Normal widgets retain direct controls", R.layout.run_widget, remote.layoutId)
             }
         }
+    }
+
+    @Test fun launcherPaddingAndTinyFallbackKeepTheAppActionAccessible() {
+        val state = snapshot()
+        rememberIntents(state)
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            for (scale in listOf(1f, 1.5f, 2f)) {
+                val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = scale })
+                val density = display.resources.displayMetrics.density
+                val padding = AppWidgetHostView.getDefaultPaddingForWidget(display,
+                    ComponentName(display, RunWidgetProvider::class.java), null)
+                val width = 128 - kotlin.math.ceil((padding.left + padding.right) / density).toInt()
+                val height = 140 - kotlin.math.ceil((padding.top + padding.bottom) / density).toInt()
+                val remote = RunWidgetViews.forSize(display, state, true, width, height)
+                val root = remote.apply(display, FrameLayout(display)) as ViewGroup
+                val pixelsWide = (width * density).toInt()
+                val pixelsHigh = (height * density).toInt()
+                root.measure(View.MeasureSpec.makeMeasureSpec(pixelsWide, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(pixelsHigh, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, root.measuredWidth, root.measuredHeight)
+                assertFits(root, pixelsWide, pixelsHigh, density, "actual launcher padding, font=$scale")
+                assertTrue(root.findViewById<View>(R.id.run_widget_open).isClickable)
+                assertTrue(root.contentDescription.toString().contains("01:15"))
+            }
+            for ((width, height) in listOf(64 to 48, 0 to 0)) {
+                val remote = RunWidgetViews.forSize(context, state, true, width, height)
+                assertEquals(R.layout.run_widget_action_only, remote.layoutId)
+                val root = remote.apply(context, FrameLayout(context)) as ViewGroup
+                val density = context.resources.displayMetrics.density
+                root.measure(View.MeasureSpec.makeMeasureSpec((64 * density).toInt(), View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec((48 * density).toInt(), View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, root.measuredWidth, root.measuredHeight)
+                assertFits(root, root.width, root.height, density, "icon-only app action")
+                assertTrue(root.findViewById<ImageButton>(R.id.run_widget_open).isClickable)
+                assertEquals("앱에서 러닝 확인", root.findViewById<View>(R.id.run_widget_open).contentDescription)
+                assertTrue(root.contentDescription.toString().contains("1.23 km"))
+            }
+        }
+    }
+
+    private fun rememberIntents(state: RunWidgetSnapshot?) {
+        created += RunWidgetViews.open(context, state)
+        state?.let {
+            created += RunWidgetViews.control(context, it.runId, RunWidgetControl.PAUSE)
+            created += RunWidgetViews.control(context, it.runId, RunWidgetControl.RESUME)
+            created += RunNotifications.activity(context, it.runId, true)
+        }
+    }
+
+    private fun assertFits(root: ViewGroup, width: Int, height: Int, density: Float, label: String) {
+        assertTrue("Widget exceeds launcher bounds: $label", root.measuredHeight <= height)
+        fun inspect(view: View) {
+            if (view.visibility != View.VISIBLE) return
+            val rect = Rect().also { view.getDrawingRect(it); root.offsetDescendantRectToMyCoords(view, it) }
+            assertTrue("Clipped child at $label: $rect", rect.left >= 0 && rect.top >= 0 && rect.right <= width && rect.bottom <= height)
+            if (view is Button || view is ImageButton) {
+                assertTrue("Button height at $label", view.height + 0.5f >= 48 * density)
+                assertTrue("Button width at $label", view.width + 0.5f >= 48 * density)
+            }
+            if (view is TextView && view.text.isNotEmpty()) {
+                val layout = requireNotNull(view.layout)
+                assertTrue("No text lines at $label", layout.lineCount > 0)
+                assertEquals("Truncated text at $label", view.text.length, layout.getLineEnd(layout.lineCount - 1))
+                assertTrue("Text height at $label", layout.getLineBottom(layout.lineCount - 1) <= view.height - view.compoundPaddingTop - view.compoundPaddingBottom)
+                val available = view.width - view.compoundPaddingLeft - view.compoundPaddingRight
+                val originY = view.baseline - layout.getLineBaseline(0)
+                for (line in 0 until layout.lineCount) {
+                    assertEquals("Ellipsized text at $label", 0, layout.getEllipsisCount(line))
+                    assertTrue("Horizontal text clipping at $label", layout.getLineWidth(line) <= available + 0.5f)
+                    val text = view.text.toString().substring(layout.getLineStart(line), layout.getLineEnd(line)).trimEnd()
+                    if (text.isEmpty()) continue
+                    val ink = Rect().also { view.paint.getTextBounds(text, 0, text.length, it) }
+                    val baseline = originY + layout.getLineBaseline(line)
+                    assertTrue("Glyph top clipping at $label: $ink", baseline + ink.top >= view.compoundPaddingTop - 1)
+                    assertTrue("Glyph bottom clipping at $label: $ink", baseline + ink.bottom <= view.height - view.compoundPaddingBottom + 1)
+                }
+            }
+            if (view is ViewGroup) (0 until view.childCount).forEach { inspect(view.getChildAt(it)) }
+        }
+        (0 until root.childCount).forEach { inspect(root.getChildAt(it)) }
     }
 }

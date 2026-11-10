@@ -1,0 +1,158 @@
+{
+  "name": "widget1",
+  "version": "0.4.1-dev",
+  "versionCode": 23,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "passed": false,
+  "completed": true,
+  "startedAtUtc": "2026-11-10T16:53:14.040376+00:00",
+  "captures": [],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "actualTaps": [],
+  "launcherWidgetLifecycles": [],
+  "driverWidgetUpdateBroadcastsSent": 0,
+  "twoIndependentOsPinPlacements": true,
+  "sameWidgetResizingVerified": false,
+  "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+  "databaseWritesByReview": false,
+  "runCreatedByReview": false,
+  "notificationControlsExecuted": false,
+  "authenticationExecuted": false,
+  "foregroundServiceStartedByReview": false,
+  "httpRequestsMadeByDriver": 0,
+  "networkOrProxyConfigurationChanged": false,
+  "appNetworkTrafficMeasured": false,
+  "appTotalNetworkZeroClaimed": false,
+  "automaticAppUpdateFeedTrafficMayOccur": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "outdoorGpsVerified": false,
+  "dozeVerified": false,
+  "oemBatteryPolicyVerified": false,
+  "syntheticGps": false,
+  "locationInjected": false,
+  "factoryGlyphInkVerificationIsSeparate": true,
+  "glyphInkMeasuredByThisDriver": false,
+  "rootPixelReviewRequiredBeforePublication": true,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "userVisualApproval": false,
+  "otherLauncherFixtureItemsMayAppear": true,
+  "otherLauncherAccountsOrPersonalContentVerifiedAbsentByDriver": false,
+  "launcherHomePageIndexRestorationClaimed": false,
+  "wholeLauncherDatabaseOrAllOsBytesRestorationClaimed": false,
+  "executedDriver": "widget1-executed-driver.py",
+  "executedDriverSha256": "e529ce6e97f56c9ac1dbcf36a4ce3bfd7550703860d262a893af6015a92c4227",
+  "observerHelper": "widget1-actual-ui-helper.py",
+  "observerHelperSha256": "1cc713c08cf5c2e12b83c0fcb0a879ae92922ff0cfe318388e6b9fef796c84d2",
+  "environmentHelper": "widget1-environment-helper.py",
+  "environmentHelperSha256": "d834959bc4352b6a9de28e9407f49f994b90b835783d1e98d6a2ed360c0db139",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-10T16:53:41.206992+00:00",
+  "idleServiceObservations": [
+    {
+      "observedAtUtc": "2026-11-10T16:53:15.443015+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    }
+  ],
+  "binaryReferenceSha256": "a80b4c667b6bfe67e9ceaf70d4368398eb65023f0f1458075e69951dec218bee",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 94,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 74,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 28,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "96491f2a85bf5ed534e81b9337ff29aa8b6194d38f2f4051d968ceaed120cbc8"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "8f51b860c0e10bc050a535fa81155b202efc9748784e7262ec799d14fec33b32"
+    }
+  ],
+  "privateEnvironmentBefore": {
+    "file": "widget1-private-environment-before.json",
+    "sha256": "cc87c9ea2886aef2bedcb0f38ace05b23abc89703745a2a567c45a9ed5034118",
+    "mode": "0600"
+  },
+  "privatePreferencesBefore": {
+    "file": "widget1-private-preferences-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "failureType": "ParseError",
+  "failure": "Inspect private local diagnostics",
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 94,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 74,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 28,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-10T16:53:41.206972+00:00"
+}

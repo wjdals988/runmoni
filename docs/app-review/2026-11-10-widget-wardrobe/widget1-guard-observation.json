@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-10T16:56:37.267809+00:00",
+  "failedAttempt": "widget1.json",
+  "failureBeforeFixtureMutationOrWidgetPin": true,
+  "originalPreferencesStillExact": true,
+  "controlledEnvironmentStillExact": true,
+  "appProcessAbsent": true,
+  "recorderAbsent": true,
+  "reviewWidgetPinAttempted": false,
+  "originalCacheExistingAndMalformedXml": true,
+  "originalCacheBytesRetainedPrivately": true,
+  "originalCacheSha256": "5bee6e3869e53d2d783d7d36b0d720772f4ed1b1b869734a1a01fb58ab2d3050",
+  "originalCacheRepairAttempted": false,
+  "causeOfPreexistingCacheContentEstablished": false,
+  "driverCorrectionOnly": true,
+  "scope": "Guard failed while parsing preexisting64-byte cache; before any fixture write, font/permission change, DB snapshot or widget pin. Existing bytes will be backed up/restored opaquely; valid temporary idle XML only during review."
+}

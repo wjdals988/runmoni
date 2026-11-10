@@ -1,0 +1,23 @@
+{
+  "materialCheck": {
+    "cases": 208,
+    "changedPixelsAcrossCases": 207328,
+    "alphaPreserved": true,
+    "maskAndInputPreserved": true,
+    "identityAndShoesPreservedBySocks": true,
+    "androidExecution": false,
+    "visualApproval": "pending"
+  },
+  "maskSha256": "a9e546d5f8a068a81852780ce58503f0e70cbc1a35ce65d3fa61267677b9fa04",
+  "sourceHashes": {
+    "app/src/main/java/com/runmoni/app/avatar/GarmentPalette.java": "efe7c2a80794591f43761682474ac5e288af2614fae2267edd703df382101dcf",
+    "app/src/main/java/com/runmoni/app/avatar/WardrobeClothing.java": "dfb7e8cca22a5e4bdb120af8fbf271de3be9b450dea4ac7d13303b29613bbc34",
+    "app/src/main/java/com/runmoni/app/avatar/SockClothing.java": "b6b3559ace8cf5996f5cb1be69a05d8869a4cab1429bd1b5ce759f78bcd1757c",
+    "scripts/avatar/VerifyExpandedWardrobe.java": "15504033d00e2a758041e41b81e3c86c81d57f63059dbb7539dde2abba274a01"
+  },
+  "hostOnly": true,
+  "visuallyReviewedByRootAndPeer": true,
+  "visuallyAccepted": false,
+  "userApproval": false,
+  "issue": "Female socks look like isolated light patches with visible ankle gaps; numeric material invariants do not establish visual readiness. Male no new blocking issue found in these static strips."
+}

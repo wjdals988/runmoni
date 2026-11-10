@@ -1,0 +1,895 @@
+{
+  "name": "widget2",
+  "version": "0.4.1-dev",
+  "versionCode": 23,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "passed": true,
+  "completed": true,
+  "startedAtUtc": "2026-11-10T16:55:55.489135+00:00",
+  "captures": [
+    {
+      "file": "widget2-idle-font1.png",
+      "sha256": "85d0d71c680efb06917b3d7672b53711e5c0c22cbda49a7328c76a550fee229c",
+      "bytes": 165071,
+      "width": 480,
+      "height": 854,
+      "kind": "launcher",
+      "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "independentOsPinPlacement": 1,
+      "sameWidgetResizingClaimed": false,
+      "source": "Launcher",
+      "launcherResumedActivityVerified": true,
+      "idleWidget": true,
+      "systemFontScale": 1.0,
+      "reviewWidgetId": 4,
+      "observedBounds": {
+        "systemFontScale": 1.0,
+        "actualDisplayPixels": [
+          480,
+          854
+        ],
+        "rootWidgetBounds": [
+          23,
+          40,
+          187,
+          284
+        ],
+        "visibleNodes": [
+          {
+            "resource": "com.runmoni.app:id/run_widget_root",
+            "class": "android.widget.LinearLayout",
+            "text": "",
+            "bounds": [
+              23,
+              40,
+              187,
+              284
+            ],
+            "clickable": true
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_title",
+            "class": "android.widget.TextView",
+            "text": "러닝 시작 준비",
+            "bounds": [
+              31,
+              48,
+              179,
+              65
+            ],
+            "clickable": false
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_distance",
+            "class": "android.widget.TextView",
+            "text": "— km",
+            "bounds": [
+              31,
+              67,
+              164,
+              95
+            ],
+            "clickable": false
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_duration",
+            "class": "android.widget.TextView",
+            "text": "—",
+            "bounds": [
+              168,
+              74,
+              179,
+              93
+            ],
+            "clickable": false
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_speed",
+            "class": "android.widget.TextView",
+            "text": "현재 속도 —",
+            "bounds": [
+              31,
+              97,
+              179,
+              114
+            ],
+            "clickable": false
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_open",
+            "class": "android.widget.Button",
+            "text": "앱에서 확인",
+            "bounds": [
+              31,
+              118,
+              179,
+              166
+            ],
+            "clickable": true
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_footer",
+            "class": "android.widget.TextView",
+            "text": "앱에서 러닝을 시작하세요",
+            "bounds": [
+              31,
+              170,
+              179,
+              185
+            ],
+            "clickable": false
+          }
+        ],
+        "rootDescriptionHasOnlyIdleMetrics": true,
+        "allObservedWidgetChildrenInsideRootAndDisplay": true,
+        "glyphInkMeasured": false,
+        "textAdvanceOrMaxLinesMeasuredFromAccessibility": false,
+        "fontSizeMeasuredFromAccessibility": false,
+        "serviceControlsAbsent": true,
+        "widgetCacheMetricsAbsent": true
+      },
+      "originalWidgetMetricsNotDisplayed": true,
+      "otherLauncherFixtureItemsMayAppear": true,
+      "rootPrivacyReviewRequiredBeforePublication": true
+    },
+    {
+      "file": "widget2-idle-font2.png",
+      "sha256": "b17c0789ff6a72d275e363b060fd1e5b7e0ee396bfd4ab8670a51adc6a18d7f0",
+      "bytes": 163364,
+      "width": 480,
+      "height": 854,
+      "kind": "launcher",
+      "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "independentOsPinPlacement": 2,
+      "sameWidgetResizingClaimed": false,
+      "source": "Launcher",
+      "launcherResumedActivityVerified": true,
+      "idleWidget": true,
+      "systemFontScale": 2.0,
+      "reviewWidgetId": 5,
+      "observedBounds": {
+        "systemFontScale": 2.0,
+        "actualDisplayPixels": [
+          480,
+          854
+        ],
+        "rootWidgetBounds": [
+          23,
+          40,
+          187,
+          284
+        ],
+        "visibleNodes": [
+          {
+            "resource": "com.runmoni.app:id/run_widget_root",
+            "class": "android.widget.LinearLayout",
+            "text": "",
+            "bounds": [
+              23,
+              40,
+              187,
+              284
+            ],
+            "clickable": true
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_title",
+            "class": "android.widget.TextView",
+            "text": "런모니",
+            "bounds": [
+              31,
+              48,
+              179,
+              81
+            ],
+            "clickable": false
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_open",
+            "class": "android.widget.Button",
+            "text": "앱 열기",
+            "bounds": [
+              31,
+              85,
+              179,
+              133
+            ],
+            "clickable": true
+          },
+          {
+            "resource": "com.runmoni.app:id/run_widget_footer",
+            "class": "android.widget.TextView",
+            "text": "러닝 시작 준비",
+            "bounds": [
+              31,
+              137,
+              179,
+              167
+            ],
+            "clickable": false
+          }
+        ],
+        "rootDescriptionHasOnlyIdleMetrics": true,
+        "allObservedWidgetChildrenInsideRootAndDisplay": true,
+        "glyphInkMeasured": false,
+        "textAdvanceOrMaxLinesMeasuredFromAccessibility": false,
+        "fontSizeMeasuredFromAccessibility": false,
+        "serviceControlsAbsent": true,
+        "widgetCacheMetricsAbsent": true
+      },
+      "originalWidgetMetricsNotDisplayed": true,
+      "otherLauncherFixtureItemsMayAppear": true,
+      "rootPrivacyReviewRequiredBeforePublication": true
+    }
+  ],
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "actualTaps": [
+    {
+      "label": "러닝 옵션",
+      "bounds": [
+        211,
+        571,
+        271,
+        593
+      ],
+      "package": "com.runmoni.app"
+    },
+    {
+      "label": "홈 화면에 러닝 위젯 추가",
+      "bounds": [
+        176,
+        355,
+        332,
+        377
+      ],
+      "package": "com.runmoni.app"
+    },
+    {
+      "label": "ADD AUTOMATICALLY",
+      "package": "com.android.launcher3",
+      "bounds": [
+        267,
+        515,
+        432,
+        569
+      ],
+      "systemFontScale": 1.0
+    },
+    {
+      "label": "러닝 옵션",
+      "bounds": [
+        188,
+        575,
+        295,
+        615
+      ],
+      "package": "com.runmoni.app"
+    },
+    {
+      "label": "홈 화면에 러닝 위젯 추가",
+      "bounds": [
+        115,
+        428,
+        393,
+        468
+      ],
+      "package": "com.runmoni.app"
+    },
+    {
+      "label": "ADD AUTOMATICALLY",
+      "package": "com.android.launcher3",
+      "bounds": [
+        178,
+        536,
+        432,
+        627
+      ],
+      "systemFontScale": 2.0
+    }
+  ],
+  "launcherWidgetLifecycles": [
+    {
+      "systemFontScale": 1.0,
+      "beforeIds": {
+        "all": [
+          2
+        ],
+        "runmoni": []
+      },
+      "newReviewWidgetRemoved": true,
+      "freshMainProcessObserved": true,
+      "updateSource": "Actual OS pin lifecycle; no driver widget broadcast",
+      "onUpdateCallbackTraceMeasured": false,
+      "afterPinIds": {
+        "all": [
+          2,
+          4
+        ],
+        "runmoni": [
+          4
+        ]
+      },
+      "newReviewWidgetId": 4,
+      "actualOsPinAction": "ADD AUTOMATICALLY",
+      "originalWidgetIdsPreserved": true,
+      "captureCompleted": true,
+      "removalMethod": "Actual Launcher3 drag from owned widget into top Remove region",
+      "removalTargetPixels": [
+        250,
+        55
+      ],
+      "transientRemoveTargetObservedByAccessibility": false,
+      "originalRunmoniWidgetIdsPreserved": true,
+      "originalOtherWidgetIdsPreserved": true,
+      "afterRemovalIds": {
+        "all": [
+          2
+        ],
+        "runmoni": []
+      }
+    },
+    {
+      "systemFontScale": 2.0,
+      "beforeIds": {
+        "all": [
+          2
+        ],
+        "runmoni": []
+      },
+      "newReviewWidgetRemoved": true,
+      "freshMainProcessObserved": true,
+      "updateSource": "Actual OS pin lifecycle; no driver widget broadcast",
+      "onUpdateCallbackTraceMeasured": false,
+      "afterPinIds": {
+        "all": [
+          2,
+          5
+        ],
+        "runmoni": [
+          5
+        ]
+      },
+      "newReviewWidgetId": 5,
+      "actualOsPinAction": "ADD AUTOMATICALLY",
+      "originalWidgetIdsPreserved": true,
+      "captureCompleted": true,
+      "removalMethod": "Actual Launcher3 drag from owned widget into top Remove region",
+      "removalTargetPixels": [
+        250,
+        55
+      ],
+      "transientRemoveTargetObservedByAccessibility": false,
+      "originalRunmoniWidgetIdsPreserved": true,
+      "originalOtherWidgetIdsPreserved": true,
+      "afterRemovalIds": {
+        "all": [
+          2
+        ],
+        "runmoni": []
+      }
+    }
+  ],
+  "driverWidgetUpdateBroadcastsSent": 0,
+  "twoIndependentOsPinPlacements": true,
+  "sameWidgetResizingVerified": false,
+  "sourceKind": "actual Android Launcher3 AppWidget RemoteViews",
+  "databaseWritesByReview": false,
+  "runCreatedByReview": false,
+  "notificationControlsExecuted": false,
+  "authenticationExecuted": false,
+  "foregroundServiceStartedByReview": false,
+  "httpRequestsMadeByDriver": 0,
+  "networkOrProxyConfigurationChanged": false,
+  "appNetworkTrafficMeasured": false,
+  "appTotalNetworkZeroClaimed": false,
+  "automaticAppUpdateFeedTrafficMayOccur": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "outdoorGpsVerified": false,
+  "dozeVerified": false,
+  "oemBatteryPolicyVerified": false,
+  "syntheticGps": false,
+  "locationInjected": false,
+  "factoryGlyphInkVerificationIsSeparate": true,
+  "glyphInkMeasuredByThisDriver": false,
+  "rootPixelReviewRequiredBeforePublication": true,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "userVisualApproval": false,
+  "otherLauncherFixtureItemsMayAppear": true,
+  "otherLauncherAccountsOrPersonalContentVerifiedAbsentByDriver": false,
+  "launcherHomePageIndexRestorationClaimed": false,
+  "wholeLauncherDatabaseOrAllOsBytesRestorationClaimed": false,
+  "executedDriver": "widget2-executed-driver.py",
+  "executedDriverSha256": "d61c7631b7c45cdeafbebfe0f7b2f780811c1fa8bbed674562cb2e426e331adf",
+  "observerHelper": "widget2-actual-ui-helper.py",
+  "observerHelperSha256": "1cc713c08cf5c2e12b83c0fcb0a879ae92922ff0cfe318388e6b9fef796c84d2",
+  "environmentHelper": "widget2-environment-helper.py",
+  "environmentHelperSha256": "d834959bc4352b6a9de28e9407f49f994b90b835783d1e98d6a2ed360c0db139",
+  "stage": "complete-passed",
+  "updatedAtUtc": "2026-11-10T17:04:05.379770+00:00",
+  "idleServiceObservations": [
+    {
+      "observedAtUtc": "2026-11-10T16:55:56.586909+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T16:57:00.378848+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T16:57:28.560337+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T16:59:14.990893+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:00:02.929768+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:00:04.189772+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:00:39.820003+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:02:34.546830+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:03:31.618371+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    },
+    {
+      "observedAtUtc": "2026-11-10T17:03:32.204011+00:00",
+      "recorderDumpAbsent": true,
+      "foregroundServiceInReviewedAppObserved": false,
+      "recorderServiceRecordObserved": false,
+      "runningFgsExecutionVerified": false
+    }
+  ],
+  "binaryReferenceSha256": "a80b4c667b6bfe67e9ceaf70d4368398eb65023f0f1458075e69951dec218bee",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 94,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 74,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 28,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "96491f2a85bf5ed534e81b9337ff29aa8b6194d38f2f4051d968ceaed120cbc8"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "8f51b860c0e10bc050a535fa81155b202efc9748784e7262ec799d14fec33b32"
+    }
+  ],
+  "privateEnvironmentBefore": {
+    "file": "widget2-private-environment-before.json",
+    "sha256": "cc87c9ea2886aef2bedcb0f38ace05b23abc89703745a2a567c45a9ed5034118",
+    "mode": "0600"
+  },
+  "privatePreferencesBefore": {
+    "file": "widget2-private-preferences-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "privateWidgetCacheBefore": {
+    "file": "widget2-private-widget-cache-before.xml",
+    "sha256": "5bee6e3869e53d2d783d7d36b0d720772f4ed1b1b869734a1a01fb58ab2d3050",
+    "mode": "0600"
+  },
+  "originalWidgetCacheExists": true,
+  "originalWidgetCacheWellFormedXml": false,
+  "originalCacheHandledAsOpaqueBytes": true,
+  "originalWidgetCacheSha256": "5bee6e3869e53d2d783d7d36b0d720772f4ed1b1b869734a1a01fb58ab2d3050",
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "privateWidgetIdsBefore": {
+    "file": "widget2-private-widget-ids-before.json",
+    "sha256": "bc71cbc5559ed3ab5cd8d69bc5a6251ba037f455f736515d2b0408dfa4c98d80",
+    "mode": "0600"
+  },
+  "launcherWidgetIdsBefore": {
+    "all": [
+      2
+    ],
+    "runmoni": []
+  },
+  "temporaryWidgetCacheContainsNoMetrics": true,
+  "previewLocationPermissionsTemporarilyRevoked": true,
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.061,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.695,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual system font_scale set to 1.0",
+      "budgetSeconds": 20,
+      "elapsedHostSeconds": 0.536,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.491,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 16.032,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual OS pin created one Runmoni widget",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 1.63,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.31,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Only owned review widget visible on Launcher3",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 8.745,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Fresh OS-pinned idle widget with an actual enabled app action",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 15.537,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.318,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Only owned review widget visible on Launcher3",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 17.933,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Original widget service IDs after owned Launcher drag Remove",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 4.407,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.687,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.3,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual system font_scale set to 2.0",
+      "budgetSeconds": 20,
+      "elapsedHostSeconds": 3.011,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.817,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 13.332,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual OS pin created one Runmoni widget",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 1.342,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.339,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Only owned review widget visible on Launcher3",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 7.151,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Fresh OS-pinned idle widget with an actual enabled app action",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 15.538,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.256,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Only owned review widget visible on Launcher3",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 16.514,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Original widget service IDs after owned Launcher drag Remove",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 4.456,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.058,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.232,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 21,
+  "originalFontSettingRestoredBeforeWidgetRemoval": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 94,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 74,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 28,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "restorationAttempts": [
+    {
+      "step": "original-font-before-removal",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:32.247376+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:34.469344+00:00"
+    },
+    {
+      "step": "remove-only-new-widget",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:34.471392+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:34.726460+00:00"
+    },
+    {
+      "step": "force-stop-after-removal",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:34.728380+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:35.382701+00:00"
+    },
+    {
+      "step": "verify-original-db-rows",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:35.384707+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:37.004578+00:00"
+    },
+    {
+      "step": "restore-original-preferences",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:37.006704+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:39.350347+00:00"
+    },
+    {
+      "step": "restore-original-widget-cache",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:39.352239+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:42.591845+00:00"
+    },
+    {
+      "step": "verify-original-widget-ids",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:42.593839+00:00",
+      "finishedAtUtc": "2026-11-10T17:03:42.928913+00:00"
+    },
+    {
+      "step": "restore-controlled-environment",
+      "attempted": true,
+      "passed": true,
+      "startedAtUtc": "2026-11-10T17:03:42.931033+00:00",
+      "finishedAtUtc": "2026-11-10T17:04:05.331831+00:00"
+    }
+  ],
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "widgetCacheExistsExactlyRestored": true,
+  "widgetCacheExactlyRestored": true,
+  "launcherWidgetIdsExactlyRestored": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "privateEnvironmentAfter": {
+    "file": "widget2-private-environment-after.json",
+    "sha256": "cc87c9ea2886aef2bedcb0f38ace05b23abc89703745a2a567c45a9ed5034118",
+    "mode": "0600"
+  },
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 94,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 74,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 28,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 5,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-10T17:04:05.379754+00:00"
+}

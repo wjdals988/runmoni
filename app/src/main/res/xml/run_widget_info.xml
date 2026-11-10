@@ -5,7 +5,7 @@
     android:targetCellWidth="2" android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
-    android:initialLayout="@layout/run_widget"
-    android:previewLayout="@layout/run_widget"
+    android:initialLayout="@layout/run_widget_action_only"
+    android:previewLayout="@layout/run_widget_action_only"
     android:description="@string/run_widget_description"
     android:widgetCategory="home_screen" />

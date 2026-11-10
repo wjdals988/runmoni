@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "maskVersion": "approved-socks-v1",
+  "canvas": [
+    2048,
+    768
+  ],
+  "cell": [
+    256,
+    384
+  ],
+  "frames": 8,
+  "rows": 2,
+  "sourceAsset": "avatars/v0.3.0/running-motion.png",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "fabricMaskSha256": "462433ce98a7a2f52c98823d851bed462418bbab18f4262c75f6113456e74bb5",
+  "wardrobeMaskSha256": "2d0e8375a5644311b1337cd369708d5ebf35e0cef3314d6d7c2145382d650115",
+  "annotationSha256": "98554f1392053b9f2e782afd48751c15f371adc7018fcc53b61b29111440f2ee",
+  "maskFile": "sock-mask.png",
+  "maskSha256": "a9e546d5f8a068a81852780ce58503f0e70cbc1a35ce65d3fa61267677b9fa04",
+  "encoding": "A255,R flags(crew1/knee2),G shade0..255,B cuff flags(crew1/knee2)+rib4. A0 copies input.",
+  "visualApproval": "pending",
+  "scope": {
+    "male": "Existing wardrobe coverage bit4 only, excluding all fabric labels and source transparent pixels.",
+    "female": "Existing fabric region2 only. This is an overlay on original tights; existing visible ankle skin remains unchanged.",
+    "invariants": "Never extend source alpha or touch source shoes, soles, outline, face, hair, or original files. Occluded leg segments may have zero labels."
+  },
+  "authoring": "Fixed source-bound labels from manually proposed axes; no rig, hidden skin, or new source pixels."
+}

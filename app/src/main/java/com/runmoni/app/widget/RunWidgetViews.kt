@@ -21,6 +21,7 @@ import com.runmoni.app.tracking.RunNotifications
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 internal object RunWidgetViews {
     private const val FLAGS = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -40,13 +41,36 @@ internal object RunWidgetViews {
     else PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java).setData(identity("", "open"))
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP), FLAGS)
 
-    /** The launcher bounds and scaled Korean font metrics decide which layout
-     * fits. A fixed scale threshold alone misses narrow150% configurations. */
+    /** Measure every candidate, including the compact fallback, using the
+     * launcher's available bounds and the user's actual font configuration.
+     * Never shrink text below that font setting to make a widget fit. */
     fun forSize(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, widthDp: Int, heightDp: Int): RemoteViews {
-        if (context.resources.configuration.fontScale >= 1.6f || widthDp <= 0 || heightDp <= 0 ||
-            Looper.myLooper() != Looper.getMainLooper()) return create(context, snapshot, live, minimal = true)
-        val full = create(context, snapshot, live, minimal = false)
-        return if (fits(context, full, widthDp, heightDp)) full else create(context, snapshot, live, minimal = true)
+        // The publisher dispatches to main without blocking its session lock.
+        // Unknown bounds/incorrect callers get a labelled icon action, rather
+        // than an unmeasured block of potentially clipped Korean text.
+        if (widthDp <= 0 || heightDp <= 0 || Looper.myLooper() != Looper.getMainLooper())
+            return iconOnly(context, snapshot, live)
+        val candidates = sequence {
+            yield(create(context, snapshot, live, minimal = false))
+            yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true))
+            if (RunWidgetContent.from(snapshot, live).control != null) {
+                // Keep current metrics and controls before giving up to an
+                // app link. Stale/blocked information must retain its title.
+                yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true).apply {
+                    setViewVisibility(R.id.run_widget_title, View.GONE)
+                })
+            }
+            yield(create(context, snapshot, live, minimal = true))
+            yield(create(context, snapshot, live, minimal = true).apply {
+                setViewVisibility(R.id.run_widget_footer, View.GONE)
+            })
+            yield(create(context, snapshot, live, minimal = true).apply {
+                setViewVisibility(R.id.run_widget_title, View.GONE)
+                setViewVisibility(R.id.run_widget_footer, View.GONE)
+                setTextViewText(R.id.run_widget_open, "열기")
+            })
+        }
+        return candidates.firstOrNull { fits(context, it, widthDp, heightDp) } ?: iconOnly(context, snapshot, live)
     }
 
     private fun fits(context: Context, views: RemoteViews, widthDp: Int, heightDp: Int): Boolean = try {
@@ -61,33 +85,57 @@ internal object RunWidgetViews {
             if (view.visibility != View.VISIBLE) return true
             val rect = Rect().also { view.getDrawingRect(it); root.offsetDescendantRectToMyCoords(view, it) }
             if (rect.left < 0 || rect.top < 0 || rect.right > width || rect.bottom > height) return false
-            if (view is Button && (view.width < 48 * density || view.height < 48 * density)) return false
+            val minimumTarget = (48 * density).roundToInt()
+            if (view is Button && (view.width < minimumTarget || view.height < minimumTarget)) return false
             if (view is TextView && view.text.isNotEmpty()) {
                 val layout = view.layout ?: return false
+                val textWidth = view.width - view.compoundPaddingLeft - view.compoundPaddingRight
                 if (layout.lineCount == 0 || layout.getLineEnd(layout.lineCount - 1) != view.text.length ||
                     layout.getLineBottom(layout.lineCount - 1) > view.height - view.compoundPaddingTop - view.compoundPaddingBottom ||
-                    (0 until layout.lineCount).any { layout.getEllipsisCount(it) > 0 }) return false
+                    (0 until layout.lineCount).any { layout.getEllipsisCount(it) > 0 ||
+                        layout.getLineWidth(it) > textWidth + 0.5f }) return false
             }
             return view !is ViewGroup || (0 until view.childCount).all { fitsChild(view.getChildAt(it)) }
         }
         root.measuredHeight <= height && (0 until root.childCount).all { fitsChild(root.getChildAt(it)) }
     } catch (_: RuntimeException) { false }
 
-    fun create(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, minimal: Boolean): RemoteViews {
+    fun create(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, minimal: Boolean): RemoteViews =
+        populate(context, snapshot, live, if (minimal) R.layout.run_widget_minimal else R.layout.run_widget,
+            compact = minimal, minimal = minimal)
+
+    private fun description(content: RunWidgetContent, footer: String): String =
+        "런모니, ${content.title}, ${content.distance}, 러닝 시간 ${content.duration}, ${content.speed}, $footer"
+
+    private fun footer(snapshot: RunWidgetSnapshot?, compact: Boolean): String = snapshot?.updatedAtMillis?.takeIf { it > 0 }?.let {
+        SimpleDateFormat(if (compact) "HH:mm" else "HH:mm:ss", Locale.KOREA).format(Date(it)) + " 기준"
+    } ?: if (compact) "러닝 시작 준비" else "앱에서 러닝을 시작하세요"
+
+    private fun iconOnly(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean): RemoteViews =
+        RemoteViews(context.packageName, R.layout.run_widget_action_only).apply {
+            val content = RunWidgetContent.from(snapshot, live)
+            val action = open(context, snapshot)
+            setContentDescription(R.id.run_widget_root, description(content, footer(snapshot, compact = true)))
+            setContentDescription(R.id.run_widget_open, "앱에서 러닝 확인")
+            setOnClickPendingIntent(R.id.run_widget_root, action)
+            setOnClickPendingIntent(R.id.run_widget_open, action)
+        }
+
+    private fun populate(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, layout: Int,
+                         compact: Boolean, minimal: Boolean = false): RemoteViews {
         val content = RunWidgetContent.from(snapshot, live)
-        val views = RemoteViews(context.packageName, if (minimal) R.layout.run_widget_minimal else R.layout.run_widget)
+        val views = RemoteViews(context.packageName, layout)
         val open = open(context, snapshot)
-        views.setTextViewText(R.id.run_widget_title, if (!minimal) content.title else when {
+        views.setTextViewText(R.id.run_widget_title, if (!compact) content.title else when {
             content.stale -> "지난 정보"
             snapshot?.blocked == true || snapshot?.finishing == true -> "저장 확인"
             content.control == RunWidgetControl.PAUSE -> "러닝 중"
             content.control == RunWidgetControl.RESUME -> "일시정지"
             else -> "런모니"
         })
-        views.setTextViewText(R.id.run_widget_footer, snapshot?.updatedAtMillis?.takeIf { it > 0 }?.let {
-            SimpleDateFormat(if (minimal) "HH:mm" else "HH:mm:ss", Locale.KOREA).format(Date(it)) + " 기준"
-        } ?: if (minimal) "러닝 시작 준비" else "앱에서 러닝을 시작하세요")
-        views.setContentDescription(R.id.run_widget_root, "런모니, ${content.title}, ${content.distance}, 러닝 시간 ${content.duration}, ${content.speed}")
+        val footer = footer(snapshot, compact)
+        views.setTextViewText(R.id.run_widget_footer, footer)
+        views.setContentDescription(R.id.run_widget_root, description(content, footer))
         views.setOnClickPendingIntent(R.id.run_widget_root, open)
         views.setOnClickPendingIntent(R.id.run_widget_open, open)
         views.setTextViewText(R.id.run_widget_open, if (minimal) "앱 열기" else "앱에서 확인")

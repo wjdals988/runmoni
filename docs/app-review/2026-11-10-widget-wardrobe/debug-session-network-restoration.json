@@ -1,0 +1,15 @@
+{
+  "verifiedAtUtc": "2026-11-10T17:04:22.866440+00:00",
+  "ownedProxySettingKeys": [
+    "http_proxy",
+    "global_http_proxy_host",
+    "global_http_proxy_port",
+    "global_http_proxy_exclusion_list",
+    "global_proxy_pac_url"
+  ],
+  "originalProxySettingsExactlyRestored": true,
+  "systemTrustStoreModifiedByDebugMethod": false,
+  "releaseNetworkSecurityConfigUnchanged": true,
+  "hostProxyAndNoProxyEnvironmentPreserved": true,
+  "allOsFilesByteIdenticalClaimed": false
+}

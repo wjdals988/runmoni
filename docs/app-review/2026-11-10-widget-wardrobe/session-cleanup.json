@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-11-10T17:04:32.940416+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "ownedEmulatorPid": 672492,
+  "observedProcessState": "Z",
+  "ownedEmulatorNoLongerRunning": true,
+  "providedHelperStopSucceeded": true,
+  "proxyRestoration": {
+    "file": "debug-session-network-restoration.json"
+  },
+  "otherAvdShutdownClaimed": false
+}

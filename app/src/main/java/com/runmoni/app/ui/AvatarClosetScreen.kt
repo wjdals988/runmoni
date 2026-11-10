@@ -45,7 +45,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             // An unusually short portrait window must scroll its controls rather
             // than reserve all of the available height for fixed decoration.
             val scrollingHeader = !sidePreview && maxHeight < 360.dp
-            val previewHeight = if (largeText) 104.dp else 144.dp
+            val previewHeight = if (largeText) 112.dp else 176.dp
             Column(Modifier.fillMaxSize()) {
                 PageTopBar("옷장", onDismiss, closeTag = "closet_close", actions = {
                     IconButton(onClick = { playing = !playing }, modifier = Modifier.size(48.dp).testTag("closet_animation")) {
