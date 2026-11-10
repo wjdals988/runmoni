@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.3.9-dev",
-    "versionCode": 21,
-    "fileName": "runmoni-0.3.9-dev.apk",
-    "sizeBytes": 219456174,
-    "sha256": "57895b0237d09ba91b6c73a47da42e67bd8485ccd31f0406cb0ea0a8c1d965a3",
+    "version": "0.4.0-dev",
+    "versionCode": 22,
+    "fileName": "runmoni-0.4.0-dev.apk",
+    "sizeBytes": 219652782,
+    "sha256": "85abeb65917612d31e6ce8d5650df53f6a17b1495c4205297ff1dd38cc475ffb",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "fc08fe08bd0cb87770be56350684f55a41a37c85",
+    "sourceRevision": "eafdb48d80558114c7322072319c709c67fc3e82",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.3.9-dev/runmoni-0.3.9-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.3.9-dev",
-    "notes": "홈 화면 러닝 위젯, 실제 배경 지도와 독립 기록 페이지를 추가했습니다. 기록·포인트·꾸미기를 유지하는 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.4.0-dev/runmoni-0.4.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.4.0-dev",
+    "notes": "팝업 닫기·홈 날씨/시각·지도 조작·통합 프로필과 약100m 러너 공유를 추가했습니다. 새 Firestore 규칙/색인 적용이 필요한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

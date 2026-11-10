@@ -1,0 +1,15 @@
+# 0.4.0-dev 게시 검증 — 2026.11.10 한국 시간
+
+고정 닫기·키보드/안전영역·부모 화면 복귀, 일관된 아이콘, 홈 시각·기온·MET 예보/옷차림, 핀치·드래그 지도, 통합 프로필과 온라인 닉네임 예약을 반영했다. 탐색은 지도 중심이며 크루/파티는 크루 탭에 모았다. 공개 위치는 기본 꺼짐·매회 동의한 현재 러닝의 약100m 격자다. [구현 PR](https://github.com/wjdals988/runmoni/pull/41) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.4.0-dev/runmoni-0.4.0-dev.apk) · [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.4.0-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni).
+
+0.4.0-dev/code22, 219,652,782bytes, SHA256 `85abeb65917612d31e6ce8d5650df53f6a17b1495c4205297ff1dd38cc475ffb`, 실제 APK 출처 C `eafdb48d80558114c7322072319c709c67fc3e82`. 같은 보관키 `a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a`의 실기기 검증 전 개발 프리뷰다. 후속 문서/피드 D로 출처 C를 바꾸지 않는다. 서명 CI42808717611의 새 JVM164·실패/오류/skip0, release lint오류0/경고75를 확인했다. [공개3자산/sidecar](app-review/2026-11-10-discovery-refresh/publication-verification.json) · [서명 CI](app-review/2026-11-10-discovery-refresh/signed-ci-verification.json) · [APK HEAD200/크기](app-review/2026-11-10-discovery-refresh/public-apk-head-verification.json).
+
+[로컬 검토](app-review/2026-11-10-discovery-refresh/README.md)는 새 JVM164·lint0/45, demo Rules160, 동일 제품 APK에서 source4 성공23·source5 성공13 보존과 source8 새16을 구분한다. 세로 실제320dp/font2·키보드2개, 가로 제품 UI1개, 실제 Firebase SDK의 demo Auth/Firestore1개는 별도다. 가로 전체 driver 실패는 그대로 보존하고 독립 회전 정책/앱 데이터/소유 환경 복원 근거를 연결한다. 초기 검사 실패·테스트 런타임 스레드 예외/단독 비재현을 새 성공 수에 더하지 않는다. Rules CI42808341806도 demo160통과이며 운영 Firebase 변경은 없다.
+
+[실제 Main4장과 manifest](app-review/2026-11-10-discovery-refresh/gallery.json)는 로컬 TEST debug/API29/TCG, Firebase 비활성·제공 CA/세션 프록시·합성 서울 GPS 근거다. 홈 날짜/시각/기온·네이티브 예보, 실제 지도/출처, 실제 로컬 닉네임 저장과 다른 필드 보존·탐색/마이의 같은 편집, 앱정보 X→원래 설정 스크롤 복귀를 확인했다. 사진4장을 root가 직접 보고 개인정보를 확인했으며 사용자 시각 승인은 아니다. [실행](app-review/2026-11-10-discovery-refresh/live1.json) · [배포 C와 실제 실행 입력의 여섯 source map 비교](app-review/2026-11-10-discovery-refresh/release-source-comparison.json) · [프록시 복원](app-review/2026-11-10-discovery-refresh/debug-session-network-restoration.json) · [전용 AVD 종료](app-review/2026-11-10-discovery-refresh/session-cleanup.json).
+
+대시보드 [PR](https://github.com/wjdals988/mydashboard/pull/23) · [main CI](https://github.com/wjdals988/mydashboard/actions/runs/42812263827) · Production `7681503615` · main `2821126ae54dfd016dcdbe2f5bb96eeb1751fe4f`. canonical13항목과 원본 PNG4장 바이트를 대조했다. 기존 다른8프로젝트·이전14개 릴리스노트·이전4장 PNG를 보존했다. [운영 근거](app-review/2026-11-10-discovery-refresh/dashboard-production-verification.json). preview22/stable null을 실제 자산으로 갱신하며 canonical raw 전체 바이트는 이 문서/피드 병합 후 별도 대조한다.
+
+새 Firestore Rules/색인은 [운영 적용 안내](DISCOVERY_REFRESH_20261110.md#firebase-운영-적용)에 따라 소유자가 게시해야 한다. 현재 클라우드에 관리 인증이 없어 운영 게시/쓰기·실제 두 기기 공유는 미확인이다. 0.4 APK를 먼저 설치한 뒤 새 규칙을 게시한다. 새 예약 규칙 적용 후0.3.9이하의 신규 닉네임/변경은 거절될 수 있다. 기존 UID/소속/권한/기록은 지우지 않는다. Google·휴대폰·야외GPS/장시간·Doze/OEM·API31이상·공개 서명 APK 실행·사용자 시각 승인은 별도다.
+
+기존0.3.9/source `fc08fe08bd0cb87770be56350684f55a41a37c85`와0.1.5/source `75c39ca900b140cfb02c1a47807a5955c8b8db7f` 출처는 보존한다. 승인 원본·준비36/미준비22·58ID/9탭/13슬롯/0P·성별·기존 기록/지갑·보관키를 유지했다. 다음 우선순위는 새 Rules/index 적용과 두 기기 확인, 크루 승계/신고·차단, 남은 원화, 지도/날씨 운영 용량과 APK 크기 실측이다.
