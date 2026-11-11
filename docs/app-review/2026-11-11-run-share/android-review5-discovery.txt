@@ -1,0 +1,29 @@
+
+com.runmoni.app.ui.RunnerDiscoveryUiTest:....
+Error in mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText(com.runmoni.app.ui.RunnerDiscoveryUiTest):
+java.lang.AssertionError: Actual height is 84.0.dp, expected at least 96.0.dp (tolerance: 0.5.dp)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU(BoundsAssertions.kt:290)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU$default(BoundsAssertions.kt:287)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertHeightIsAtLeast$1.invoke(BoundsAssertions.kt:100)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertHeightIsAtLeast$1.invoke(BoundsAssertions.kt:99)
+	at androidx.compose.ui.test.BoundsAssertionsKt.withUnclippedBoundsInRoot(BoundsAssertions.kt:211)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertHeightIsAtLeast-3ABfNKs(BoundsAssertions.kt:99)
+	at com.runmoni.app.ui.RunnerDiscoveryUiTest.mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText(RunnerDiscoveryUiTest.kt:161)
+
+
+Time: 56.61
+There was 1 failure:
+1) mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText(com.runmoni.app.ui.RunnerDiscoveryUiTest)
+java.lang.AssertionError: Actual height is 84.0.dp, expected at least 96.0.dp (tolerance: 0.5.dp)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU(BoundsAssertions.kt:290)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU$default(BoundsAssertions.kt:287)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertHeightIsAtLeast$1.invoke(BoundsAssertions.kt:100)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertHeightIsAtLeast$1.invoke(BoundsAssertions.kt:99)
+	at androidx.compose.ui.test.BoundsAssertionsKt.withUnclippedBoundsInRoot(BoundsAssertions.kt:211)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertHeightIsAtLeast-3ABfNKs(BoundsAssertions.kt:99)
+	at com.runmoni.app.ui.RunnerDiscoveryUiTest.mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText(RunnerDiscoveryUiTest.kt:161)
+
+FAILURES!!!
+Tests run: 5,  Failures: 1
+
+

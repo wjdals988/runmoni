@@ -27,6 +27,7 @@ jobs:
     env:
       RUNMONI_API_URL: ${{ vars.RUNMONI_API_URL || 'http://127.0.0.1:8787' }}
       RUNMONI_COMMUNITY_BACKEND: ${{ vars.RUNMONI_COMMUNITY_BACKEND || 'firebase' }}
+      NAVER_MAP_CLIENT_ID: ${{ vars.NAVER_MAP_CLIENT_ID || '' }}
     timeout-minutes: 60
     # Repository Actions secrets; this workflow only runs on explicit dispatch.
     permissions:

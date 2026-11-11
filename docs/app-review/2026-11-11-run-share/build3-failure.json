@@ -1,0 +1,13 @@
+{
+  "passed": false,
+  "stage": "lintDebug",
+  "error": "WrongConstant setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE)",
+  "jvm": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "jvmReportsFresh": true,
+  "sourceFreezeReference": "source-freeze3.json"
+}

@@ -1,0 +1,8 @@
+{
+  "passed": false,
+  "failurePhase": "compileDebugKotlin",
+  "actualFailure": "Int * Dp operator not available with the selected imports; changed to Dp * Int",
+  "log": "build1.txt",
+  "logSha256": "efd1a43c1cdf5eabfa110bef334dea2c82ad09a6cb6b85698961ac8d60765678",
+  "jvmOrAndroidProductPassClaimed": false
+}

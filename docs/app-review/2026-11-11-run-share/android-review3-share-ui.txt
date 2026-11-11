@@ -1,0 +1,131 @@
+
+com.runmoni.app.ui.RunShareUiTest:
+Error in failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices(com.runmoni.app.ui.RunShareUiTest):
+java.lang.AssertionError: Text overflow in failed restored URI recovery ComponentActivity/fake callbacks: 배경; lines=4.0..57.0/42.0; size=52 x 42; maxLines=false
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow$lambda$9(RunmoniDesignTest.kt:84)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.$r8$lambda$Zx9jK42fUcsMVVtX21zGSamt8l8(Unknown Source:0)
+	at com.runmoni.app.ui.RunmoniDesignTestBase$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.runOnUiThread$lambda$0(AndroidSynchronization.android.kt:37)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.$r8$lambda$opyMdTZ52jorqLaIG4SKpPr_Zno(Unknown Source:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt$$ExternalSyntheticLambda0.call(D8$$SyntheticClass:0)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2207)
+	at android.os.Handler.handleCallback(Handler.java:883)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loop(Looper.java:214)
+	at android.app.ActivityThread.main(ActivityThread.java:7356)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+
+Error in everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(com.runmoni.app.ui.RunShareUiTest):
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #145 at (l=160.0, t=551.0, r=210.0, b=599.0)px, Tag: 'run_share_theme_2'
+Role = 'RadioButton'
+Focused = 'false'
+Selected = 'false'
+Text = '[밝게]'
+Actions = [OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+MergeDescendants = 'true'
+Has 2 siblings
+Selector used: (TestTag = 'run_share_theme_2')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:84)
+	at com.runmoni.app.ui.RunShareUiTest.everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(RunShareUiTest.kt:83)
+.
+Error in shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll(com.runmoni.app.ui.RunShareUiTest):
+java.lang.AssertionError: Text overflow in share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: 배경; lines=4.0..57.0/42.0; size=52 x 42; maxLines=false
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow$lambda$9(RunmoniDesignTest.kt:84)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.$r8$lambda$Zx9jK42fUcsMVVtX21zGSamt8l8(Unknown Source:0)
+	at com.runmoni.app.ui.RunmoniDesignTestBase$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.runOnUiThread$lambda$0(AndroidSynchronization.android.kt:37)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.$r8$lambda$opyMdTZ52jorqLaIG4SKpPr_Zno(Unknown Source:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt$$ExternalSyntheticLambda0.call(D8$$SyntheticClass:0)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2207)
+	at android.os.Handler.handleCallback(Handler.java:883)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loop(Looper.java:214)
+	at android.app.ActivityThread.main(ActivityThread.java:7356)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+
+
+Time: 66.141
+There were 3 failures:
+1) failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices(com.runmoni.app.ui.RunShareUiTest)
+java.lang.AssertionError: Text overflow in failed restored URI recovery ComponentActivity/fake callbacks: 배경; lines=4.0..57.0/42.0; size=52 x 42; maxLines=false
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow$lambda$9(RunmoniDesignTest.kt:84)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.$r8$lambda$Zx9jK42fUcsMVVtX21zGSamt8l8(Unknown Source:0)
+	at com.runmoni.app.ui.RunmoniDesignTestBase$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.runOnUiThread$lambda$0(AndroidSynchronization.android.kt:37)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.$r8$lambda$opyMdTZ52jorqLaIG4SKpPr_Zno(Unknown Source:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt$$ExternalSyntheticLambda0.call(D8$$SyntheticClass:0)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2207)
+	at android.os.Handler.handleCallback(Handler.java:883)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loop(Looper.java:214)
+	at android.app.ActivityThread.main(ActivityThread.java:7356)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+2) everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(com.runmoni.app.ui.RunShareUiTest)
+java.lang.AssertionError: Failed to assert the following: (Selected = 'true')
+Semantics of the node:
+Node #145 at (l=160.0, t=551.0, r=210.0, b=599.0)px, Tag: 'run_share_theme_2'
+Role = 'RadioButton'
+Focused = 'false'
+Selected = 'false'
+Text = '[밝게]'
+Actions = [OnClick, RequestFocus, SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+MergeDescendants = 'true'
+Has 2 siblings
+Selector used: (TestTag = 'run_share_theme_2')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertIsSelected(Assertions.kt:84)
+	at com.runmoni.app.ui.RunShareUiTest.everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(RunShareUiTest.kt:83)
+3) shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll(com.runmoni.app.ui.RunShareUiTest)
+java.lang.AssertionError: Text overflow in share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: 배경; lines=4.0..57.0/42.0; size=52 x 42; maxLines=false
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow$lambda$9(RunmoniDesignTest.kt:84)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.$r8$lambda$Zx9jK42fUcsMVVtX21zGSamt8l8(Unknown Source:0)
+	at com.runmoni.app.ui.RunmoniDesignTestBase$$ExternalSyntheticLambda1.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.runOnUiThread$lambda$0(AndroidSynchronization.android.kt:37)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt.$r8$lambda$opyMdTZ52jorqLaIG4SKpPr_Zno(Unknown Source:0)
+	at androidx.compose.ui.test.AndroidSynchronization_androidKt$$ExternalSyntheticLambda0.call(D8$$SyntheticClass:0)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:462)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at android.app.Instrumentation$SyncRunnable.run(Instrumentation.java:2207)
+	at android.os.Handler.handleCallback(Handler.java:883)
+	at android.os.Handler.dispatchMessage(Handler.java:100)
+	at android.os.Looper.loop(Looper.java:214)
+	at android.app.ActivityThread.main(ActivityThread.java:7356)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:492)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:930)
+
+FAILURES!!!
+Tests run: 4,  Failures: 3
+
+

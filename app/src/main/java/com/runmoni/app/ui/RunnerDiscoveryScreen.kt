@@ -3,6 +3,8 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -46,14 +48,18 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
         // Reserve usable map/attribution space as the region, status and actions
         // grow. A weighted map can otherwise collapse to a few pixels at 1.5x.
         val constrained = maxHeight < 520.dp || LocalDensity.current.fontScale >= 1.3f
+        // Large type expands the attribution and independent map/location
+        // status. Keep the map usable; the enclosing column remains scrollable.
+        val mapHeight = if (LocalDensity.current.fontScale >= 1.8f) 360.dp else 280.dp
         Column(Modifier.fillMaxSize().then(if (constrained) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-            .padding(horizontal = pageGutter(), vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("근처 러너", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
-            CurrentAreaLabel(state.currentArea, clock)
+            .padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("근처 러너", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                CurrentAreaLabel(state.currentArea, clock)
+            }
             MapPane(emptyList(), publicRunners + listOfNotNull(own),
-                modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(240.dp) else Modifier.weight(1f)),
+                modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(mapHeight) else Modifier.weight(1f)),
                 interactiveMap = true, followCenter = center, onBoundsChanged = actions::setDiscoveryBounds)
-            if (state.discovery.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
             val status = when {
                 !state.signedIn -> "지도는 둘러볼 수 있어요. 러너를 보려면 프로필을 연결해 주세요."
                 state.discovery.error != null -> state.discovery.error
@@ -63,18 +69,28 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                 publicRunners.isEmpty() -> "이 화면에 표시할 공유 위치가 없어요."
                 else -> "위치를 공유한 러너 ${publicRunners.size}명 · 약 100m 단위"
             }
-            Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("runner_discovery_status"))
-            AdaptiveActions(first = { m ->
-                OutlinedButton(onClick = actions::locateExplore, shape = RunmoniShapes.Action,
-                    modifier = m.heightIn(min = 48.dp).testTag("locate_explore")) { Text("내 위치로 이동") }
-            }, second = { m ->
-                OutlinedButton(onClick = { if (!state.signedIn) onProfile() else actions.setPublicLocation(!state.publicLocation) },
-                    enabled = !state.sharing.busy, shape = RunmoniShapes.Action,
-                    modifier = m.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
-                    Text(if (!state.signedIn) "프로필 연결" else if (state.sharing.busy) "연결 중…" else if (state.publicLocation) "공유 끄기" else "내 위치 공유")
-                }
-            })
-            state.sharing.error?.let { Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodySmall) }
+            Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()).testTag("runner_discovery_details"),
+                verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (state.discovery.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
+                Text(status.orEmpty(), style = MaterialTheme.typography.bodySmall,
+                    color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
+                    modifier = Modifier.testTag("runner_discovery_status"))
+                AdaptiveActions(first = { m ->
+                    TextButton(onClick = actions::locateExplore,
+                        modifier = m.heightIn(min = 48.dp).testTag("locate_explore")) {
+                        Icon(Icons.Outlined.MyLocation, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("내 위치")
+                    }
+                }, second = { m ->
+                    TextButton(onClick = { if (!state.signedIn) onProfile() else actions.setPublicLocation(!state.publicLocation) },
+                        enabled = !state.sharing.busy,
+                        modifier = m.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
+                        Text(if (!state.signedIn) "프로필 연결" else if (state.sharing.busy) "연결 중…" else if (state.publicLocation) "공유 끄기" else "내 위치 공유")
+                    }
+                })
+                state.sharing.error?.let { Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodySmall) }
+            }
         }
     }
 }

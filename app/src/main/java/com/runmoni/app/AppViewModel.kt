@@ -538,6 +538,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         if (!firebaseMode && api.token.isNotBlank()) try { api.request("DELETE", "/v1/runs/$id") } catch (failure: PilotException) { if (failure.status != 404 || record?.synced == true) throw failure }
         app.runs.delete(id)
     })
+    override fun canShareRun(record: RunRecord): Boolean = RunShareAccess.allowed(state.value, record)
     override fun exportRun(id: String) = ignoreJob(work {
         val record = app.runs.record(id) ?: error("기록이 없습니다.")
         val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US).apply { timeZone = TimeZone.getTimeZone("UTC") }

@@ -1,0 +1,23 @@
+
+com.runmoni.app.sharing.RunShareCardRendererTest:.
+Error in approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls(com.runmoni.app.sharing.RunShareCardRendererTest):
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.runmoni.app.sharing.RunShareCardRendererTest.approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls(RunShareCardRendererTest.kt:90)
+.
+
+Time: 17.24
+There was 1 failure:
+1) approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls(com.runmoni.app.sharing.RunShareCardRendererTest)
+java.lang.AssertionError
+	at org.junit.Assert.fail(Assert.java:87)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at org.junit.Assert.assertTrue(Assert.java:53)
+	at com.runmoni.app.sharing.RunShareCardRendererTest.approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls(RunShareCardRendererTest.kt:90)
+
+FAILURES!!!
+Tests run: 3,  Failures: 1
+
+

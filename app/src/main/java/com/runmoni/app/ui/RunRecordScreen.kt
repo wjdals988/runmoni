@@ -7,6 +7,7 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,7 +30,7 @@ import com.runmoni.app.domain.RunRecord
 // This private semantic value adds no platform accessibility action or label.
 internal val RecordActionSnapshot = SemanticsPropertyKey<() -> Unit>("RunmoniRecordActionSnapshot")
 
-private fun Modifier.recordActionSnapshot(action: () -> Unit) = semantics { this[RecordActionSnapshot] = action }
+internal fun Modifier.recordActionSnapshot(action: () -> Unit) = semantics { this[RecordActionSnapshot] = action }
 
 /** A record is a page; only its destructive/account-specific choices are dialogs. */
 @Composable
@@ -39,13 +40,14 @@ internal fun RunRecordScreen(
     cloud: CloudAccountState = CloudAccountState(),
     persistence: RunPersistenceState = RunPersistenceState(initialized = true),
     operationBusy: Boolean = false,
+    onShare: (() -> Unit)? = null,
     onBack: () -> Unit,
 ) {
     val scroll = key(record.id) { rememberScrollState() }
     // Each entity/account owns its page and Dialog windows. Preserve the local
     // record scroll across account changes while disposing all old actions.
     key(record.id, cloud.uid) {
-        RunRecordPageContent(record, actions, cloud, persistence, operationBusy, scroll, onBack)
+        RunRecordPageContent(record, actions, cloud, persistence, operationBusy, scroll, onShare, onBack)
     }
 }
 
@@ -57,6 +59,7 @@ private fun RunRecordPageContent(
     persistence: RunPersistenceState,
     operationBusy: Boolean,
     scroll: ScrollState,
+    onShare: (() -> Unit)?,
     onBack: () -> Unit,
 ) {
     // A confirmation never carries over to another record or account. Keep the
@@ -81,6 +84,11 @@ private fun RunRecordPageContent(
     val latestCanBackUp by rememberUpdatedState(canBackUp)
     val latestBusy by rememberUpdatedState(operationBusy)
     val latestActions by rememberUpdatedState(actions)
+    val latestShare by rememberUpdatedState(onShare)
+    val shareAction: () -> Unit = {
+        if (pageAlive && latestContext === confirmationContext && record.id == latestRecordId && !latestBusy &&
+            latestActions.canShareRun(record)) latestShare?.invoke()
+    }
     val exportAction: () -> Unit = {
         val expectedId = record.id
         if (pageAlive && expectedId.isNotBlank() && expectedId == latestRecordId && !latestBusy)
@@ -102,6 +110,11 @@ private fun RunRecordPageContent(
                     }
                     Text("러닝 기록", style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.weight(1f).semantics { heading() })
+                    if (onShare != null) IconButton(onClick = shareAction,
+                        enabled = !operationBusy && actions.canShareRun(record),
+                        modifier = Modifier.size(48.dp).testTag("share_run_record").recordActionSnapshot(shareAction)) {
+                        Icon(Icons.Outlined.Share, "공유 이미지 만들기")
+                    }
                 }
             }
             HorizontalDivider(color = RunmoniColors.Line)

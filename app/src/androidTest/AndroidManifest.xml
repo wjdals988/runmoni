@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Test APK only. Never merged into the distributable application. -->
+    <application>
+        <activity
+            android:name="com.runmoni.app.RunShareReceiverActivity"
+            android:label="Runmoni 공유 검토"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:exported="true"
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/png" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

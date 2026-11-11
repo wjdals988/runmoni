@@ -1,0 +1,80 @@
+
+com.runmoni.app.sharing.RunShareImageStoreTest:
+Error in cancellingPendingGalleryWriteRemovesOnlyItsOwnRow(com.runmoni.app.sharing.RunShareImageStoreTest):
+java.lang.SecurityException: com.runmoni.app has no access to content://media/external/images/media/29
+	at android.os.Parcel.createException(Parcel.java:2071)
+	at android.os.Parcel.readException(Parcel.java:2039)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:140)
+	at android.content.ContentProviderProxy.delete(ContentProviderNative.java:553)
+	at android.content.ContentResolver.delete(ContentResolver.java:1949)
+	at com.runmoni.app.sharing.RunShareImageStoreTest$cancellingPendingGalleryWriteRemovesOnlyItsOwnRow$1$3.invokeSuspend(RunShareImageStoreTest.kt:148)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+Error in failedGalleryPublishIsCleanedAndSuccessfulSaveIsAStandaloneOwnedPng(com.runmoni.app.sharing.RunShareImageStoreTest):
+java.lang.SecurityException: com.runmoni.app has no access to content://media/external/images/media/30
+	at android.os.Parcel.createException(Parcel.java:2071)
+	at android.os.Parcel.readException(Parcel.java:2039)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:140)
+	at android.content.ContentProviderProxy.delete(ContentProviderNative.java:553)
+	at android.content.ContentResolver.delete(ContentResolver.java:1949)
+	at com.runmoni.app.sharing.RunShareImageStoreTest$failedGalleryPublishIsCleanedAndSuccessfulSaveIsAStandaloneOwnedPng$1$6.invokeSuspend(RunShareImageStoreTest.kt:197)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+..
+
+Time: 4.561
+There were 2 failures:
+1) cancellingPendingGalleryWriteRemovesOnlyItsOwnRow(com.runmoni.app.sharing.RunShareImageStoreTest)
+java.lang.SecurityException: com.runmoni.app has no access to content://media/external/images/media/29
+	at android.os.Parcel.createException(Parcel.java:2071)
+	at android.os.Parcel.readException(Parcel.java:2039)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:140)
+	at android.content.ContentProviderProxy.delete(ContentProviderNative.java:553)
+	at android.content.ContentResolver.delete(ContentResolver.java:1949)
+	at com.runmoni.app.sharing.RunShareImageStoreTest$cancellingPendingGalleryWriteRemovesOnlyItsOwnRow$1$3.invokeSuspend(RunShareImageStoreTest.kt:148)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+2) failedGalleryPublishIsCleanedAndSuccessfulSaveIsAStandaloneOwnedPng(com.runmoni.app.sharing.RunShareImageStoreTest)
+java.lang.SecurityException: com.runmoni.app has no access to content://media/external/images/media/30
+	at android.os.Parcel.createException(Parcel.java:2071)
+	at android.os.Parcel.readException(Parcel.java:2039)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:188)
+	at android.database.DatabaseUtils.readExceptionFromParcel(DatabaseUtils.java:140)
+	at android.content.ContentProviderProxy.delete(ContentProviderNative.java:553)
+	at android.content.ContentResolver.delete(ContentResolver.java:1949)
+	at com.runmoni.app.sharing.RunShareImageStoreTest$failedGalleryPublishIsCleanedAndSuccessfulSaveIsAStandaloneOwnedPng$1$6.invokeSuspend(RunShareImageStoreTest.kt:197)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:101)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:113)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:89)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:589)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:823)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:720)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:707)
+
+FAILURES!!!
+Tests run: 4,  Failures: 2
+
+

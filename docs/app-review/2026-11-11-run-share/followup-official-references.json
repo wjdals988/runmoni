@@ -1,0 +1,27 @@
+{
+  "checkedAtUtc": "2026-11-11T15:28:33.709598+00:00",
+  "references": [
+    {
+      "name": "android-widgets",
+      "url": "https://developer.android.com/design/ui/mobile/guides/widgets",
+      "finalUrl": "https://developer.android.com/design/ui/mobile/guides/widgets",
+      "httpStatus": 200,
+      "sha256": "b9d18ffd92e6369318a31662363440e732ad7d5e3f470492675d9b5d9218945a",
+      "bytes": 271859
+    },
+    {
+      "name": "naver-map-types",
+      "url": "https://navermaps.github.io/android-map-sdk/guide-ko/2-3.html",
+      "finalUrl": "https://navermaps.github.io/android-map-sdk/guide-ko/2-3.html",
+      "httpStatus": 200,
+      "sha256": "862215295a297d79e5f9ddbf0c396a80d3001e244b3e7dfec08df8c13de983ac",
+      "bytes": 65521
+    },
+    {
+      "name": "maplibre-android",
+      "url": "https://maplibre.org/maplibre-native/android/",
+      "failureType": "HTTPError",
+      "failure": "HTTP Error 404: Not Found"
+    }
+  ]
+}

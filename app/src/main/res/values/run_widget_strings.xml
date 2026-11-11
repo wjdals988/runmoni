@@ -11,4 +11,5 @@
     <string name="run_widget_finish_description">러닝 종료 확인창 열기</string>
     <string name="run_widget_open">앱에서 확인</string>
     <string name="run_widget_preview_footer">러닝 시작 준비</string>
+    <string name="run_widget_duration_label">시간</string>
 </resources>

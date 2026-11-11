@@ -38,6 +38,7 @@ interface AppActions {
     fun buyItem(slot: String, variant: Int)
     fun deleteRun(id: String)
     fun exportRun(id: String)
+    fun canShareRun(record: RunRecord): Boolean = false
     fun configureServer(url: String)
     fun signIn(inviteCode: String, name: String)
     fun connectCommunity(name: String)

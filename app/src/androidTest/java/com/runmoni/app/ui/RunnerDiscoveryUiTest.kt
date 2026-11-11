@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
+import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -140,6 +141,48 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             assertEquals(listOf(Triple("run-a", true, 9L)), actions.confirmations)
             assertEquals(listOf(7L), actions.dismissedNonces)
             assertTrue(actions.sharingRequests.isEmpty())
+        }
+    }
+
+    @Test fun mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText() {
+        val viewport = mutableStateOf(Viewport())
+        val state = mutableStateOf(AppState())
+        val actions = Actions(state)
+        compose.setContent {
+            ViewportBox(viewport.value) {
+                RunmoniTheme { RunnerDiscoveryScreen(state.value, actions, onProfile = {}) }
+            }
+        }
+        for (width in listOf(320, 360, 411)) for (scale in listOf(1f, 1.5f, 2f)) {
+            compose.runOnIdle { viewport.value = Viewport(width, scale) }
+            fun reachable(tag: String): SemanticsNodeInteraction = compose.onNodeWithTag(tag).also {
+                if (scale >= 1.3f) it.performScrollTo()
+            }
+            reachable("route_map_viewport").assertIsDisplayed().assertHeightIsAtLeast(96.dp)
+            reachable("map_options").assertIsDisplayed()
+                .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+            compose.onNodeWithTag("map_recenter").assertDoesNotExist()
+            val map = compose.onNodeWithTag("route_map_viewport").fetchSemanticsNode().boundsInRoot
+            val bar = compose.onNodeWithTag("map_control_bar").fetchSemanticsNode().boundsInRoot
+            assertTrue("The map's persistent control is outside its pixels at $width/$scale", map.bottom <= bar.top)
+            for (tag in listOf("locate_explore", "toggle_runner_sharing")) {
+                reachable(tag).assertIsDisplayed()
+                    .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+                val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
+                val screen = compose.onNodeWithTag("audit_viewport").fetchSemanticsNode().boundsInRoot
+                assertTrue("The full outside-map action stays in the viewport at $width/$scale: $tag",
+                    bounds.left >= screen.left && bounds.right <= screen.right && bounds.top >= screen.top && bounds.bottom <= screen.bottom)
+            }
+            noTextOverflow("map-first discovery $width / $scale")
+            if (width == 320 && scale == 2f) {
+                reachable("route_map_viewport")
+                capture("discovery-map-clean-320-font2-fixture")
+            }
+        }
+        compose.runOnIdle {
+            assertTrue("Layout and capture do not request public sharing", actions.sharingRequests.isEmpty())
+            assertTrue(actions.confirmations.isEmpty())
+            assertEquals(0, actions.locates)
         }
     }
 }

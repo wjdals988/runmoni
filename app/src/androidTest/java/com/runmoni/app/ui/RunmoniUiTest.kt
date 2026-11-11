@@ -444,6 +444,7 @@ class RunmoniUiTest {
         override fun buyItem(slot: String, variant: Int) { val price = AvatarCatalogue.price(variant); purchases += "$slot:$variant"; val profile = state.value.profile; state.value = state.value.copy(profile = profile.copy(mileage = profile.mileage - price, ownedItems = profile.ownedItems + "$slot:$variant")) }
         override fun deleteRun(id: String) { deletions += id; state.value = state.value.copy(records = state.value.records.filterNot { it.id == id }) }
         override fun exportRun(id: String) { exports += id }
+        override fun canShareRun(record: RunRecord) = RunShareAccess.allowed(state.value, record)
         override fun configureServer(url: String) = Unit
         override fun signIn(inviteCode: String, name: String) { login = inviteCode to name }
         override fun connectCommunity(name: String) { login = "" to name }

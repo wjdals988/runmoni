@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetHostView
 import android.content.ComponentName
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Rect
 import android.os.Build
 import android.view.View
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.graphics.ColorUtils
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -24,6 +27,7 @@ import org.junit.After
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 import java.util.UUID
 
 /** Inflates factory output only. Never pins a widget, sends an action, starts
@@ -52,7 +56,9 @@ class RunWidgetFactoryTest {
                 View.MeasureSpec.makeMeasureSpec(((if (minimal) 140 else 200) * density).toInt(), View.MeasureSpec.AT_MOST))
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         }
-        created += RunWidgetViews.open(context, state)
+        // The idle open action has a shared identity used by a real pinned widget.
+        // Do not cancel that existing application action as test cleanup.
+        if (!state?.runId.isNullOrBlank()) created += RunWidgetViews.open(context, state)
         state?.let {
             created += RunWidgetViews.control(context, it.runId, RunWidgetControl.PAUSE)
             created += RunWidgetViews.control(context, it.runId, RunWidgetControl.RESUME)
@@ -92,11 +98,32 @@ class RunWidgetFactoryTest {
         assertEquals(View.VISIBLE, running.findViewById<View>(R.id.run_widget_actions).visibility)
         assertEquals(View.GONE, running.findViewById<View>(R.id.run_widget_open).visibility)
         assertEquals("멈춤", running.findViewById<Button>(R.id.run_widget_control).text.toString())
+        assertEquals(View.VISIBLE, running.findViewById<View>(R.id.run_widget_metrics).visibility)
+        val distance = running.findViewById<TextView>(R.id.run_widget_distance)
+        val duration = running.findViewById<TextView>(R.id.run_widget_duration)
+        val speed = running.findViewById<TextView>(R.id.run_widget_speed)
+        assertTrue("Distance remains the primary value", distance.textSize > duration.textSize)
+        assertTrue("Secondary metrics keep a different weight", duration.textSize > speed.textSize)
+        assertEquals("러닝 시간 01:15", duration.contentDescription)
+        val surface = context.getColor(R.color.run_widget_surface)
+        for (id in listOf(R.id.run_widget_title, R.id.run_widget_distance, R.id.run_widget_duration, R.id.run_widget_speed))
+            assertTrue("Readable widget text contrast for $id", ColorUtils.calculateContrast(
+                running.findViewById<TextView>(id).currentTextColor, surface) >= 4.5)
+        assertTrue("Primary control remains readable", ColorUtils.calculateContrast(
+            running.findViewById<Button>(R.id.run_widget_control).currentTextColor,
+            context.getColor(R.color.run_widget_primary)) >= 4.5)
+        assertTrue("Secondary finish remains readable", ColorUtils.calculateContrast(
+            running.findViewById<Button>(R.id.run_widget_finish).currentTextColor,
+            context.getColor(R.color.run_widget_secondary)) >= 4.5)
         val paused = inflate(snapshot(run.copy(phase = RunPhase.PAUSED)), live = true)
         assertEquals("재개", paused.findViewById<Button>(R.id.run_widget_control).text.toString())
         assertEquals("현재 속도 —", paused.findViewById<TextView>(R.id.run_widget_speed).text.toString())
+        assertEquals("Pause does not show a redundant empty speed row", View.GONE,
+            paused.findViewById<View>(R.id.run_widget_speed).visibility)
         for (id in listOf(R.id.run_widget_control, R.id.run_widget_finish))
             assertTrue(running.findViewById<View>(id).measuredHeight >= 48 * context.resources.displayMetrics.density)
+        captureFixture("widget-refresh-running-256x220-fixture", snapshot(), true, 256, 220)
+        captureFixture("widget-refresh-paused-128x140-fixture", snapshot(run.copy(phase = RunPhase.PAUSED)), true, 128, 140)
     }
 
     @Test fun coldOrRecoveryViewsHaveNoServiceControlsAndNeverUseAChronometer() {
@@ -106,6 +133,14 @@ class RunWidgetFactoryTest {
             assertEquals(View.VISIBLE, view.findViewById<View>(R.id.run_widget_open).visibility)
             assertFalse(view.findViewById<View>(R.id.run_widget_duration) is android.widget.Chronometer)
             assertTrue(view.findViewById<TextView>(R.id.run_widget_speed).text.toString().contains("—"))
+            if (state.phase == RunPhase.IDLE) {
+                assertEquals("Idle does not publish empty run statistics", View.GONE,
+                    view.findViewById<View>(R.id.run_widget_metrics).visibility)
+                assertEquals(View.GONE, view.findViewById<View>(R.id.run_widget_footer).visibility)
+                assertEquals("런모니 열기", view.findViewById<Button>(R.id.run_widget_open).text.toString())
+                assertFalse(view.contentDescription.toString().contains("—"))
+                captureFixture("widget-refresh-idle-256x160-fixture", state, false, 256, 160)
+            } else assertEquals(View.VISIBLE, view.findViewById<View>(R.id.run_widget_metrics).visibility)
         }
     }
 
@@ -228,8 +263,35 @@ class RunWidgetFactoryTest {
         }
     }
 
+    /** Native RemoteViews draw with synthetic metrics. Not a launcher/MainActivity screenshot. */
+    private fun captureFixture(name: String, state: RunWidgetSnapshot, live: Boolean, widthDp: Int, heightDp: Int) {
+        val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = 1f })
+        var output: Bitmap? = null
+        try {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync {
+                val density = display.resources.displayMetrics.density
+                val width = (widthDp * density).toInt()
+                val height = (heightDp * density).toInt()
+                val root = RunWidgetViews.forSize(display, state, live, widthDp, heightDp)
+                    .apply(display, FrameLayout(display)) as ViewGroup
+                root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, width, height)
+                assertFits(root, width, height, density, "native widget render fixture $name")
+                val rendered = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                output = rendered
+                root.draw(Canvas(rendered))
+            }
+            val target = File(context.cacheDir, "widget-review/$name.png")
+            check(target.parentFile!!.isDirectory || target.parentFile!!.mkdirs())
+            target.outputStream().use { assertTrue(requireNotNull(output).compress(Bitmap.CompressFormat.PNG, 100, it)) }
+        } finally { output?.recycle() }
+    }
+
     private fun rememberIntents(state: RunWidgetSnapshot?) {
-        created += RunWidgetViews.open(context, state)
+        // The idle open action has a shared identity used by a real pinned widget.
+        // Do not cancel that existing application action as test cleanup.
+        if (!state?.runId.isNullOrBlank()) created += RunWidgetViews.open(context, state)
         state?.let {
             created += RunWidgetViews.control(context, it.runId, RunWidgetControl.PAUSE)
             created += RunWidgetViews.control(context, it.runId, RunWidgetControl.RESUME)

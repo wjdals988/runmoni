@@ -3,7 +3,7 @@
     <style name="RunWidgetAction" parent="@android:style/Widget.Button">
         <item name="android:background">@drawable/run_widget_action</item>
         <item name="android:backgroundTint">@null</item>
-        <item name="android:textColor">#153E2D</item>
+        <item name="android:textColor">@color/run_widget_surface</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">sans</item>

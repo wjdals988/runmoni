@@ -1,0 +1,32 @@
+## UI Pro Max Stack Guidelines
+**Stack:** jetpack-compose | **Query:** typography hierarchy compact
+**Source:** stacks/jetpack-compose.csv | **Found:** 2 results
+
+### Result 1
+- **Category:** Theming
+- **Guideline:** No hardcoded text style
+- **Description:** Use typography
+- **Do:** MaterialTheme.typography
+- **Don't:** Hardcode sp
+- **Code Good:** Scalable
+- **Code Bad:** Inconsistent
+- **Severity:** Medium
+- **Docs URL:** 
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 2
+- **Category:** Layout
+- **Guideline:** Avoid deep layout nesting
+- **Description:** Deep layout trees increase measure & layout cost
+- **Do:** Keep layout flat
+- **Don't:** Box ? Column ? Box ? Row
+- **Code Good:** Flat hierarchy
+- **Code Bad:** Deep nested tree
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/develop/ui/compose/layouts/basics
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+

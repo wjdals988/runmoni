@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.4.3-dev", "2026-11-11", "정사각형 공유·위젯·지도 개선 · 실기기 검증 전", listOf(
+        "러닝 결과에서 사진과 기록으로 공유 이미지를 만들 수 있어요.",
+        "기본 1:1 이미지에 사진·문구·색상과 미니미 위치·크기를 고를 수 있어요. 4:5·9:16도 지원해요.",
+        "완성한 이미지를 사진 앱에 저장하거나 다른 앱으로 공유할 수 있어요.",
+        "위젯은 거리와 조작을 간결하게, 지도 버튼은 지도 밖 메뉴로 정리했어요.",
+    )),
     AppVersionEntry("0.4.2-dev", "2026-11-11", "프로필 연결 재시도·현재 위치 · 실기기 검증 전", listOf(
         "온라인 프로필 저장이 확인된 뒤 연결을 완료하고, 실패하면 같은 계정으로 다시 시도해요.",
         "연결 오류와 닉네임 확인은 프로필 안에서 안내해요. 원래 기록과 포인트는 유지해요.",

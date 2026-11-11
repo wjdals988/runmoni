@@ -1,0 +1,18 @@
+{
+  "buildSucceeded": false,
+  "interrupted": true,
+  "toolObservation": "poll aborted by user; exec session4582 no longer exists; no Gradle process observed",
+  "lastLoggedTask": "lintAnalyzeDebugAndroidTest",
+  "sourceFreezeReference": "source-freeze6.json",
+  "jvmReports": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "jvmReportsFresh": true,
+  "finalLintVerified": false,
+  "binaryInstallationOrPublicationAttempted": false,
+  "ownedAvdsRunning": false,
+  "recordedAtUtc": "2026-11-11T15:24:04.977553+00:00"
+}
