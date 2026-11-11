@@ -1,0 +1,19 @@
+
+com.runmoni.app.ui.RouteTileMapUiTest:.....
+Error in unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix(com.runmoni.app.ui.RouteTileMapUiTest):
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RouteTileMapUiTest.unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix(RouteTileMapUiTest.kt:200)
+
+
+Time: 69.284
+There was 1 failure:
+1) unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix(com.runmoni.app.ui.RouteTileMapUiTest)
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RouteTileMapUiTest.unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix(RouteTileMapUiTest.kt:200)
+
+FAILURES!!!
+Tests run: 6,  Failures: 1
+
+

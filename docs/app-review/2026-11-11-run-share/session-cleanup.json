@@ -1,0 +1,12 @@
+{
+  "ownedPid": 864418,
+  "avd": "Runmoni_Cloud_29",
+  "ownedCommandVerifiedBeforeStop": true,
+  "ownedEmulatorNoLongerRunning": true,
+  "ownedPidState": "Z",
+  "widgetProof": "widget2.json",
+  "restorationConfirmedBeforeStop": true,
+  "observedAtUtc": "2026-11-11T20:20:41.962354+00:00",
+  "otherEmulatorsStopped": false,
+  "cleanupCollectorNote": "Initial process-list substring check also matched its own shell command; exact PID/state and executable-name check confirmed shutdown."
+}

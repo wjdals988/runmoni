@@ -1,0 +1,22 @@
+{
+  "base": "binary-build4.json",
+  "final": "binary-build5.json",
+  "changedInputs": {
+    "productSources": [],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/sharing/RunShareCardRendererTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "appBinaryExactlyUnchanged": true,
+  "testBinaryChanged": true,
+  "jvm189ReusedFromBuild4": true,
+  "fresh189ClaimedForBuild5": false,
+  "unitTestSourcesExactlyUnchanged": true,
+  "productConfigResourcesAssetsExactlyUnchanged": true,
+  "jvmSourceFileCount": 27,
+  "testLintAnalysisExecuted": true
+}

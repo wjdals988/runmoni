@@ -1,0 +1,26 @@
+{
+  "ownSyntheticPngValidated": true,
+  "sizeBytes": 147,
+  "sha256": "d0acfc2b5426c4b16c59de920f89fcffedaf07055c74e662080962384c7f77ec",
+  "dimensions": [
+    32,
+    48
+  ],
+  "everyPixelRgba": [
+    28,
+    86,
+    65,
+    255
+  ],
+  "rootContentDeleteExitSuccess": true,
+  "rootContentDeleteStdoutEmpty": true,
+  "verificationScriptFailedOnAssumedStdoutFormat": true,
+  "rowAbsencePendingNextBoot": false,
+  "userPhotosTargeted": false,
+  "ownedAvd823520Stopped": true,
+  "rowAbsenceConfirmedOnNextBoot": true,
+  "exactSyntheticRowRemovedCount": 1,
+  "allOtherOriginalRowsPreserved": true,
+  "verifiedAtUtc": "2026-11-11T15:57:31.834093+00:00",
+  "verification": "Direct exec-out root content delete of exactly proven synthetic URI, then direct query returned No result found; no format-based deletion assumption"
+}

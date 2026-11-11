@@ -1,0 +1,637 @@
+{
+  "name": "live8",
+  "nonce": "share43live08",
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build12.json",
+  "sourceKind": "actual Android MainActivity",
+  "passed": false,
+  "completed": true,
+  "captures": [
+    {
+      "file": "live8-main-default-card.png",
+      "sha256": "9e53c8f7bcc0c42dec50b30e22b6ea38feccbb00add78f5a12056235158aa347",
+      "bytes": 39089,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live8-main-photo-story.png",
+      "sha256": "ae9569f653bc6f9e1622c6195e622a365d9d1e85d65b456b46b1ce03c11926e7",
+      "bytes": 44951,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live8-main-mini-editor.png",
+      "sha256": "d05c81cc01db212efbace208417b34912cf726113ce2569954efa5ec22aef691",
+      "bytes": 42940,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    }
+  ],
+  "actualTaps": [
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        412,
+        32,
+        460,
+        80
+      ]
+    },
+    {
+      "label": "9:16",
+      "description": false,
+      "system": false,
+      "bounds": [
+        146,
+        632,
+        197,
+        680
+      ]
+    },
+    {
+      "label": "검정",
+      "description": false,
+      "system": false,
+      "bounds": [
+        102,
+        653,
+        152,
+        701
+      ]
+    },
+    {
+      "label": "사진 추가",
+      "description": false,
+      "system": false,
+      "bounds": [
+        20,
+        445,
+        460,
+        493
+      ]
+    },
+    {
+      "label": "기록",
+      "description": false,
+      "system": false,
+      "bounds": [
+        108,
+        463,
+        188,
+        511
+      ]
+    },
+    {
+      "label": "상단",
+      "description": false,
+      "system": false,
+      "bounds": [
+        102,
+        567,
+        152,
+        615
+      ]
+    },
+    {
+      "label": "미니미",
+      "description": false,
+      "system": false,
+      "bounds": [
+        196,
+        463,
+        276,
+        511
+      ]
+    },
+    {
+      "label": "왼쪽",
+      "description": false,
+      "system": false,
+      "bounds": [
+        20,
+        717,
+        70,
+        746
+      ]
+    },
+    {
+      "label": "미니미 위로 이동",
+      "description": true,
+      "system": false,
+      "bounds": [
+        76,
+        653,
+        124,
+        701
+      ]
+    },
+    {
+      "label": "이미지 저장",
+      "description": false,
+      "system": false,
+      "bounds": [
+        20,
+        746,
+        234,
+        794
+      ]
+    },
+    {
+      "label": "공유하기",
+      "description": false,
+      "system": false,
+      "bounds": [
+        246,
+        746,
+        460,
+        794
+      ]
+    },
+    {
+      "label": "Runmoni 공유 검토",
+      "description": false,
+      "system": true,
+      "bounds": [
+        0,
+        685,
+        120,
+        806
+      ]
+    },
+    {
+      "label": "러닝 기록으로 돌아가기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        412,
+        32,
+        460,
+        80
+      ]
+    },
+    {
+      "label": "러닝 기록으로 돌아가기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-11T19:37:35.629647+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live8-executed-driver.py",
+  "executedDriverSha256": "28ffd1866266ea718d329106462a7c0b4afb67ccdd2210703ec931391abaf479",
+  "observerHelper": "live8-actual-ui-helper.py",
+  "observerHelperSha256": "1cc713c08cf5c2e12b83c0fcb0a879ae92922ff0cfe318388e6b9fef796c84d2",
+  "environmentHelper": "live8-environment-helper.py",
+  "environmentHelperSha256": "ff727ab3b88a06312e125a997fa108e3469dc2c408d0a028a79bf95d1be78f62",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-11T19:52:25.851048+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "6cda5b7c6b44717ac7305f110816cd820c22eea18a23ba48eef5124baf673695",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 87,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "99e02e17c2780ed3afa777925c148d8fa8aad14c31adf88cb81ff6b24a16c079"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "d2d06ab3ad121a1268cb9528ad986422293ff6fe76ac31946d7af02bbb876a3c"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.796,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.316,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.267,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 28.178,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 25.312,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual owned result page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.546,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 8.325,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Real system image picker leaves Main",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 0.69,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual picker callback loads own synthetic photo",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 10.491,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 3.482,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main caption IME is shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 3.083,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Real shell keys retained in the focused Main caption while IME is shown",
+      "budgetSeconds": 40,
+      "elapsedHostSeconds": 6.1,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual caption present in preview semantics",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 18.009,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.086,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Android chooser offers test receiver",
+      "budgetSeconds": 60,
+      "elapsedHostSeconds": 15.079,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual separate UID receiver read completed",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 12.29,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Back from test receiver returns to actual Main",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 1.627,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.294,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Editor Back returns to canonical result",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.774,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 6.998,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Back to record before map review",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.577,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Root navigation restored before map review",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.444,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual clean discovery map and outside action bar",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 11.968,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.192,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.25,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.461,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 87,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "share43live08",
+    "recordId": "runmoni-share-review-share43live08",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-share43live08.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "ownResultUiSignatureObserved": [
+    "11월 11일 (수) 19:05",
+    "5.24 km",
+    "30:00"
+  ],
+  "defaultPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.11 (수).  1:1, 미니미 포함",
+  "systemPhotoPickerRequestedByThisAttempt": true,
+  "internalStorageVisibilityTemporarilyEnabled": true,
+  "systemPhotoPickerFolderNavigationUsed": true,
+  "internalStorageVisibilityRestored": true,
+  "systemPhotoPickerOwnFilename": "RunmoniReview-share43live08.png",
+  "systemPhotoPickerOwnFilenameBounds": [
+    24,
+    152,
+    162,
+    290
+  ],
+  "systemPhotoPickerOwnFilenameResourceId": "",
+  "systemPhotoPickerOwnFilenameNodeClass": "android.widget.LinearLayout",
+  "systemPhotoPickerOwnFilenameIsGridDescription": true,
+  "systemPhotoPickerSelectionSource": "exact filename in a DocumentsUI list/grid document holder with MIME/thumbnail icon",
+  "actualSystemPhotoPickerUsed": true,
+  "photoStoryPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.11 (수).  9:16, 미니미 포함",
+  "actualCaptionKeyboardObserved": true,
+  "actualCaptionKeyboardBackBounds": [
+    8,
+    32,
+    56,
+    80
+  ],
+  "actualCaptionKeyboardWindowVisibleFrame": [
+    0,
+    24,
+    480,
+    469
+  ],
+  "actualCaptionKeyboardBackFullyOnDisplay": true,
+  "actualCaptionKeyboardBackInsideVisibleWindow": true,
+  "actualCaptionRealShellKeysObservedBeforeImeDismissal": true,
+  "editedPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.11 (수). Morning Miles 9:16, 미니미 포함",
+  "actualMiniMiMovementActionObserved": true,
+  "galleryAcknowledgmentScrollActions": 0,
+  "actualGallerySaveAcknowledgmentObserved": true,
+  "galleryExport": {
+    "file": "live8-gallery-export.png",
+    "displayName": "Runmoni-1934aff4-77ad-423b-a6f1-490c32b59245.png",
+    "sha256": "ef088fa768447277330f41643dd99c57b6642c3328de807348d959dba54800f6",
+    "width": 1080,
+    "height": 1920,
+    "sourceKind": "actual saved MediaStore PNG, not a screenshot"
+  },
+  "receiver": {
+    "schemaVersion": 1,
+    "receiptBase": "received-6efdcce3-06f4-4c3d-a49c-31c202418b38",
+    "sourceKind": "actual READ-granted separate-UID receiver PNG, not a screenshot",
+    "receivedAtMillis": 1794426546777,
+    "passed": true,
+    "receiverPackage": "com.runmoni.app.test",
+    "receiverLinuxUid": 10118,
+    "socialAppDeliveryVerified": false,
+    "networkRequestedByReceiver": false,
+    "targetLinuxUid": 10117,
+    "differentLinuxUid": true,
+    "clipDataMatchesSingleStream": true,
+    "readPermissionGranted": true,
+    "writePermissionDenied": true,
+    "siblingReadPermissionDenied": true,
+    "siblingOpenDeniedBySecurityException": true,
+    "prefixAndPersistableGrantAbsent": true,
+    "width": 1080,
+    "height": 1920,
+    "sizeBytes": 217337,
+    "sha256": "ef088fa768447277330f41643dd99c57b6642c3328de807348d959dba54800f6",
+    "pngFile": "received-6efdcce3-06f4-4c3d-a49c-31c202418b38.png",
+    "sourceUriCanonical": true,
+    "actualReadSucceeded": true,
+    "completedAtMillis": 1794426550040,
+    "file": "live8-receiver-export.png"
+  },
+  "galleryCacheReceiverPngBytesExactlyEqual": true,
+  "shareCacheOwnFilename": "runmoni-card-cd3c4c00-23e3-4746-a28d-b93d390d408c.png",
+  "previewAfterChooserReturn": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.11 (수). Morning Miles 9:16, 미니미 포함",
+  "resultReturnedAfterEditorBack": true,
+  "previewAfterActualReopen": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.11 (수). Morning Miles 9:16, 미니미 포함",
+  "draftReopenObservationMeaning": "Actual accessibility description after Back and reopening; retention is not inferred from taps",
+  "failureType": "AssertionError",
+  "failure": "",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerNoLongerForegroundAtCleanup": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 87,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-11T19:52:25.851032+00:00"
+}

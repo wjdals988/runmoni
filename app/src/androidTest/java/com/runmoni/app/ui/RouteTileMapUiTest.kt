@@ -106,17 +106,23 @@ class RouteTileMapUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithText("© OpenStreetMap contributors").assertIsDisplayed()
         compose.onNodeWithTag("map_zoom_in").assertDoesNotExist()
         compose.onNodeWithTag("map_zoom_out").assertDoesNotExist()
-        for (tag in listOf("map_tile_retry", "map_options", "map_recenter")) {
-            compose.onNodeWithTag(tag).performScrollTo().assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+        compose.onNodeWithTag("map_recenter").assertDoesNotExist()
+        for (tag in listOf("map_options", "osm_attribution")) {
+            compose.onNodeWithTag(tag).assertIsDisplayed().assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
         }
+        val viewport = compose.onNodeWithTag("route_map_viewport").fetchSemanticsNode().boundsInRoot
+        val controls = compose.onNodeWithTag("map_control_bar").fetchSemanticsNode().boundsInRoot
+        assertTrue("No map control obscures the geographic viewport", viewport.bottom <= controls.top)
         val before = requests.size
-        compose.onNodeWithTag("map_tile_retry").performScrollTo().performClick()
+        compose.onNodeWithTag("map_options").performClick()
+        compose.onNodeWithTag("map_tile_retry").assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp).performClick()
         compose.waitUntil(30_000) { requests.size > before }
-        compose.onNodeWithTag("map_options").performScrollTo().performClick()
+        compose.onNodeWithTag("map_options").performClick()
         compose.onNodeWithText("지도 확대").performClick()
         compose.onNodeWithText("지도 확대").assertDoesNotExist()
         mapAccessibilityAction("지도 축소")
-        compose.onNodeWithTag("map_recenter").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithTag("map_options").performClick()
+        compose.onNodeWithText("전체 러닝 경로 보기").performScrollTo().assertIsEnabled().performClick()
         noTextOverflow("inert unavailable basemap/real route controls at320dp-font2")
         capture("record-map-unavailable-font2-fixture")
     }
@@ -174,25 +180,40 @@ class RouteTileMapUiTest : RunmoniDesignTestBase() {
         compose.runOnIdle { center.value = RouteMapCenter(35.1796, 129.0756) }
         compose.waitForIdle()
         assertEquals("A host fix does not interrupt manual browsing", dragged, bounds.get())
-        compose.onNodeWithTag("map_recenter").performScrollTo().performClick()
+        compose.onNodeWithTag("map_options").performClick()
+        compose.onNodeWithText("내 위치로 이동").performScrollTo().performClick()
         compose.waitUntil(30_000) { bounds.get()?.contains(35.1796, 129.0756) == true }
         compose.onNodeWithTag("map_page_scroll_hint").assertDoesNotExist()
     }
 
     @Test fun unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix() {
         val bounds = AtomicReference<RouteMapBounds?>()
-        compose.setContent {
-            CompositionLocalProvider(LocalMapTileSource provides MapTileSource { MapTileResult() }) {
-                RunmoniTheme { MapPane(emptyList(), modifier = Modifier.width(320.dp).height(400.dp), interactiveMap = true,
-                    onBoundsChanged = { bounds.set(it) }) }
+        val unavailable = CompletableDeferred<Unit>()
+        try {
+            compose.setContent {
+                CompositionLocalProvider(LocalMapTileSource provides MapTileSource { unavailable.await(); MapTileResult() }) {
+                    RunmoniTheme { MapPane(emptyList(), modifier = Modifier.width(320.dp).height(400.dp), interactiveMap = true,
+                        onBoundsChanged = { bounds.set(it) }) }
+                }
             }
+            compose.waitUntil(30_000) { bounds.get() != null }
+            compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("내 위치는 확인되지 않았습니다", substring = true)
+            compose.onNodeWithTag("map_location_empty").assertDoesNotExist()
+            compose.onNodeWithText("내 위치 확인 전").assertIsDisplayed()
+            compose.onNodeWithTag("map_tile_error").assertDoesNotExist()
+            compose.runOnIdle { unavailable.complete(Unit) }
+            compose.waitUntil(30_000) {
+                compose.onAllNodesWithTag("map_tile_error").fetchSemanticsNodes().isNotEmpty()
+            }
+            compose.onNodeWithTag("map_tile_error").assertIsDisplayed()
+                .assertTextContains("지도 연결 실패", substring = true)
+                .assertTextContains("내 위치 확인 전", substring = true)
+            compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("내 위치는 확인되지 않았습니다", substring = true)
+            mapAccessibilityAction("지도 확대")
+            compose.waitUntil(30_000) { bounds.get()!!.east - bounds.get()!!.west < 360 }
+        } finally {
+            unavailable.complete(Unit)
         }
-        compose.waitUntil(30_000) { bounds.get() != null }
-        compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("내 위치는 확인되지 않았습니다", substring = true)
-        compose.onNodeWithTag("map_location_empty").assertDoesNotExist()
-        compose.onNodeWithText("내 위치 확인 전").assertIsDisplayed()
-        mapAccessibilityAction("지도 확대")
-        compose.waitUntil(30_000) { bounds.get()!!.east - bounds.get()!!.west < 360 }
     }
 
     @Test fun aRecordWithoutLocationsNeverInventsACenterOrFetchesTiles() {
@@ -203,7 +224,8 @@ class RouteTileMapUiTest : RunmoniDesignTestBase() {
             }
         }
         compose.onNodeWithTag("map_location_empty").assertTextEquals("위치가 저장되지 않은 기록이에요")
-        compose.onNodeWithTag("map_recenter").assertIsNotEnabled()
+        compose.onNodeWithTag("map_options").assertIsNotEnabled()
+        compose.onNodeWithTag("map_recenter").assertDoesNotExist()
         compose.runOnIdle { assertEquals(0, requests.get()) }
     }
 }

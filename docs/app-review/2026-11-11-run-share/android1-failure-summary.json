@@ -1,0 +1,16 @@
+{
+  "attempt": "android-review1",
+  "failedGroup": "renderer",
+  "actualMethodsRun": 3,
+  "failureCount": 1,
+  "scopeMethodsPassedClaimed": 0,
+  "restored": {
+    "preferencesRestoredExactly": true,
+    "profileRestoredExactly": true,
+    "communityAccountPreferencesRestoredExactly": true,
+    "controlledSettingsPermissionsPowerRestoredExactly": true
+  },
+  "avdPid": 821548,
+  "ownedAvdStopped": true,
+  "preliminaryStaticFinding": "Approved source has zero fully-opaque pixels; new test expected >10 alpha255 colors. No product placement failure proven."
+}

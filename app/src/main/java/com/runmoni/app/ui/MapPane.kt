@@ -7,12 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
@@ -33,7 +26,6 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -176,11 +168,8 @@ internal fun MapPane(
             customActions = mapActions
         }) {
             AndroidView(factory = { view.apply { getMapAsync { map = it } } }, modifier = Modifier.fillMaxSize())
-            Box(Modifier.align(Alignment.TopEnd).padding(8.dp)) { MapOptionsMenu(mapActions, enabled = map != null) }
-            if (usablePoints.isNotEmpty() || actualCenter != null || interactiveMap || validRunners.isNotEmpty())
-                FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { manualCamera = false; map?.let(::positionCamera) },
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(10.dp).size(48.dp)) { Icon(Icons.Outlined.MyLocation, recenterLabel) }
         }
+        MapControlBar(mapActions, enabled = map != null)
         if (fitRoute && !interactiveMap) MapPageScrollHint()
     }
     LaunchedEffect(map, geometry, validRunners, mapSize, fitRoute, interactiveMap, actualCenter) {

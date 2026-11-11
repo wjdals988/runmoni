@@ -1,0 +1,29 @@
+{
+  "sourceFrozen": true,
+  "xmlSyntaxParsed": 10,
+  "buildOrAndroidRuntimeExecutedByAgent": false,
+  "nativeMethodCount": 7,
+  "domainOrProviderOrSessionChanged": false,
+  "snapshotCacheSchemaChanged": false,
+  "sourceHashes": {
+    "app/src/main/java/com/runmoni/app/widget/RunWidgetViews.kt": "5b0a1924eb834f4ea581016826ad53375b5be5933d6375e999d42a9f616bcb40",
+    "app/src/androidTest/java/com/runmoni/app/widget/RunWidgetFactoryTest.kt": "0ba883c4b3dbdd3ac87ae80984497cb3ea50b785ce719c58f72b6f95cb09a17d",
+    "app/src/main/res/layout/run_widget.xml": "a7147e454ea381d5229fbaa74bd8ba145b70c420b7284fe29334939aadc19a25",
+    "app/src/main/res/layout/run_widget_action_only.xml": "f6de481c2ddd74c9e66c99bf6a6ba58e39d6d9b0186ac02a713be5be9159a6e3",
+    "app/src/main/res/layout/run_widget_compact.xml": "24289d8139d8059a0dfb22d6b81ba836b44ef3af688a8e78b4adaaf863e75656",
+    "app/src/main/res/layout/run_widget_minimal.xml": "846c28627d331d6269b67c0ecf85f15b3eabd09b599e93f884bfa55cb5367591",
+    "app/src/main/res/values/run_widget_colors.xml": "b3f1421de7ec600c0751d0a4dc34845b894e6a52844ed70aee801adbf4719f30",
+    "app/src/main/res/values/run_widget_strings.xml": "b3e4920baff1c11f2e487d39305efe87d347ff447ff6359e0d13eb3cb7af632c",
+    "app/src/main/res/values/run_widget_styles.xml": "6ee9370b44d0bfacba42000ed0a10e89bee9f646b0f27dbb491e2c4bd7dd5148",
+    "app/src/main/res/drawable/run_widget_action.xml": "ab6c736d43fb8e897024437cf47689969c6979d31d7319d37f5632bf9d9fc0f9",
+    "app/src/main/res/drawable/run_widget_secondary_action.xml": "047c5497110f11d7abe4106282ab650d0751796f0527d51b520c1a908c13e681",
+    "app/src/main/res/drawable/run_widget_surface.xml": "fc3c5f66be02929c56701ca664684c1d2b060b4bebdbc08be8ff430f8c144782"
+  },
+  "skillMatch": "No verified widget-specific DB match; MASTER + native defaults + Root official Android guide research",
+  "expectedNativeFixtureOutputs": [
+    "cache/widget-review/widget-refresh-running-256x220-fixture.png",
+    "cache/widget-review/widget-refresh-paused-128x140-fixture.png",
+    "cache/widget-review/widget-refresh-idle-256x160-fixture.png"
+  ],
+  "fixtureSourceKind": "Native RemoteViews rendering with synthetic snapshot; NOT launcher/MainActivity screenshot"
+}

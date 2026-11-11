@@ -1,0 +1,2 @@
+failed restored URI recovery ComponentActivity/fake callbacks: waitMillis=39; timeoutMillis=120000
+share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: waitMillis=16; timeoutMillis=120000

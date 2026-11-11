@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunRecordNavigationUiTest:..
+
+Time: 65.732
+
+OK (2 tests)
+
+

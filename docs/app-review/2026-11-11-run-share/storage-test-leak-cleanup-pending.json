@@ -1,0 +1,21 @@
+{
+  "ownSyntheticPngValidated": true,
+  "sizeBytes": 147,
+  "sha256": "d0acfc2b5426c4b16c59de920f89fcffedaf07055c74e662080962384c7f77ec",
+  "dimensions": [
+    32,
+    48
+  ],
+  "everyPixelRgba": [
+    28,
+    86,
+    65,
+    255
+  ],
+  "rootContentDeleteExitSuccess": true,
+  "rootContentDeleteStdoutEmpty": true,
+  "verificationScriptFailedOnAssumedStdoutFormat": true,
+  "rowAbsencePendingNextBoot": true,
+  "userPhotosTargeted": false,
+  "ownedAvd823520Stopped": true
+}

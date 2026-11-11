@@ -71,19 +71,27 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var selectedRecordId by rememberSaveable { mutableStateOf<String?>(null) }
         var recordSnapshot by remember { mutableStateOf<RunRecord?>(null) }
         var deletingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        var sharingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        val recordStateHolder = rememberSaveableStateHolder()
         fun openRecord(record: RunRecord) {
             recordSnapshot = record
             selectedRecordId = record.id
             deletingRecordId = null
+            sharingRecordId = null
             settings = false
             closet = false
             appInformation = false
             signIn = false
         }
         fun closeRecord() {
+            selectedRecordId?.let { id ->
+                recordStateHolder.removeState("record_$id")
+                recordStateHolder.removeState("share_$id")
+            }
             selectedRecordId = null
             recordSnapshot = null
             deletingRecordId = null
+            sharingRecordId = null
         }
         val selectedRecord = state.records.firstOrNull { it.id == selectedRecordId }
             ?: recordSnapshot?.takeIf { it.id == selectedRecordId }
@@ -302,8 +310,18 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                         }
                     }
                 }
-                RunRecordScreen(selectedRecord, recordActions, state.cloud, state.runPersistence,
-                    operationBusy = state.busy, onBack = ::closeRecord)
+                if (sharingRecordId == selectedRecord.id) {
+                    recordStateHolder.SaveableStateProvider("share_${selectedRecord.id}") { key(selectedRecord.id) {
+                        RunShareScreen(selectedRecord, state.profile.avatar, state.profile.name,
+                            recordAvailable = RunShareAccess.allowed(state, selectedRecord),
+                            authorize = { actions.canShareRun(selectedRecord) }, onBack = { sharingRecordId = null })
+                    } }
+                } else recordStateHolder.SaveableStateProvider("record_${selectedRecord.id}") {
+                    RunRecordScreen(selectedRecord, recordActions, state.cloud, state.runPersistence,
+                        operationBusy = state.busy,
+                        onShare = { if (actions.canShareRun(selectedRecord)) sharingRecordId = selectedRecord.id },
+                        onBack = ::closeRecord)
+                }
             } else {
                 BackHandler(onBack = ::closeRecord)
                 Surface(Modifier.fillMaxSize(), color = RunmoniColors.Cream) {

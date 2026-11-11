@@ -1,0 +1,37 @@
+## UI Pro Max Search Results
+**Domain:** web | **Query:** contextual actions
+**Source:** app-interface.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Anti-Pattern
+- **Issue:** No Gesture-Only Actions
+- **Platform:** iOS/Android/React Native
+- **Description:** Don't rely solely on hidden gestures for core actions
+- **Do:** Provide visible buttons in addition to gestures
+- **Don't:** Rely on swipe/shake only with no UI affordance
+- **Code Example Good:** Swipe to delete + visible Delete button
+- **Code Example Bad:** Only shake device to undo with no UI
+- **Severity:** Critical
+
+### Result 2
+- **Category:** Feedback
+- **Issue:** Success Feedback
+- **Platform:** iOS/Android/React Native
+- **Description:** Confirm successful actions with brief feedback
+- **Do:** Show toast/checkmark or banner
+- **Don't:** Complete actions silently with no confirmation
+- **Code Example Good:** showToast('Saved successfully')
+- **Code Example Bad:** // silently update state only
+- **Severity:** Medium
+
+### Result 3
+- **Category:** Navigation
+- **Issue:** Modal Escape
+- **Platform:** iOS/Android/React Native
+- **Description:** Modals/sheets must have clear close actions
+- **Do:** Provide close button and swipe-down where platform expects
+- **Don't:** Trapping users in modal with no obvious exit
+- **Code Example Good:** <Modal><Button title="Close" onPress={onClose} /></Modal>
+- **Code Example Bad:** <Modal><View>{children}</View></Modal>
+- **Severity:** High
+

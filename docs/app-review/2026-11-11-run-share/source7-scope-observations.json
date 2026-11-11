@@ -1,0 +1,76 @@
+{
+  "source": "source-freeze7.json",
+  "binary": "binary-build7.json",
+  "default38Complete": true,
+  "default38Passed": false,
+  "fullyPassedIndependentGroups": [
+    {
+      "name": "renderer",
+      "methods": 4,
+      "raw": "android-review5-renderer.txt",
+      "sha256": "4c71b22f3731210cd98fd40a037a7f0c825dc78c9debc1e8eaa78b9ad10e3505"
+    },
+    {
+      "name": "storage",
+      "methods": 4,
+      "raw": "android-review5-storage.txt",
+      "sha256": "0c3782e6c61400cc4f0b7f8a6ffbc31a7ab3e0a61c30d0bae486408a4a0b3040"
+    },
+    {
+      "name": "share-ui",
+      "methods": 4,
+      "raw": "android-review5-share-ui.txt",
+      "sha256": "36124cb56a7f34ee4284db6c64f401163f75387b0cba88bdac1e3957a80b07d1"
+    },
+    {
+      "name": "controller",
+      "methods": 1,
+      "raw": "android-review5-controller.txt",
+      "sha256": "87820635f219e02010e4095d006001eeb2c9492cbacacf6a6b8d0c1273ecad53"
+    },
+    {
+      "name": "record-ui",
+      "methods": 4,
+      "raw": "android-review5-record-ui.txt",
+      "sha256": "48990374ee2f86610e9d43d9be8d7f30133a48f42e14cf8fe6a9013257ed35da"
+    },
+    {
+      "name": "record-navigation",
+      "methods": 2,
+      "raw": "android-review5-record-navigation.txt",
+      "sha256": "ae100ce373d87efe9652bf1d149d4a54f7cadb4e30030ac61b6e3a6e91fde624"
+    },
+    {
+      "name": "tabs",
+      "methods": 1,
+      "raw": "android-review5-tabs.txt",
+      "sha256": "4d00ea824ea38ffa757842fffd8f98bacf06ebb8e59da77bbcfd38c0795c4908"
+    },
+    {
+      "name": "widget",
+      "methods": 7,
+      "raw": "android-review5-widget.txt",
+      "sha256": "48496741b17798ce3f510dd922bfdb335d34477fcb629ee5bb2072efc3fb16f6"
+    }
+  ],
+  "failedGroups": [
+    {
+      "name": "map",
+      "raw": "android-review5-map.txt",
+      "expected": 6,
+      "failureCount": 1
+    },
+    {
+      "name": "discovery",
+      "raw": "android-review5-discovery.txt",
+      "expected": 5,
+      "failureCount": 1
+    }
+  ],
+  "fullyPassedGroupMethods": 27,
+  "nativeRecordMethodRetained": true,
+  "nativeImeFailed": true,
+  "allSource7ResultsClaimedAsSource8": false,
+  "source8FutureTarget": "map6 + discovery5 + tabs1 and IME1; Source7 others remain separate",
+  "originalPreferencesAndProfileAndAccountAndControlledEnvironmentRestored": true
+}

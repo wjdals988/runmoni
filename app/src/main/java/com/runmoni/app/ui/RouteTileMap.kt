@@ -3,9 +3,7 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -151,22 +149,6 @@ internal fun RouteTileMap(
     }
     val failed = requested.isNotEmpty() && !loading && requested.any { images[it]?.bitmap == null || images[it]?.stale == true }
     Column(modifier.background(RunmoniColors.Paper).testTag("route_canvas")) {
-        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), verticalAlignment = Alignment.CenterVertically) {
-            if (failed) {
-                Text("지도 연결 실패", style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted,
-                    modifier = Modifier.padding(horizontal = 8.dp).testTag("map_tile_error"))
-                FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { source.retry(); attempt++ }, modifier = Modifier.size(48.dp).testTag("map_tile_retry")) {
-                    Icon(Icons.Outlined.Refresh, "배경 지도 다시 불러오기")
-                }
-            }
-            if (interactiveMap && route.isEmpty() && actualCenter == null) Text("내 위치 확인 전",
-                style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted, modifier = Modifier.padding(horizontal = 8.dp))
-            MapOptionsMenu(mapActions, enabled = viewport != null)
-            FilledTonalIconButton(shape = RunmoniShapes.Action, onClick = { recenter() }, enabled = viewport != null,
-                modifier = Modifier.size(48.dp).testTag("map_recenter")) {
-                Icon(Icons.Outlined.MyLocation, recenterLabel)
-            }
-        }
         Box(Modifier.weight(1f).fillMaxWidth().clipToBounds().onSizeChanged { canvasSize = it }
             .pointerInput(tileSize, fitRoute, interactiveMap, viewport != null) {
                 if (viewport == null) return@pointerInput
@@ -249,11 +231,25 @@ internal fun RouteTileMap(
                 modifier = Modifier.align(Alignment.Center).padding(horizontal = 12.dp, vertical = if (fitRoute) 12.dp else 4.dp).testTag("map_location_empty"))
             if (loading) LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).testTag("map_tiles_loading"))
         }
+        // Device location and basemap availability are independent. A failed
+        // tile request must never hide the absence of a confirmed user fix.
+        val status = listOfNotNull(
+            "지도 연결 실패".takeIf { failed },
+            "내 위치 확인 전".takeIf { interactiveMap && route.isEmpty() && actualCenter == null },
+        ).joinToString(" · ").takeIf { it.isNotEmpty() }
+        if (status != null) Text(status, style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)
+                .then(if (failed) Modifier.testTag("map_tile_error") else Modifier))
+        MapControlBar(mapActions, enabled = viewport != null,
+            retry = if (failed) ({ source.retry(); attempt++ }) else null,
+            attribution = {
+                TextButton(onClick = { uri.openUri("https://www.openstreetmap.org/copyright") },
+                    modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("osm_attribution"),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
+                    Text("© OpenStreetMap contributors", style = MaterialTheme.typography.labelSmall)
+                }
+            })
         if (fitRoute && !interactiveMap) MapPageScrollHint()
-        TextButton(onClick = { uri.openUri("https://www.openstreetmap.org/copyright") },
-            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("osm_attribution"), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
-            Text("© OpenStreetMap contributors", style = MaterialTheme.typography.labelSmall)
-        }
     }
 }
 
@@ -265,27 +261,51 @@ internal fun MapPageScrollHint() {
 
 private class MapMenuLifetime { var active = true }
 
+/** All pointer controls sit outside the geographic viewport; its pixels belong
+ * to the route, runners and provider attribution rather than floating buttons. */
+@Composable
+internal fun MapControlBar(
+    actions: List<CustomAccessibilityAction>, enabled: Boolean,
+    retry: (() -> Unit)? = null, attribution: (@Composable RowScope.() -> Unit)? = null,
+) {
+    Row(Modifier.fillMaxWidth().testTag("map_control_bar"), verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.End) {
+        attribution?.invoke(this)
+        MapOptionsMenu(actions, enabled, retry)
+    }
+}
+
 /** Pointer alternative to pinch/drag without permanent +/- buttons. A delayed
  * item/dismiss callback cannot act on a reopened menu or a disposed map. */
 @Composable
-internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: Boolean = true) {
+internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: Boolean = true, retry: (() -> Unit)? = null) {
     var expanded by remember { mutableStateOf(false) }
     var request by remember { mutableIntStateOf(0) }
     val latestActions by rememberUpdatedState(actions)
+    val latestRetry by rememberUpdatedState(retry)
+    val latestEnabled by rememberUpdatedState(enabled)
     val lifetime = remember { MapMenuLifetime() }
     DisposableEffect(lifetime) { onDispose { lifetime.active = false } }
     val currentRequest = request
     Box {
-        FilledTonalIconButton(shape = RunmoniShapes.Action, enabled = enabled,
-            onClick = { request++; expanded = true }, modifier = Modifier.size(48.dp).testTag("map_options")) {
-            Icon(Icons.Outlined.MoreVert, "지도 옵션")
+        TextButton(enabled = enabled,
+            onClick = { request++; expanded = true }, modifier = Modifier.heightIn(min = 48.dp).widthIn(min = 48.dp).testTag("map_options")) {
+            Text("지도 조작", style = MaterialTheme.typography.labelLarge)
+            Icon(Icons.Outlined.KeyboardArrowDown, null, Modifier.size(18.dp))
         }
         DropdownMenu(expanded = expanded, onDismissRequest = {
             if (lifetime.active && request == currentRequest) expanded = false
         }) {
+            if (retry != null) DropdownMenuItem(text = { Text("배경 지도 다시 불러오기") },
+                modifier = Modifier.heightIn(min = 48.dp).testTag("map_tile_retry"), onClick = {
+                    if (lifetime.active && expanded && latestEnabled && request == currentRequest) {
+                        expanded = false
+                        latestRetry?.invoke()
+                    }
+                })
             actions.forEach { action ->
                 DropdownMenuItem(text = { Text(action.label) }, modifier = Modifier.heightIn(min = 48.dp), onClick = {
-                    if (lifetime.active && expanded && request == currentRequest) {
+                    if (lifetime.active && expanded && latestEnabled && request == currentRequest) {
                         expanded = false
                         latestActions.singleOrNull { it.label == action.label }?.action?.invoke()
                     }

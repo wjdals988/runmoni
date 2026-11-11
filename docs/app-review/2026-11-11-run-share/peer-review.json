@@ -1,0 +1,17 @@
+{
+  "sourceReviewOnly": true,
+  "agentsExecutedBuildOrDeviceOrNetwork": false,
+  "productBlockingIssuesResolved": [
+    "canonical-record stale snapshot",
+    "MediaStore own-row cancellation and handoff",
+    "restored failed photo clear",
+    "short viewport/IME footer",
+    "visible avatar bounds/reverse gesture",
+    "same-turn editor revision export fence"
+  ],
+  "reviewNotes": {
+    "audit.md": "4038bdfa1319c3ad557af636fc39452c14966b74e9c6c4aa83bd0f8365fe46b4",
+    "implementation-read-review.md": "20f58c48a968785a12774171e0fe2781cbc91109ae8c8449f0a6a6ce8ef03791"
+  },
+  "executionSuccessClaimedByPeerReview": false
+}

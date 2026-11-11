@@ -1,0 +1,52 @@
+{
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "actualRootViewImageReview": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "reviewedAtUtc": "2026-11-11T20:18:57.501649+00:00",
+  "images": [
+    {
+      "file": "live8-main-default-card.png",
+      "sha256": "9e53c8f7bcc0c42dec50b30e22b6ea38feccbb00add78f5a12056235158aa347",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live8-main-photo-story.png",
+      "sha256": "ae9569f653bc6f9e1622c6195e622a365d9d1e85d65b456b46b1ce03c11926e7",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live8-main-mini-editor.png",
+      "sha256": "d05c81cc01db212efbace208417b34912cf726113ce2569954efa5ec22aef691",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "map-live1-main-map-clean.png",
+      "sha256": "7002f14912664a561e5814fbc912a52c298df7d1507ebd78eaaeaa1b41a39c21",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "widget2-idle-font1.png",
+      "sha256": "240a1f0cce03c43a5ef669cb35d477194c90813bddfedd74034ddf6cc5d6209d",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "widget2-idle-font2.png",
+      "sha256": "8b75aee3315fc7080e1390ad2251cbe7e19d0c98cd5a54b990846d23bab715f7",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "notes": [
+    "Main sharing uses a controlled record/photo; map has no location permission or injected fix.",
+    "Launcher images are separate idle OS pin placements, not live running control or physical-device verification.",
+    "The allocated Launcher widget area may contain empty space; normal and 200% text/actions are legible without clipping.",
+    "Root visual review is not user visual approval."
+  ]
+}

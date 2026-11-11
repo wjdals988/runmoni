@@ -1,0 +1,2 @@
+map-first discovery 320 / 1.0: waitMillis=43; timeoutMillis=120000
+map-first discovery 320 / 1.5: waitMillis=21; timeoutMillis=120000

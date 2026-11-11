@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RouteTileMapUiTest:......
+
+Time: 74.64
+
+OK (6 tests)
+
+

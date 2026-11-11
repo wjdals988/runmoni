@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "failurePhase": "compileDebugAndroidTestKotlin",
+  "mainCompilePassed": true,
+  "actualFailure": "Native geometry observer used layoutInfo.size; use layoutInfo.coordinates.size on pinned Compose1.7",
+  "log": "build2.txt",
+  "logSha256": "3a1ec6bfd1d3e90655af1d53ccec67fd1a9a6dbe0e4b760f30af154426e68d63",
+  "jvmOrAndroidProductPassClaimed": false,
+  "kotlinDaemonStartupRetryWasNotTheFinalFailure": true
+}
