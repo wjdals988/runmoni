@@ -1,0 +1,44 @@
+{
+  "version": "0.4.2-dev",
+  "versionCode": 24,
+  "retained": {
+    "proof": "android-review1.json",
+    "sha256": "bcfdd4a37925c8066c21d88baf862a7ef9c92b71d5816f4550bde57bd5fe123f",
+    "binary": "binary-build2.json",
+    "methods": {
+      "community-ui": 4,
+      "area-repository": 3,
+      "area-ui": 3,
+      "weather-layout": 2,
+      "weather-state": 1
+    },
+    "total": 13,
+    "wholeOriginalAttemptPassed": false
+  },
+  "freshTargeted": {
+    "proof": "android-review2.json",
+    "sha256": "2979cf8c5817406906419ffe1666ece040252bb7e2433794d20977ea7ccda6da",
+    "binary": "binary-build4.json",
+    "total": 12
+  },
+  "freshSdk": {
+    "proof": "android-review4.json",
+    "sha256": "2dd8a6a4d66ed4a84b2028d083ab8e6388e3d6809477da754fa55f414f3a8ed3",
+    "binary": "binary-build4.json",
+    "total": 3,
+    "backend": "localhost demo-runmoni Auth/Firestore"
+  },
+  "distinctMethodScopes": 28,
+  "all28FreshOnOneBinaryPairClaimed": false,
+  "wholeFailedAttemptsRetained": [
+    "android-review1.json",
+    "android-review3.json"
+  ],
+  "sourceContinuity": [
+    "source2-to3-continuity.json",
+    "source3-to4-continuity.json"
+  ],
+  "productionProfileSuccessOrPermissionDeniedProved": false,
+  "googleOrPhoneProved": false,
+  "noRulesOrTestsWeakenedToPass": true
+}

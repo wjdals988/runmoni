@@ -40,6 +40,7 @@ import com.runmoni.app.domain.RunningWeatherGuidance
 import com.runmoni.app.domain.RunningWeatherState
 import com.runmoni.app.domain.WeatherCaution
 import com.runmoni.app.domain.WeatherPhase
+import com.runmoni.app.domain.nearbyCoordinates
 import com.runmoni.app.domain.millisUntilNextHomeMinute
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -137,6 +138,11 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
     val advice = weatherAdvice(state, nowMillis)
     Column(modifier.fillMaxWidth().testTag("home_weather_summary"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (snapshot != null) {
+            val area = state.area
+            val areaTitle = if (state.phase == WeatherPhase.READY && area?.isRecent(nowMillis) == true) "현재 위치" else "예보 위치"
+            Text("$areaTitle · ${area?.name?.let { "$it 부근" } ?: snapshot.location.nearbyCoordinates()}",
+                style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                modifier = Modifier.testTag("home_current_area"))
             Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC), style = MaterialTheme.typography.headlineSmall,
                 color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -153,8 +159,7 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
             val forecast = Instant.ofEpochMilli(snapshot.forecastAtMillis).atZone(ZoneId.systemDefault())
             val today = Instant.ofEpochMilli(nowMillis).atZone(ZoneId.systemDefault()).toLocalDate()
             val format = DateTimeFormatter.ofPattern(if (forecast.toLocalDate() == today) "HH:mm" else "M/d HH:mm", Locale.KOREAN)
-            val place = if (state.phase == WeatherPhase.READY) "현재 위치 근처" else "마지막 확인 위치"
-            Text("$place · ${forecast.format(format)} 예보" + if (!snapshot.isCurrent(nowMillis)) " · 이전 정보" else "",
+            Text("${forecast.format(format)} 예보" + if (!snapshot.isCurrent(nowMillis)) " · 이전 정보" else "",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                 modifier = Modifier.testTag("home_weather_forecast"))
         } else WeatherStatus(state, nowMillis)

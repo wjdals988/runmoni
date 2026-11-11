@@ -12,9 +12,18 @@ internal data class CommunityLinkIdentity(val uid: String, val googleLinked: Boo
 internal enum class CommunityLinkResult { LINKED, ALREADY_LINKED, CREDENTIAL_CONFLICT, SESSION_CHANGED, NOT_VERIFIED }
 internal class CommunityCredentialConflict : Exception()
 
-/** Firebase may persist a restoration sign-in before the server-profile read finishes. */
-internal fun acceptedStoredCommunityUid(uid: String, anonymous: Boolean, googleLinked: Boolean, verifiedGoogleUid: String): String =
-    uid.takeIf { it.isNotBlank() && (anonymous && !googleLinked || googleLinked && it == verifiedGoogleUid) }.orEmpty()
+/** Recognizes an existing auth candidate, not proof that its server profile exists. */
+internal fun acceptedStoredCommunityUid(uid: String, anonymous: Boolean, googleLinked: Boolean, verifiedGoogleUid: String,
+    pendingAnonymousConnect: Boolean = false): String =
+    uid.takeIf { it.isNotBlank() && (anonymous && !googleLinked && !pendingAnonymousConnect || googleLinked && it == verifiedGoogleUid) }.orEmpty()
+
+/** An interrupted reservation retains its own anonymous auth UID for an explicit retry. */
+internal fun pendingStoredCommunityUid(uid: String, anonymous: Boolean, googleLinked: Boolean, pendingAnonymousConnect: Boolean): String =
+    uid.takeIf { it.isNotBlank() && anonymous && !googleLinked && pendingAnonymousConnect }.orEmpty()
+
+/** A retained auth candidate and a server ACK must describe the same still-current identity. */
+internal fun verifiedCommunityUid(authCandidateUid: String, serverProfileUid: String, currentAuthUid: String): String =
+    authCandidateUid.takeIf { it.isNotBlank() && it == serverProfileUid && it == currentAuthUid }.orEmpty()
 
 internal enum class CommunityConnectMode { NEW_ANONYMOUS, REUSE_CURRENT, REJECT_UNVERIFIED }
 internal fun communityConnectMode(acceptedUid: String, currentUid: String): CommunityConnectMode = when {

@@ -29,6 +29,8 @@ interface AppActions {
     fun setVoiceGuidance(enabled: Boolean)
     fun setPublicLocation(enabled: Boolean)
     fun saveUnifiedProfile(name: String, expectedUid: String) { updateProfile(name) }
+    fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { saveUnifiedProfile(name, expectedUid) }
+    fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { connectCommunity(name) }
     fun updateProfile(name: String)
     fun setAvatarGender(gender: AvatarGender) {}
     fun setRunningKitColor(region: RunningKitRegion, color: Int) {}

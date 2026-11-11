@@ -52,7 +52,10 @@ data class RunningWeatherState(
     val phase: WeatherPhase = WeatherPhase.IDLE,
     val snapshot: RunningWeatherSnapshot? = null,
     val message: String? = null,
-)
+    val area: CurrentAreaUi? = null,
+) {
+    init { require(area == null || snapshot != null && area.location == snapshot.location) }
+}
 
 data class RunningWeatherAdvice(val headline: String, val attire: String, val detail: String?, val caution: WeatherCaution)
 

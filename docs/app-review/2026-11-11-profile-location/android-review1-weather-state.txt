@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.HomeWeatherUiTest:.
+
+Time: 15.189
+
+OK (1 test)
+
+

@@ -1,0 +1,46 @@
+{
+  "observedAtUtc": "2026-11-11T10:50:58.531733+00:00",
+  "demoProject": "demo-runmoni",
+  "currentRulesSha256": "8af3d6cf02774567818a0980b70cdb43f1a7c6489f6d613199669b285d13b183",
+  "legacyRulesSha256": "9aac42292e3416e746dae5fb834df507f7f652fcaa7ef9d3103fc63a1e742740",
+  "legacySourceRevision": "fc08fe08bd0cb87770be56350684f55a41a37c85",
+  "groups": [
+    {
+      "raw": "firestore-current-rules.txt",
+      "rawSha256": "9ddb8fbd4fac16c432bff2bc32dc5debb177894dbf009df64359819ceee1c617",
+      "counts": {
+        "tests": 160,
+        "pass": 160,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    },
+    {
+      "raw": "firestore-schema-contrast.txt",
+      "rawSha256": "0061e91052f7a969e62ec6b18a49851464e9c06e6a511c7f9229719be0518f7b",
+      "counts": {
+        "tests": 2,
+        "pass": 2,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      }
+    }
+  ],
+  "contrastScript": "executed-schema-contrast.test.cjs",
+  "contrastScriptSha256": "642453a8abf3d93e7c977cd0b013b81c8a198f0d153973a60bbab0552da23a92",
+  "rulesRelaxed": false,
+  "productionRulesVersionVerified": false,
+  "productionWrites": 0,
+  "googleLoginVerified": false,
+  "ownedEmulatorPortsClosedAfterExec": {
+    "8080": true,
+    "9099": true,
+    "4400": true,
+    "4500": true
+  },
+  "scope": "Current policy160 plus a separate two-method historical/current schema contrast. Historical DENIED is expected and does not establish currently deployed production rules."
+}

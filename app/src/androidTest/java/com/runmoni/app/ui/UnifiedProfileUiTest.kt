@@ -55,6 +55,10 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
         val visible = mutableStateOf(true)
         val saves = mutableListOf<Pair<String, String>>()
         val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(state.value.communityBackend, expectedBackend)
+                saveUnifiedProfile(name, expectedUid)
+            }
             override fun saveUnifiedProfile(name: String, expectedUid: String) { saves += name to expectedUid }
         }
         compose.setContent { RunmoniTheme { if (visible.value) UnifiedProfileDialog(state.value, actions) { visible.value = false } } }
@@ -76,6 +80,10 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
         val visible = mutableStateOf(true)
         val saves = mutableListOf<Pair<String, String>>()
         val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(state.value.communityBackend, expectedBackend)
+                saveUnifiedProfile(name, expectedUid)
+            }
             override fun saveUnifiedProfile(name: String, expectedUid: String) { saves += name to expectedUid }
         }
         compose.setContent { RunmoniTheme { if (visible.value) UnifiedProfileDialog(state.value, actions) { visible.value = false } } }
@@ -114,6 +122,10 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
         val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
             override fun checkNickname(name: String) { checks++ }
             override fun connectCommunity(name: String) { connections++ }
+            override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(state.value.communityBackend, expectedBackend)
+                saveUnifiedProfile(name, expectedUid)
+            }
             override fun saveUnifiedProfile(name: String, expectedUid: String) {
                 saves += name to expectedUid
                 state.value = state.value.copy(profile = state.value.profile.copy(name = NicknamePolicy.normalize(name)),
@@ -138,4 +150,117 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
             assertEquals(0, connections)
         }
     }
+    @Test fun failedConnectionKeepsTheNicknameAndWalletAndClosesOnlyForItsConnectionAcknowledgement() {
+        val original = Profile(name = "재시도 러너", mileage = 4321)
+        val state = mutableStateOf(AppState(profile = original, communityBackend = CommunityBackend.FIREBASE))
+        val visible = mutableStateOf(true)
+        val connections = mutableListOf<Pair<String, String>>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(CommunityBackend.FIREBASE, expectedBackend)
+                connections += name to expectedUid
+                state.value = state.value.copy(unifiedProfile = state.value.unifiedProfile.copy(connecting = true, error = null))
+            }
+        }
+        compose.setContent { RunmoniTheme { if (visible.value) UnifiedProfileDialog(state.value, actions) { visible.value = false } } }
+        compose.onNodeWithTag("profile_adult").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithTag("confirm_sign_in").assertIsNotEnabled()
+        compose.runOnIdle {
+            assertEquals(listOf("재시도 러너" to ""), connections)
+            assertEquals(original, state.value.profile)
+            assertTrue(visible.value)
+            state.value = state.value.copy(unifiedProfile = state.value.unifiedProfile.copy(
+                connecting = false, error = "검토용 프로필 권한 실패"))
+        }
+        compose.onNodeWithTag("profile_error").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("profile_name").performScrollTo().assertTextContains("재시도 러너")
+        // An unrelated local-save serial does not acknowledge an online connect.
+        compose.runOnIdle {
+            state.value = state.value.copy(unifiedProfile = state.value.unifiedProfile.copy(savedSerial = 1))
+            assertEquals(original, state.value.profile)
+        }
+        compose.onNodeWithTag("close_profile").assertIsDisplayed()
+        compose.runOnIdle { assertTrue(visible.value) }
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(listOf("재시도 러너" to "", "재시도 러너" to ""), connections)
+            assertEquals(original, state.value.profile)
+            state.value = state.value.copy(signedIn = true, communityUid = "verified-retry",
+                unifiedProfile = state.value.unifiedProfile.copy(connecting = false, error = null,
+                    connectedSerial = 1, connectionUid = "verified-retry", connectedNickname = "재시도 러너"))
+        }
+        compose.onNodeWithTag("profile_name").assertDoesNotExist()
+        compose.runOnIdle { assertFalse(visible.value); assertEquals(original, state.value.profile) }
+    }
+
+    @Test fun aForeignConnectionUidCannotCloseOrAuthorizeTheOpenedProfile() {
+        val state = mutableStateOf(AppState(profile = Profile(name = "경계 러너"), communityBackend = CommunityBackend.FIREBASE))
+        val visible = mutableStateOf(true)
+        val connections = mutableListOf<Pair<String, String>>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { assertEquals(CommunityBackend.FIREBASE, expectedBackend); connections += name to expectedUid }
+        }
+        compose.setContent { RunmoniTheme { if (visible.value) UnifiedProfileDialog(state.value, actions) { visible.value = false } } }
+        compose.onNodeWithTag("profile_adult").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().performClick()
+        compose.runOnIdle {
+            state.value = state.value.copy(signedIn = true, communityUid = "foreign-current",
+                unifiedProfile = UnifiedProfileUi(connectedNickname = "경계 러너", connectedSerial = 1,
+                    connectionUid = "different-ack", savedSerial = 1,
+                    check = check("경계 러너", "foreign-current")))
+        }
+        compose.onNodeWithTag("save_profile").assertIsNotEnabled()
+        compose.onNodeWithTag("check_nickname").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithTag("close_profile").assertIsDisplayed()
+        compose.runOnIdle { assertTrue(visible.value); assertEquals(listOf("경계 러너" to ""), connections) }
+        compose.onNodeWithTag("close_profile").performClick()
+        compose.runOnIdle { assertFalse(visible.value) }
+    }
+
+    @Test fun httpConnectionAlsoRequiresItsOwnReceiptInsteadOfAnUnrelatedLocalSave() {
+        val state = mutableStateOf(AppState(profile = Profile(name = "서버 러너"), communityBackend = CommunityBackend.HTTP))
+        val visible = mutableStateOf(true)
+        val requests = mutableListOf<Pair<String, String>>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { assertEquals(CommunityBackend.HTTP, expectedBackend); requests += name to expectedUid }
+        }
+        compose.setContent { RunmoniTheme { if (visible.value) UnifiedProfileDialog(state.value, actions) { visible.value = false } } }
+        compose.onNodeWithTag("profile_adult").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().performClick()
+        compose.runOnIdle {
+            state.value = state.value.copy(signedIn = true,
+                unifiedProfile = UnifiedProfileUi(savedSerial = 1, connectedNickname = "서버 러너"))
+        }
+        compose.onNodeWithTag("close_profile").assertIsDisplayed()
+        compose.runOnIdle {
+            assertTrue(visible.value)
+            assertEquals(listOf("서버 러너" to ""), requests)
+            state.value = state.value.copy(unifiedProfile = state.value.unifiedProfile.copy(connectedSerial = 1, connectionUid = ""))
+        }
+        compose.onNodeWithTag("profile_name").assertDoesNotExist()
+        compose.runOnIdle { assertFalse(visible.value) }
+    }
+
+    @Test fun changingTheBackendWithTheSameEmptyUidCannotAuthorizeTheOpenedEditor() {
+        val state = mutableStateOf(AppState(profile = Profile(name = "백엔드 경계"), communityBackend = CommunityBackend.FIREBASE))
+        var calls = 0
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { calls++ }
+            override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(state.value.communityBackend, expectedBackend)
+                saveUnifiedProfile(name, expectedUid)
+            }
+            override fun saveUnifiedProfile(name: String, expectedUid: String) { calls++ }
+        }
+        compose.setContent { RunmoniTheme { UnifiedProfileDialog(state.value, actions) {} } }
+        compose.onNodeWithTag("profile_adult").performScrollTo().performClick()
+        compose.onNodeWithTag("confirm_sign_in").performScrollTo().assertIsEnabled()
+        compose.runOnIdle { state.value = state.value.copy(communityBackend = CommunityBackend.HTTP) }
+        compose.onNodeWithTag("confirm_sign_in").assertIsNotEnabled().performTouchInput { click() }
+        compose.onNodeWithTag("save_profile").assertIsNotEnabled()
+        compose.onNodeWithTag("close_profile").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(0, calls) }
+    }
+
 }

@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.CommunityRoomsTest:....
+
+Time: 112.761
+
+OK (4 tests)
+
+

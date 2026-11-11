@@ -1,0 +1,9 @@
+{
+  "pid": 799413,
+  "processGroup": 799413,
+  "startedAtUtc": "2026-11-11T12:03:00.401334+00:00",
+  "project": "demo-runmoni",
+  "host": "127.0.0.1",
+  "productionRequestsByThisCommand": false,
+  "readyObservedAtUtc": "2026-11-11T12:03:10.406028+00:00"
+}

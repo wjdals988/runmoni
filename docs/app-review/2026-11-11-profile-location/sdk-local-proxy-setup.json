@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-11-11T12:06:45.503150+00:00",
+  "ownedAvd": "Runmoni_Cloud_29",
+  "guestProxyTemporarilyDisabledForLocalhostSdkOnly": true,
+  "hostProxyAndNoProxyEnvironmentChanged": false,
+  "tlsVerificationDisabled": false,
+  "firewallOrExternalTunnelAdded": false,
+  "productionCallsProbed": false,
+  "wholeNetworkTrafficMeasured": false,
+  "originalGuestProxyWasPresent": true,
+  "restorationPending": true
+}

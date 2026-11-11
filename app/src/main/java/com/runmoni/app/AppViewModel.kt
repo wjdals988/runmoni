@@ -66,8 +66,13 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val firebaseRooms = app.community
     private val weatherLocations = WeatherLocationRepository(app)
     private val weatherRepository = RunningWeatherRepository(app)
+    private val areaRepository = CurrentAreaRepository(app)
     private var weatherJob: Job? = null
+    private var areaJob: Job? = null
+    private var areaOperation = 0L
     private var profileOperation = 0L
+    private var profileConnectOperation = 0L
+    private var profileConnectJob: Job? = null
     private var nicknameCheckJob: Job? = null
     private var nicknameCheckOperation = 0L
     private var discoveryJob: Job? = null
@@ -177,7 +182,21 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     fun permissionDenied(message: String) { mutableState.update { it.copy(error = message) } }
     fun updateLocationAccess(precisePermissionGranted: Boolean, gpsEnabled: Boolean) {
-        mutableState.update { it.copy(locationAccess = LocationAccess(precisePermissionGranted, gpsEnabled)) }
+        // Coarse access can still resolve a district, and disabling GPS alone
+        // does not disable an available network location provider.
+        val unavailable = when {
+            !hasPreviewLocationPermission() -> CurrentAreaPhase.PERMISSION_REQUIRED
+            runCatching { app.getSystemService(android.location.LocationManager::class.java)?.isLocationEnabled }.getOrNull() == false -> CurrentAreaPhase.LOCATION_DISABLED
+            else -> null
+        }
+        if (unavailable != null) {
+            areaOperation++; areaJob?.cancel(); areaJob = null
+            weatherJob?.cancel(); weatherJob = null
+        }
+        mutableState.update { it.copy(locationAccess = LocationAccess(precisePermissionGranted, gpsEnabled),
+            currentArea = unavailable?.let { phase -> CurrentAreaUi(phase) } ?: it.currentArea,
+            weather = if (unavailable != null && (it.weather.snapshot != null || it.weather.phase in listOf(WeatherPhase.LOCATING, WeatherPhase.LOADING)))
+                it.weather.copy(phase = WeatherPhase.valueOf(unavailable.name)) else it.weather) }
     }
     fun updateRunNotificationAccess(enabled: Boolean) {
         mutableState.update { it.copy(runNotificationAccess = RunNotificationAccess(checked = true, enabled = enabled)) }
@@ -206,8 +225,18 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun finishRun() { commandRun(RunTrackingService.FINISH) }
     override fun finishRun(expectedRunId: String) { commandRun(RunTrackingService.FINISH, expectedRunId) }
     override fun retryRunPersistence() { commandRun(RunTrackingService.RETRY) }
-    override fun linkCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.LinkCommunityGoogle) }
-    override fun restoreCommunityGoogle() { if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) requests.tryEmit(UiRequest.RestoreCommunityGoogle) }
+    override fun linkCommunityGoogle() {
+        if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) {
+            invalidateProfileForCommunityIdentityChange()
+            requests.tryEmit(UiRequest.LinkCommunityGoogle)
+        }
+    }
+    override fun restoreCommunityGoogle() {
+        if (firebaseMode && !state.value.cloud.busy && !state.value.communityGoogleLink.busy) {
+            invalidateProfileForCommunityIdentityChange()
+            requests.tryEmit(UiRequest.RestoreCommunityGoogle)
+        }
+    }
     override fun dismissError() { mutableState.update { it.copy(error = null) } }
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
@@ -246,23 +275,43 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     fun previewPermissionResult(weather: Boolean, allowed: Boolean) {
         if (allowed) loadPreviewLocation(weather)
-        else if (weather) mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.PERMISSION_REQUIRED, message = "위치를 허용하면 근처 예보를 확인할 수 있어요.")) }
-        else mutableState.update { it.copy(discovery = it.discovery.copy(error = "현재 위치로 이동하려면 위치 권한을 허용해 주세요.")) }
+        else {
+            areaOperation++; areaJob?.cancel(); areaJob = null
+            mutableState.update { it.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.PERMISSION_REQUIRED),
+                weather = if (weather) it.weather.copy(phase = WeatherPhase.PERMISSION_REQUIRED,
+                    message = "위치를 허용하면 근처 예보를 확인할 수 있어요.") else it.weather,
+                discovery = if (!weather) it.discovery.copy(error = "현재 위치로 이동하려면 위치 권한을 허용해 주세요.") else it.discovery) }
+        }
     }
     private fun loadPreviewLocation(weather: Boolean) {
         if (weatherJob?.isActive == true) return
+        areaOperation++; areaJob?.cancel(); areaJob = null
+        mutableState.update { it.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.LOCATING)) }
         weatherJob = viewModelScope.launch {
             if (weather) mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.LOCATING, message = null)) }
             try {
                 val location = weatherLocations.currentLocation()
-                mutableState.update { it.copy(discoveryCenter = RouteMapCenter(location.latitude, location.longitude)) }
+                val area = CurrentAreaUi(CurrentAreaPhase.RESOLVING, location, checkedAtMillis = System.currentTimeMillis())
+                mutableState.update { it.copy(discoveryCenter = RouteMapCenter(location.latitude, location.longitude), currentArea = area) }
+                resolveCurrentArea(area)
                 if (weather) {
                     mutableState.update { it.copy(weather = it.weather.copy(phase = WeatherPhase.LOADING)) }
                     val snapshot = weatherRepository.load(location)
-                    mutableState.update { it.copy(weather = RunningWeatherState(WeatherPhase.READY, snapshot)) }
+                    mutableState.update { it.copy(weather = RunningWeatherState(WeatherPhase.READY, snapshot,
+                        area = it.currentArea.takeIf { current -> current.location == snapshot.location })) }
                 }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (failure: Exception) {
+                if (failure is WeatherLocationException) {
+                    val areaPhase = when (failure.reason) {
+                        WeatherLocationFailure.PERMISSION_REQUIRED -> CurrentAreaPhase.PERMISSION_REQUIRED
+                        WeatherLocationFailure.LOCATION_DISABLED -> CurrentAreaPhase.LOCATION_DISABLED
+                        WeatherLocationFailure.UNAVAILABLE -> CurrentAreaPhase.UNAVAILABLE
+                    }
+                    mutableState.update { it.copy(currentArea = CurrentAreaUi(areaPhase)) }
+                }
+                else mutableState.update { if (it.currentArea.phase == CurrentAreaPhase.LOCATING)
+                    it.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.UNAVAILABLE)) else it }
                 if (weather) {
                     val phase = (failure as? WeatherLocationException)?.let { WeatherPhase.valueOf(it.reason.name) } ?: WeatherPhase.UNAVAILABLE
                     mutableState.update { it.copy(weather = it.weather.copy(phase = phase, message = failure.message ?: "예보를 확인하지 못했어요.")) }
@@ -270,9 +319,27 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             }
         }
     }
+    private fun resolveCurrentArea(area: CurrentAreaUi) {
+        val location = area.location ?: return
+        val ticket = ++areaOperation
+        areaJob?.cancel()
+        areaJob = viewModelScope.launch {
+            val name = areaRepository.resolve(location)
+            if (ticket != areaOperation) return@launch
+            val resolved = area.copy(phase = if (name == null) CurrentAreaPhase.UNAVAILABLE else CurrentAreaPhase.READY, name = name)
+            mutableState.update {
+                if (it.currentArea.location != location) it else it.copy(currentArea = resolved,
+                    weather = if (it.weather.snapshot?.location == location) it.weather.copy(area = resolved) else it.weather)
+            }
+        }
+    }
     fun onUiStopped() {
         weatherJob?.cancel(); weatherJob = null
-        mutableState.update { if (it.weather.phase in listOf(WeatherPhase.LOCATING, WeatherPhase.LOADING)) it.copy(weather = it.weather.copy(phase = WeatherPhase.IDLE)) else it }
+        areaOperation++; areaJob?.cancel(); areaJob = null
+        mutableState.update { it.copy(
+            weather = if (it.weather.phase in listOf(WeatherPhase.LOCATING, WeatherPhase.LOADING)) it.weather.copy(phase = WeatherPhase.IDLE) else it.weather,
+            currentArea = if (it.currentArea.phase in listOf(CurrentAreaPhase.LOCATING, CurrentAreaPhase.RESOLVING))
+                it.currentArea.copy(phase = CurrentAreaPhase.IDLE) else it.currentArea) }
         setDiscoveryVisible(false)
     }
     override fun setDiscoveryVisible(visible: Boolean) {
@@ -332,35 +399,62 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             }
         }
     }
-    override fun saveUnifiedProfile(name: String, expectedUid: String) {
-        if (firebaseMode && (expectedUid != firebaseRooms.uid || expectedUid != state.value.communityUid)) {
+    private fun invalidateProfileConnection() {
+        profileConnectOperation++
+        profileConnectJob?.cancel(); profileConnectJob = null
+        mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(connecting = false)) }
+    }
+    private fun invalidateProfileForCommunityIdentityChange() {
+        invalidateProfileConnection()
+        profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+        mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = false,
+            checking = false, check = null, error = null)) }
+    }
+    override fun saveUnifiedProfile(name: String, expectedUid: String) =
+        saveUnifiedProfile(name, expectedUid, state.value.communityBackend)
+    override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+        val current = state.value
+        val actualBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP
+        if (expectedBackend != actualBackend || expectedBackend != current.communityBackend || expectedUid != current.communityUid ||
+            firebaseMode && current.signedIn && (expectedUid.isBlank() || expectedUid != firebaseRooms.uid)) {
             mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(error = "연결 상태가 바뀌었어요. 프로필을 다시 열어 주세요.")) }
             return
         }
+        // A hidden, unapproved Auth candidate never blocks local device-name saving.
         saveProfile(name, expectedUid)
     }
-    override fun updateProfile(name: String) = saveProfile(name, firebaseRooms.uid)
+    override fun updateProfile(name: String) = saveUnifiedProfile(name, state.value.communityUid)
     private fun saveProfile(name: String, expectedUid: String) {
-        if (state.value.unifiedProfile.saving) return
+        if (state.value.unifiedProfile.saving || state.value.unifiedProfile.connecting) return
         val ticket = ++profileOperation
-        val uid = firebaseRooms.uid
         val generation = communityGeneration
+        val startedFirebase = firebaseMode
+        val onlineFirebase = startedFirebase && state.value.signedIn
+        val targetUrl = api.baseUrl
+        val targetToken = api.token
+        val targetUser = currentUserId
+        fun sameContext() = generation == communityGeneration && startedFirebase == firebaseMode &&
+            (startedFirebase || targetUrl == api.baseUrl && targetToken == api.token && targetUser == currentUserId)
         mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = true, error = null)) }
         viewModelScope.launch {
             try {
                 val normalized = NicknamePolicy.requireValid(name).nickname
-                if (firebaseMode && state.value.signedIn) firebaseRooms.updateNickname(normalized, expectedUid = expectedUid)
-                else if (!firebaseMode && api.token.isNotBlank()) api.request("PATCH", "/v1/me", JSONObject().put("nickname", normalized))
-                if (ticket != profileOperation || generation != communityGeneration || uid != firebaseRooms.uid) return@launch
+                if (ticket != profileOperation || !sameContext() || state.value.communityUid != expectedUid) return@launch
+                if (onlineFirebase) firebaseRooms.updateNickname(normalized, expectedUid = expectedUid)
+                else if (!startedFirebase && targetToken.isNotBlank())
+                    PilotClient(targetUrl, targetToken).request("PATCH", "/v1/me", JSONObject().put("nickname", normalized))
+                if (ticket != profileOperation || !sameContext() || state.value.communityUid != expectedUid ||
+                    onlineFirebase && expectedUid != firebaseRooms.uid) return@launch
                 mutateLocalProfile { it.copy(name = normalized) }
-                mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(
+                profileOperation++ // Fence a snapshot which read the previous nickname while this save was pending.
+                mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = false,
                     connectedNickname = if (it.signedIn) normalized else null, savedSerial = it.unifiedProfile.savedSerial + 1)) }
             } catch (cancelled: CancellationException) { throw cancelled }
             catch (failure: Exception) {
-                if (ticket == profileOperation && generation == communityGeneration) mutableState.update {
+                if (ticket == profileOperation && sameContext() && state.value.communityUid == expectedUid) mutableState.update {
                     it.copy(unifiedProfile = it.unifiedProfile.copy(error = failure.message ?: "프로필을 저장하지 못했어요.")) }
             } finally {
-                if (ticket == profileOperation) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = false)) }
+                if (ticket == profileOperation && sameContext()) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(saving = false)) }
             }
         }
     }
@@ -463,10 +557,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             require(uri.userInfo == null && uri.query == null && uri.fragment == null && uri.host != null && uri.scheme in setOf("http", "https")) { "올바른 서버 주소를 입력해 주세요." }
             require(uri.scheme == "https" || uri.host in setOf("127.0.0.1", "localhost", "10.0.2.2")) { "로컬 주소 외에는 HTTPS 주소를 사용해 주세요." }
             if (firebaseMode || api.baseUrl != url.trim().trimEnd('/')) {
+                invalidateProfileConnection()
                 app.runnerSharing.stop()
                 profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
                 mutableState.update { it.copy(communityUid = "", sharingConsentRunId = null,
-                    unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
+                    unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial)) }
             }
             if (firebaseMode) {
                 firebaseMode = false; communityGeneration++; connectionCheckGeneration++
@@ -491,63 +586,135 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             }
         }.onFailure { permissionDenied(it.message ?: "서버 주소를 확인해 주세요.") }.onSuccess { refreshCommunity() }
     }
-    override fun connectCommunity(name: String) = ignoreJob(work {
+    override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+        val actualBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP
+        if (expectedBackend != actualBackend || expectedBackend != state.value.communityBackend || expectedUid != state.value.communityUid) {
+            mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(error = "연결 상태가 바뀌었어요. 프로필을 다시 열어 주세요.")) }
+            return
+        }
+        connectProfile(name, expectedUid, expectedBackend)
+    }
+    override fun connectCommunity(name: String) = connectUnifiedProfile(name, state.value.communityUid, state.value.communityBackend)
+    private fun connectProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+        if (state.value.busy || state.value.unifiedProfile.connecting || state.value.unifiedProfile.saving) return
+        val ticket = ++profileConnectOperation
+        profileOperation++ // Invalidate a nickname snapshot started before this request.
         val generation = communityGeneration
-        if (firebaseMode) {
-            firebaseRooms.connect(NicknamePolicy.requireValid(name).nickname)
-            if (!firebaseMode || generation != communityGeneration) return@work
-            mutateLocalProfile { it.copy(name = NicknamePolicy.requireValid(name).nickname) }
-            refreshNow()
-            mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(savedSerial = it.unifiedProfile.savedSerial + 1)) }
-            return@work
+        val targetUrl = api.baseUrl
+        var scopedToken = api.token
+        var scopedUser = currentUserId
+        var createdHttpGuest = false
+        fun sameContext() = ticket == profileConnectOperation && generation == communityGeneration &&
+            expectedBackend == state.value.communityBackend &&
+            (if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP) == expectedBackend &&
+            (expectedBackend == CommunityBackend.FIREBASE || targetUrl == api.baseUrl && scopedToken == api.token && scopedUser == currentUserId)
+        nicknameCheckOperation++; nicknameCheckJob?.cancel()
+        mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(connecting = true, checking = false, check = null, error = null)) }
+        profileConnectJob = viewModelScope.launch {
+            try {
+                val requested = NicknamePolicy.requireValid(name)
+                if (!sameContext() || state.value.communityUid != expectedUid) return@launch
+                val acknowledgedUid: String
+                if (expectedBackend == CommunityBackend.FIREBASE) {
+                    firebaseRooms.connect(requested.nickname)
+                    acknowledgedUid = firebaseRooms.uid
+                    check(acknowledgedUid.isNotBlank()) { "프로필 연결 결과를 확인하지 못했어요. 같은 닉네임으로 다시 시도해 주세요." }
+                } else {
+                    val client = PilotClient(targetUrl, scopedToken)
+                    if (scopedToken.isNotBlank()) {
+                        // Editing an already authenticated HTTP profile must not
+                        // create a replacement guest account or discard memberships.
+                        check(scopedUser.isNotBlank()) { "현재 서버 프로필을 확인한 뒤 다시 시도해 주세요." }
+                        client.request("PATCH", "/v1/me", JSONObject().put("nickname", requested.nickname))
+                    } else {
+                        val result = client.connectCommunity(requested.nickname)
+                        val nextToken = result.getString("access_token")
+                        val nextUser = result.getJSONObject("user").getString("id")
+                        check(nextToken.isNotBlank() && nextUser.isNotBlank()) { "서버 프로필 연결 결과를 확인하지 못했어요." }
+                        if (!sameContext() || state.value.communityUid != expectedUid) return@launch
+                        scopedToken = nextToken; scopedUser = nextUser; createdHttpGuest = true
+                        api.token = nextToken; currentUserId = nextUser
+                        session.write(nextToken)
+                        preferences.edit().putString("userId", nextUser).putBoolean("communityGuest", true).putBoolean("publicLocation", false).apply()
+                        RunSyncWorker.cancel(app)
+                    }
+                    acknowledgedUid = state.value.communityUid // HTTP identities remain private in the existing session model.
+                }
+                if (!sameContext() || state.value.communityUid !in setOf(expectedUid, acknowledgedUid)) return@launch
+                profileOperation++ // A read started during the request cannot overwrite its ACKed nickname.
+                mutateLocalProfile { it.copy(name = requested.nickname) }
+                mutableState.update { it.copy(signedIn = true, communityUid = acknowledgedUid,
+                    communityGuest = if (expectedBackend == CommunityBackend.FIREBASE || createdHttpGuest) true else it.communityGuest,
+                    publicLocation = if (createdHttpGuest) false else it.publicLocation,
+                    unifiedProfile = it.unifiedProfile.copy(connecting = false, error = null,
+                        connectedNickname = requested.nickname, connectedNicknameKey = requested.key,
+                        connectionUid = acknowledgedUid, connectedSerial = it.unifiedProfile.connectedSerial + 1,
+                        savedSerial = it.unifiedProfile.savedSerial + 1)) }
+                // The profile has been ACKed. A room-list failure must not undo
+                // that receipt or replace it with another modal profile error.
+                try { refreshNow() }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) {
+                    if (sameContext()) mutableState.update { it.copy(serverConnected = false,
+                        serverStatus = "프로필은 연결됐어요. 크루 목록은 새로고침해 주세요.") }
+                }
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (failure: Exception) {
+                if (sameContext()) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(
+                    error = failure.message ?: "프로필을 연결하지 못했어요. 같은 닉네임으로 다시 시도해 주세요.")) }
+            } finally {
+                if (sameContext()) mutableState.update { it.copy(unifiedProfile = it.unifiedProfile.copy(connecting = false)) }
+            }
         }
-        val result = api.connectCommunity(name.trim())
-        RunSyncWorker.cancel(app)
-        preferences.edit().putBoolean("communityGuest", true).putBoolean("publicLocation", false).apply()
-        api.token = result.getString("access_token"); session.write(api.token)
-        currentUserId = result.getJSONObject("user").getString("id")
-        preferences.edit().putString("userId", currentUserId).apply()
-        mutateLocalProfile { it.copy(name = NicknamePolicy.requireValid(name).nickname) }
-        mutableState.update { it.copy(signedIn = true, communityGuest = true, publicLocation = false) }
-        refreshNow()
-    })
-    override fun signIn(inviteCode: String, name: String) = ignoreJob(work {
-        val result = api.login(inviteCode.trim(), name.trim())
-        preferences.edit().putBoolean("communityGuest", false).apply()
-        api.token = result.getString("access_token"); session.write(api.token)
-        currentUserId = result.getJSONObject("user").getString("id"); preferences.edit().putString("userId", currentUserId).apply()
-        mutableState.update { it.copy(signedIn = true, communityGuest = false) }; refreshNow(); RunSyncWorker.enqueue(app)
-    })
-    override fun signOut() = ignoreJob(work {
-        app.runnerSharing.stop(); profileOperation++; nicknameCheckJob?.cancel()
-        if (firebaseMode) {
-            firebaseRooms.signOut(); communityGeneration++
-            mutableState.update { it.copy(signedIn = false, communityGuest = true, openedRoomId = "", openedRoomTitle = "", messages = emptyList(), crewMembers = emptyMap(), crews = emptyList(), parties = emptyList(), serverConnected = false) }
-            refreshNow()
-            return@work
-        }
-        runCatching { api.request("DELETE", "/v1/presence") }; runCatching { api.request("DELETE", "/v1/auth/session") }
-        audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).putBoolean("communityGuest", false).apply()
-        mutableState.update { it.copy(signedIn = false, communityGuest = false, serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
-    })
+    }
+    override fun signIn(inviteCode: String, name: String) {
+        invalidateProfileConnection()
+        ignoreJob(work {
+            val result = api.login(inviteCode.trim(), name.trim())
+            preferences.edit().putBoolean("communityGuest", false).apply()
+            api.token = result.getString("access_token"); session.write(api.token)
+            currentUserId = result.getJSONObject("user").getString("id"); preferences.edit().putString("userId", currentUserId).apply()
+            mutableState.update { it.copy(signedIn = true, communityGuest = false) }; refreshNow(); RunSyncWorker.enqueue(app)
+        })
+    }
+    override fun signOut() {
+        invalidateProfileConnection()
+        ignoreJob(work {
+            app.runnerSharing.stop(); profileOperation++; nicknameCheckJob?.cancel()
+            if (firebaseMode) {
+                firebaseRooms.signOut(); communityGeneration++
+                mutableState.update { it.copy(signedIn = false, communityGuest = true, communityUid = "",
+                    unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial), openedRoomId = "", openedRoomTitle = "", messages = emptyList(), crewMembers = emptyMap(), crews = emptyList(), parties = emptyList(), serverConnected = false) }
+                refreshNow()
+                return@work
+            }
+            runCatching { api.request("DELETE", "/v1/presence") }; runCatching { api.request("DELETE", "/v1/auth/session") }
+            audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).putBoolean("communityGuest", false).apply()
+            mutableState.update { it.copy(signedIn = false, communityGuest = false, communityUid = "",
+                unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial), serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
+        })
+    }
     override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
-    override fun useFirebaseCommunity() = ignoreJob(work {
-        app.runnerSharing.stop()
-        profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
-        mutableState.update { it.copy(sharingConsentRunId = null,
-            unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
-        val previous = PilotClient(api.baseUrl, api.token)
-        val previousHttp = !firebaseMode
-        firebaseMode = true; communityGeneration++; connectionCheckGeneration++
-        preferences.edit { putString("communityBackend", "firebase"); putBoolean("publicLocation", false) }
-        RunSyncWorker.cancel(app)
-        mutableState.update { it.copy(communityBackend = CommunityBackend.FIREBASE, signedIn = false, communityGuest = true, publicLocation = false,
-            serverConnected = false, deviceChecks = it.deviceChecks.copy(room = RoomCheck.NOT_CHECKED, roomCheckedAt = 0),
-            crews = emptyList(), parties = emptyList(), crewMembers = emptyMap(), messages = emptyList(), openedRoomId = "", openedRoomTitle = "") }
-        if (previousHttp && previous.token.isNotBlank()) runCatching { previous.request("DELETE", "/v1/presence") }
-        audio.stopMusic(); runCatching { stopLease() }; audio.disconnect(); selectedVoiceRoom = ""
-        refreshNow()
-    })
+    override fun useFirebaseCommunity() {
+        invalidateProfileConnection()
+        ignoreJob(work {
+            app.runnerSharing.stop()
+            profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+            mutableState.update { it.copy(sharingConsentRunId = null,
+                unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial)) }
+            val previous = PilotClient(api.baseUrl, api.token)
+            val previousHttp = !firebaseMode
+            firebaseMode = true; communityGeneration++; connectionCheckGeneration++
+            preferences.edit { putString("communityBackend", "firebase"); putBoolean("publicLocation", false) }
+            RunSyncWorker.cancel(app)
+            mutableState.update { it.copy(communityBackend = CommunityBackend.FIREBASE, signedIn = false, communityUid = "", communityGuest = true, publicLocation = false,
+                serverConnected = false, deviceChecks = it.deviceChecks.copy(room = RoomCheck.NOT_CHECKED, roomCheckedAt = 0),
+                crews = emptyList(), parties = emptyList(), crewMembers = emptyMap(), messages = emptyList(), openedRoomId = "", openedRoomTitle = "") }
+            if (previousHttp && previous.token.isNotBlank()) runCatching { previous.request("DELETE", "/v1/presence") }
+            audio.stopMusic(); runCatching { stopLease() }; audio.disconnect(); selectedVoiceRoom = ""
+            refreshNow()
+        })
+    }
     override fun loadCrewMembers(id: String) {
         if (!firebaseMode || state.value.crews.none { it.id == id && it.joined }) return
         val generation = communityGeneration
@@ -657,7 +824,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         catch (_: Exception) { permissionDenied("Google 로그인에 실패했습니다. 클라우드 연결 설정을 확인해 주세요.") }
     }
     suspend fun linkCommunityGoogle(context: Context, restore: Boolean = false) {
-        if (!firebaseMode || state.value.cloud.busy) return
+        if (!firebaseMode || state.value.cloud.busy || state.value.communityGoogleLink.busy) return
+        invalidateProfileForCommunityIdentityChange()
         // An identity operation never carries public-location consent to its result.
         app.runnerSharing.stop()
         mutableState.update { it.copy(sharingConsentRunId = null) }
@@ -685,34 +853,43 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val generation = communityGeneration
         if (firebaseMode) {
             val focusedAtStart = focusedCrewForParties
-            val accepted = firebaseRooms.uid
-            if (state.value.communityUid != accepted) {
-                app.runnerSharing.stop()
-                profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
-                mutableState.update { it.copy(communityUid = accepted, sharingConsentRunId = null, unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial)) }
-            }
             val profileVersionAtRead = profileOperation
+            // The repository obtains a server profile ACK from its private auth
+            // candidate. Do not publish an Auth UID before this read succeeds.
             val snapshot = firebaseRooms.snapshot()
+            val accepted = if (snapshot.signedIn) firebaseRooms.uid else ""
+            if (snapshot.signedIn && accepted.isBlank()) return@withLock
             var scopedError: String? = null
             val focused = focusedCrewForParties?.takeIf { id -> snapshot.crews.any { it.id == id } }
             val scoped = try { focused?.let { firebaseRooms.partiesForCrew(it) }.orEmpty() }
                 catch (cancelled: CancellationException) { throw cancelled }
                 catch (_: Exception) { scopedError = "크루의 파티를 불러오지 못했어요. 다시 시도해 주세요."; emptyList() }
+            if (!firebaseMode || generation != communityGeneration || focusedAtStart != focusedCrewForParties ||
+                firebaseRooms.uid != accepted) return@withLock
             val visibleParties = (snapshot.parties + scoped).distinctBy { it.id }
-            if (snapshot.signedIn && snapshot.nickname != null && profileVersionAtRead == profileOperation && !state.value.unifiedProfile.saving) {
+            val unchangedProfileOperation = profileVersionAtRead == profileOperation
+            val identityChanged = state.value.communityUid != accepted
+            if (identityChanged) {
+                app.runnerSharing.stop()
+                profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
+            }
+            if (snapshot.signedIn && snapshot.nickname != null && unchangedProfileOperation &&
+                !state.value.unifiedProfile.saving && !state.value.unifiedProfile.connecting) {
                 val before = wallet.read()
                 if (before.name != snapshot.nickname) {
                     if (!preferences.contains("legacyLocalNicknameBeforeUnifiedV1")) preferences.edit().putString("legacyLocalNicknameBeforeUnifiedV1", before.name).apply()
-                    mutateLocalProfile { it.copy(name = snapshot.nickname) }
+                    wallet.update { it.copy(name = snapshot.nickname) }
                 }
             }
-            if (!firebaseMode || generation != communityGeneration || focusedAtStart != focusedCrewForParties) return@withLock
             mutableState.update {
                 val openedId = it.openedRoomId.substringAfter(':')
                 val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || visibleParties.any { r -> r.id == openedId && r.joined }
+                val profileUi = if (identityChanged) UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial,
+                    connectedSerial = it.unifiedProfile.connectedSerial, connecting = it.unifiedProfile.connecting) else it.unifiedProfile
                 it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = visibleParties, crewPartiesError = scopedError,
-                    signedIn = snapshot.signedIn, communityGuest = true, communityUid = firebaseRooms.uid,
-                    unifiedProfile = if (profileVersionAtRead == profileOperation) it.unifiedProfile.copy(connectedNickname = snapshot.nickname, connectedNicknameKey = snapshot.nicknameKey) else it.unifiedProfile,
+                    signedIn = snapshot.signedIn, communityGuest = true, communityUid = accepted,
+                    unifiedProfile = if (unchangedProfileOperation) profileUi.copy(connectedNickname = snapshot.nickname, connectedNicknameKey = snapshot.nicknameKey) else profileUi,
+                    sharingConsentRunId = if (identityChanged) null else it.sharingConsentRunId,
                     publicLocation = app.runnerSharing.state.value.enabled,
                     serverConnected = true, serverStatus = "크루·파티 목록을 불러왔어요",
                     openedRoomId = if (stillMember) it.openedRoomId else "", openedRoomTitle = if (stillMember) it.openedRoomTitle else "",
@@ -720,6 +897,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             }
             return@withLock
         }
+        val profileVersionAtRead = profileOperation
         val expectedToken = api.token
         val expectedUrl = api.baseUrl
         val health = api.health()
@@ -742,7 +920,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         }
         val canDj = voiceParty?.isOrganizer == true || voiceCrew?.let { it.isOwner || it.isDj } == true
         if (!canDj && audio.status.value.musicSending) { audio.stopMusic(); stopLease() }
-        mutableState.update { it.copy(profile = profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = identity != null, communityGuest = guest, serverStatus = "크루·파티 목록을 불러왔어요", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
+        mutableState.update { it.copy(profile = if (profileVersionAtRead == profileOperation && !it.unifiedProfile.saving && !it.unifiedProfile.connecting) profile else it.profile, crews = crews, parties = parties, crewMembers = members, liveRunners = presence, serverConnected = true, signedIn = identity != null, communityGuest = guest, serverStatus = "크루·파티 목록을 불러왔어요", audio = it.audio.copy(roomId = selectedVoiceRoom, canDj = canDj, status = if (!voice && !it.audio.connected) "음성·방송 서버 설정 필요" else it.audio.status)) }
     }
     private suspend fun refreshAfterCreation() {
         runCatching { refreshNow() }.onFailure {
@@ -853,5 +1031,5 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private fun readLocalProfile(): Profile = wallet.read()
     private fun mutateLocalProfile(transform: (Profile) -> Profile) { val profile = wallet.update(transform); mutableState.update { it.copy(profile = profile) } }
     private fun ignoreJob(job: Job) = Unit
-    override fun onCleared() { weatherJob?.cancel(); discoveryJob?.cancel(); audio.close(); super.onCleared() }
+    override fun onCleared() { profileConnectOperation++; profileConnectJob?.cancel(); weatherJob?.cancel(); areaJob?.cancel(); discoveryJob?.cancel(); audio.close(); super.onCleared() }
 }

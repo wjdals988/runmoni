@@ -40,9 +40,12 @@ class FirebaseNicknameTest {
             assertNull(a.presenceFirestore())
             a.connect("검토A$suffix"); b.connect("검토B$suffix")
             assertTrue(runCatching { c.connect("검토A$suffix") }.isFailure)
-            val pendingUid = c.uid
+            val pendingUid = FirebaseAuth.getInstance(apps[2]).currentUser?.uid.orEmpty()
             assertTrue(pendingUid.isNotBlank())
+            assertEquals("", c.uid)
+            assertNull(c.presenceFirestore())
             assertFalse(c.snapshot().signedIn)
+            assertEquals(pendingUid, FirebaseAuth.getInstance(apps[2]).currentUser?.uid)
             c.connect("검토C$suffix")
             assertEquals(pendingUid, c.uid)
             val originalA = a.uid; val originalB = b.uid
@@ -79,4 +82,56 @@ class FirebaseNicknameTest {
             apps.forEach { FirebaseFirestore.getInstance(it).terminate().await(); it.delete() }
         }
     }
+    /** Repository recreation exercises persisted candidate markers; it is not a phone/Google test. */
+    @Test fun pendingAndLegacyAnonymousAuthNeedServerProfileAcknowledgementAfterRecreation() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+        val suffix = System.nanoTime().toString(36).takeLast(6)
+        val app = FirebaseApp.initializeApp(context, FirebaseOptions.Builder().setProjectId("demo-runmoni")
+            .setApplicationId("1:123:android:abc123").setApiKey("fake-emulator-api-key").build(), "profile-retry-$suffix")
+        val appName = app.name
+        val auth = FirebaseAuth.getInstance(app)
+        val database = FirebaseFirestore.getInstance(app)
+        auth.useEmulator("10.0.2.2", 9099)
+        database.useEmulator("10.0.2.2", 8080)
+        val preferences = context.getSharedPreferences("runmoni-community-account", android.content.Context.MODE_PRIVATE)
+        val repositories = mutableListOf<FirebaseCommunityRepository>()
+        fun reopened() = FirebaseCommunityRepository(context, app).also { repositories += it }
+        try {
+            // Models a v0.4.1 retained anonymous Auth with no marker/profile.
+            val originalUid = auth.signInAnonymously().await().user!!.uid
+            assertFalse(preferences.contains("pendingAnonymousConnectV1:$appName"))
+            val legacy = reopened()
+            assertEquals("", legacy.uid)
+            assertNull(legacy.presenceFirestore())
+            assertFalse(legacy.snapshot().signedIn)
+            assertEquals(originalUid, auth.currentUser?.uid)
+            assertTrue(preferences.getBoolean("pendingAnonymousConnectV1:$appName", false))
+            legacy.close()
+            val pending = reopened()
+            assertEquals("", pending.uid)
+            assertNull(pending.presenceFirestore())
+            assertEquals(originalUid, auth.currentUser?.uid)
+            pending.connect("재시도$suffix")
+            assertEquals(originalUid, pending.uid)
+            assertNotNull(pending.presenceFirestore())
+            assertFalse(preferences.contains("pendingAnonymousConnectV1:$appName"))
+            pending.close()
+            val confirmed = reopened()
+            // Even retained Auth with a real profile is gated until this process
+            // obtains its own server profile observation.
+            assertEquals("", confirmed.uid)
+            assertNull(confirmed.presenceFirestore())
+            val snapshot = confirmed.snapshot()
+            assertTrue(snapshot.signedIn)
+            assertEquals("재시도$suffix", snapshot.nickname)
+            assertEquals(originalUid, confirmed.uid)
+            assertEquals(originalUid, auth.currentUser?.uid)
+        } finally {
+            repositories.lastOrNull()?.signOut()
+            repositories.forEach { it.close() }
+            database.terminate().await(); app.delete()
+            preferences.edit().remove("pendingAnonymousConnectV1:$appName").remove("verifiedGoogleUid:$appName").commit()
+        }
+    }
+
 }

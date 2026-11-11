@@ -14,6 +14,10 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
         val state = mutableStateOf(AppState(profile = original))
         val fake = RunmoniUiTest.FakeActions(state)
         val actions = object : AppActions by fake {
+            override fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
+                assertEquals(state.value.communityBackend, expectedBackend)
+                saveUnifiedProfile(name, expectedUid)
+            }
             override fun saveUnifiedProfile(name: String, expectedUid: String) {
                 // This fixture models the VM's acknowledged local save only.
                 // It does not reserve a nickname or authenticate an account.

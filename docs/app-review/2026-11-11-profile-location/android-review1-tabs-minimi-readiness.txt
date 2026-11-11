@@ -1,0 +1,7 @@
+home 320 / 1.0: waitMillis=41; timeoutMillis=120000
+explore 320 / 1.0: waitMillis=16; timeoutMillis=120000
+run 320 / 1.0: waitMillis=29; timeoutMillis=120000
+crew 320 / 1.0: waitMillis=33; timeoutMillis=120000
+me 320 / 1.0: waitMillis=23; timeoutMillis=120000
+home 320 / 1.5: waitMillis=45; timeoutMillis=120000
+explore 320 / 1.5: waitMillis=66; timeoutMillis=120000

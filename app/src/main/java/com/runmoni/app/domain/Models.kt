@@ -147,6 +147,7 @@ data class AppState(
     val runNotificationAccess: RunNotificationAccess = RunNotificationAccess(),
     val runNavigationRequest: RunNavigationRequest? = null,
     val weather: RunningWeatherState = RunningWeatherState(),
+    val currentArea: CurrentAreaUi = CurrentAreaUi(),
     val discoveryCenter: RouteMapCenter? = null,
     val discovery: RunnerDiscoveryUi = RunnerDiscoveryUi(),
     val sharing: RunnerSharingUi = RunnerSharingUi(),

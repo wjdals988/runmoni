@@ -1,0 +1,9 @@
+{
+  "legacySourceRevision": "fc08fe08bd0cb87770be56350684f55a41a37c85",
+  "legacySourcePath": "firebase/firestore.rules",
+  "legacySha256": "9aac42292e3416e746dae5fb834df507f7f652fcaa7ef9d3103fc63a1e742740",
+  "currentRulesSha256": "8af3d6cf02774567818a0980b70cdb43f1a7c6489f6d613199669b285d13b183",
+  "productionRulesVersionInspected": false,
+  "productionChanged": false,
+  "purpose": "Task-local demo policy contrast, not a deployment or statement about currently published owner Rules."
+}

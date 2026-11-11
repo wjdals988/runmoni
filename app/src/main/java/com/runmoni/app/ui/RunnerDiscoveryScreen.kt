@@ -43,10 +43,13 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
     }
     val center = state.discoveryCenter ?: own?.let { RouteMapCenter(it.latitude, it.longitude) }
     BoxWithConstraints(Modifier.fillMaxSize().testTag("runner_discovery")) {
-        val constrained = maxHeight < 400.dp || LocalDensity.current.fontScale >= 1.6f
+        // Reserve usable map/attribution space as the region, status and actions
+        // grow. A weighted map can otherwise collapse to a few pixels at 1.5x.
+        val constrained = maxHeight < 520.dp || LocalDensity.current.fontScale >= 1.3f
         Column(Modifier.fillMaxSize().then(if (constrained) Modifier.verticalScroll(rememberScrollState()) else Modifier)
             .padding(horizontal = pageGutter(), vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text("근처 러너", style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+            CurrentAreaLabel(state.currentArea, clock)
             MapPane(emptyList(), publicRunners + listOfNotNull(own),
                 modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(240.dp) else Modifier.weight(1f)),
                 interactiveMap = true, followCenter = center, onBoundsChanged = actions::setDiscoveryBounds)

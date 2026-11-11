@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-11-11T12:10:37.599141+00:00",
+  "ownedProxySettingKeys": [
+    "http_proxy",
+    "global_http_proxy_host",
+    "global_http_proxy_port",
+    "global_http_proxy_exclusion_list",
+    "global_proxy_pac_url"
+  ],
+  "originalGuestProxySettingsExactlyRestored": true,
+  "hostProxyAndNoProxyEnvironmentChanged": false,
+  "allOsFilesOrTotalTrafficVerified": false
+}

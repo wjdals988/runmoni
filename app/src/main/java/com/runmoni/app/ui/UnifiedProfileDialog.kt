@@ -14,35 +14,47 @@ import com.runmoni.app.domain.*
 internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismiss: () -> Unit) {
     var name by rememberSaveable { mutableStateOf(state.profile.name) }
     var adultConfirmed by rememberSaveable { mutableStateOf(false) }
-    var submitted by rememberSaveable { mutableStateOf(false) }
-    val initialSave = remember { state.unifiedProfile.savedSerial }
-    val openedUid = remember { state.communityUid }
-    val identityChanged = openedUid != state.communityUid
+    var saveStartSerial by rememberSaveable { mutableStateOf<Long?>(null) }
+    var connectionStartSerial by rememberSaveable { mutableStateOf<Long?>(null) }
+    val openedUid = rememberSaveable { state.communityUid }
+    val openedBackend = rememberSaveable { state.communityBackend }
+    val identityChanged = openedUid != state.communityUid || openedBackend != state.communityBackend
     val online = state.communityBackend == CommunityBackend.FIREBASE && state.signedIn && state.communityUid.isNotBlank()
     val valid = NicknamePolicy.validationError(name) == null
     val result = state.unifiedProfile.check?.takeIf { it.matches(name, state.communityUid) }
     val reserved = result?.availability in listOf(NicknameAvailability.AVAILABLE, NicknameAvailability.OWNED)
-    val busy = state.busy || state.unifiedProfile.saving || state.unifiedProfile.checking
-    LaunchedEffect(state.unifiedProfile.savedSerial) {
-        if (submitted && state.unifiedProfile.savedSerial > initialSave) onDismiss()
+    val busy = state.busy || state.unifiedProfile.saving || state.unifiedProfile.checking || state.unifiedProfile.connecting
+    LaunchedEffect(state.unifiedProfile.savedSerial, state.unifiedProfile.connectedSerial,
+        state.unifiedProfile.connectionUid, state.unifiedProfile.connectedNickname,
+        state.communityUid, state.signedIn, state.communityBackend, saveStartSerial, connectionStartSerial) {
+        // A name save and an online connection are distinct acknowledgements.
+        // Only the requested connection may change the editor's original UID.
+        val saved = saveStartSerial?.let { state.unifiedProfile.savedSerial > it && !identityChanged } == true
+        val connected = connectionStartSerial?.let {
+            state.unifiedProfile.connectedSerial > it && state.signedIn && openedBackend == state.communityBackend &&
+                (state.communityBackend != CommunityBackend.FIREBASE || state.communityUid.isNotBlank()) &&
+                state.unifiedProfile.connectionUid == state.communityUid &&
+                state.unifiedProfile.connectedNickname == NicknamePolicy.normalize(name)
+        } == true
+        if (saved || connected) onDismiss()
     }
     FormDialog("프로필", onDismiss, closeTag = "close_profile", dismissLabel = null, confirm = {
-        Button(onClick = { submitted = true; actions.saveUnifiedProfile(name, openedUid) }, shape = RunmoniShapes.Action,
+        Button(onClick = { connectionStartSerial = null; saveStartSerial = state.unifiedProfile.savedSerial; actions.saveUnifiedProfile(name, openedUid, openedBackend) }, shape = RunmoniShapes.Action,
             enabled = valid && !busy && !identityChanged && (!online || reserved), modifier = Modifier.heightIn(min = 48.dp).testTag("save_profile")) {
             Text(if (state.unifiedProfile.saving) "저장 중…" else "저장")
         }
     }) {
-        OutlinedTextField(name, { name = it; submitted = false }, label = { Text("닉네임") }, singleLine = true,
-            enabled = !state.unifiedProfile.saving && !state.busy, isError = !valid,
+        OutlinedTextField(name, { name = it; saveStartSerial = null; connectionStartSerial = null }, label = { Text("닉네임") }, singleLine = true,
+            enabled = !state.unifiedProfile.saving && !state.unifiedProfile.connecting && !state.busy, isError = !valid,
             supportingText = { Text(NicknamePolicy.validationError(name) ?: "한글·영문·숫자 등 2~16자") },
             modifier = Modifier.fillMaxWidth().testTag("profile_name"))
         state.unifiedProfile.connectedNickname?.takeIf { it != state.profile.name && it != name }?.let { serverName ->
-            TextButton(onClick = { name = serverName }, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp)) {
+            TextButton(onClick = { name = serverName; saveStartSerial = null; connectionStartSerial = null }, enabled = !busy && !identityChanged, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp)) {
                 Text("연결된 닉네임 ‘$serverName’ 사용")
             }
         }
         if (online) {
-            TextButton(onClick = { actions.checkNickname(name) }, enabled = valid && !busy,
+            TextButton(onClick = { actions.checkNickname(name) }, enabled = valid && !busy && !identityChanged,
                 shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("check_nickname")) {
                 Text(if (state.unifiedProfile.checking) "확인 중…" else "중복 확인")
             }
@@ -60,14 +72,15 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
             Text("기기 이름을 저장하거나, 이 닉네임으로 온라인 프로필을 연결할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
             Text("온라인 연결 시 서버에서 중복을 확인해요. 기존 계정과 기록을 자동으로 합치지 않아요.", style = MaterialTheme.typography.bodySmall)
             Row {
-                Checkbox(checked = adultConfirmed, onCheckedChange = { adultConfirmed = it }, enabled = !busy)
+                Checkbox(checked = adultConfirmed, onCheckedChange = { adultConfirmed = it }, enabled = !busy,
+                    modifier = Modifier.testTag("profile_adult"))
                 Text("성인이며 크루·러너 기능을 이용할게요.", modifier = Modifier.weight(1f).padding(top = 12.dp))
             }
-            OutlinedButton(onClick = { submitted = true; actions.connectCommunity(NicknamePolicy.normalize(name)) },
-                enabled = valid && adultConfirmed && !busy, shape = RunmoniShapes.Action,
-                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("confirm_sign_in")) { Text("이 닉네임으로 연결") }
+            OutlinedButton(onClick = { saveStartSerial = null; connectionStartSerial = state.unifiedProfile.connectedSerial; actions.connectUnifiedProfile(NicknamePolicy.normalize(name), openedUid, openedBackend) },
+                enabled = valid && adultConfirmed && !busy && !identityChanged, shape = RunmoniShapes.Action,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("confirm_sign_in")) { Text(if (state.unifiedProfile.connecting) "연결 중…" else "이 닉네임으로 연결") }
         }
-        if (identityChanged && !submitted) Text("연결 상태가 바뀌었어요. 닫고 프로필을 다시 열어 주세요.", color = RunmoniColors.CoralInk)
+        if (identityChanged && !state.unifiedProfile.connecting) Text("연결 상태가 바뀌었어요. 닫고 프로필을 다시 열어 주세요.", color = RunmoniColors.CoralInk)
         state.unifiedProfile.error?.let { Text(it, color = RunmoniColors.CoralInk, modifier = Modifier.testTag("profile_error")) }
         Text("미니미와 옷은 ‘나 → 꾸미기’에서 바꿀 수 있어요.", style = MaterialTheme.typography.bodySmall)
     }

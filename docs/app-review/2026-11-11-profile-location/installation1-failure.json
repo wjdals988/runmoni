@@ -1,0 +1,12 @@
+{
+  "passed": false,
+  "completed": true,
+  "stage": "old installed APK sha256 preflight",
+  "failureType": "TimeoutExpired",
+  "timeoutSeconds": 45,
+  "appOrTestInstallStartedByThisAttempt": false,
+  "originalPreferencesBackedUpPrivately": true,
+  "uninstallOrDataReset": false,
+  "productFailureInferred": false,
+  "privateRawLog": "work/profile-location/boot-install1.log"
+}

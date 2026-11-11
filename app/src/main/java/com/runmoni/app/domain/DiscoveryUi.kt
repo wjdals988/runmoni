@@ -16,4 +16,7 @@ data class UnifiedProfileUi(
     val saving: Boolean = false,
     val error: String? = null,
     val savedSerial: Long = 0,
+    val connecting: Boolean = false,
+    val connectedSerial: Long = 0,
+    val connectionUid: String = "",
 )

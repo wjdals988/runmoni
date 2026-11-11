@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.4.2-dev", "2026-11-11", "프로필 연결 재시도·현재 위치 · 실기기 검증 전", listOf(
+        "온라인 프로필 저장이 확인된 뒤 연결을 완료하고, 실패하면 같은 계정으로 다시 시도해요.",
+        "연결 오류와 닉네임 확인은 프로필 안에서 안내해요. 원래 기록과 포인트는 유지해요.",
+        "홈 날씨와 탐색 지도에 현재 지역명을 표시해요. 조회가 어려우면 근처 좌표로 구분해요.",
+    )),
     AppVersionEntry("0.4.1-dev", "2026-11-10", "위젯 글자·새 양말과 의상 · 실기기 검증 전", listOf(
         "위젯 크기와 글자 크기에 맞춰 정보와 조작을 배치해요.",
         "홈 미니미 옆에서 기온·바람·강수와 옷차림을 확인해요.",

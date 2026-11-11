@@ -1,0 +1,3 @@
+rooms list 320 / 2: waitMillis=33; timeoutMillis=120000
+crew room 320 / 2: waitMillis=23; timeoutMillis=120000
+crew creation 320 / 2: waitMillis=28; timeoutMillis=120000

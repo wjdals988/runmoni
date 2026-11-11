@@ -1,0 +1,13 @@
+fresh device administrative label: waitMillis=67; timeoutMillis=120000
+unavailable geocoder approximate coordinates: waitMillis=20; timeoutMillis=120000
+location disabled without a map or fabricated district: waitMillis=21; timeoutMillis=120000
+permission denied without an invented place: waitMillis=13; timeoutMillis=120000
+current administrative area 320 / 1.0: waitMillis=1785; timeoutMillis=120000
+current administrative area 320 / 1.5: waitMillis=15; timeoutMillis=120000
+current administrative area 320 / 2.0: waitMillis=15; timeoutMillis=120000
+current administrative area 360 / 1.0: waitMillis=14; timeoutMillis=120000
+current administrative area 360 / 1.5: waitMillis=7; timeoutMillis=120000
+current administrative area 360 / 2.0: waitMillis=35; timeoutMillis=120000
+current administrative area 411 / 1.0: waitMillis=7; timeoutMillis=120000
+current administrative area 411 / 1.5: waitMillis=29; timeoutMillis=120000
+current administrative area 411 / 2.0: waitMillis=13; timeoutMillis=120000
