@@ -43,6 +43,40 @@ class CommunityGoogleLinkTest {
         assertEquals(CommunityConnectMode.REJECT_UNVERIFIED, communityConnectMode("known-owner", ""))
     }
 
+    @Test fun pendingAnonymousReservationIsRetainedWithoutApprovingItsProfile() {
+        assertEquals("", acceptedStoredCommunityUid("pending-owner", true, false, "", pendingAnonymousConnect = true))
+        assertEquals("pending-owner", pendingStoredCommunityUid("pending-owner", true, false, true))
+        assertEquals("", pendingStoredCommunityUid("pending-owner", true, false, false))
+    }
+
+    @Test fun interruptedAnonymousMarkerCannotAdoptAGoogleOrOtherProviderSession() {
+        assertEquals("", pendingStoredCommunityUid("google-user", false, true, true))
+        assertEquals("", pendingStoredCommunityUid("other-provider", false, false, true))
+        assertEquals("", pendingStoredCommunityUid("", true, false, true))
+        assertEquals("", acceptedStoredCommunityUid("unverified-google", false, true, "", true))
+        assertEquals("verified-google", acceptedStoredCommunityUid("verified-google", false, true, "verified-google", true))
+    }
+
+    @Test fun pendingReservationRetriesOnlyItsOwnCurrentAnonymousAuthIdentity() {
+        val pending = pendingStoredCommunityUid("pending-owner", true, false, true)
+        assertEquals(CommunityConnectMode.REUSE_CURRENT, communityConnectMode(pending, "pending-owner"))
+        assertEquals(CommunityConnectMode.REJECT_UNVERIFIED, communityConnectMode(pending, "foreign-user"))
+        assertEquals(CommunityConnectMode.REJECT_UNVERIFIED, communityConnectMode(pending, ""))
+        assertTrue(validCommunityConnectIdentity(CommunityConnectMode.REUSE_CURRENT, pending,
+            CommunityLinkIdentity("pending-owner", false), true, "pending-owner"))
+        assertFalse(validCommunityConnectIdentity(CommunityConnectMode.REUSE_CURRENT, pending,
+            CommunityLinkIdentity("foreign-user", false), true, "foreign-user"))
+    }
+
+    @Test fun aServerProfileAckCannotAuthorizeAPendingOrChangedAuthIdentity() {
+        assertEquals("", verifiedCommunityUid("candidate-a", "", "candidate-a"))
+        assertEquals("", verifiedCommunityUid("candidate-a", "candidate-b", "candidate-a"))
+        assertEquals("", verifiedCommunityUid("candidate-a", "candidate-a", "candidate-b"))
+        assertEquals("", verifiedCommunityUid("candidate-a", "candidate-a", ""))
+        assertEquals("", verifiedCommunityUid("", "", ""))
+        assertEquals("candidate-a", verifiedCommunityUid("candidate-a", "candidate-a", "candidate-a"))
+    }
+
     private class LinkFake(var current: CommunityLinkIdentity?) : CommunityLinkSession<String> {
         var calls = 0
         var attempt: suspend LinkFake.() -> CommunityLinkIdentity? = {

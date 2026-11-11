@@ -1,0 +1,12 @@
+{
+  "completed": true,
+  "passed": false,
+  "version": "0.4.2-dev",
+  "versionCode": 24,
+  "stage": "compileDebugKotlin",
+  "failure": "Pinned Firestore25.1.4 has getCacheSettings(), not localCacheSettings Kotlin property.",
+  "affectedSource": "app/src/main/java/com/runmoni/app/data/FirebaseCommunityRepository.kt:52",
+  "jvmOrAndroidSuccessFromThisAttemptClaimed": false,
+  "sourceFreezeReference": "source-freeze1.json",
+  "correction": "Use cacheSettings confirmed by javap on cached pinned AAR."
+}

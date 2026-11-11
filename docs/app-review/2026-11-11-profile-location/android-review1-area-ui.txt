@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.CurrentAreaUiTest:...
+
+Time: 48.211
+
+OK (3 tests)
+
+

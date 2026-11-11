@@ -1,0 +1,15 @@
+{
+  "version": "0.4.2-dev",
+  "versionCode": 24,
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build2.json",
+  "appReplaceInstallPerformed": true,
+  "testApkReinstalled": true,
+  "uninstallOrDataReset": false,
+  "preInstallPreferencesPreservedExactly": true,
+  "preInstallXmlSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "changedFileSizeSkipsUnnecessaryOldApkHash": true,
+  "installedHashesCheckedByFollowingAndroidDriver": true
+}

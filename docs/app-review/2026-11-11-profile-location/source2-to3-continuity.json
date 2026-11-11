@@ -1,0 +1,16 @@
+{
+  "previousSourceFreeze": "source-freeze2.json",
+  "nextSourceFreeze": "source-freeze3.json",
+  "changedFiles": {
+    "productSources": [
+      "app/src/main/java/com/runmoni/app/ui/RunnerDiscoveryScreen.kt"
+    ],
+    "testSources": [],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "sameProductApkClaimed": false,
+  "reusedScopesRequireSeparateRetentionExplanation": true
+}

@@ -1,0 +1,37 @@
+{
+  "version": "0.4.2-dev",
+  "versionCode": 24,
+  "actualRootViewImageReview": true,
+  "allFourOriginalPngViewed": true,
+  "privacyReviewed": true,
+  "sourceKind": "actual Android MainActivity, local TEST debug/Firebase disabled/API29/TCG",
+  "userVisualApproval": false,
+  "syntheticGps": true,
+  "syntheticNamesOnly": true,
+  "reviewedImages": [
+    {
+      "file": "live1-home-current-area-weather.png",
+      "sha256": "77f9e2822ee5d665644b7a0c62661ac97ef0e46b763a07edb7519a2303730553"
+    },
+    {
+      "file": "live1-explore-current-area.png",
+      "sha256": "c090c62f64a3ad0b223abd137cfc618de490490c3b8970cd034f446a150636f4"
+    },
+    {
+      "file": "live1-profile-inline-retry.png",
+      "sha256": "1875928cb839481daa504f35b62b1741de022fbdc9f84a424a848414b8bef605"
+    },
+    {
+      "file": "live1-me-saved-device-name.png",
+      "sha256": "bfb8bfe9caa52606df738e45b6210246b4443ad992515a12485f4786df03b861"
+    }
+  ],
+  "homeWeatherBesideMiniMiVisible": true,
+  "currentAreaCoordinatesFallbackActuallyVisible": true,
+  "nativeGeocoderSupportOrFailureCauseMeasured": false,
+  "namedAreaFixtureIsNotActualGeocoderResult": true,
+  "mapAndVisibleOpenStreetMapAttribution": true,
+  "profileSingleFormInlineConfigurationError": true,
+  "successfulProductionProfileConnectionVerified": false,
+  "googleOrPhoneVerified": false
+}

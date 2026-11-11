@@ -1,0 +1,8 @@
+
+com.runmoni.app.ProfileConnectionViewModelTest:..
+
+Time: 4.033
+
+OK (2 tests)
+
+

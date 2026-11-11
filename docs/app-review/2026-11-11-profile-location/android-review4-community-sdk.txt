@@ -1,0 +1,8 @@
+
+com.runmoni.app.data.FirebaseCommunityTest:.
+
+Time: 25.722
+
+OK (1 test)
+
+

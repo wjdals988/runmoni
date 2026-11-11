@@ -1,0 +1,22 @@
+{
+  "previousSourceFreeze": "source-freeze3.json",
+  "nextSourceFreeze": "source-freeze4.json",
+  "changedFiles": {
+    "productSources": [
+      "app/src/main/java/com/runmoni/app/AppViewModel.kt",
+      "app/src/main/java/com/runmoni/app/domain/AppActions.kt",
+      "app/src/main/java/com/runmoni/app/ui/UnifiedProfileDialog.kt"
+    ],
+    "testSources": [
+      "app/src/androidTest/java/com/runmoni/app/ProfileConnectionViewModelTest.kt",
+      "app/src/androidTest/java/com/runmoni/app/ui/ConsumerClosetTest.kt",
+      "app/src/androidTest/java/com/runmoni/app/ui/UnifiedProfileUiTest.kt"
+    ],
+    "resources": [],
+    "rendererAssets": [],
+    "approvedSourceCopies": [],
+    "configurationSources": []
+  },
+  "sameProductApkClaimed": false,
+  "reusedScopesRequireSeparateRetentionExplanation": true
+}

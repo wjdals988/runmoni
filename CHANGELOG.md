@@ -1,3 +1,23 @@
+# 0.4.2-dev 로컬 검증 완료 — 2026.11.11
+
+- 최종 build4 새 JVM177/lint 오류0·경고54, 변경 범위 Android UI/실제VM/옷장/지도12개와 별도 Firebase SDK3개가 통과했다. 이전 입력에서 보존한 지역명/날씨/커뮤니티13개와 구분하며 모두를 한 APK쌍의 새28개로 세지 않는다.
+- SDK 첫 시도는 기기 프록시를 거친 localhost 인증의 upstream 오류로 실패했다. 같은 앱·검사·Rules로 로컬 demo 검사 중에만 guest 프록시를 임시 해제해3개 통과했고 호스트 프록시/NO_PROXY는 유지했다. 원래guest5키와 설정/account파일 복원·로컬 서버 종료를 확인했다.
+- 실제 Main4장, 같은 입력 연결2회 실패 안내·재시도, 기기 이름 저장1회·프로필 X 조작과 원래 XML/프로필/account파일/DB rows fingerprint/소유 환경 복원을 확인했다. Root가4장 전부를 실제 보고 개인정보/배치를 검토했다. 현재 위치는 실제 이 실행에서 근처 좌표 fallback이며 native Geocoder 지원 여부/실패 원인은 측정하지 않았다. 명명된 지역 사진은 주입한 UI fixture다.
+- Main은 Firebase 비활성 TEST debug/API29/TCG·합성 GPS다. 운영 권한 실패/성공·서명 APK 직접 실행·휴대폰/Google/절전/API31+와 사용자 시각 승인을 대체하지 않는다. guest 프록시 복원·소유 AVD796575 종료를 확인했다. [실행 근거](docs/app-review/2026-11-11-profile-location/README.md)와 [운영 점검](docs/FIREBASE_PROFILE_CONNECTION_CHECK.md)을 따른다. 공개 APK/대시보드/피드는 서명 CI 이후 별도 게시 검증으로 기록한다.
+
+# 0.4.2-dev 검증 진행 — 2026.11.11
+
+- 고정 Firestore25.1.4에서 초안의 `localCacheSettings`가 컴파일되지 않았다. 실제 SDK getter를 확인해 `cacheSettings`로 고쳤으며 실패 로그/입력을 보존했다. build2/3/4의 새 JVM177개는 각각 같은 검사 묶음의 재실행이지 합산531개가 아니다. 최종 로컬 build4의 lint는 오류0·경고54다.
+- Android 첫 시도는 프로필/현재 지역명/날씨23개를 통과했지만 320dp·글씨1.5에서 탐색 지도의 출처 줄이2px로 눌려 전체 실패했다. 작은 높이/큰 글씨를 세로 스크롤로 전환했고 검사 기대를 완화하지 않았다. 뒤이어 편집창을 연 뒤 backend가 바뀐 저장을3인자로 차단했으며 변경된 프로필/UI·지도 범위를 최종 입력으로 다시 검사한다.
+- 첫 AVD 설치 준비는 이전 APK SHA 확인45초 제한에서 실패해 설치 자체를 시작하지 못했다. 파일 크기가 다른 APK는 불필요한 해시를 생략하고 해시가 필요할 때120초로 제한했다. 최종 build4 앱/검사는 `install -r`로 설치했고 원래 설정 바이트 보존·데이터 초기화 없음이 확인됐다. 부팅 중 SystemUI Wait 관측을 제품의 휴대폰 실행 결과로 세지 않는다.
+- 저장소의 현재 Rules demo160개와 과거 규칙 대비 별도2개가 통과했다. 과거 정책에서 닉네임 예약이 거절되는 관측은 운영에 과거 정책이 게시됐다는 증거가 아니다. 운영 Rules 버전/휴대폰/Google은 아직 별도 확인이다. 새 Rules·키·의존성·원화 변경은 없다.
+
+# 0.4.2-dev 개발 — 2026.11.11
+
+- 사용자 0.4.1 화면에서 프로필 연결의 일반 방 권한 팝업과 UID변경 안내가 겹친 실패를 보고했다. 본인 nickname transaction ACK 전 공개UID반영과 generic work 오류경로를 수정한다. 보류익명UID를 버리거나 다른Google/크루계정으로 자동합치지 않는다.
+- 홈·탐색에 현재 지역명/근처 좌표를 표시한다. 기기 Geocoder의 행정필드만 사용하고 기존 약1km 위치와 메모리 캐시·호출 시간/큐 제한·중단과 현재성/예보격자 결합을 적용한다. 제주도/제주시를 같은 문자열로 합치던 초안은 정적 검토에서 발견해 수정했다.
+- 운영 Rules에 communityNicknames가 있는지는 소유자 확인 대기다. 이번 환경의 관측 identity/credential 바인딩은 비어 있고 로컬 Firebase login user/token도 없으므로 운영 배포/권한 성공을 주장하지 않는다. 구정책 대비 demo/SDK·로컬Android·서명CI·새공개APK/대시보드/피드는 실제 실행 뒤 별도 갱신한다. 아래는 이전 버전의 완료 근거다.
+
 # 0.4.1-dev 공개 — 2026.11.11 한국 시간
 
 <!-- verified-release-0.4.1-v1 -->

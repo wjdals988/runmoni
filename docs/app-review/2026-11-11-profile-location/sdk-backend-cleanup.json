@@ -1,0 +1,16 @@
+{
+  "pid": 799413,
+  "processGroup": 799413,
+  "startedAtUtc": "2026-11-11T12:03:00.401334+00:00",
+  "project": "demo-runmoni",
+  "host": "127.0.0.1",
+  "productionRequestsByThisCommand": false,
+  "stoppedAtUtc": "2026-11-11T12:04:45.519345+00:00",
+  "ownedPortsObservedClosed": [
+    8080,
+    9099,
+    4400,
+    4500
+  ],
+  "unrelatedProcessesStopped": false
+}

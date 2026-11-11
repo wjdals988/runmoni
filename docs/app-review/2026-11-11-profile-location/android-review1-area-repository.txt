@@ -1,0 +1,8 @@
+
+com.runmoni.app.data.CurrentAreaRepositoryTest:...
+
+Time: 0.867
+
+OK (3 tests)
+
+
