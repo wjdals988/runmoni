@@ -1,3 +1,9 @@
+# 0.4.3-dev 구현 main 반영·게시 보류 — 2026.11.11 UTC
+
+- PR47을 후보 C `bd4c10e643d40e0fe3b382f4bd4f34db629e4be7`로 병합했다. 기본1:1 공유·밝은 위젯·지도 밖 조작 메뉴와 로컬 검증은 완료했으나 새 서명 APK는 미생성이다. 후보 C를 실제 APK 출처로 확정하지 않는다.
+- 서명 CI43095642325의 최초/같은 작업 rerun과 별도43097606451이 job0/startup_failure로 종료됐다. GitHub 실행 페이지의 unexpected error 진단을 보존했고 세부 원인은 미확정이다. 코드/JVM/서명 실패나 성공으로 합산하지 않는다. 현재 추가 실행은 없다.
+- canonical raw preview24/stable null과 운영 대시보드의0.4.2 다운로드를 재확인했다. 기존 실제 APK출처176a9cbe...를 유지하며 새 키/Rules/의존성/원화·대시보드 변경은 없다. [후보 검토/재개 절차](docs/RELEASE_CANDIDATE_0.4.3_20261111.md). 게시 사실을 보강할 후속 근거 PR은 초안으로 유지한다.
+
 # 0.4.3-dev 실제 Main·Launcher 검토 — 2026.11.11
 
 - 최종 source12에서 공유 하위 동선3장과 별도 지도1장, 실제 Launcher의 보통/200% 글씨 idle pin2회를 확인하고 원래 XML/profile/account/DB행/cache/위젯 IDs·소유 환경을 복원했다. 소유 클라우드 AVD는 검토 후 종료했다.

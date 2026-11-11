@@ -1,0 +1,18 @@
+{
+  "id": 43095642325,
+  "run_attempt": 1,
+  "status": "completed",
+  "conclusion": "startup_failure",
+  "head_sha": "bd4c10e643d40e0fe3b382f4bd4f34db629e4be7",
+  "head_branch": "main",
+  "event": "workflow_dispatch",
+  "html_url": "https://github.com/wjdals988/runmoni/actions/runs/43095642325",
+  "created_at": "2026-11-11T20:22:20Z",
+  "run_started_at": "2026-11-11T20:22:20Z",
+  "updated_at": "2026-11-11T20:36:05Z",
+  "jobsCreated": 0,
+  "buildExecuted": false,
+  "apkCreatedByThisAttempt": false,
+  "underlyingCauseVerified": false,
+  "recordedAtUtc": "2026-11-11T20:37:23.515270+00:00"
+}

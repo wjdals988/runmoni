@@ -1,0 +1,44 @@
+{
+  "recordedAtUtc": "2026-11-11T20:46:23.226624+00:00",
+  "candidateVersion": "0.4.3-dev",
+  "candidateVersionCode": 25,
+  "candidateSourceRevision": "bd4c10e643d40e0fe3b382f4bd4f34db629e4be7",
+  "featurePr": "https://github.com/wjdals988/runmoni/pull/47",
+  "featurePrMerged": true,
+  "signingWorkflowStarted": false,
+  "candidateApkCreated": false,
+  "candidateReleaseExists": false,
+  "candidateDashboardPublished": false,
+  "candidateFeedPublished": false,
+  "noActiveOrQueuedRun": true,
+  "startupFailureEvidence": [
+    "ci-startup-attempt1.json",
+    "ci-startup-rerun-observation.json",
+    "ci-fresh-startup-failure.json"
+  ],
+  "publicFeed": {
+    "url": "https://raw.githubusercontent.com/wjdals988/runmoni/main/updates/android.json",
+    "httpStatus": 200,
+    "sizeBytes": 908,
+    "sha256": "8917425061de2465297913da00bc781676a6a4613d72b55a880694633ac00559",
+    "wholeBodyMatchesUnchangedRepositoryFile": true,
+    "version": "0.4.2-dev",
+    "versionCode": 24,
+    "sourceRevision": "176a9cbe1112efa05e9fc55d913738ee1778a57f",
+    "stable": null
+  },
+  "publicDashboard": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "oldDownloadUrlStillPresent": true,
+    "newDownloadUrlAbsent": true,
+    "responseSha256": "42856172db96364c5f7470e3257819b3c2f6a7aa128a98a44a58614627fcd66b",
+    "dashboardWorktreeUnchanged": true,
+    "baselineOtherProjectCount": 8,
+    "baselineOldReleaseNoteCount": 17,
+    "baselineOldScreenshotCount": 4
+  },
+  "apkBodyDownloaded": false,
+  "newSigningKeyCreated": false,
+  "emulatorRestarted": false
+}

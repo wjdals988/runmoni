@@ -1,3 +1,7 @@
+# 게시 상태: 0.4.3 후보 구현 완료, 서명 CI 시작 실패
+
+[현재 후보/차단/재개 절차](../../RELEASE_CANDIDATE_0.4.3_20261111.md). PR47은 main에 병합됐지만 두 CI run의 최초/rerun/새 실행이 job 생성 전 startup_failure로 종료됐다. 새 APK·대시보드·preview25 피드는 미게시이며 공개0.4.2/code24와 실제 APK출처176a9cbe...를 유지한다. `publication-blocked-state.json`을 따른다. gallery/context와 후보 C 대조 JSON은 준비 자료이며 새 공개 APK의 실행·게시 근거가 아니다.
+
 # 최종 로컬 검토: source12
 
 최종 입력은 `binary-build12.json` / `source-freeze12.json`이다. 새 JVM189·lint 오류0/경고57, 같은 APK쌍의 새 Android7과 이전 입력의 지도12/독립22를 구분한다(`android-scope-summary.json`). 아래 source5~11의 ‘최종 후보’는 해당 시점의 이력이다.
@@ -87,3 +91,9 @@ Source11은 실제 Main에서 기본 글씨 IME 뒤 caption이 가려지는 문�
 `live6.json`은 실제 Main의 caption 입력 Morning Miles와 Back 안전영역을 관측했지만, 입력칸에 맞춰 스크롤된 미리보기 노드가 보인다고 가정한 도구 assertion 때문에 실패했다. `live7.json`은 미리보기의 사진 이동 제스처 영역에서 페이지 스크롤을 시도해 전체 preview 관측이 실패했다. 두 시도 모두 원래 데이터/소유 환경을 복원했다. 제품 입력 실패나 후속 전체 성공으로 고쳐 쓰지 않는다. 도구는 IME에서는 focused EditText 값을 확인하고,사진 바깥 여백에서 페이지를 스크롤해 preview를 확인하도록 보완했다. 추가 passive XML 읽기는 UI나 데이터를 변경하지 않았고,불완전한 동시 읽기는 결과로 사용하지 않았다.
 
 사진의 최근 목록 문제는 실제 원인이 확정되지 않았다. 단독 provider 조회/정상 크기·시각과 실제 폴더 경로를 각각 확인했으며,메타데이터 갱신이 최근 목록을 고쳤다고 주장하지 않는다. Main은 정상 OS 폴더 탐색/정확한 파일 선택을 사용하고 원래 storage 표시 설정을 복원했다. 앱 callback에 URI를 주입하지 않는다.
+
+## 서명 CI 시작 실패와 동일 작업 재시도
+
+`ci-startup-attempt1.json`은 C의 서명 CI43095642325가 job/실제 빌드 생성 전 startup_failure로 종료된 원문 메타데이터다. APK나 JVM 검사를 실행한 것으로 세지 않는다. 소스 변경/중복 dispatch 없이 같은 작업의 rerun을 요청했으며 실제 최종 결과는 후속 CI proof를 따른다. 공식 상태 페이지의 Actions 정상 표시는 이 개별 실패의 원인을 설명하지 않으므로 underlying cause는 미확정이다. rerun 직후 API의 queued/run_attempt 필드 반영 시점도 최종 성공이나 새 빌드 수로 해석하지 않는다.
+
+같은 작업 rerun의 실제 실패는 `ci-startup-rerun-observation.json`, 별도 새 실행의 실패는 `ci-fresh-startup-failure.json`에 보존했다. 둘 다 GitHub의 unexpected error 진단/job0이며 세부 원인은 미확정이다. 현재 대기·실행 중인 CI는 없고 대시보드 저장소는 미변경이다.
