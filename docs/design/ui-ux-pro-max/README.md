@@ -19,3 +19,7 @@ Python 표준 라이브러리 도구·관련 CSV·reference19개/737272bytes만 
 자동 추천의 제품 방향 일치는 확인하지 못했다. 따라서 색/서체/스타일은 기존 DESIGN.md와 사용자 요청을 유지하고, 실제 적합한 Compose 결과 및 스킬 기본 native 접근성/조작/위계 원칙을 종합한 [MASTER](../../../design-system/runmoni/MASTER.md)를 작성했다. 검색 결과에 표시된 Compose 버전·Verified At는 upstream 메타데이터이며 런모니의 실제 의존성 버전이나 이번 사용성 측정이 아니다.
 
 awesome-design-md의 기존 pinned Apple/Nike/Airbnb 참조는 유지한다. 새 스킬이 기존 승인 원본·기록/포인트/보유권·실제 APK 출처·서명키·Firebase 경계를 변경하는 권한을 주지 않는다. 실제 실행/실패/미확인/페이지별 결과는 CHANGELOG와 후속 검토 문서에 기록한다.
+
+## 2026-11-11: 공유·위젯·지도 보완
+
+기본1:1 공유의 위계, 밝은 위젯의 거리 중심 구성, 지도 바깥의 보조 조작을 적용했다. 실제 검색의 원문/재검색/공식 자료는 [공유 검토 근거](../../app-review/2026-11-11-run-share/README.md)에 보존한다. `glanceable widget information`의 일치는0건이었고 재검색도 제품 맥락에 맞지 않아 공식 Android 위젯 지침으로 보완했다. `contextual actions`의 NoGestureOnlyActions와 Compose typography/flat layout 결과는 적용했다. 결과에 기록된 upstream 버전/확인일을 런모니의 최신 시장 유행 측정이나 실제 의존성 업그레이드로 주장하지 않는다.

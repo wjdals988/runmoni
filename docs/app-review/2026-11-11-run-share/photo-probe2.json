@@ -1,0 +1,20 @@
+{
+  "name": "photo-probe2",
+  "nonce": "share43probe02",
+  "source": "standalone controlled Android documents picker probe, not product photo selection",
+  "passed": false,
+  "completed": true,
+  "deviceOrAppDataReset": false,
+  "mediaScanRequested": false,
+  "documentsUiProcessRestartRequested": false,
+  "sameValueLegacyMediaTypeUpdatePerformed": false,
+  "actualSystemPickerBeforeHasOwnGridRow": false,
+  "failureType": "AssertionError",
+  "failure": "One exact owned metadata row updated",
+  "ownedPickerBackActions": 1,
+  "ownedPickerClosed": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true
+}

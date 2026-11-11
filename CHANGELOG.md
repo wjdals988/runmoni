@@ -1,3 +1,45 @@
+# 0.4.3-dev 실제 Main·Launcher 검토 — 2026.11.11
+
+- 최종 source12에서 공유 하위 동선3장과 별도 지도1장, 실제 Launcher의 보통/200% 글씨 idle pin2회를 확인하고 원래 XML/profile/account/DB행/cache/위젯 IDs·소유 환경을 복원했다. 소유 클라우드 AVD는 검토 후 종료했다.
+- Main 공유 실행의 최종 지도 selector 실패는 전체 FAILED로 보존하고, 독립 지도 성공과 같은 설치 SHA/원래 데이터/실제 입력을 검증한 단계 묶음만 사용한다. Launcher 최초 큰 글씨 도구 스와이프 실패도 보존했고 본문 실측 viewport에서 재검증했다. 단일 Main 전체 성공/새41개 Android/실제 SNS·휴대폰·Google·운영 지도 인증으로 합산하지 않는다.
+- 실제 원본 Main4/Launcher2는 Root가 열어 확인했으며 사용자 시각 승인은 아니다. 새 JVM189/Android 새7·보존12+22와 공개 서명 CI/배포 결과는 각각의 근거를 따른다.
+
+# 0.4.3-dev 단일 스크롤 실제 검증 — 2026.11.11
+
+- source12 앱/검사APK·새 JVM189(실패/오류/skip0), lint 오류0/경고57을 통과했다. Native6의 실제320/font2와480/font1 키보드2개·일반 UI4/상태제어1을 새로 실행해7개 통과했고 원래 XML/profile/account/소유 환경을 복원했다. 기본 글씨에서는 입력칸 전체/실제 shell키 Morning Miles/EditableText·draft 일치/창 복원까지 확인했다. 이전 source11의6개와 합산하지 않는다.
+- 지도12와 독립22의 선행 결과를 별도 보존해 서로 다른41개 검사 범위를 기록한다. 기록 관련7개는 이전 baseline이며 새 지도/공유 창 정책 전체 검증으로 꾸미지 않는다. 실제 Main/Launcher 결과와 공개 서명 CI도 각각 별도다.
+
+# 0.4.3-dev 공유 UI/검토 도구 재검증 — 2026.11.11
+
+- source11 일반 공유 UI4·실제 공유 상태제어1을 새로 통과했고 원래 전체XML/프로필/account/소유 환경을 복원했다. 같은 입력의 native IME1과 별도6개이며 이전 지도12/독립22의 보존 결과와 구분한다.
+- 실제 Main 두 번째 시도는 picker에서 title TextView만 찾던 driver가 실제 썸네일 container의 접근성 filename을 놓친 뒤 관측 timeout으로 실패했다. private 초기 계층에서 검토 사진·thumbnail/list 구조를 확인했고, 정확한 filename+해당 목록/icon 양성 조건으로 검토 도구만 보완했다. 앱 사진 선택 실패나 source11 제품 변경으로 기록하지 않는다. fixture/원래DB행/전체XML/프로필/account/소유 환경은 복원했다.
+
+# 0.4.3-dev IME 실제 재검증 — 2026.11.11
+
+- 최종 후보 source11 앱/검사 APK·새 JVM189가 통과했고 lint는 오류0/경고58이다. 추가 경고1개는 반환값이 있는 private composable의 대문자 이름이며 런타임 통과와 구분해 기록한다.
+- `native5`는 실제API29/320dp/글씨200%/키보드에서 닫기·스크롤한 저장·공유 전체48dp와 시스템바/IME밖 배치를 통과했다. 편집 이탈 후 원래 소유 layout flags/softInputMode 복원도 확인했다. 전체XML/프로필/account/소유 환경 복원 후 완료했다. 이전 native1~4 실패와 합산하지 않는다.
+
+# 0.4.3-dev API29 inset 소유 범위 보완 — 2026.11.11
+
+- source10은 빌드를 통과했으나 Android 실행 전 출시 Core1.16/Compose1.7 읽기 검토에서 framework fitting 뒤 root visibleInsets로 IME가 다시 추론될 가능성을 확인했다. 실제 source10 Android 실패를 관측했다고 기록하지 않는다. 새 APK 설치 전 AVD848472를 종료했다.
+- source11은 실제 host Window에 classic fitting을 적용한 API29에서 Compose inset을0으로 두어 framework가 status/navigation/IME를 전부 소유하게 한다. API30+와 Window 없는 preview는 기존 safeDrawing/ime 경로다. 기존 엄격한 native1/이탈 후 원래 창 복원 검사를 유지한다.
+
+# 0.4.3-dev source10 빌드 — 2026.11.11
+
+- API29 한정 편집 창 정책과 이탈 후 복원 검사를 반영한 source10 앱/검사 APK·새 JVM189가 통과했고 lint 오류0/경고57이다. 실제 IME/일반 UI·Main/Launcher 검증은 이후 근거와 구분한다.
+- source9 실제 Main의1:1 기본 화면1장을 확인했으나 OS picker에서 검색 EditText를 파일로 오인한 검토 driver 때문에 이후 callback 대기가 실패했다. 앱 사진 로딩 오류로 합산하지 않는다. 검토 fixture/own output·원래 DB행/전체XML/프로필/account/소유 환경 복원 후 전용AVD843929 종료를 확인했다.
+
+# 0.4.3-dev API29 창 이동 재현 — 2026.11.11
+
+- source9 native4의 엄격한 IME 검사는 실패로 보존했다. raw inset 관찰은 safe content를746→377px로 올바르게 줄였으나 root y=-158px와 뒤로 버튼 y=-110px가 남았다. padding만으로 해결됐다고 표시하지 않는다. 원래 XML/프로필/account/소유 환경은 복원했다.
+- AOSP Android10의 ViewRootImpl/DisplayPolicy와 출시 Compose1.7/Core1.16 소스를 읽고, API29 편집 화면 수명에만 framework fitting/ADJUST_RESIZE를 적용하는 후보를 검토했다. 화면 이탈 시 소유 layout flags와 soft input mode를 복원하며 API30+는 기존 정책을 유지한다. 후보의 실제 통과는 별도 새 입력 검증을 따른다.
+
+# 0.4.3-dev 지도 재검증·IME 보완 — 2026.11.11
+
+- source8의 지도6/탐색5/하단탭1을 클라우드 API29에서 새로 실행해12개 모두 통과했고 원래 XML·프로필·계정·소유 환경을 복원했다. source7 실패를 삭제하거나 같은 입력의 전체 성공으로 바꾸지 않는다.
+- source8 실제320dp/글씨200%의 IME 검사는 다시 실패했다. 실패 직후 관측에서 raw IME441px·Compose safe content746px·창 y=-158px·뒤로 버튼 y=-110px를 확인했다. API29에서만 root IME inset을 관찰해 기존 safe/IME와 최대값으로 합친다. 기존 Compose listener를 교체하거나 키보드를 숨겨 검사를 통과시키지 않는다.
+- source9는 위 보완을 포함해 오프라인 앱/검사 APK·새 JVM189(실패/오류/skip0), lint 오류0/경고57을 통과했다. 실제 Android IME와 Main/Launcher 재검증은 별도 결과를 따른다.
+
 # 0.4.3-dev 실제 Android 보완 — 2026.11.11
 
 - source7 새 JVM189/lint0·경고57과 Android 기본38 중 독립8그룹27개가 통과했다. Map6의 noFix 안내가 tile실패 안내에 가려졌고, Discovery5의320dp/글씨200%에서 지도84dp<96dp가 관측돼 전체는 실패로 보존했다. 두 상태를 함께 표시하고 큰 글씨의 지도 공간을 확보한다. 기존96dp/48dp/전체bounds/overflow 기준은 낮추지 않는다.
@@ -793,3 +835,9 @@
 - 최종 제품 source6는 source4에서 라이브 빈 지도 문구/세로 여백2줄만 바꿨다. 320dp/font1.5의2px glyph overflow 실패를1px 허용 완화 없이 수정했다. source4의 지도/기록/탐색/위젯16개는 기존 성공 근거로 보존하고, source6에서 영향받는 러닝/5탭2개와 실제320dp/font2 기록 페이지1개를 새 실행했다. 전체19개가 같은 바이너리에서 새 실행된 것으로 합산하지 않는다.
 - live1은 실제 OS pin·위젯 일시정지/재개·상단 알림 일시정지/재개와 화면 끔 합성GPS 증가(21.153→31.730m,125→137지점)를 확인했으나 기본 홈 페이지에 위젯이 없어 종료 탐색에서 실패했다. 삭제 뒤 프로필 구역 제목과 상세 제목이 같은 테스트 대기 문제도 있었다. 실패는 보존하고 별도 복구에서 기존 DB/원래XML/위젯cache/통제 환경 및 원래 위젯ID집합[2] 복원을 확인했다. 실제 휴대폰/Doze/Google 성공이 아니다.
 - 기본 에뮬레이터에는 클라우드의 TLS 검사 프록시/CA가 전달되지 않아 실제 지도 연결 검증이 남았다. SDK 임시 writable-system의 정상 remount도 실패해 추가CA/프록시 적용 없이 중단했고 enable-verity 성공/종료를 기록했다. 이어 앱 로컬 debug-only res/init overlay로 제공된 세션 CA를 연결했다. 배포용 main 보안 XML/서명키/제품코드는 바꾸지 않으며 TLS 검증을 끄지 않는다. build7은 이 로컬 설정의 실제 패키징을 확인했다. native HTTPS/전체live2 결과는 완료 후 별도 기록한다.
+
+# 0.4.3-dev 일반 글씨 IME 동선 보완 — 2026.11.11
+
+- source11 실제 Main의 사진 선택/미리보기와 기본 글씨 IME 뒤로 버튼은 통과했다. 이후 caption이 화면 아래로 가려지고 실제 입력이 빈 값으로 남은 시도는 live5 실패로 보존했다. 화면 높이에 따라 같은 ScrollState가 controls와 outer 사이를 옮기는 구조는 확인했지만, 빈 입력의 원인을 그 구조만으로 단정하지 않는다. 검토 도구도 입력을 IME 표시 이후에 보내도록 바로잡는다.
+- source12는 outer 스크롤 하나를 유지하고 성공 문구를 저장·공유 동작 위에 둔다. 긴 오류는 기존 본문에 남겨 작은 창 footer 과밀을 피한다. 기본480dp/font1/tall→IME short에서 필드 전체 표시/실제 shell 키 입력/창 복원을 확인하는 Native1개를 추가하며 기존 font2 검사는 그대로다. 단순 composable 이름 경고도 함께 정리한다.
+- 파일 등록/direct document/recent cursor는 image/png·124887bytes·최근 시각으로 확인했다. Images collection의 media_type projection 오류, CLI 출력 형식 잘못 가정한 probe2와 metadata 동일값 갱신 뒤에도 최근 목록이 비어 있던 probe3를 보존한다. 이를 새 제품/사진 처리 실패로 합산하지 않는다. standalone probe4는 OS 폴더 탐색으로 정확한 검토 사진을 찾고 원래 storage 표시/파일SHA/DB/XML/account 복원을 통과했다. 실제 Main도 이 정상 폴더 경로로 사진을 선택했다. 새 권한·서비스/Rules·이미지 원본 변경은 없다.

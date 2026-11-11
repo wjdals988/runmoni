@@ -1,0 +1,110 @@
+{
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "finalLocalBinary": "binary-build12.json",
+  "finalLocalJvm": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finalLocalLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 57
+  },
+  "freshFinalAndroid": {
+    "proofs": [
+      "native6.json",
+      "android-review8.json"
+    ],
+    "total": 7,
+    "groups": {
+      "actualNative320Font2ImeAndWindowRestore": 1,
+      "actualNative480Font1ImeRealKeysAndWindowRestore": 1,
+      "shareEditorUi": 4,
+      "shareControllerFences": 1
+    }
+  },
+  "retainedMapRegression": {
+    "proof": "android-review6.json",
+    "binary": "binary-build8.json",
+    "total": 12,
+    "groups": {
+      "map": 6,
+      "discovery": 5,
+      "tabs": 1
+    },
+    "changedInputsToFinal": {
+      "productSources": [
+        "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt"
+      ],
+      "testSources": [
+        "app/src/androidTest/java/com/runmoni/app/ui/RunShareImeUiTest.kt"
+      ],
+      "resources": [],
+      "rendererAssets": [],
+      "approvedSourceCopies": [],
+      "configurationSources": []
+    },
+    "claim": "These paths do not enter the changed share editor; this is retained evidence on a previous APK pair."
+  },
+  "earlierIndependentGroups": {
+    "proofs": [
+      "android-review5.json",
+      "native1.json"
+    ],
+    "binary": "binary-build7.json",
+    "total": 22,
+    "groups": {
+      "renderer": 4,
+      "storage": 4,
+      "widget": 7,
+      "recordUi": 4,
+      "recordNavigation": 2,
+      "nativeRecord": 1
+    },
+    "changedInputsToFinal": {
+      "productSources": [
+        "app/src/main/java/com/runmoni/app/ui/RouteTileMap.kt",
+        "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt",
+        "app/src/main/java/com/runmoni/app/ui/RunnerDiscoveryScreen.kt"
+      ],
+      "testSources": [
+        "app/src/androidTest/java/com/runmoni/app/ui/RouteTileMapUiTest.kt",
+        "app/src/androidTest/java/com/runmoni/app/ui/RunShareImeUiTest.kt"
+      ],
+      "resources": [],
+      "rendererAssets": [],
+      "approvedSourceCopies": [],
+      "configurationSources": []
+    },
+    "claim": "Independent passed groups only. Whole android-review5/native1 failed and remain failed. Record-related seven are earlier baselines; map descendants and share-window policy subsequently changed."
+  },
+  "distinctObservedMethodsAcrossInputs": 41,
+  "historicalFailedAttempts": [
+    "android-review1.json",
+    "android-review2.json",
+    "android-review3.json",
+    "android-review5.json",
+    "native1.json",
+    "native2.json",
+    "native3.json",
+    "native4.json",
+    "live1.json",
+    "live2.json",
+    "live3.json",
+    "live4.json",
+    "live5.json",
+    "photo-probe2.json",
+    "photo-probe3.json",
+    "live6.json",
+    "live7.json"
+  ],
+  "appSignedReleaseRuntimeVerified": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "socialAppDeliveryVerified": false,
+  "all41FreshOnFinalBinaryClaimed": false
+}

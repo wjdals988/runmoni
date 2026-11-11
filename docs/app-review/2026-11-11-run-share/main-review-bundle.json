@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "actual-main-phase-bundle",
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "api": 29,
+  "bundleValidationPassed": true,
+  "bundleIsNotSingleExecution": true,
+  "singleExecutionPassedClaimed": false,
+  "sharingParentOverallPassed": false,
+  "mapParentOverallPassed": true,
+  "validationMeaning": "Completed sharing sub-observations plus independent map review; neither reruns nor promotes the FAILED sharing parent.",
+  "phases": {
+    "sharing": {
+      "file": "live8.json",
+      "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+    },
+    "map": {
+      "file": "map-live1.json",
+      "sha256": "0b0f64a0fd51bf47b8514155e82c5d6e3c9403f656adca09087c652e964f3a23"
+    }
+  },
+  "binaryReference": "binary-build12.json",
+  "binaryReferenceSha256": "6cda5b7c6b44717ac7305f110816cd820c22eea18a23ba48eef5124baf673695",
+  "sameFrozenAndInstalledApkPairVerified": true,
+  "sameOriginalDatasetsVerified": true,
+  "sharingSourceSnapshotFieldsActuallyPresent": [
+    "sourceMapsBefore",
+    "sourceMapsAfterRestoration"
+  ],
+  "sourceSnapshotScope": "Sharing before/after-restoration and map-only before/after/after-restoration are original per-phase measurements; no missing sharing after snapshot is invented.",
+  "failureReview": {
+    "failedCollectorPhase": "final-map-accessibility-locator",
+    "failedSelector": "startswith('지도.')",
+    "observedMapPrefix": "세계 지도.",
+    "originalSelectorWouldMatch": false,
+    "privateFailureXmlSha256": "fc142f119d072d4c28536a810eca1dc53590ad030af4557b1914735177e3b0f6",
+    "privateStageLogSha256": "adb8255b4bc34c5e845ff504f889c22d083d1c4333058f293124890eefed7053",
+    "actualWorldMapBoundsInFailureXml": "[0,151][480,563]",
+    "rawParentOverallFailedPreserved": true
+  },
+  "captures": [
+    {
+      "file": "live8-main-default-card.png",
+      "sha256": "9e53c8f7bcc0c42dec50b30e22b6ea38feccbb00add78f5a12056235158aa347",
+      "bytes": 39089,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "sourcePhase": "completed-sharing-subobservations",
+      "parentExecutionPassed": false
+    },
+    {
+      "file": "live8-main-photo-story.png",
+      "sha256": "ae9569f653bc6f9e1622c6195e622a365d9d1e85d65b456b46b1ce03c11926e7",
+      "bytes": 44951,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "sourcePhase": "completed-sharing-subobservations",
+      "parentExecutionPassed": false
+    },
+    {
+      "file": "live8-main-mini-editor.png",
+      "sha256": "d05c81cc01db212efbace208417b34912cf726113ce2569954efa5ec22aef691",
+      "bytes": 42940,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "sourcePhase": "completed-sharing-subobservations",
+      "parentExecutionPassed": false
+    },
+    {
+      "file": "map-live1-main-map-clean.png",
+      "sha256": "7002f14912664a561e5814fbc912a52c298df7d1507ebd78eaaeaa1b41a39c21",
+      "bytes": 62543,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false,
+      "sourceProof": {
+        "file": "map-live1.json",
+        "sha256": "0b0f64a0fd51bf47b8514155e82c5d6e3c9403f656adca09087c652e964f3a23"
+      },
+      "sourcePhase": "independent-map-only",
+      "parentExecutionPassed": true
+    }
+  ],
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "verifierSource": {
+    "file": "main-phase-bundle-verifier.py",
+    "sha256": "6c4feeefcd41afcf8e46a9779fc903a84e9952592022a4a578820c53a1675cb6"
+  }
+}

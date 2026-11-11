@@ -1,6 +1,12 @@
 package com.runmoni.app.ui
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
+import android.os.Build
+import android.view.View
+import android.view.WindowManager
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -35,6 +41,9 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
@@ -249,8 +258,13 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
     val scroll = rememberScrollState()
     val latestTransform by rememberUpdatedState(onTransform)
     var photoPositionExpanded by rememberSaveable { mutableStateOf(false) }
+    val frameworkFitted = legacyRunShareWindowPolicy()
+    // API29 classic fitting owns both bars and IME. Compat may still infer raw IME
+    // from root visibleInsets after consumption, so adding it would count it twice.
+    val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
+        else WindowInsets.safeDrawing.union(WindowInsets.ime)
     Surface(Modifier.fillMaxSize().testTag("run_share_page"), color = RunmoniColors.Cream) {
-        BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
+        BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(contentInsets)
             .testTag("run_share_safe_content")) {
           // IME and short windows can leave less room than the two export actions.
           // Keep Back fixed and let those actions join the single body scroll.
@@ -268,7 +282,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 val small = scrollFooter || LocalDensity.current.fontScale >= 1.3f || maxHeight < 500.dp
                 val previewHeight = if (small) 220.dp else minOf(maxHeight * .52f, 350.dp)
                 val previewWidth = minOf(maxWidth - pageGutter() * 2, previewHeight * draft.ratio.aspectRatio)
-                Column(Modifier.fillMaxSize().then(if (small) Modifier.verticalScroll(scroll) else Modifier),
+                // Keep one scroll owner when IME/viewport changes. The focused field stays
+                // inside this same viewport instead of transferring its ScrollState to a parent.
+                Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Box(Modifier.padding(vertical = 16.dp).width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
                         .background(RunmoniColors.Line).border(1.dp, RunmoniColors.Line)
@@ -291,12 +307,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                         }
                     }
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                        .then(if (!small) Modifier.weight(1f).verticalScroll(scroll) else Modifier)
                         .padding(horizontal = pageGutter(), vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
-                        if (message != null) Text(message, color = RunmoniColors.Primary,
-                            modifier = Modifier.testTag("run_share_message").semantics { liveRegion = LiveRegionMode.Polite })
                         // Material Tab fixes its text-only height; let large Korean text choose its own height.
                         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
                             .testTag("run_share_tools"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -381,10 +394,10 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                         }
                         Spacer(Modifier.height(8.dp))
                     }
-                    if (scrollFooter) RunShareExportActions(ready, busy, onSave, onShare)
+                    if (scrollFooter) RunShareExportActions(ready, busy, message, onSave, onShare)
                 }
             }
-            if (!scrollFooter) RunShareExportActions(ready, busy, onSave, onShare)
+            if (!scrollFooter) RunShareExportActions(ready, busy, message, onSave, onShare)
           }
         }
     }
@@ -409,10 +422,14 @@ private fun ShareNudgeControls(label: String, tag: String, enabled: Boolean, onM
 }
 
 @Composable
-private fun RunShareExportActions(ready: Boolean, busy: Boolean, onSave: () -> Unit, onShare: () -> Unit) {
+private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String?,
+    onSave: () -> Unit, onShare: () -> Unit) {
     HorizontalDivider(color = RunmoniColors.Line)
     Box(Modifier.fillMaxWidth().padding(horizontal = pageGutter(), vertical = 12.dp), contentAlignment = Alignment.Center) {
-        Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()) {
+        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            if (message != null) Text(message, color = RunmoniColors.Primary,
+                modifier = Modifier.testTag("run_share_message").semantics { liveRegion = LiveRegionMode.Polite })
             AdaptiveActions(first = { m ->
                 OutlinedButton(onClick = onSave, enabled = ready && !busy, shape = RunmoniShapes.Action,
                     modifier = m.heightIn(min = 48.dp).testTag("save_run_share").recordActionSnapshot(onSave)) {
@@ -442,4 +459,52 @@ private fun <T> ShareChoices(options: List<T>, selected: T, label: (T) -> String
             }
         }
     }
+}
+
+/** API29 lets the framework fit this editor while the IME is visible instead of panning the
+ * complete edge-to-edge root. Other pages and API30+ keep their existing window policy.
+ * The framework consumes its fitted insets; do not add raw root IME pixels a second time.
+ */
+@Composable
+private fun legacyRunShareWindowPolicy(): Boolean {
+    val view = LocalView.current
+    val window = remember(view) {
+        if (Build.VERSION.SDK_INT == 29) view.context.runShareHostActivity()?.window else null
+    }
+    DisposableEffect(window) {
+        if (window == null) {
+            onDispose { }
+        } else {
+            val decor = window.decorView
+            // WindowCompat API16 implementation owns only these three layout flags on API29.
+            val layoutMask = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            val originalLayoutFlags = decor.systemUiVisibility and layoutMask
+            val originalSoftInputMode = window.attributes.softInputMode
+            WindowCompat.setDecorFitsSystemWindows(window, true)
+            window.setSoftInputMode((originalSoftInputMode and WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST.inv()) or
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            ViewCompat.requestApplyInsets(decor)
+            decor.requestLayout()
+            onDispose {
+                // Preserve any independent status/navigation appearance change during this page.
+                decor.systemUiVisibility = (decor.systemUiVisibility and layoutMask.inv()) or originalLayoutFlags
+                window.setSoftInputMode(originalSoftInputMode)
+                ViewCompat.requestApplyInsets(decor)
+                decor.requestLayout()
+            }
+        }
+    }
+    return window != null
+}
+
+private fun Context.runShareHostActivity(): Activity? {
+    var current = this
+    while (current is ContextWrapper) {
+        if (current is Activity) return current
+        val next = current.baseContext
+        if (next === current) return null
+        current = next
+    }
+    return current as? Activity
 }

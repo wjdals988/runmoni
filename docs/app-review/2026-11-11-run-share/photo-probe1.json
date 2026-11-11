@@ -1,0 +1,44 @@
+{
+  "name": "photo-probe1",
+  "nonce": "share43probe01",
+  "source": "explicit test fixture, not product photo selection",
+  "passed": true,
+  "completed": true,
+  "deviceOrAppDataReset": false,
+  "mediaScanRequested": false,
+  "documentsUiProcessRestartRequested": false,
+  "media-row": {
+    "queryError": true,
+    "hasOwnFilename": false,
+    "noResults": false,
+    "_size": null,
+    "media_type": null,
+    "is_pending": null,
+    "date_added": null,
+    "date_modified": null,
+    "width": null,
+    "height": null
+  },
+  "media-document": {
+    "queryError": false,
+    "hasOwnFilename": true,
+    "noResults": false
+  },
+  "recent-images": {
+    "queryError": false,
+    "hasOwnFilename": true,
+    "noResults": false
+  },
+  "roots": {
+    "queryError": false,
+    "hasOwnFilename": false,
+    "noResults": false,
+    "imageRootFlags": [
+      14
+    ]
+  },
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true
+}

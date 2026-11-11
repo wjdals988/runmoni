@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunShareUiTest:....
+
+Time: 132.954
+
+OK (4 tests)
+
+
