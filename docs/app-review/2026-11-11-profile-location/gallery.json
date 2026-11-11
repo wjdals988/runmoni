@@ -1,0 +1,80 @@
+{
+  "version": "0.4.2-dev",
+  "versionCode": 24,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "176a9cbe1112efa05e9fc55d913738ee1778a57f",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "e2bce83e2f75ae098e1c308193053a59726e9d208c8ccf0162b686ba158f71b8"
+    }
+  },
+  "images": [
+    {
+      "file": "live1-home-current-area-weather.png",
+      "sha256": "77f9e2822ee5d665644b7a0c62661ac97ef0e46b763a07edb7519a2303730553",
+      "width": 480,
+      "height": 854,
+      "key": "home-current-area",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "caption": "홈 · 현재 위치와 날씨",
+      "alt": "합성 GPS를 사용한 실제 홈 화면. 미니미 옆 현재 위치의 근처 좌표·기온·바람·옷차림 안내.",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "5e90172a41903212b1ccf8eb32d4b04c9e4886f26bb7eaaec2706f7652279b19"
+      }
+    },
+    {
+      "file": "live1-explore-current-area.png",
+      "sha256": "c090c62f64a3ad0b223abd137cfc618de490490c3b8970cd034f446a150636f4",
+      "width": 480,
+      "height": 854,
+      "key": "explore-current-area",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "caption": "탐색 · 현재 위치와 지도",
+      "alt": "실제 탐색 화면의 현재 위치 좌표 fallback과 OpenStreetMap 출처. 다른 러너의 실제 위치를 표시한 검증이 아닙니다.",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "5e90172a41903212b1ccf8eb32d4b04c9e4886f26bb7eaaec2706f7652279b19"
+      }
+    },
+    {
+      "file": "live1-profile-inline-retry.png",
+      "sha256": "1875928cb839481daa504f35b62b1741de022fbdc9f84a424a848414b8bef605",
+      "width": 480,
+      "height": 854,
+      "key": "profile-inline-retry",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "caption": "프로필 · 연결 안내 (검토 설정)",
+      "alt": "Firebase 비활성 로컬 TEST 설정에서 연결 안내를 창 안에 표시하고 입력과 재시도를 유지한 실제 화면. 운영 연결 성공 사진이 아닙니다.",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "5e90172a41903212b1ccf8eb32d4b04c9e4886f26bb7eaaec2706f7652279b19"
+      }
+    },
+    {
+      "file": "live1-me-saved-device-name.png",
+      "sha256": "bfb8bfe9caa52606df738e45b6210246b4443ad992515a12485f4786df03b861",
+      "width": 480,
+      "height": 854,
+      "key": "me-local-name",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "caption": "프로필 · 기기 이름 저장",
+      "alt": "실제 저장 버튼으로 합성 기기 이름 AreaRunner24를 저장한 뒤 나 화면. 온라인 닉네임 등록과 다릅니다.",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "5e90172a41903212b1ccf8eb32d4b04c9e4886f26bb7eaaec2706f7652279b19"
+      }
+    }
+  ]
+}

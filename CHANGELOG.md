@@ -1,3 +1,9 @@
+# 0.4.2-dev 공개 — 2026-11-11 한국 시간
+
+<!-- verified-release-0.4.2-v1 -->
+- 프로필 연결의 서버 확인/같은 UID 재시도·inline 안내와 현재 지역명/좌표, 큰 글씨 지도 배치를 수정했다. 같은 보관키/code24, 219,821,173bytes, 실제 APK출처 `176a9cbe1112efa05e9fc55d913738ee1778a57f`, SHA256 `2cd7bd0a865ed75af64a6bf30b5e93e7e92259b7eb9467b0f06adb91c415b046`. 서명 CI43020432448 JVM177/lint오류0·경고84, 운영13항목/원본PNG4를 확인했다.
+- [게시 근거](docs/RELEASE_REVIEW_0.4.2_20261111.md). 최종 local 새177/lint0·경고54, Android 새12+별도 SDK3와 이전 입력 보존13·실제 Main4를 구분한다. getter/출처 잘림/설치 해시/SDK 프록시 실패와 복원은 원문에 보존했다. preview24/stable null의 canonical raw는 병합 후 별도 확인한다. 운영 Rules 버전·휴대폰/Google·공개 서명 APK 실행은 별도이며 새 Rules/키/의존성/원화 변경은 없다.
+
 # 0.4.2-dev 로컬 검증 완료 — 2026.11.11
 
 - 최종 build4 새 JVM177/lint 오류0·경고54, 변경 범위 Android UI/실제VM/옷장/지도12개와 별도 Firebase SDK3개가 통과했다. 이전 입력에서 보존한 지역명/날씨/커뮤니티13개와 구분하며 모두를 한 APK쌍의 새28개로 세지 않는다.

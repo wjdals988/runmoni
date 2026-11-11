@@ -1,0 +1,107 @@
+{
+  "ciRun": 43020432448,
+  "sourceRevision": "176a9cbe1112efa05e9fc55d913738ee1778a57f",
+  "status": "completed",
+  "conclusion": "success",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:09Z",
+      "completed_at": "2026-11-11T12:27:10Z"
+    },
+    {
+      "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:10Z",
+      "completed_at": "2026-11-11T12:27:13Z"
+    },
+    {
+      "name": "Validate requested mode and restore retained key",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:13Z",
+      "completed_at": "2026-11-11T12:27:13Z"
+    },
+    {
+      "name": "Inspect connections and inject Android client configuration",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:13Z",
+      "completed_at": "2026-11-11T12:27:16Z"
+    },
+    {
+      "name": "Retain sanitized connection readiness",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:16Z",
+      "completed_at": "2026-11-11T12:27:17Z"
+    },
+    {
+      "name": "Prepare verified build tools, without an emulator",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:17Z",
+      "completed_at": "2026-11-11T12:27:24Z"
+    },
+    {
+      "name": "Build, test and inspect unsigned candidate",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-11-11T12:27:24Z",
+      "completed_at": "2026-11-11T12:27:24Z"
+    },
+    {
+      "name": "Build, test, sign and verify retained certificate",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:27:24Z",
+      "completed_at": "2026-11-11T12:34:04Z"
+    },
+    {
+      "name": "Upload and verify private release draft",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:34:04Z",
+      "completed_at": "2026-11-11T12:48:14Z"
+    },
+    {
+      "name": "Retain APK and verification sidecars",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-11-11T12:48:14Z",
+      "completed_at": "2026-11-11T12:48:14Z"
+    },
+    {
+      "name": "Retain small verification reports",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:48:14Z",
+      "completed_at": "2026-11-11T12:48:15Z"
+    },
+    {
+      "name": "Remove temporary signing and Android configuration files",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:48:15Z",
+      "completed_at": "2026-11-11T12:48:15Z"
+    },
+    {
+      "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:48:15Z",
+      "completed_at": "2026-11-11T12:48:15Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-11-11T12:48:15Z",
+      "completed_at": "2026-11-11T12:48:15Z"
+    }
+  ],
+  "taskCacheOrFreshExecutionInferredFromStepStatus": false
+}
