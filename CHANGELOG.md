@@ -1,3 +1,9 @@
+# 0.4.4-dev Android·실제 화면 검토 — 2026.11.12 한국 시간
+
+- 최종binary4에서새Android일반13/native옷장3=16개통과와원래XML/프로필/account·소유환경복원/3회6맵/설치쌍을확인했다. 실제system scale0읽기·그설정의조작은실제150ms/전체중간프레임·다른배율검증과다르다.
+- 실제Main첫시도는이미selected=true인비클릭탭을click_targets에서찾던관측조건때문에실패했다. 원문·데이터복원을보존하고상태관측만보완한live2가전체PASS/원본4장을통과했다. 옷장selected·공유기본draft왕복/지도밖조작을확인했고Root원본검토·원래데이터/소유환경복원·정확한AVD961746종료를확인했다. 앱입력/타임아웃을바꾸어통과시키지않았다.
+- [근거](docs/app-review/2026-11-12-expressive-track/README.md). 같은키서명CI/실제APK/운영대시보드·피드는후속검증이며공개0.4.3실제출처를유지한다. 이전43의70/사진Picker·갤러리/receiver/Launcher를이번새결과로합산하지않는다.
+
 # 0.4.4-dev 시각 강화 1차 후보 — 2026.11.12 한국 시간
 
 - frontend-design/ui-ux-pro-max로 [우선순위와 이유](docs/UI_UX_EXPRESSIVE_PRIORITIES_20261112.md)를 정리했다. 미니미·옷장의 공통 정적 트랙/민트·라임·clay색면,홈4dp 색띠,자연높이 탭의 선택배경/150ms 색상전환을 구현했다. 원본픽셀·기존선택/저장/조작영역·데이터는보존한다.

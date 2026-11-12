@@ -1,0 +1,23 @@
+{
+  "observedAtUtc": "2026-11-12T07:25:32.292523+00:00",
+  "images": [
+    {
+      "file": "android-review1-consumer-closet-native-items.png",
+      "sha256": "16805e365c376707563239093f31de186d2068d76a8f2892ddd62f19ccbf8c37",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "ComponentActivity synthetic fixture, not MainActivity",
+      "notes": "Approved sprite remains; mint/clay track visible, selected top tab has mint surface and underline; item/color rows visible."
+    },
+    {
+      "file": "android-review1-studio-home-320-font2-fixture.png",
+      "sha256": "623f4fb4b460a969dd9e86f68e8af2f394fc251ba0c4a04b0c83a3265e554792",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "ComponentActivity synthetic320dp/font2 fixture, not MainActivity",
+      "notes": "Home accent strip and compact approved avatar visible; running CTA entirely visible above bottom navigation in this fixture."
+    }
+  ],
+  "userVisualApproval": false,
+  "allFixtureImagesViewed": false
+}

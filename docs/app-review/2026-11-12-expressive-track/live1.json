@@ -1,0 +1,284 @@
+{
+  "name": "live1",
+  "nonce": "166d11e931d1",
+  "version": "0.4.4-dev",
+  "versionCode": 26,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "sourceKind": "actual Android MainActivity",
+  "passed": false,
+  "completed": true,
+  "captures": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "1cd3e1e342a1bdfe754ca9e668a659d626c05803d512636674bd386ad5902ec8",
+      "bytes": 63994,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    }
+  ],
+  "actualTaps": [
+    {
+      "label": "미니미 꾸미기",
+      "description": false,
+      "system": false,
+      "bounds": [
+        40,
+        332,
+        440,
+        388
+      ]
+    },
+    {
+      "label": "하의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        285,
+        288,
+        375,
+        336
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-12T07:41:28.312177+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 1,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live1-executed-driver.py",
+  "executedDriverSha256": "f8158ea6250c040d1a69128213a818bd9fbd59218e97cb6efcd18c80074f0a45",
+  "observerHelper": "live1-actual-ui-helper.py",
+  "observerHelperSha256": "1cc713c08cf5c2e12b83c0fcb0a879ae92922ff0cfe318388e6b9fef796c84d2",
+  "environmentHelper": "live1-environment-helper.py",
+  "environmentHelperSha256": "3ccab1b28b70d1475280d8adb32f26f27ee079da4d6a84e48c1d87bcb88d1369",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-12T07:47:34.592150+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "e851a131a34ccbce730ff561b69d134e51337ea8be151640951e0af6a5eec53d",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 88,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "5c3e9eb91dabb0efbcf23bc198cf8e34857a1f4efdd83e7eccde738d1a52efd9"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "67efccea48ef9a69aef6b3384a01f8bf185b151a90d3355c35ce738a3e1f9a9e"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.03,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.277,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.287,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 28.428,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 28.538,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main home avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 11.047,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standalone closet visible",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 11.729,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main closet avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.628,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main closet selected state observed: 하의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 75.003,
+      "completed": false,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.902,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.241,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.222,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 24,
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "166d11e931d1",
+    "recordId": "runmoni-share-review-166d11e931d1",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-166d11e931d1.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "originalHistoryExcludedFromExtraScreenshots": true,
+  "homeCaptureContainsOnlyNonceReviewRun": true,
+  "failureType": "TimeoutExpired",
+  "failure": "Inspect retained private diagnostics",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerDismissalNotRequested": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 88,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-12T07:47:34.592134+00:00"
+}

@@ -1,0 +1,43 @@
+{
+  "observedAtUtc": "2026-11-12T07:58:57.418852+00:00",
+  "actualRootViewImageReview": true,
+  "privacyReviewed": true,
+  "images": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "dd91189e1dc4d90ef029a1ccb86138beee48ee6021606d0578c55c72eb4fbd99",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main with synthetic review record; no real GPS or private original history/wallet shown."
+    },
+    {
+      "file": "live2-main-studio-closet.png",
+      "sha256": "10004745e73f6ebeb8e6bbb8b39d7f48e76a87e28d4394d46c80f3bb1598422f",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main with synthetic review record; no real GPS or private original history/wallet shown."
+    },
+    {
+      "file": "live2-main-default-card.png",
+      "sha256": "de8b124c7385ad4d82f65584e1aad1aa9d110a0197108412d02f85d53859644c",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main with synthetic review record; no real GPS or private original history/wallet shown."
+    },
+    {
+      "file": "live2-main-map-clean.png",
+      "sha256": "aa431e21ff024e73e0f79841c819929513eaf262d345afa4c633211390f13d5e",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main with synthetic review record; no real GPS or private original history/wallet shown."
+    }
+  ],
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "originalHistoryOrWalletPublished": false
+}

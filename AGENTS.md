@@ -21,6 +21,8 @@
 
 ## 변경 이력
 
+- 2026-11-12 0.4.4후속검토: PR51/binary4 새JVM189/lint0·경고57,새Android일반13/native3=16와actualMain live2전체PASS/원본4·selected/system0관측·원래데이터/환경복원·소유AVD961746종료를확인했다. live1관측실패·복원은보존했다. [근거](docs/app-review/2026-11-12-expressive-track/README.md). 최신사용자요청은앱반영·배포까지이며기존승인범위로PR/main·같은키개발APK/대시보드/피드를계속한다. 공개43/실제출처eb32a30...는새게시전까지유지한다.
+
 - 2026-11-12 후속 후보: frontend-design/ui-ux-pro-max로 [시각 강화 우선순위](docs/UI_UX_EXPRESSIVE_PRIORITIES_20261112.md)를 정리하고 미게시0.4.4/code26에 트랙 색면/홈색띠/선택탭·150ms색전환을구현했다. 새localJVM189/lint0·경고57/debug APK빌드·대비6조합을확인했다. 새Android/원본PNG/축소모션·휴대폰·서명배포는미확인이므로검토PR후실행검증부터이어간다. 공개0.4.3실제출처eb32a30...·피드/대시보드를유지하고이전70검사/Main6결과를새입력의실행으로합산하지않는다.
 
 - 2026-11-12 공개:0.4.3-dev/code25 전체 화면 UI·visible 공유·기본1:1 사진/기록/미니미 PNG. <!-- verified-studio-release-0.4.3-v1 --> 실제 APK출처 `eb32a30d20b0223d436e80ca09c7c17e25d60c69`를 후속 문서/피드로 바꾸지 않는다. [게시 근거](docs/RELEASE_REVIEW_0.4.3_20261112.md). 같은키 서명 CI43155385740 JVM189/lint0·local새189/Android새6+보존64/서로다른70·실제Main단일PASS/Root원본6/운영13+PNG4를 구분한다. 이전Launcher·실패원문/복원을 보존하고 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임은 미검증이다. 새 키/Rules/의존성/원화 없이 원본·데이터·과거 APK출처를 유지했다.

@@ -1,0 +1,17 @@
+{
+  "parent": "live1.json",
+  "parentSha256": "2fad90a2bd476aea154f8f67703a9fe601ff51c0c85a7d26033d7bac7c7efbbd",
+  "parentOverallPassed": false,
+  "failureType": "TimeoutExpired",
+  "privateHierarchyObservation": {
+    "label": "하의",
+    "selectedAncestor": true,
+    "selectedAncestorClickable": false,
+    "bounds": "[195,288][285,336]"
+  },
+  "invalidObserverAssumption": "Selected tab was looked up using click_targets, which excludes its selected/non-clickable semantic ancestor",
+  "collectorFix": "State lookup follows matching text ancestors for selected=true independently of clickability; actual tap still requires unambiguous clickable target",
+  "productSourceChanged": false,
+  "sameFrozenPairRetried": true,
+  "originalDataAndControlledEnvironmentRestored": true
+}
