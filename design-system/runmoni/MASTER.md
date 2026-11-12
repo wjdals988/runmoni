@@ -1,3 +1,7 @@
+# 최신 전체 화면 개편
+
+2026-11-12 한국 시간. [Studio 전체 화면 계획/자체 비평](pages/studio-refresh.md)이 최신 화면 구성 기준이다. 아래 공통 접근성/데이터/안전영역 규칙은 유지한다. 스킬 자동 저장/force 덮어쓰기는 사용하지 않았다.
+
 # Runmoni UI 기준
 
 2026-11-06 한국 시간. Android Jetpack Compose 러닝 앱. `ui-ux-pro-max` 고정 revision `b7d5353e0130feb8c5574ef1251f8a1db1873ccb`의 native/Compose·접근성 지침과 기존 awesome-design-md 기준을 함께 적용한다. [출처·검색·채택 판단](../../docs/design/ui-ux-pro-max/README.md).

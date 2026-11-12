@@ -30,6 +30,8 @@ import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.SaveAlt
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.listSaver
@@ -286,8 +288,10 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(Modifier.padding(vertical = 16.dp).width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
-                        .background(RunmoniColors.Line).border(1.dp, RunmoniColors.Line)
+                    Box(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
+                        .padding(vertical = 20.dp), contentAlignment = Alignment.Center) {
+                    Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
+                        .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Line)
                         .testTag("run_share_preview")
                         .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
                             if (editable && (tool == 0 && photoPresent || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
@@ -306,8 +310,10 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                 modifier = Modifier.padding(8.dp))
                         }
                     }
+                    }
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                        .padding(horizontal = pageGutter(), vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        .background(RunmoniColors.Paper)
+                        .padding(horizontal = pageGutter(), vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         // Material Tab fixes its text-only height; let large Korean text choose its own height.
@@ -318,17 +324,19 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                     .selectable(selected = tool == index, enabled = !busy, role = Role.Tab) { onTool(index) }
                                     .testTag("run_share_tool_$index"), horizontalAlignment = Alignment.CenterHorizontally) {
                                     Text(label, Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                                        style = MaterialTheme.typography.bodyMedium,
+                                        style = MaterialTheme.typography.titleSmall,
                                         color = if (tool == index) RunmoniColors.Primary else RunmoniColors.Muted)
                                     Box(Modifier.fillMaxWidth().height(2.dp)
-                                        .background(if (tool == index) RunmoniColors.Primary else RunmoniColors.Line))
+                                        .background(if (tool == index) RunmoniColors.Primary else androidx.compose.ui.graphics.Color.Transparent))
                                 }
                             }
                         }
                         when (tool) {
                             0 -> {
-                                OutlinedButton(onClick = onPickPhoto, enabled = editable, shape = RunmoniShapes.Action,
-                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_share_photo")) {
+                                FilledTonalButton(onClick = onPickPhoto, enabled = editable, shape = RunmoniShapes.Action,
+                                    colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash,
+                                        contentColor = RunmoniColors.RouteBlue),
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("run_share_photo")) {
                                     Icon(Icons.Outlined.AddPhotoAlternate, null); Spacer(Modifier.width(8.dp))
                                     Text(if (photoPresent) "사진 바꾸기" else "사진 추가")
                                 }
@@ -348,12 +356,13 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                             latestTransform(Offset(.5f, .5f), it, 1f)
                                         }
                                     }
-                                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    AdaptiveActions(first = { m ->
                                         TextButton(onClick = { onDraft(draft.copy(photoZoom = 1f, photoX = 0f, photoY = 0f)) },
-                                            enabled = editable, modifier = Modifier.heightIn(min = 48.dp).testTag("run_share_photo_reset")) { Text("위치 초기화") }
+                                            enabled = editable, modifier = m.heightIn(min = 48.dp).testTag("run_share_photo_reset")) { Text("위치 초기화") }
+                                    }, second = { m ->
                                         TextButton(onClick = onRemovePhoto, enabled = editable,
-                                            modifier = Modifier.heightIn(min = 48.dp).testTag("run_share_photo_remove")) { Text("사진 빼기") }
-                                    }
+                                            modifier = m.heightIn(min = 48.dp).testTag("run_share_photo_remove")) { Text("사진 빼기") }
+                                    })
                                 }
                                 Text("이미지 비율", style = MaterialTheme.typography.titleSmall)
                                 ShareChoices(RunShareRatio.entries, draft.ratio, { it.label }, editable, "ratio") { onDraft(draft.copy(ratio = it)) }
@@ -425,7 +434,8 @@ private fun ShareNudgeControls(label: String, tag: String, enabled: Boolean, onM
 private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String?,
     onSave: () -> Unit, onShare: () -> Unit) {
     HorizontalDivider(color = RunmoniColors.Line)
-    Box(Modifier.fillMaxWidth().padding(horizontal = pageGutter(), vertical = 12.dp), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+        .padding(horizontal = pageGutter(), vertical = 12.dp), contentAlignment = Alignment.Center) {
         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
             if (message != null) Text(message, color = RunmoniColors.Primary,
@@ -433,11 +443,17 @@ private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String
             AdaptiveActions(first = { m ->
                 OutlinedButton(onClick = onSave, enabled = ready && !busy, shape = RunmoniShapes.Action,
                     modifier = m.heightIn(min = 48.dp).testTag("save_run_share").recordActionSnapshot(onSave)) {
+                    Icon(Icons.Outlined.SaveAlt, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
                     Text(if (busy) "준비 중…" else "이미지 저장")
                 }
             }, second = { m ->
                 Button(onClick = onShare, enabled = ready && !busy, shape = RunmoniShapes.Action,
-                    modifier = m.heightIn(min = 48.dp).testTag("send_run_share").recordActionSnapshot(onShare)) { Text("공유하기") }
+                    modifier = m.heightIn(min = 48.dp).testTag("send_run_share").recordActionSnapshot(onShare)) {
+                    Icon(Icons.Outlined.Share, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("공유하기")
+                }
             })
         }
     }

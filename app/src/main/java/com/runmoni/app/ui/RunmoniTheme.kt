@@ -20,12 +20,12 @@ internal object RunmoniColors {
     val Paper = Color(0xFFFFFFFF)
     val Coral = Color(0xFFF16D55)
     val Primary = Color(0xFF205641)
-    val PrimarySoft = Color(0xFFE9EFDF)
+    val PrimarySoft = Color(0xFFE6F0EA)
     val Navy = Color(0xFF192D25)
     val Muted = Color(0xFF556158)
     val Line = Color(0xFFDFE3DA)
     val Outline = Color(0xFF748071)
-    val Mint = Color(0xFFE9EFDF)
+    val Mint = Color(0xFFE6F0EA)
     val Green = Primary
     val Lime = Color(0xFFD7F58A)
     val OnDark = Color(0xFFFFFFFF)
@@ -37,6 +37,8 @@ internal object RunmoniColors {
     val LimeWash = Color(0xFFF0F5D8)
     val CoralWash = Color(0xFFFBE7DE)
     val CoralInk = Color(0xFF8D402B)
+    val RouteBlue = Color(0xFF2E6194)
+    val BlueWash = Color(0xFFE8F0FA)
 }
 
 /** Shared geometry: readable controls and contained surfaces, without pill chrome. */
@@ -72,9 +74,9 @@ internal fun RunmoniTheme(content: @Composable () -> Unit) {
             onSecondary = Color.White,
             secondaryContainer = RunmoniColors.Mint,
             onSecondaryContainer = RunmoniColors.Navy,
-            tertiary = RunmoniColors.Primary,
+            tertiary = RunmoniColors.RouteBlue,
             onTertiary = Color.White,
-            tertiaryContainer = RunmoniColors.Mint,
+            tertiaryContainer = RunmoniColors.BlueWash,
             onTertiaryContainer = RunmoniColors.Navy,
             background = RunmoniColors.Cream,
             onBackground = RunmoniColors.Navy,

@@ -3,6 +3,7 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -105,7 +106,7 @@ private fun ModalFrame(
                         .padding(start = 20.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
                         verticalAlignment = Alignment.CenterVertically) {
                         if (!compact) Box(Modifier.weight(1f).semantics(mergeDescendants = true) { heading() }) {
-                            ProvideTextStyle(MaterialTheme.typography.headlineSmall, title)
+                            ProvideTextStyle(MaterialTheme.typography.titleLarge, title)
                         } else Spacer(Modifier.weight(1f))
                         IconButton(onClick = dismiss, modifier = Modifier.size(48.dp).testTag(closeTag)) {
                             Icon(Icons.Outlined.Close, "닫기")
@@ -116,7 +117,7 @@ private fun ModalFrame(
                         .testTag("modal_scroll_body")) {
                         if (compact) Box(Modifier.fillMaxWidth().padding(start = 20.dp, end = 20.dp, top = 16.dp)
                             .semantics(mergeDescendants = true) { heading() }) {
-                            ProvideTextStyle(MaterialTheme.typography.headlineSmall, title)
+                            ProvideTextStyle(MaterialTheme.typography.titleLarge, title)
                         }
                         Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 16.dp),
                             verticalArrangement = Arrangement.spacedBy(16.dp), content = content)
@@ -133,7 +134,7 @@ private fun ModalFrame(
 @Composable
 private fun ModalActions(actions: @Composable () -> Unit) {
     HorizontalDivider(color = RunmoniColors.Line)
-    FlowRow(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+    FlowRow(Modifier.fillMaxWidth().background(RunmoniColors.Cream).padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End),
         verticalArrangement = Arrangement.spacedBy(8.dp)) { actions() }
 }

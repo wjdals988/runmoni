@@ -204,11 +204,11 @@ internal fun RouteTileMap(
                         previous = p
                     }
                     drawPath(path, Color.White, style = Stroke(7.dp.toPx(), cap = StrokeCap.Round))
-                    drawPath(path, RunmoniColors.Primary, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(path, RunmoniColors.RouteBlue, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
                 }
                 route.firstOrNull()?.let { first ->
                     drawCircle(Color.White, 8.dp.toPx(), at(first.x, first.y))
-                    drawCircle(RunmoniColors.Primary, 5.dp.toPx(), at(first.x, first.y))
+                    drawCircle(RunmoniColors.RouteBlue, 5.dp.toPx(), at(first.x, first.y))
                     caption("시작", at(first.x, first.y), below = true)
                 }
                 route.lastOrNull()?.let { last ->
@@ -268,7 +268,8 @@ internal fun MapControlBar(
     actions: List<CustomAccessibilityAction>, enabled: Boolean,
     retry: (() -> Unit)? = null, attribution: (@Composable RowScope.() -> Unit)? = null,
 ) {
-    Row(Modifier.fillMaxWidth().testTag("map_control_bar"), verticalAlignment = Alignment.CenterVertically,
+    Row(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+        .testTag("map_control_bar"), verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End) {
         attribution?.invoke(this)
         MapOptionsMenu(actions, enabled, retry)
@@ -288,7 +289,7 @@ internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: B
     DisposableEffect(lifetime) { onDispose { lifetime.active = false } }
     val currentRequest = request
     Box {
-        TextButton(enabled = enabled,
+        TextButton(enabled = enabled, shape = RunmoniShapes.Action,
             onClick = { request++; expanded = true }, modifier = Modifier.heightIn(min = 48.dp).widthIn(min = 48.dp).testTag("map_options")) {
             Text("지도 조작", style = MaterialTheme.typography.labelLarge)
             Icon(Icons.Outlined.KeyboardArrowDown, null, Modifier.size(18.dp))

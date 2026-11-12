@@ -172,6 +172,8 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                             Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                                 .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
                                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Outlined.Route, null, Modifier.size(22.dp), tint = RunmoniColors.Primary)
+                                    Spacer(Modifier.width(8.dp))
                                     Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
                                         modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
                                     if (!separateVersion) AppVersionShortcut(updates) { appInformationFromSettings = false; appInformation = true }
@@ -372,17 +374,28 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                     accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                 }
                 if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
-                if (run.phase == RunPhase.IDLE) {
-                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
+                if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     RunwayArtwork(state.profile.avatar, compact = LocalDensity.current.fontScale >= 1.3f)
+                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
                         Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     }
-                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.Navy) {
+                    }
+                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.DeepGreen) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text("달린 거리 · km", color = RunmoniColors.Lime, style = MaterialTheme.typography.labelMedium)
-                        DistanceNumber(distance(run.distanceMeters), RunmoniColors.OnDark, Modifier.testTag("run_distance"))
+                        BoxWithConstraints(Modifier.fillMaxWidth()) {
+                            val showAvatar = maxWidth >= 280.dp && LocalDensity.current.fontScale < 1.3f
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text("달린 거리 (km)", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodyMedium)
+                                    DistanceNumber(distance(run.distanceMeters), RunmoniColors.OnDark, Modifier.testTag("run_distance"))
+                                }
+                                if (showAvatar) AvatarMini(state.profile.avatar, Modifier.width(64.dp).height(96.dp)
+                                    .testTag("run_avatar"), running = run.phase == RunPhase.RUNNING, decorative = true)
+                            }
+                        }
                         HorizontalDivider(color = RunmoniColors.OnDark.copy(alpha = 0.2f))
                         MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"), UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = true)
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -570,8 +583,8 @@ internal fun StatusPill(label: String, color: Color, tag: String = "") {
 
 @Composable
 internal fun EmptyCard(title: String, message: String, action: String? = null, onClick: () -> Unit = {}) {
-    Column(Modifier.fillMaxWidth().padding(vertical = 20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text(title, style = MaterialTheme.typography.titleLarge)
+    Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper, RunmoniShapes.Surface).padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         if (message.isNotBlank()) Text(message, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         if (action != null) TextButton(shape = RunmoniShapes.Action, onClick = onClick, contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp)) { Text(action); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(18.dp)) }
     }
@@ -627,7 +640,13 @@ internal fun RecordRow(record: RunRecord, onClick: () -> Unit) {
                 Text("${distance(record.distanceMeters)} km", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
                 Icon(Icons.Outlined.ChevronRight, null, tint = RunmoniColors.Muted)
             }
-            Text("${duration(record.activeDurationMillis)} · ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Outlined.Timer, null, Modifier.size(16.dp), tint = RunmoniColors.Muted)
+                    Text(duration(record.activeDurationMillis), style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                }
+                Text("${averagePace(record.distanceMeters, record.activeDurationMillis)} /km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.RouteBlue)
+            }
             HorizontalDivider(color = RunmoniColors.Line)
     }
 }

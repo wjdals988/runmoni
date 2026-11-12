@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import android.content.ComponentCallbacks
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -162,7 +163,7 @@ internal fun MapPane(
             view.onDestroy()
         }
     }
-    Column(modifier.testTag("naver_map")) {
+    Column(modifier.background(RunmoniColors.Paper).testTag("naver_map")) {
         Box(Modifier.weight(1f).fillMaxWidth().onSizeChanged { mapSize = it }.semantics {
             contentDescription = "지도. 드래그로 이동하고 두 손가락으로 확대하거나 축소합니다."
             customActions = mapActions
@@ -185,7 +186,7 @@ internal fun MapPane(
         geometry.segments.forEach { segment ->
             if (segment.size > 1) paths += PathOverlay().apply {
                 coords = segment.map { LatLng(it.point.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE), it.point.longitude) }
-                color = RunmoniColors.Primary.toArgb()
+                color = RunmoniColors.RouteBlue.toArgb()
                 width = 10
                 this.map = ready
             }

@@ -6,6 +6,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.FactCheck
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +36,15 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                 val gutter = if (LocalConfiguration.current.screenWidthDp >= 600) 32.dp else 20.dp
                 Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().align(Alignment.TopCenter).verticalScroll(rememberScrollState())
                     .padding(horizontal = gutter, vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    ScreenSection("크루·파티 연결", showDivider = false) {
+                    Surface(color = RunmoniColors.BlueWash, shape = RunmoniShapes.Surface) {
+                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Icon(Icons.Outlined.FactCheck, null, Modifier.size(28.dp), tint = RunmoniColors.RouteBlue)
+                            Text("내 기기의 연결 상태", style = MaterialTheme.typography.titleLarge)
+                            Text("앱이 확인한 연결 상태와 직접 확인한 항목을 나눠 볼 수 있어요.",
+                                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                        }
+                    }
+                    SettingsGroup("크루·파티 연결", Icons.Outlined.Groups) {
                         Text(when (state.deviceChecks.room) {
                             RoomCheck.NOT_CHECKED -> "아직 확인하지 않았어요"
                             RoomCheck.CHECKING -> "서버 응답을 확인하고 있어요…"
@@ -41,10 +56,13 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                             RoomCheck.UNSUPPORTED -> "이 서버에서는 크루·파티 기능을 확인할 수 없어요"
                         }, style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.testTag("room_check_status").semantics { liveRegion = LiveRegionMode.Polite })
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkRoomConnection, enabled = state.deviceChecks.room != RoomCheck.CHECKING, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_room_connection")) { Text("연결 확인") }
+                        if (state.deviceChecks.room == RoomCheck.CHECKING) LinearProgressIndicator(Modifier.fillMaxWidth())
+                        OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::checkRoomConnection, enabled = state.deviceChecks.room != RoomCheck.CHECKING, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("check_room_connection")) {
+                            Icon(Icons.Outlined.Refresh, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("연결 확인")
+                        }
                         SmallNote("연결 응답만 확인해요. 파티 참가와 채팅은 아래에서 직접 확인해 주세요.")
                     }
-                    ScreenSection("Google 계정") {
+                    SettingsGroup("Google 계정", Icons.Outlined.AccountCircle) {
                         Text(if (!state.cloud.configured) "Google 연결 설정이 빠져 있어요. 새 APK가 필요해요." else state.cloud.status,
                             style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("device_google_status"))
                         if (state.cloud.configured) {
@@ -56,7 +74,8 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                         }
                         SmallNote("크루 프로필 연결과는 별도예요. 기록 요약 백업은 기록 상세에서 확인할 수 있어요.")
                     }
-                    ScreenSection("내 휴대폰에서 확인") {
+                    SettingsGroup("내 휴대폰에서 확인", Icons.Outlined.PhoneAndroid,
+                        "직접 확인한 항목만 선택해 주세요") {
                         SmallNote("직접 확인한 항목을 체크해 주세요. 자동 검사와 구분해 공유돼요. 새 버전에서는 다시 확인해 주세요.")
                         Text(if (state.locationAccess.precisePermissionGranted == true && state.locationAccess.gpsEnabled == true) "정확한 위치 권한·GPS 켜짐" else "야외 기록 전 위치 권한·GPS를 확인해 주세요", style = MaterialTheme.typography.bodyMedium)
                         PhoneCheck.entries.forEach { check ->
@@ -69,7 +88,9 @@ internal fun DeviceChecksScreen(state: AppState, actions: AppActions, onDismiss:
                             HorizontalDivider(color = RunmoniColors.Line)
                         }
                         SmallNote("앱 버전·서명·연결 결과·체크한 항목을 공유해요. 계정 정보·토큰·서버 주소·GPS 경로는 포함하지 않아요.")
-                        Button(shape = RunmoniShapes.Action, onClick = actions::shareDeviceChecks, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("share_device_checks")) { Text("점검 결과 공유") }
+                        Button(shape = RunmoniShapes.Action, onClick = actions::shareDeviceChecks, modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("share_device_checks")) {
+                            Icon(Icons.Outlined.Share, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("점검 결과 공유")
+                        }
                     }
                 }
             }

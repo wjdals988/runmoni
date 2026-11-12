@@ -1,0 +1,67 @@
+╔═════════════════════════════════════════════════════════════════════════════════════════╗
+║  TARGET: Runmoni - RECOMMENDED DESIGN SYSTEM                                            ║
+╚═════════════════════════════════════════════════════════════════════════════════════════╝
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+├─── PATTERN ─────────────────────────────────────────────────────────────────────────────┤
+│  Name: Product Demo + Features                                                          │
+│     Conversion: Use an interactive demo only when it explains value better than static  │
+│     media. Provide captions, transcript, visible play/pause controls, and a non-video   │
+│     fallback; do not autoplay under reduced motion. Pause media when offscreen or       │
+│     hidden and keep the final product state available as static content.                │
+│     CTA: Video center + CTA right/bottom                                                │
+│     Sections:                                                                           │
+│       1. Hero                                                                           │
+│       2. Product video/mockup (center)                                                  │
+│       3. Feature breakdown per section                                                  │
+│       4. Comparison (optional)                                                          │
+│       5. CTA                                                                            │
+├─── STYLE ───────────────────────────────────────────────────────────────────────────────┤
+│  Name: AI-Native UI                                                                     │
+│     Mode Support: Light supported | Dark supported                                      │
+│     Keywords: Chatbot, conversational, voice, assistant, agentic, ambient, minimal      │
+│     chrome, streaming text, AI interactions                                             │
+│     Best For: AI products, chatbots, voice assistants, copilots, AI-powered tools,      │
+│     conversational interfaces                                                           │
+│     Performance: cost:low|drivers:none | Accessibility:                                 │
+│     risk:low|requires:contrast-text-4.5,keyboard,visible-focus,reduced-motion           │
+├─── COLORS ──────────────────────────────────────────────────────────────────────────────┤
+│     Primary:           #7C3AED    (--color-primary)                                     │
+│     On Primary:        #FFFFFF    (--color-on-primary)                                  │
+│     Secondary:         #A78BFA    (--color-secondary)                                   │
+│     On Secondary:      #0F172A    (--color-on-secondary)                                │
+│     Accent/CTA:        #0891B2    (--color-accent)                                      │
+│     On Accent/CTA:     #000000    (--color-on-accent)                                   │
+│     Background:        #FAF5FF    (--color-background)                                  │
+│     Foreground:        #1E1B4B    (--color-foreground)                                  │
+│     Card:              #FFFFFF    (--color-card)                                        │
+│     Card Foreground:   #1E1B4B    (--color-card-foreground)                             │
+│     Muted:             #ECEEF9    (--color-muted)                                       │
+│     Muted Foreground:  #475569    (--color-muted-foreground)                            │
+│     Border:            #DDD6FE    (--color-border)                                      │
+│     Destructive:       #DC2626    (--color-destructive)                                 │
+│     On Destructive:    #FFFFFF    (--color-on-destructive)                              │
+│     Ring:              #7C3AED    (--color-ring)                                        │
+│     Notes: AI purple + cyan interactions [Accent adjusted from #06B6D4]                 │
+├─── TYPOGRAPHY ──────────────────────────────────────────────────────────────────────────┤
+│  Inter / Inter                                                                          │
+│     Mood: flat, clean, system, bold, geometric, cross-platform, icon, poster, minimal,  │
+│     functional, responsive                                                              │
+│     Best For: Cross-platform apps, dashboards, system UI, onboarding, marketing pages,  │
+│     informational apps, icon-heavy interfaces                                           │
+│     Google Fonts:                                                                       │
+│     https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap    │
+│     CSS Import: @import url('https://fonts.googleapis.com/css2?family=Inter:wght@40...  │
+├─── KEY EFFECTS ─────────────────────────────────────────────────────────────────────────┤
+│     Typing indicators (3-dot pulse), streaming text animations, pulse animations,       │
+│     context cards, smooth reveals                                                       │
+├─── AVOID ───────────────────────────────────────────────────────────────────────────────┤
+│     Heavy chrome + Slow response feedback                                               │
+├─── PRE-DELIVERY CHECKLIST ──────────────────────────────────────────────────────────────┤
+│     [ ] No emojis as icons (use SVG: Heroicons/Lucide)                                  │
+│     [ ] cursor-pointer on all clickable elements                                        │
+│     [ ] Hover states with smooth transitions (150-300ms)                                │
+│     [ ] Light mode: text contrast 4.5:1 minimum                                         │
+│     [ ] Focus states visible for keyboard nav                                           │
+│     [ ] prefers-reduced-motion respected                                                │
+│     [ ] Responsive: 375px, 768px, 1024px, 1440px                                        │
+└─────────────────────────────────────────────────────────────────────────────────────────┘

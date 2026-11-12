@@ -36,43 +36,42 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
         "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회" else null
     ScreenContent {
-        Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface,
+        HomeDateTime(homeClock)
+        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface,
             modifier = Modifier.fillMaxWidth().testTag("home_run_hero")) {
             BoxWithConstraints(Modifier.padding(if (largeText) 16.dp else 20.dp)) {
-                // 320dp phones have 240dp inside both page and hero gutters.
-                // Reserve 80dp for the sprite and leave 148dp for readable text.
+                // The measured weather layout keeps its own width beside the approved sprite.
                 val besideAvatar = maxWidth >= 240.dp && !largeText
                 val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (besideAvatar) {
-                        HomeHeading(homeClock, todaySummary)
+                        HomeHeading(todaySummary, compact = false)
                         Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
                             verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            AvatarMini(state.profile.avatar, Modifier.width(avatarWidth).height(avatarWidth * 1.5f)
-                                .testTag("home_avatar"), running = true, decorative = true)
+                            HomeRunnerStage(state.profile.avatar, avatarWidth)
                             HomeWeatherSummary(state.weather, homeClock, Modifier.weight(1f))
                         }
                     } else {
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            HomeHeading(homeClock, if (largeText) null else todaySummary, Modifier.weight(1f))
-                            AvatarMini(state.profile.avatar, Modifier.width(if (largeText) 56.dp else 80.dp)
-                                .height(if (largeText) 84.dp else 120.dp).testTag("home_avatar"),
-                                running = true, decorative = true)
+                            HomeHeading(if (largeText) null else todaySummary, compact = largeText, modifier = Modifier.weight(1f))
+                            HomeRunnerStage(state.profile.avatar, if (largeText) 56.dp else 80.dp)
                         }
                     }
-                    Button(onClick = onRun, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.DeepGreen, contentColor = RunmoniColors.OnDark),
+                    Button(onClick = onRun, shape = RunmoniShapes.Action,
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.Primary, contentColor = RunmoniColors.OnDark),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
-                        Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp)); Spacer(Modifier.width(12.dp))
+                        Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp))
+                        Spacer(Modifier.width(12.dp))
                         Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
                             modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
-                        if (!largeText) { Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.ArrowForward, null, Modifier.size(20.dp)) }
                     }
                     if (!besideAvatar) Box(Modifier.fillMaxWidth().testTag("home_avatar_conditions_stacked")) {
                         HomeWeatherSummary(state.weather, homeClock)
                     }
-                    if (largeText && todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                    if (largeText && todaySummary != null) Text(todaySummary,
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
                 }
             }
         }
@@ -95,12 +94,19 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 }
 
 @Composable
-private fun HomeHeading(homeClock: Long, todaySummary: String?, modifier: Modifier = Modifier) {
+private fun HomeHeading(todaySummary: String?, compact: Boolean, modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        HomeDateTime(homeClock)
-        Text("러닝", style = MaterialTheme.typography.headlineLarge,
+        Text(if (compact) "러닝" else "오늘의 러닝", style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.semantics { heading() })
         if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+    }
+}
+
+@Composable
+private fun HomeRunnerStage(avatar: AvatarStyle, width: androidx.compose.ui.unit.Dp) {
+    // The outer measured node keeps the existing layout-observation tag; the inner stage is decorative.
+    Box(Modifier.width(width).height(width * 1.5f).testTag("home_avatar")) {
+        StudioAvatarStage(avatar, Modifier.fillMaxSize(), running = true)
     }
 }
 
@@ -132,30 +138,49 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
     val records = state.records.filter { val date = localDate(it.startedAtMillis); when (period) { 0 -> date == reference; 1 -> date.year == reference.year && date.month == reference.month; else -> date.year == reference.year } }
     ScreenContent {
         EditorialHeading("", "프로필")
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            BoxWithConstraints(Modifier.fillMaxWidth()) {
-                val details: @Composable (Modifier) -> Unit = { modifier ->
-                    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
-                        TextButton(onClick = onProfile, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("open_unified_profile")) { Text("프로필 편집") }
-                        TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true },
-                            colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.CoralInk),
-                            contentPadding = PaddingValues(0.dp), modifier = Modifier.heightIn(min = 48.dp).testTag("open_mileage_help")) { Text("${state.profile.mileage} P"); Spacer(Modifier.width(8.dp)); Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(16.dp)) }
+        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                BoxWithConstraints(Modifier.fillMaxWidth()) {
+                    val details: @Composable (Modifier) -> Unit = { modifier ->
+                        Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
+                            TextButton(onClick = onProfile, shape = RunmoniShapes.Action,
+                                contentPadding = PaddingValues(0.dp),
+                                modifier = Modifier.heightIn(min = 48.dp).testTag("open_unified_profile")) {
+                                Icon(Icons.Outlined.Edit, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(8.dp))
+                                Text("프로필 편집")
+                            }
+                        }
+                    }
+                    if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            ProfileArtwork(state.profile.avatar)
+                            details(Modifier.fillMaxWidth())
+                        }
+                    } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                        ProfileArtwork(state.profile.avatar)
+                        details(Modifier.weight(1f))
                     }
                 }
-                if (LocalDensity.current.fontScale >= 1.3f || maxWidth < 260.dp) {
-                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        ProfileArtwork(state.profile.avatar)
-                        details(Modifier.fillMaxWidth())
-                    }
-                } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    ProfileArtwork(state.profile.avatar)
-                    details(Modifier.weight(1f))
+                FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action,
+                    colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_closet")) {
+                    Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(12.dp))
+                    Text("미니미 꾸미기", modifier = Modifier.weight(1f))
+                    Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp))
                 }
             }
-            FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action,
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_closet")) { Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("미니미 꾸미기") }
+        }
+        TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true },
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_mileage_help")) {
+            Text("마일리지 ${state.profile.mileage} P", style = MaterialTheme.typography.titleMedium,
+                color = RunmoniColors.Navy, modifier = Modifier.weight(1f))
+            Spacer(Modifier.width(12.dp))
+            Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(20.dp), tint = RunmoniColors.Muted)
         }
         ScreenSection("러닝 기록") {
             RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
@@ -167,18 +192,18 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
                 )
             }
-            Column(Modifier.fillMaxWidth().background(RunmoniColors.MintWash, RunmoniShapes.Surface).padding(20.dp),
+            Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash, RunmoniShapes.Surface).padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 val unavailable = state.runPersistence.historyUnavailable && state.records.isEmpty()
-                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.DeepGreen, maxSize = 48f)
+                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.RouteBlue, maxSize = 48f)
                 Text("km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 HorizontalDivider(color = RunmoniColors.SecondaryMint, modifier = Modifier.padding(vertical = 4.dp))
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (unavailable) "러닝 —회" else "러닝 ${records.size}회", style = MaterialTheme.typography.titleMedium,
-                        color = RunmoniColors.Primary, modifier = Modifier.testTag("history_run_count"))
+                        color = RunmoniColors.RouteBlue, modifier = Modifier.testTag("history_run_count"))
                     Text(if (unavailable) "시간 —" else "시간 ${duration(records.sumOf { it.activeDurationMillis })}",
-                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.CoralInk,
+                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.Navy,
                         modifier = Modifier.testTag("history_active_duration"))
                 }
                 if (state.runPersistence.historyUnavailable) Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -199,10 +224,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
 
 @Composable
 private fun ProfileArtwork(avatar: AvatarStyle) {
-    Box(Modifier.width(88.dp).height(120.dp).background(RunmoniColors.MintWash, RunmoniShapes.Surface),
-        contentAlignment = Alignment.Center) {
-        AvatarMini(avatar, Modifier.width(72.dp).height(104.dp), running = true, decorative = true)
-    }
+    StudioAvatarStage(avatar, Modifier.width(88.dp).height(132.dp), running = true)
 }
 
 @Composable
