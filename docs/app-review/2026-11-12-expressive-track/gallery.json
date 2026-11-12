@@ -1,0 +1,80 @@
+{
+  "version": "0.4.4-dev",
+  "versionCode": 26,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "7d921417e63d41bac5942645f2d2a50f4e1d308a",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "ccf6d4cffd627a9e651cfde6d76b20738ad7e7d1e463c0cc71e4709ad679d0bb"
+    }
+  },
+  "images": [
+    {
+      "key": "studio-home",
+      "file": "live2-main-studio-home.png",
+      "sha256": "dd91189e1dc4d90ef029a1ccb86138beee48ee6021606d0578c55c72eb4fbd99",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "164bcdc21118d28ee2d8bef2e308a59c10650ea853011a539a4b4e372c53b9b4"
+      },
+      "caption": "홈 · 트랙과 러닝 시작",
+      "alt": "실제 홈의 미니미 트랙과 러닝 시작. 수치는 합성 검토용 기록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "studio-closet",
+      "file": "live2-main-studio-closet.png",
+      "sha256": "10004745e73f6ebeb8e6bbb8b39d7f48e76a87e28d4394d46c80f3bb1598422f",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "164bcdc21118d28ee2d8bef2e308a59c10650ea853011a539a4b4e372c53b9b4"
+      },
+      "caption": "옷장 · 선택한 분류 강조",
+      "alt": "실제 옷장의 미니미 트랙과 상의 탭 선택 색면·아이템 목록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "default-card",
+      "file": "live2-main-default-card.png",
+      "sha256": "de8b124c7385ad4d82f65584e1aad1aa9d110a0197108412d02f85d53859644c",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "164bcdc21118d28ee2d8bef2e308a59c10650ea853011a539a4b4e372c53b9b4"
+      },
+      "caption": "기록 공유 · 기본1:1 유지",
+      "alt": "합성 검토 기록과 미니미의 기본1:1 공유 편집 화면입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "map-clean",
+      "file": "live2-main-map-clean.png",
+      "sha256": "aa431e21ff024e73e0f79841c819929513eaf262d345afa4c633211390f13d5e",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "164bcdc21118d28ee2d8bef2e308a59c10650ea853011a539a4b4e372c53b9b4"
+      },
+      "caption": "탐색 · 위치 확인 전",
+      "alt": "위치 확인 전 탐색 지도와 지도 아래 조작 메뉴입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ]
+}

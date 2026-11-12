@@ -1,0 +1,8 @@
+{
+  "liveProof": "live2.json",
+  "visualProof": "root-main-visual-review.json",
+  "scopeProof": "android-scope-summary.json",
+  "sourceComparison": "executed-source-vs-release-C.json",
+  "galleryManifest": "gallery.json",
+  "sessionCleanup": "session-cleanup.json"
+}
