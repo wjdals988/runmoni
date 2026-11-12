@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:.
+
+Time: 86.797
+
+OK (1 test)
+
+

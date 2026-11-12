@@ -1,0 +1,7 @@
+{
+  "error": "Software CPU emulation requires explicit ANDROID_I_WANT_MY_TCG=yes",
+  "activeQemuProcessesObserved": [],
+  "installedOrDataReset": false,
+  "hardwareAccelerationClaimed": false,
+  "sameAuthorizedCloudAvdRetriedWithExplicitTcg": true
+}

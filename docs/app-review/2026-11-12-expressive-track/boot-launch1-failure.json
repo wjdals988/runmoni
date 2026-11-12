@@ -1,0 +1,25 @@
+{
+  "observedAtUtc": "2026-11-12T07:12:31.406139+00:00",
+  "launchPid": 961162,
+  "launchProcessDefunct": true,
+  "activeQemuProcessesObserved": [],
+  "emulatorError": "Running multiple emulators with the same AVD",
+  "bootWaitStoppedExactOwnedPids": [
+    961158,
+    961163
+  ],
+  "apkInstalledOrDataReset": false,
+  "removedOnlyVerifiedIdleAvdLocks": [
+    {
+      "name": "hardware-qemu.ini.lock",
+      "bytes": 7,
+      "sha256": "1ea059d4b3c5ba00165a40248cdb2c661d7b85994d6b6778379c5807b0469f6b"
+    },
+    {
+      "name": "multiinstance.lock",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "noReadOnlyDuplicateInstanceUsed": true
+}

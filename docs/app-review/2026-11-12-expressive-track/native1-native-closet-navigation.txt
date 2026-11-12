@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+
+Time: 64.173
+
+OK (1 test)
+
+

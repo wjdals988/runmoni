@@ -1,0 +1,4 @@
+closet basic running kit color and unchanged inventory: waitMillis=41; timeoutMillis=120000
+running kit colors 320/1.0: waitMillis=13; timeoutMillis=120000
+running kit colors 320/2.0: waitMillis=18; timeoutMillis=120000
+running kit colors 240/2.0: waitMillis=18; timeoutMillis=120000

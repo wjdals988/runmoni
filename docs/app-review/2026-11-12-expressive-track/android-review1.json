@@ -1,0 +1,578 @@
+{
+  "name": "android-review1",
+  "version": "0.4.4-dev",
+  "versionCode": 26,
+  "binaryReference": "binary-build4.json",
+  "reviewPhase": "default",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-12T07:20:05.365168+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 13,
+  "actualPassedProductMethods": 13,
+  "groups": [
+    {
+      "name": "closet",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.ConsumerClosetTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-closet.txt",
+      "startedAtUtc": "2026-11-12T07:20:58.459144+00:00",
+      "actual": 1,
+      "rawSha256": "c8852fa768a23e1fdda4c04893be14085190b528c70f73d0b35745aea2313592",
+      "elapsedSeconds": 136.54,
+      "finishedAtUtc": "2026-11-12T07:23:15.000360+00:00",
+      "minimiReadinessRaw": "android-review1-closet-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "10a2ba87740c612856cbd7d23384a5bc14b1eb61e713110d684c4f4f5a11419a",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "studio",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.StudioRefreshUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-studio.txt",
+      "startedAtUtc": "2026-11-12T07:23:33.394788+00:00",
+      "actual": 2,
+      "rawSha256": "d5d3d71dd6051812c11c57fc4fa302917aa7ebf27ccd06f665cb87c13194a1c6",
+      "elapsedSeconds": 105.63,
+      "finishedAtUtc": "2026-11-12T07:25:19.027952+00:00",
+      "minimiReadinessRaw": "android-review1-studio-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "d982dbd5a0c025bf5b44755fc1c4911484d607e18bdb663d083cd4d3397c8204",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "main-design",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.RunmoniDesignTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-main-design.txt",
+      "startedAtUtc": "2026-11-12T07:25:39.976984+00:00",
+      "actual": 2,
+      "rawSha256": "0ff73227d35f3f7af9cf35627aa5c73298218804f643e3aa2fca622e73ea2fa1",
+      "elapsedSeconds": 155.01,
+      "finishedAtUtc": "2026-11-12T07:28:14.989972+00:00",
+      "minimiReadinessRaw": "android-review1-main-design-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "e4b4abe56787349f66627baa309a3bcc49a768f4bbb3a0a7454c38c4e9578d18",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "entry",
+      "expected": 4,
+      "classes": [
+        "com.runmoni.app.ui.AppEntryUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-entry.txt",
+      "startedAtUtc": "2026-11-12T07:28:32.779357+00:00",
+      "actual": 4,
+      "rawSha256": "edc27476cc1b8cce968fc95439a73e13afe4edd2591ba5ec7e279c6962dc690a",
+      "elapsedSeconds": 71.04,
+      "finishedAtUtc": "2026-11-12T07:29:43.823024+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "home-weather",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.HomeWeatherLayoutTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-home-weather.txt",
+      "startedAtUtc": "2026-11-12T07:30:00.089027+00:00",
+      "actual": 2,
+      "rawSha256": "0fd5aba71277dd4efb8413cef36278e975e72d476c339151ba95b824d3822d8b",
+      "elapsedSeconds": 68.19,
+      "finishedAtUtc": "2026-11-12T07:31:08.280278+00:00",
+      "minimiReadinessRaw": "android-review1-home-weather-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "ba626bcceb2079f9a6e7b3353664b3d2ac69288da647734e3127b4885bfbbbb0",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "colors",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.RunningKitColorsUiTest#namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#closetColorChangesKeepReadyItemSelectionsInventoryAndGender"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-colors.txt",
+      "startedAtUtc": "2026-11-12T07:31:25.570843+00:00",
+      "actual": 2,
+      "rawSha256": "0207ac9a59f0bf1efd3d0d207119a75ac3ed3a2f0a5d926ec210099b7581759e",
+      "elapsedSeconds": 116.94,
+      "finishedAtUtc": "2026-11-12T07:33:22.508846+00:00",
+      "minimiReadinessRaw": "android-review1-colors-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "d03a8db3ebae43b3fad32a432d29a635f7db401275a77939dfdfa24fd1e124ac",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "android-review1-consumer-closet-native-items.png",
+      "sha256": "16805e365c376707563239093f31de186d2068d76a8f2892ddd62f19ccbf8c37",
+      "bytes": 69853,
+      "width": 480,
+      "height": 782,
+      "sourceGroup": "closet",
+      "sourceRaw": "android-review1-closet.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-studio-home-320-font2-fixture.png",
+      "sha256": "623f4fb4b460a969dd9e86f68e8af2f394fc251ba0c4a04b0c83a3265e554792",
+      "bytes": 43323,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "studio",
+      "sourceRaw": "android-review1-studio.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-studio-profile-320-font2-fixture.png",
+      "sha256": "c18c03e27bfa24ae9a05e2fd790d5a4b0511b6900b026bf74bfdd29dd1512d2e",
+      "bytes": 41438,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "studio",
+      "sourceRaw": "android-review1-studio.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-studio-crews-320-font2-fixture.png",
+      "sha256": "328433bfa79484aa1fbe69af9290615f00ca7365a693036abe603302ffbd8e7e",
+      "bytes": 35495,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "studio",
+      "sourceRaw": "android-review1-studio.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-studio-explore-controls-320-font2-fixture.png",
+      "sha256": "363ea592a34e2dba2bd9b41580177212870d45df4d0539c6370c4dfc0612dea7",
+      "bytes": 41846,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "studio",
+      "sourceRaw": "android-review1-studio.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-running-active-fixture-360-100.png",
+      "sha256": "b3b474c0130b66be942ee991c336fc3063f9751c5d03574033f6ab0242260ea2",
+      "bytes": 37974,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-home-360-100.png",
+      "sha256": "fcad9ee25218c7b20873bc0c100374c2d121a3b86a3d351abd35e8828cd0ee0b",
+      "bytes": 54647,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-explore-360-100.png",
+      "sha256": "1010b20a8ef70a00123af59d58089c33ba2f8177c67bdfa80b09cc488e62c005",
+      "bytes": 36317,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-run-360-100.png",
+      "sha256": "529e1eff985b347a7dabd4cb984d2086874e11e64263cc1cd2134de4d92c904d",
+      "bytes": 53887,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-crew-360-100.png",
+      "sha256": "22240e6300f80ba90ddc9d33626de9f073305a81c931a5e2e3d0bc0b0b651a64",
+      "bytes": 34718,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-me-360-100.png",
+      "sha256": "a159a23e9757ec658d62e02d8c304afc952c69698694ecfe1a1fd8b5deaaecb1",
+      "bytes": 40268,
+      "width": 360,
+      "height": 640,
+      "sourceGroup": "main-design",
+      "sourceRaw": "android-review1-main-design.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-home-weather-beside-320-fixture.png",
+      "sha256": "e409aec3507d2f56aa9f0e1aab9e88d6511bca6dbf6d08929c8aa4df6954561d",
+      "bytes": 40143,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "home-weather",
+      "sourceRaw": "android-review1-home-weather.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-home-weather-stacked-320-font2-fixture.png",
+      "sha256": "debea992dce4ef81d7590d99ec065cf620db0a7d40f720131f1ae00231623b62",
+      "bytes": 42853,
+      "width": 320,
+      "height": 640,
+      "sourceGroup": "home-weather",
+      "sourceRaw": "android-review1-home-weather.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    },
+    {
+      "file": "android-review1-kit-colors-closet-female-fixture.png",
+      "sha256": "92785c75e2a32ee20e78ff8b7701e59b7dafb0aea46fa3c01db3ee811395fa24",
+      "bytes": 75231,
+      "width": 480,
+      "height": 782,
+      "sourceGroup": "colors",
+      "sourceRaw": "android-review1-colors.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont2Group": false
+    }
+  ],
+  "executedDriver": "android-review1-executed-driver.py",
+  "executedDriverSha256": "3ccab1b28b70d1475280d8adb32f26f27ee079da4d6a84e48c1d87bcb88d1369",
+  "observerHelper": "android-review1-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI images use safe ComponentActivity fixtures and test callbacks, not actual MainActivity accounts or production data.",
+    "Native modal cases inspect actual OS/IME insets and injected test controls at320dp/font2. They do not verify phone authentication."
+  ],
+  "updatedAtUtc": "2026-11-12T07:33:54.695237+00:00",
+  "binaryReferenceSha256": "e851a131a34ccbce730ff561b69d134e51337ea8be151640951e0af6a5eec53d",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 88,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "5c3e9eb91dabb0efbcf23bc198cf8e34857a1f4efdd83e7eccde738d1a52efd9"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "67efccea48ef9a69aef6b3384a01f8bf185b151a90d3355c35ce738a3e1f9a9e"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "android-review1-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "android-review1-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "android-review1-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 88,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 6,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 103,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 88,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 29,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-12T07:33:54.695217+00:00"
+}

@@ -1,0 +1,46 @@
+## UI Pro Max Stack Guidelines
+**Stack:** jetpack-compose | **Query:** animation reduced motion
+**Source:** stacks/jetpack-compose.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Animation
+- **Guideline:** Avoid animation logic in VM
+- **Description:** Animation is UI concern
+- **Do:** Animate in UI
+- **Don't:** Animate in VM
+- **Code Good:** Correct layering
+- **Code Bad:** Mixed concern
+- **Severity:** Low
+- **Docs URL:** 
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 2
+- **Category:** Animation
+- **Guideline:** Compose animation APIs
+- **Description:** Use animate*AsState
+- **Do:** AnimatedVisibility
+- **Don't:** Manual anim
+- **Code Good:** Smooth
+- **Code Bad:** Jank
+- **Severity:** Medium
+- **Docs URL:** https://developer.android.com/jetpack/compose/animation
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 3
+- **Category:** State
+- **Guideline:** remember only UI state
+- **Description:** remember for UI-only state
+- **Do:** Scroll, animation
+- **Don't:** Business state
+- **Code Good:** Correct remember
+- **Code Bad:** Misuse remember
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/jetpack/compose/state
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+

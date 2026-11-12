@@ -1,3 +1,7 @@
+# 2026-11-12 시각 강화 후속
+
+[우선순위·근거·1차 구현](docs/UI_UX_EXPRESSIVE_PRIORITIES_20261112.md)을 따른다. 색면과 러닝 트랙은 미니미 주변에 집중하고 선택 색면은 기존 탭의 상태를 보조한다. 아래 데이터·가독성·안전영역 원칙은 유지한다.
+
 # 2026-11-12 전체 화면 UI 개편
 
 [화면 계획과 자체 비평](design-system/runmoni/pages/studio-refresh.md)과 [실제 적용/검증 근거](docs/app-review/2026-11-11-studio-ui/README.md)를 따른다. frontend-design 원문과 ui-ux-pro-max 검색을 앱 맥락으로 검토했다. 승인 미니미·정적 트랙·mint/route blue, 제목과 구역, 자연 높이 탭·단일 행 조작으로 홈/로그인/탐색/러닝/크루·파티/프로필·옷장/기록·공유/설정·정보·양식을 정리한다.

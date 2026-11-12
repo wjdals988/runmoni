@@ -1,0 +1,31 @@
+{
+  "version": "0.4.4-dev",
+  "versionCode": 26,
+  "observedAtUtc": "2026-11-12T07:42:26.391278+00:00",
+  "finalLocalBinary": "binary-build4.json",
+  "finalLocalJvm": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finalLocalLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 57
+  },
+  "freshFinalAndroid": {
+    "total": 16,
+    "proofs": [
+      "android-review1.json",
+      "native1.json"
+    ]
+  },
+  "distinctPassedMethods": 16,
+  "earlierResultsReused": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "productionWritesVerified": false
+}

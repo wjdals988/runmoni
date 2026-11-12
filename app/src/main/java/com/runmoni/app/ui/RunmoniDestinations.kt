@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -40,10 +41,15 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface,
             modifier = Modifier.fillMaxWidth().testTag("home_run_hero")) {
             BoxWithConstraints(Modifier.padding(if (largeText) 16.dp else 20.dp)) {
+                androidx.compose.foundation.Canvas(Modifier.fillMaxWidth().height(4.dp).clearAndSetSemantics { }) {
+                    drawRect(RunmoniColors.Primary, size = androidx.compose.ui.geometry.Size(size.width * .68f, size.height))
+                    drawRect(RunmoniColors.Lime, topLeft = androidx.compose.ui.geometry.Offset(size.width * .68f, 0f), size = androidx.compose.ui.geometry.Size(size.width * .20f, size.height))
+                    drawRect(RunmoniColors.TrackClay, topLeft = androidx.compose.ui.geometry.Offset(size.width * .88f, 0f), size = androidx.compose.ui.geometry.Size(size.width * .12f, size.height))
+                }
                 // The measured weather layout keeps its own width beside the approved sprite.
                 val besideAvatar = maxWidth >= 240.dp && !largeText
                 val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(Modifier.padding(top = 12.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (besideAvatar) {
                         HomeHeading(todaySummary, compact = false)
                         Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
