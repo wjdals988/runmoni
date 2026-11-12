@@ -1,0 +1,42 @@
+{
+  "sourceInput": 1,
+  "actualRootViewImageReview": true,
+  "userVisualApproval": false,
+  "finalVisualApproval": false,
+  "images": [
+    {
+      "file": "android-review1-studio-home-320-font2-fixture.png",
+      "sha256": "0c35fffd107a483f886a4abd791bc9a842327b6d6fba26f3c5f20c6245aa04df",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity with controlled in-memory state"
+    },
+    {
+      "file": "android-review1-studio-profile-320-font2-fixture.png",
+      "sha256": "0c8971d3da26fcf9262fabfa328f1db3d215e1d2961def2c69832dba9a759de5",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity with controlled in-memory state"
+    },
+    {
+      "file": "android-review1-home-weather-beside-320-fixture.png",
+      "sha256": "ae8250892ab169980d8f5947ef715d68219e2cb6b76173ebd5710c8f8ca69225",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity with controlled in-memory state"
+    },
+    {
+      "file": "android-review1-rooms-list-360-100.png",
+      "sha256": "2db3a833f097555581ed88988041d9b02782d0b29dfacf2a5b95242475a08b97",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity with controlled in-memory state"
+    }
+  ],
+  "findings": [
+    "Profile large-text closet action leaves a final single-character line; shorten only the enlarged-text label after the frozen execution finishes.",
+    "Home weather spatial fixture captured the legitimate avatar loading state; do not use it as approved-sprite-ready or consumer-gallery evidence.",
+    "Running map no-fix text measured zero height at320/font2; preserve failed raw and allocate enough map/footer space, then re-execute."
+  ],
+  "sourceFilesChangedDuringRuntime": false
+}

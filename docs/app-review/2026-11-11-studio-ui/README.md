@@ -31,3 +31,15 @@ frontend-design은 anthropics/skills의 실제 pinned 원문을 읽고 주제 �
 Android ComponentActivity/in-memory/inert-map fixture는 실제 MainActivity/휴대폰/Google·운영 쓰기·실제 SNS 전송이 아니다. Root가 실제 원본 PNG를 연 뒤 시각 검토 여부를 기록한다. AVD 설치/검사 뒤 원래 XML/프로필/account·소유 설정/권한·전원을 확인하고 정확한 소유 프로세스를 종료한다. 미확인 상태는 그대로 남긴다.
 
 커밋·푸시·PR은 구현 보존 단계다. 실제 같은 키 서명 CI·APK/sidecar/digest·공개 HEAD가 확인되기 전에는 업데이트 피드/대시보드를 새 버전으로 바꾸지 않는다. 기존 공개0.4.2 실제 APK출처176a9cbe...와0.1.5 출처75c39ca...는 새 UI/문서 커밋으로 바꾸지 않는다.
+
+## 첫 Android 실행과 source2 보완
+
+`android-review1.json`은 source1/binary1의 일반56 계획 중 독립 그룹 기준53개를 통과했고 전체는 FAILED다. main-design 그룹2범위(실제2개 중1개 실패)에서 러닝320/font2 ‘위치 정보 없음’ Text높이0, closet1은기존120초미니미준비대기초과였다. 나머지통과그룹원문을보존하며전체통과로바꾸지않는다. `installation8.json`은템플릿파일명이남은첫교체설치관측으로,실제참조는binary-build1이다(8회설치의뜻이아님).
+
+원래 XML/프로필/account·소유설정/권한/전원을복원하고소유919531을종료했다. 실패phase의원문에없는after source snapshot은끼워넣지않고,편집전Root가전체6맵을다시측정한별도 `source1-post-review-observation.json`에보존했다. 원래driverproof자체를성공으로바꾸지않는다.
+
+Root가원본4장을열어보았고(`root-visual-input1.json`),프로필큰글씨꾸미기문구의마지막글자줄바꿈을확인했다. 홈날씨공간fixture에는정상로딩hourglass가보였다. Stage부모의clearSemantics가하위loadingmarker를숨긴것을소스상호검토로확인했으므로해당통과를sprite준비완료근거로쓰지않고최종갤러리에서도제외한다.
+
+source2는러닝지도fontScale1.3이상에서360dp/기본188dp,큰글씨의‘꾸미기’문구,장식Canvas만clear하는Stage로보완했다. Consumer의120초·전체loading조건과원래예외는그대로유지하고실패후에만노드/조상tag·full/clippedbounds/표시여부·threadstack/PNG를진단하도록했다. 옷장timeout의구체원인은아직미확정이며타임아웃확대·조건축소로통과시키지않는다.
+
+`binary-build2.json`/`source-freeze2.json`:새JVM189·실패/오류/skip0,lint오류0/경고57,앱241404647bytes·검사5527612bytes. source1의189와합산하지않는다. source2 일반13/native13은계획이며실제실행/복원결과를별도로기록한다.

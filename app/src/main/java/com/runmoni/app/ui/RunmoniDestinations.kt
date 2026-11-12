@@ -169,7 +169,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_closet")) {
                     Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp))
                     Spacer(Modifier.width(12.dp))
-                    Text("미니미 꾸미기", modifier = Modifier.weight(1f))
+                    Text(if (LocalDensity.current.fontScale >= 1.3f) "꾸미기" else "미니미 꾸미기", modifier = Modifier.weight(1f))
                     Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp))
                 }
             }

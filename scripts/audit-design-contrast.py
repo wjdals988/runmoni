@@ -20,6 +20,7 @@ checks = [
     ("Muted", "Cream", 4.5), ("Primary", "Paper", 4.5), ("Outline", "Cream", 3),
     ("RouteBlue", "BlueWash", 4.5), ("Muted", "BlueWash", 4.5),
     ("Navy", "MintWash", 4.5), ("CoralInk", "CoralWash", 4.5),
+    ("OnDark", "DeepGreen", 4.5), ("OnDarkMuted", "DeepGreen", 4.5),
 ]
 results = []
 for foreground, background, minimum in checks:

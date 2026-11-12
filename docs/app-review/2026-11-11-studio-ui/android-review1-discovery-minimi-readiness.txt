@@ -1,0 +1,9 @@
+map-first discovery 320 / 1.0: waitMillis=68; timeoutMillis=120000
+map-first discovery 320 / 1.5: waitMillis=11; timeoutMillis=120000
+map-first discovery 320 / 2.0: waitMillis=10; timeoutMillis=120000
+map-first discovery 360 / 1.0: waitMillis=22; timeoutMillis=120000
+map-first discovery 360 / 1.5: waitMillis=20; timeoutMillis=120000
+map-first discovery 360 / 2.0: waitMillis=6; timeoutMillis=120000
+map-first discovery 411 / 1.0: waitMillis=13; timeoutMillis=120000
+map-first discovery 411 / 1.5: waitMillis=6; timeoutMillis=120000
+map-first discovery 411 / 2.0: waitMillis=7; timeoutMillis=120000

@@ -45,8 +45,8 @@ internal fun RunwayArtwork(avatar: AvatarStyle, modifier: Modifier = Modifier, c
 /** Decorative track lanes, never a recorded route. The approved sprite is unchanged. */
 @Composable
 internal fun StudioAvatarStage(avatar: AvatarStyle, modifier: Modifier = Modifier, running: Boolean = false) {
-    Box(modifier.clearAndSetSemantics { }, contentAlignment = Alignment.Center) {
-        Canvas(Modifier.matchParentSize()) {
+    Box(modifier, contentAlignment = Alignment.Center) {
+        Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
             val laneWidth = size.width.coerceAtMost(size.height * 1.8f)
             val laneHeight = size.height * .16f
             repeat(3) { index ->

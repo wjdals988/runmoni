@@ -430,7 +430,8 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         null -> "러닝이 멈춰 있어요. 저장 상태를 확인한 뒤 이어갈 수 있어요."
                     })
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
-                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth().height(188.dp).clip(RunmoniShapes.Surface))
+                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth()
+                    .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 188.dp).clip(RunmoniShapes.Surface))
                 TextButton(shape = RunmoniShapes.Action, onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)

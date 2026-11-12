@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
 import androidx.activity.enableEdgeToEdge
 import android.view.WindowManager
@@ -54,6 +55,39 @@ abstract class RunmoniDesignTestBase {
         val loadingWaitStarted = android.os.SystemClock.uptimeMillis()
         try {
             compose.waitUntil(120_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        } catch (failure: Throwable) {
+            // Failure-only evidence. Keep the same readiness condition, timeout and exception.
+            // Distinguish the fixed preview from a thumbnail, and full from clipped bounds.
+            runCatching {
+                val target = InstrumentationRegistry.getInstrumentation().targetContext
+                val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
+                val diagnostic = File.createTempFile("minimi-timeout-${Integer.toHexString(context.hashCode())}-", ".txt", directory)
+                val report = buildString {
+                    appendLine("case=$context")
+                    val loading = compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true)
+                    loading.fetchSemanticsNodes().forEachIndexed { index, node ->
+                        appendLine("loading[$index] id=${node.id} full=${node.positionInRoot}+${node.size} clipped=${node.boundsInRoot}")
+                        appendLine("displayed=${runCatching { loading[index].assertIsDisplayed() }.isSuccess}")
+                        var parent = node.parent
+                        while (parent != null) {
+                            appendLine("parent tag=${parent.config.getOrNull(SemanticsProperties.TestTag)} full=${parent.positionInRoot}+${parent.size} clipped=${parent.boundsInRoot}")
+                            parent = parent.parent
+                        }
+                    }
+                    Thread.getAllStackTraces().filter { (thread, _) ->
+                        thread.name == "main" || thread.name.startsWith("DefaultDispatcher")
+                    }.forEach { (thread, stack) ->
+                        appendLine("thread=${thread.name} state=${thread.state}")
+                        stack.take(24).forEach { appendLine(it.toString()) }
+                    }
+                }
+                diagnostic.writeText(report)
+                runCatching {
+                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+                        .takeScreenshot(File(directory, diagnostic.nameWithoutExtension + ".png"))
+                }
+            }
+            throw failure
         } finally {
             val target = InstrumentationRegistry.getInstrumentation().targetContext
             File(target.cacheDir, "design-review").apply { mkdirs() }

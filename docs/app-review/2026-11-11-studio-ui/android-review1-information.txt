@@ -1,0 +1,9 @@
+
+com.runmoni.app.ui.AppInformationTest:...
+com.runmoni.app.ui.AppVersionShortcutLayoutTest:.
+
+Time: 105.488
+
+OK (4 tests)
+
+

@@ -1,0 +1,1 @@
+record detail page with unavailable map tiles: waitMillis=78; timeoutMillis=120000

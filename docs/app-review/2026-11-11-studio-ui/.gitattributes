@@ -1,0 +1,2 @@
+# Preserve original stdout/search evidence bytes; keep source whitespace checks unchanged.
+*.txt -whitespace

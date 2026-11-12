@@ -1,0 +1,25 @@
+
+com.runmoni.app.ui.ConsumerClosetTest:
+Error in fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(com.runmoni.app.ui.ConsumerClosetTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 120000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:56)
+	at com.runmoni.app.ui.ConsumerClosetTest.fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(ConsumerClosetTest.kt:52)
+
+
+Time: 192.248
+There was 1 failure:
+1) fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(com.runmoni.app.ui.ConsumerClosetTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 120000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:56)
+	at com.runmoni.app.ui.ConsumerClosetTest.fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory(ConsumerClosetTest.kt:52)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+
