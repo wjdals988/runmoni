@@ -1,0 +1,27 @@
+{
+  "observedAtUtc": "2026-11-12T06:25:53.452891+00:00",
+  "version": "0.4.4-dev",
+  "versionCode": 26,
+  "sourceInput": "source-input2.json",
+  "productSourcesUnchangedDuringBuild": true,
+  "buildSucceeded": true,
+  "jvm": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "jvmReportsFresh": true,
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 57
+  },
+  "buildLog": "build2.txt",
+  "apkBytes": 241572471,
+  "apkSha256": "f92c4fe5231c2de3f5bd7c7d0d7e17fd0c2e1e4efd26c3ba423be475fcb5c022",
+  "signing": "local TEST debug, not release signing",
+  "androidRuntimeVerified": false,
+  "newScreenshotsReviewed": false,
+  "newSignedReleasePublished": false
+}

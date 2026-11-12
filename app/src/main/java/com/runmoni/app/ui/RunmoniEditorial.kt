@@ -1,6 +1,8 @@
 @file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 package com.runmoni.app.ui
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -10,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,20 +49,37 @@ internal fun RunwayArtwork(avatar: AvatarStyle, modifier: Modifier = Modifier, c
 @Composable
 internal fun StudioAvatarStage(avatar: AvatarStyle, modifier: Modifier = Modifier, running: Boolean = false) {
     Box(modifier, contentAlignment = Alignment.Center) {
-        Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
-            val laneWidth = size.width.coerceAtMost(size.height * 1.8f)
-            val laneHeight = size.height * .16f
-            repeat(3) { index ->
-                val inset = index * laneHeight * .24f
-                drawOval(RunmoniColors.Primary.copy(alpha = .12f),
-                    topLeft = Offset((size.width - laneWidth) / 2 + inset, size.height * .82f + inset / 3),
-                    size = Size(laneWidth - inset * 2, (laneHeight - inset * .65f).coerceAtLeast(1f)),
-                    style = Stroke(width = 1.dp.toPx()))
-            }
-        }
+        RunningTrackBackdrop(Modifier.matchParentSize())
         AvatarMini(avatar, Modifier.fillMaxHeight().aspectRatio(2f / 3f), running = running, decorative = true)
     }
 }
+
+/** Static sports illustration only: no GPS, progress, or achievement is implied. */
+@Composable
+internal fun RunningTrackBackdrop(modifier: Modifier = Modifier) {
+    Canvas(modifier.clipToBounds().clearAndSetSemantics { }) {
+        // Keep the illustration inside its existing viewport, including tiny previews.
+        val w = size.width
+        val h = size.height
+        drawOval(RunmoniColors.MintWash, Offset(w * .04f, h * .08f), Size(w * .92f, h * .82f))
+        drawCircle(RunmoniColors.Lime, radius = minOf(w, h) * .13f, center = Offset(w * .77f, h * .23f))
+        drawOval(RunmoniColors.TrackClay, Offset(w * .04f, h * .72f), Size(w * .92f, h * .22f))
+        repeat(3) { lane ->
+            val inset = w * (.10f + lane * .09f)
+            drawOval(RunmoniColors.Paper.copy(alpha = .85f),
+                Offset(inset, h * (.75f + lane * .018f)),
+                Size(w - inset * 2, h * (.16f - lane * .025f)),
+                style = Stroke(width = 1.dp.toPx()))
+        }
+    }
+}
+
+/** A short response to a selection; framework duration scale handles motion disabled. */
+@Composable
+internal fun selectedTabSurface(selected: Boolean): Color = animateColorAsState(
+    if (selected) RunmoniColors.MintWash else RunmoniColors.MintWash.copy(alpha = 0f),
+    animationSpec = tween(durationMillis = 150), label = "tab selection",
+).value
 
 @Composable
 internal fun DestinationRow(title: String, subtitle: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier,
@@ -84,7 +104,9 @@ internal fun DestinationTabs(labels: List<String>, selected: Int, onSelect: (Int
         labels.forEachIndexed { index, label ->
             Box(Modifier.heightIn(min = 48.dp)
                 .selectable(selected = selected == index, role = Role.Tab, onClick = { onSelect(index) })
-                .testTag("${tag}_$index").padding(horizontal = 20.dp, vertical = 12.dp),
+                .testTag("${tag}_$index")
+                .background(selectedTabSurface(selected == index), RunmoniShapes.Action)
+                .padding(horizontal = 20.dp, vertical = 12.dp),
                 contentAlignment = Alignment.Center) {
                 Text(label, style = MaterialTheme.typography.titleSmall, maxLines = 1, softWrap = false,
                     color = if (selected == index) RunmoniColors.Primary else RunmoniColors.Muted)

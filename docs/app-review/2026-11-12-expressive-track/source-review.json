@@ -1,0 +1,20 @@
+{
+  "reviewer": "studio_qa",
+  "readOnlyReview": true,
+  "initialFinding": "Circle radius tied only to width could draw outside compact72dp stage",
+  "sourceFix": "min(width,height)*.13 and clipToBounds",
+  "secondFinding": "Transparent-black to mint endpoint may introduce changing RGB during alpha interpolation; no runtime failure measured",
+  "sourceFix2": "Same MintWash RGB at alpha0 and1; only opacity changes",
+  "preserved": [
+    "approved sprite",
+    "selection callbacks and tags",
+    "selected semantics",
+    "48dp minimum targets"
+  ],
+  "remainingRuntimeChecks": [
+    "320dp/font2 home CTA full bounds after12dp spacing",
+    "system motion scale0",
+    "actual Android originals and visual review"
+  ],
+  "runtimeExecutedByReviewer": false
+}

@@ -42,6 +42,10 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.4.4-dev", "2026-11-12", "러닝 트랙·선택 강조 · 검토 중", listOf(
+        "미니미 주변에 트랙과 색상 포인트를 더했어요.",
+        "옷장과 화면 분류에서 선택한 탭을 더 쉽게 찾을 수 있어요.",
+    )),
     AppVersionEntry("0.4.3-dev", "2026-11-11", "전체 화면 UI·공유 개선 · 실기기 검증 전", listOf(
         "홈·탐색·러닝·크루·프로필과 옷장·설정의 화면 구성과 조작을 정리했어요.",
         "러닝 결과에서 사진과 기록으로 공유 이미지를 만들 수 있어요.",

@@ -1,3 +1,9 @@
+# 0.4.4-dev 시각 강화 1차 후보 — 2026.11.12 한국 시간
+
+- frontend-design/ui-ux-pro-max로 [우선순위와 이유](docs/UI_UX_EXPRESSIVE_PRIORITIES_20261112.md)를 정리했다. 미니미·옷장의 공통 정적 트랙/민트·라임·clay색면,홈4dp 색띠,자연높이 탭의 선택배경/150ms 색상전환을 구현했다. 원본픽셀·기존선택/저장/조작영역·데이터는보존한다.
+- 웹 Feature-Rich Showcase 추천은 native화면과달라레이아웃/CTA/외부폰트를채택하지않았다. Compose UI animation API를사용하고저장소의의존성을올리지않는다. 시장개선율/사용자시각승인을측정했다고쓰지않는다.
+- 로컬debug APK빌드·새JVM189개(실패/오류/skip0),lint오류0·경고57과선택색6조합대비를확인했다. 실제결과는 docs/app-review/2026-11-12-expressive-track/build-result3.json을따른다. 미게시0.4.4/code26이다. 공개0.4.3·실제APK출처eb32a30...·피드/대시보드다운로드는유지한다. 새Android/PNG·축소모션·휴대폰/Google·같은키서명/배포는별도다.
+
 # 0.4.3-dev 전체 화면 UI·공유 공개 — 2026-11-12 한국 시간
 
 <!-- verified-studio-release-0.4.3-v1 -->

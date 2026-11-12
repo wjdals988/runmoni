@@ -37,6 +37,8 @@ internal object RunmoniColors {
     val LimeWash = Color(0xFFF0F5D8)
     val CoralWash = Color(0xFFFBE7DE)
     val CoralInk = Color(0xFF8D402B)
+    // Decorative clay track, never a status/text/control color.
+    val TrackClay = Color(0xFFC97558)
     val RouteBlue = Color(0xFF2E6194)
     val BlueWash = Color(0xFFE8F0FA)
 }

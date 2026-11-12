@@ -133,22 +133,7 @@ private fun ClosetPreview(profile: Profile, actions: AppActions, playing: Boolea
 @Composable
 private fun ClosetAvatarStage(avatar: AvatarStyle, playing: Boolean, modifier: Modifier = Modifier) {
     Box(modifier.background(RunmoniColors.MintWash, RunmoniShapes.Surface), contentAlignment = Alignment.Center) {
-        Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
-            val trackWidth = size.width * .82f
-            val trackHeight = size.height * .16f
-            val left = (size.width - trackWidth) / 2
-            val top = size.height - trackHeight - 5.dp.toPx()
-            repeat(3) { lane ->
-                val inset = lane * 4.dp.toPx()
-                val width = trackWidth - inset * 2
-                val height = trackHeight - inset * .7f
-                if (width > 0 && height > 0) drawOval(
-                    RunmoniColors.Primary.copy(alpha = .18f),
-                    topLeft = Offset(left + inset, top + inset * .35f),
-                    size = Size(width, height), style = Stroke(1.dp.toPx()),
-                )
-            }
-        }
+        RunningTrackBackdrop(Modifier.matchParentSize())
         AvatarMini(avatar, Modifier.fillMaxSize().testTag("closet_avatar_preview"), running = playing)
     }
 }
@@ -274,7 +259,8 @@ private fun ClosetTabs(
         containerColor = androidx.compose.ui.graphics.Color.Transparent,
         contentColor = RunmoniColors.Primary, divider = { HorizontalDivider(color = RunmoniColors.Line) }) {
         items.forEachIndexed { index, (key, label) ->
-            Tab(selected = selected == index, onClick = { onSelect(index) }, modifier = Modifier.heightIn(min = 48.dp).testTag("${prefix}_$key"),
+            Tab(selected = selected == index, onClick = { onSelect(index) }, modifier = Modifier.heightIn(min = 48.dp).testTag("${prefix}_$key")
+                    .background(selectedTabSurface(selected == index), RunmoniShapes.Action),
                 text = { Text(label, style = MaterialTheme.typography.titleSmall, maxLines = 1) })
         }
     }
