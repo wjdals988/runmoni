@@ -1,0 +1,38 @@
+
+com.runmoni.app.ui.RunmoniDialogDesignTest:..
+Error in largeLocationConsentRemainsScrollableWithoutEnablingSharing(com.runmoni.app.ui.RunmoniDialogDesignTest):
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'dialog_message')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.largeLocationConsentRemainsScrollableWithoutEnablingSharing(RunmoniDesignTest.kt:312)
+
+Error in arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest):
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:258)
+
+
+Time: 150.142
+There were 2 failures:
+1) largeLocationConsentRemainsScrollableWithoutEnablingSharing(com.runmoni.app.ui.RunmoniDialogDesignTest)
+java.lang.AssertionError: Failed: assertExists.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'dialog_message')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode$default(SemanticsNodeInteraction.kt:83)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.largeLocationConsentRemainsScrollableWithoutEnablingSharing(RunmoniDesignTest.kt:312)
+2) arrivingChatDoesNotMoveReadersAwayFromOlderMessages(com.runmoni.app.ui.RunmoniDialogDesignTest)
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunmoniDialogDesignTest.arrivingChatDoesNotMoveReadersAwayFromOlderMessages(RunmoniDesignTest.kt:258)
+
+FAILURES!!!
+Tests run: 4,  Failures: 2
+
+

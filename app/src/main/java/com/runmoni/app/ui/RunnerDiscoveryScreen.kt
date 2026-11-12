@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material.icons.outlined.Groups
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -118,7 +120,12 @@ internal fun RunnerSharingConsent(state: AppState, actions: AppActions) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("러닝 중 닉네임·미니미와 약 100m 단위 위치를 다른 연결 사용자에게 보여줘요. 정확한 GPS 경로와 포인트는 공유하지 않아요.")
                 Text("일시정지·종료하면 공유를 해제해요. 연결이 끊기면 이전 위치가 최장 75초 남을 수 있어요.")
-                Row { Checkbox(adult, { adult = it }); Text("성인이며 위치 공개에 동의해요.", Modifier.weight(1f).padding(top = 12.dp)) }
+                Row(Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                    .toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Checkbox(adult, onCheckedChange = null)
+                    Text("성인이며 위치 공개에 동의해요.", Modifier.weight(1f))
+                }
             }
         }, confirmButton = {
             TextButton(onClick = { actions.confirmPublicLocation(runId, adult, requestNonce) }, enabled = adult,

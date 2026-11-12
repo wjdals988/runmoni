@@ -43,3 +43,13 @@ Root가원본4장을열어보았고(`root-visual-input1.json`),프로필큰글�
 source2는러닝지도fontScale1.3이상에서360dp/기본188dp,큰글씨의‘꾸미기’문구,장식Canvas만clear하는Stage로보완했다. Consumer의120초·전체loading조건과원래예외는그대로유지하고실패후에만노드/조상tag·full/clippedbounds/표시여부·threadstack/PNG를진단하도록했다. 옷장timeout의구체원인은아직미확정이며타임아웃확대·조건축소로통과시키지않는다.
 
 `binary-build2.json`/`source-freeze2.json`:새JVM189·실패/오류/skip0,lint오류0/경고57,앱241404647bytes·검사5527612bytes. source1의189와합산하지않는다. source2 일반13/native13은계획이며실제실행/복원결과를별도로기록한다.
+
+## source2 실행과 source3 보완
+
+`android-review2.json`은 같은source2 APK쌍의 일반13개 모두통과 및전체XML/프로필/account·소유설정/권한/전원복원,실제sourceMapsBefore/After/AfterRestoration과바이너리불변을확인했다. Consumer의원래120초/전체loading조건은그대로통과했으며source1 timeout의구체원인이확정됐다고쓰지않는다.
+
+`native1.json`은실제320dp/systemfont2 및별도480dp/font1/실제IME의13범위에서독립그룹기준9개를통과했다. 대화상자그룹4범위(실제2실패/2통과)는전체실패로보존했다. 현재루트가아닌legacy Toggle만렌더하고dialog_message를찾던동의검사는현재탐색→run/nonce중앙동의창흐름과맞지않는stale fixture였다. 제품에옛Alert를되살려맞추지않는다. 채팅은최신메시지jump후본문assertDisplayed가실패했고실제body/history측정이없으므로공간추정값을실측으로부르지않는다. 두실패모두120초로딩실패와는별개다. 원래입력/환경복원및실제3개source map관측은실패proof에도그대로있다.
+
+source3는큰글씨/짧은창채팅을압축header로표시해본문공간을확보하고메뉴대안을유지했다. 동의Checkbox는문구행전체에서단일toggle을사용하며미체크초기값/수동확인/nonce/run경계를유지한다. Native동의검사는현재root탐색의요청/100m·75초고지/실제scroll/disabled확인/전체48dp안전영역/취소후데이터불변을검증하도록갱신했다. 채팅은최신본문전체bounds와기존IME/Back/메시지전송기준을함께검증한다.
+
+`binary-build3.json`/`source-freeze3.json`:오프라인새JVM189(실패/오류/skip0),lint오류0/경고57,앱241404991bytes·검사5530720bytes. 이전189를합산하지않는다. source3일반2/native4는현재계획이며이후실제원문·복원결과를따른다. 새서명APK/운영다운로드는아직미게시다.

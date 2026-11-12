@@ -73,7 +73,8 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
         .pointerInput(state.openedRoomId) { detectTapGestures { focusManager.clearFocus() } }
         .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
         .padding(vertical = 8.dp)) {
-        val compact = imeVisible || maxHeight < 480.dp
+        val compact = imeVisible || maxHeight < 480.dp ||
+            (LocalDensity.current.fontScale >= 1.3f && maxHeight < 720.dp)
         val composerMaxLines = if (maxHeight < 300.dp) 1 else if (compact) 2 else 4
         LaunchedEffect(maxHeight, compact) { if (followLatest) { withFrameNanos { }; scroll.scrollTo(scroll.maxValue) } }
         Surface(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize().align(Alignment.Center).testTag("chat_dialog").semantics {
