@@ -1,0 +1,32 @@
+{
+  "observedAtUtc": "2026-11-12T04:29:30.305068+00:00",
+  "ownedPid": 934800,
+  "ownedAvd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "ownerCommandSha256": "4ff6144ee7765916f7b86d365b8f536b62a39acfeb0669e77a53a258be1b94f3",
+  "signal": "SIGTERM to verified exact owned PID",
+  "finalProcessState": "Z",
+  "ownedEmulatorNoLongerRunning": true,
+  "noUnrelatedProcessTerminated": true,
+  "restorationProofs": [
+    {
+      "file": "android-review3.json",
+      "sha256": "d0fef84204e9d892a0fe50f37c4fe8ac46455e700abce8b6257a0d3a635e1dff",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "native2.json",
+      "sha256": "35f987caefb23efad8ecb9cca39bdd5c7f3237993e32451e4139b9092b4ba77f",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "live1.json",
+      "sha256": "8b28cfe9320ca807a33148c37a602c433b35a871f19ac2b0a7eee09f7c8fe5ca",
+      "completed": true,
+      "originalParentPassed": true
+    }
+  ],
+  "physicalDeviceOrUserPcEmulatorUsed": false
+}

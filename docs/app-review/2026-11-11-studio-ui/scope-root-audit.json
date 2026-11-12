@@ -1,0 +1,93 @@
+{
+  "observedAtUtc": "2026-11-12T04:22:49.048204+00:00",
+  "source": "source-scope-audit.py",
+  "sourceSha256": "22bb865c4922c4ad3e81668a2a2642bdb6b0d11a47362d1142cb064a6a1fab6e",
+  "scope": {
+    "file": "android-scope-summary.json",
+    "sha256": "4cc070ec2cffbcce3ee5d7d4484fe6aea3448256bad6abb018e94ba60b917193"
+  },
+  "actualSelectorsAndMatchingFrozenSourceMethodsCrossChecked": true,
+  "originalScopeNotRewritten": true,
+  "freshFinal": 6,
+  "retainedEarlier": 64,
+  "distinct": 70,
+  "observations": [
+    {
+      "proof": "android-review1.json",
+      "sha256": "197470f3afae6e09bbc24d488b498b5afcbe865438dfdf228440d4fc5890aed7",
+      "binaryReference": "binary-build1.json",
+      "matchingTestBlobCommit": "f0c6601fd2dd5a87e3b15eab2d6f96818e9dfb6b",
+      "allFrozenTestSourceBlobsMatched": true,
+      "sourceSnapshotFieldsActuallyChecked": [
+        "sourceMapsBefore"
+      ],
+      "installedPairMatches": true,
+      "passedGroupMethods": 53,
+      "parentOverallPassed": false
+    },
+    {
+      "proof": "android-review2.json",
+      "sha256": "907cbe2fece6b6ecf4731bf0c73421ca93b780d755adc9da74a79d6028d1ea91",
+      "binaryReference": "binary-build2.json",
+      "matchingTestBlobCommit": "8a50228c7815234089a0c41011561fb3edaef513",
+      "allFrozenTestSourceBlobsMatched": true,
+      "sourceSnapshotFieldsActuallyChecked": [
+        "sourceMapsBefore",
+        "sourceMapsAfter",
+        "sourceMapsAfterRestoration"
+      ],
+      "installedPairMatches": true,
+      "passedGroupMethods": 13,
+      "parentOverallPassed": true
+    },
+    {
+      "proof": "native1.json",
+      "sha256": "bb64699c4740a7d5b67bbaa4f91729aa79d3542412ca968da3971ee7eea90dfe",
+      "binaryReference": "binary-build2.json",
+      "matchingTestBlobCommit": "8a50228c7815234089a0c41011561fb3edaef513",
+      "allFrozenTestSourceBlobsMatched": true,
+      "sourceSnapshotFieldsActuallyChecked": [
+        "sourceMapsBefore",
+        "sourceMapsAfter",
+        "sourceMapsAfterRestoration"
+      ],
+      "installedPairMatches": true,
+      "passedGroupMethods": 9,
+      "parentOverallPassed": false
+    },
+    {
+      "proof": "android-review3.json",
+      "sha256": "d0fef84204e9d892a0fe50f37c4fe8ac46455e700abce8b6257a0d3a635e1dff",
+      "binaryReference": "binary-build3.json",
+      "matchingTestBlobCommit": "030261a90506016c6b103b088507f3f0fb5c6cba",
+      "allFrozenTestSourceBlobsMatched": true,
+      "sourceSnapshotFieldsActuallyChecked": [
+        "sourceMapsBefore",
+        "sourceMapsAfter",
+        "sourceMapsAfterRestoration"
+      ],
+      "installedPairMatches": true,
+      "passedGroupMethods": 2,
+      "parentOverallPassed": true
+    },
+    {
+      "proof": "native2.json",
+      "sha256": "35f987caefb23efad8ecb9cca39bdd5c7f3237993e32451e4139b9092b4ba77f",
+      "binaryReference": "binary-build3.json",
+      "matchingTestBlobCommit": "030261a90506016c6b103b088507f3f0fb5c6cba",
+      "allFrozenTestSourceBlobsMatched": true,
+      "sourceSnapshotFieldsActuallyChecked": [
+        "sourceMapsBefore",
+        "sourceMapsAfter",
+        "sourceMapsAfterRestoration"
+      ],
+      "installedPairMatches": true,
+      "passedGroupMethods": 4,
+      "parentOverallPassed": true
+    }
+  ],
+  "source1MissingAfterSnapshotFabricated": false,
+  "source1SeparatePostObservationPreserved": true,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false
+}

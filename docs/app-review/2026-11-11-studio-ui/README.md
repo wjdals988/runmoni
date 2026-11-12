@@ -53,3 +53,21 @@ source2는러닝지도fontScale1.3이상에서360dp/기본188dp,큰글씨의‘�
 source3는큰글씨/짧은창채팅을압축header로표시해본문공간을확보하고메뉴대안을유지했다. 동의Checkbox는문구행전체에서단일toggle을사용하며미체크초기값/수동확인/nonce/run경계를유지한다. Native동의검사는현재root탐색의요청/100m·75초고지/실제scroll/disabled확인/전체48dp안전영역/취소후데이터불변을검증하도록갱신했다. 채팅은최신본문전체bounds와기존IME/Back/메시지전송기준을함께검증한다.
 
 `binary-build3.json`/`source-freeze3.json`:오프라인새JVM189(실패/오류/skip0),lint오류0/경고57,앱241404991bytes·검사5530720bytes. 이전189를합산하지않는다. source3일반2/native4는현재계획이며이후실제원문·복원결과를따른다. 새서명APK/운영다운로드는아직미게시다.
+
+## source3 Android 실행 결과
+
+`android-review3.json` 일반2개와 `native2.json` native4개를 최종 로컬 APK쌍에서 새로 실행해 모두 통과했다. 큰 글씨 채팅 최신 본문의 전체 bounds·기존 메시지 읽기 위치·실제 IME 입력/Back, 현재 루트의 약100m 동의·수동확인·48dp/안전영역·취소 후 불변을 확인했다. 각 phase의 원래 XML/프로필/account와 소유 설정/권한/전원 복원, 전/후/복원후6맵과 APK쌍 불변을 확인했다.
+
+`android-scope-summary.json`은 원문 통과 개수와 실행 selector·소스 method ID를 대조한 중복 제거 결과다. 최종 입력 새6개와 앞선 입력에서 유지한64개, 총70개 서로 다른 통과 method를 구분한다. 70개 모두를 최종 바이너리에서 새로 실행했다고 주장하지 않는다. 첫 전체실패/source2 native전체실패와원문도그대로보존한다. JVM189와lint0/경고57은최종빌드결과이며이전빌드의189를합산하지않는다.
+
+Root가 source2 원본5장과 source3 native target 원본3장을 열어 검토했다(`root-visual-input2.json`, `root-visual-input3.json`). 스크롤/Compose target crop은 전체 화면 검증·MainActivity·휴대폰·사용자 시각 승인이 아니다. source3 실제 Main 검토와 공개 배포는 이후 별도 근거를 따른다.
+
+`scope-root-audit.json`은 별도 재현 검토다. 각 입력과 같은88개 test blob의 SHA를 실제 커밋과 대조하고 fully-qualified class/selector로 method 이름을 다시 읽어6/64/70을 확인했다. 설치APK쌍과각실제source snapshot의6key·개수·matches/빈mismatch도확인했다. 원래scope파일/빌드당시HEAD는고치지않았다. 최초audit의단순class명충돌은도구를package포함이름으로바로잡았으며제품/Android검사실패가아니다.
+
+## source3 실제 MainActivity 검토
+
+`live1.json`은 최종 TEST APK쌍에서 실제 MainActivity의 전체 검토를 통과한 단일 실행이다. 검토 전 원래 기록이 비어 있음을 확인한 홈과 옷장,1:1 기본 공유/선택한 합성 사진9:16/문구와미니미편집/위치확인전탐색의원본6장을획득했다. Root가모두열어개인정보를검토했다(`root-main-visual-review.json`). 합성 완료기록과 합성 사진이며 실제 사용자 러닝/사진/GPS를 대신하지 않는다.
+
+실제OS파일선택·실제키로Morning Miles입력/IME중Back의48dp·안전영역·미니미이동,갤러리저장·실제chooser의별도UID수신기READ와쓰기/다른파일거부,갤러리/cache/receiver PNG전체bytes일치를확인했다. 결과Back과편집재진입의draft도확인했다. 실제SNS전송/휴대폰/Google/운영쓰기/서명APK실행은미검증이다. 지도는조작행이실제mapbounds밖임을확인했으며현재GPS·타일HTTP/콘텐츠·다른러너나새제공자인증은측정하지않았다.
+
+검토용기록/사진/갤러리/cache/수신출력을한정정리하고원래DB행/전체XML/프로필/account와소유설정/권한/전원을복원했다. 전/후/복원후6맵과설치APK쌍·검토도구불변을확인했다. `session-cleanup.json`에서정확한소유AVD934800종료를확인했다. 이전Launcher검토는이전입력baseline이며새전체UI의새Launcher결과로합산하지않는다.
