@@ -1,3 +1,9 @@
+# 0.4.3-dev 전체 화면 UI·공유 공개 — 2026-11-12 한국 시간
+
+<!-- verified-studio-release-0.4.3-v1 -->
+- frontend-design/ui-ux-pro-max 기반 전체 화면 위계와 visible 공유 진입·기본1:1 사진/기록/미니미 PNG를 반영했다. 같은 보관키/code25,실제 APK출처 `eb32a30d20b0223d436e80ca09c7c17e25d60c69`,220,148,853bytes,SHA256 `47f0f70a18a64ba84fe59f7d7a6466287721b29ee77bc2fccf1fb3c60f1f9c07`. 서명 CI43155385740 JVM189/lint0·경고87,운영13항목/PNG4/Node23개를 확인했다.
+- [게시 검증](docs/RELEASE_REVIEW_0.4.3_20261112.md). 최종 local새189/lint0·경고57,Android새6와이전보존64/서로다른70을구분한다. 실제Main단일PASS/Root원본6·원래DB/XML/account/소유환경복원·AVD종료를확인했다. 이전Launcher·실패원문을보존하고휴대폰/Google/SNS/운영네이버/사용자승인·공개서명APK런타임은별도다. canonical raw 피드는후속병합뒤확인한다.
+
 # 전체 UI 실제 Main 검토 완료 — 2026.11.12 한국 시간
 
 - 최종TEST APK쌍에서실제Main의홈/옷장/기본1:1공유·합성사진선택/문구·미니미조작/갤러리저장/공유창의별도UID READ/Back·재진입/지도밖조작행을한실행에서통과했다. 원본6장은Root가열어검토했다. 합성검토기록/사진이며실제SNS·휴대폰·Google·서명APK실행과는다르다.

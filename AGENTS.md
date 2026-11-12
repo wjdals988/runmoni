@@ -21,6 +21,8 @@
 
 ## 변경 이력
 
+- 2026-11-12 공개:0.4.3-dev/code25 전체 화면 UI·visible 공유·기본1:1 사진/기록/미니미 PNG. <!-- verified-studio-release-0.4.3-v1 --> 실제 APK출처 `eb32a30d20b0223d436e80ca09c7c17e25d60c69`를 후속 문서/피드로 바꾸지 않는다. [게시 근거](docs/RELEASE_REVIEW_0.4.3_20261112.md). 같은키 서명 CI43155385740 JVM189/lint0·local새189/Android새6+보존64/서로다른70·실제Main단일PASS/Root원본6/운영13+PNG4를 구분한다. 이전Launcher·실패원문/복원을 보존하고 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임은 미검증이다. 새 키/Rules/의존성/원화 없이 원본·데이터·과거 APK출처를 유지했다.
+
 - 2026-11-12 최종 전체UI 로컬 검토: PR49의 source3 새JVM189/lint0·경고57, Android새6/이전입력보존64·서로다른70 및 실제Main 단일전체흐름/원본6장·Root시각검토·원래데이터/소유환경복원·정확한AVD934800종료를 확인했다. [새근거](docs/app-review/2026-11-11-studio-ui/README.md). 전체70개최종새실행/휴대폰/Google/SNS/운영쓰기/공개서명APK실행/사용자승인은별개다. 기존PR-main·동일키개발APK·대시보드/피드승인범위로계속하며새게시전공개0.4.2·실제출처를유지한다.
 
 - 2026-11-12 최신 사용자 요청/재개:frontend-design+ui-ux-pro-max로 앱 모든 페이지 UI/UX를 개편한다. [설계](design-system/runmoni/pages/studio-refresh.md)·[새 근거](docs/app-review/2026-11-11-studio-ui/README.md)를 읽는다. 미게시0.4.3/code25에서 소스1 새JVM189/lint0·경고57/대비16을 통과했고6담당상호소스검토를 했다. 중단된 환경 복구 뒤 동일소스/파일보존·정확한 소유AVD887490 종료를 확인했다. Android/실제PNG/서명APK·운영은 아직 새결과가 없으므로 이전 source12 결과와 합산하지 않는다. 기존 PR/main/동일키개발APK/대시보드·피드 승인 범위를 이어가며 이전 main bd4c10e 유지 문구는 당시 CI 재개 계획이다. 새 서명/배포 근거 전 공개0.4.2/실제출처176a9cbe...·원본/데이터/규칙/키를 유지한다. 먼저구현을커밋/푸시해보존하고순차검증을재개한다.
