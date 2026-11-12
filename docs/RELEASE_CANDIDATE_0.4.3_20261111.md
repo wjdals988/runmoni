@@ -1,3 +1,5 @@
+> 후속 공개 상태: [2026-11-12 전체 화면 UI·공유 게시 검증](RELEASE_REVIEW_0.4.3_20261112.md). <!-- verified-studio-release-0.4.3-v1 --> 아래의 미게시/시작 실패는 이전 후보 시점의 보존 이력이며,새 실제 APK출처는 게시 검증의 C를 따른다.
+
 # 0.4.3-dev 구현 검토 — APK 게시 보류
 
 기본 1:1 공유 이미지, 밝은 위젯, 지도 밖 조작 메뉴를 [PR47](https://github.com/wjdals988/runmoni/pull/47)로 main에 반영했다. 앱 설정은0.4.3-dev/code25지만 새 APK는 아직 생성되지 않았다. 서명 CI가 job 생성 전 `startup_failure`로 종료돼 APK·대시보드·피드 게시가 보류됐다.

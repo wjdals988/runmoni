@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.4.2-dev",
-    "versionCode": 24,
-    "fileName": "runmoni-0.4.2-dev.apk",
-    "sizeBytes": 219821173,
-    "sha256": "2cd7bd0a865ed75af64a6bf30b5e93e7e92259b7eb9467b0f06adb91c415b046",
+    "version": "0.4.3-dev",
+    "versionCode": 25,
+    "fileName": "runmoni-0.4.3-dev.apk",
+    "sizeBytes": 220148853,
+    "sha256": "47f0f70a18a64ba84fe59f7d7a6466287721b29ee77bc2fccf1fb3c60f1f9c07",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "176a9cbe1112efa05e9fc55d913738ee1778a57f",
+    "sourceRevision": "eb32a30d20b0223d436e80ca09c7c17e25d60c69",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.4.2-dev/runmoni-0.4.2-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.4.2-dev",
-    "notes": "프로필 연결 재시도·저장 경계를 수정하고 홈·탐색에 현재 지역명/근처 좌표를 추가한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.4.3-dev/runmoni-0.4.3-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.4.3-dev",
+    "notes": "전체 화면 UI와 기본1:1 사진·러닝 기록·미니미 공유를 개선한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

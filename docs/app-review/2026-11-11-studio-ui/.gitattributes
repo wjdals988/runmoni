@@ -1,2 +1,4 @@
 # Preserve original stdout/search evidence bytes; keep source whitespace checks unchanged.
 *.txt -whitespace
+# Preserve the exact Node coverage table bytes and their recorded SHA.
+dashboard-node-tests.log -whitespace

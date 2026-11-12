@@ -1,5 +1,7 @@
 # Runmoni 전체 화면 UI 개편 검토
 
+2026-11-12 한국 시간 후속 상태: 같은 키0.4.3-dev/code25 APK와 운영 대시보드를 공개·검증했다. 실제 APK출처는 `eb32a30d20b0223d436e80ca09c7c17e25d60c69`이며 [게시 검증](../../RELEASE_REVIEW_0.4.3_20261112.md)을 따른다. 아래 미게시·진행 중 문구는 당시 검토 이력이다. 업데이트 피드의 canonical bytes는 문서 PR 병합 뒤 별도 확인한다.
+
 사용자 요청의 frontend-design/ui-ux-pro-max를 적용한 미게시0.4.3-dev/code25 후보다. 폴더 날짜는 작업 시작 UTC 기준이며 재개일은2026-11-12 한국 시간이다. 구현·로컬 실행·실제 서명 APK·운영 다운로드를 구분한다. 공개 다운로드는 검증한0.4.2/code24를 유지한다.
 
 ## 방향과 적용
@@ -71,3 +73,5 @@ Root가 source2 원본5장과 source3 native target 원본3장을 열어 검토�
 실제OS파일선택·실제키로Morning Miles입력/IME중Back의48dp·안전영역·미니미이동,갤러리저장·실제chooser의별도UID수신기READ와쓰기/다른파일거부,갤러리/cache/receiver PNG전체bytes일치를확인했다. 결과Back과편집재진입의draft도확인했다. 실제SNS전송/휴대폰/Google/운영쓰기/서명APK실행은미검증이다. 지도는조작행이실제mapbounds밖임을확인했으며현재GPS·타일HTTP/콘텐츠·다른러너나새제공자인증은측정하지않았다.
 
 검토용기록/사진/갤러리/cache/수신출력을한정정리하고원래DB행/전체XML/프로필/account와소유설정/권한/전원을복원했다. 전/후/복원후6맵과설치APK쌍·검토도구불변을확인했다. `session-cleanup.json`에서정확한소유AVD934800종료를확인했다. 이전Launcher검토는이전입력baseline이며새전체UI의새Launcher결과로합산하지않는다.
+
+원문 Node coverage log의 두 행은 출력 표 정렬용 끝 공백을 포함한다. 기록한 SHA를 보존하기 위해 해당 `dashboard-node-tests.log`에만 whitespace 예외를 뒀으며 앱/검사 소스 규칙은 그대로다.

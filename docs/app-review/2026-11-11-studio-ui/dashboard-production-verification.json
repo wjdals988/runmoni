@@ -1,0 +1,105 @@
+{
+  "verifiedAtUtc": "2026-11-12T04:57:47.128027+00:00",
+  "productionVerified": true,
+  "dashboard": {
+    "repository": "wjdals988/mydashboard",
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/26",
+    "mergeRevision": "b83448d966d66118914e7d10598a37bba09e191e",
+    "mainCi": {
+      "runId": 43157941150,
+      "conclusion": "success",
+      "url": "https://github.com/wjdals988/mydashboard/actions/runs/43157941150"
+    },
+    "productionDeployment": {
+      "id": 7728819352,
+      "state": "success",
+      "environmentUrl": "https://mydashboard-p5etlabzx-wjdals988-6836s-projects.vercel.app"
+    },
+    "localNodeTests": {
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "observedAtUtc": "2026-11-12T04:53:12.757078+00:00",
+      "rawLog": "dashboard-node-tests.log",
+      "rawSha256": "0d2872e62415b7ac5ef445fab4c76939a9b1dd39f19cdc4b16145b33ff8f15e5",
+      "nodeVersion": "v24.19.0"
+    }
+  },
+  "productionPage": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "httpStatus": 200,
+    "checks": {
+      "http200": true,
+      "canonicalUrl": true,
+      "downloadAnchor": true,
+      "versionAndCode": true,
+      "fileSize": true,
+      "sha256": true,
+      "previewLabel": true,
+      "description": true,
+      "screenshotsProvenance": true,
+      "gallery_studio-studio-home": true,
+      "gallery_studio-studio-closet": true,
+      "gallery_studio-default-card": true,
+      "gallery_studio-map-clean": true
+    },
+    "responseSha256": "8ed6cab1f4d37f6409d645f1037e7a9b506fea587be5f32fdebebd2beb2f9af6"
+  },
+  "apk": {
+    "url": "https://github.com/wjdals988/runmoni/releases/download/v0.4.3-dev/runmoni-0.4.3-dev.apk",
+    "fileName": "runmoni-0.4.3-dev.apk",
+    "version": "0.4.3-dev",
+    "versionCode": 25,
+    "size": "220,148,853 bytes",
+    "sha256": "47f0f70a18a64ba84fe59f7d7a6466287721b29ee77bc2fccf1fb3c60f1f9c07",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.4.3-dev",
+    "label": "실기기 검증 전 개발 프리뷰 APK",
+    "sourceRevision": "eb32a30d20b0223d436e80ca09c7c17e25d60c69",
+    "sizeBytes": 220148853
+  },
+  "gallery": [
+    {
+      "path": "/reviews/runmoni/0.4.3-dev/studio-studio-home.png",
+      "httpStatus": 200,
+      "sizeBytes": 62943,
+      "sha256": "61a5b820708091f989102f7e8be46300470b3e46b7954edaf5a9646ec44c4158",
+      "source": "MainActivity",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.4.3-dev/studio-studio-closet.png",
+      "httpStatus": 200,
+      "sizeBytes": 65010,
+      "sha256": "c271b213059587e300e671bb2a6e39f4d6038c3ce45ebeaef386207c238d5c3d",
+      "source": "MainActivity",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.4.3-dev/studio-default-card.png",
+      "httpStatus": 200,
+      "sizeBytes": 39003,
+      "sha256": "865eba094ac58fa1049edf04b4684a26f01390cc76ce0702c2a02ad4b4ba38d0",
+      "source": "MainActivity",
+      "matchesCommittedOriginal": true
+    },
+    {
+      "path": "/reviews/runmoni/0.4.3-dev/studio-map-clean.png",
+      "httpStatus": 200,
+      "sizeBytes": 64806,
+      "sha256": "83aa8ad1ba2c4a0812742c3217e4afa24b75e0c424cb0105c0f78eb6fa8c7c77",
+      "source": "MainActivity",
+      "matchesCommittedOriginal": true
+    }
+  ],
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false,
+  "productionPartyWritesVerified": false,
+  "userVisualApproval": false,
+  "limits": [
+    "HTTP text/download anchor and four PNG bytes verified; browser clicks not inferred.",
+    "Each image retains its actual Android source; local TEST debug/API29 and synthetic data are not signed APK or physical-phone execution.",
+    "No APK body downloaded by this helper. Canonical raw update feed is a separate later check."
+  ]
+}

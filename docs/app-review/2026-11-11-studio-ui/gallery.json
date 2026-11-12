@@ -1,0 +1,80 @@
+{
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "eb32a30d20b0223d436e80ca09c7c17e25d60c69",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "b5f3e8d657d100cbc1f8bd9495797c183f857ede35fc4ffb5d782a8460e0f1ce"
+    }
+  },
+  "images": [
+    {
+      "key": "studio-studio-home",
+      "file": "live1-main-studio-home.png",
+      "sha256": "61a5b820708091f989102f7e8be46300470b3e46b7954edaf5a9646ec44c4158",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "8b28cfe9320ca807a33148c37a602c433b35a871f19ac2b0a7eee09f7c8fe5ca"
+      },
+      "caption": "홈 · 검토용 기록",
+      "alt": "홈의 승인 미니미와 러닝 시작. 수치는 합성 검토 기록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "studio-studio-closet",
+      "file": "live1-main-studio-closet.png",
+      "sha256": "c271b213059587e300e671bb2a6e39f4d6038c3ce45ebeaef386207c238d5c3d",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "8b28cfe9320ca807a33148c37a602c433b35a871f19ac2b0a7eee09f7c8fe5ca"
+      },
+      "caption": "옷장 · 미니미와 착용 목록",
+      "alt": "실제 앱 옷장의 캐릭터 미리보기, 분류 탭과 무료 아이템 목록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "studio-default-card",
+      "file": "live1-main-default-card.png",
+      "sha256": "865eba094ac58fa1049edf04b4684a26f01390cc76ce0702c2a02ad4b4ba38d0",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "8b28cfe9320ca807a33148c37a602c433b35a871f19ac2b0a7eee09f7c8fe5ca"
+      },
+      "caption": "기록 공유 · 기본1:1",
+      "alt": "합성 검토 기록과 현재 미니미를 담은 기본1:1 공유 편집 화면입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "studio-map-clean",
+      "file": "live1-main-map-clean.png",
+      "sha256": "83aa8ad1ba2c4a0812742c3217e4afa24b75e0c424cb0105c0f78eb6fa8c7c77",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "8b28cfe9320ca807a33148c37a602c433b35a871f19ac2b0a7eee09f7c8fe5ca"
+      },
+      "caption": "탐색 · 위치 확인 전",
+      "alt": "현재 위치 확인 전 탐색 지도와 지도 아래 조작 메뉴입니다. 실제 다른 러너 위치가 아닙니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ]
+}
