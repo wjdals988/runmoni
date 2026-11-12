@@ -1,11 +1,20 @@
 package com.runmoni.app.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 
@@ -44,9 +53,22 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
             Text(if (state.unifiedProfile.saving) "저장 중…" else "저장")
         }
     }) {
+        Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+            Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Icon(Icons.Outlined.AccountCircle, null, Modifier.size(32.dp), tint = RunmoniColors.Primary)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(state.profile.name, style = MaterialTheme.typography.titleMedium)
+                    Text(if (online) "온라인 프로필 연결됨" else "이 기기에 저장된 프로필",
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                }
+            }
+        }
         OutlinedTextField(name, { name = it; saveStartSerial = null; connectionStartSerial = null }, label = { Text("닉네임") }, singleLine = true,
             enabled = !state.unifiedProfile.saving && !state.unifiedProfile.connecting && !state.busy, isError = !valid,
             supportingText = { Text(NicknamePolicy.validationError(name) ?: "한글·영문·숫자 등 2~16자") },
+            shape = RunmoniShapes.Input,
+            colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = RunmoniColors.Paper, focusedContainerColor = RunmoniColors.Paper),
             modifier = Modifier.fillMaxWidth().testTag("profile_name"))
         state.unifiedProfile.connectedNickname?.takeIf { it != state.profile.name && it != name }?.let { serverName ->
             TextButton(onClick = { name = serverName; saveStartSerial = null; connectionStartSerial = null }, enabled = !busy && !identityChanged, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp)) {
@@ -71,17 +93,31 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
         } else {
             Text("기기 이름을 저장하거나, 이 닉네임으로 온라인 프로필을 연결할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
             Text("온라인 연결 시 서버에서 중복을 확인해요. 기존 계정과 기록을 자동으로 합치지 않아요.", style = MaterialTheme.typography.bodySmall)
-            Row {
-                Checkbox(checked = adultConfirmed, onCheckedChange = { adultConfirmed = it }, enabled = !busy,
-                    modifier = Modifier.testTag("profile_adult"))
-                Text("성인이며 크루·러너 기능을 이용할게요.", modifier = Modifier.weight(1f).padding(top = 12.dp))
+            Row(Modifier.fillMaxWidth().heightIn(min = 56.dp)
+                .toggleable(adultConfirmed, enabled = !busy, role = Role.Checkbox, onValueChange = { adultConfirmed = it })
+                .testTag("profile_adult"), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Checkbox(checked = adultConfirmed, onCheckedChange = null, enabled = !busy)
+                Text("성인이며 크루·러너 기능을 이용할게요.", modifier = Modifier.weight(1f).padding(vertical = 12.dp),
+                    style = MaterialTheme.typography.bodyMedium)
             }
             OutlinedButton(onClick = { saveStartSerial = null; connectionStartSerial = state.unifiedProfile.connectedSerial; actions.connectUnifiedProfile(NicknamePolicy.normalize(name), openedUid, openedBackend) },
                 enabled = valid && adultConfirmed && !busy && !identityChanged, shape = RunmoniShapes.Action,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("confirm_sign_in")) { Text(if (state.unifiedProfile.connecting) "연결 중…" else "이 닉네임으로 연결") }
         }
         if (identityChanged && !state.unifiedProfile.connecting) Text("연결 상태가 바뀌었어요. 닫고 프로필을 다시 열어 주세요.", color = RunmoniColors.CoralInk)
-        state.unifiedProfile.error?.let { Text(it, color = RunmoniColors.CoralInk, modifier = Modifier.testTag("profile_error")) }
-        Text("미니미와 옷은 ‘나 → 꾸미기’에서 바꿀 수 있어요.", style = MaterialTheme.typography.bodySmall)
+        state.unifiedProfile.error?.let {
+            Surface(color = RunmoniColors.CoralWash, shape = RunmoniShapes.Action) {
+                Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("profile_error")
+                        .semantics { liveRegion = LiveRegionMode.Polite })
+            }
+        }
+        HorizontalDivider(color = RunmoniColors.Line)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
+            Icon(Icons.Outlined.Palette, null, Modifier.size(20.dp), tint = RunmoniColors.Muted)
+            Text("미니미와 옷은 ‘나 → 꾸미기’에서 바꿀 수 있어요.", style = MaterialTheme.typography.bodyMedium,
+                color = RunmoniColors.Muted, modifier = Modifier.weight(1f))
+        }
     }
 }

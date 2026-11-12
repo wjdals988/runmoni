@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.runmoni.app.R
 import com.runmoni.app.domain.AppActions
 import com.runmoni.app.domain.AppEntryState
+import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.AppState
 import com.runmoni.app.domain.RunPhase
 import com.google.android.gms.base.R as GmsR
@@ -38,7 +41,7 @@ fun RunmoniRoot(
 ) {
     if (state.entry.requiresChoice && state.activeRun.phase == RunPhase.IDLE) {
         RunmoniTheme {
-            EntryScreen(state.entry, actions::startEntryGoogleSignIn, actions::continueAsGuest)
+            EntryScreen(state.entry, actions::startEntryGoogleSignIn, actions::continueAsGuest, state.profile.avatar)
         }
     } else {
         RunmoniApp(state, actions, updates, onCheckUpdates, onExternalAppLink)
@@ -46,7 +49,7 @@ fun RunmoniRoot(
 }
 
 @Composable
-internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: () -> Unit) {
+internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: () -> Unit, avatar: AvatarStyle = AvatarStyle()) {
     val googleEnabled = entry.googleConfigured && !entry.googleBusy && !entry.savingChoice
     val largeText = LocalDensity.current.fontScale >= 1.3f
     Surface(
@@ -72,18 +75,19 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    if (compact && !largeText) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            EntryLogo(48.dp)
-                            Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
-                                modifier = Modifier.weight(1f).semantics { heading() })
-                        }
-                    } else {
-                        EntryLogo(56.dp)
-                        Spacer(Modifier.height(24.dp))
-                        Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.semantics { heading() })
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        EntryLogo(40.dp)
+                        Text("runmoni", style = MaterialTheme.typography.titleLarge,
+                            color = RunmoniColors.Primary)
                     }
+                    if (!compact && !largeText && availableHeight >= 600.dp) {
+                        Spacer(Modifier.height(24.dp))
+                        StudioAvatarStage(avatar, Modifier.fillMaxWidth().height(136.dp), running = false)
+                    }
+                    Spacer(Modifier.height(if (compact) 20.dp else 24.dp))
+                    Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.semantics { heading() })
                     Spacer(Modifier.height(12.dp))
                     Text("로그인 방법을 선택해 주세요", style = MaterialTheme.typography.bodyLarge,
                         color = RunmoniColors.Muted)
@@ -113,15 +117,21 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
                     EntryFeedback(entry)
                     Spacer(Modifier.height(16.dp))
                     if (entry.googleConfigured) {
-                        TextButton(
+                        FilledTonalButton(
                             onClick = onGuest,
                             // Guest is deliberately available during Google sign-in:
                             // the controller cancels late results and keeps local use.
                             enabled = !entry.savingChoice,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
                             shape = RunmoniShapes.Action,
+                            colors = ButtonDefaults.filledTonalButtonColors(
+                                containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                        ) { Text("게스트로 시작", style = MaterialTheme.typography.labelLarge) }
+                        ) {
+                            Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
+                            Spacer(Modifier.width(12.dp))
+                            Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                        }
                     } else {
                         Button(
                             onClick = onGuest,
@@ -129,7 +139,11 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
                             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
                             shape = RunmoniShapes.Action,
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                        ) { Text("게스트로 시작", style = MaterialTheme.typography.labelLarge) }
+                        ) {
+                            Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
+                            Spacer(Modifier.width(12.dp))
+                            Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                        }
                     }
                     Spacer(Modifier.height(24.dp))
                     HorizontalDivider(color = RunmoniColors.Line)

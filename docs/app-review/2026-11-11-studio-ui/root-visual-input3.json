@@ -1,0 +1,31 @@
+{
+  "observedAtUtc": "2026-11-12T04:16:31.763926+00:00",
+  "images": [
+    {
+      "file": "native2-settings-320-200.png",
+      "sha256": "90f075ab1ecf5d4748b94b709556e33f5511fdd82ff7f9f48fbe99eeedb09841",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "sourceKind": "ComponentActivity fixture, not actual MainActivity",
+      "notes": "320dp/200% scrolled settings fixture: close remains visible; long Google description wraps. Not a full-page or authenticated backup verification."
+    },
+    {
+      "file": "native2-closet-320-200.png",
+      "sha256": "3102fb538798bc680b2307860a3f4cc623d99bdd51343ffc1d90f9260b8cc79a",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "sourceKind": "ComponentActivity fixture, not actual MainActivity",
+      "notes": "320dp/200% scrolled closet fixture: approved avatar and gender switch visible, horizontal tab strip intentionally scrolls; cropped viewport is not full item-list coverage."
+    },
+    {
+      "file": "native2-chat-input-default.png",
+      "sha256": "4273c36fdf6c9b2072d4aab04dc5bf3658765f6af34aa1d01684fb35c2de7710",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "sourceKind": "ComponentActivity fixture, not actual MainActivity",
+      "notes": "Compose target screenshot of chat/entry region at large text; body and multiline editor visible. Actual IME/back/full-message geometry assertions are in raw native test, not inferred from this crop."
+    }
+  ],
+  "userVisualApproval": false,
+  "wholeAppPixelPerfectionClaimed": false
+}

@@ -1,0 +1,72 @@
+{
+  "observedAtUtc": "2026-11-12T04:28:39.525509+00:00",
+  "actualRootViewImageReview": true,
+  "privacyReviewed": true,
+  "images": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "61a5b820708091f989102f7e8be46300470b3e46b7954edaf5a9646ec44c4158",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main home, approved avatar ready; only nonce synthetic run shown; no live weather/location fix claimed."
+    },
+    {
+      "file": "live1-main-studio-closet.png",
+      "sha256": "c271b213059587e300e671bb2a6e39f4d6038c3ce45ebeaef386207c238d5c3d",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main closet with approved avatar, gender choices, category strip and item/color groups. Original wallet excluded."
+    },
+    {
+      "file": "live1-main-default-card.png",
+      "sha256": "865eba094ac58fa1049edf04b4684a26f01390cc76ce0702c2a02ad4b4ba38d0",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main square default card editor; visible save/share actions. Synthetic completed run."
+    },
+    {
+      "file": "live1-main-photo-story.png",
+      "sha256": "7d0a56a55c7cfa2ef31ffc6526e02d0f96e53f7de7cf80c8315502aba4e092d8",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main selected synthetic photo/story ratio; no user photo or original GPS."
+    },
+    {
+      "file": "live1-main-mini-editor.png",
+      "sha256": "322947ac6b3aab26e8da32dce9a50b6b6bd2b0ea09eb339b975e3f5eaecf0931",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main edited caption and moved current avatar; source synthetic photo has visible REVIEW marking."
+    },
+    {
+      "file": "live1-main-map-clean.png",
+      "sha256": "83aa8ad1ba2c4a0812742c3217e4afa24b75e0c424cb0105c0f78eb6fa8c7c77",
+      "width": 480,
+      "height": 854,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Main map with outside action row and provider attribution; no GPS injected. Tile HTTP/content status and other runners not measured."
+    }
+  ],
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "syntheticCompletedRunAndPhoto": true,
+  "originalHistoryOrWalletPublished": false
+}

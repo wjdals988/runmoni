@@ -1,0 +1,50 @@
+{
+  "sourceInput": 2,
+  "actualRootViewImageReview": true,
+  "userVisualApproval": false,
+  "finalVisualApproval": false,
+  "images": [
+    {
+      "file": "android-review2-consumer-closet-native-items.png",
+      "sha256": "8ccf77dec8bc9dfc0bbee7f92aa326ff8fed33dfbf01aeff68740565887dcc46",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity controlled in-memory fixture"
+    },
+    {
+      "file": "android-review2-studio-profile-320-font2-fixture.png",
+      "sha256": "df26b44f096ba82cf61fd2f964f19bf42fd00db140ad11c95cc308bdb13d8d25",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity controlled in-memory fixture"
+    },
+    {
+      "file": "android-review2-home-360-100.png",
+      "sha256": "5741d11cc3e19fd451c1805cb6cd168f0dde9550a373cd7d3e33d76d3eb1589f",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity controlled in-memory fixture"
+    },
+    {
+      "file": "android-review2-running-active-fixture-360-100.png",
+      "sha256": "004e74b837a988bec09f30c182c8bfed79d10f843f089fbd43179f03a6d4e1a2",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity controlled in-memory fixture"
+    },
+    {
+      "file": "android-review2-home-weather-beside-320-fixture.png",
+      "sha256": "551d3dd7e203d68b58b271a4285929b822142a654e00031f2dae0f53b2ae6e8b",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Android ComponentActivity controlled in-memory fixture"
+    }
+  ],
+  "notes": [
+    "Closet item/colour state and approved sprite visible.",
+    "Enlarged profile closet action fits a single readable line.",
+    "Running image is an intentionally scrolled controls fixture; not an initial running overview.",
+    "Weather spatial fixture now shows the sprite after unchanged loading readiness condition.",
+    "Consumer original120s condition passed on source2; previous timeout retained and its specific cause remains unverified."
+  ]
+}

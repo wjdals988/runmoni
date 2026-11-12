@@ -16,8 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.AppActions
 import com.runmoni.app.domain.CloudAccountState
@@ -102,18 +106,33 @@ private fun RunRecordPageContent(
         Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
             .testTag("record_safe_content")) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
-                Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                    .heightIn(min = 64.dp).padding(start = 8.dp, end = pageGutter(), top = 4.dp, bottom = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("close_record")) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, "뒤로")
+                BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()) {
+                    val separateShare = maxWidth < 360.dp || LocalDensity.current.fontScale >= 1.3f
+                    val shareButton: @Composable () -> Unit = {
+                        FilledTonalButton(onClick = shareAction, shape = RunmoniShapes.Action,
+                            enabled = !operationBusy && actions.canShareRun(record),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                            modifier = Modifier.heightIn(min = 48.dp).testTag("share_run_record")
+                                .semantics { contentDescription = "공유 이미지 만들기" }.recordActionSnapshot(shareAction)) {
+                            Icon(Icons.Outlined.Share, null, Modifier.size(20.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("공유", style = MaterialTheme.typography.labelLarge)
+                        }
                     }
-                    Text("러닝 기록", style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.weight(1f).semantics { heading() })
-                    if (onShare != null) IconButton(onClick = shareAction,
-                        enabled = !operationBusy && actions.canShareRun(record),
-                        modifier = Modifier.size(48.dp).testTag("share_run_record").recordActionSnapshot(shareAction)) {
-                        Icon(Icons.Outlined.Share, "공유 이미지 만들기")
+                    Column {
+                        Row(Modifier.fillMaxWidth().heightIn(min = 64.dp)
+                            .padding(start = 8.dp, end = pageGutter(), top = 4.dp, bottom = 4.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("close_record")) {
+                                Icon(Icons.AutoMirrored.Outlined.ArrowBack, "뒤로")
+                            }
+                            Text("러닝 기록", style = MaterialTheme.typography.titleLarge,
+                                modifier = Modifier.weight(1f).semantics { heading() })
+                            if (onShare != null && !separateShare) shareButton()
+                        }
+                        if (onShare != null && separateShare) Row(Modifier.fillMaxWidth()
+                            .padding(start = pageGutter(), end = pageGutter(), bottom = 12.dp),
+                            horizontalArrangement = Arrangement.End) { shareButton() }
                     }
                 }
             }
@@ -123,19 +142,30 @@ private fun RunRecordPageContent(
                     .align(Alignment.TopCenter).verticalScroll(scroll).testTag("record_detail_scroll")
                     .padding(horizontal = pageGutter(), vertical = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                            color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
-                        DistanceNumber("${distance(record.distanceMeters)} km", RunmoniColors.Primary,
-                            modifier = Modifier.testTag("record_distance"), maxSize = 48f)
-                        Text("러닝 시간 ${duration(record.activeDurationMillis)} · 평균 ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km",
-                            style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("record_duration_pace"))
+                    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
+                                color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
+                            val recordedDistance = distance(record.distanceMeters)
+                            Row(Modifier.fillMaxWidth().testTag("record_distance")
+                                .clearAndSetSemantics { text = AnnotatedString("$recordedDistance km") },
+                                horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+                                Box(Modifier.weight(1f)) {
+                                    DistanceNumber(recordedDistance, RunmoniColors.Primary, maxSize = 48f)
+                                }
+                                Text("km", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted,
+                                    modifier = Modifier.padding(bottom = 4.dp))
+                            }
+                            HorizontalDivider(color = RunmoniColors.Line)
+                            Text("러닝 시간 ${duration(record.activeDurationMillis)} · 평균 ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km",
+                                style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("record_duration_pace"))
+                        }
                     }
 
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         RecordSectionTitle("러닝 경로")
                         Box(Modifier.fillMaxWidth()
-                            .height(if (LocalDensity.current.fontScale >= 1.3f) 300.dp else 260.dp)
+                            .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 280.dp)
                             .clip(RunmoniShapes.Surface).testTag("record_map")) {
                             MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true)
                         }
@@ -156,7 +186,7 @@ private fun RunRecordPageContent(
                         }
                     }
 
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         RecordSectionTitle("저장과 백업")
                         Text(if (record.synced) "서버 동기화됨" else "기기에 저장됨",
                             style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Primary,

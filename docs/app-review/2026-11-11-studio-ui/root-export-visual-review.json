@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-12T04:30:33.843401+00:00",
+  "file": "live1-receiver-export.png",
+  "sha256": "2c8d64020c7142d90170cb35368a07939b1a1ed6ce416a73f2e3af6d3f135258",
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "sourceKind": "Actual separate-UID recipient PNG bytes; not an Android app screenshot",
+  "syntheticPhotoAndCompletedRecord": true,
+  "identicalGalleryExport": {
+    "file": "live1-gallery-export.png",
+    "sha256": "2c8d64020c7142d90170cb35368a07939b1a1ed6ce416a73f2e3af6d3f135258",
+    "bytesExactlyEqual": true,
+    "separatelyViewedWithViewImage": false
+  },
+  "userVisualApproval": false,
+  "actualSnsDeliveryVerified": false
+}

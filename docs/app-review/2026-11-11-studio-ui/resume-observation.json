@@ -1,0 +1,15 @@
+{
+  "resumedAtUtc": "2026-11-12T02:18:13.697002+00:00",
+  "branch": "codex/runmoni-studio-ui",
+  "sourceMapsPreservedExactly": true,
+  "buildEvidencePreserved": true,
+  "interruptedBeforeAndroidInstallationCollectorStarted": true,
+  "priorAndroidExecutionCompleted": false,
+  "oldOwnedEmulatorPid": 887490,
+  "oldOwnedEmulatorFoundRunningAfterReconnect": true,
+  "oldOwnedEmulatorStoppedBeforePush": true,
+  "oldPidState": "Z",
+  "interruptionCauseVerified": false,
+  "environmentSettingsChangedForRecovery": false,
+  "sourceCommitAtBuildRetained": "1f2eea25fbed2d06743cb169173fc740aa9bf82b"
+}

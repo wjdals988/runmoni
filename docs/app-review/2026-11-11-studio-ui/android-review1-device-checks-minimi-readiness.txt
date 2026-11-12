@@ -1,0 +1,3 @@
+anonymous room disconnect confirmation: waitMillis=2297; timeoutMillis=120000
+device checks missing and local response: waitMillis=20; timeoutMillis=120000
+device checks manual results: waitMillis=16; timeoutMillis=120000

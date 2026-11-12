@@ -1,0 +1,44 @@
+{
+  "default": [
+    [
+      "chat-normal",
+      1,
+      [
+        "ui.AppInformationTest#fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls"
+      ],
+      false,
+      []
+    ],
+    [
+      "sharing-consent",
+      1,
+      [
+        "ui.RunmoniUiTest#approximateRunnerLocationRequiresDisclosureBeforeEnabling"
+      ],
+      false,
+      []
+    ]
+  ],
+  "native": [
+    [
+      "native-dialogs",
+      4,
+      [
+        "ui.RunmoniDialogDesignTest"
+      ],
+      true,
+      [
+        "settings-320-200",
+        "closet-320-200",
+        "chat-input-default"
+      ]
+    ]
+  ],
+  "sourceInput": 3,
+  "defaultMethods": 2,
+  "nativeMethods": 4,
+  "executed": false,
+  "staleLegacyConsentFixtureReplacedByCurrentRootFlow": true,
+  "chatLatestBodyFullBoundsAssertionAdded": true,
+  "originalConditionsAndNoAutomaticConsentPreserved": true
+}

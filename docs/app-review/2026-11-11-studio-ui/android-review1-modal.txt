@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.ModalDismissUiTest:...
+
+Time: 89.405
+
+OK (3 tests)
+
+

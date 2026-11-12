@@ -1,0 +1,96 @@
+{
+  "version": "0.4.3-dev",
+  "versionCode": 25,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "bd4c10e643d40e0fe3b382f4bd4f34db629e4be7",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "957267e5011d8b0b7a2044b379ee6dc5fbf3f998a91a40372ddf756d3b9cfab0"
+    }
+  },
+  "images": [
+    {
+      "file": "live8-main-default-card.png",
+      "sha256": "9e53c8f7bcc0c42dec50b30e22b6ea38feccbb00add78f5a12056235158aa347",
+      "width": 480,
+      "height": 854,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "key": "square-share",
+      "caption": "기본 1:1 공유",
+      "alt": "1:1이 기본 선택인 실제 러닝 공유 편집 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "main-review-bundle.json",
+        "sha256": "c050cb36f4a9c7550f5227744331c88b9622b4aca9cff47ecd06d967b547901e"
+      }
+    },
+    {
+      "file": "live8-main-photo-story.png",
+      "sha256": "ae9569f653bc6f9e1622c6195e622a365d9d1e85d65b456b46b1ce03c11926e7",
+      "width": 480,
+      "height": 854,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "key": "photo-story",
+      "caption": "사진과 러닝 기록",
+      "alt": "검토용 사진과 기록을 배치한 9:16 공유 편집 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "main-review-bundle.json",
+        "sha256": "c050cb36f4a9c7550f5227744331c88b9622b4aca9cff47ecd06d967b547901e"
+      }
+    },
+    {
+      "file": "live8-main-mini-editor.png",
+      "sha256": "d05c81cc01db212efbace208417b34912cf726113ce2569954efa5ec22aef691",
+      "width": 480,
+      "height": 854,
+      "sourceProof": {
+        "file": "live8.json",
+        "sha256": "0d975a3d31b770c706209f5a4e802771c3830a648d3f523bf054891b2c983963"
+      },
+      "key": "minimi-editor",
+      "caption": "미니미 배치",
+      "alt": "공유 이미지의 미니미 배치 조작 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "main-review-bundle.json",
+        "sha256": "c050cb36f4a9c7550f5227744331c88b9622b4aca9cff47ecd06d967b547901e"
+      }
+    },
+    {
+      "file": "map-live1-main-map-clean.png",
+      "sha256": "7002f14912664a561e5814fbc912a52c298df7d1507ebd78eaaeaa1b41a39c21",
+      "width": 480,
+      "height": 854,
+      "sourceProof": {
+        "file": "map-live1.json",
+        "sha256": "0b0f64a0fd51bf47b8514155e82c5d6e3c9403f656adca09087c652e964f3a23"
+      },
+      "key": "clean-map",
+      "caption": "넓게 보는 지도",
+      "alt": "지도 아래에 조작 메뉴를 둔 탐색 화면, 위치 권한 꺼짐",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "main-review-bundle.json",
+        "sha256": "c050cb36f4a9c7550f5227744331c88b9622b4aca9cff47ecd06d967b547901e"
+      }
+    }
+  ]
+}

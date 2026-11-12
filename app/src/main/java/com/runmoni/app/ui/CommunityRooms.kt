@@ -65,17 +65,32 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
         Box(Modifier.weight(1f)) {
             ScreenContent {
                 if (selected != null) {
-                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Text(selected.name, style = MaterialTheme.typography.headlineMedium,
-                            modifier = Modifier.semantics { heading() })
-                        AdaptiveActions(
-                            first = { modifier -> CommunityFact("활동 지역", selected.region.ifBlank { "지역 자유" }, modifier) },
-                            second = { modifier -> CommunityFact("러닝 페이스", selected.paceLabel.ifBlank { "자유 페이스" }, modifier) },
-                        )
-                        FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("멤버 ${selected.memberCount}명", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                            if (selected.joined) Text(if (selected.isOwner) "크루장으로 활동 중" else "가입한 크루",
-                                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                                Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary,
+                                    modifier = Modifier.padding(12.dp).size(28.dp))
+                            }
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text(selected.name, style = MaterialTheme.typography.headlineMedium,
+                                    modifier = Modifier.semantics { heading() })
+                                Text("멤버 ${selected.memberCount}명", style = MaterialTheme.typography.bodyMedium,
+                                    color = RunmoniColors.Muted)
+                            }
+                        }
+                        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+                            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                AdaptiveActions(
+                                    first = { modifier -> CommunityFact("활동 지역", selected.region.ifBlank { "지역 자유" }, modifier) },
+                                    second = { modifier -> CommunityFact("러닝 페이스", selected.paceLabel.ifBlank { "자유 페이스" }, modifier) },
+                                )
+                                if (selected.joined) Row(verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Icon(Icons.Outlined.CheckCircle, null, tint = RunmoniColors.Primary, modifier = Modifier.size(18.dp))
+                                    Text(if (selected.isOwner) "크루장으로 활동 중" else "가입한 크루",
+                                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                                }
+                            }
                         }
                     }
                     if (!state.serverConnected && !state.busy) RoomConnectionNotice(state, actions)
@@ -109,7 +124,10 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                         }
                         if (selected.joined) ScreenSection("참여 및 관리") {
                             Button(shape = RunmoniShapes.Action, onClick = { actions.openChat("crew:${selected.id}", selected.name) },
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) { Text("크루 공지 · 채팅") }
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp)) {
+                                Icon(Icons.Outlined.ChatBubbleOutline, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(8.dp)); Text("크루 공지 · 채팅")
+                            }
                             if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "crew:${selected.id}")
                             if (selected.isOwner) {
                                 OutlinedButton(shape = RunmoniShapes.Action, onClick = { manageId = selected.id },
@@ -120,16 +138,20 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                         } else SmallNote("크루에 가입하면 공지와 채팅에 참여할 수 있어요.")
                     }
                 } else {
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        Text("크루", style = MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.weight(1f).semantics { heading() })
-                        IconButton(onClick = actions::refreshCommunity, enabled = !state.busy,
-                            modifier = Modifier.size(48.dp).testTag("rooms_refresh")) { Icon(Icons.Outlined.Refresh, "크루 새로고침") }
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text("크루", style = MaterialTheme.typography.headlineLarge,
+                                modifier = Modifier.weight(1f).semantics { heading() })
+                            IconButton(onClick = actions::refreshCommunity, enabled = !state.busy,
+                                modifier = Modifier.size(48.dp).testTag("rooms_refresh")) { Icon(Icons.Outlined.Refresh, "크루 새로고침") }
+                        }
+                        Text("함께 달릴 크루를 찾아보세요.", style = MaterialTheme.typography.bodyLarge,
+                            color = RunmoniColors.Muted)
                     }
                     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         DestinationTabs(listOf("내 크루", "둘러보기"), section, { section = it }, "crews_section")
                         RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
-                        Button(shape = RunmoniShapes.Action, onClick = { connected("create") }, enabled = !state.busy,
+                        OutlinedButton(shape = RunmoniShapes.Action, onClick = { connected("create") }, enabled = !state.busy,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("create_crew")) {
                             Icon(Icons.Outlined.Add, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기")
                         }
@@ -140,7 +162,12 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                     if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(
                         if (query.isNotBlank()) "검색한 크루가 없어요" else if (section == 0) "가입한 크루가 없어요" else "등록된 크루가 없어요",
                         if (query.isNotBlank()) "다른 이름·지역·페이스로 검색해 보세요." else if (section == 0) "둘러보기에서 크루에 가입할 수 있어요." else "크루 만들기로 새 크루를 시작할 수 있어요.")
-                    Column { crews.forEach { crew -> key(crew.id) { CrewRoomCard(crew) { selectedCrewId = crew.id; detailSection = 0 } } } }
+                    if (crews.isNotEmpty()) Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(if (section == 0) "내 크루 ${crews.size}" else if (query.isNotBlank()) "검색 결과 ${crews.size}" else "크루 목록",
+                            style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Muted,
+                            modifier = Modifier.semantics { heading() })
+                        Column { crews.forEach { crew -> key(crew.id) { CrewRoomCard(crew) { selectedCrewId = crew.id; detailSection = 0 } } } }
+                    }
                     val legacy = state.parties.filter { it.joined && state.crews.none { crew -> crew.id == it.crewId } }
                     if (legacy.isNotEmpty()) Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         HorizontalDivider(color = RunmoniColors.Line)

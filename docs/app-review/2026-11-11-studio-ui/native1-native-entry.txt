@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AppEntryNativeUiTest:.
+
+Time: 19.091
+
+OK (1 test)
+
+

@@ -5,6 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DirectionsRun
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -110,8 +121,8 @@ internal fun HomeDateTime(nowMillis: Long, modifier: Modifier = Modifier, temper
         Text(time.format(DateTimeFormatter.ofPattern("M월 d일 E요일", Locale.KOREAN)),
             style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         Text(time.format(DateTimeFormatter.ofPattern("HH:mm", Locale.KOREAN)),
-            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Navy,
-            modifier = Modifier.testTag("home_current_time"))
+            style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum", fontWeight = FontWeight.SemiBold),
+            color = RunmoniColors.RouteBlue, modifier = Modifier.testTag("home_current_time"))
         if (temperatureC != null && temperatureC.isFinite()) Text(String.format(Locale.KOREAN, "%.0f°C", temperatureC),
             style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Primary,
             modifier = Modifier.testTag("home_header_temperature"))
@@ -143,7 +154,8 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
             Text("$areaTitle · ${area?.name?.let { "$it 부근" } ?: snapshot.location.nearbyCoordinates()}",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                 modifier = Modifier.testTag("home_current_area"))
-            Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC), style = MaterialTheme.typography.headlineSmall,
+            Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC),
+                style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"),
                 color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(String.format(Locale.KOREAN, "바람 %.1f m/s", snapshot.windMetersPerSecond),
@@ -178,15 +190,29 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
     Column(modifier.fillMaxWidth().testTag("home_weather"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (snapshot != null) WeatherStatus(state, nowMillis)
         if (advice != null) {
-            Text(advice.headline, style = MaterialTheme.typography.titleSmall,
-                color = if (advice.caution == WeatherCaution.HIGH) RunmoniColors.CoralInk else RunmoniColors.Navy,
-                modifier = Modifier.testTag("home_running_guidance"))
-            advice.detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted) }
+            val caution = advice.caution == WeatherCaution.HIGH
+            Surface(color = if (caution) RunmoniColors.CoralWash else RunmoniColors.BlueWash,
+                shape = RunmoniShapes.Surface) {
+                Row(Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.Top) {
+                    Icon(if (caution) Icons.Outlined.WarningAmber else Icons.Outlined.DirectionsRun,
+                        null, Modifier.size(24.dp),
+                        tint = if (caution) RunmoniColors.CoralInk else RunmoniColors.RouteBlue)
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(advice.headline, style = MaterialTheme.typography.titleSmall,
+                            color = if (caution) RunmoniColors.CoralInk else RunmoniColors.Navy,
+                            modifier = Modifier.testTag("home_running_guidance"))
+                        advice.detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted) }
+                    }
+                }
+            }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             TextButton(onClick = onRefresh, enabled = !loading, shape = RunmoniShapes.Action,
                 modifier = Modifier.heightIn(min = 48.dp).testTag("refresh_home_weather")) {
-                Text(if (loading) "확인 중…" else if (snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인")
+                Icon(Icons.Outlined.Refresh, null, Modifier.size(20.dp))
+                Text(if (loading) "확인 중…" else if (snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인",
+                    modifier = Modifier.padding(start = 8.dp))
             }
             if (snapshot != null) TextButton(onClick = { uri.openUri(RunningWeatherRepository.LICENSE_URL) },
                 shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("home_weather_source")) {

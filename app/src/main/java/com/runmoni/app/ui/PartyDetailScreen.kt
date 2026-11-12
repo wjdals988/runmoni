@@ -5,6 +5,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,23 +50,43 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                         .verticalScroll(partyScroll).testTag("party_content")
                         .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
                         verticalArrangement = Arrangement.spacedBy(RunmoniLayout.PageGap)) {
-                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(crew?.name ?: "이전 버전 파티", style = MaterialTheme.typography.bodyMedium,
-                                color = RunmoniColors.Primary, modifier = Modifier.testTag("parent_crew_name"))
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
+                                Text(crew?.name ?: "이전 버전 파티", style = MaterialTheme.typography.bodyMedium,
+                                    color = RunmoniColors.Primary, modifier = Modifier.testTag("parent_crew_name"))
+                            }
                             Text(party.title, style = MaterialTheme.typography.headlineMedium,
                                 modifier = Modifier.semantics { heading() })
-                            Text(if (party.kind == PartyKind.LOCAL) "현장 러닝" else "각자의 장소에서 함께 뛰기",
-                                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                            if (party.isOrganizer) Text("파티 주최자", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Icon(if (party.kind == PartyKind.LOCAL) Icons.Outlined.LocationOn else Icons.Outlined.NearMe,
+                                    null, tint = RunmoniColors.RouteBlue, modifier = Modifier.size(20.dp))
+                                Text(if (party.kind == PartyKind.LOCAL) "현장 러닝" else "각자의 장소에서 함께 뛰기",
+                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                            }
+                            if (party.isOrganizer || party.joined) Row(verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Icon(Icons.Outlined.CheckCircle, null, tint = RunmoniColors.Primary, modifier = Modifier.size(18.dp))
+                                Text(if (party.isOrganizer) "파티 주최자" else "참가 중인 파티",
+                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+                            }
                         }
-                        ScreenSection("일정 및 참가 정보", showDivider = false) {
-                            PartyFact("일정", dateTime(party.startsAtMillis))
-                            PartyFact("장소", if (party.kind == PartyKind.LOCAL) party.meetingLabel else "각자의 러닝 코스")
-                            AdaptiveActions(
-                                first = { modifier -> PartyFact("거리", "${party.distanceKm} km", modifier) },
-                                second = { modifier -> PartyFact("페이스", party.paceLabel, modifier) },
-                            )
-                            PartyFact("참가 인원", "${party.participantCount} / ${party.capacity}명")
+                        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+                            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                                Text("일정 및 참가 정보", style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.semantics { heading() })
+                                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    Icon(Icons.Outlined.Event, null, tint = RunmoniColors.RouteBlue, modifier = Modifier.size(24.dp))
+                                    PartyFact("일정", dateTime(party.startsAtMillis), Modifier.weight(1f))
+                                }
+                                PartyFact("장소", if (party.kind == PartyKind.LOCAL) party.meetingLabel else "각자의 러닝 코스")
+                                HorizontalDivider(color = RunmoniColors.Line)
+                                AdaptiveActions(
+                                    first = { modifier -> PartyFact("거리", "${party.distanceKm} km", modifier) },
+                                    second = { modifier -> PartyFact("페이스", party.paceLabel, modifier) },
+                                )
+                                PartyFact("참가 인원", "${party.participantCount} / ${party.capacity}명")
+                            }
                         }
                         if (party.cancelled) Text("종료된 파티예요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                         else if (crew == null) SmallNote("이전 버전에서 만든 파티예요. 새로운 파티는 크루 안에서 만들 수 있어요.")
@@ -77,7 +103,10 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                         }
                         if (party.joined && !party.cancelled && crew?.joined == true) ScreenSection("파티 소통") {
                             Button(shape = RunmoniShapes.Action, onClick = { actions.openChat("party:${party.id}", party.title); onDismiss() },
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("open_party_chat")) { Text("파티 공지 · 채팅") }
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("open_party_chat")) {
+                                Icon(Icons.Outlined.ChatBubbleOutline, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(8.dp)); Text("파티 공지 · 채팅")
+                            }
                             if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "party:${party.id}")
                         }
                         if (!party.cancelled && crew != null && !party.isOrganizer && party.joined) {

@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.*
 import androidx.activity.enableEdgeToEdge
 import android.view.WindowManager
@@ -54,6 +55,39 @@ abstract class RunmoniDesignTestBase {
         val loadingWaitStarted = android.os.SystemClock.uptimeMillis()
         try {
             compose.waitUntil(120_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+        } catch (failure: Throwable) {
+            // Failure-only evidence. Keep the same readiness condition, timeout and exception.
+            // Distinguish the fixed preview from a thumbnail, and full from clipped bounds.
+            runCatching {
+                val target = InstrumentationRegistry.getInstrumentation().targetContext
+                val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
+                val diagnostic = File.createTempFile("minimi-timeout-${Integer.toHexString(context.hashCode())}-", ".txt", directory)
+                val report = buildString {
+                    appendLine("case=$context")
+                    val loading = compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true)
+                    loading.fetchSemanticsNodes().forEachIndexed { index, node ->
+                        appendLine("loading[$index] id=${node.id} full=${node.positionInRoot}+${node.size} clipped=${node.boundsInRoot}")
+                        appendLine("displayed=${runCatching { loading[index].assertIsDisplayed() }.isSuccess}")
+                        var parent = node.parent
+                        while (parent != null) {
+                            appendLine("parent tag=${parent.config.getOrNull(SemanticsProperties.TestTag)} full=${parent.positionInRoot}+${parent.size} clipped=${parent.boundsInRoot}")
+                            parent = parent.parent
+                        }
+                    }
+                    Thread.getAllStackTraces().filter { (thread, _) ->
+                        thread.name == "main" || thread.name.startsWith("DefaultDispatcher")
+                    }.forEach { (thread, stack) ->
+                        appendLine("thread=${thread.name} state=${thread.state}")
+                        stack.take(24).forEach { appendLine(it.toString()) }
+                    }
+                }
+                diagnostic.writeText(report)
+                runCatching {
+                    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+                        .takeScreenshot(File(directory, diagnostic.nameWithoutExtension + ".png"))
+                }
+            }
+            throw failure
         } finally {
             val target = InstrumentationRegistry.getInstrumentation().targetContext
             File(target.cacheDir, "design-review").apply { mkdirs() }
@@ -221,7 +255,17 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         val after = compose.onNodeWithTag("chat_history").fetchSemanticsNode().config[SemanticsProperties.VerticalScrollAxisRange].value()
         assertEquals("Reader position changed on arrival", before, after, 1f)
         compose.onNodeWithTag("chat_jump_latest").performClick()
-        compose.onNodeWithText("새 메시지").assertIsDisplayed()
+        val latestMessage = compose.onNodeWithText("새 메시지")
+        val latestBody = latestMessage.fetchSemanticsNode()
+        val historyBounds = compose.onNodeWithTag("chat_history").fetchSemanticsNode().boundsInRoot
+        val latestTop = latestBody.positionInRoot.y
+        val latestBottom = latestTop + latestBody.size.height
+        val latestScroll = compose.onNodeWithTag("chat_history").fetchSemanticsNode().config[SemanticsProperties.VerticalScrollAxisRange]
+        File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review")
+            .apply { mkdirs() }.resolve("chat-latest-geometry.txt")
+            .writeText("body=${latestBody.positionInRoot}+${latestBody.size}; history=$historyBounds; scroll=${latestScroll.value()}/${latestScroll.maxValue()}\n")
+        latestMessage.assertIsDisplayed()
+        assertTrue("Full latest message body must be inside history", latestTop >= historyBounds.top - 1f && latestBottom <= historyBounds.bottom + 1f)
         compose.onNodeWithTag("chat_jump_latest").assertDoesNotExist()
         compose.onNodeWithTag("chat_input").performClick().performTextInput("러닝 준비됐어요")
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -270,18 +314,58 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
 
     @Test fun largeLocationConsentRemainsScrollableWithoutEnablingSharing() {
         requireNativeLargeViewport()
-        val state = mutableStateOf(AppState(signedIn = true, serverConnected = true))
+        val original = AppState(signedIn = true, serverConnected = true,
+            communityUid = "native-consent-fixture", communityBackend = CommunityBackend.FIREBASE,
+            activeRun = ActiveRun(id = "native-consent-run", phase = RunPhase.RUNNING), publicLocation = false)
+        val state = mutableStateOf(original)
         val actions = RunmoniUiTest.FakeActions(state)
-        compose.setContent { RunmoniTheme { LocationSharingToggle(state.value, actions) } }
-        compose.onNodeWithTag("share_location").performClick()
-        val message = compose.onNodeWithTag("dialog_message")
-        val range = message.fetchSemanticsNode().config[SemanticsProperties.VerticalScrollAxisRange]
+        compose.setContent { RunmoniApp(state.value, actions) }
+        compose.onNodeWithTag("nav_explore").performClick().assertIsSelected()
+        compose.onNodeWithTag("toggle_runner_sharing").performScrollTo()
+            .assertIsDisplayed().assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).performClick()
+        compose.runOnIdle {
+            assertEquals(listOf(true), actions.locationRequests)
+            assertEquals(original.activeRun.id, state.value.sharingConsentRunId)
+            assertTrue(state.value.sharingConsentNonce > 0)
+            assertTrue(actions.locationChanges.isEmpty())
+            assertTrue(actions.sharingConfirmations.isEmpty())
+            assertEquals(false, state.value.publicLocation)
+        }
+        compose.onNodeWithText("약 100m 단위", substring = true).assertExists()
+        compose.onNodeWithText("최장 75초", substring = true).assertExists()
+        val body = compose.onNodeWithTag("modal_scroll_body")
+        val range = body.fetchSemanticsNode().config[SemanticsProperties.VerticalScrollAxisRange]
         assertTrue("Large disclosure must be scrollable", range.maxValue() > 0)
+        compose.onNodeWithTag("confirm_runner_sharing").assertIsNotEnabled()
+        compose.onNode(isToggleable() and hasAnyAncestor(hasTestTag("form_dialog")), useUnmergedTree = true).assertIsOff()
         captureDevice("location-consent-system-200")
-        message.performTouchInput { swipeUp() }
-        assertTrue(range.value() > 0)
-        compose.onNodeWithTag("cancel_share_location").assertIsDisplayed().performClick()
-        compose.runOnIdle { assertTrue(actions.locationChanges.isEmpty()); assertEquals(false, state.value.publicLocation) }
+        val previousScroll = range.value()
+        body.performTouchInput { swipeUp() }
+        compose.waitForIdle()
+        assertTrue("Actual disclosure swipe moves the scroll position", range.value() > previousScroll)
+        compose.onNodeWithTag("confirm_runner_sharing").assertIsNotEnabled()
+        val cancel = compose.onNode(hasText("취소") and hasClickAction())
+        val safe = compose.onNodeWithTag("modal_safe_content").fetchSemanticsNode().boundsInRoot
+        listOf(compose.onNodeWithTag("confirmation_close"), compose.onNodeWithTag("confirm_runner_sharing"), cancel).forEach { action ->
+            val node = action.assertIsDisplayed().assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).fetchSemanticsNode()
+            assertTrue("Full consent action inside safe area", node.positionInRoot.x >= safe.left - 1f &&
+                node.positionInRoot.x + node.size.width <= safe.right + 1f && node.positionInRoot.y >= safe.top - 1f &&
+                node.positionInRoot.y + node.size.height <= safe.bottom + 1f)
+        }
+        val close = compose.onNodeWithTag("confirmation_close").fetchSemanticsNode()
+        assertTrue("Close remains above the scrolling disclosure", close.positionInRoot.y + close.size.height <= body.fetchSemanticsNode().boundsInRoot.top + 1f)
+        cancel.performClick()
+        compose.onNodeWithTag("form_dialog").assertDoesNotExist()
+        compose.onNodeWithTag("nav_explore").assertIsSelected()
+        compose.runOnIdle {
+            assertTrue(actions.locationChanges.isEmpty())
+            assertTrue(actions.sharingConfirmations.isEmpty())
+            assertEquals(false, state.value.publicLocation)
+            assertEquals(null, state.value.sharingConsentRunId)
+            assertEquals(original.activeRun, state.value.activeRun)
+            assertEquals(original.profile, state.value.profile)
+            assertEquals(original.records, state.value.records)
+        }
     }
 
     @Test fun nativePartyPickersAndStrictDateErrorRemainUsable() {

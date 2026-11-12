@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
@@ -122,16 +123,20 @@ internal fun AppVersionShortcut(updates: AppUpdateUiState, onClick: () -> Unit) 
 
 @Composable
 internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag: String = "app_version") {
-        Row(Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "버전 및 업데이트 정보 보기", onClick = onClick).testTag(tag).heightIn(min = 64.dp).padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-            BadgedBox(badge = {
-                if (updates.updateAvailable) Badge(Modifier.testTag("${tag}_red_dot").semantics { contentDescription = "새 버전 업데이트 가능" }, containerColor = MaterialTheme.colorScheme.error)
-            }) { Icon(Icons.Outlined.Info, null, Modifier.size(24.dp)) }
+    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+        Row(Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "버전 및 업데이트 정보 보기", onClick = onClick).testTag(tag).heightIn(min = 72.dp).padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Box(Modifier.size(40.dp).background(RunmoniColors.BlueWash, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+                Icon(Icons.Outlined.SystemUpdate, null, Modifier.size(24.dp), tint = RunmoniColors.RouteBlue)
+            }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("버전 ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.titleSmall)
                 Text(updates.description, style = MaterialTheme.typography.bodyMedium, color = if (updates.updateAvailable) RunmoniColors.Primary else RunmoniColors.Muted)
             }
+            if (updates.updateAvailable) Badge(Modifier.size(6.dp).testTag("${tag}_red_dot")
+                .semantics { contentDescription = "새 버전 업데이트 가능" }, containerColor = MaterialTheme.colorScheme.error)
             Icon(Icons.Outlined.ChevronRight, null, Modifier.size(24.dp))
         }
+    }
 }
 
 @Composable
@@ -158,6 +163,7 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("런모니", style = MaterialTheme.typography.headlineSmall)
                 if (BuildConfig.VERSION_NAME.contains('-')) Text("개발 프리뷰", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                Text("러닝 기록과 나의 미니미", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             }
         }
         AppVersionCard(updates, onClick = { if (updates.updateAvailable) updatePrompt = true else history = true }, tag = "about_app_version")
@@ -172,7 +178,7 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
         Text("앱 지원", style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
         AppLinkRow(Icons.Outlined.Dashboard, "런모니 웹사이트", "앱 소개와 다운로드", "link_dashboard") { open("https://coldbrewventi.vercel.app/projects/runmoni") }
         AppLinkRow(Icons.Outlined.Code, "GitHub", "소스 코드와 공개 릴리스", "link_github") { open(AppRelease.REPOSITORY) }
-        AppLinkRow(Icons.Outlined.Description, "오픈소스 라이선스", "라이브러리와 SDK 고지", "open_licenses") { licenses = true }
+        AppLinkRow(Icons.Outlined.Description, "오픈소스 라이선스", "라이브러리와 SDK 고지", "open_licenses", external = false) { licenses = true }
         AppLinkRow(Icons.Outlined.BugReport, "문제 신고", "GitHub에서 작성", "link_issue") {
             val body = "앱 버전: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})\nAndroid API: ${android.os.Build.VERSION.SDK_INT}\n\n문제 상황:\n\n재현 순서:\n1. \n\n기대 결과:\n\n실제 결과:\n\n개인 좌표·비밀번호·인증번호·토큰은 작성하지 마세요."
             open("${AppRelease.REPOSITORY}/issues/new?title=${Uri.encode("[Android] 문제 신고")}&body=${Uri.encode(body)}")
@@ -201,12 +207,14 @@ private fun AppVersionHistoryDialog(updates: AppUpdateUiState, onDismiss: () -> 
             HorizontalDivider(color = RunmoniColors.Line)
         }
         bundledAppHistory.forEach { entry ->
-            Column(Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(entry.version, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
-                Text("${entry.date} · ${entry.status}", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                Text(entry.date, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                Text(entry.status, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Primary)
                 entry.changes.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
             }
-            HorizontalDivider(color = RunmoniColors.Line)
+            }
         }
     }
 }
@@ -217,20 +225,31 @@ internal fun MileageExplanationDialog(onDismiss: () -> Unit, serverWallet: Boole
         Text("달리면 쌓이는 포인트", style = MaterialTheme.typography.titleMedium)
         Text("${if (serverWallet) "서버가 검증한 러닝" else "이 기기에 완료한 러닝"} 10m당 1P를 받아요. 지금은 모든 아이템이 무료라 포인트를 쓰지 않고 선택할 수 있어요.", style = MaterialTheme.typography.bodyLarge)
         if (serverWallet) SmallNote("지급 포인트는 GPS 검증 결과와 서버의 일일 한도에 따라 달라질 수 있어요.")
-        Text("1km → 100P\n5km → 500P\n10km → 1,000P", style = MaterialTheme.typography.titleSmall)
+        Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("거리별 적립 예시", style = MaterialTheme.typography.titleSmall)
+                listOf("1km" to "100P", "5km" to "500P", "10km" to "1,000P").forEach { (km, points) ->
+                    Text("$km → $points", style = MaterialTheme.typography.titleSmall,
+                        color = RunmoniColors.Primary)
+                }
+            }
+        }
         SmallNote("${if (serverWallet) "이 포인트는 테스트 서버에 보관되며 기기 포인트와 합산되지 않아요." else "이 포인트는 기기에 보관되며 테스트 서버 포인트와 합산되지 않아요."} Google 기록 요약 백업에는 포인트와 아이템이 포함되지 않아요. 현금 전환·결제·출금은 지원하지 않아요.")
     }
 }
 
 @Composable
-private fun AppLinkRow(icon: ImageVector, title: String, detail: String, tag: String, onClick: () -> Unit) {
+private fun AppLinkRow(icon: ImageVector, title: String, detail: String, tag: String, external: Boolean = true, onClick: () -> Unit) {
     Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).clickable(role = Role.Button, onClickLabel = title, onClick = onClick).testTag(tag).padding(vertical = 12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, null, Modifier.size(24.dp), tint = RunmoniColors.Primary)
+        Box(Modifier.size(40.dp).background(RunmoniColors.BlueWash, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+            Icon(icon, null, Modifier.size(24.dp), tint = RunmoniColors.RouteBlue)
+        }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(title, style = MaterialTheme.typography.titleSmall)
             Text(detail, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
         }
-        Icon(Icons.Outlined.OpenInNew, null, Modifier.size(24.dp))
+        Icon(if (external) Icons.Outlined.OpenInNew else Icons.Outlined.ChevronRight, null,
+            Modifier.size(20.dp), tint = RunmoniColors.Muted)
     }
 }
 
@@ -246,9 +265,9 @@ private fun OpenSourceLicensesDialog(onDismiss: () -> Unit) {
         if (entries.length() == 0) Text("고지 목록을 읽지 못했어요. GitHub의 THIRD_PARTY_NOTICES.md를 확인해 주세요.")
         for (index in 0 until entries.length()) {
             val entry = entries.getJSONObject(index)
-            TextButton(shape = RunmoniShapes.Action, onClick = { selectedText = entry.toString() }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("license_entry_$index")) {
-                Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) { Text(entry.getString("name"), style = MaterialTheme.typography.bodyMedium); Text(entry.optString("license"), style = MaterialTheme.typography.bodySmall) }
-            }
+            AppLinkRow(Icons.Outlined.Description, entry.getString("name"), entry.optString("license"),
+                "license_entry_$index", external = false) { selectedText = entry.toString() }
+            HorizontalDivider(color = RunmoniColors.Line)
         }
     }
     selectedText?.let { raw ->

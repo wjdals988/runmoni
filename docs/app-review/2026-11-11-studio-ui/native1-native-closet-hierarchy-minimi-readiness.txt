@@ -1,0 +1,3 @@
+native 320dp / font2 active Home action: waitMillis=19431; timeoutMillis=120000
+native 320dp / font2 gender and free closet: waitMillis=522; timeoutMillis=120000
+native 320dp / font2 main after closet: waitMillis=36; timeoutMillis=120000

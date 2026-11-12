@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.PopupNavigationUiTest:.
+
+Time: 34.494
+
+OK (1 test)
+
+

@@ -23,3 +23,7 @@ awesome-design-md의 기존 pinned Apple/Nike/Airbnb 참조는 유지한다. 새
 ## 2026-11-11: 공유·위젯·지도 보완
 
 기본1:1 공유의 위계, 밝은 위젯의 거리 중심 구성, 지도 바깥의 보조 조작을 적용했다. 실제 검색의 원문/재검색/공식 자료는 [공유 검토 근거](../../app-review/2026-11-11-run-share/README.md)에 보존한다. `glanceable widget information`의 일치는0건이었고 재검색도 제품 맥락에 맞지 않아 공식 Android 위젯 지침으로 보완했다. `contextual actions`의 NoGestureOnlyActions와 Compose typography/flat layout 결과는 적용했다. 결과에 기록된 upstream 버전/확인일을 런모니의 최신 시장 유행 측정이나 실제 의존성 업그레이드로 주장하지 않는다.
+
+## 2026-11-12: 전체 화면 Studio 개편
+
+기존 고정판을 유지해 시스템 검색/Compose typography/disclosure 재검색과 native 기본 체크를 적용했다. AI/보라·영상 홍보와 CTA 반복의 자동 시스템 추천은 채택하지 않았다. disclosure 재검색0결과를 검증된 일치라고 부르지 않으며 기존 native 기본 지침으로 보완했다. 디자인 계획/스킬 원문·실제 결과는 [새 검토 폴더](../../app-review/2026-11-11-studio-ui/README.md)에 보존한다. 현재 시장 유행이나 사용성 개선율을 측정한 결과가 아니다.

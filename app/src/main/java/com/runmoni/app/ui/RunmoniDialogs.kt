@@ -16,6 +16,11 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.CloudDone
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.FactCheck
+import androidx.compose.material.icons.outlined.DirectionsRun
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,11 +73,13 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                         AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
                         HorizontalDivider(color = RunmoniColors.Line)
                     }
-                    ScreenSection("프로필", showDivider = false) {
-                        DestinationRow("프로필", "닉네임과 계정", Icons.Outlined.AccountCircle,
-                            onOpenProfile, Modifier.testTag("settings_profile"))
+                    Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
+                            DestinationRow(state.profile.name, "프로필과 닉네임 관리", Icons.Outlined.AccountCircle,
+                                onOpenProfile, Modifier.testTag("settings_profile"))
+                        }
                     }
-                    ScreenSection("러닝과 위치") {
+                    SettingsGroup("러닝과 위치", Icons.Outlined.DirectionsRun) {
                         ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
                         ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
                         DestinationRow("러닝 알림", when {
@@ -82,7 +89,8 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                         }, Icons.Outlined.Notifications, actions::openRunNotificationSettings, Modifier.testTag("settings_run_notifications"))
                         LocationSharingToggle(state, actions)
                     }
-                    ScreenSection("기록 요약 백업") {
+                    SettingsGroup("기록 요약 백업", Icons.Outlined.CloudDone,
+                        "Google 계정에 보관한 러닝 요약") {
                         Text(if (state.cloud.configured) state.cloud.status else "이 앱에서는 Google 백업을 사용할 수 없어요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
                         if (state.cloud.uid.isBlank()) {
                             OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.communityGoogleLink.busy && !state.busy, shape = RunmoniShapes.Action, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
@@ -93,7 +101,8 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                         }
                         SmallNote("기록 상세에서 요약을 백업할 수 있어요. 러닝 경로·포인트·옷장은 포함되지 않아요.")
                     }
-                    ScreenSection("온라인 계정") {
+                    SettingsGroup("온라인 계정", Icons.Outlined.Groups,
+                        "크루 소속과 온라인 프로필") {
                         StatusPill(if (state.serverConnected && state.signedIn) "프로필 연결됨" else if (state.serverConnected) "둘러보기 가능" else "기기 기록 모드", if (state.serverConnected && state.signedIn) RunmoniColors.Green else RunmoniColors.Muted, "backend_status")
                         if (state.communityBackend == CommunityBackend.FIREBASE) {
                             val link = state.communityGoogleLink
@@ -112,11 +121,16 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "온라인 연결 해제" else "파일럿 로그아웃") }
                         else OutlinedButton(shape = RunmoniShapes.Action, onClick = onSignIn, enabled = !state.communityGoogleLink.busy && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
                     }
-                    ScreenSection("도움말 및 앱 정보") {
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = onAppInformation, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("settings_app_information")) { Icon(Icons.Outlined.Info, null, Modifier.size(24.dp)); Spacer(Modifier.width(8.dp)); Text("앱 정보 · 업데이트") }
-                        OutlinedButton(shape = RunmoniShapes.Action, onClick = { deviceChecks = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_device_checks")) { Text("연결·휴대폰 점검") }
+                    SettingsGroup("앱 지원", Icons.Outlined.Info) {
+                        DestinationRow("앱 정보와 업데이트", "버전 내역, 다운로드, 라이선스", Icons.Outlined.Info,
+                            onAppInformation, Modifier.testTag("settings_app_information"))
+                        HorizontalDivider(color = RunmoniColors.Line)
+                        DestinationRow("연결·휴대폰 점검", "연결 상태와 직접 확인한 항목", Icons.Outlined.FactCheck,
+                            { deviceChecks = true }, Modifier.testTag("open_device_checks"),
+                            iconContainer = RunmoniColors.BlueWash, iconTint = RunmoniColors.RouteBlue)
                         TextButton(shape = RunmoniShapes.Action, onClick = { connectionDetails = !connectionDetails }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("toggle_server_details").semantics { stateDescription = if (connectionDetails) "펼침" else "접힘" }) { Text(if (connectionDetails) "개발용 연결 설정 닫기" else "개발용 연결 설정") }
                         if (connectionDetails) {
+                            HorizontalDivider(color = RunmoniColors.Line)
                             Text(if (state.communityBackend == CommunityBackend.FIREBASE) "연결 방식: Firebase" else "연결 방식: HTTP 테스트 서버")
                             if (state.communityBackend != CommunityBackend.FIREBASE) OutlinedButton(shape = RunmoniShapes.Action, onClick = actions::useFirebaseCommunity, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("use_firebase_rooms")) { Text("Firebase 크루·파티 사용") }
                             SmallNote(state.serverStatus)
@@ -148,6 +162,29 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { disconnectRoom = false }) { Text("유지하기") } })
 }
 
+/** Settings groups describe a real task or account boundary, rather than a card per control. */
+@Composable
+internal fun SettingsGroup(title: String, icon: ImageVector, detail: String? = null,
+    content: @Composable ColumnScope.() -> Unit) {
+    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(Modifier.size(40.dp).background(RunmoniColors.BlueWash, RunmoniShapes.Action),
+                    contentAlignment = Alignment.Center) {
+                    Icon(icon, null, Modifier.size(24.dp), tint = RunmoniColors.RouteBlue)
+                }
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(title, style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics { heading() })
+                    if (!detail.isNullOrBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium,
+                        color = RunmoniColors.Muted)
+                }
+            }
+            content()
+        }
+    }
+}
+
 @Composable
 internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () -> Unit) {
     UnifiedProfileDialog(state, actions, onDismiss)
@@ -162,7 +199,7 @@ internal fun NewCrewDialog(actions: AppActions, state: AppState = AppState(), on
     var submitted by remember { mutableStateOf(false) }
     val previousId = remember { state.lastCreatedCrewId }
     LaunchedEffect(state.lastCreatedCrewId) { if (submitted && state.lastCreatedCrewId != previousId) onDismiss() }
-    FormDialog("크루 만들기", onDismiss, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createCrew(NewCrew(name.trim(), description.trim(), region.trim(), pace.trim())) }, enabled = name.trim().length in 2..60 && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_crew")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
+    FormDialog("크루 만들기", onDismiss, confirm = { Button(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createCrew(NewCrew(name.trim(), description.trim(), region.trim(), pace.trim())) }, enabled = name.trim().length in 2..60 && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_crew")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
         FormField("크루 이름", name, { if (it.length <= 60) name = it }, "crew_name")
         FormField("크루 소개", description, { description = it.take(500) }, "crew_description", singleLine = false)
         FormField("활동 지역", region, { region = it.take(80) }, "crew_region")
@@ -190,8 +227,17 @@ internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppStat
     var submitted by remember { mutableStateOf(false) }
     val previousId = remember { state.lastCreatedPartyId }
     LaunchedEffect(state.lastCreatedPartyId) { if (submitted && state.lastCreatedPartyId != previousId) onDismiss() }
-    FormDialog("파티 만들기", onDismiss, confirm = { TextButton(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createParty(NewParty(crewId, title.trim(), kind, time!!, if (kind == PartyKind.LOCAL) meeting.trim() else "각자의 러닝 코스", km!!, pace.trim(), max!!)) }, enabled = valid && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_party")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
-        Text(state.crews.firstOrNull { it.id == crewId }?.name ?: "먼저 크루에 가입해 주세요", style = MaterialTheme.typography.titleMedium)
+    FormDialog("파티 만들기", onDismiss, confirm = { Button(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createParty(NewParty(crewId, title.trim(), kind, time!!, if (kind == PartyKind.LOCAL) meeting.trim() else "각자의 러닝 코스", km!!, pace.trim(), max!!)) }, enabled = valid && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_party")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
+        Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+            Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Icon(Icons.Outlined.Groups, null, Modifier.size(24.dp), tint = RunmoniColors.Primary)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text("소속 크루", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                    Text(state.crews.firstOrNull { it.id == crewId }?.name ?: "먼저 크루에 가입해 주세요", style = MaterialTheme.typography.titleMedium)
+                }
+            }
+        }
         FormField("파티 이름", title, { if (it.length <= 80) title = it }, "party_title")
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { FilterChip(shape = RunmoniShapes.Action, selected = kind == PartyKind.LOCAL, onClick = { kind = PartyKind.LOCAL }, label = { Text("현장 모임") }, modifier = Modifier.heightIn(min = 48.dp).testTag("party_local")); FilterChip(shape = RunmoniShapes.Action, selected = kind == PartyKind.REMOTE, onClick = { kind = PartyKind.REMOTE }, label = { Text("원격 함께 뛰기") }, modifier = Modifier.heightIn(min = 48.dp).testTag("party_remote")) }
         AdaptiveActions(
@@ -318,13 +364,16 @@ internal fun CrewMembersDialog(state: AppState, crewId: String, actions: AppActi
 @Composable
 private fun FormRequestStatus(submitted: Boolean, busy: Boolean, error: String?, tag: String) {
     if (submitted && busy) LinearProgressIndicator(Modifier.fillMaxWidth().testTag("${tag}_progress"))
-    if (submitted && !busy && !error.isNullOrBlank()) Text(error, style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.error,
-        modifier = Modifier.fillMaxWidth().testTag("${tag}_error").semantics { liveRegion = LiveRegionMode.Polite })
+    if (submitted && !busy && !error.isNullOrBlank()) Surface(color = RunmoniColors.CoralWash, shape = RunmoniShapes.Action) {
+        Text(error, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.CoralInk,
+            modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("${tag}_error")
+                .semantics { liveRegion = LiveRegionMode.Polite })
+    }
 }
 
 @Composable
 private fun FormField(label: String, value: String, onChange: (String) -> Unit, tag: String, singleLine: Boolean = true, keyboardType: KeyboardType = KeyboardType.Text, hint: String? = null, error: String? = null) {
     val support: @Composable (() -> Unit)? = if (hint == null && error == null) null else { { Text(error ?: hint.orEmpty(), modifier = Modifier.testTag("${tag}_support")) } }
-    OutlinedTextField(shape = RunmoniShapes.Input, value = value, onValueChange = onChange, label = { Text(label) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag(tag), singleLine = singleLine, minLines = if (singleLine) 1 else 3, keyboardOptions = KeyboardOptions(keyboardType = keyboardType), isError = error != null, supportingText = support)
+    OutlinedTextField(shape = RunmoniShapes.Input, value = value, onValueChange = onChange, label = { Text(label) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag(tag), singleLine = singleLine, minLines = if (singleLine) 1 else 3, keyboardOptions = KeyboardOptions(keyboardType = keyboardType), isError = error != null, supportingText = support,
+        colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = RunmoniColors.Paper, focusedContainerColor = RunmoniColors.Paper))
 }

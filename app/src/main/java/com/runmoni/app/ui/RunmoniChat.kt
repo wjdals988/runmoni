@@ -73,7 +73,8 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
         .pointerInput(state.openedRoomId) { detectTapGestures { focusManager.clearFocus() } }
         .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
         .padding(vertical = 8.dp)) {
-        val compact = imeVisible || maxHeight < 480.dp
+        val compact = imeVisible || maxHeight < 480.dp ||
+            (LocalDensity.current.fontScale >= 1.3f && maxHeight < 720.dp)
         val composerMaxLines = if (maxHeight < 300.dp) 1 else if (compact) 2 else 4
         LaunchedEffect(maxHeight, compact) { if (followLatest) { withFrameNanos { }; scroll.scrollTo(scroll.maxValue) } }
         Surface(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize().align(Alignment.Center).testTag("chat_dialog").semantics {
@@ -82,10 +83,14 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
             Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp)) {
                 Row(Modifier.fillMaxWidth().heightIn(min = if (compact) 48.dp else 64.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(if (notice) "공지 작성 · ${state.openedRoomTitle}" else state.openedRoomTitle,
-                        style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.weight(1f).semantics { heading() },
-                        maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        if (!compact) Text(if (state.openedRoomId.startsWith("crew:")) "크루 대화" else "파티 대화",
+                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                        Text(if (notice) "공지 작성 · ${state.openedRoomTitle}" else state.openedRoomTitle,
+                            style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.semantics { heading() },
+                            maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
+                    }
                     Box {
                         IconButton(onClick = { menuExpanded = true }, modifier = Modifier.size(48.dp).testTag("chat_options")) { Icon(Icons.Outlined.MoreVert, "채팅 보기와 공지 설정") }
                         DropdownMenu(expanded = menuExpanded, onDismissRequest = { menuExpanded = false }) {
@@ -96,12 +101,12 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                     }
                     IconButton(onClick = close, modifier = Modifier.size(48.dp).testTag("close_chat")) { Icon(Icons.Outlined.Close, "채팅 닫기") }
                 }
-                if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) Text("연결 확인 중 · 저장된 메시지", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.testTag("chat_connection_status"))
-                if (!compact) FlowRow(Modifier.testTag("chat_filters"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(shape = RunmoniShapes.Action, selected = !noticesOnly, onClick = { noticesOnly = false }, label = { Text("전체 채팅") }, modifier = Modifier.heightIn(min = 48.dp))
-                    FilterChip(shape = RunmoniShapes.Action, selected = noticesOnly, onClick = { noticesOnly = true }, label = { Text("공지") }, modifier = Modifier.heightIn(min = 48.dp))
+                if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) Text("연결 확인 중 · 저장된 메시지", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.RouteBlue, modifier = Modifier.testTag("chat_connection_status"))
+                if (!compact) Column(Modifier.testTag("chat_filters")) {
+                    DestinationTabs(listOf("전체 채팅", "공지"), if (noticesOnly) 1 else 0,
+                        { noticesOnly = it == 1 }, "chat_scope")
                 }
-                HorizontalDivider(color = RunmoniColors.Line)
+                if (compact) HorizontalDivider(color = RunmoniColors.Line)
                 Box(Modifier.weight(1f).fillMaxWidth()) {
                     Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("chat_history"), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         if (messages.isEmpty()) {
@@ -110,18 +115,25 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                         }
                         messages.forEach { message ->
                             key(message.id) {
-                                Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start) {
-                                    Surface(shape = RunmoniShapes.Surface,
-                                        color = if (message.notice) RunmoniColors.Mint else if (message.mine) RunmoniColors.Primary else RunmoniColors.Paper,
-                                        contentColor = if (message.mine && !message.notice) RunmoniColors.OnDark else RunmoniColors.Navy,
-                                        modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
-                                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                            Text(if (message.notice) "공지 · ${message.author}" else message.author, style = MaterialTheme.typography.labelLarge)
-                                            Text(message.body, style = MaterialTheme.typography.bodyLarge)
-                                            Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall,
-                                                color = if (message.mine && !message.notice) RunmoniColors.OnDarkMuted else RunmoniColors.Muted)
-                                        }
+                                Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start,
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.Top,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                        if (message.notice) Icon(Icons.Outlined.Campaign, null, tint = RunmoniColors.RouteBlue,
+                                            modifier = Modifier.size(18.dp))
+                                        Text(if (message.notice) "공지 · ${message.author}" else message.author,
+                                            style = MaterialTheme.typography.labelLarge,
+                                            color = if (message.notice) RunmoniColors.RouteBlue else RunmoniColors.Navy)
                                     }
+                                    Surface(shape = RunmoniShapes.Surface,
+                                        color = if (message.notice) RunmoniColors.BlueWash else if (message.mine) RunmoniColors.MintWash else RunmoniColors.Paper,
+                                        contentColor = RunmoniColors.Navy,
+                                        modifier = Modifier.fillMaxWidth(if (compact || message.notice) 1f else 0.86f)) {
+                                        Text(message.body, style = MaterialTheme.typography.bodyLarge,
+                                            modifier = Modifier.padding(16.dp))
+                                    }
+                                    Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall,
+                                        color = RunmoniColors.Muted, modifier = Modifier.padding(horizontal = 4.dp))
                                 }
                             }
                         }

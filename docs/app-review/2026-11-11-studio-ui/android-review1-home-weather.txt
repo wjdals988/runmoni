@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.HomeWeatherLayoutTest:..
+
+Time: 46.207
+
+OK (2 tests)
+
+

@@ -1,0 +1,1 @@
+native entry 320dp / fontScale 2: waitMillis=19; timeoutMillis=120000

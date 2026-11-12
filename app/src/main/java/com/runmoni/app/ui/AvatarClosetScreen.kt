@@ -2,6 +2,8 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -16,11 +18,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.avatar.AvatarArtwork
@@ -48,7 +58,9 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             val previewHeight = if (largeText) 112.dp else 176.dp
             Column(Modifier.fillMaxSize()) {
                 PageTopBar("옷장", onDismiss, closeTag = "closet_close", actions = {
-                    IconButton(onClick = { playing = !playing }, modifier = Modifier.size(48.dp).testTag("closet_animation")) {
+                    IconButton(onClick = { playing = !playing }, modifier = Modifier.size(48.dp)
+                        .semantics { stateDescription = if (playing) "재생 중" else "멈춤" }
+                        .testTag("closet_animation")) {
                         Icon(if (playing) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
                             if (playing) "달리기 멈춤" else "달리기 재생")
                     }
@@ -57,12 +69,11 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                     Row(Modifier.weight(1f).widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                         .align(Alignment.CenterHorizontally).padding(horizontal = pageGutter()),
                         horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                        Surface(color = RunmoniColors.PrimarySoft, shape = RunmoniShapes.Surface,
+                        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface,
                             modifier = Modifier.width(if (largeText) 160.dp else 136.dp).fillMaxHeight()) {
                             Column(Modifier.padding(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                                    AvatarMini(profile.avatar, Modifier.width(96.dp).fillMaxHeight()
-                                        .testTag("closet_avatar_preview"), running = playing)
+                                    ClosetAvatarStage(profile.avatar, playing, Modifier.width(96.dp).fillMaxHeight())
                                 }
                                 GenderSelector(profile, actions, Modifier.fillMaxWidth())
                             }
@@ -108,13 +119,37 @@ private fun ClosetPreview(profile: Profile, actions: AppActions, playing: Boolea
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .padding(horizontal = pageGutter(), vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-            AvatarMini(profile.avatar, Modifier.width(height * 2f / 3f).height(height)
-                .testTag("closet_avatar_preview"), running = playing)
+            ClosetAvatarStage(profile.avatar, playing, Modifier.width(height * 2f / 3f).height(height))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("나의 미니미", style = MaterialTheme.typography.titleMedium)
                 Text("기본형", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                 GenderSelector(profile, actions, Modifier.fillMaxWidth())
             }
         }
+    }
+}
+
+/** A static track beneath the approved sprite, never a route or replacement artwork. */
+@Composable
+private fun ClosetAvatarStage(avatar: AvatarStyle, playing: Boolean, modifier: Modifier = Modifier) {
+    Box(modifier.background(RunmoniColors.MintWash, RunmoniShapes.Surface), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.matchParentSize().clearAndSetSemantics { }) {
+            val trackWidth = size.width * .82f
+            val trackHeight = size.height * .16f
+            val left = (size.width - trackWidth) / 2
+            val top = size.height - trackHeight - 5.dp.toPx()
+            repeat(3) { lane ->
+                val inset = lane * 4.dp.toPx()
+                val width = trackWidth - inset * 2
+                val height = trackHeight - inset * .7f
+                if (width > 0 && height > 0) drawOval(
+                    RunmoniColors.Primary.copy(alpha = .18f),
+                    topLeft = Offset(left + inset, top + inset * .35f),
+                    size = Size(width, height), style = Stroke(1.dp.toPx()),
+                )
+            }
+        }
+        AvatarMini(avatar, Modifier.fillMaxSize().testTag("closet_avatar_preview"), running = playing)
     }
 }
 
@@ -156,7 +191,7 @@ private fun ClosetItems(
             ClosetTabs(accessorySlots.map { it.key to it.label }, accessory, onAccessory, "closet_slot", edgePadding = 0.dp)
         }
         Spacer(Modifier.height(16.dp))
-        Text(slot.label, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+        Text(slot.label, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         Spacer(Modifier.height(4.dp))
         Text("모두 무료", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
         if (!AvatarArtwork.styleReady(profile.avatar)) {
@@ -169,26 +204,34 @@ private fun ClosetItems(
                 color = RunmoniColors.Muted, modifier = Modifier.testTag("closet_artwork_status"))
         }
         Spacer(Modifier.height(16.dp))
-        Column(Modifier.selectableGroup()) {
-            ready.forEach { variant ->
-                val selected = current == variant && !covered
-                Surface(color = if (selected) RunmoniColors.PrimarySoft else RunmoniColors.Cream,
-                    shape = RunmoniShapes.Action,
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)
-                        .selectable(selected, role = Role.RadioButton, onClick = { actions.equipItem(slot.key, variant) })
-                        .testTag("closet_${slot.key}_$variant")) {
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        // The fixed selected avatar remains visible. At large
-                        // text sizes give the item's full name the row width.
-                        if (!largeText) AvatarMini(profile.avatar.withSelectedItem(slot.key, variant), Modifier.width(32.dp).height(48.dp)
-                            .testTag("closet_preview_${slot.key}_$variant"), decorative = true)
-                        Text(if (variant == 0 && slot.key in setOf("hair", "top", "bottom", "shoes")) "기본 ${slot.label}" else slot.variants[variant],
-                            style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                        if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
+        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
+            Column(Modifier.fillMaxWidth().selectableGroup()) {
+                ready.forEach { variant ->
+                    val selected = current == variant && !covered
+                    Surface(color = if (selected) RunmoniColors.PrimarySoft else Color.Transparent,
+                        shape = RunmoniShapes.Action,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)
+                            .selectable(selected, role = Role.RadioButton, onClick = { actions.equipItem(slot.key, variant) })
+                            .testTag("closet_${slot.key}_$variant")) {
+                        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            // The fixed selected avatar remains visible. At large
+                            // text sizes give the item's full name the row width.
+                            if (!largeText) Box(Modifier.width(40.dp).height(56.dp)
+                                .background(RunmoniColors.Cream, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+                                AvatarMini(profile.avatar.withSelectedItem(slot.key, variant), Modifier.width(32.dp).height(48.dp)
+                                    .testTag("closet_preview_${slot.key}_$variant"), decorative = true)
+                            }
+                            Text(if (variant == 0 && slot.key in setOf("hair", "top", "bottom", "shoes")) "기본 ${slot.label}" else slot.variants[variant],
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                                modifier = Modifier.weight(1f))
+                            if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
+                            else Spacer(Modifier.size(20.dp))
+                        }
                     }
+                    HorizontalDivider(color = RunmoniColors.Line, modifier = Modifier.padding(horizontal = 12.dp))
                 }
-                HorizontalDivider(color = RunmoniColors.Line, modifier = Modifier.padding(horizontal = 12.dp))
             }
         }
         if (fabricRegion != null && currentReady && !covered) {
@@ -201,18 +244,22 @@ private fun ClosetItems(
 
 @Composable
 private fun GenderSelector(profile: Profile, actions: AppActions, modifier: Modifier = Modifier) {
-    Row(modifier.selectableGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(modifier.background(RunmoniColors.Paper, RunmoniShapes.Action).padding(4.dp)
+        .selectableGroup(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         AvatarGender.entries.forEach { gender ->
             val selected = profile.avatar.gender == gender
-            Column(Modifier.weight(1f).heightIn(min = 48.dp).selectable(selected, role = Role.RadioButton,
+            Column(Modifier.weight(1f).heightIn(min = 48.dp).clip(RunmoniShapes.Action)
+                .background(if (selected) RunmoniColors.PrimarySoft else Color.Transparent)
+                .selectable(selected, role = Role.RadioButton,
                 onClick = { actions.setAvatarGender(gender) }).testTag("closet_gender_${gender.wireValue}")
                 .padding(vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                 Text(gender.label, style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
                     color = if (selected) RunmoniColors.Primary else RunmoniColors.Muted)
                 Spacer(Modifier.height(4.dp))
-                HorizontalDivider(thickness = if (selected) 2.dp else 1.dp,
-                    color = if (selected) RunmoniColors.Primary else RunmoniColors.Line)
+                HorizontalDivider(modifier = Modifier.width(16.dp), thickness = 2.dp,
+                    color = if (selected) RunmoniColors.Primary else Color.Transparent)
             }
         }
     }
