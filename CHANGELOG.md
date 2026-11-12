@@ -1,3 +1,9 @@
+# 0.4.4-dev 트랙·선택 강조 공개 — 2026-11-12 한국 시간
+
+<!-- verified-expressive-release-0.4.4-v1 -->
+- 정적 민트/라임/클레이 트랙·홈 색띠·공통/옷장 탭 선택 색면과150ms전환을 반영했다. 같은 보관키/code26,실제 APK출처 `7d921417e63d41bac5942645f2d2a50f4e1d308a`,220,148,853bytes,SHA256 `5302f2a8275ac5e32533d7ca18d6b23033ef97a06d506042e9a63a84413ba48f`. 서명 CI43179710268 JVM189/lint0·경고87,운영13항목/PNG4/Node23개를 확인했다.
+- [게시 검증](docs/RELEASE_REVIEW_0.4.4_20261112.md). 최종 binary4 새JVM189/lint0·경고57,Android일반13/native3=새16과실제Main단일PASS/원본4·원래데이터/소유환경복원·AVD종료를확인했다.43의70/Launcher/사진Picker·gallery·receiver export는이번새결과로합산하지않는다. 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임·실제150ms시간/모든중간프레임·다른모션배율은별도다. system0배속설정읽기와그설정의조작은이번관측에포함한다. canonical raw피드는후속병합뒤확인한다.
+
 # 0.4.4-dev Android·실제 화면 검토 — 2026.11.12 한국 시간
 
 - 최종binary4에서새Android일반13/native옷장3=16개통과와원래XML/프로필/account·소유환경복원/3회6맵/설치쌍을확인했다. 실제system scale0읽기·그설정의조작은실제150ms/전체중간프레임·다른배율검증과다르다.

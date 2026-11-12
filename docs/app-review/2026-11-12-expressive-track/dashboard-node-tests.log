@@ -1,0 +1,45 @@
+
+> mydashboard@0.1.0 test
+> node --test --experimental-test-coverage --test-coverage-include=scripts/update-project-apk.mjs --test-coverage-lines=90 --test-coverage-branches=75 --test-coverage-functions=100 scripts/*.test.mjs
+
+✔ default catalog preserves all project facts and editorial order (2.124902ms)
+✔ search matches Korean names and case-insensitive English technology (0.311787ms)
+✔ multi-word search requires every term (0.142544ms)
+✔ Android includes unpublished APK projects (0.321221ms)
+✔ APK availability is independent of platform and development status (0.158187ms)
+✔ status and platform filters intersect (0.169724ms)
+✔ empty searches and reset are deterministic (0.188642ms)
+✔ recent sort is descending and never mutates source data (8.376192ms)
+✔ accepts internally consistent APK metadata (23.602011ms)
+✔ preserves a development version in the matching release and download URLs (1.46882ms)
+✔ rejects a digest that is not SHA-256 (0.183044ms)
+✔ rejects a release URL and asset URL version mismatch (0.221952ms)
+✔ rejects malformed byte labels (0.159659ms)
+✔ normalizes a raw byte count used by older release workflows (0.204716ms)
+✔ requires both semantic version and versionCode to increase (0.559387ms)
+✔ allows an exact retry but rejects replacing an existing release (0.196705ms)
+✔ compares numeric SemVer components (0.241441ms)
+✔ orders prereleases before stable releases with numeric identifier precedence (2.803008ms)
+✔ reconciles the visible description when a pending source is released (0.628701ms)
+✔ reconciles an existing development version without losing its prerelease label (0.718807ms)
+✔ updates a project file and reconciles its visible release version (24.475169ms)
+✔ dry run validates without changing the project file (3.616546ms)
+✔ main rejects missing options and unknown project slugs (2.740694ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 180.422694
+ℹ start of coverage report
+ℹ ----------------------------------------------------------------------------------------------------------------------------------------------
+ℹ file                    | line % | branch % | funcs % | uncovered lines
+ℹ ----------------------------------------------------------------------------------------------------------------------------------------------
+ℹ scripts                 |        |          |         | 
+ℹ  update-project-apk.mjs |  92.69 |    86.14 |  100.00 | 78-79 110-111 114-115 137-138 144-145 152-153 264-265 268-269 276-277 283-284 300-301
+ℹ ----------------------------------------------------------------------------------------------------------------------------------------------
+ℹ all files               |  92.69 |    86.14 |  100.00 | 
+ℹ ----------------------------------------------------------------------------------------------------------------------------------------------
+ℹ end of coverage report
