@@ -1,3 +1,7 @@
+# 최신 화면 구성 공개 — 0.5.0-dev, 2026-11-13
+
+<!-- verified-layout-renewal-release-0.5.0-v1 --> [게시 검증](docs/RELEASE_REVIEW_0.5.0_20261113.md). 실제 APK출처 df09c233f711dc5a0573daf4e030e53af51dddf8와 새 화면 구성/검증 경계를 따른다. 아래 후보/과거 설명은 당시 이력이며 승인 원본·데이터·접근성 규칙은 유지한다.
+
 # 2026-11-13 화면 구성 개편 후보
 
 frontend-design·ui-ux-pro-max를 적용해 홈/러닝/탐색/나·기록/옷장/크루·파티/공유·로그인·설정의 읽기·조작 순서를 재구성한다. [우선순위와 적용 이유](design-system/runmoni/pages/layout-renewal.md)와 [검토 근거](docs/app-review/2026-11-13-layout-renewal/README.md)를 따른다. 후보0.5.0-dev/code27이며 공개0.4.4의 실제 APK출처7d921417e63d41bac5942645f2d2a50f4e1d308a·피드는 새 서명·게시 전까지 유지한다. 원화/데이터/키/Rules·의존성은 유지하고 새 검증은 입력별로 구분한다. 휴대폰·Google·운영쓰기·사용자승인을 추정하지 않는다.

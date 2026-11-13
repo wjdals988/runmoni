@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.4.4-dev",
-    "versionCode": 26,
-    "fileName": "runmoni-0.4.4-dev.apk",
-    "sizeBytes": 220148853,
-    "sha256": "5302f2a8275ac5e32533d7ca18d6b23033ef97a06d506042e9a63a84413ba48f",
+    "version": "0.5.0-dev",
+    "versionCode": 27,
+    "fileName": "runmoni-0.5.0-dev.apk",
+    "sizeBytes": 220181621,
+    "sha256": "006086f4786e209bcce46d4815ad9ee8891ca5b9d2ac108c56b946ce25f813c5",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "7d921417e63d41bac5942645f2d2a50f4e1d308a",
+    "sourceRevision": "df09c233f711dc5a0573daf4e030e53af51dddf8",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.4.4-dev/runmoni-0.4.4-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.4.4-dev",
-    "notes": "미니미 주변 트랙과 분류 탭 선택 강조를 더한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.5.0-dev/runmoni-0.5.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.5.0-dev",
+    "notes": "홈·러닝·기록·옷장·크루 화면 구성을 개편한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

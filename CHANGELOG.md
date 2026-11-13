@@ -1,3 +1,9 @@
+# 0.5.0-dev 화면 구성 개편 공개 — 2026-11-13 한국 시간
+
+<!-- verified-layout-renewal-release-0.5.0-v1 -->
+- 홈 출발/러닝 행동·현재 수치/경로·캐릭터/기간 기록·옷장 작업영역·소속 파티·기록/공유 편집의 구성을 개편했다. 같은 보관키/code27,실제 APK출처 df09c233f711dc5a0573daf4e030e53af51dddf8,220,181,621bytes,SHA256 006086f4786e209bcce46d4815ad9ee8891ca5b9d2ac108c56b946ce25f813c5. 서명 CI43416932734 JVM189/lint0·경고87,운영13항목/PNG4/Node23개를 확인했다.
+- [게시 검증](docs/RELEASE_REVIEW_0.5.0_20261113.md). 최종 binary3 새JVM189/lint0·경고57,동일입력 정상51+분리옷장5+native13=고유69와 실제Main 단일PASS/원본5·갤러리선택4·원래데이터/소유환경복원·AVD종료를 구분한다. ar2는 전체false로 유지하며 일반56 단일phasePASS를 주장하지 않는다. native13에는320/font2 12건과480/font1 IME1건이 포함된다. 입력1/2·27부분통과/Consumer의 HomeClock Main스레드 예외/Root중단은 원문으로 보존하고69에 합산하지 않는다. 입력3의30초semantics대기 실패와 원인미확정도 남기고 같은APK 분리재검사5의 결과만 대체했다. 이전44의16/43의70/Launcher/사진Picker·갤러리·receiver export는 이번 새 Main 결과가 아니다. 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임과 실제150ms시간/모든프레임·다른모션배율은 별도다. canonical raw피드는 후속 병합 뒤 확인한다.
+
 # 2026-11-13 화면 구성 개편 후보
 
 frontend-design·ui-ux-pro-max를 적용해 홈/러닝/탐색/나·기록/옷장/크루·파티/공유·로그인·설정의 읽기·조작 순서를 재구성한다. [우선순위와 적용 이유](design-system/runmoni/pages/layout-renewal.md)와 [검토 근거](docs/app-review/2026-11-13-layout-renewal/README.md)를 따른다. 후보0.5.0-dev/code27이며 공개0.4.4의 실제 APK출처7d921417e63d41bac5942645f2d2a50f4e1d308a·피드는 새 서명·게시 전까지 유지한다. 원화/데이터/키/Rules·의존성은 유지하고 새 검증은 입력별로 구분한다. 휴대폰·Google·운영쓰기·사용자승인을 추정하지 않는다.

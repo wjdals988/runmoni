@@ -1,3 +1,9 @@
+# 0.5.0-dev 화면 구성 개편 공개 — 2026-11-13 한국 시간
+
+<!-- verified-layout-renewal-release-0.5.0-v1 -->
+- 홈 출발/러닝 행동·현재 수치/경로·캐릭터/기간 기록·옷장 작업영역·소속 파티·기록/공유 편집의 구성을 개편했다. 같은 보관키/code27,실제 APK출처 df09c233f711dc5a0573daf4e030e53af51dddf8,220,181,621bytes,SHA256 006086f4786e209bcce46d4815ad9ee8891ca5b9d2ac108c56b946ce25f813c5. 서명 CI43416932734 JVM189/lint0·경고87,운영13항목/PNG4/Node23개를 확인했다.
+- [게시 검증](docs/RELEASE_REVIEW_0.5.0_20261113.md). 최종 binary3 새JVM189/lint0·경고57,동일입력 정상51+분리옷장5+native13=고유69와 실제Main 단일PASS/원본5·갤러리선택4·원래데이터/소유환경복원·AVD종료를 구분한다. ar2는 전체false로 유지하며 일반56 단일phasePASS를 주장하지 않는다. native13에는320/font2 12건과480/font1 IME1건이 포함된다. 입력1/2·27부분통과/Consumer의 HomeClock Main스레드 예외/Root중단은 원문으로 보존하고69에 합산하지 않는다. 입력3의30초semantics대기 실패와 원인미확정도 남기고 같은APK 분리재검사5의 결과만 대체했다. 이전44의16/43의70/Launcher/사진Picker·갤러리·receiver export는 이번 새 Main 결과가 아니다. 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임과 실제150ms시간/모든프레임·다른모션배율은 별도다. canonical raw피드는 후속 병합 뒤 확인한다.
+
 # 2026-11-13 화면 구성 개편 후보
 
 frontend-design·ui-ux-pro-max를 적용해 홈/러닝/탐색/나·기록/옷장/크루·파티/공유·로그인·설정의 읽기·조작 순서를 재구성한다. [우선순위와 적용 이유](design-system/runmoni/pages/layout-renewal.md)와 [검토 근거](docs/app-review/2026-11-13-layout-renewal/README.md)를 따른다. 후보0.5.0-dev/code27이며 공개0.4.4의 실제 APK출처7d921417e63d41bac5942645f2d2a50f4e1d308a·피드는 새 서명·게시 전까지 유지한다. 원화/데이터/키/Rules·의존성은 유지하고 새 검증은 입력별로 구분한다. 휴대폰·Google·운영쓰기·사용자승인을 추정하지 않는다.
@@ -24,6 +30,8 @@ frontend-design·ui-ux-pro-max를 적용해 홈/러닝/탐색/나·기록/옷장
 - 순차 작업 중에도 지연이 재발했다는 2026-10-24 사용자 보고가 있다. 이를 해결된 문제로 취급하지 말고, 증상 재발 시 추가 대량 전송을 중단하고 원인·영향을 다시 확인한다.
 
 ## 변경 이력
+
+- 2026-11-13 공개:0.5.0-dev/code27 화면 구성 전면 개편. <!-- verified-layout-renewal-release-0.5.0-v1 --> 실제 APK출처 df09c233f711dc5a0573daf4e030e53af51dddf8를 후속 문서/피드로 바꾸지 않는다. [게시 근거](docs/RELEASE_REVIEW_0.5.0_20261113.md). 같은키 서명 CI43416932734 JVM189/lint0·최종binary3 새189/동일입력정상51+분리옷장5+native13=고유69·실제Main단일PASS/제한된5화면·운영13+PNG4를 구분한다. native13은320/font2 12건+480/font1 IME1건이다. 이전44의16/43의70/Launcher·사진Picker/갤러리/receiver export는 이번새Main결과가 아니다. 원래데이터/소유환경복원·AVD종료와 과거실패/출처를 보존하며 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임·실제150ms시간/모든프레임·다른모션배율은 별도다. 새키/Rules/의존성/원화 없이 기존데이터·원본을 유지했다.
 
 - 2026-11-12 공개:0.4.4-dev/code26 정적 미니미트랙·홈색띠·분류탭선택강조. <!-- verified-expressive-release-0.4.4-v1 --> 실제 APK출처 `7d921417e63d41bac5942645f2d2a50f4e1d308a`를 후속 문서/피드로 바꾸지 않는다. [게시 근거](docs/RELEASE_REVIEW_0.4.4_20261112.md). 같은키 서명 CI43179710268 JVM189/lint0·최종binary4새189/Android일반13+native3=새16·실제Main단일PASS/Root원본4·운영13+PNG4를 구분한다. 이전43의70/Launcher/사진Picker·갤러리·receiver export는 이번새결과가 아니다. 원래데이터/환경복원·AVD종료와 과거실패/출처를보존하고 휴대폰/Google/SNS/네이버운영·사용자승인·공개서명APK런타임·실제150ms시간/모든프레임·다른모션배율은별도다. system0설정읽기와조작은이번관측으로구분한다. 새키/Rules/의존성/원화없이기존데이터·원본을유지했다.
 

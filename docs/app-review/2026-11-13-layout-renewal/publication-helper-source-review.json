@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-11-13T11:34:37.408242+00:00",
+  "reviewer": "benchmark_design_review",
+  "kind": "read-only source review, not publication success",
+  "firstSignedSource": "9a4ef0eba5b0a981b880dfa81b296e96f80b9699",
+  "firstCiRun": 43414902441,
+  "freshSigningSource": "df09c233f711dc5a0573daf4e030e53af51dddf8",
+  "freshCiRun": 43416932734,
+  "implementationPr": 53,
+  "releaseNotesSupplementPr": 54,
+  "findings": [
+    "No source provenance conflation found in prepared helpers.",
+    "Publication still requires actual CI2 success, three assets, current source C2 and canonical dashboard proof.",
+    "Missing notes is based on separately verified absence at C1; upload log itself reports a generic plan blocker."
+  ],
+  "helperExecutedByReviewer": false,
+  "publicationVerifiedByReviewer": false
+}
