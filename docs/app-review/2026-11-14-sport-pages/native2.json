@@ -1,0 +1,245 @@
+{
+  "name": "native2",
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "binaryReference": "binary-build4.json",
+  "reviewPhase": "native",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-13T17:16:46.403587+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 15,
+  "actualPassedProductMethods": 0,
+  "groups": [
+    {
+      "name": "native-form-pages",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.ModalDismissNativeUiTest"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native2-native-form-pages.txt",
+      "startedAtUtc": "2026-11-13T17:18:30.271447+00:00",
+      "actual": null,
+      "rawSha256": "f64dd3e618b35d2f7fc6eee6c23f10e783985b50f5ae7ef38fc18dadc167af77",
+      "elapsedSeconds": 51.15,
+      "finishedAtUtc": "2026-11-13T17:19:21.425758+00:00",
+      "minimiReadinessRaw": "native2-native-form-pages-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "cddd16d6f7383c4312d2c00250f0a443de3474a17e4d14c59b38b3a0b55106a3",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "pageWindowGeometry": "native2-native-form-page-bounds.jsonl",
+      "pageWindowGeometrySha256": "3028f9a6690c07170d22fa0b177486a9a4f9ee05a5dcd6f3873684fefea4301d",
+      "privateFailureCapture": "native2-private-form-bounds-failure.png",
+      "privateFailureCaptureSha256": "5810d2b9943089ad7cdddb06ded1d18536a23119761ec5a747b19cedc5067ac8",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "native-large-text",
+      "expected": 12,
+      "classes": [
+        "com.runmoni.app.ui.RunmoniDialogDesignTest",
+        "com.runmoni.app.ui.AppEntryNativeUiTest",
+        "com.runmoni.app.ui.AppInformationNativeTest",
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest",
+        "com.runmoni.app.ui.ClosetNavigationNativeUiTest",
+        "com.runmoni.app.ui.RunningKitColorsNativeUiTest",
+        "com.runmoni.app.ui.RunRecordScreenNativeUiTest",
+        "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native2-native-large-text.txt",
+      "startedAtUtc": "2026-11-13T17:20:12.222868+00:00",
+      "rawSha256": "f79004e567f59a5fbbcc8eca99ef73d9305df92018a760a1bf84b1ae94207195",
+      "elapsedSeconds": 135.67,
+      "finishedAtUtc": "2026-11-13T17:22:27.890805+00:00",
+      "minimiReadinessRaw": "native2-native-large-text-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "f010f49cab1417614f5712a7362b4eea00c63b0f9a6d96fee3065fc1649586c4",
+      "minimiReadinessPerformanceSlaClaimed": false
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "native2-executed-driver.py",
+  "executedDriverSha256": "e4ca01813f20f1907f60ef5e096c8a02f7c58425ccde93d00543cc2ee5bdd315",
+  "observerHelper": "native2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native modal cases inspect actual OS/IME insets and injected test controls at320dp/font2. They do not verify phone authentication."
+  ],
+  "updatedAtUtc": "2026-11-13T17:23:17.031119+00:00",
+  "binaryReferenceSha256": "778ed6433a0f3f937151d9c76988b6bf26a82ec92d35708a0f15b116fed62aba",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 105,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "e88bbe47082204d0ae638e33bbb82151649aae2c4ca4812eaad50ad49833812e"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "caa1bbca5580560143913d9c5799f0ff5ba56648aaf6b37284be15d7bf796002"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "native2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "native2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "native2-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "failureType": "KeyboardInterrupt",
+  "failure": "Review operation failed; inspect preserved raw group/private diagnostics",
+  "privateFailureScreenshot": "native2-private-failure.png",
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 2,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 105,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-13T17:23:17.031102+00:00"
+}

@@ -1,0 +1,42 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "observedAtUtc": "2026-11-13T17:26:44.296064+00:00",
+  "binaryReference": "binary-build4.json",
+  "nativeParentPassed": false,
+  "rootStoppedCollectorAfterCriticalFailure": true,
+  "notFinalPassedScope": true,
+  "sameThreadSemanticAndLayoutCoordinatesAgree": true,
+  "actualSubmitBottomPx": 764,
+  "actualOsImeSafeBottomPx": 413,
+  "actualBottomOcclusionPx": 351,
+  "activitySoftInputMode": 16,
+  "privateFailureScreenshotActuallyViewed": true,
+  "screenshotWasSyntheticInputFixtureNotMainActivity": true,
+  "screenshotPublished": false,
+  "observedBehavior": "API29 editable page keeps full body while IME covers Save; semantic/layout APIs agree, so changing coordinate APIs cannot resolve the observed coverage",
+  "fix": "Reuse working API29 framework fit/resize policy for editable pages and consume fitted insets once; restore owned window flags/mode on exit",
+  "assertionsOrTimeoutRelaxed": false,
+  "proofReferences": [
+    {
+      "file": "native2.json",
+      "sha256": "4c8ec29800a520087b934001c1638f7fcd79fc8575f6b25c6df87107661c5cd1"
+    },
+    {
+      "file": "native2-native-form-pages.txt",
+      "sha256": "f64dd3e618b35d2f7fc6eee6c23f10e783985b50f5ae7ef38fc18dadc167af77"
+    },
+    {
+      "file": "native2-native-form-page-bounds.jsonl",
+      "sha256": "3028f9a6690c07170d22fa0b177486a9a4f9ee05a5dcd6f3873684fefea4301d"
+    },
+    {
+      "file": "input4-stop-reason.json",
+      "sha256": "24dc362c5baaa1d1f5048069baf9b7bee4e6d4ea64034b3a6d56d6e25ef037b8"
+    },
+    {
+      "file": "session-cleanup-input4.json",
+      "sha256": "a6bf04792f517491029e529e0c227104a8861100c50ee04496024758ef88669c"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "observedAtUtc": "2026-11-13T17:09:30.865044+00:00",
+  "previousStatus": 401,
+  "currentApiStatus": 200,
+  "ghCliReadSucceeded": true,
+  "featurePushSucceeded": true,
+  "pullRequest": {
+    "headRefOid": "9009d6d23928d59a03a9549792811c84f6b5747e",
+    "isDraft": true,
+    "state": "OPEN",
+    "url": "https://github.com/wjdals988/runmoni/pull/56"
+  },
+  "credentialValuesRecorded": false,
+  "rootCauseConfirmed": false,
+  "ownerReconnectionNoLongerRequired": true
+}

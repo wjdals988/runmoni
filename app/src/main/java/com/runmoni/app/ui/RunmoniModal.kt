@@ -48,10 +48,13 @@ internal fun FormDialog(
         confirm()
     })
     val bodyScroll = scrollState ?: rememberScrollState()
+    val frameworkFitted = legacyEditablePageWindowPolicy()
+    val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
+        else WindowInsets.safeDrawing.union(WindowInsets.ime)
     BackHandler(onBack = dismiss)
     Surface(Modifier.fillMaxSize().testTag("form_dialog"), color = RunmoniColors.Cream) {
         BoxWithConstraints(Modifier.fillMaxSize()
-            .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
+            .windowInsetsPadding(contentInsets)
             .testTag("form_page_safe_content")) {
             val scrollingActions = maxHeight < 240.dp ||
                 (LocalDensity.current.fontScale >= 1.8f && maxHeight < 360.dp)

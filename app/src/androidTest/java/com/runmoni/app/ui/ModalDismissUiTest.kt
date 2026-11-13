@@ -307,7 +307,15 @@ class ModalDismissNativeUiTest : RunmoniDesignTestBase() {
                 compose.activity.enableEdgeToEdge()
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
             }
+            val mainLayoutFlags = window.decorView.systemUiVisibility and layoutMask
+            val mainSoftInputMode = window.attributes.softInputMode
             test(before)
+            compose.runOnIdle {
+                assertEquals("Leaving the page restores Main's layout flags", mainLayoutFlags,
+                    window.decorView.systemUiVisibility and layoutMask)
+                assertEquals("Leaving the page restores Main's soft input mode", mainSoftInputMode,
+                    window.attributes.softInputMode)
+            }
         } finally {
             try {
                 compose.runOnUiThread { visible.value = false }
@@ -330,6 +338,8 @@ class ModalDismissNativeUiTest : RunmoniDesignTestBase() {
             compose.setContent { RunmoniTheme {
                 if (visible.value) AppInformationDialog(AppUpdateUiState(), {}, { visible.value = false }, onExternalLink = {})
             } }
+            compose.onNodeWithTag("open_version_history").performScrollTo().performClick()
+            compose.onNodeWithTag("close_version_history").assertIsDisplayed().performClick()
             compose.onNodeWithTag("link_issue").performScrollTo().assertIsDisplayed()
             assertModalActionInsideWindow(compose, "close_app_information", host = ModalContentHost.PAGE,
                 fixtureWindowBefore = before)
