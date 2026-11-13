@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.StudioRefreshUiTest:..
+
+Time: 85.645
+
+OK (2 tests)
+
+

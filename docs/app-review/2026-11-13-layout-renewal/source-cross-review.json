@@ -8,12 +8,13 @@
       "CommunityRooms/PartyDetailScreen/RunmoniChat state/permission/back/IME paths"
     ],
     "community_lifecycle": [
-      "RunRecordScreen/RunShareScreen source review requested"
+      "RunRecordScreen/RunShareScreen no source blocker; 320/font2/IME need execution"
     ],
     "closet_context_ui": [
-      "AppEntryScreen/SettingsGroup no blocker; RunningScreen persistence/permission before map correction"
+      "AppEntryScreen/SettingsGroup no blocker; RunningScreen persistence/permission before map correction",
+      "source3 Home clock STARTED/Main receiver ownership reviewed; existing minute/revision preserved; runtime pending"
     ]
   },
   "noRuntimeResultInferred": true,
-  "sourceFrozenBeforeBuild": "source-freeze2.json"
+  "sourceFrozenBeforeBuild": "source-freeze3.json"
 }

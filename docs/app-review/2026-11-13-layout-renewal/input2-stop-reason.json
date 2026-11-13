@@ -1,0 +1,9 @@
+{
+  "observedAtUtc": "2026-11-13T09:53:05.275812+00:00",
+  "reason": "ConsumerClosetTest failed: Home clock observer disposal violated main-thread lifecycle contract. Stop additional source2 groups and restore through collector finally before changing source.",
+  "signalToExactCollector": "SIGINT",
+  "collectorPid": 1127535,
+  "failureRaw": "android-review1-closet.txt",
+  "notAProductPass": true,
+  "sourceMutationBeforeRestoration": false
+}

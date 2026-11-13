@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -42,7 +41,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.runmoni.app.data.RunningWeatherRepository
@@ -67,39 +65,33 @@ internal fun rememberHomeClock(): Long {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     var clockRevision by remember { mutableIntStateOf(0) }
-    DisposableEffect(context, lifecycle) {
-        var registered = false
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                now = System.currentTimeMillis()
-                clockRevision += 1 // Re-align the next minute after a manual time/zone change.
-            }
-        }
-        fun unregister() {
-            if (registered) {
-                runCatching { context.unregisterReceiver(receiver) }
-                registered = false
-            }
-        }
-        fun register() {
-            now = System.currentTimeMillis()
-            if (!registered) {
-                val filter = IntentFilter().apply {
-                    addAction(Intent.ACTION_TIME_CHANGED)
-                    addAction(Intent.ACTION_TIMEZONE_CHANGED)
-                    addAction(Intent.ACTION_DATE_CHANGED)
+    // Keep receiver ownership inside STARTED and on Android's main dispatcher.
+    // Cancellation can originate from a different dispatcher in UI tests.
+    LaunchedEffect(context, lifecycle) {
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Main.immediate) {
+                var registered = false
+                val receiver = object : BroadcastReceiver() {
+                    override fun onReceive(context: Context?, intent: Intent?) {
+                        now = System.currentTimeMillis()
+                        clockRevision += 1
+                    }
                 }
-                ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
-                registered = true
+                try {
+                    val filter = IntentFilter().apply {
+                        addAction(Intent.ACTION_TIME_CHANGED)
+                        addAction(Intent.ACTION_TIMEZONE_CHANGED)
+                        addAction(Intent.ACTION_DATE_CHANGED)
+                    }
+                    ContextCompat.registerReceiver(context, receiver, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+                    registered = true
+                    now = System.currentTimeMillis()
+                    kotlinx.coroutines.awaitCancellation()
+                } finally {
+                    if (registered) runCatching { context.unregisterReceiver(receiver) }
+                }
             }
         }
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) register()
-            if (event == Lifecycle.Event.ON_STOP) unregister()
-        }
-        lifecycle.addObserver(observer)
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) register()
-        onDispose { lifecycle.removeObserver(observer); unregister() }
     }
     LaunchedEffect(lifecycle, clockRevision) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
