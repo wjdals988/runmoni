@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.RouteTileMapUiTest:......
+com.runmoni.app.ui.RunnerDiscoveryUiTest:.....
+com.runmoni.app.ui.ModalDismissUiTest:...
+com.runmoni.app.ui.PopupNavigationUiTest:.
+
+Time: 186.831
+
+OK (15 tests)
+
+

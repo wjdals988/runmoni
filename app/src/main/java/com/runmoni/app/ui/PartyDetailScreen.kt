@@ -5,12 +5,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.NearMe
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -50,7 +48,7 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                         .verticalScroll(partyScroll).testTag("party_content")
                         .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
                         verticalArrangement = Arrangement.spacedBy(RunmoniLayout.PageGap)) {
-                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                 Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary, modifier = Modifier.size(20.dp))
                                 Text(crew?.name ?: "이전 버전 파티", style = MaterialTheme.typography.bodyMedium,
@@ -58,34 +56,32 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                             }
                             Text(party.title, style = MaterialTheme.typography.headlineMedium,
                                 modifier = Modifier.semantics { heading() })
-                            Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Icon(if (party.kind == PartyKind.LOCAL) Icons.Outlined.LocationOn else Icons.Outlined.NearMe,
-                                    null, tint = RunmoniColors.RouteBlue, modifier = Modifier.size(20.dp))
-                                Text(if (party.kind == PartyKind.LOCAL) "현장 러닝" else "각자의 장소에서 함께 뛰기",
-                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                            }
-                            if (party.isOrganizer || party.joined) Row(verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                Icon(Icons.Outlined.CheckCircle, null, tint = RunmoniColors.Primary, modifier = Modifier.size(18.dp))
-                                Text(if (party.isOrganizer) "파티 주최자" else "참가 중인 파티",
-                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
-                            }
                         }
-                        Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
-                            Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                                Text("일정 및 참가 정보", style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.semantics { heading() })
-                                Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    Icon(Icons.Outlined.Event, null, tint = RunmoniColors.RouteBlue, modifier = Modifier.size(24.dp))
-                                    PartyFact("일정", dateTime(party.startsAtMillis), Modifier.weight(1f))
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                            Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                                Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                                    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                        Icon(Icons.Outlined.Event, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
+                                        Text(dateTime(party.startsAtMillis), style = MaterialTheme.typography.titleLarge,
+                                            color = RunmoniColors.Primary, modifier = Modifier.weight(1f))
+                                    }
+                                    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                        Icon(Icons.Outlined.LocationOn, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
+                                        PartyFact(if (party.kind == PartyKind.LOCAL) "모이는 곳" else "출발 장소",
+                                            if (party.kind == PartyKind.LOCAL) party.meetingLabel.ifBlank { "모이는 장소 미정" } else "각자의 러닝 코스",
+                                            Modifier.weight(1f))
+                                    }
                                 }
-                                PartyFact("장소", if (party.kind == PartyKind.LOCAL) party.meetingLabel else "각자의 러닝 코스")
-                                HorizontalDivider(color = RunmoniColors.Line)
-                                AdaptiveActions(
-                                    first = { modifier -> PartyFact("거리", "${party.distanceKm} km", modifier) },
-                                    second = { modifier -> PartyFact("페이스", party.paceLabel, modifier) },
-                                )
-                                PartyFact("참가 인원", "${party.participantCount} / ${party.capacity}명")
+                            }
+                            AdaptiveActions(
+                                first = { modifier -> PartyFact("거리", "${party.distanceKm} km", modifier) },
+                                second = { modifier -> PartyFact("페이스", party.paceLabel, modifier) },
+                            )
+                            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text("참가 인원 ${party.participantCount} / ${party.capacity}명",
+                                    style = MaterialTheme.typography.bodyLarge)
+                                if (party.isOrganizer || party.joined) Text(if (party.isOrganizer) "파티 주최자" else "참가 중인 파티",
+                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
                             }
                         }
                         if (party.cancelled) Text("종료된 파티예요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -101,7 +97,7 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                                 else if (party.startsAtMillis < System.currentTimeMillis()) SmallNote("이미 시작한 파티예요.")
                             }
                         }
-                        if (party.joined && !party.cancelled && crew?.joined == true) ScreenSection("파티 소통") {
+                        if (party.joined && !party.cancelled && crew?.joined == true) Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Button(shape = RunmoniShapes.Action, onClick = { actions.openChat("party:${party.id}", party.title); onDismiss() },
                                 modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("open_party_chat")) {
                                 Icon(Icons.Outlined.ChatBubbleOutline, null, Modifier.size(20.dp))
@@ -109,11 +105,16 @@ internal fun PartyDialog(state: AppState, original: Party, actions: AppActions, 
                             }
                             if (state.communityBackend == CommunityBackend.HTTP) AudioPanel(state.audio, actions, "party:${party.id}")
                         }
+                        HorizontalDivider(color = RunmoniColors.Line)
+                        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Text(if (party.kind == PartyKind.LOCAL) "현장 러닝" else "각자의 장소에서 함께 뛰기",
+                                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                            SmallNote("러닝 탭에서 각자 기록을 시작해요. 파티 참가만으로 GPS 위치가 공유되지는 않아요.")
+                        }
                         if (!party.cancelled && crew != null && !party.isOrganizer && party.joined) {
                             TextButton(shape = RunmoniShapes.Action, onClick = { if (!state.signedIn) onSignIn() else actions.leaveParty(party.id) },
                                 enabled = !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("join_party_${party.id}")) { Text("파티 나가기") }
                         }
-                        SmallNote("러닝 탭에서 각자 기록을 시작해요. 파티 참가만으로 GPS 위치가 공유되지는 않아요.")
                         if (crew?.isOwner == true || party.isOrganizer) ScreenSection("파티 관리") {
                             TextButton(shape = RunmoniShapes.Action, onClick = { confirmation = true }, enabled = !state.busy,
                                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("delete_party_${party.id}")) {

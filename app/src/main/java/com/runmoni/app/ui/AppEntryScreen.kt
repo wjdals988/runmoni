@@ -52,46 +52,30 @@ fun RunmoniRoot(
 internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: () -> Unit, avatar: AvatarStyle = AvatarStyle()) {
     val googleEnabled = entry.googleConfigured && !entry.googleBusy && !entry.savingChoice
     val largeText = LocalDensity.current.fontScale >= 1.3f
-    Surface(
-        modifier = Modifier.fillMaxSize().testTag("app_entry_screen")
-            .semantics { paneTitle = "런모니 시작하기" },
-        color = RunmoniColors.Cream,
-        contentColor = RunmoniColors.Navy,
-    ) {
-        BoxWithConstraints(
-            Modifier.fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))
-                .testTag("entry_safe_content"),
-        ) {
-            val availableHeight = maxHeight
+    Surface(Modifier.fillMaxSize().testTag("app_entry_screen").semantics { paneTitle = "런모니 시작하기" },
+        color = RunmoniColors.Cream, contentColor = RunmoniColors.Navy) {
+        BoxWithConstraints(Modifier.fillMaxSize()
+            .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime)).testTag("entry_safe_content")) {
             val compact = maxHeight < 440.dp
-            Column(
-                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).testTag("entry_scroll"),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Column(
-                    Modifier.widthIn(max = 480.dp).fillMaxWidth().heightIn(min = availableHeight)
-                        .padding(horizontal = pageGutter(), vertical = 24.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        EntryLogo(40.dp)
-                        Text("runmoni", style = MaterialTheme.typography.titleLarge,
-                            color = RunmoniColors.Primary)
+            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).testTag("entry_scroll"),
+                horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(Modifier.widthIn(max = 480.dp).fillMaxWidth().padding(horizontal = pageGutter(), vertical = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                    Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                EntryLogo(40.dp)
+                                Text("runmoni", style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Primary)
+                            }
+                            Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
+                                modifier = Modifier.semantics { heading() })
+                            if (!compact && !largeText) {
+                                StudioAvatarStage(avatar, Modifier.fillMaxWidth().height(112.dp), running = false)
+                            }
+                            Text("로그인 방법을 선택해 주세요", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Navy)
+                        }
                     }
-                    if (!compact && !largeText && availableHeight >= 600.dp) {
-                        Spacer(Modifier.height(24.dp))
-                        StudioAvatarStage(avatar, Modifier.fillMaxWidth().height(136.dp), running = false)
-                    }
-                    Spacer(Modifier.height(if (compact) 20.dp else 24.dp))
-                    Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.semantics { heading() })
-                    Spacer(Modifier.height(12.dp))
-                    Text("로그인 방법을 선택해 주세요", style = MaterialTheme.typography.bodyLarge,
-                        color = RunmoniColors.Muted)
-                    Spacer(Modifier.height(if (compact) 24.dp else 32.dp))
+                    Column(Modifier.fillMaxWidth()) {
                     OutlinedButton(
                         onClick = onGoogle,
                         enabled = googleEnabled,
@@ -145,18 +129,13 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
                             Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
                         }
                     }
-                    Spacer(Modifier.height(24.dp))
-                    HorizontalDivider(color = RunmoniColors.Line)
-                    Spacer(Modifier.height(16.dp))
-                    Text("게스트도 로그인 없이 러닝을 기록할 수 있어요.",
-                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        "Google 로그인은 기록 요약 백업에 사용해요. 러닝 경로·포인트·옷장은 이 기기에 저장돼요.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = RunmoniColors.Muted,
-                        modifier = Modifier.testTag("entry_scope"),
-                    )
+
+                    }
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("게스트도 로그인 없이 러닝을 기록할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
+                        Text("Google 로그인은 기록 요약 백업에 사용해요. 러닝 경로·포인트·옷장은 이 기기에 저장돼요.",
+                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.testTag("entry_scope"))
+                    }
                 }
             }
         }

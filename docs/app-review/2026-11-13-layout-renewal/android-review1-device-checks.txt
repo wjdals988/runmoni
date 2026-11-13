@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.DeviceChecksTest:..
+
+Time: 49.511
+
+OK (2 tests)
+
+

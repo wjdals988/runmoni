@@ -1,0 +1,6 @@
+studio home 320/font2 ComponentActivity fixture: waitMillis=906; timeoutMillis=120000
+studio profile 320/font2 ComponentActivity fixture: waitMillis=40; timeoutMillis=120000
+studio crew list 320/font2 ComponentActivity fixture: waitMillis=53; timeoutMillis=120000
+studio discovery controls 320/font2 ComponentActivity fixture: waitMillis=9; timeoutMillis=120000
+studio record share header 411/1.0 ComponentActivity fixture: waitMillis=9; timeoutMillis=120000
+studio record share header 320/2.0 ComponentActivity fixture: waitMillis=26; timeoutMillis=120000

@@ -368,20 +368,35 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                 Text(if (persistence.finishing) "러닝 마무리 중"
                     else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"
                     else if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
-                    style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                    style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
                 FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
                     accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                 }
-                if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
-                if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    RunwayArtwork(state.profile.avatar, compact = LocalDensity.current.fontScale >= 1.3f)
-                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
-                        Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                    }
+                if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        BoxWithConstraints(Modifier.fillMaxWidth()) {
+                            val details: @Composable (Modifier) -> Unit = { m ->
+                                Column(m, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    Text("달릴 준비", style = MaterialTheme.typography.headlineSmall)
+                                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
+                                }
+                            }
+                            if (maxWidth < 280.dp || LocalDensity.current.fontScale >= 1.3f) {
+                                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    details(Modifier.fillMaxWidth())
+                                    StudioAvatarStage(state.profile.avatar, Modifier.width(64.dp).height(96.dp))
+                                }
+                            } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                                StudioAvatarStage(state.profile.avatar, Modifier.width(88.dp).height(132.dp))
+                                details(Modifier.weight(1f))
+                            }
+                        }
+                        HorizontalDivider(color = RunmoniColors.Outline)
+                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Outlined.PhoneAndroid, null, tint = RunmoniColors.Primary)
+                            Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
+                        }
                     }
                 } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.DeepGreen) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -407,7 +422,11 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
+                if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
+                if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
+                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth()
+                    .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 188.dp).clip(RunmoniShapes.Surface))
                 if (state.runNotificationAccess.isBlocked) {
                     Column(Modifier.fillMaxWidth().testTag("run_notification_blocked")
                         .semantics { liveRegion = LiveRegionMode.Polite }, verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -422,7 +441,6 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
                         modifier = Modifier.testTag("run_notification_guide"))
                 }
-                if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 if (run.phase == RunPhase.PAUSED && !persistence.finishing && persistence.issue != RunPersistenceIssue.CHECKPOINT)
                     SmallNote(when (run.pauseReason) {
                         PauseReason.AUTOMATIC -> "멈춰 있어 러닝 시간을 잠시 멈췄어요. 움직임이 확인되면 자동으로 이어져요. 지금 시작하려면 ‘계속 달리기’를 누르세요."
@@ -430,8 +448,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                         null -> "러닝이 멈춰 있어요. 저장 상태를 확인한 뒤 이어갈 수 있어요."
                     })
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
-                if (run.phase != RunPhase.IDLE) MapPane(run.points, modifier = Modifier.fillMaxWidth()
-                    .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 188.dp).clip(RunmoniShapes.Surface))
+
                 TextButton(shape = RunmoniShapes.Action, onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)

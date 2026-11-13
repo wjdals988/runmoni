@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.StudioRefreshUiTest:..
+com.runmoni.app.ui.RunmoniDesignTest:..
+com.runmoni.app.ui.AppEntryUiTest:....
+com.runmoni.app.ui.HomeWeatherLayoutTest:..
+
+Time: 245.117
+
+OK (10 tests)
+
+

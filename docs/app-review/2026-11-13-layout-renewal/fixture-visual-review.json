@@ -1,0 +1,78 @@
+{
+  "observedAtUtc": "2026-11-13T09:35:50.067414+00:00",
+  "images": [
+    {
+      "file": "android-review1-studio-home-320-font2-fixture.png",
+      "sha256": "3f9e582db10891c75cca740c0d5af9f02bf8448da2db17e6082d10d8fee86354",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity synthetic fixture; virtual320dp/font2",
+      "note": "Root reviewed hierarchy, primary action and readable wrapping; fixture data is synthetic."
+    },
+    {
+      "file": "android-review1-studio-profile-320-font2-fixture.png",
+      "sha256": "0ce5688baa8ffb16c0451cec8bb0401ad39ba022fd455422a1eb262e177523e9",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity synthetic fixture; virtual320dp/font2",
+      "note": "Root reviewed hierarchy, primary action and readable wrapping; fixture data is synthetic."
+    },
+    {
+      "file": "android-review1-studio-crews-320-font2-fixture.png",
+      "sha256": "f64e339173fa65b146b7ed485a0c7f7c6291777d6c95a8c51c8ae58e31e29bea",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity synthetic fixture; virtual320dp/font2",
+      "note": "Root reviewed hierarchy, primary action and readable wrapping; fixture data is synthetic."
+    },
+    {
+      "file": "android-review1-studio-explore-controls-320-font2-fixture.png",
+      "sha256": "16de8954d46968ae70a3d84d095cc67c6adad74459cb7e1864da8f65927d1d23",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity synthetic fixture; virtual320dp/font2",
+      "note": "Explore image is intentionally scrolled to independent controls; it is not the initial full map screen."
+    },
+    {
+      "file": "android-review1-home-360-100.png",
+      "sha256": "31cd6fa9179a19a135fdcdfbaceb289bdfcf8c71e0fb89ccba64fc369ebb30ad",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    },
+    {
+      "file": "android-review1-running-active-fixture-360-100.png",
+      "sha256": "6cc19ad8fa9dcc0eef6008f0e3cdcbaa096062f75a3c396b90937c37f9969d42",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    },
+    {
+      "file": "android-review1-run-360-100.png",
+      "sha256": "f5c3b742865cbe7f6498f445d38170adafd0d050f0a944c9345db1a438102f67",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    },
+    {
+      "file": "android-review1-me-360-100.png",
+      "sha256": "88632e4164091584c9f11de5ebca9f403bd61143dbd35494df48d4f0182ffb79",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    },
+    {
+      "file": "android-review1-crew-360-100.png",
+      "sha256": "9e29706a2c656eb20b5421d8fe1a9859ff2ce958d92b7efdb092936536df0b0f",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    },
+    {
+      "file": "android-review1-explore-360-100.png",
+      "sha256": "b8752f4dcb437503c41e3ab87c8e9fd6f6990bf7ee67cd19514a4d4b513a42f5",
+      "actuallyViewedWithViewImage": true,
+      "source": "ComponentActivity fixture, virtual360dp/font1",
+      "note": "Offline review state, not production backend/real GPS. Active-run image is scrolled to map and fixed controls."
+    }
+  ],
+  "sourceKind": "ComponentActivity fixture, not MainActivity",
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false
+}

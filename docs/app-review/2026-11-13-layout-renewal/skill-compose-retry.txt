@@ -1,0 +1,46 @@
+## UI Pro Max Stack Guidelines
+**Stack:** jetpack-compose | **Query:** adaptive layout
+**Source:** stacks/jetpack-compose.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Theming
+- **Guideline:** Dark mode support
+- **Description:** Theme-based colors
+- **Do:** colorScheme
+- **Don't:** Fixed color
+- **Code Good:** Adaptive UI
+- **Code Bad:** Broken dark
+- **Severity:** Medium
+- **Docs URL:** 
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 2
+- **Category:** Layout
+- **Guideline:** Avoid deep layout nesting
+- **Description:** Deep layout trees increase measure & layout cost
+- **Do:** Keep layout flat
+- **Don't:** Box ? Column ? Box ? Row
+- **Code Good:** Flat hierarchy
+- **Code Bad:** Deep nested tree
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/develop/ui/compose/layouts/basics
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 3
+- **Category:** Layout
+- **Guideline:** Extract reusable layout patterns
+- **Description:** Repeated layouts should be shared
+- **Do:** Create layout composable
+- **Don't:** Copy-paste layouts
+- **Code Good:** Reusable scaffold
+- **Code Bad:** Duplicated layout
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/develop/ui/compose/components
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+

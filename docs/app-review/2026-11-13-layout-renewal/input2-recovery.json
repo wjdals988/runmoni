@@ -1,0 +1,12 @@
+{
+  "observedAtUtc": "2026-11-13T10:05:55.696229+00:00",
+  "failedProof": "android-review1.json",
+  "failedProofSha256": "a05ac3567dbd58fbda1d21376d2923dd53503ded793a9aa903bd7fa4ecbdae46",
+  "originalPreferencesProfileAccountControlledEnvironmentRestoredExactly": true,
+  "sourceMapsAfterRestorationMatch": true,
+  "previousOwnedPid": 1126560,
+  "previousOwnedPidNowAbsent": true,
+  "noActiveQemuObserved": true,
+  "emulatorWasNotClaimedStoppedBeforeRecovery": true,
+  "reason": "Cloud transport outage after collector finally; resumed host has no active qemu."
+}

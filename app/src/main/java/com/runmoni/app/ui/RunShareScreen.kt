@@ -288,34 +288,48 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
-                        .padding(vertical = 20.dp), contentAlignment = Alignment.Center) {
-                    Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
-                        .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Line)
-                        .testTag("run_share_preview")
-                        .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
-                            if (editable && (tool == 0 && photoPresent || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
-                                if (size.width > 0 && size.height > 0) latestTransform(
-                                    Offset(centroid.x / size.width, centroid.y / size.height),
-                                    Offset(pan.x / size.width, pan.y / size.height), zoom)
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
+                        .padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                            .padding(horizontal = pageGutter())) {
+                            if (maxWidth < 320.dp || LocalDensity.current.fontScale >= 1.3f) {
+                                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    Text("미리보기", style = MaterialTheme.typography.titleSmall,
+                                        modifier = Modifier.semantics { heading() })
+                                    Text(draft.ratio.label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                                }
+                            } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                verticalAlignment = Alignment.CenterVertically) {
+                                Text("미리보기", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.weight(1f).semantics { heading() })
+                                Text(draft.ratio.label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                             }
-                        }, contentAlignment = Alignment.Center) {
-                        if (bitmap != null) Image(bitmap.asImageBitmap(),
-                            "$previewDescription ${draft.ratio.label}, ${if (draft.showAvatar) "미니미 포함" else "미니미 숨김"}",
-                            Modifier.fillMaxSize())
-                        else CircularProgressIndicator(Modifier.size(32.dp))
-                        if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
-                            modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
-                            Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.padding(8.dp))
                         }
-                    }
+                        Spacer(Modifier.height(16.dp))
+                        Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
+                            .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Line)
+                            .testTag("run_share_preview")
+                            .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
+                                if (editable && (tool == 0 && photoPresent || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
+                                    if (size.width > 0 && size.height > 0) latestTransform(
+                                        Offset(centroid.x / size.width, centroid.y / size.height),
+                                        Offset(pan.x / size.width, pan.y / size.height), zoom)
+                                }
+                            }, contentAlignment = Alignment.Center) {
+                            if (bitmap != null) Image(bitmap.asImageBitmap(),
+                                "$previewDescription ${draft.ratio.label}, ${if (draft.showAvatar) "미니미 포함" else "미니미 숨김"}",
+                                Modifier.fillMaxSize())
+                            else CircularProgressIndicator(Modifier.size(32.dp))
+                            if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
+                                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
+                                Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(8.dp))
+                            }
+                        }
                     }
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                         .background(RunmoniColors.Paper)
-                        .padding(horizontal = pageGutter(), vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
+                        .padding(horizontal = pageGutter(), vertical = 8.dp)) {
                         // Material Tab fixes its text-only height; let large Korean text choose its own height.
                         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
                             .testTag("run_share_tools"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -331,6 +345,17 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                 }
                             }
                         }
+                    }
+                    HorizontalDivider(color = RunmoniColors.Line)
+                    // One flat property area follows the selected tool. Preview,
+                    // navigation and output each have their own visual region.
+                    Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .padding(horizontal = pageGutter(), vertical = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(when (tool) { 0 -> "사진과 배경"; 1 -> "기록 표시"; else -> "미니미 배치" },
+                            style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                        if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         when (tool) {
                             0 -> {
                                 FilledTonalButton(onClick = onPickPhoto, enabled = editable, shape = RunmoniShapes.Action,
@@ -364,13 +389,17 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                             modifier = m.heightIn(min = 48.dp).testTag("run_share_photo_remove")) { Text("사진 빼기") }
                                     })
                                 }
-                                Text("이미지 비율", style = MaterialTheme.typography.titleSmall)
+                                HorizontalDivider(color = RunmoniColors.Line)
+                                Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.semantics { heading() })
                                 ShareChoices(RunShareRatio.entries, draft.ratio, { it.label }, editable, "ratio") { onDraft(draft.copy(ratio = it)) }
-                                Text("색상", style = MaterialTheme.typography.titleSmall)
+                                Text("바탕 색", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.semantics { heading() })
                                 ShareChoices(RunShareTheme.entries, draft.theme, { it.label }, editable, "theme") { onDraft(draft.copy(theme = it)) }
                             }
                             1 -> {
-                                Text("기록 배치", style = MaterialTheme.typography.titleSmall)
+                                Text("기록 배치", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.semantics { heading() })
                                 ShareChoices(RunSharePlacement.entries, draft.placement, { it.label }, editable, "placement") { onDraft(draft.copy(placement = it)) }
                                 OutlinedTextField(draft.caption, { onDraft(draft.copy(caption = RunShareText.takeCodePoints(it, 60))) },
                                     label = { Text("한 줄 기록") }, placeholder = { Text("남기고 싶은 말이 있나요?") },

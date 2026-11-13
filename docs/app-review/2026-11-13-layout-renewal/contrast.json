@@ -1,0 +1,56 @@
+{
+  "method": "WCAG relative luminance sRGB",
+  "endpointPairs": [
+    {
+      "foreground": "#205641",
+      "background": "#FFFFFF",
+      "ratio": 8.51
+    },
+    {
+      "foreground": "#205641",
+      "background": "#F5F7F6",
+      "ratio": 7.91
+    },
+    {
+      "foreground": "#205641",
+      "background": "#E0F0E8",
+      "ratio": 7.21
+    },
+    {
+      "foreground": "#556158",
+      "background": "#FFFFFF",
+      "ratio": 6.49
+    },
+    {
+      "foreground": "#556158",
+      "background": "#F5F7F6",
+      "ratio": 6.03
+    },
+    {
+      "foreground": "#556158",
+      "background": "#E0F0E8",
+      "ratio": 5.5
+    },
+    {
+      "foreground": "#2E6194",
+      "background": "#FFFFFF",
+      "ratio": 6.45
+    },
+    {
+      "foreground": "#2E6194",
+      "background": "#F5F7F6",
+      "ratio": 6.0
+    },
+    {
+      "foreground": "#2E6194",
+      "background": "#E8F0FA",
+      "ratio": 5.62
+    },
+    {
+      "foreground": "#556158",
+      "background": "#E8F0FA",
+      "ratio": 5.65
+    }
+  ],
+  "allPixelsOrAnimationFramesMeasured": false
+}

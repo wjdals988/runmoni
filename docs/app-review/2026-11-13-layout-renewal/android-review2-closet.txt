@@ -1,0 +1,25 @@
+
+com.runmoni.app.ui.ConsumerClosetTest:.
+com.runmoni.app.ui.RunningKitColorsUiTest:
+Error in closetColorChangesKeepReadyItemSelectionsInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepReadyItemSelectionsInventoryAndGender(RunningKitColorsUiTest.kt:181)
+.
+com.runmoni.app.ui.ClosetNavigationUiTest:..
+
+Time: 223.249
+There was 1 failure:
+1) closetColorChangesKeepReadyItemSelectionsInventoryAndGender(com.runmoni.app.ui.RunningKitColorsUiTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.closetColorChangesKeepReadyItemSelectionsInventoryAndGender(RunningKitColorsUiTest.kt:181)
+
+FAILURES!!!
+Tests run: 5,  Failures: 1
+
+

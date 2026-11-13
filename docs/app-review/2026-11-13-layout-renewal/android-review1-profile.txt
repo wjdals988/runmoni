@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.UnifiedProfileUiTest:..
+
+Time: 42.639
+
+OK (2 tests)
+
+

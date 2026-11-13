@@ -1,0 +1,11 @@
+{
+  "observedAtUtc": "2026-11-13T10:48:18.613187+00:00",
+  "file": "android-review3-kit-colors-closet-female-fixture.png",
+  "sha256": "5dcb14a837e391be5cd8b5a21ba7e7b6009d91e67a21ce6345046219949867a4",
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "source": "ComponentActivity synthetic female closet fixture, not MainActivity",
+  "notes": "Current preview, named color swatches, full item labels and flat categories reviewed; scrolled screenshot. Independent color methods passed unchanged30-second predicate; earlier batch timeout cause remains undetermined.",
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false
+}

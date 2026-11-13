@@ -1,0 +1,30 @@
+failed restored URI recovery ComponentActivity/fake callbacks: waitMillis=105; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=0: waitMillis=10; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=1: waitMillis=22; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=2: waitMillis=28; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=0: waitMillis=21; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=1: waitMillis=9; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=2: waitMillis=18; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=0: waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=1: waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=2: waitMillis=9; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=0: waitMillis=17; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=1: waitMillis=16; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=2: waitMillis=11; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=0: waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=1: waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=2: waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=0: waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=1: waitMillis=9; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=2: waitMillis=5; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=0: waitMillis=8; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=1: waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=2: waitMillis=15; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=0: waitMillis=21; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=1: waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=2: waitMillis=8; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=0: waitMillis=28; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=1: waitMillis=8; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=2: waitMillis=10; timeoutMillis=120000
+share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: waitMillis=13; timeoutMillis=120000
+record detail page with unavailable map tiles: waitMillis=10; timeoutMillis=120000
