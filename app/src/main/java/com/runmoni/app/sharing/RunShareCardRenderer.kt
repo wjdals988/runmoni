@@ -26,7 +26,7 @@ import kotlin.math.min
 
 /** The same opaque bitmap is used by the editor and PNG export. Inputs are borrowed and never recycled or changed. */
 object RunShareCardRenderer {
-    private data class Palette(val background: Int, val foreground: Int, val secondary: Int)
+    private data class Palette(val background: Int, val foreground: Int, val secondary: Int, val photoPanelAlpha: Int)
     private data class BoundsKey(val bitmap: Bitmap, val generation: Int)
     private val boundsCache = object : LinkedHashMap<BoundsKey, Rect?>(8, .75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<BoundsKey, Rect?>?) = size > 8
@@ -96,8 +96,7 @@ object RunShareCardRenderer {
             }
 
             // Text is always above image/sticker layers, with a strong opaque-enough theme surface.
-            val panelColor = if (photo == null) palette.background else withAlpha(palette.background,
-                if (config.theme == RunShareTheme.PAPER) 248 else 236)
+            val panelColor = if (photo == null) palette.background else withAlpha(palette.background, palette.photoPanelAlpha)
             canvas.drawRect(0f, panelTop, width.toFloat(), panelBottom, Paint().apply { color = panelColor })
             var metricsTop = panelTop + if (square) 32f else 40f
             if (caption != null) {
@@ -132,13 +131,19 @@ object RunShareCardRenderer {
             if (content.interrupted) canvas.drawText("중단 구간 포함", padding, metricsTop + if (square) 340f else 364f, labelPaint)
 
             // Brand/date/name remain legible independently from the chosen photo or stat placement.
-            if (photo != null) canvas.drawRect(0f, 0f, width.toFloat(), headerBottom + 24f, Paint().apply {
+            val lightPhotoHeader = photo != null && config.theme == RunShareTheme.CORAL
+            if (lightPhotoHeader) {
+                // The bright theme keeps its dark text on the same measured coral
+                // surface over any photo. Stop at the header bound so no genuine
+                // avatar pixels in the adjacent sticker area receive this tint.
+                canvas.drawRect(0f, 0f, width.toFloat(), headerBottom, Paint().apply { color = panelColor })
+            } else if (photo != null) canvas.drawRect(0f, 0f, width.toFloat(), headerBottom + 24f, Paint().apply {
                 shader = LinearGradient(0f, 0f, 0f, headerBottom + 24f,
                     intArrayOf(0xbc000000.toInt(), 0xaa000000.toInt(), Color.TRANSPARENT),
                     floatArrayOf(0f, headerBottom / (headerBottom + 24f), 1f), Shader.TileMode.CLAMP)
             })
-            val headerColor = if (photo != null) Color.WHITE else palette.foreground
-            val headerSecondary = if (photo != null) 0xffedf2ee.toInt() else palette.secondary
+            val headerColor = if (photo != null && !lightPhotoHeader) Color.WHITE else palette.foreground
+            val headerSecondary = if (photo != null && !lightPhotoHeader) 0xffedf2ee.toInt() else palette.secondary
             canvas.drawText("runmoni", padding, if (square) 80f else 96f, textPaint(44f, headerColor, bold = true))
             var nextBaseline = if (square) 124f else 148f
             if (config.showDate) {
@@ -159,9 +164,10 @@ object RunShareCardRenderer {
     }
 
     private fun palette(theme: RunShareTheme) = when (theme) {
-        RunShareTheme.FOREST -> Palette(0xff205641.toInt(), Color.WHITE, 0xffd6e5da.toInt())
-        RunShareTheme.INK -> Palette(0xff18201c.toInt(), Color.WHITE, 0xffd6e5da.toInt())
-        RunShareTheme.PAPER -> Palette(0xfff5f3eb.toInt(), 0xff192d25.toInt(), 0xff556158.toInt())
+        RunShareTheme.FOREST -> Palette(0xff205641.toInt(), Color.WHITE, 0xffd6e5da.toInt(), 236)
+        RunShareTheme.INK -> Palette(0xff18201c.toInt(), Color.WHITE, 0xffd6e5da.toInt(), 236)
+        RunShareTheme.PAPER -> Palette(0xfff5f3eb.toInt(), 0xff192d25.toInt(), 0xff556158.toInt(), 248)
+        RunShareTheme.CORAL -> Palette(0xfffbe7de.toInt(), 0xff192d25.toInt(), 0xff556158.toInt(), 248)
     }
 
     private fun layout(content: RunShareContent, config: RunShareDraft, hasName: Boolean, palette: Palette): CardLayout {

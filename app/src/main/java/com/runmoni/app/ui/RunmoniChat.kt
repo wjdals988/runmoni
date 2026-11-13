@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -82,6 +83,9 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
             Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(if (compact) 8.dp else 12.dp)) {
                 Row(Modifier.fillMaxWidth().heightIn(min = if (compact) 48.dp else 64.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    IconButton(onClick = close, modifier = Modifier.size(48.dp).testTag("close_chat")) {
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, "채팅 닫기")
+                    }
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(if (notice) "공지 작성 · ${state.openedRoomTitle}" else state.openedRoomTitle,
                             style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
@@ -98,7 +102,6 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                             if (canNotice) DropdownMenuItem(text = { Text("공지로 보내기") }, onClick = { notice = !notice; menuExpanded = false }, trailingIcon = { if (notice) Icon(Icons.Outlined.Check, null) }, modifier = Modifier.semantics { stateDescription = if (notice) "선택됨" else "선택 안 됨" })
                         }
                     }
-                    IconButton(onClick = close, modifier = Modifier.size(48.dp).testTag("close_chat")) { Icon(Icons.Outlined.Close, "채팅 닫기") }
                 }
                 if (state.communityBackend == CommunityBackend.FIREBASE && state.chatFromCache) Text("연결 확인 중 · 저장된 메시지", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.RouteBlue, modifier = Modifier.testTag("chat_connection_status"))
                 if (!compact) Column(Modifier.testTag("chat_filters")) {

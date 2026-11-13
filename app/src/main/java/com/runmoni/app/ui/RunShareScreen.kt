@@ -288,7 +288,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Cream)
                         .padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                             .padding(horizontal = pageGutter())) {
@@ -350,10 +350,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                     // One flat property area follows the selected tool. Preview,
                     // navigation and output each have their own visual region.
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .background(RunmoniColors.Paper)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Text(when (tool) { 0 -> "사진과 배경"; 1 -> "기록 표시"; else -> "미니미 배치" },
-                            style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                         if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         when (tool) {
@@ -489,11 +488,12 @@ private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String
 }
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun <T> ShareChoices(options: List<T>, selected: T, label: (T) -> String,
     enabled: Boolean, tag: String, onSelect: (T) -> Unit) {
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
+    FlowRow(Modifier.fillMaxWidth().selectableGroup()
         .testTag("run_share_${tag}_choices"),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         options.forEachIndexed { index, option ->
             Row(Modifier.heightIn(min = 48.dp).background(if (selected == option) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
                 .selectable(selected == option, enabled, Role.RadioButton) { onSelect(option) }

@@ -44,7 +44,7 @@ internal fun MiniMi(
     running: Boolean = false,
     description: String? = "러닝 미니미",
     frameOverride: Int? = null,
-    // Internal verification observer. Production callers leave this null.
+    // Optional draw observer: fixed previews can prioritize their first real frame.
     onFrameRendered: ((Int) -> Unit)? = null,
     // Controlled I/O for loading/retry verification; production uses the approved asset.
     frameLoader: (suspend (Int, Boolean) -> Bitmap)? = null,

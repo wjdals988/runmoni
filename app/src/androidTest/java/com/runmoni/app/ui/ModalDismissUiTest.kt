@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
@@ -72,7 +73,7 @@ class ModalDismissUiTest : RunmoniDesignTestBase() {
         compose.runOnIdle { assertTrue(deletes.isEmpty()) }
     }
 
-    @Test fun outsideTapAndPlatformBackDismissWithoutSubmitting() {
+    @Test fun blankPageBodyDoesNotDismissAndPlatformBackDismissesWithoutSubmitting() {
         val visible = mutableStateOf(true)
         var submitted = 0
         compose.setContent { RunmoniTheme {
@@ -80,13 +81,34 @@ class ModalDismissUiTest : RunmoniDesignTestBase() {
                 TextButton(onClick = { submitted++ }) { Text("저장") }
             }) { repeat(30) { Text("본문 $it") } }
         } }
-        compose.onNodeWithTag("modal_window").performTouchInput { click(Offset(1f, center.y)) }
-        compose.runOnIdle { assertFalse(visible.value); assertEquals(0, submitted) }
-        compose.runOnIdle { visible.value = true }
-        compose.onNodeWithTag("form_dialog_close").assertIsDisplayed()
+        compose.onNodeWithTag("modal_window").assertDoesNotExist()
+        compose.onNodeWithTag("form_page").assertIsDisplayed()
+        // The left body padding is page space, not a modal backdrop.
+        compose.onNodeWithTag("modal_scroll_body").performTouchInput { click(Offset(1f, center.y)) }
+        compose.onNodeWithTag("form_dialog_close").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        compose.runOnIdle { assertTrue(visible.value); assertEquals(0, submitted) }
+        noTextOverflow("in-tree form blank body and Back fixture")
         assertTrue(UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK))
         compose.onNodeWithTag("form_dialog").assertDoesNotExist()
-        compose.runOnIdle { assertEquals(0, submitted) }
+        compose.runOnIdle { assertFalse(visible.value); assertEquals(0, submitted) }
+    }
+
+    @Test fun confirmationOutsideTapAndPlatformBackDismissWithoutConfirming() {
+        val visible = mutableStateOf(true)
+        var confirmed = 0
+        compose.setContent { RunmoniTheme {
+            if (visible.value) DismissibleAlertDialog(onDismissRequest = { visible.value = false },
+                title = { Text("변경 사항 적용") }, text = { DialogMessage("확인하면 변경 사항을 적용해요.") },
+                confirmButton = { TextButton(onClick = { confirmed++ }) { Text("확인") } })
+        } }
+        compose.onNodeWithTag("form_page").assertDoesNotExist()
+        compose.onNodeWithTag("modal_window").performTouchInput { click(Offset(1f, center.y)) }
+        compose.runOnIdle { assertFalse(visible.value); assertEquals(0, confirmed) }
+        compose.runOnIdle { visible.value = true }
+        compose.onNodeWithTag("confirmation_close").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        assertTrue(UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressKeyCode(KeyEvent.KEYCODE_BACK))
+        compose.onNodeWithTag("form_dialog").assertDoesNotExist()
+        compose.runOnIdle { assertFalse(visible.value); assertEquals(0, confirmed) }
     }
 }
 
@@ -95,24 +117,38 @@ private fun focusedModalWindow(): View? = WindowInspector.getGlobalWindowViews()
     .singleOrNull { it.isAttachedToWindow && it.hasWindowFocus() }
 
 @RequiresApi(29)
-private fun assertModalActionInsideWindow(compose: OfflineMapComposeRule, tag: String, requireIme: Boolean = false) {
+private fun assertModalActionInsideWindow(
+    compose: OfflineMapComposeRule,
+    tag: String,
+    host: ModalContentHost = ModalContentHost.CONFIRMATION,
+    requireIme: Boolean = false,
+) {
     compose.waitUntil(30_000) { focusedModalWindow() != null }
-    val action = compose.onNodeWithTag(tag).assertIsDisplayed().assertHeightIsAtLeast(48.dp).fetchSemanticsNode()
-    val safe = compose.onNodeWithTag("modal_safe_content").fetchSemanticsNode()
+    val action = compose.onNodeWithTag(tag).assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        .assertWidthIsAtLeast(48.dp).fetchSemanticsNode()
+    compose.onAllNodesWithTag(host.safeTag).assertCountEquals(1)
+    val otherHost = ModalContentHost.entries.single { it != host }
+    compose.onNodeWithTag(otherHost.safeTag).assertDoesNotExist()
+    val safe = compose.onNodeWithTag(host.safeTag).fetchSemanticsNode()
     val window = requireNotNull(focusedModalWindow())
     val insets = requireNotNull(ViewCompat.getRootWindowInsets(window))
     val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout() or WindowInsetsCompat.Type.ime())
-    if (requireIme) assertTrue("Actual dialog IME must remain visible", insets.isVisible(WindowInsetsCompat.Type.ime()) && bars.bottom > 0)
+    if (requireIme) assertTrue("Actual OS IME must remain visible", insets.isVisible(WindowInsetsCompat.Type.ime()) && bars.bottom > 0)
     val left = action.positionInWindow.x
     val top = action.positionInWindow.y
     val right = left + action.size.width
     val bottom = top + action.size.height
-    assertTrue("Full $tag stays inside its modal safe content", left >= safe.positionInWindow.x - .5f && top >= safe.positionInWindow.y - .5f &&
+    assertTrue("Full $tag stays inside ${host.safeTag}", left >= safe.positionInWindow.x - .5f && top >= safe.positionInWindow.y - .5f &&
         right <= safe.positionInWindow.x + safe.size.width + .5f && bottom <= safe.positionInWindow.y + safe.size.height + .5f)
     assertTrue("Full $tag stays outside actual OS/IME bounds", left >= bars.left - .5f && top >= bars.top - .5f &&
         right <= window.width - bars.right + .5f && bottom <= window.height - bars.bottom + .5f)
     File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "design-review").apply { mkdirs() }
-        .resolve("modal-action-window-bounds.txt").appendText("$tag boundsPx=$left,$top,$right,$bottom window=${window.width}x${window.height} insetBottom=${bars.bottom} ime=${insets.isVisible(WindowInsetsCompat.Type.ime())}\n")
+        .resolve("modal-action-window-bounds.txt").appendText("$tag host=$host safeTag=${host.safeTag} boundsPx=$left,$top,$right,$bottom window=${window.width}x${window.height} insetBottom=${bars.bottom} ime=${insets.isVisible(WindowInsetsCompat.Type.ime())}\n")
+}
+
+private enum class ModalContentHost(val safeTag: String) {
+    PAGE("form_page_safe_content"),
+    CONFIRMATION("modal_safe_content"),
 }
 
 @SdkSuppress(minSdkVersion = 29)
@@ -130,7 +166,7 @@ class ModalDismissNativeUiTest : RunmoniDesignTestBase() {
             if (visible.value) AppInformationDialog(AppUpdateUiState(), {}, { visible.value = false }, onExternalLink = {})
         } }
         compose.onNodeWithTag("link_issue").performScrollTo().assertIsDisplayed()
-        assertModalActionInsideWindow(compose, "close_app_information")
+        assertModalActionInsideWindow(compose, "close_app_information", host = ModalContentHost.PAGE)
         noTextOverflow("native320/font2 information fixed close")
         captureDevice("modal-about-close-native320-font2-fixture")
         compose.onNodeWithTag("close_app_information").performClick()
@@ -160,8 +196,14 @@ class ModalDismissNativeUiTest : RunmoniDesignTestBase() {
             focusedModalWindow()?.let { ViewCompat.getRootWindowInsets(it)?.isVisible(WindowInsetsCompat.Type.ime()) } == true
         }
         compose.onNodeWithTag("modal_text_9").performScrollTo()
-        assertModalActionInsideWindow(compose, "modal_native_submit", requireIme = true)
-        assertModalActionInsideWindow(compose, "form_dialog_close", requireIme = true)
+        val submit = compose.onNodeWithTag("modal_native_submit")
+        // In a short IME window the page moves its actions into the body.
+        // A fixed footer has no scroll parent and must already be reachable.
+        if (generateSequence(submit.fetchSemanticsNode().parent) { it.parent }
+                .any { it.config.contains(SemanticsActions.ScrollBy) }) submit.performScrollTo()
+        assertModalActionInsideWindow(compose, "modal_native_submit", host = ModalContentHost.PAGE, requireIme = true)
+        assertModalActionInsideWindow(compose, "form_dialog_close", host = ModalContentHost.PAGE, requireIme = true)
+        noTextOverflow("native320/font2 in-tree form with actual IME")
         captureDevice("modal-ime-close-native320-font2-fixture")
         compose.onNodeWithTag("form_dialog_close").performClick()
         compose.onNodeWithTag("form_dialog").assertDoesNotExist()

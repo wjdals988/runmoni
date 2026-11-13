@@ -66,7 +66,7 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("settings_screen").assertIsDisplayed()
         noTextOverflow("consumer settings actual Android viewport")
         capture("consumer-settings-native")
-        compose.onNodeWithText("닫기").performClick()
+        compose.onNodeWithTag("close_settings").performClick()
         compose.onNodeWithTag("nav_me").assertIsSelected()
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,10 +61,14 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         DeviceChecksScreen(state, actions) { deviceChecks = false }
         return
     }
+    if (cloudHistory && state.cloud.uid.isNotBlank()) {
+        CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
+        return
+    }
     BackHandler(onBack = onDismiss)
     Surface(Modifier.fillMaxSize().testTag("settings_screen"), color = RunmoniColors.Cream) {
         Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
-            PageTopBar("설정", onDismiss)
+            PageTopBar("설정", onDismiss, closeTag = "close_settings")
             HorizontalDivider(color = RunmoniColors.Line)
             Box(Modifier.weight(1f).fillMaxWidth()) {
                 val gutter = if (LocalConfiguration.current.screenWidthDp >= 600) 32.dp else 20.dp
@@ -143,7 +148,7 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
             }
         }
     }
-    if (cloudHistory && state.cloud.uid.isNotBlank()) CloudSummariesDialog(state.cloud, actions) { cloudHistory = false }
+
     if (linkCommunityGoogle) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { linkCommunityGoogle = false },
         title = { Text("현재 크루 프로필에 Google을 연결할까요?") },
         text = { DialogMessage("현재 크루 소속과 크루장·주최자 권한을 그대로 유지해요. 이미 다른 프로필에 사용한 Google 계정은 자동으로 합치지 않아요.\n\n이 연결은 기기의 GPS 기록·포인트·옷장 백업과는 별도예요.") },
@@ -186,12 +191,12 @@ internal fun SignInDialog(state: AppState, actions: AppActions, onDismiss: () ->
 
 @Composable
 internal fun NewCrewDialog(actions: AppActions, state: AppState = AppState(), onDismiss: () -> Unit) {
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var region by remember { mutableStateOf("") }
-    var pace by remember { mutableStateOf("자유 페이스") }
-    var submitted by remember { mutableStateOf(false) }
-    val previousId = remember { state.lastCreatedCrewId }
+    var name by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var region by rememberSaveable { mutableStateOf("") }
+    var pace by rememberSaveable { mutableStateOf("자유 페이스") }
+    var submitted by rememberSaveable { mutableStateOf(false) }
+    val previousId = rememberSaveable { state.lastCreatedCrewId }
     LaunchedEffect(state.lastCreatedCrewId) { if (submitted && state.lastCreatedCrewId != previousId) onDismiss() }
     FormDialog("크루 만들기", onDismiss, confirm = { Button(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createCrew(NewCrew(name.trim(), description.trim(), region.trim(), pace.trim())) }, enabled = name.trim().length in 2..60 && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_crew")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
         FormField("크루 이름", name, { if (it.length <= 60) name = it }, "crew_name")
@@ -207,19 +212,19 @@ internal fun NewCrewDialog(actions: AppActions, state: AppState = AppState(), on
 internal fun NewPartyDialog(crewId: String?, actions: AppActions, state: AppState = AppState(), onDismiss: () -> Unit) {
     val formatter = remember { DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(java.time.format.ResolverStyle.STRICT) }
     val context = LocalContext.current
-    var title by remember { mutableStateOf("") }
-    var kind by remember { mutableStateOf(PartyKind.LOCAL) }
-    var starts by remember { mutableStateOf(LocalDateTime.now().plusHours(1).withSecond(0).withNano(0).format(formatter)) }
-    var meeting by remember { mutableStateOf("") }
-    var distance by remember { mutableStateOf("5") }
-    var pace by remember { mutableStateOf("자유 페이스") }
-    var capacity by remember { mutableStateOf("20") }
+    var title by rememberSaveable(crewId) { mutableStateOf("") }
+    var kind by rememberSaveable(crewId) { mutableStateOf(PartyKind.LOCAL) }
+    var starts by rememberSaveable(crewId) { mutableStateOf(LocalDateTime.now().plusHours(1).withSecond(0).withNano(0).format(formatter)) }
+    var meeting by rememberSaveable(crewId) { mutableStateOf("") }
+    var distance by rememberSaveable(crewId) { mutableStateOf("5") }
+    var pace by rememberSaveable(crewId) { mutableStateOf("자유 페이스") }
+    var capacity by rememberSaveable(crewId) { mutableStateOf("20") }
     val time = runCatching { LocalDateTime.parse(starts, formatter).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() }.getOrNull()
     val km = distance.toDoubleOrNull()
     val max = capacity.toIntOrNull()
     val valid = crewId != null && state.crews.any { it.id == crewId && it.joined } && title.trim().length in 2..80 && time != null && time > System.currentTimeMillis() && km != null && km.isFinite() && km > 0 && km <= 100 && max != null && max in 2..20 && pace.trim().length in 1..80 && time <= System.currentTimeMillis() + 366L * 86400000 && (kind == PartyKind.REMOTE || meeting.trim().length >= 2)
-    var submitted by remember { mutableStateOf(false) }
-    val previousId = remember { state.lastCreatedPartyId }
+    var submitted by rememberSaveable(crewId) { mutableStateOf(false) }
+    val previousId = rememberSaveable(crewId) { state.lastCreatedPartyId }
     LaunchedEffect(state.lastCreatedPartyId) { if (submitted && state.lastCreatedPartyId != previousId) onDismiss() }
     FormDialog("파티 만들기", onDismiss, confirm = { Button(shape = RunmoniShapes.Action, onClick = { submitted = true; actions.createParty(NewParty(crewId, title.trim(), kind, time!!, if (kind == PartyKind.LOCAL) meeting.trim() else "각자의 러닝 코스", km!!, pace.trim(), max!!)) }, enabled = valid && !state.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_create_party")) { Text(if (state.busy) "만드는 중…" else "만들기") } }) {
         Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {

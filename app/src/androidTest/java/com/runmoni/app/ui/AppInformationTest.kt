@@ -187,6 +187,8 @@ class AppInformationTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("crew_detail_0").performScrollTo().performClick()
         compose.onNodeWithTag("create_party_second").assertIsDisplayed()
         compose.onNodeWithTag("create_party_first").assertDoesNotExist()
+        compose.onNodeWithTag("nav_crew").assertDoesNotExist()
+        compose.onNodeWithTag("back_to_rooms").performClick()
         compose.onNodeWithTag("nav_crew").assertIsSelected()
     }
 

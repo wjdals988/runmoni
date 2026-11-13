@@ -13,7 +13,7 @@ enum class RunShareRatio(val height: Int, val label: String) {
     val aspectRatio: Float get() = width.toFloat() / height
 }
 
-enum class RunShareTheme(val label: String) { FOREST("초록"), INK("검정"), PAPER("밝게") }
+enum class RunShareTheme(val label: String) { FOREST("초록"), INK("검정"), PAPER("밝게"), CORAL("코랄") }
 enum class RunSharePlacement(val label: String) { BOTTOM("하단"), TOP("상단") }
 
 /** Editor coordinates are fractions of the complete output canvas, not GPS or source-photo coordinates. */

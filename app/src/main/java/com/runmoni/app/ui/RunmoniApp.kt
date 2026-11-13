@@ -105,7 +105,21 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var finishRunId by rememberSaveable { mutableStateOf<String?>(null) }
         var handledRunNavigationToken by rememberSaveable { mutableStateOf<Long?>(null) }
         var lastActiveId by remember { mutableStateOf(state.activeRun.id.takeIf { it.isNotBlank() }) }
+        var mileageInformation by rememberSaveable { mutableStateOf(false) }
+        var communitySubpage by rememberSaveable { mutableStateOf(false) }
+        val communityDeep = tab == 3 && communitySubpage
         val chatOpen = state.openedRoomId.isNotBlank()
+        // One root page at a time, including asynchronous chat arrivals.
+        val rootPage = when {
+            chatOpen -> "chat"
+            selectedRecordId != null -> "record"
+            signIn -> "profile"
+            appInformation -> "information"
+            mileageInformation -> "mileage"
+            settings -> "settings"
+            closet -> "closet"
+            else -> "main"
+        }
         val focusManager = LocalFocusManager.current
         LaunchedEffect(state.openedRoomId) { if (chatOpen) focusManager.clearFocus(force = true) }
         var completedId by remember { mutableStateOf<String?>(null) }
@@ -130,6 +144,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 appInformation = false
                 appInformationFromSettings = false
                 profileFromSettings = false
+                mileageInformation = false
                 closeRecord()
                 completedId = null
                 crewNavigation = null
@@ -159,12 +174,12 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             ((configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 maxWidth > maxHeight && maxHeight <= 360.dp) ||
                 (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp))
-        if (!closet && selectedRecordId == null) mainStateHolder.SaveableStateProvider("main_navigation") {
+        if (rootPage == "main") mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
-            modifier = if (chatOpen || settings) Modifier.clearAndSetSemantics { }.focusProperties { canFocus = false } else Modifier,
+            contentWindowInsets = if (communityDeep) WindowInsets(0) else ScaffoldDefaults.contentWindowInsets,
             containerColor = RunmoniColors.Cream,
             topBar = {
-                Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
+                if (!communityDeep) Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
                     if (!compactActiveRun) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
                             val separateVersion = maxWidth < 360.dp ||
@@ -191,7 +206,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 }
             },
             bottomBar = {
-                Surface(color = RunmoniColors.Paper) {
+                if (!communityDeep) Surface(color = RunmoniColors.Paper) {
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
                         if (compactActiveRun) {
@@ -290,19 +305,22 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onWeather = actions::refreshWeather, onWeatherEntry = actions::prepareHomeConditions, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { profileFromSettings = false; signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onFinish = { finishRunId = state.activeRun.id })
-                    3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch)
-                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformationFromSettings = false; appInformation = true }, onCloset = { closet = true }, onProfile = { profileFromSettings = false; signIn = true })
+                    3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch,
+                        onSubpageChanged = { communitySubpage = it })
+                    4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformationFromSettings = false; appInformation = true }, onCloset = { closet = true }, onProfile = { profileFromSettings = false; signIn = true }, onMileageHelp = { mileageInformation = true })
                 }
             }
         }
         }
-        if (closet) ClosetDialog(state.profile, actions) { closet = false }
-        if (settings) SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { profileFromSettings = true; settings = false; signIn = true }, onAppInformation = { appInformationFromSettings = true; settings = false; appInformation = true }, updates = updates, onOpenProfile = { profileFromSettings = true; settings = false; signIn = true }, scrollState = settingsScroll)
-        if (appInformation) AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false; if (appInformationFromSettings) settings = true; appInformationFromSettings = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
-        if (signIn) SignInDialog(state, actions) { signIn = false; if (profileFromSettings) settings = true; profileFromSettings = false }
+        if (rootPage == "closet") ClosetDialog(state.profile, actions) { closet = false }
+        if (rootPage == "settings") SettingsScreen(state, actions, onDismiss = { settings = false }, onSignIn = { profileFromSettings = true; settings = false; signIn = true }, onAppInformation = { appInformationFromSettings = true; settings = false; appInformation = true }, updates = updates, onOpenProfile = { profileFromSettings = true; settings = false; signIn = true }, scrollState = settingsScroll)
+        if (rootPage == "information") AppInformationDialog(updates, onCheckUpdates, onDismiss = { appInformation = false; if (appInformationFromSettings) settings = true; appInformationFromSettings = false }, promptUpdateInitially = updates.updateAvailable, onExternalLink = onExternalAppLink)
+        if (rootPage == "profile") SignInDialog(state, actions) { signIn = false; if (profileFromSettings) settings = true; profileFromSettings = false }
+        if (rootPage == "mileage") MileageExplanationDialog(onDismiss = { mileageInformation = false },
+            serverWallet = state.signedIn && !state.communityGuest)
         RunnerSharingConsent(state, actions)
-        if (chatOpen) ChatScreen(state, actions)
-        if (selectedRecordId != null) {
+        if (rootPage == "chat") ChatScreen(state, actions)
+        if (rootPage == "record") {
             if (selectedRecord != null) {
                 val recordActions = object : AppActions by actions {
                     override fun deleteRun(id: String) {
@@ -364,7 +382,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
         accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            ScreenContent {
+            ScreenContent(centerWhenFits = run.phase == RunPhase.IDLE) {
                 Text(if (persistence.finishing) "러닝 마무리 중"
                     else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"
                     else if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
@@ -560,12 +578,15 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
 }
 
 @Composable
-internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = RunmoniLayout.PageGap, content: @Composable ColumnScope.() -> Unit) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize()
+internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = RunmoniLayout.PageGap,
+    centerWhenFits: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
+    BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .verticalScroll(rememberScrollState()).testTag("screen_scroll")
+            .heightIn(min = maxHeight)
             .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(spacing), content = content)
+            verticalArrangement = Arrangement.spacedBy(spacing,
+                if (centerWhenFits) Alignment.CenterVertically else Alignment.Top), content = content)
     }
 }
 
@@ -671,7 +692,9 @@ internal fun RecordRow(record: RunRecord, onClick: () -> Unit) {
 
 internal fun topColor(variant: Int): Color = when (variant % 4) { 1 -> RunmoniColors.Green; 2 -> Color(0xFF547FB3); 3 -> Color(0xFFD6AE48); else -> RunmoniColors.Coral }
 @Composable
-internal fun AvatarMini(avatar: AvatarStyle, modifier: Modifier, running: Boolean = false, decorative: Boolean = false) = MiniMi(avatar, modifier, running, if (decorative) null else "나의 러닝 미니미")
+internal fun AvatarMini(avatar: AvatarStyle, modifier: Modifier, running: Boolean = false, decorative: Boolean = false,
+    onFrameRendered: ((Int) -> Unit)? = null) = MiniMi(avatar, modifier, running,
+    if (decorative) null else "나의 러닝 미니미", onFrameRendered = onFrameRendered)
 internal fun accessoryName(variant: Int) = when (variant) { 1 -> "headband"; 2 -> "cap"; 3 -> "headphones"; else -> "none" }
 internal fun distance(meters: Double) = String.format(Locale.KOREAN, "%.2f", meters / 1000)
 internal fun duration(millis: Long): String { val seconds = millis.coerceAtLeast(0) / 1000; return if (seconds >= 3600) "%d:%02d:%02d".format(seconds / 3600, seconds / 60 % 60, seconds % 60) else "%02d:%02d".format(seconds / 60, seconds % 60) }

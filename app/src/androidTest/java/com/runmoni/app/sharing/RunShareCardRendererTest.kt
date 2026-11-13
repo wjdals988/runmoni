@@ -19,9 +19,11 @@ import com.runmoni.app.domain.RunSharePlacement
 import com.runmoni.app.domain.RunShareRatio
 import com.runmoni.app.domain.RunShareTheme
 import com.runmoni.app.domain.RunShareText
+import com.runmoni.app.domain.TrackPoint
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.math.pow
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -59,6 +61,96 @@ class RunShareCardRendererTest {
             }
             assertFalse(photo.isRecycled)
             assertArrayEquals(original, pixels(photo))
+        } finally { photo.recycle() }
+    }
+
+    @Test fun coralKeepsReadablePhotoSurfacesAndCanonicalPngAcrossAllRatios() {
+        assertEquals(listOf("FOREST", "INK", "PAPER"), RunShareTheme.entries.take(3).map { it.name })
+        assertEquals(listOf(0, 1, 2), RunShareTheme.entries.take(3).map { it.ordinal })
+        assertEquals(RunShareTheme.CORAL, RunShareTheme.entries.last())
+        assertEquals(RunShareTheme.FOREST, RunShareDraft().theme)
+        assertEquals(RunShareRatio.SQUARE, RunShareDraft().ratio)
+        val privateRecord = RunRecord("synthetic-private-id-a", start, start + 1_800_000,
+            distanceMeters = 5230.0, activeDurationMillis = 1_738_000,
+            points = listOf(TrackPoint(0, 37.5665, 126.9780, 5f, start)), mileage = 90)
+        val publicContent = RunShareContent.from(privateRecord, ZoneId.of("Asia/Seoul"))!!
+        assertEquals("Private ID, route and wallet must remain outside share content", publicContent,
+            RunShareContent.from(privateRecord.copy(id = "synthetic-private-id-b", mileage = 999,
+                points = listOf(TrackPoint(0, 35.1796, 129.0756, 5f, start))), ZoneId.of("Asia/Seoul")))
+        val foreground = 0xff192d25.toInt()
+        val secondary = 0xff556158.toInt()
+        for (ratio in RunShareRatio.entries) for (shade in listOf<Int?>(null, Color.WHITE, Color.BLACK)) {
+            val shadeName = when (shade) { Color.WHITE -> "bright"; Color.BLACK -> "dark"; else -> "plain" }
+            val label = "${ratio.name}/$shadeName"
+            val photo = shade?.let { color -> Bitmap.createBitmap(48, 32, Bitmap.Config.ARGB_8888).apply { eraseColor(color) } }
+            val original = photo?.let(::pixels)
+            val result = RunShareCardRenderer.render(publicContent, RunShareDraft(ratio = ratio,
+                theme = RunShareTheme.CORAL,
+                placement = if (shade == Color.BLACK) RunSharePlacement.TOP else RunSharePlacement.BOTTOM,
+                caption = "나의 페이스로", showName = true, showAvatar = false), photo, null, "검토용 러너")
+            try {
+                val image = pixels(result)
+                assertEquals(ratio.width, result.width)
+                assertEquals(ratio.height, result.height)
+                assertTrue("$label actual text must be drawn in the dark foreground", image.any { it == foreground })
+                assertTrue("$label actual labels must be drawn in the secondary color", image.any { it == secondary })
+                // x=0 contains the real full-width header/stat surfaces, outside all text.
+                // Measure their final composed colors rather than assuming the photo alpha.
+                val surfaces = (0 until result.height).map { result.getPixel(0, it) }
+                    .filter { shade == null || it != shade }.toSet()
+                assertTrue("$label must contain a legible theme surface", surfaces.isNotEmpty())
+                surfaces.forEach { background ->
+                    assertEquals("$label composed surface must be opaque", 255, Color.alpha(background))
+                    assertTrue("$label primary contrast=${contrast(foreground, background)}", contrast(foreground, background) >= 4.5)
+                    assertTrue("$label secondary contrast=${contrast(secondary, background)}", contrast(secondary, background) >= 4.5)
+                }
+                assertPngRoundTrip(result, "share-card-coral-${ratio.name.lowercase()}-$shadeName-fixture.png")
+                if (photo != null) {
+                    assertFalse("$label borrowed photo stays alive", photo.isRecycled)
+                    assertArrayEquals("$label borrowed photo must not be tinted", original!!, pixels(photo))
+                }
+            } finally { result.recycle(); photo?.recycle() }
+        }
+    }
+
+    @Test fun coralLeavesApprovedMaleAndFemalePaletteAndBorrowedPixelsIntact() {
+        val renderer = ApprovedAvatarRenderer(context)
+        val photo = Bitmap.createBitmap(48, 32, Bitmap.Config.ARGB_8888).apply { eraseColor(0xff374b42.toInt()) }
+        val originalPhoto = pixels(photo)
+        try {
+            for (gender in AvatarGender.entries) {
+                val avatar = renderer.renderForDisplay(2, true, AvatarStyle(top = 1, bottom = 1,
+                    socks = 2, shoes = 2, gender = gender))
+                val original = pixels(avatar)
+                val flat = Bitmap.createBitmap(avatar.width, avatar.height, Bitmap.Config.ARGB_8888)
+                val flattened = try {
+                    Canvas(flat).apply {
+                        drawColor(photo.getPixel(0, 0))
+                        drawBitmap(avatar, 0f, 0f, Paint().apply {
+                            isFilterBitmap = false; isAntiAlias = false; isDither = false
+                        })
+                    }
+                    pixels(flat)
+                } finally { flat.recycle() }
+                val required = original.indices.filter { Color.alpha(original[it]) >= 250 }.map { flattened[it] }.toMutableSet()
+                assertTrue("$gender approved palette must be meaningful", required.size > 10)
+                val result = RunShareCardRenderer.render(content(true), RunShareDraft(
+                    ratio = if (gender == AvatarGender.MALE) RunShareRatio.SQUARE else RunShareRatio.POST,
+                    theme = RunShareTheme.CORAL, showName = true, avatarX = .25f, avatarY = -9f, avatarScale = 1.5f),
+                    photo, avatar, "검토용 러너")
+                try {
+                    for (pixel in pixels(result)) {
+                        required.remove(pixel)
+                        if (required.isEmpty()) break
+                    }
+                    assertTrue("$gender coral surface must not tint or hide the genuine character palette", required.isEmpty())
+                    assertFalse(avatar.isRecycled)
+                    assertArrayEquals("$gender borrowed approved source must be unchanged", original, pixels(avatar))
+                    assertArrayEquals("$gender borrowed photo must be unchanged", originalPhoto, pixels(photo))
+                    assertPngRoundTrip(result, "share-card-coral-${gender.name.lowercase()}-approved-fixture.png")
+                } finally { result.recycle() }
+                // The genuine renderer owns avatar. Never recycle its shared bitmap.
+            }
         } finally { photo.recycle() }
     }
 
@@ -257,5 +349,31 @@ class RunShareCardRendererTest {
                 // The approved renderer owns avatar; the compositor/test never recycles it.
             }
         } finally { photo.recycle() }
+    }
+
+    private fun assertPngRoundTrip(bitmap: Bitmap, filename: String) {
+        val target = File(context.cacheDir, "run-share-review/$filename")
+        target.parentFile!!.mkdirs()
+        target.outputStream().use { assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) }
+        val decoded = BitmapFactory.decodeFile(target.absolutePath)
+        assertNotNull("Canonical PNG must decode: $filename", decoded)
+        try {
+            assertEquals(bitmap.width, decoded!!.width)
+            assertEquals(bitmap.height, decoded.height)
+            assertArrayEquals("Canonical PNG must retain every preview-rendered pixel: $filename", pixels(bitmap), pixels(decoded))
+        } finally { decoded?.recycle() }
+    }
+
+    private fun contrast(foreground: Int, background: Int): Double {
+        fun luminance(color: Int): Double {
+            fun linear(value: Int): Double {
+                val s = value / 255.0
+                return if (s <= .04045) s / 12.92 else ((s + .055) / 1.055).pow(2.4)
+            }
+            return .2126 * linear(Color.red(color)) + .7152 * linear(Color.green(color)) + .0722 * linear(Color.blue(color))
+        }
+        val a = luminance(foreground)
+        val b = luminance(background)
+        return (maxOf(a, b) + .05) / (minOf(a, b) + .05)
     }
 }

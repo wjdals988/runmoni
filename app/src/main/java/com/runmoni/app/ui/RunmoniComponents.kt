@@ -10,6 +10,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,19 +39,20 @@ internal fun PageTopBar(
     title: String,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
-    closeLabel: String = "닫기",
+    closeLabel: String = "뒤로",
     closeTag: String = "",
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Box(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-            .heightIn(min = 64.dp).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp),
+            .heightIn(min = 64.dp).padding(horizontal = 8.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            IconButton(onClick = onClose, modifier = Modifier.size(48.dp).testTag(closeTag)) {
+                Icon(Icons.AutoMirrored.Outlined.ArrowBack, closeLabel, tint = RunmoniColors.Primary)
+            }
             Text(title, style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f).semantics { heading() })
             actions()
-            TextButton(onClick = onClose, shape = RunmoniShapes.Action,
-                modifier = Modifier.heightIn(min = 48.dp).testTag(closeTag)) { Text(closeLabel) }
         }
     }
 }

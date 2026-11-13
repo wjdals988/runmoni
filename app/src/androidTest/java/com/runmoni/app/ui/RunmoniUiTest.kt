@@ -265,7 +265,9 @@ class RunmoniUiTest {
         compose.setContent { RunmoniTheme { PartyDialog(state.value, fixture, actions, onDismiss = {}) } }
         compose.onNodeWithTag("join_party_ui-party").assertDoesNotExist()
         compose.onNodeWithTag("delete_party_ui-party").performScrollTo().performClick()
-        compose.onNodeWithTag("party_detail").assertDoesNotExist()
+        // A short confirmation overlays the current page; it does not replace
+        // that page with a second full-screen Dialog window.
+        compose.onNodeWithTag("party_detail").assertExists()
         compose.onNodeWithTag("confirmation_close").assertIsDisplayed().performClick()
         compose.runOnIdle { assertTrue(deleted.isEmpty()); assertTrue(fake.cancelledParties.isEmpty()); assertTrue(fake.leftParties.isEmpty()) }
         compose.onNodeWithTag("delete_party_ui-party").assertIsDisplayed().performClick()
@@ -281,6 +283,7 @@ class RunmoniUiTest {
         compose.setContent { RunmoniApp(state.value, actions) }
         compose.onNodeWithTag("nav_crew").performClick()
         compose.onNodeWithTag("crew_ui-crew").performScrollTo().performClick()
+        compose.onNodeWithTag("nav_crew").assertDoesNotExist()
         compose.onNodeWithTag("leave_crew_ui-crew").assertDoesNotExist()
         compose.onNodeWithTag("create_party_ui-crew").performScrollTo().assertIsEnabled()
         compose.onNodeWithTag("crew_detail_1").performScrollTo().performClick()
@@ -290,6 +293,11 @@ class RunmoniUiTest {
         compose.runOnIdle { assertEquals(listOf(Triple("ui-crew", "member", true)), actions.djChanges) }
         compose.onNodeWithTag("assign_dj_member").performScrollTo().performClick()
         compose.runOnIdle { assertEquals(Triple("ui-crew", "member", false), actions.djChanges.last()); assertTrue(actions.leftCrews.isEmpty()) }
+        compose.onNodeWithTag("close_crew_members").performClick()
+        compose.onNodeWithTag("crew_detail_1").assertIsSelected()
+        compose.onNodeWithTag("nav_crew").assertDoesNotExist()
+        compose.onNodeWithTag("back_to_rooms").performClick()
+        compose.onNodeWithTag("nav_crew").assertIsSelected()
     }
 
     @Test fun djMusicChoicesDelegateAllSixAppPackagesAndCloseAfterRoleLoss() {

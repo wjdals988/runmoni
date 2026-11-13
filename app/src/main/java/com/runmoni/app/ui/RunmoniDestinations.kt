@@ -16,21 +16,27 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
 internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, onRecord: (RunRecord) -> Unit, onParty: (Party) -> Unit = { onCrew() }, onRetrySave: () -> Unit = {}, onWeather: () -> Unit = {}, onWeatherEntry: () -> Unit = {}) {
     val homeClock = rememberHomeClock()
-    val today = java.time.Instant.ofEpochMilli(homeClock).atZone(java.time.ZoneId.systemDefault()).toLocalDate()
+    val zone = ZoneId.systemDefault()
+    val today = java.time.Instant.ofEpochMilli(homeClock).atZone(zone).toLocalDate()
     LaunchedEffect(Unit) { onWeatherEntry() }
     val todaysRuns = state.records.filter { localDate(it.startedAtMillis) == today }
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
         "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회" else null
+    val recentActivity = remember(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable) {
+        recentRunActivity(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable)
+    }
     ScreenContent {
         HomeDateTime(homeClock)
         BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -41,7 +47,8 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
             val avatarWidth = if (sceneWidth < 280.dp) 80.dp else 96.dp
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                 // The open departure scene and its full-width action are separate areas.
-                Column(Modifier.fillMaxWidth().testTag("home_run_hero").padding(horizontal = sceneInset),
+                Column(Modifier.fillMaxWidth().testTag("home_run_hero")
+                    .background(RunmoniColors.MintWash, RunmoniShapes.Surface).padding(horizontal = sceneInset),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (besideAvatar) {
                         HomeHeading(null, compact = false)
@@ -80,6 +87,9 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         }
         HomeWeatherDetails(state.weather, homeClock, onWeather)
         RunPersistenceNotice(state.runPersistence, onRetrySave)
+        Box(Modifier.fillMaxWidth().testTag("home_recent_activity")) {
+            RecentRunActivitySection(recentActivity)
+        }
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }
         if (next != null) ScreenSection("예정된 파티", action = "모두 보기", onAction = onCrew) {
@@ -99,7 +109,8 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 @Composable
 private fun HomeHeading(todaySummary: String?, compact: Boolean, modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(if (compact) "러닝" else "오늘의 러닝", style = MaterialTheme.typography.headlineLarge,
+        Text(if (compact) "러닝" else "오늘의 러닝",
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold), color = RunmoniColors.DeepGreen,
             modifier = Modifier.semantics { heading() })
         if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
     }
@@ -133,8 +144,7 @@ internal fun CommunityUnavailable(actions: AppActions) {
 }
 
 @Composable
-internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Unit, onRecord: (RunRecord) -> Unit, onSettings: () -> Unit, updates: AppUpdateUiState, onAppInformation: () -> Unit, onCloset: () -> Unit, onProfile: () -> Unit = {}) {
-    var mileageHelp by rememberSaveable { mutableStateOf(false) }
+internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Unit, onRecord: (RunRecord) -> Unit, onSettings: () -> Unit, updates: AppUpdateUiState, onAppInformation: () -> Unit, onCloset: () -> Unit, onProfile: () -> Unit = {}, onMileageHelp: () -> Unit = {}) {
     var period by rememberSaveable { mutableIntStateOf(1) }
     var referenceEpoch by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
     val reference = LocalDate.ofEpochDay(referenceEpoch)
@@ -146,7 +156,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             BoxWithConstraints(Modifier.fillMaxWidth()) {
                 val details: @Composable (Modifier) -> Unit = { modifier ->
                     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(state.profile.name, style = MaterialTheme.typography.titleLarge)
+                        Text(state.profile.name, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold))
                         TextButton(onClick = onProfile, shape = RunmoniShapes.Action,
                             contentPadding = PaddingValues(0.dp),
                             modifier = Modifier.heightIn(min = 48.dp).testTag("open_unified_profile")) {
@@ -177,7 +187,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                 Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp))
             }
         }
-        TextButton(shape = RunmoniShapes.Action, onClick = { mileageHelp = true },
+        TextButton(shape = RunmoniShapes.Action, onClick = onMileageHelp,
             contentPadding = PaddingValues(vertical = 12.dp),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_mileage_help")) {
             Text("마일리지 ${state.profile.mileage} P", style = MaterialTheme.typography.titleMedium,
@@ -195,23 +205,25 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
                 )
             }
-            Column(Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                val unavailable = state.runPersistence.historyUnavailable && state.records.isEmpty()
-                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.RouteBlue, maxSize = 48f)
-                Text("km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            Column(Modifier.fillMaxWidth().background(RunmoniColors.DeepGreen, RunmoniShapes.Surface).padding(20.dp)
+                .testTag("history_period_summary"), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
+                val unavailable = (!state.runPersistence.initialized || state.runPersistence.historyUnavailable) && state.records.isEmpty()
+                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.OnDark, maxSize = 48f)
+                Text("km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (unavailable) "러닝 —회" else "러닝 ${records.size}회", style = MaterialTheme.typography.titleMedium,
-                        color = RunmoniColors.RouteBlue, modifier = Modifier.testTag("history_run_count"))
+                        color = RunmoniColors.OnDark, modifier = Modifier.testTag("history_run_count"))
                     Text(if (unavailable) "시간 —" else "시간 ${duration(records.sumOf { it.activeDurationMillis })}",
-                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.Navy,
+                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.OnDark,
                         modifier = Modifier.testTag("history_active_duration"))
                 }
-                if (state.runPersistence.historyUnavailable) Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                if (state.records.isNotEmpty() && (state.runPersistence.historyUnavailable || !state.runPersistence.initialized))
+                    Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
             }
             HorizontalDivider(color = RunmoniColors.Line)
-            if (records.isEmpty() && !state.runPersistence.historyUnavailable) EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 시작", onRun)
+            if (records.isEmpty() && state.runPersistence.initialized && !state.runPersistence.historyUnavailable)
+                EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 시작", onRun)
             if (records.isNotEmpty()) Column(Modifier.fillMaxWidth()) {
                 records.sortedByDescending { it.startedAtMillis }.forEach { record -> RecordRow(record) { onRecord(record) } }
             }
@@ -221,7 +233,6 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             AppVersionCard(updates, onAppInformation)
         }
     }
-    if (mileageHelp) MileageExplanationDialog(onDismiss = { mileageHelp = false }, serverWallet = state.signedIn && !state.communityGuest)
 }
 
 @Composable
