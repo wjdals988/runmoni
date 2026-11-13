@@ -1,0 +1,19 @@
+{
+  "kind": "source-only independent cross review; not execution or user visual approval",
+  "reviewers": {
+    "benchmark_design_review": [
+      "Home/Profile layout and plan height/state risks"
+    ],
+    "avatar_item_review": [
+      "CommunityRooms/PartyDetailScreen/RunmoniChat state/permission/back/IME paths"
+    ],
+    "community_lifecycle": [
+      "RunRecordScreen/RunShareScreen source review requested"
+    ],
+    "closet_context_ui": [
+      "AppEntryScreen/SettingsGroup no blocker; RunningScreen persistence/permission before map correction"
+    ]
+  },
+  "noRuntimeResultInferred": true,
+  "sourceFrozenBeforeBuild": "source-freeze2.json"
+}

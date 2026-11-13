@@ -59,7 +59,7 @@ internal fun ScreenSection(
     modifier: Modifier = Modifier,
     action: String? = null,
     onAction: () -> Unit = {},
-    showDivider: Boolean = true,
+    showDivider: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

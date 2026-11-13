@@ -9,7 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
@@ -22,7 +21,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.paneTitle
@@ -42,6 +40,7 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
     var noticesOnly by remember(state.openedRoomId) { mutableStateOf(false) }
     var pending by remember(state.openedRoomId) { mutableStateOf<String?>(null) }
     val crewId = if (state.openedRoomId.startsWith("crew:")) state.openedRoomId.removePrefix("crew:") else state.parties.firstOrNull { "party:${it.id}" == state.openedRoomId }?.crewId
+    val crew = state.crews.firstOrNull { it.id == crewId }
     val canNotice = if (state.communityBackend == CommunityBackend.FIREBASE) state.chatCanNotice else state.crews.any { it.id == crewId && (it.isOwner || it.isDj) } || state.parties.any { "party:${it.id}" == state.openedRoomId && it.isOrganizer }
     val messages = state.messages.filter { it.roomId == state.openedRoomId && (!noticesOnly || it.notice) }.sortedBy { it.createdAtMillis }
     val scroll = key(state.openedRoomId, noticesOnly) { rememberScrollState() }
@@ -84,12 +83,12 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                 Row(Modifier.fillMaxWidth().heightIn(min = if (compact) 48.dp else 64.dp), verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        if (!compact) Text(if (state.openedRoomId.startsWith("crew:")) "크루 대화" else "파티 대화",
-                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                         Text(if (notice) "공지 작성 · ${state.openedRoomTitle}" else state.openedRoomTitle,
                             style = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
                             modifier = Modifier.semantics { heading() },
                             maxLines = if (compact) 1 else 2, overflow = TextOverflow.Ellipsis)
+                        if (!compact && state.openedRoomId.startsWith("crew:") && crew != null) Text("크루 멤버 ${crew.memberCount}명",
+                            style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     }
                     Box {
                         IconButton(onClick = { menuExpanded = true }, modifier = Modifier.size(48.dp).testTag("chat_options")) { Icon(Icons.Outlined.MoreVert, "채팅 보기와 공지 설정") }
@@ -116,14 +115,16 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                         messages.forEach { message ->
                             key(message.id) {
                                 Column(Modifier.fillMaxWidth(), horizontalAlignment = if (message.mine && !message.notice) Alignment.End else Alignment.Start,
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Row(Modifier.padding(horizontal = 4.dp), verticalAlignment = Alignment.Top,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    FlowRow(Modifier.padding(horizontal = 4.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                         if (message.notice) Icon(Icons.Outlined.Campaign, null, tint = RunmoniColors.RouteBlue,
                                             modifier = Modifier.size(18.dp))
                                         Text(if (message.notice) "공지 · ${message.author}" else message.author,
                                             style = MaterialTheme.typography.labelLarge,
                                             color = if (message.notice) RunmoniColors.RouteBlue else RunmoniColors.Navy)
+                                        Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall,
+                                            color = RunmoniColors.Muted)
                                     }
                                     Surface(shape = RunmoniShapes.Surface,
                                         color = if (message.notice) RunmoniColors.BlueWash else if (message.mine) RunmoniColors.MintWash else RunmoniColors.Paper,
@@ -132,8 +133,6 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                                         Text(message.body, style = MaterialTheme.typography.bodyLarge,
                                             modifier = Modifier.padding(16.dp))
                                     }
-                                    Text(clock(message.createdAtMillis), style = MaterialTheme.typography.bodySmall,
-                                        color = RunmoniColors.Muted, modifier = Modifier.padding(horizontal = 4.dp))
                                 }
                             }
                         }
@@ -154,7 +153,6 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                         Text("새 메시지")
                     }
                 }
-                if (canNotice && !compact) Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).toggleable(notice, role = Role.Checkbox, onValueChange = { notice = it }), verticalAlignment = Alignment.CenterVertically) { Checkbox(checked = notice, onCheckedChange = null); Spacer(Modifier.width(8.dp)); Text("공지로 보내기", style = MaterialTheme.typography.bodyMedium) }
                 HorizontalDivider(color = RunmoniColors.Line)
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, label = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), textStyle = MaterialTheme.typography.bodyLarge, maxLines = composerMaxLines, shape = RunmoniShapes.Input)

@@ -1,6 +1,7 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.ScrollState
@@ -140,29 +141,43 @@ private fun RunRecordPageContent(
             Box(Modifier.fillMaxWidth().weight(1f).testTag("record_scroll_viewport")) {
                 Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                     .align(Alignment.TopCenter).verticalScroll(scroll).testTag("record_detail_scroll")
-                    .padding(horizontal = pageGutter(), vertical = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
-                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                            Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                                color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
-                            val recordedDistance = distance(record.distanceMeters)
-                            Row(Modifier.fillMaxWidth().testTag("record_distance")
-                                .clearAndSetSemantics { text = AnnotatedString("$recordedDistance km") },
-                                horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
-                                Box(Modifier.weight(1f)) {
-                                    DistanceNumber(recordedDistance, RunmoniColors.Primary, maxSize = 48f)
-                                }
-                                Text("km", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted,
-                                    modifier = Modifier.padding(bottom = 4.dp))
+                    .padding(bottom = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(32.dp)) {
+                    // The result is the opening of the page, rather than one
+                    // more card competing with the route and management tools.
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.PrimarySoft)
+                        .padding(horizontal = pageGutter(), vertical = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
+                            color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
+                        val recordedDistance = distance(record.distanceMeters)
+                        Row(Modifier.fillMaxWidth().testTag("record_distance")
+                            .clearAndSetSemantics { text = AnnotatedString("$recordedDistance km") },
+                            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+                            Box(Modifier.weight(1f)) {
+                                DistanceNumber(recordedDistance, RunmoniColors.Primary, maxSize = 56f)
                             }
-                            HorizontalDivider(color = RunmoniColors.Line)
-                            Text("러닝 시간 ${duration(record.activeDurationMillis)} · 평균 ${averagePace(record.distanceMeters, record.activeDurationMillis)} /km",
-                                style = MaterialTheme.typography.bodyLarge, modifier = Modifier.testTag("record_duration_pace"))
+                            Text("km", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted,
+                                modifier = Modifier.padding(bottom = 4.dp))
+                        }
+                        HorizontalDivider(color = RunmoniColors.Line)
+                        val time = duration(record.activeDurationMillis)
+                        val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
+                        BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_duration_pace")
+                            .clearAndSetSemantics { text = AnnotatedString("러닝 시간 $time · 평균 $pace /km") }) {
+                            if (maxWidth < 320.dp || LocalDensity.current.fontScale >= 1.3f) {
+                                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                                    RecordResultMetric("러닝 시간", time)
+                                    RecordResultMetric("평균 페이스", "$pace /km")
+                                }
+                            } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                                Box(Modifier.weight(1f)) { RecordResultMetric("러닝 시간", time) }
+                                Box(Modifier.weight(1f)) { RecordResultMetric("평균 페이스", "$pace /km") }
+                            }
                         }
                     }
 
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         RecordSectionTitle("러닝 경로")
                         Box(Modifier.fillMaxWidth()
                             .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 280.dp)
@@ -174,8 +189,15 @@ private fun RunRecordPageContent(
                             modifier = Modifier.testTag("record_interrupted"))
                     }
 
-                    if (record.splits.isNotEmpty()) Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (record.splits.isNotEmpty()) Column(Modifier.padding(horizontal = pageGutter()),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         RecordSectionTitle("킬로미터별 기록")
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Text("구간", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                                modifier = Modifier.weight(1f))
+                            Text("시간", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                        }
+                        HorizontalDivider(color = RunmoniColors.Line)
                         record.splits.forEach { split ->
                             Row(Modifier.fillMaxWidth().testTag("record_split_${split.kilometer}"),
                                 horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.Top) {
@@ -186,8 +208,11 @@ private fun RunRecordPageContent(
                         }
                     }
 
-                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        RecordSectionTitle("저장과 백업")
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+                        .padding(horizontal = pageGutter(), vertical = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        RecordSectionTitle("기록 관리")
+                        HorizontalDivider(color = RunmoniColors.Line)
                         Text(if (record.synced) "서버 동기화됨" else "기기에 저장됨",
                             style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Primary,
                             modifier = Modifier.testTag("record_storage_status"))
@@ -208,9 +233,6 @@ private fun RunRecordPageContent(
                                 style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                         } else Text("요약 백업은 설정에서 Google 계정을 연결한 뒤 이용할 수 있어요.",
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                    }
-
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         HorizontalDivider(color = RunmoniColors.Line)
                         OutlinedButton(shape = RunmoniShapes.Action, onClick = exportAction, enabled = hasRecordId && !operationBusy,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export_run").recordActionSnapshot(exportAction)) {
@@ -284,5 +306,13 @@ private fun RunRecordPageContent(
 
 @Composable
 private fun RecordSectionTitle(title: String) {
-    Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
+    Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+}
+
+@Composable
+private fun RecordResultMetric(label: String, value: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Navy)
+    }
 }

@@ -166,22 +166,16 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
 @Composable
 internal fun SettingsGroup(title: String, icon: ImageVector, detail: String? = null,
     content: @Composable ColumnScope.() -> Unit) {
-    Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(40.dp).background(RunmoniColors.BlueWash, RunmoniShapes.Action),
-                    contentAlignment = Alignment.Center) {
-                    Icon(icon, null, Modifier.size(24.dp), tint = RunmoniColors.RouteBlue)
-                }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text(title, style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.semantics { heading() })
-                    if (!detail.isNullOrBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium,
-                        color = RunmoniColors.Muted)
-                }
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Icon(icon, null, Modifier.size(24.dp), tint = RunmoniColors.RouteBlue)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+                if (!detail.isNullOrBlank()) Text(detail, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             }
-            content()
         }
+        Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper, RunmoniShapes.Surface).padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp), content = content)
     }
 }
 

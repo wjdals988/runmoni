@@ -1,3 +1,7 @@
+# 2026-11-13 화면 구성 개편 후보
+
+frontend-design·ui-ux-pro-max를 적용해 홈/러닝/탐색/나·기록/옷장/크루·파티/공유·로그인·설정의 읽기·조작 순서를 재구성한다. [우선순위와 적용 이유](design-system/runmoni/pages/layout-renewal.md)와 [검토 근거](docs/app-review/2026-11-13-layout-renewal/README.md)를 따른다. 후보0.5.0-dev/code27이며 공개0.4.4의 실제 APK출처7d921417e63d41bac5942645f2d2a50f4e1d308a·피드는 새 서명·게시 전까지 유지한다. 원화/데이터/키/Rules·의존성은 유지하고 새 검증은 입력별로 구분한다. 휴대폰·Google·운영쓰기·사용자승인을 추정하지 않는다.
+
 # 2026-11-12 시각 강화 후속
 
 [우선순위·근거·1차 구현](docs/UI_UX_EXPRESSIVE_PRIORITIES_20261112.md)을 따른다. 색면과 러닝 트랙은 미니미 주변에 집중하고 선택 색면은 기존 탭의 상태를 보조한다. 아래 데이터·가독성·안전영역 원칙은 유지한다.
