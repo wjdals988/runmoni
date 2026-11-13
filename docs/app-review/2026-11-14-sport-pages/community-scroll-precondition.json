@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-13T16:20:48.337500+00:00",
+  "binaryReference": "binary-build3.json",
+  "raw": {
+    "file": "android-review1-community.txt",
+    "sha256": "7a54f6fc264cb232d0342bfae8aef3eb065c7f34da32233f7cecd45321a5206d"
+  },
+  "testsRun": 12,
+  "failures": 1,
+  "failedMethod": "com.runmoni.app.ui.CommunityPageNavigationTest#partyChatBackReturnsToTheSamePartyScrollAndCrewTab",
+  "failure": "Fixture nonzero-scroll precondition: open_party_chat already visible, scroll offset0",
+  "actualChatBackPathReached": false,
+  "productNavigationFailureEstablished": false,
+  "sourceOrAssertionsChanged": false,
+  "recheckPlan": "Same APK/source; default11 and actual short landscape party scroll1, each recorded independently",
+  "recheckExecuted": false
+}

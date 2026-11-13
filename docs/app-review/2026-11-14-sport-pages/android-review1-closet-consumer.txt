@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.ConsumerClosetTest:.
+
+Time: 113.133
+
+OK (1 test)
+
+

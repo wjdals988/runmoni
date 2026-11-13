@@ -1,0 +1,25 @@
+
+com.runmoni.app.ui.ModalDismissNativeUiTest:.
+Error in imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss(com.runmoni.app.ui.ModalDismissNativeUiTest):
+java.lang.AssertionError: Full modal_native_submit stays outside actual OS/IME bounds
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.ModalDismissUiTestKt.assertModalActionInsideWindow(ModalDismissUiTest.kt:143)
+	at com.runmoni.app.ui.ModalDismissUiTestKt.access$assertModalActionInsideWindow(ModalDismissUiTest.kt:1)
+	at com.runmoni.app.ui.ModalDismissNativeUiTest.imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss(ModalDismissUiTest.kt:204)
+
+
+Time: 34.328
+There was 1 failure:
+1) imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss(com.runmoni.app.ui.ModalDismissNativeUiTest)
+java.lang.AssertionError: Full modal_native_submit stays outside actual OS/IME bounds
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.ModalDismissUiTestKt.assertModalActionInsideWindow(ModalDismissUiTest.kt:143)
+	at com.runmoni.app.ui.ModalDismissUiTestKt.access$assertModalActionInsideWindow(ModalDismissUiTest.kt:1)
+	at com.runmoni.app.ui.ModalDismissNativeUiTest.imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss(ModalDismissUiTest.kt:204)
+
+FAILURES!!!
+Tests run: 2,  Failures: 1
+
+

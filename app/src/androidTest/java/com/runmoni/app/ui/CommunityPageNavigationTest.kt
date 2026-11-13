@@ -39,6 +39,9 @@ class CommunityPageNavigationTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("nav_crew").assertDoesNotExist()
         compose.onNodeWithTag("party_${party.id}").performScrollTo().performClick()
         compose.onNodeWithTag("crew_detail_0").assertDoesNotExist()
+        // Read the last action first so this checks a real scroll round trip
+        // even when the chat action originally fits above the fold.
+        compose.onNodeWithTag("join_party_${party.id}").performScrollTo()
         compose.onNodeWithTag("open_party_chat").performScrollTo()
         val before = scrollPosition("party_content")
         assertTrue("The fixture must exercise a scrolled party page", before > 0f)

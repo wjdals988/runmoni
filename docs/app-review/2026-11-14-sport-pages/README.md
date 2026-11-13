@@ -7,3 +7,5 @@
 소스 상호 검토와 실제 빌드/Android 결과를 구분해 아래 자료에 추가합니다. 과거0.5.0의 JVM189·Android69·Main5는 이번 실행으로 합산하지 않습니다. 기존 공개 APK의 실제 출처df09c233f711dc5a0573daf4e030e53af51dddf8도 새 문서 커밋으로 바꾸지 않습니다. 실기기·Google 로그인·운영 쓰기·SNS 전달·새 공개서명 APK 실행·사용자 시각 승인은 별도입니다.
 
 최종 로컬 binary3/source-freeze3: 새 JVM193개, lint 오류0·경고57, debug APK와 test APK를 빌드했습니다. 첫 컴파일의 높이 참조 오류와 두 번째 lint의 위젯 tint 오류를 원문으로 보존했고 최종 입력에서 재실행했습니다. Android90개 선택 계획·실제 Main·Launcher 검증은 아직 실행 전입니다.
+
+입력3 진단 실행: 일반 parent=false/성공 그룹63개와 native parent=false/성공 그룹13개를 보존했습니다. 파티 검사의 실제 스크롤 전제와 폼 IME 저장 버튼의 OS 경계 실패를 구분하며 최종90개에 합산하지 않습니다. 원래 데이터/소유 환경 복원 뒤 AVD47376을 종료했습니다. 입력4는 파티 테스트에서 실제 마지막 부분을 읽도록 하고, 폼 테스트를 Main의 edge-to-edge/resize 설정에 맞추며 판정 전 geometry를 기록합니다. 원래 경계·48dp·시간 제한은 유지합니다. 새 전체 일반75/native15와 실제 Main/Launcher 검증은 아직 실행 전입니다.

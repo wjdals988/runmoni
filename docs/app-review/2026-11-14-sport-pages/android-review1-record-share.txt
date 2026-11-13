@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.RunShareUiTest:....
+com.runmoni.app.ui.RunShareControllerTest:.
+com.runmoni.app.ui.RunRecordScreenUiTest:....
+com.runmoni.app.ui.RunRecordNavigationUiTest:..
+
+Time: 262.949
+
+OK (11 tests)
+
+

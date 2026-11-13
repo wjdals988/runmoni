@@ -1,0 +1,23 @@
+
+com.runmoni.app.ui.CommunityRoomsTest:....
+com.runmoni.app.ui.HierarchyClosetUxTest:...
+com.runmoni.app.ui.CommunityPageNavigationTest:
+Error in partyChatBackReturnsToTheSamePartyScrollAndCrewTab(com.runmoni.app.ui.CommunityPageNavigationTest):
+java.lang.AssertionError: The fixture must exercise a scrolled party page
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.CommunityPageNavigationTest.partyChatBackReturnsToTheSamePartyScrollAndCrewTab(CommunityPageNavigationTest.kt:44)
+....
+
+Time: 259.499
+There was 1 failure:
+1) partyChatBackReturnsToTheSamePartyScrollAndCrewTab(com.runmoni.app.ui.CommunityPageNavigationTest)
+java.lang.AssertionError: The fixture must exercise a scrolled party page
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.CommunityPageNavigationTest.partyChatBackReturnsToTheSamePartyScrollAndCrewTab(CommunityPageNavigationTest.kt:44)
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+
