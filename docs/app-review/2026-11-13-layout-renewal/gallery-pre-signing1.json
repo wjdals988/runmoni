@@ -7,7 +7,7 @@
     "releaseSourceRevision": "9a4ef0eba5b0a981b880dfa81b296e96f80b9699",
     "runtimeAppSourcesMatchRelease": true,
     "proof": {
-      "file": "executed-source-vs-release-C.json",
+      "file": "executed-source-vs-first-signing-C.json",
       "sha256": "ec25d71b94b91382f41e1167e4275708a96a3f91e2b9f1b22dc90618f614e3b2"
     }
   },
@@ -76,5 +76,7 @@
       "actuallyViewedWithViewImage": true,
       "privacyReviewed": true
     }
-  ]
+  ],
+  "originalPreparedManifestSha256": "a022f95843e7d22fb9cea103b65f5e0ce521e9b2ff723d0d5fdeb7cc2c21e4db",
+  "preparedOnlyNotAppliedToProduction": true
 }
