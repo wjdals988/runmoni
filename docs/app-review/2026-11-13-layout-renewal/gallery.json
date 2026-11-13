@@ -1,0 +1,80 @@
+{
+  "version": "0.5.0-dev",
+  "versionCode": 27,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "key": "home",
+      "file": "live1-main-studio-home.png",
+      "sha256": "9aab7f24cbe5e17d42fe6b032c046425caba382e426b491a90081508929b0057",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "c3e0e43dfd7d5f13215aa8d0eb11d749b9a0ece113eb754b6f7a170040282874"
+      },
+      "caption": "홈 · 출발 준비와 러닝 시작",
+      "alt": "실제 홈의 미니미·독립 시작 버튼과 합성 검토용 최근 기록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "closet",
+      "file": "live1-main-studio-closet.png",
+      "sha256": "2e976f2adcb7cfffe293953a8d97fb0aa358523f668f9cb7522b863bb70ec173",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "c3e0e43dfd7d5f13215aa8d0eb11d749b9a0ece113eb754b6f7a170040282874"
+      },
+      "caption": "옷장 · 미리보기와 품목 선택",
+      "alt": "실제 옷장의 통합 피팅 영역·분류·현재 착용과 품목 비교 목록입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "record",
+      "file": "live1-main-record-result.png",
+      "sha256": "c5bda651ba646c372c81f59af8c6a4ecada03e7b0b80d6e0aa15e33db47b5542",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "c3e0e43dfd7d5f13215aa8d0eb11d749b9a0ece113eb754b6f7a170040282874"
+      },
+      "caption": "러닝 기록 · 결과와 경로",
+      "alt": "합성 검토용 러닝 결과 요약과 경로 영역입니다. 이 기록에는 GPS 좌표가 없습니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "key": "share",
+      "file": "live1-main-default-card.png",
+      "sha256": "5f45eb6be602e86620ae301117cc0c9a18b689ffb132e1505b535bfaec990677",
+      "width": 480,
+      "height": 854,
+      "source": "MainActivity",
+      "captureProof": {
+        "file": "live1.json",
+        "sha256": "c3e0e43dfd7d5f13215aa8d0eb11d749b9a0ece113eb754b6f7a170040282874"
+      },
+      "caption": "기록 공유 · 기본1:1 편집",
+      "alt": "실제 공유 편집의 기본1:1 미리보기·꾸미기 도구·저장과 공유 영역입니다.",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "sourceComparison": {
+    "releaseSourceRevision": "df09c233f711dc5a0573daf4e030e53af51dddf8",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "cef7f3fa87057a999adde88133b31f9f90aadfb7714e0ae8dac7cf051e6416e5"
+    }
+  }
+}
