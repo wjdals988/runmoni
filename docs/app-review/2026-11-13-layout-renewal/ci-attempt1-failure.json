@@ -1,0 +1,15 @@
+{
+  "ciRun": 43414902441,
+  "sourceRevision": "9a4ef0eba5b0a981b880dfa81b296e96f80b9699",
+  "url": "https://github.com/wjdals988/runmoni/actions/runs/43414902441",
+  "overallConclusion": "failure",
+  "signedBuildStepSucceeded": true,
+  "temporaryInputCleanupStepSucceeded": true,
+  "failedStep": "Upload and verify private release draft",
+  "observedError": "Local plan has publication blockers; no credential or network was used.",
+  "missingRequiredNotesPath": "docs/RELEASE_NOTES_0.5.0-dev.md",
+  "missingAtActualSourceVerified": true,
+  "taggedReleaseAbsentAfterFailure": true,
+  "apkFromThisAttemptPublished": false,
+  "noOldApkProvenanceRewritten": true
+}
