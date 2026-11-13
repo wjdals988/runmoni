@@ -1,0 +1,14 @@
+{
+  "verifiedStoppedPid": 2722,
+  "ownedAvd": "Runmoni_Cloud_29",
+  "removedOnlyOwnedIdleLocks": [
+    {
+      "file": "hardware-qemu.ini.lock",
+      "sha256": "b5911dc943932c04521a1322ca26dd1d7b4fc0fed83c7ab6e9fea7c3f09b1ee9"
+    },
+    {
+      "file": "multiinstance.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

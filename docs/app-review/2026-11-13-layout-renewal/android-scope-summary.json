@@ -1,0 +1,102 @@
+{
+  "version": "0.5.0-dev",
+  "versionCode": 27,
+  "observedAtUtc": "2026-11-13T10:58:14.098988+00:00",
+  "finalLocalBinary": "binary-build3.json",
+  "finalLocalJvm": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "finalLocalLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 57
+  },
+  "freshFinalAndroid": {
+    "total": 69,
+    "proofs": [
+      "android-review2.json",
+      "android-review3.json",
+      "native1.json"
+    ]
+  },
+  "distinctPassedMethods": 69,
+  "proofReferences": {
+    "android-review2.json": {
+      "file": "android-review2.json",
+      "sha256": "c98e37909edfe0d6e7f07e704b23167526bd124a0082dcd74c0a8c80a9ee6d35"
+    },
+    "android-review3.json": {
+      "file": "android-review3.json",
+      "sha256": "87d497a1bbb1f1d907364abc7ee77f3db86c9db9b1bf8807fc80374ebadf5538"
+    },
+    "native1.json": {
+      "file": "native1.json",
+      "sha256": "0ac6bbba00e4e100d86891efcc359edd89a06e1b02d21cbea70b9374566edf32"
+    }
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review2.json",
+      "group": "screens"
+    },
+    {
+      "proof": "android-review2.json",
+      "group": "community"
+    },
+    {
+      "proof": "android-review2.json",
+      "group": "account-information"
+    },
+    {
+      "proof": "android-review2.json",
+      "group": "record-share"
+    },
+    {
+      "proof": "android-review2.json",
+      "group": "map-modal"
+    },
+    {
+      "proof": "android-review3.json",
+      "group": "closet"
+    },
+    {
+      "proof": "android-review3.json",
+      "group": "colors"
+    },
+    {
+      "proof": "android-review3.json",
+      "group": "closet-navigation"
+    },
+    {
+      "proof": "native1.json",
+      "group": "native-large-text"
+    },
+    {
+      "proof": "native1.json",
+      "group": "native-share-font1"
+    }
+  ],
+  "excludedFailedGroups": [
+    {
+      "proof": "android-review2.json",
+      "group": "closet"
+    }
+  ],
+  "countedExecutionsByProof": {
+    "android-review2.json": 51,
+    "android-review3.json": 5,
+    "native1.json": 13
+  },
+  "sameInputPassedGroupsRetained": true,
+  "earlierInputResultsReused": false,
+  "singleSuccessfulDefaultPhaseClaimed": false,
+  "earlierResultsReused": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "productionWritesVerified": false
+}

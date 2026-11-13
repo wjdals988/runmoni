@@ -1,0 +1,11 @@
+
+com.runmoni.app.ui.AppInformationTest:...
+com.runmoni.app.ui.AppVersionShortcutLayoutTest:.
+com.runmoni.app.ui.DeviceChecksTest:..
+com.runmoni.app.ui.UnifiedProfileUiTest:..
+
+Time: 157.406
+
+OK (8 tests)
+
+

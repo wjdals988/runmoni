@@ -1,0 +1,22 @@
+{
+  "observedAtUtc": "2026-11-13T10:59:25.421357+00:00",
+  "images": [
+    {
+      "file": "native1-closet-navigation-native-320-font2-fixture.png",
+      "sha256": "182f7cc400a28b7bc432a558d554d6f54854fc16575177a8ba6a589a87c11348",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "ComponentActivity synthetic fixture at actual320dp/font2, not MainActivity"
+    },
+    {
+      "file": "native1-run-share-native320-font2-ime-fixture.png",
+      "sha256": "74548a00296fc42a7c8dadd98783f05e45755194f306d974c822ad49139209f8",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "ComponentActivity synthetic fixture at actual320dp/font2, not MainActivity"
+    }
+  ],
+  "notes": "Closet last named color and share export actions reviewed. Share screenshot intentionally scrolled to export actions with real IME shown.",
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false
+}

@@ -1,0 +1,9 @@
+
+com.runmoni.app.ui.CommunityRoomsTest:....
+com.runmoni.app.ui.HierarchyClosetUxTest:...
+
+Time: 180.044
+
+OK (7 tests)
+
+

@@ -1,0 +1,51 @@
+{
+  "observedAtUtc": "2026-11-13T11:07:56.746067+00:00",
+  "actualRootViewImageReview": true,
+  "privacyReviewed": true,
+  "images": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "9aab7f24cbe5e17d42fe6b032c046425caba382e426b491a90081508929b0057",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Android MainActivity TEST debug with nonce synthetic completed run; no original private history/wallet or real GPS shown."
+    },
+    {
+      "file": "live1-main-studio-closet.png",
+      "sha256": "2e976f2adcb7cfffe293953a8d97fb0aa358523f668f9cb7522b863bb70ec173",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Android MainActivity TEST debug with nonce synthetic completed run; no original private history/wallet or real GPS shown."
+    },
+    {
+      "file": "live1-main-record-result.png",
+      "sha256": "c5bda651ba646c372c81f59af8c6a4ecada03e7b0b80d6e0aa15e33db47b5542",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Android MainActivity TEST debug with nonce synthetic completed run; no original private history/wallet or real GPS shown."
+    },
+    {
+      "file": "live1-main-default-card.png",
+      "sha256": "5f45eb6be602e86620ae301117cc0c9a18b689ffb132e1505b535bfaec990677",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Android MainActivity TEST debug with nonce synthetic completed run; no original private history/wallet or real GPS shown."
+    },
+    {
+      "file": "live1-main-map-clean.png",
+      "sha256": "3999906b13533e328a54cbfcdc561bb2a157c825453ed273cbec801e534e9962",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "notes": "Actual Android MainActivity TEST debug with nonce synthetic completed run; no original private history/wallet or real GPS shown."
+    }
+  ],
+  "userVisualApproval": false,
+  "physicalDeviceVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "originalHistoryOrWalletPublished": false
+}
