@@ -1,0 +1,23 @@
+candidate	Upload and verify private release draft	﻿2026-11-13T11:18:53.3168560Z ##[group]Run python3 - <<'PY'
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3169075Z [36;1mpython3 - <<'PY'[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3169458Z [36;1mimport json, os, subprocess[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3169914Z [36;1mfrom pathlib import Path[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3170360Z [36;1mmetadata, = Path('outputs').glob('runmoni-*.metadata.json')[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3170953Z [36;1mdata = json.loads(metadata.read_text())[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3171549Z [36;1msubprocess.run(['python3', 'scripts/publish_android_preview.py', '--version', data['version'],[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3172270Z [36;1m                '--target', os.environ['GITHUB_SHA'], '--stage-draft'], check=True)[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3172738Z [36;1mPY[0m
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3186604Z shell: /usr/bin/bash -e {0}
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3187128Z env:
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3187484Z   RUNMONI_API_URL: http://127.0.0.1:8787
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3187944Z   RUNMONI_COMMUNITY_BACKEND: firebase
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3188368Z   NAVER_MAP_CLIENT_ID: 
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3190881Z   GH_TOKEN: ***
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.3191364Z ##[endgroup]
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.5663246Z {"ok": false, "error": "Local plan has publication blockers; no credential or network was used."}
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6468031Z Traceback (most recent call last):
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6468856Z   File "<stdin>", line 5, in <module>
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6469747Z   File "/usr/lib/python3.12/subprocess.py", line 571, in run
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6475824Z     raise CalledProcessError(retcode, process.args,
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6477742Z subprocess.CalledProcessError: Command '['python3', 'scripts/publish_android_preview.py', '--version', '0.5.0-dev', '--target', '9a4ef0eba5b0a981b880dfa81b296e96f80b9699', '--stage-draft']' returned non-zero exit status 1.
+candidate	Upload and verify private release draft	2026-11-13T11:18:53.6641737Z ##[error]Process completed with exit code 1.
