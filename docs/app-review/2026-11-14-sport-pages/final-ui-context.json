@@ -1,0 +1,34 @@
+{
+  "scopeProof": {
+    "file": "android-scope-summary.json",
+    "sha256": "a8f5f646c205cd7c0330747149a8cec35786a8ece32a18eba2b53a536d6d812b"
+  },
+  "liveProof": {
+    "file": "live2.json",
+    "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+  },
+  "visualProof": {
+    "file": "root-main2-visual-review.json",
+    "sha256": "e3addb44670d2e3643946691013cf032ebd061a9c46d72b2e37f95bfcf3be1c5"
+  },
+  "widgetProof": {
+    "file": "widget2.json",
+    "sha256": "a72e12658442e2af71ba8b639ad72fc11cb5e3c0c6fa9813121194095a1f871b"
+  },
+  "widgetVisualProof": {
+    "file": "root-widget2-visual-review.json",
+    "sha256": "e151d6c40afeeb0ce99b55b61aafafb3ce99e981ff3df039ff4449a1b4604c60"
+  },
+  "sourceComparison": {
+    "file": "executed-source-vs-release-C.json",
+    "sha256": "43e6bbf770f7a90926085501160c48de0af5b7865ea6cc5852fa75b0a055e49e"
+  },
+  "galleryManifest": {
+    "file": "gallery.json",
+    "sha256": "df902f24e3a05b3416f75cb034f3465fe79f1163dc23cb4228adb0cf3188b0aa"
+  },
+  "sessionCleanup": {
+    "file": "session-cleanup.json",
+    "sha256": "1ff2d9244ed107e90831f59ebdf269f4644cb93b6ffe3b6fc25e4f8b5ed97693"
+  }
+}

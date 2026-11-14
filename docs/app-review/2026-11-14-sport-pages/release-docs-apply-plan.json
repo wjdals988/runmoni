@@ -1,0 +1,63 @@
+{
+  "apply": true,
+  "actualApkSourceC": "9a572de8da88ef42bf740d9424b22c7fa14e17cb",
+  "ciRun": 43578574576,
+  "freshLocalJvm": 193,
+  "distinctPassedMethods": 90,
+  "countedExecutionsByProof": {
+    "android-review2.json": 72,
+    "android-review3.json": 3,
+    "native3.json": 15
+  },
+  "excludedFailedGroups": [
+    {
+      "proof": "android-review2.json",
+      "group": "closet-consumer",
+      "raw": "android-review2-closet-consumer.txt",
+      "rawSha256": "38814bbfde58181a0a4a5550ee83b2805c4237e30a2cc565860cb63bd17507ce",
+      "originalParentPassed": false
+    },
+    {
+      "proof": "android-review2.json",
+      "group": "closet-colors",
+      "raw": "android-review2-closet-colors.txt",
+      "rawSha256": "f88fb540758b2ca16203a76d001b1d1cfd481b90cb8bd337f135aad36d9e6724",
+      "originalParentPassed": false
+    }
+  ],
+  "earlierInputResultsReused": false,
+  "sameInputPassedGroupsRetained": true,
+  "singleSuccessfulDefaultPhaseClaimed": false,
+  "unresolvedIntermittentSnapshotObserverFailure": true,
+  "targetedRetryLimit": 1,
+  "actualMainOriginals": 7,
+  "actualLauncherOriginals": 2,
+  "priorShareExportFlowReexecuted": false,
+  "actualProfileKeyboardObserved": true,
+  "actualProfileClosedWithoutSaving": true,
+  "widgetRecoveryRestorationOnly": true,
+  "widgetRecoveryProductTestsCounted": 0,
+  "finalAvdObservationMethod": "post-reconnection absence observation",
+  "finalAvdProcessState": "absent",
+  "finalAvdSignal": null,
+  "plannedFiles": {
+    "docs/RELEASE_REVIEW_0.6.0_20261114.md": "1db74a78c026e9e44869b3a2d230a91da8a68954d5df68efca0a787f89c1cd45",
+    "docs/app-review/2026-11-14-sport-pages/README.md": "c5439a2c4f6c0c379e6f813bd7e9b59f42b127c478b765ee52e2b49b77b0efbb",
+    "updates/android.json": "66c2aa8132f56cb0e191d701446a36588cb83a1e2be04144068a65ce212d782a",
+    "AGENTS.md": "d5afc3c2e18710c73c929ef72326bd42790387645508b2c9712cae5f101ff4e6",
+    "CHANGELOG.md": "b177a6057e5774ce7b6a23d0a8f7807e7febec697ed0abf3b99d5c397eeb6df1",
+    "DESIGN.md": "1eaed11bec6c39f3485f2e6db05e823efb1d64d4914722940569ad48c58bdb9b",
+    "design-system/runmoni/MASTER.md": "e50f0b530f2c9dee53a5b0047a2f64db8d6cc6de5207e1779f10c5e3ab29c50c",
+    "docs/DEVELOPMENT_CONTINUATION.md": "ad7ba0459252b74e77fa9dd1dc9850d39ec3040b909e410a06d269d901268fc2",
+    "docs/DEVELOPMENT_PRIORITIES.md": "f7087a89a6652c01b0844d4dfa9c83bf9a4f3a724f2660ebcb6909abc01804d8",
+    "design-system/runmoni/pages/sport-pages.md": "f8144fda27e8485f33e29263b7f9539e124859622081146350c6632584d2ac65",
+    "docs/app-review/2026-11-14-sport-pages/publication.json": "06fc86b54e588b69042a3d8e03b9a64d4ab11b3f9a6a80db93a50acaf9ec8f13",
+    "docs/app-review/2026-11-14-sport-pages/ci-verification.json": "f0188b42f928d2db16d853f6fd2a5f34cfa3567d8248c203542b895f79a61a96",
+    "docs/app-review/2026-11-14-sport-pages/public-head-verification.json": "e60ce4dfc3dca69237995fa39c99bc1bee6b91f73d75fcb0c67d00241b77732c",
+    "docs/app-review/2026-11-14-sport-pages/runmoni-0.6.0-dev.metadata.json": "f4cb92255504a7f48ff091ec89e6688fd142f51b082620afbf28e2ea48aba213",
+    "docs/app-review/2026-11-14-sport-pages/SHA256SUMS-0.6.0-dev.txt": "51ff3a21113a28b79a3d36a238aa88c7819f5c8d4a57d839af24235034f0502c",
+    "docs/app-review/2026-11-14-sport-pages/dashboard-production-verification.json": "6ead64608d7063d35c77d5a3f835c5b09ddd8b2b1634a336203ab02b7c9c5a25",
+    "docs/app-review/2026-11-14-sport-pages/dashboard-node-tests.json": "4f0015eced6e4fe081e49d83c58461df199363fc5baacae6cef79d424b626a4c",
+    "docs/app-review/2026-11-14-sport-pages/dashboard-node-tests.log": "6cafadb1b4256b0a62b6dbf2e83c48cd1ab7e4199c273fcdab588ba039b0ff3b"
+  }
+}

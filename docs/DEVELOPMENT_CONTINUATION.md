@@ -1,3 +1,17 @@
+# 최신 이어가기 — 0.6.0-dev/code28, 2026-11-14
+
+<!-- verified-sport-pages-release-0.6.0-v1 -->
+[게시 검증](RELEASE_REVIEW_0.6.0_20261114.md)과 [페이지 설계](../design-system/runmoni/pages/sport-pages.md)를 시작점으로 삼는다. 실제 APK출처 `9a572de8da88ef42bf740d9424b22c7fa14e17cb`는 후속 문서/피드 커밋으로 바꾸지 않는다. 같은 키 서명CI43578574576·공개3자산·운영13항목/MainPNG4/Node23개를 확인했다. input5의 고유Android90개·최종 live2 새 원본7장·새 OS pin Launcher2장과 원래 데이터/소유 환경 복원·최종 AVD 상태 관측을 구분한다. 동일 binary5의 ar2의 전체 통과 그룹에 속한 검사72개·실패그룹 한 번 재실행 ar3의3개·native3 전체15개를 채택했다. ar2는 parent=false이고 원래 두 실패 그룹을 보존하며 일반75개 단일phase 전체PASS를 주장하지 않는다. SnapshotStateObserver 오류의 원인은 미확정이며 해결되었다고 쓰지 않는다. 입력3/4 결과는90개에 합산하지 않았다. 이전0.5 검사나 입력1/2 빌드실패·입력3/4 실패를 새 결과에 합산하지 않는다. 첫 Main의 도달 관측 실패·부분6장과 [observer 진단](app-review/2026-11-14-sport-pages/main1-observer-diagnosis.json)을 보존하며 사진은 재사용하지 않는다. [입력3 진단](app-review/2026-11-14-sport-pages/input3-diagnostic-review.json)의 두 parent=false·일반63/native13·당시 원인미확정·PID47376 종료와 [입력4 실제 IME 가림/중단/복원](app-review/2026-11-14-sport-pages/input4-ime-diagnosis.json)·전체성공그룹0·PID57956 종료를 별도 보존한다. 최종 제품은 API29 framework fit/resize·단일 inset 처리·원래 flags/mode 복원을 Form/공유에 적용했다. 7건의 완료 자료에서 원래 데이터·소유 환경 복원을 확인한 뒤, 재연결 시점의 /proc 열거에서 소유 PID61846과 모든 emulator 프로세스가 없음을 관측했다. 종료 시그널은 보내지 않았으며 이전 AVD가 사라진 방식·시각·원인은 확인하지 못했다.
+
+1. 휴대폰에서 같은 키 업데이트 뒤 기록/아이템·뒤로가기/초안/선택 탭·큰 글씨·위젯을 확인한다. 승인 여부는 사용자에게 남기고 새 키/같은 Rules 게시를 반복 요구하지 않는다.
+2. 실제 사진Picker·caption·갤러리 PNG 저장·SNS 전달과 프로필 저장·Google/운영 연결을 각각 확인한다. 이번 Main의 프로필 IME/저장없이 Back·기본/코랄 미리보기와 native IME·Canvas PNG 검사로 대신하지 않는다.
+3. 야외 GPS/화면 끔/장시간BG·알림과 위젯 제어·Doze/OEM/API31+를 확인한다. 이번 Launcher는 font1/font2 별도 새 배치이며 같은 위젯 resizing은 다음 범위다.
+4. 이번 제한된 Main 밖의 페이지·가로/IME·빈 상태/실패/재시도와 남은 승인 원화 의복·크루 승계/신고/차단을 우선한다. 완료한 무료/성별/공유를 재구현하지 않는다.
+
+승인 원본·58ID/13슬롯/9분류/0P·보유권/지갑과 순차 heavy·오프라인/작업자1·클라우드전용AVD/종료 또는 부재 관측의 구분을 유지한다. 휴대폰·Google 로그인·운영 프로필/Firestore/네이버 인증·SNS 전달·야외 GPS/장시간 백그라운드·Doze/OEM/API31이상·공개 서명 APK 런타임·사용자 시각 승인은 별도 미검증이다. Launcher의 두 번의 새 배치를 같은 위젯 크기 변경이나 모든 런처 크기 검증으로 확대하지 않는다.
+
+아래는 이전 시점의 보존 기록이다.
+
 # 최신 이어가기 — 0.5.0-dev/code27 공개, 2026-11-13
 
 <!-- verified-layout-renewal-release-0.5.0-v1 -->

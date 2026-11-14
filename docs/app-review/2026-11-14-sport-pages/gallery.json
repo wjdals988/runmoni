@@ -1,0 +1,80 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "9a572de8da88ef42bf740d9424b22c7fa14e17cb",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "executed-source-vs-release-C.json",
+      "sha256": "43e6bbf770f7a90926085501160c48de0af5b7865ea6cc5852fa75b0a055e49e"
+    }
+  },
+  "images": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "bf1f3efd6f676ebc54c8c287f13fd6a68928c54527dc9e13207a937ef74e9b53",
+      "width": 480,
+      "height": 854,
+      "key": "home",
+      "caption": "홈 · 검토용 최근 기록과 미니미",
+      "alt": "클라우드 Android TEST debug 실제 MainActivity 화면: 홈 · 검토용 최근 기록과 미니미",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+      }
+    },
+    {
+      "file": "live2-main-studio-closet.png",
+      "sha256": "e8b778fdfbfb1035097ec94043165eaa9ba8d6e70116c2f9dce4bb388d6140e8",
+      "width": 480,
+      "height": 854,
+      "key": "closet",
+      "caption": "옷장 · 현재 착용과 의상 비교",
+      "alt": "클라우드 Android TEST debug 실제 MainActivity 화면: 옷장 · 현재 착용과 의상 비교",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+      }
+    },
+    {
+      "file": "live2-main-record-result.png",
+      "sha256": "1ec0c8db15b9a0a6e3c736a7433ba498efc79f5a4b53a938f587962d1f71113a",
+      "width": 480,
+      "height": 854,
+      "key": "record",
+      "caption": "러닝 기록 · 검토용 수치와 공유",
+      "alt": "클라우드 Android TEST debug 실제 MainActivity 화면: 러닝 기록 · 검토용 수치와 공유",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+      }
+    },
+    {
+      "file": "live2-main-default-card.png",
+      "sha256": "f5a1c01b91b0c6adf765b0f7ae504b6fd2cdbf07005c4261f621b3f30eecbe82",
+      "width": 480,
+      "height": 854,
+      "key": "share",
+      "caption": "기록 공유 · 기본 1:1 편집과 저장 동작",
+      "alt": "클라우드 Android TEST debug 실제 MainActivity 화면: 기록 공유 · 기본 1:1 편집과 저장 동작",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+      }
+    }
+  ]
+}
