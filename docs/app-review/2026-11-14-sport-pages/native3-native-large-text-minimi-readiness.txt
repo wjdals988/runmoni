@@ -1,0 +1,10 @@
+large settings: waitMillis=46; timeoutMillis=120000
+large closet: waitMillis=10853; timeoutMillis=120000
+native entry 320dp / fontScale 2: waitMillis=24; timeoutMillis=120000
+native large app information: waitMillis=6; timeoutMillis=120000
+native 320dp / font2 active Home action: waitMillis=4999; timeoutMillis=120000
+native 320dp / font2 gender and free closet: waitMillis=506; timeoutMillis=120000
+native 320dp / font2 main after closet: waitMillis=18; timeoutMillis=120000
+native320/font2 root closet safe navigation: waitMillis=201; timeoutMillis=120000
+native320dp/font2 basic running kit colors: waitMillis=11; timeoutMillis=120000
+native320/font2 record detail footer, unavailable map tiles: waitMillis=9; timeoutMillis=120000

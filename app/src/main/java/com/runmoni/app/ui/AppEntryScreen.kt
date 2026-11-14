@@ -56,11 +56,12 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
         color = RunmoniColors.Cream, contentColor = RunmoniColors.Navy) {
         BoxWithConstraints(Modifier.fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime)).testTag("entry_safe_content")) {
-            val compact = maxHeight < 440.dp
+            val availableHeight = maxHeight
+            val compact = availableHeight < 440.dp
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).testTag("entry_scroll"),
                 horizontalAlignment = Alignment.CenterHorizontally) {
-                Column(Modifier.widthIn(max = 480.dp).fillMaxWidth().padding(horizontal = pageGutter(), vertical = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                Column(Modifier.widthIn(max = 480.dp).fillMaxWidth().heightIn(min = availableHeight).padding(horizontal = pageGutter(), vertical = 24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)) {
                     Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
                         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {

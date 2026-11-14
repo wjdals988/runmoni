@@ -1,0 +1,17 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "sourceFreezeReference": "source-freeze2.json",
+  "buildSucceeded": false,
+  "failedTask": ":app:lintDebug",
+  "jvmObserved": {
+    "tests": 193,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lintErrors": 1,
+  "reason": "UseAppTint on framework RemoteViews ImageButton android:tint",
+  "fix": "Widget-specific vector with explicit stroke color; no AppCompat tint dependency",
+  "androidExecutionClaimed": false
+}

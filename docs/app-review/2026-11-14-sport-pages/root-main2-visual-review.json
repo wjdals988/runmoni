@@ -1,0 +1,70 @@
+{
+  "observedAtUtc": "2026-11-13T19:03:43.904033+00:00",
+  "proof": {
+    "file": "live2.json",
+    "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+  },
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "bf1f3efd6f676ebc54c8c287f13fd6a68928c54527dc9e13207a937ef74e9b53",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:50:26.094388+00:00"
+    },
+    {
+      "file": "live2-main-profile-ime.png",
+      "sha256": "ca305b93395641c81017a1f72a1027e0f99a4f3bc2f37167bd5cb298856a59f8",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:52:22.724670+00:00"
+    },
+    {
+      "file": "live2-main-studio-closet.png",
+      "sha256": "e8b778fdfbfb1035097ec94043165eaa9ba8d6e70116c2f9dce4bb388d6140e8",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:54:04.956658+00:00"
+    },
+    {
+      "file": "live2-main-record-result.png",
+      "sha256": "1ec0c8db15b9a0a6e3c736a7433ba498efc79f5a4b53a938f587962d1f71113a",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:56:34.623167+00:00"
+    },
+    {
+      "file": "live2-main-default-card.png",
+      "sha256": "f5a1c01b91b0c6adf765b0f7ae504b6fd2cdbf07005c4261f621b3f30eecbe82",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:56:34.623239+00:00"
+    },
+    {
+      "file": "live2-main-coral-card.png",
+      "sha256": "6143a5f53bb0d4e2cd24a762228548042676dc243f26045badbd7b32cf058b85",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:56:34.623311+00:00",
+      "visualObservation": "Scrolled color controls are visible; the full default-card original is selected for public gallery instead."
+    },
+    {
+      "file": "live2-main-map-clean.png",
+      "sha256": "59c409448231958ba5e8cecb64c8b1566923e55fa6d85f095bd6f029629337d5",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T19:03:43.902900+00:00",
+      "visualObservation": "World fallback and location-permission/network-error states, not a real location/online tile verification."
+    }
+  ]
+}

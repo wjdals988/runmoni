@@ -1,0 +1,32 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "reviewType": "source review, not execution or user visual approval",
+  "observedAtUtc": "2026-11-13T15:50:06.722367+00:00",
+  "reviewers": [
+    "Root",
+    "closet_context_ui",
+    "avatar_item_review",
+    "community_lifecycle",
+    "benchmark_design_review",
+    "benchmark_function_review"
+  ],
+  "decisions": [
+    "Long forms render as exclusive in-tree pages; only short confirmation or OS pickers use modal windows",
+    "One root leaf prevents chat and delayed completed-result pages from composing simultaneously",
+    "A single owner applies safeDrawing/IME insets; community deep routes suppress main chrome",
+    "Only fitting short entry/idle bodies are vertically centered; long forms and lists remain scrollable",
+    "Widget candidates pass both natural-height and exact host-height text/48dp bounds checks",
+    "Primary approved-avatar first draw precedes secondary closet previews only for fixed headers; scrolling headers bypass the gate",
+    "Recent calendar-day data distinguishes READY/CACHED/LOADING/UNAVAILABLE and keeps canonical legacy records",
+    "Coral appended without changing previous enum ordinals, default ratio/theme or genuine avatar pixels"
+  ],
+  "issuesFixed": [
+    "Cancel now shares hide-IME/clear-focus dismiss wrapper",
+    "Mileage explanation moved to exclusive root page",
+    "Settings close tests use stable close_settings tag after back-arrow navigation",
+    "RemoteViews icon now uses a widget-specific framework vector stroke, avoiding ImageButton tint compatibility lint"
+  ],
+  "runtimeClaimsMade": false,
+  "userVisualApproval": false
+}

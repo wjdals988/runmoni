@@ -1,12 +1,6 @@
 package com.runmoni.app.ui
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
-import android.os.Build
-import android.view.View
-import android.view.WindowManager
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -43,9 +37,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
@@ -260,7 +251,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
     val scroll = rememberScrollState()
     val latestTransform by rememberUpdatedState(onTransform)
     var photoPositionExpanded by rememberSaveable { mutableStateOf(false) }
-    val frameworkFitted = legacyRunShareWindowPolicy()
+    val frameworkFitted = legacyEditablePageWindowPolicy()
     // API29 classic fitting owns both bars and IME. Compat may still infer raw IME
     // from root visibleInsets after consumption, so adding it would count it twice.
     val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
@@ -288,7 +279,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Cream)
                         .padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                             .padding(horizontal = pageGutter())) {
@@ -350,10 +341,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                     // One flat property area follows the selected tool. Preview,
                     // navigation and output each have their own visual region.
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .background(RunmoniColors.Paper)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        Text(when (tool) { 0 -> "사진과 배경"; 1 -> "기록 표시"; else -> "미니미 배치" },
-                            style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
                         if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         when (tool) {
@@ -489,11 +479,12 @@ private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String
 }
 
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun <T> ShareChoices(options: List<T>, selected: T, label: (T) -> String,
     enabled: Boolean, tag: String, onSelect: (T) -> Unit) {
-    Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
+    FlowRow(Modifier.fillMaxWidth().selectableGroup()
         .testTag("run_share_${tag}_choices"),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         options.forEachIndexed { index, option ->
             Row(Modifier.heightIn(min = 48.dp).background(if (selected == option) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
                 .selectable(selected == option, enabled, Role.RadioButton) { onSelect(option) }
@@ -504,52 +495,4 @@ private fun <T> ShareChoices(options: List<T>, selected: T, label: (T) -> String
             }
         }
     }
-}
-
-/** API29 lets the framework fit this editor while the IME is visible instead of panning the
- * complete edge-to-edge root. Other pages and API30+ keep their existing window policy.
- * The framework consumes its fitted insets; do not add raw root IME pixels a second time.
- */
-@Composable
-private fun legacyRunShareWindowPolicy(): Boolean {
-    val view = LocalView.current
-    val window = remember(view) {
-        if (Build.VERSION.SDK_INT == 29) view.context.runShareHostActivity()?.window else null
-    }
-    DisposableEffect(window) {
-        if (window == null) {
-            onDispose { }
-        } else {
-            val decor = window.decorView
-            // WindowCompat API16 implementation owns only these three layout flags on API29.
-            val layoutMask = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            val originalLayoutFlags = decor.systemUiVisibility and layoutMask
-            val originalSoftInputMode = window.attributes.softInputMode
-            WindowCompat.setDecorFitsSystemWindows(window, true)
-            window.setSoftInputMode((originalSoftInputMode and WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST.inv()) or
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-            ViewCompat.requestApplyInsets(decor)
-            decor.requestLayout()
-            onDispose {
-                // Preserve any independent status/navigation appearance change during this page.
-                decor.systemUiVisibility = (decor.systemUiVisibility and layoutMask.inv()) or originalLayoutFlags
-                window.setSoftInputMode(originalSoftInputMode)
-                ViewCompat.requestApplyInsets(decor)
-                decor.requestLayout()
-            }
-        }
-    }
-    return window != null
-}
-
-private fun Context.runShareHostActivity(): Activity? {
-    var current = this
-    while (current is ContextWrapper) {
-        if (current is Activity) return current
-        val next = current.baseContext
-        if (next === current) return null
-        current = next
-    }
-    return current as? Activity
 }

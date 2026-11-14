@@ -1,0 +1,21 @@
+{
+  "observedAtUtc": "2026-11-13T16:12:42.187664+00:00",
+  "source": "ComponentActivity UI fixtures, not actual MainActivity or phone",
+  "actuallyViewedWithViewImage": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "android-review1-home-360-100.png",
+      "sha256": "87a4da52c50002b881fc7134bae7cc90c47b66c501805e3f3bc66c535074b8d3"
+    },
+    {
+      "file": "android-review1-studio-home-320-font2-fixture.png",
+      "sha256": "8be0e202d7e5a245dc73e819a9cae063af5e9133e42b4e9ee98b860c041f7f2f"
+    }
+  ],
+  "findings": [
+    "Primary avatar/start/weather order is visible without overlapped actions",
+    "At320/font2 the avatar becomes compact and long weather text scrolls; main content remains left-aligned",
+    "Full parent Android phase remains in progress; no whole-phase or production result claimed"
+  ]
+}

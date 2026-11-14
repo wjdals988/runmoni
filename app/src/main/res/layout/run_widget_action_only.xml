@@ -7,7 +7,8 @@
         android:layout_width="match_parent" android:layout_height="match_parent"
         android:minWidth="48dp" android:minHeight="48dp"
         android:padding="8dp" android:scaleType="center"
-        android:src="@drawable/ic_nav_run"
+        android:src="@drawable/run_widget_open_icon"
         android:background="@drawable/run_widget_secondary_action"
+        android:backgroundTint="@null"
         android:contentDescription="@string/run_widget_open" />
 </FrameLayout>

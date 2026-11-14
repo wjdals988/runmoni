@@ -25,8 +25,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.activity.compose.BackHandler
 
-/** Every modal has an always-reachable close action outside its scrolling body. */
+/** Legacy call-site name: long forms now occupy one in-tree page, not a Dialog window. */
 @Composable
 internal fun FormDialog(
     title: String,
@@ -37,13 +38,56 @@ internal fun FormDialog(
     scrollState: ScrollState? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    val latestDismiss by rememberUpdatedState(onDismiss)
+    val dismiss = { keyboard?.hide(); focus.clearFocus(force = true); latestDismiss() }
     val actions: (@Composable () -> Unit)? = if (confirm == null) null else ({
-        if (dismissLabel != null) TextButton(shape = RunmoniShapes.Action, onClick = onDismiss,
+        if (dismissLabel != null) TextButton(shape = RunmoniShapes.Action, onClick = dismiss,
             modifier = Modifier.heightIn(min = 48.dp)) { Text(dismissLabel) }
         confirm()
     })
-    ModalFrame(onDismiss, closeTag, scrollState, longTitle = title.length > 32,
-        title = { Text(title) }, actions = actions, content = content)
+    val bodyScroll = scrollState ?: rememberScrollState()
+    val frameworkFitted = legacyEditablePageWindowPolicy()
+    val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
+        else WindowInsets.safeDrawing.union(WindowInsets.ime)
+    BackHandler(onBack = dismiss)
+    Surface(Modifier.fillMaxSize().testTag("form_dialog"), color = RunmoniColors.Cream) {
+        BoxWithConstraints(Modifier.fillMaxSize()
+            .windowInsetsPadding(contentInsets)
+            .testTag("form_page_safe_content")) {
+            val scrollingActions = maxHeight < 240.dp ||
+                (LocalDensity.current.fontScale >= 1.8f && maxHeight < 360.dp)
+            Column(Modifier.fillMaxSize().testTag("form_page")) {
+                PageTopBar(title, dismiss, closeTag = closeTag)
+                HorizontalDivider(color = RunmoniColors.Line)
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+                    Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .verticalScroll(bodyScroll).testTag("modal_scroll_body")
+                        .padding(horizontal = pageGutter(), vertical = 24.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        content()
+                        if (scrollingActions && actions != null) PageActions(actions)
+                        Spacer(Modifier.height(8.dp))
+                    }
+                }
+                if (!scrollingActions && actions != null) PageActions(actions)
+            }
+        }
+    }
+}
+
+@Composable
+private fun PageActions(actions: @Composable () -> Unit) {
+    Surface(color = RunmoniColors.Paper) {
+        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+            HorizontalDivider(color = RunmoniColors.Line)
+            FlowRow(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                .padding(horizontal = pageGutter(), vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) { actions() }
+        }
+    }
 }
 
 /** Confirmation semantics stay at the call site; closing always means dismiss. */

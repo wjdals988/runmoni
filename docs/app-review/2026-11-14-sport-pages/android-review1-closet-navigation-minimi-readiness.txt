@@ -1,0 +1,1 @@
+root closet final item and color actions: waitMillis=46; timeoutMillis=120000

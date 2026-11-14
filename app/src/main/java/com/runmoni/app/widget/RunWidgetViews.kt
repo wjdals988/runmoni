@@ -98,7 +98,18 @@ internal object RunWidgetViews {
             }
             return view !is ViewGroup || (0 until view.childCount).all { fitsChild(view.getChildAt(it)) }
         }
-        root.measuredHeight <= height && (0 until root.childCount).all { fitsChild(root.getChildAt(it)) }
+        fun childrenFit(): Boolean = (0 until root.childCount).all { fitsChild(root.getChildAt(it)) }
+        // Keep the natural-height check: an exact host height alone could
+        // conceal content that was compressed or placed above its bounds.
+        val naturalFits = root.measuredHeight <= height && childrenFit()
+        // CENTER_VERTICAL only takes effect when the launcher supplies its
+        // final height. Recheck every line and complete 48dp target after
+        // that layout, retaining both results even if either one fails.
+        root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+        root.layout(0, 0, root.measuredWidth, root.measuredHeight)
+        val exactFits = root.measuredWidth == width && root.measuredHeight == height && childrenFit()
+        naturalFits && exactFits
     } catch (_: RuntimeException) { false }
 
     fun create(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, minimal: Boolean): RemoteViews =

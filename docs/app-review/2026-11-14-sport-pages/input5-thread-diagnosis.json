@@ -1,0 +1,42 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "observedAtUtc": "2026-11-13T18:29:31.766215+00:00",
+  "binaryReference": "binary-build5.json",
+  "binaryReferenceSha256": "745459af69a596b115090b975acc6f62171c584107994778b5fe7083c579503c",
+  "sourceFreezeReference": "source-freeze5.json",
+  "proofReferences": {
+    "android-review2.json": {
+      "file": "android-review2.json",
+      "sha256": "2d34ee7c99dfb5088e543e3e175c4b17409b3ce672c2d25a2c099623a1d73366"
+    },
+    "android-review3.json": {
+      "file": "android-review3.json",
+      "sha256": "f9f3e703bc261e607cef59294bf3767448615186eeb1daae48796c00b3420efe"
+    },
+    "native3.json": {
+      "file": "native3.json",
+      "sha256": "07948b2472840ef9ae78016768c116decea9f11fba90dadf2a3fc17b410023dd"
+    }
+  },
+  "originalParentPassed": false,
+  "causeConfirmed": false,
+  "productFixClaimed": false,
+  "targetedRetryLimit": 1,
+  "targetedRetryObservedPassed": true,
+  "singleSuccessfulDefaultPhaseClaimed": false,
+  "sameInputPassedGroupsRetained": true,
+  "earlierInputResultsReused": false,
+  "failedGroupNames": [
+    "closet-consumer",
+    "closet-colors"
+  ],
+  "observations": [
+    "Original android-review2 finished with completed=true, passed=false. Consumer1 failed with SnapshotStateObserver previousThread247/Main2 and Colors2 process crashed with previousThread251/Main2; no partial tests inside these failed groups are counted.",
+    "Both read-only reviewers inspected product worker Bitmap paths and cached Compose1.7 capture/clock bytecode. Neither identified a direct off-main Compose Owner draw caller. The original other-thread name, stack and initiating call are absent, so the cause remains unconfirmed.",
+    "No product or test source, assertion, timeout or APK was changed. One targeted rerun of the same three frozen methods completed wholly successfully; this is an observed rerun outcome and not a root-cause fix.",
+    "Final method scope retains only the original72 methods from wholly passing groups, retries3 once, and native15, with no duplicate methods or earlier-input reuse. General75 is not claimed as a single wholly successful phase.",
+    "Actual MainActivity, Launcher, physical phone and public signed APK execution are separate evidence boundaries."
+  ],
+  "editorialStatusClarificationAtUtc": "2026-11-13T19:06:11.001198+00:00"
+}

@@ -1,0 +1,8 @@
+{
+  "pid": 61846,
+  "avd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "acceleration": "explicit TCG",
+  "startedAtUtc": "2026-11-13T17:35:43.701412+00:00",
+  "removedIdleOwnLocks": []
+}

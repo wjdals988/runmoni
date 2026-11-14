@@ -23,7 +23,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.runmoni.app.domain.AppActions
 import com.runmoni.app.domain.CloudAccountState
 import com.runmoni.app.domain.RunPersistenceIssue
@@ -145,22 +151,14 @@ private fun RunRecordPageContent(
                     verticalArrangement = Arrangement.spacedBy(32.dp)) {
                     // The result is the opening of the page, rather than one
                     // more card competing with the route and management tools.
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.PrimarySoft)
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.DeepGreen)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                            color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
+                            color = RunmoniColors.OnDarkMuted, modifier = Modifier.testTag("record_date"))
                         val recordedDistance = distance(record.distanceMeters)
-                        Row(Modifier.fillMaxWidth().testTag("record_distance")
-                            .clearAndSetSemantics { text = AnnotatedString("$recordedDistance km") },
-                            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
-                            Box(Modifier.weight(1f)) {
-                                DistanceNumber(recordedDistance, RunmoniColors.Primary, maxSize = 56f)
-                            }
-                            Text("km", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted,
-                                modifier = Modifier.padding(bottom = 4.dp))
-                        }
-                        HorizontalDivider(color = RunmoniColors.Line)
+                        RecordDistance(recordedDistance)
+                        HorizontalDivider(color = RunmoniColors.OnDarkMuted.copy(alpha = .3f))
                         val time = duration(record.activeDurationMillis)
                         val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
                         BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_duration_pace")
@@ -312,7 +310,43 @@ private fun RecordSectionTitle(title: String) {
 @Composable
 private fun RecordResultMetric(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Navy)
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
+        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.OnDark)
+    }
+}
+
+/** Number and unit share a baseline and a text block, rather than opposite ends
+ * of a weighted row. Respect font scaling; at the readable minimum a genuinely
+ * long value wraps naturally instead of clipping the final digits or its unit.
+ */
+@Composable
+private fun RecordDistance(value: String) {
+    val measurer = rememberTextMeasurer()
+    val style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold,
+        fontFeatureSettings = "tnum")
+    val unit = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = RunmoniColors.OnDarkMuted)
+    val label = buildAnnotatedString {
+        append(value)
+        withStyle(unit) { append(" km") }
+    }
+    BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_distance")
+        .clearAndSetSemantics { text = AnnotatedString("$value km") }) {
+        val widthPx = with(LocalDensity.current) { maxWidth.roundToPx() }
+        val size = remember(value, widthPx, measurer, style, unit) {
+            fun fits(candidate: Float) = measurer.measure(label,
+                style.copy(fontSize = candidate.sp, lineHeight = (candidate * 1.15f).sp),
+                softWrap = false, maxLines = 1).size.width <= widthPx
+            if (fits(56f)) 56f else {
+                var low = 20f
+                var high = 56f
+                repeat(8) {
+                    val middle = (low + high) / 2
+                    if (fits(middle)) low = middle else high = middle
+                }
+                low
+            }
+        }
+        Text(label, modifier = Modifier.fillMaxWidth(), color = RunmoniColors.OnDark,
+            style = style.copy(fontSize = size.sp, lineHeight = (size * 1.15f).sp), softWrap = true)
     }
 }

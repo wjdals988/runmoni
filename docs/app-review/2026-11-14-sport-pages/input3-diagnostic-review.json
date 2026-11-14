@@ -1,0 +1,43 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "observedAtUtc": "2026-11-13T16:57:11.936470+00:00",
+  "binaryReference": "binary-build3.json",
+  "normalParentPassed": false,
+  "normalCountedPassedMethods": 63,
+  "nativeParentPassed": false,
+  "nativeCountedPassedMethods": 13,
+  "notFinalPassedScope": true,
+  "failures": [
+    {
+      "proof": "android-review1.json",
+      "group": "community",
+      "failedMethod": "partyChatBackReturnsToTheSamePartyScrollAndCrewTab",
+      "observation": "Nonzero scroll precondition failed before chat navigation; fixture will read bottom action first without weakening assertions"
+    },
+    {
+      "proof": "native1.json",
+      "group": "native-form-pages",
+      "failedMethod": "imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss",
+      "observation": "OS/IME bounds assertion failed; submit values were not logged before the assertion; actual overlap versus window/coordinate cause not yet established",
+      "newDiagnosticsPlanned": true
+    }
+  ],
+  "proofReferences": [
+    {
+      "file": "android-review1.json",
+      "sha256": "6222017dc0c10fb58c25ad8db881e4cd99f6f22ed62d3cab5ff8ef5104bb52bc"
+    },
+    {
+      "file": "native1.json",
+      "sha256": "b9092b2c922a03d740b13a3955d6f83281ca9504dd562b8cc4254ae64d47b447"
+    },
+    {
+      "file": "session-cleanup-input3.json",
+      "sha256": "6b8e4a06165724b93c4f30d03290f72c10cf6ead56c6e57f6213a902f8d67d91"
+    }
+  ],
+  "allScopedRestorationsVerified": true,
+  "nextInputPlan": "Correct test preconditions, record actual geometry and match MainActivity window policy; rebuild and execute complete fresh75+15, not a custom-window success substitution",
+  "earlierInputPassesWillNotSupplyFinal90": true
+}

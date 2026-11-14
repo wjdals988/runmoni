@@ -1,0 +1,13 @@
+{
+  "observedAtUtc": "2026-11-13T16:06:13.405022+00:00",
+  "action": "GitHub read APIs after successful feature push and PR creation",
+  "status": 401,
+  "message": "Bad credentials",
+  "featureCommit": "42149f9",
+  "featurePullRequest": "https://github.com/wjdals988/runmoni/pull/56",
+  "signedReleaseDispatched": false,
+  "publicFeedChanged": false,
+  "dashboardApplied": false,
+  "credentialValuesRecorded": false,
+  "ownerReconnectionRequested": true
+}

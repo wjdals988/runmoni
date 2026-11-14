@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-13T17:22:27.639755+00:00",
+  "exactCollectorPid": 58720,
+  "signalToExactCollector": "SIGINT",
+  "reason": "Confirmed API29 in-tree form Save is occluded by actual IME; stop unrelated remaining diagnostics before product fix",
+  "raw": {
+    "file": "native2-native-form-pages.txt",
+    "sha256": "f64dd3e618b35d2f7fc6eee6c23f10e783985b50f5ae7ef38fc18dadc167af77"
+  },
+  "sourceMutationBeforeRestoration": false,
+  "notAProductPass": true,
+  "actualSaveBottomPx": 764,
+  "actualOsImeSafeBottomPx": 413,
+  "semanticAndLayoutActionCoordinatesAgree": true,
+  "fixtureAdjustResizeExplicit": true,
+  "rootPrivateFailureScreenshotActuallyViewed": true
+}

@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/run_widget_root" android:forceDarkAllowed="false"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:padding="8dp"
+    android:orientation="vertical" android:gravity="center_vertical" android:padding="8dp"
     android:background="@drawable/run_widget_surface">
     <TextView android:id="@+id/run_widget_title"
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/run_widget_preview_title" android:textSize="12sp"
-        android:textColor="@color/run_widget_primary" android:textStyle="bold" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
+        android:text="@string/run_widget_preview_title" android:textSize="16sp"
+        android:textColor="@color/run_widget_muted" android:textStyle="bold" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
     <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
-        android:text="@string/run_widget_open" android:textSize="12sp" />
+        android:text="@string/run_widget_open" />
     <TextView android:id="@+id/run_widget_footer"
         android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
-        android:text="@string/run_widget_preview_footer" android:textSize="12sp"
+        android:text="@string/run_widget_preview_footer" android:textSize="14sp"
         android:textColor="@color/run_widget_muted" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
 </LinearLayout>

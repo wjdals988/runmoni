@@ -1,0 +1,10 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "sourceFreezeReference": "source-freeze1.json",
+  "buildSucceeded": false,
+  "failedTask": ":app:compileDebugKotlin",
+  "reason": "AppEntryScreen nested ColumnScope hides BoxWithConstraints maxHeight implicit receiver",
+  "fix": "Capture availableHeight before entering nested ColumnScope",
+  "testsOrAndroidExecutionClaimed": false
+}

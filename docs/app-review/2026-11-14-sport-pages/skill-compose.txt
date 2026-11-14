@@ -1,0 +1,46 @@
+## UI Pro Max Stack Guidelines
+**Stack:** jetpack-compose | **Query:** navigation state restoration
+**Source:** stacks/jetpack-compose.csv | **Found:** 3 results
+
+### Result 1
+- **Category:** Navigation
+- **Guideline:** Event-based navigation
+- **Description:** VM emits navigation event
+- **Do:** VM: Channel + receiveAsFlow(), V: Collect with Dispatchers.Main.immediate
+- **Don't:** Nav in UI
+- **Code Good:** Decoupled nav
+- **Code Bad:** Using State / SharedFlow for navigation -> event is replayed and navigation fires again (StateFlow)
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/jetpack/compose/navigation
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 2
+- **Category:** Navigation
+- **Guideline:** Typed routes
+- **Description:** Use sealed routes
+- **Do:** sealed class Route
+- **Don't:** String routes
+- **Code Good:** Type-safe
+- **Code Bad:** Runtime crash
+- **Severity:** Medium
+- **Docs URL:** 
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+
+### Result 3
+- **Category:** State
+- **Guideline:** rememberSaveable
+- **Description:** Persist state across config
+- **Do:** rememberSaveable
+- **Don't:** remember
+- **Code Good:** State survives
+- **Code Bad:** State lost
+- **Severity:** High
+- **Docs URL:** https://developer.android.com/jetpack/compose/state#restore-ui-state
+- **Applies To:** jetpack-compose 1.11.4 (current stable)
+- **Status:** active
+- **Verified At:** 2026-08-13
+

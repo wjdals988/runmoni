@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunningKitColorsUiTest:..
+
+Time: 87.063
+
+OK (2 tests)
+
+

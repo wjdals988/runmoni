@@ -1,0 +1,40 @@
+{
+  "observedAtUtc": "2026-11-13T16:53:39.518041+00:00",
+  "ownedPid": 47376,
+  "ownedAvd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "ownership": {
+    "file": "owned-avd.json",
+    "sha256": "7a295df9efbd3b9d748c0ab307574a3f5016e6b830b6cfbafd5073c99095ea0a"
+  },
+  "ownerCommandSha256": "4ff6144ee7765916f7b86d365b8f536b62a39acfeb0669e77a53a258be1b94f3",
+  "signal": "SIGTERM to verified exact owned PID",
+  "finalProcessState": "Z",
+  "ownedEmulatorNoLongerRunning": true,
+  "noUnrelatedProcessTerminated": true,
+  "restorationProofs": [
+    {
+      "file": "android-review1.json",
+      "sha256": "6222017dc0c10fb58c25ad8db881e4cd99f6f22ed62d3cab5ff8ef5104bb52bc",
+      "completed": true,
+      "originalParentPassed": false
+    },
+    {
+      "file": "native1.json",
+      "sha256": "b9092b2c922a03d740b13a3955d6f83281ca9504dd562b8cc4254ae64d47b447",
+      "completed": true,
+      "originalParentPassed": false
+    }
+  ],
+  "removedIdleOwnLocks": [
+    {
+      "path": "/workspace/runmoni/work/cloud-android/avds/Runmoni_Cloud_29.avd/hardware-qemu.ini.lock",
+      "sha256": "3d3ae0c0e727fd87d1e8bdd5c0408f610c0dbafaea272063e9d14678b0ac03bb"
+    },
+    {
+      "path": "/workspace/runmoni/work/cloud-android/avds/Runmoni_Cloud_29.avd/multiinstance.lock",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "physicalDeviceOrUserPcEmulatorUsed": false
+}

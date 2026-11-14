@@ -204,11 +204,11 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         compose.setContent { ViewportBox(Viewport(320, 2f)) { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state)) } }
         compose.onNodeWithTag("settings_button").performClick()
         compose.onNodeWithTag("google_sign_in").performScrollTo().assertIsNotEnabled()
-        compose.onAllNodesWithText("닫기").assertCountEquals(1)
+        compose.onAllNodesWithTag("close_settings").assertCountEquals(1)
         compose.onNodeWithText("취소").assertDoesNotExist()
         noTextOverflow("large settings")
         capture("settings-320-200")
-        compose.onNodeWithText("닫기").performClick()
+        compose.onNodeWithTag("close_settings").performClick()
         compose.onNodeWithTag("nav_me").performClick()
         compose.onNodeWithTag("open_closet").performScrollTo().performClick()
         val previewBounds = compose.onNodeWithTag("closet_avatar_preview").fetchSemanticsNode().boundsInRoot

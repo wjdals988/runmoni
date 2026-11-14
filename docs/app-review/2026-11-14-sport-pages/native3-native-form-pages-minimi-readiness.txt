@@ -1,0 +1,2 @@
+native320/font2 information fixed close: waitMillis=33; timeoutMillis=120000
+native320/font2 in-tree form with actual IME: waitMillis=30; timeoutMillis=120000

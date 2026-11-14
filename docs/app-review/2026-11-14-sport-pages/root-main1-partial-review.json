@@ -1,0 +1,63 @@
+{
+  "observedAtUtc": "2026-11-13T18:47:56.672096+00:00",
+  "proof": {
+    "file": "live1.json",
+    "sha256": "292e5facadd217d10be2e005e05a08115fd036f345e3b96fb9e7f6b47edb8bcf"
+  },
+  "originalParentPassed": false,
+  "notFinalMainReview": true,
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "5c101b5d83f8fd741f7a6fc871b55c2edd6bc2b4393433e7a94d1fb4250c2ff9",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:33:40.376110+00:00"
+    },
+    {
+      "file": "live1-main-profile-ime.png",
+      "sha256": "0dad2356f4c3cb741080334f0863e95e0827437e51a54ad8ae14136a99b515cc",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:34:21.078571+00:00"
+    },
+    {
+      "file": "live1-main-studio-closet.png",
+      "sha256": "dc9af940fa33f4207f933f1ab31974f1447b72bc1607a6d293fe964f15757843",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:35:55.470051+00:00"
+    },
+    {
+      "file": "live1-main-record-result.png",
+      "sha256": "39508cf4bb32c0c04153785b088fcbd07a84850a463fda1c87c9fd2ea444e954",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:37:09.012515+00:00"
+    },
+    {
+      "file": "live1-main-default-card.png",
+      "sha256": "45abfb8703863da6d9af56f7eefda5d38c969d5557520bf5094f8a4d952713d1",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:37:09.012582+00:00"
+    },
+    {
+      "file": "live1-main-coral-card.png",
+      "sha256": "1fe4d5e2770ff3f673dc7dffe3b5c025f75dbf154e3386969c59d53aec53f7c8",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "MainActivity",
+      "viewedAtUtc": "2026-11-13T18:39:05.212869+00:00",
+      "visualObservation": "Actual scrolled editor shows checked Coral controls; preview extends above viewport. Use the fully visible default-card original for the four-image public gallery."
+    }
+  ]
+}

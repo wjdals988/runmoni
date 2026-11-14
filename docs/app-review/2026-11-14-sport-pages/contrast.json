@@ -1,0 +1,36 @@
+{
+  "method": "WCAG sRGB token calculation, not actual rendered pixel observation",
+  "pairs": [
+    {
+      "foreground": "white",
+      "background": "deep",
+      "ratio": 11.876743073528953
+    },
+    {
+      "foreground": "muted",
+      "background": "deep",
+      "ratio": 9.093820835340216
+    },
+    {
+      "foreground": "primary",
+      "background": "lime",
+      "ratio": 7.014315711486663
+    },
+    {
+      "foreground": "primary",
+      "background": "pressed",
+      "ratio": 5.958161614697326
+    },
+    {
+      "foreground": "ink",
+      "background": "coral",
+      "ratio": 12.184394980459858
+    },
+    {
+      "foreground": "secondary",
+      "background": "coral",
+      "ratio": 5.433027543179519
+    }
+  ],
+  "minimum": 5.433027543179519
+}

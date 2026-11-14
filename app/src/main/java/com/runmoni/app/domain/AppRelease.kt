@@ -42,6 +42,11 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.6.0-dev", "2026-11-14", "페이지 이동·위젯·실제 기록 중심 개편 · 실기기 검증 전", listOf(
+        "설정·프로필·크루 편집을 독립 페이지와 뒤로가기로 연결",
+        "위젯의 거리·시간·제어를 중앙 배치하고 글자 확대 시 실제 높이 검사",
+        "최근 7일 실제 러닝과 옷장 비교를 정리하고 공유에 코랄 테마 추가",
+    )),
     AppVersionEntry("0.5.0-dev", "2026-11-13", "화면 구성 전면 개편 · 실기기 검증 전", listOf(
         "홈의 출발 준비와 러닝 시작, 기록 조회와 꾸미기의 흐름을 나눴어요.",
         "옷장·크루·파티·기록과 공유 화면의 정보 순서와 선택 영역을 정리했어요.",

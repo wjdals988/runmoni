@@ -2,3 +2,6 @@
 *.bat text eol=crlf
 *.jar binary
 *.png binary
+
+# Preserve exact raw verification output.
+docs/app-review/2026-11-14-sport-pages/*.txt -whitespace
