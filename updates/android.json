@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.5.0-dev",
-    "versionCode": 27,
-    "fileName": "runmoni-0.5.0-dev.apk",
-    "sizeBytes": 220181621,
-    "sha256": "006086f4786e209bcce46d4815ad9ee8891ca5b9d2ac108c56b946ce25f813c5",
+    "version": "0.6.0-dev",
+    "versionCode": 28,
+    "fileName": "runmoni-0.6.0-dev.apk",
+    "sizeBytes": 220284077,
+    "sha256": "3d444a4e9ca7873e5d7104292b417b9e67281e15d0e9d0c02cd3b93f03096364",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "df09c233f711dc5a0573daf4e030e53af51dddf8",
+    "sourceRevision": "9a572de8da88ef42bf740d9424b22c7fa14e17cb",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.5.0-dev/runmoni-0.5.0-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.5.0-dev",
-    "notes": "홈·러닝·기록·옷장·크루 화면 구성을 개편한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.6.0-dev/runmoni-0.6.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.6.0-dev",
+    "notes": "페이지 이동·뒤로가기와 위젯·옷장 비교·코랄 공유를 개선한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

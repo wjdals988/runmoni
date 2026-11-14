@@ -1,0 +1,11 @@
+{
+  "exitCode": 0,
+  "tests": 23,
+  "passed": 23,
+  "failed": 0,
+  "skipped": 0,
+  "observedAtUtc": "2026-11-14T09:25:17.107145+00:00",
+  "rawLog": "dashboard-node-tests.log",
+  "rawSha256": "6cafadb1b4256b0a62b6dbf2e83c48cd1ab7e4199c273fcdab588ba039b0ff3b",
+  "nodeVersion": "v24.19.0"
+}

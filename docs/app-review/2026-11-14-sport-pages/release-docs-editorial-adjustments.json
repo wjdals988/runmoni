@@ -1,0 +1,40 @@
+{
+  "observedAtUtc": "2026-11-14T09:30:32.281138+00:00",
+  "reason": "Clarify that72/3/15 count test methods within whole passing groups, not group count. Runtime proofs, actual90-method union and source C are unchanged.",
+  "executedApplyPlan": {
+    "file": "release-docs-apply-plan.json",
+    "sha256": "1eb9d4e9443db22f4b78443f8f35bc9003db94856b3d71faec59838966b9c6d9"
+  },
+  "changes": [
+    {
+      "file": "docs/RELEASE_REVIEW_0.6.0_20261114.md",
+      "generatedSha256": "1db74a78c026e9e44869b3a2d230a91da8a68954d5df68efca0a787f89c1cd45",
+      "finalSha256": "1a4828b3837351089686c3891232f876a950e08fb380410842a5944b72e27e51"
+    },
+    {
+      "file": "docs/app-review/2026-11-14-sport-pages/README.md",
+      "generatedSha256": "c5439a2c4f6c0c379e6f813bd7e9b59f42b127c478b765ee52e2b49b77b0efbb",
+      "finalSha256": "d4a05fb42da3a8430b164b72579eb6a635170197e2490aa6d8463481b2daeec6"
+    },
+    {
+      "file": "AGENTS.md",
+      "generatedSha256": "d5afc3c2e18710c73c929ef72326bd42790387645508b2c9712cae5f101ff4e6",
+      "finalSha256": "ad40cc01c088af77c04d1a5e0cdbe707132c8da7b629963307dc70cea2192cdd"
+    },
+    {
+      "file": "CHANGELOG.md",
+      "generatedSha256": "b177a6057e5774ce7b6a23d0a8f7807e7febec697ed0abf3b99d5c397eeb6df1",
+      "finalSha256": "8fb71889992bf3e26ec5072e37d94acb3c6c07690824ba51234cda054bdff7b6"
+    },
+    {
+      "file": "docs/DEVELOPMENT_CONTINUATION.md",
+      "generatedSha256": "ad7ba0459252b74e77fa9dd1dc9850d39ec3040b909e410a06d269d901268fc2",
+      "finalSha256": "7e918800d9dc8bce5fd23248a2f10930e6f91d20f8f16ba58a1ed6c90c111793"
+    },
+    {
+      "file": "docs/DEVELOPMENT_PRIORITIES.md",
+      "generatedSha256": "f7087a89a6652c01b0844d4dfa9c83bf9a4f3a724f2660ebcb6909abc01804d8",
+      "finalSha256": "fa5deee4c592ac4d75cab4120c99147695785448ff90f93061eaf983fce16480"
+    }
+  ]
+}

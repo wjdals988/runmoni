@@ -1,3 +1,8 @@
+# 0.6.0-dev 페이지 이동·위젯 공개 — 2026-11-14 한국 시간
+
+<!-- verified-sport-pages-release-0.6.0-v1 -->
+긴 작성/설정 화면을 독립 페이지로 연결하고 뒤로가기·초안·읽던 위치를 유지한다. 실제7일 기록·옷장 비교·거리/단위·코랄 공유·위젯 위계를 정리하고 API29 작성 페이지의 IME 버튼 가림을 공통 window policy로 수정했다. 같은 보관키/code28, 실제 APK출처 `9a572de8da88ef42bf740d9424b22c7fa14e17cb`, 220,284,077bytes, SHA256 `3d444a4e9ca7873e5d7104292b417b9e67281e15d0e9d0c02cd3b93f03096364`다. [게시 검증](docs/RELEASE_REVIEW_0.6.0_20261114.md). 새 로컬 JVM193/lint오류0·경고57, 실제 서명 CI43578574576 JVM193/lint오류0·경고87, input5 Android고유90개와 최종 live2 새 원본7·새 widget2의 Launcher2장·운영13항목/PNG4/Node23개를 구분한다. 동일 binary5의 ar2의 전체 통과 그룹에 속한 검사72개·실패그룹 한 번 재실행 ar3의3개·native3 전체15개를 채택했다. ar2는 parent=false이고 원래 두 실패 그룹을 보존하며 일반75개 단일phase 전체PASS를 주장하지 않는다. SnapshotStateObserver 오류의 원인은 미확정이며 해결되었다고 쓰지 않는다. 입력3/4 결과는90개에 합산하지 않았다. 이전0.5 결과·build1컴파일/build2lint·입력3 실패/당시 미확정 원인·입력4에서 측정한 실제 가림과 중단/복원/정확 종료를 별도 보존한다. 첫 Main의 관측 실패와 부분6장도 보존하고 최종 사진으로 재사용하지 않았다. 첫 위젯의 프로세스 소멸/미완료와 실제 scoped 복원은 runtime성공·검사수로 세지 않는다. 7건의 완료 자료에서 원래 데이터·소유 환경 복원을 확인한 뒤, 재연결 시점의 /proc 열거에서 소유 PID61846과 모든 emulator 프로세스가 없음을 관측했다. 종료 시그널은 보내지 않았으며 이전 AVD가 사라진 방식·시각·원인은 확인하지 못했다. 원래 위젯 상태의 복원도 별도 자료로 확인했다. 휴대폰·Google 로그인·운영 프로필/Firestore/네이버 인증·SNS 전달·야외 GPS/장시간 백그라운드·Doze/OEM/API31이상·공개 서명 APK 런타임·사용자 시각 승인은 별도 미검증이다. Launcher의 두 번의 새 배치를 같은 위젯 크기 변경이나 모든 런처 크기 검증으로 확대하지 않는다. canonical raw피드는 후속 병합 뒤 별도 확인한다.
+
 ## 2026-11-14 0.6.0 후보 — 실제 앱·런처 검토 보존
 
 - 같은 binary5의 실제 Main 최종 live2 전체 동선과 새 원본7장, 별도 Launcher widget2의 독립 OS 배치/font1·font2 원본2장과 원래 데이터·설정 복원을 확인했다. Root가 모든 원본을 직접 열어 검토했으며 사용자 시각 승인·휴대폰·Google·공개 서명APK 실행은 별개다.
@@ -6,7 +11,7 @@
 
 ## 2026-11-14 0.6.0 후보 — 같은 입력 검증과 미확정 충돌
 
-- final binary5 새JVM193/lint오류0·경고57. 일반 ar2는 전체false를 유지하고 성공전체그룹72개·동일APK 단일재검사ar3의3개·native3 전체15개로 서로다른90개를 확인했다. 일반75 단일PASS가 아니다. [범위](docs/app-review/2026-11-14-sport-pages/android-scope-summary.json).
+- final binary5 새JVM193/lint오류0·경고57. 일반 ar2는 전체false를 유지하고 성공 전체 그룹에 속한 검사72개·동일APK 단일재검사ar3의3개·native3 전체15개로 서로다른90개를 확인했다. 일반75 단일PASS가 아니다. [범위](docs/app-review/2026-11-14-sport-pages/android-scope-summary.json).
 - Consumer1/Colors2의 SnapshotStateObserver 스레드 예외·process crash 원문과 원인미확정을 보존했다. 근거 없는 제품수정·assertion/timeout 완화 없이 같은입력 재실행3개가 통과한 사실만 기록한다. [진단](docs/app-review/2026-11-14-sport-pages/input5-thread-diagnosis.json). 이전0.5 대기실패와API29 IME 실제가림 수정은 별개다.
 - 각 실행의 원래데이터/소유환경/6맵·설치pair 복원을 확인했다. 실제Main·Launcher/소유AVD종료·서명APK·운영배포는 후속단계이며 이 기록에서 완료로 표기하지 않는다.
 
