@@ -1,0 +1,68 @@
+{
+  "observedAtUtc": "2026-11-14T08:57:46.161109+00:00",
+  "ownedPid": 61846,
+  "ownedAvd": "Runmoni_Cloud_29",
+  "serial": "emulator-5556",
+  "ownership": {
+    "file": "owned-avd3.json",
+    "sha256": "ae47e86abb50238740116e5bf4819b89dd9116171b70ab0ffcb02a4a9f32f915"
+  },
+  "cleanupMethod": "post-reconnection absence observation",
+  "signal": null,
+  "ownerCommandSha256": null,
+  "finalProcessState": "absent",
+  "ownedEmulatorNoLongerRunning": true,
+  "noUnrelatedProcessTerminated": true,
+  "noEmulatorProcessObserved": true,
+  "oldPidObservedAbsent": true,
+  "processExitCauseConfirmed": false,
+  "physicalDeviceOrUserPcEmulatorUsed": false,
+  "currentBootId": "c7e20dc1-f625-4776-a6cc-2fbbabbe8750",
+  "observedEmulatorProcesses": [],
+  "restorationProofs": [
+    {
+      "file": "android-review2.json",
+      "sha256": "2d34ee7c99dfb5088e543e3e175c4b17409b3ce672c2d25a2c099623a1d73366",
+      "completed": true,
+      "originalParentPassed": false
+    },
+    {
+      "file": "android-review3.json",
+      "sha256": "f9f3e703bc261e607cef59294bf3767448615186eeb1daae48796c00b3420efe",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "native3.json",
+      "sha256": "07948b2472840ef9ae78016768c116decea9f11fba90dadf2a3fc17b410023dd",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "live1.json",
+      "sha256": "292e5facadd217d10be2e005e05a08115fd036f345e3b96fb9e7f6b47edb8bcf",
+      "completed": true,
+      "originalParentPassed": false
+    },
+    {
+      "file": "live2.json",
+      "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "widget2.json",
+      "sha256": "a72e12658442e2af71ba8b639ad72fc11cb5e3c0c6fa9813121194095a1f871b",
+      "completed": true,
+      "originalParentPassed": true
+    },
+    {
+      "file": "widget1-interruption-recovery.json",
+      "sha256": "e96dc6c9986283c76de26ce1a2e5a43cec148e6a1e27f6158756f3372bb5e37e",
+      "completed": true,
+      "originalParentPassed": true
+    }
+  ],
+  "removedIdleOwnLocks": [],
+  "notes": "No signal was sent. Prior exec transport became unavailable before the planned termination command could start. At reconnection the owned PID and all emulator processes are absent; exit mechanism/time remain unconfirmed."
+}

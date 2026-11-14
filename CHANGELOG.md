@@ -1,3 +1,15 @@
+## 2026-11-14 0.6.0 후보 — 실제 앱·런처 검토 보존
+
+- 같은 binary5의 실제 Main 최종 live2 전체 동선과 새 원본7장, 별도 Launcher widget2의 독립 OS 배치/font1·font2 원본2장과 원래 데이터·설정 복원을 확인했다. Root가 모든 원본을 직접 열어 검토했으며 사용자 시각 승인·휴대폰·Google·공개 서명APK 실행은 별개다.
+- 첫 Main의 읽기 도구 조건 오류·부분6장을 보존하고, 실제 선택 상태 확인을 유지한 도구 보완 후 전체 동선을 다시 실행했다. 위젯 첫 실행은 환경 재연결 구간에 미완료로 남았고, 중단 전 변경된 설정·캐시를 복구한 뒤 새 실행만 최종 근거로 채택했다.
+- 마지막 실행 연결 장애로 계획한 종료 명령은 시작하지 못했다. 재연결 후 소유PID61846과 모든 에뮬레이터 프로세스가 없는 것을 확인했다. 종료 신호를 보냈다거나 원인을 확인했다고 기록하지 않는다. [현재 관측](docs/app-review/2026-11-14-sport-pages/session-cleanup.json). 새 서명·공개·대시보드는 후속 단계다.
+
+## 2026-11-14 0.6.0 후보 — 같은 입력 검증과 미확정 충돌
+
+- final binary5 새JVM193/lint오류0·경고57. 일반 ar2는 전체false를 유지하고 성공전체그룹72개·동일APK 단일재검사ar3의3개·native3 전체15개로 서로다른90개를 확인했다. 일반75 단일PASS가 아니다. [범위](docs/app-review/2026-11-14-sport-pages/android-scope-summary.json).
+- Consumer1/Colors2의 SnapshotStateObserver 스레드 예외·process crash 원문과 원인미확정을 보존했다. 근거 없는 제품수정·assertion/timeout 완화 없이 같은입력 재실행3개가 통과한 사실만 기록한다. [진단](docs/app-review/2026-11-14-sport-pages/input5-thread-diagnosis.json). 이전0.5 대기실패와API29 IME 실제가림 수정은 별개다.
+- 각 실행의 원래데이터/소유환경/6맵·설치pair 복원을 확인했다. 실제Main·Launcher/소유AVD종료·서명APK·운영배포는 후속단계이며 이 기록에서 완료로 표기하지 않는다.
+
 # 2026-11-14 API29 입력 페이지 키보드 가림 수정 후보
 
 입력4의 실제 Native 진단에서 저장 버튼 아래쪽764px가 OS/IME 안전 경계413px를351px 넘는 것을 같은 시점의 좌표와 캡처로 확인했다. Semantics/Layout 좌표가 일치해 좌표계 교체로 해결할 문제는 아니었다. 실패를 보존하고 정확한 환경/데이터 복원 뒤 소유 AVD57956을 종료했다. 공유 편집의 검증된 API29 framework fit/resize 방식을 공통 정책으로 옮겨 긴 폼에도 적용하고, framework가 이미 소비한 인셋은 다시 빼지 않도록 했다. 종료 때 소유한 창 모드/레이아웃 bits를 복원한다. API30+의 기존 Compose 처리·원화/데이터/키/Rules는 유지한다. 기존 OS 경계·48dp·시간 제한을 낮추지 않았다. 입력5의 새 빌드/전체 Android90개/실제 Main·Launcher/서명·운영 게시 검증은 아직 미실행이며 이전 부분 성공과 합산하지 않는다.

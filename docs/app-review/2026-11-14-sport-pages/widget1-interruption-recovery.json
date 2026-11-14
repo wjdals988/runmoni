@@ -1,0 +1,129 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "name": "widget1-interruption-recovery",
+  "startedAtUtc": "2026-11-13T19:02:17.152761+00:00",
+  "kind": "owned interruption recovery only",
+  "completed": true,
+  "passed": true,
+  "restorationOnly": true,
+  "widgetRuntimeVerified": false,
+  "originalAttemptCompleted": false,
+  "originalAttemptPassed": false,
+  "originalAttemptNotRewritten": true,
+  "originalAttempt": {
+    "file": "widget1.json",
+    "sha256": "a554eb83d53cfc653dda000bc16ebfa8ac6705586e6412185d0ff8b6eab94a75"
+  },
+  "captures": [],
+  "binaryReference": "binary-build5.json",
+  "binaryReferenceSha256": "745459af69a596b115090b975acc6f62171c584107994778b5fe7083c579503c",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 106,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "actions": [
+    "restore exact original main XML",
+    "restore exact original widget XML"
+  ],
+  "newWidgetsRemoved": false,
+  "unrelatedProcessTerminated": false,
+  "productTestsCounted": 0,
+  "launcherWidgetIdsExactlyRestored": true,
+  "preferencesAlreadyExactBeforeRecovery": false,
+  "widgetCacheAlreadyExactBeforeRecovery": false,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "widgetCacheExactlyRestored": true,
+  "widgetCacheExistsExactlyRestored": true,
+  "databaseExactlyRestored": true,
+  "databaseCopiedBack": false,
+  "accountPreferencesRestoredExactly": true,
+  "controlledEnvironmentAlreadyExactBeforeRecovery": false,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 106,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "backupReferences": [
+    {
+      "file": "widget1-private-environment-before.json",
+      "sha256": "cc87c9ea2886aef2bedcb0f38ace05b23abc89703745a2a567c45a9ed5034118",
+      "privateWorkspaceBackup": true
+    },
+    {
+      "file": "widget1-private-preferences-before.xml",
+      "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+      "privateWorkspaceBackup": true
+    },
+    {
+      "file": "widget1-private-widget-cache-before.xml",
+      "sha256": "5bee6e3869e53d2d783d7d36b0d720772f4ed1b1b869734a1a01fb58ab2d3050",
+      "privateWorkspaceBackup": true
+    },
+    {
+      "file": "widget1-private-widget-ids-before.json",
+      "sha256": "bc71cbc5559ed3ab5cd8d69bc5a6251ba037f455f736515d2b0408dfa4c98d80",
+      "privateWorkspaceBackup": true
+    }
+  ],
+  "finishedAtUtc": "2026-11-13T19:02:55.056907+00:00"
+}

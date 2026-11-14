@@ -1,0 +1,26 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "observedAtUtc": "2026-11-13T17:45:09.661527+00:00",
+  "source": "Actual API29 ComponentActivity fixture at320dp/font2, not MainActivity or phone",
+  "binaryReference": "binary-build5.json",
+  "nativeFormGroupPassed": true,
+  "entireNativePhaseStillInProgress": true,
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "image": {
+    "file": "native3-modal-ime-close-native320-font2-fixture.png",
+    "sha256": "ce4db7ad2439b3f711052bb9bb70b082c2b74f96ae2bf75200911856afd5d1df"
+  },
+  "geometry": {
+    "file": "native3-native-form-page-bounds.jsonl",
+    "sha256": "311573a5efc7f5d9595db94a8e26c6ffa7e194c9b7a8ebeaa8767240245e90df"
+  },
+  "actualSaveBottomPx": 413,
+  "actualOsImeSafeBottomPx": 413,
+  "bottomMarginPx": 0,
+  "allOriginalOsEdgesPass": true,
+  "assertionsOrTimeoutRelaxed": false,
+  "windowModeAndLayoutRestorationAssertionsPassed": true
+}

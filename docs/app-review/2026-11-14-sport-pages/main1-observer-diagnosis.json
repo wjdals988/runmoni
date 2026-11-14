@@ -1,0 +1,32 @@
+{
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "binaryReference": "binary-build5.json",
+  "binaryReferenceSha256": "745459af69a596b115090b975acc6f62171c584107994778b5fe7083c579503c",
+  "originalParentPassed": false,
+  "originalFailure": "Actual control not reachable: 코랄",
+  "productFixClaimed": false,
+  "assertionsOrTimeoutRelaxed": false,
+  "reusedFailedMainCaptures": false,
+  "preservedPartialCaptureCount": 6,
+  "failedProof": {
+    "file": "live1.json",
+    "sha256": "292e5facadd217d10be2e005e05a08115fd036f345e3b96fb9e7f6b47edb8bcf"
+  },
+  "finalMainProof": {
+    "file": "live2.json",
+    "sha256": "3544ceebfcef68fc66be3b2ada46f8c05a4c8a39dce537bd6c65bd3ad3513cb8"
+  },
+  "partialRootVisualProof": {
+    "file": "root-main1-partial-review.json",
+    "sha256": "7d70c6b9c13a5375707119e23059cbe9a3d1ca8251677587e9e96be4f1337fb0"
+  },
+  "observations": [
+    "Failed Main1 finished with completed=true, passed=false and six partial originals; its generic visibility search required a clickable target before reaching the actual post-reopen checked-state assertion. No exact Coral row attributes were captured at that failed point.",
+    "Final Main2 uses visibility of a checkable row for this read-only search, preserving the fresh checked=true assertion, all timeouts and the original one initial Coral click. No product/test/APK pair change or post-reopen re-selection was made.",
+    "Final Main2 actually observed Coral checkable=true, checked=true, clickable=false after Back/reopen and completed the whole seven-original route successfully with all scoped state restored.",
+    "Root viewed all seven new Main2 originals; none of the failed Main1 six originals are reused as final gallery captures. Main1 originals and their partial Root review remain separately preserved.",
+    "The observer search correction is separate from the unresolved SnapshotStateObserver thread failure in the product instrumentation groups. No phone, Google login, public signed APK, real GPS or tile-network success is inferred."
+  ],
+  "editorialStatusClarificationAtUtc": "2026-11-13T19:06:11.000955+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "observedAtUtc": "2026-11-14T08:57:46.153884+00:00",
+  "proof": {
+    "file": "widget2.json",
+    "sha256": "a72e12658442e2af71ba8b639ad72fc11cb5e3c0c6fa9813121194095a1f871b"
+  },
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "widget2-idle-font1.png",
+      "sha256": "2dc25cd9a504bd67e77a504ed86e07245e24db52052d5dd000e589d112ee51e3",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Launcher",
+      "viewedAtUtc": "2026-11-13T19:08:46.206739+00:00",
+      "visualObservation": "Actual idle Launcher widget: balanced vertical interior whitespace, full title and lime48dp open action. OS controls placement; running metrics/FGS are not shown."
+    },
+    {
+      "file": "widget2-idle-font2.png",
+      "sha256": "aff28744260695b6ca1bf4f017d441e167116670dfd7e058da077dc3d728ae4c",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "source": "Launcher",
+      "viewedAtUtc": "2026-11-13T19:13:04.140592+00:00",
+      "visualObservation": "Actual idle font2 Launcher fallback shows full short open label 열기, with centered content and no personal information. This is not an active-run widget control test."
+    }
+  ]
+}

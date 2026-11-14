@@ -1,0 +1,5 @@
+version shortcut and update prompt: waitMillis=97; timeoutMillis=120000
+about information: waitMillis=1238; timeoutMillis=120000
+anonymous room disconnect confirmation: waitMillis=2070; timeoutMillis=120000
+device checks missing and local response: waitMillis=9; timeoutMillis=120000
+device checks manual results: waitMillis=27; timeoutMillis=120000

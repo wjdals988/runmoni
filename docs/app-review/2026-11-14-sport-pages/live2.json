@@ -1,0 +1,700 @@
+{
+  "name": "live2",
+  "nonce": "3bf32473a932",
+  "version": "0.6.0-dev",
+  "versionCode": 28,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build5.json",
+  "sourceKind": "actual Android MainActivity",
+  "passed": true,
+  "completed": true,
+  "captures": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "bf1f3efd6f676ebc54c8c287f13fd6a68928c54527dc9e13207a937ef74e9b53",
+      "bytes": 63049,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-profile-ime.png",
+      "sha256": "ca305b93395641c81017a1f72a1027e0f99a4f3bc2f37167bd5cb298856a59f8",
+      "bytes": 52884,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-studio-closet.png",
+      "sha256": "e8b778fdfbfb1035097ec94043165eaa9ba8d6e70116c2f9dce4bb388d6140e8",
+      "bytes": 85997,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-record-result.png",
+      "sha256": "1ec0c8db15b9a0a6e3c736a7433ba498efc79f5a4b53a938f587962d1f71113a",
+      "bytes": 37346,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-default-card.png",
+      "sha256": "f5a1c01b91b0c6adf765b0f7ae504b6fd2cdbf07005c4261f621b3f30eecbe82",
+      "bytes": 38135,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-coral-card.png",
+      "sha256": "6143a5f53bb0d4e2cd24a762228548042676dc243f26045badbd7b32cf058b85",
+      "bytes": 37647,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live2-main-map-clean.png",
+      "sha256": "59c409448231958ba5e8cecb64c8b1566923e55fa6d85f095bd6f029629337d5",
+      "bytes": 65001,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    }
+  ],
+  "actualTaps": [
+    {
+      "label": "프로필 편집",
+      "description": false,
+      "system": false,
+      "bounds": [
+        124,
+        224,
+        226,
+        272
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "미니미 꾸미기",
+      "description": false,
+      "system": false,
+      "bounds": [
+        20,
+        312,
+        460,
+        368
+      ]
+    },
+    {
+      "label": "하의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        285,
+        288,
+        375,
+        336
+      ]
+    },
+    {
+      "label": "상의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        105,
+        288,
+        195,
+        336
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        372,
+        32,
+        460,
+        80
+      ]
+    },
+    {
+      "label": "코랄",
+      "description": false,
+      "system": false,
+      "bounds": [
+        218,
+        637,
+        268,
+        685
+      ]
+    },
+    {
+      "label": "기록",
+      "description": false,
+      "system": false,
+      "bounds": [
+        108,
+        321,
+        188,
+        371
+      ]
+    },
+    {
+      "label": "미니미",
+      "description": false,
+      "system": false,
+      "bounds": [
+        196,
+        321,
+        276,
+        371
+      ]
+    },
+    {
+      "label": "배경",
+      "description": false,
+      "system": false,
+      "bounds": [
+        20,
+        321,
+        100,
+        371
+      ]
+    },
+    {
+      "label": "러닝 기록으로 돌아가기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        372,
+        32,
+        460,
+        80
+      ]
+    },
+    {
+      "label": "러닝 기록으로 돌아가기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-13T18:47:12.892026+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live2-executed-driver.py",
+  "executedDriverSha256": "a43b40b50cd80a8bbf546783b6bd62bb06c8aab6fa66c4e240b03da1b7f371b3",
+  "observerHelper": "live2-actual-ui-helper.py",
+  "observerHelperSha256": "1cc713c08cf5c2e12b83c0fcb0a879ae92922ff0cfe318388e6b9fef796c84d2",
+  "environmentHelper": "live2-environment-helper.py",
+  "environmentHelperSha256": "e7caa306285812afe6864de8560259f706cbf0f63d66a1e9b045f134974c276f",
+  "stage": "complete-passed",
+  "updatedAtUtc": "2026-11-13T18:58:50.479329+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "745459af69a596b115090b975acc6f62171c584107994778b5fe7083c579503c",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 106,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "da47a4814d90544cbd108495ef790064d1174f3e31b4a105ba1c96e1f9656937"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "9f9a43752b77692ab9dd051974a7c62f54069a1aa2f9fee55bcd200a9837e78d"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "ed925d9572cf705a29273983d09d6e5efb161f5e20535efa91aa97ed54ab1f70",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.351,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.262,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.368,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 32.119,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 35.021,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main home avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.439,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.796,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main profile IME is shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 3.428,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Profile Back restores parent navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.795,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standalone closet visible",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 12.276,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main closet avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.158,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main closet selected state observed: 하의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.298,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main closet selected state observed: 상의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.022,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile navigation restored after closet",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.419,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual owned result page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 6.132,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 7.121,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual coral radio checked state",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.391,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.448,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Editor Back returns to canonical result",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.887,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 6.796,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Coral checked state restored after actual Back and reopen",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.029,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Back to record before map review",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.514,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Root navigation restored before map review",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 6.612,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual clean discovery map and outside action bar",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 11.927,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.221,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.284,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.326,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 63,
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "3bf32473a932",
+    "recordId": "runmoni-share-review-3bf32473a932",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-3bf32473a932.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "originalHistoryExcludedFromExtraScreenshots": true,
+  "homeCaptureContainsOnlyNonceReviewRun": true,
+  "actualProfileKeyboardObserved": true,
+  "actualProfileKeyboardControlBounds": {
+    "back": [
+      8,
+      32,
+      56,
+      80
+    ],
+    "save": [
+      384,
+      409,
+      460,
+      457
+    ]
+  },
+  "actualProfileKeyboardWindowVisibleFrame": [
+    0,
+    24,
+    480,
+    469
+  ],
+  "actualProfileKeyboardControlsInsideVisibleWindow": true,
+  "actualProfileKeyboardMinimum48dpTargetPx": 48.0,
+  "actualProfileKeyboardDensityDpi": 160,
+  "actualProfileClosedWithoutSaving": true,
+  "actualClosetTabSelectedObserved": true,
+  "ownResultUiSignatureObserved": [
+    "11월 13일 (금) 18:15",
+    "5.24 km",
+    "30:00"
+  ],
+  "defaultPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.13 (금).  1:1, 미니미 포함",
+  "actualCoralThemeSelectionObserved": true,
+  "existingShareToolTabsTapped": true,
+  "priorShareExportFlowReexecuted": false,
+  "resultReturnedAfterEditorBack": true,
+  "previewAfterActualReopen": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.13 (금).  1:1, 미니미 포함",
+  "actualReopenedCoralRadioAccessibility": {
+    "label": "코랄",
+    "bounds": [
+      194,
+      637,
+      268,
+      685
+    ],
+    "checked": "true",
+    "checkable": "true",
+    "clickable": "false",
+    "selected": "false",
+    "observationDoesNotRequireRepeatClick": true
+  },
+  "actualCoralThemeRestoredAfterBack": true,
+  "actualMapBounds": [
+    0,
+    178,
+    480,
+    527
+  ],
+  "outsideMapActionBounds": [
+    378,
+    553,
+    480,
+    601
+  ],
+  "mapProviderChangedOrNewProviderAuthenticated": false,
+  "mapHttpStatusAndTileContentMeasuredByDriver": false,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 106,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerDismissalNotRequested": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 106,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 90,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 30,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 7,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-13T18:58:50.479313+00:00"
+}

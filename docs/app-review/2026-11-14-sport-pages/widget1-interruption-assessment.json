@@ -1,0 +1,20 @@
+{
+  "observedAtUtc": "2026-11-13T19:03:56.642216+00:00",
+  "environmentReadinessWaitReturnedReady": true,
+  "originalDriverProcessNoLongerRunning": true,
+  "originalAttempt": {
+    "file": "widget1.json",
+    "sha256": "a554eb83d53cfc653dda000bc16ebfa8ac6705586e6412185d0ff8b6eab94a75"
+  },
+  "recoveryProof": {
+    "file": "widget1-interruption-recovery.json",
+    "sha256": "e96dc6c9986283c76de26ce1a2e5a43cec148e6a1e27f6158756f3372bb5e37e"
+  },
+  "recoveryHelper": {
+    "file": "widget1-recovery-executed-helper.py",
+    "sha256": "52ca50b7faf542fad05a1afdfa298733d58852df9137221022229b20e0e05f55"
+  },
+  "recoveryOnlyNotWidgetRuntimeSuccess": true,
+  "productTestsCounted": 0,
+  "originalIncompleteProofNotRewritten": true
+}
