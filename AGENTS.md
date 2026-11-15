@@ -1,3 +1,16 @@
+# 0.7.0-dev 앱·위젯·연결 유지 공개 — 2026-11-16 한국 시간
+
+<!-- verified-companion-release-0.7.0-v1 -->
+기존 보관키0.7.0-dev/code29, 실제 APK출처 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`, 172,509,168bytes, SHA256 `79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152`. 앱PR58·서명CI43761237483·대시보드PR30/main `9060d3661b70007ca189df12485bdae9075b9f57`와 운영13항목/새MainPNG4/새Node23개를 확인했다. [게시 검증](docs/RELEASE_REVIEW_0.7.0_20261116.md)을 시작점으로 한다. 후속 문서/피드 커밋으로 APK출처C를 바꾸지 않는다. 공개 자산은 같은3개로 유지했고 본문APK를 다시 내려받지 않았다.
+
+frontend-design로 밝은 표면·차분한 청록·여백·아이콘을 정리했고 같은UID 서버ACK 연결 유지, 출발 전 약100m 공유 선택/실제 러닝중 전송, MapLibre/OpenFreeMap 벡터 지도와 산타·곰·골든 의복을 연결했다. 원본/58ID/13슬롯/9탭/0P·지갑·계정별 동의/키는 유지한다. 소유자 Rules 게시 뒤 exact 닉네임 조회403→404를 확인했고 운영 문서쓰기0회다. 같은 Rules/키를 다시 요구하지 않는다.
+
+최신 로컬 input6 새JVM219/lint오류0·경고66, 실제 연결 서명CI 새JVM219/lint오류0·경고97을 구분한다. 이번 후보 입력3/4/5/6의 Android77/29/26/5=고유137은 소스 동등성 검토를 적용한 범위이며 같은APK137개/이전0.6결과 재사용이 아니다. 실제 Main2 새 원본7장과 Launcher idle 독립font1/font2 배치2장, 원래 데이터·소유 환경 복원과 AVD5 PID58580 정확 종료를 확인했다. 과거 thread 원인미확정·자동지도PASS/시각거절·복원-only·Main1 관측 실패와 배포 도구 실패를 보존한다.
+
+휴대폰·Google 로그인·운영 프로필/위치 공유 쓰기·실제 live 위젯/알림 제어·야외 GPS/절전/OEM/API31이상·SNS 전달·공개 서명 APK 런타임·사용자 시각 승인은 별도다. 미승인 수영복은 포함하지 않는다. canonical raw피드는 후속 문서/피드 병합 뒤 전문 바이트로 별도 확인한다. [이어가기](docs/DEVELOPMENT_CONTINUATION.md)·[우선순위](docs/DEVELOPMENT_PRIORITIES.md)와 순차heavy/캐시우선·오프라인작업자1/클라우드전용AVD 제약을 유지한다.
+
+아래는 이전 구현·검토 시점의 보존 기록이다.
+
 # 2026-11-16 0.7 후보 — 실제 앱·위젯·배포 계속
 
 frontend-design로 앱·위젯의 색/여백/글자/아이콘, 동일UID 서버 확인 연결 유지, 출발 전 약100m 공유 선택, 승인 포즈의 산타·곰·골든 의복과 MapLibre/OpenFreeMap을 구현했다. [설계](design-system/runmoni/pages/companion-redesign.md)·[검토](docs/app-review/2026-11-15-companion/README.md)·[클라우드 실행 메모](docs/CLOUD_ANDROID_RENDERING.md)를 따른다. 원본/58ID/13슬롯/9탭/데이터/보관키는 유지한다.

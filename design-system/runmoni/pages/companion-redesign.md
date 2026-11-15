@@ -16,3 +16,6 @@ Chalk #F7F9FA, Paper #FFFFFF, Ink #24343D, Muted #5B6D73, Ocean #356F78, Mist #E
 4. 기존Naver 미설정 시 저해상도 래스터 fallback만 보이는 구조를 Native vector로 교체한다. MapLibre12.0.1과 OpenFreeMap의 실제 조건/가용성을 확인한다. 계정/과금을 만들지 않으며 무료 as-is 공용 서비스의 SLA를 주장하지 않는다. 출처·제스처·오류 fallback·프레임별 미니미 marker와 오프라인 테스트 경로를 유지한다.
 5. 승인v0.3 원본 두 사본을 보존하며 장비의 재질 명암/밀착/가림을 개선한다. 구형v0.4 리그 부품을 재연결하지 않는다. 기존 세트1/4/5는 승인 포즈에 새 의복 레이어로 저작·출력 검토 후 연결하고 피부 underlay가 없는 수영복2/3을 완성으로 표시하지 않는다. 새 레이어의 시각적 사용자 승인은 별도다.
 6. 새 입력의 검사·실제 Android 화면·같은 키 서명·공개APK·대시보드·피드를 각각 검증한다. 기존0.6 검사와 새 검사를 합산하지 않으며 실패/수정/미확인 범위를 CHANGELOG에 기록한다.
+
+
+게시 상태: 기존 보관키0.7.0-dev/code29, 실제 APK출처 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`. [게시 검토](../../../docs/RELEASE_REVIEW_0.7.0_20261116.md)·[Main 원본/Android 범위](../../../docs/app-review/2026-11-15-companion/README.md). Root 검토와 사용자 시각 승인은 구분한다.

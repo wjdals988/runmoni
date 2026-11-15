@@ -1,3 +1,16 @@
+# 2026-11-16 0.7.0-dev 공개·운영 대시보드 확인
+
+<!-- verified-companion-release-0.7.0-v1 -->
+기존 보관키0.7.0-dev/code29, 실제 APK출처 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`, 172,509,168bytes, SHA256 `79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152`. 앱PR58·서명CI43761237483·대시보드PR30/main `9060d3661b70007ca189df12485bdae9075b9f57`와 운영13항목/새MainPNG4/새Node23개를 확인했다. [공개APK](https://github.com/wjdals988/runmoni/releases/tag/v0.7.0-dev)·[운영](https://coldbrewventi.vercel.app/projects/runmoni)·[검증](docs/RELEASE_REVIEW_0.7.0_20261116.md).
+
+밝은 표면/청록·넓은 구역 간격/아이콘·자연 높이 위젯, 서버ACK 동일UID 연결 복원, 출발 전 공유 선택과 live recorder/UID fence, 새 벡터 지도/버전별미니미 이미지 교체·평면 건물, 산타/곰/골든 의복을 반영했다. 원본/ID/지갑/무료/성별·기존 서명키를 보존한다.
+
+새 로컬219/lint0·경고66과 실제 서명CI219/lint0·경고97, 이번 입력3~6 고유Android137·Main2 원본7·Launcher2를 구분한다. 기존 false parent·관측/환경/스레드 원인미확정·후속 복원-only와 첫 draft URL 검증 실패를 바꾸지 않았다. Actions ZIP Accept415와 manifest 경로·실제 노트 문구·draft 임시URL을 검증 도구에서 교정했으며 제품 검사 수를 추가하지 않았다. 운영 페이지13/PNG4 exact와 Node23을 새로 확인하고 다른8프로젝트/이전21노트/기존4PNG를 보존했다.
+
+업데이트 피드는 검증된 같은 공개메타데이터로 갱신한다. canonical raw전문은 병합 뒤 별도 확인한다. 휴대폰·Google 로그인·운영 프로필/위치 공유 쓰기·실제 live 위젯/알림 제어·야외 GPS/절전/OEM/API31이상·SNS 전달·공개 서명 APK 런타임·사용자 시각 승인은 별도다. 미승인 수영복은 포함하지 않는다.
+
+아래는 이전 구현·검토 시점의 보존 기록이다.
+
 # 2026-11-16 실제 Main·Launcher 최종 검토
 
 Main2 전체 동선과 새 원본7장(홈/실제 프로필 IME/산타 선택/기록/기본1:1·코랄 공유/탐색 지도), 독립 Launcher idle font1/font2 배치2장 및 Root 픽셀·개인정보 검토를 확인했다. 산타의 선택 상태와 저장값1, 실제 기존 마일리지·보유항목 유지도 확인했다. Main1 관측기 실패와 부분2장은 보존하며 최종 갤러리에 재사용하지 않는다.

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "ca54251a780f56b60aaecce0dbeb94a4f33061ed",
+  "ciRun": 43761237483,
+  "ciAttempt": 1,
+  "expectedJvmTests": 219,
+  "verification": {
+    "file": "release-publication/proof.json",
+    "sha256": "505e132071f6be97c45369436a3cb17fb2f19afaf814150eec74d15c08bd9c91"
+  },
+  "metadata": {
+    "file": "release-publication/runmoni-0.7.0-dev.metadata.json",
+    "sha256": "cac705d7658debc532c295a4f30ce4dcb4c77657925e0a831059172d627aabb3"
+  },
+  "checksum": {
+    "file": "release-publication/SHA256SUMS-0.7.0-dev.txt",
+    "sha256": "b0d88dfcde45d2a2b91c3dddd25a8cc21bec9c80f358ffb819f83806c013e627"
+  },
+  "featureMerge": {
+    "file": "feature-merge.json",
+    "sha256": "4b57943aa6318665c8d50c09f4134d1c9b4fc4a966ebf27e84487f88650ad2e7"
+  },
+  "sourceComparison": {
+    "file": "release-source-comparison.json",
+    "sha256": "df7ee9a6ed42d51d319fc0400d723a7a4db9446d0e17107a4bb0dcf5e96a6ccf"
+  },
+  "content": {
+    "file": "dashboard-content.json",
+    "sha256": "ac1eaa55cef9a4cf265733dbb7e910f2bbcf09ba16bbffc168fb36eaee1848cd"
+  }
+}

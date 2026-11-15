@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "version": "0.7.0-dev",
+  "versionCode": 29,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "ca54251a780f56b60aaecce0dbeb94a4f33061ed",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "release-source-comparison.json",
+      "sha256": "df7ee9a6ed42d51d319fc0400d723a7a4db9446d0e17107a4bb0dcf5e96a6ccf"
+    }
+  },
+  "rootVisualProof": {
+    "file": "root-main-visual-review.json",
+    "sha256": "95721b431d87b90b1cb41b7676313129efa76f5f7dbd636814062719c3a1cf6f"
+  },
+  "scopeNote": "표시된 5.24km 기록과 프로필 별칭은 검토용 합성 데이터이며 GPS 좌표는 없습니다. 지도는 위치 미확인 상태의 서울 기본 영역이며 실제 러너 표시·현재 위치 확인 증거가 아닙니다. 사진을 적용하지 않은 정사각 공유 카드입니다.",
+  "images": [
+    {
+      "key": "home",
+      "file": "live2-main-studio-home.png",
+      "sha256": "d1f447b40e7745df3533047401f71418f5faa1b6f3f8694f1328a839308f3ab3",
+      "width": 480,
+      "height": 854,
+      "caption": "홈 · 출발 전 미니미와 날씨 안내",
+      "alt": "홈 · 출발 전 미니미와 날씨 안내 실제 Android 앱 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d"
+      }
+    },
+    {
+      "key": "closet",
+      "file": "live2-main-studio-closet.png",
+      "sha256": "8ec0fa7d6e9ec6f342c0e823a2767048d8182e182a4a5167f62a94ab25bd23e0",
+      "width": 480,
+      "height": 854,
+      "caption": "옷장 · 산타 세트 선택",
+      "alt": "옷장 · 산타 세트 선택 실제 Android 앱 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d"
+      }
+    },
+    {
+      "key": "explore",
+      "file": "live2-main-map-clean.png",
+      "sha256": "368625c62e1acb1830bcbf066e7137216d04080eb39346b096e61f954aa0a9b7",
+      "width": 480,
+      "height": 854,
+      "caption": "탐색 · 한국어 벡터 지도",
+      "alt": "탐색 · 한국어 벡터 지도 실제 Android 앱 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d"
+      }
+    },
+    {
+      "key": "share",
+      "file": "live2-main-default-card.png",
+      "sha256": "90eae8df26235e8e55f8e6ecb4660dd64238d8a93ffc9ae2d4cb83692b6a6b4a",
+      "width": 480,
+      "height": 854,
+      "caption": "공유 · 미니미가 들어간 정사각 기록 카드",
+      "alt": "공유 · 미니미가 들어간 정사각 기록 카드 실제 Android 앱 화면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "live2.json",
+        "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152  runmoni-0.7.0-dev.apk
