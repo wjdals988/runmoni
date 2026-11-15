@@ -1,3 +1,7 @@
+# 0.7.0-dev 공개 상태 — 2026-11-16
+
+기존 보관키0.7.0-dev/code29, 실제 APK출처 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`, 172,509,168bytes, SHA256 `79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152`. 앱PR58·서명CI43761237483·대시보드PR30/main `9060d3661b70007ca189df12485bdae9075b9f57`와 운영13항목/새MainPNG4/새Node23개를 확인했다. [공개/연결CI](release-publication/proof.json)·[실제C와6맵](release-source-comparison.json)·[운영페이지13/PNG4](dashboard-production.json)·[배포도구 교정/실패](RELEASE_INTEGRATION_NOTES.md)·[게시 검토](../../RELEASE_REVIEW_0.7.0_20261116.md). 공개 서명 APK 본문은 다시 내려받지 않았고 실제 휴대폰/Google/운영 저장 성공은 별도다. canonical raw피드는 문서/피드 병합 뒤 확인한다. 아래는 같은 후보의 입력별 검토 이력이다.
+
 # 러닝 동반자 개편 검토
 
 후보0.7.0-dev/code29. 한국 시간2026-11-16에 UI·위젯 가독성과 여백, 동일UID 연결 유지, 출발 전 위치 공개 선택, 벡터 지도, 원본 포즈의 의복/장비를 검토한다. [계획](../../../design-system/runmoni/pages/companion-redesign.md).

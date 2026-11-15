@@ -1,0 +1,43 @@
+{
+  "sourceRevision": "ca54251a780f56b60aaecce0dbeb94a4f33061ed",
+  "sourceFile": "app/src/main/java/com/runmoni/app/ui/RunmoniTheme.kt",
+  "sourceSha256": "15fcd30a2b083f7d1c8d21ba40bff2126bfa4f456626c971ce1040473c280677",
+  "calculatedAtUtc": "2026-11-15T21:11:31.600788+00:00",
+  "method": "WCAG sRGB linearization and relative luminance, (Lmax+0.05)/(Lmin+0.05), opaque flat color pairs only",
+  "pairs": [
+    {
+      "foreground": "Ink",
+      "background": "Paper",
+      "foregroundHex": "#24343D",
+      "backgroundHex": "#FFFFFF",
+      "contrastRatio": 12.855086790322266,
+      "atLeast4Point5": true
+    },
+    {
+      "foreground": "Muted",
+      "background": "Chalk",
+      "foregroundHex": "#5B6D73",
+      "backgroundHex": "#F7F9FA",
+      "contrastRatio": 5.125340029935603,
+      "atLeast4Point5": true
+    },
+    {
+      "foreground": "Paper",
+      "background": "Ocean",
+      "foregroundHex": "#FFFFFF",
+      "backgroundHex": "#356F78",
+      "contrastRatio": 5.681255942285486,
+      "atLeast4Point5": true
+    },
+    {
+      "foreground": "Ocean",
+      "background": "Mist",
+      "foregroundHex": "#356F78",
+      "backgroundHex": "#E7EFF1",
+      "contrastRatio": 4.8735870532312235,
+      "atLeast4Point5": true
+    }
+  ],
+  "allFourPairsAtLeast4Point5": true,
+  "limits": "Static palette arithmetic only. Does not audit every rendered state, opacity, map/photo overlay, system UI, screenshot pixel or accessibility user experience."
+}

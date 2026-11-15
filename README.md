@@ -1,10 +1,10 @@
 # 런모니 / Runmoni
 
-현재 공개 APK는 **0.6.0-dev/code28 개발 프리뷰**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.6.0-dev) · [대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 근거](docs/RELEASE_REVIEW_0.6.0_20261114.md). 실제 APK출처는 `9a572de8da88ef42bf740d9424b22c7fa14e17cb`이며 후속 문서 커밋과 구분합니다. 휴대폰·Google 로그인 성공은 별도 확인 대상입니다.
+현재 공개 APK는 **0.7.0-dev/code29 개발 프리뷰**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.7.0-dev) · [대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 근거](docs/RELEASE_REVIEW_0.7.0_20261116.md). 실제 APK출처는 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`이며 후속 문서·피드 커밋과 구분합니다. 기존 보관키를 사용합니다. 휴대폰·Google 로그인·운영 저장 성공은 별도 확인 대상입니다.
 
-0.7.0-dev/code29는 UI·위젯·동일UID 연결 유지·출발 전 약100m 공유·벡터 지도·원본 포즈의 세트 의복 개편 후보입니다. [새 검토](docs/app-review/2026-11-15-companion/README.md). 새 서명/게시가 확인되기 전에는 기존 다운로드를 대체하지 않습니다.
+차분한 색·여백·아이콘으로 앱과 위젯을 정리하고, 동일UID 서버 확인 연결 유지·출발 전 약100m 공유 선택·벡터 지도·원본 포즈의 산타/곰/골든 의복을 반영했습니다. [실제 화면과 검토](docs/app-review/2026-11-15-companion/README.md). 미승인 수영복은 포함하지 않습니다.
 
-후보 지도는 별도 지도 키 없이 MapLibre Native/OpenFreeMap을 사용하며, 지도 조회 영역은 지도 제공자에게 드러날 수 있습니다. 출처와 실패 시 재시도를 표시하고 무료공용 서비스의 가용성을 보장하지 않습니다. 정확한 GPS 원본/지갑은 기기 데이터이고 약100m 위치 공개는 별도 계정별 동의·실제 러닝 중 전송입니다.
+지도는 별도 지도 키 없이 MapLibre Native/OpenFreeMap을 사용하며, 지도 조회 영역은 지도 제공자에게 드러날 수 있습니다. 출처와 실패 시 재시도를 표시하고 무료공용 서비스의 가용성을 보장하지 않습니다. 정확한 GPS 원본/지갑은 기기 데이터이고 약100m 위치 공개는 별도 계정별 동의·실제 러닝 중 전송입니다.
 
 ---
 

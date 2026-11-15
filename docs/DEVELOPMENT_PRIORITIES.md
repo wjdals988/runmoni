@@ -1,3 +1,17 @@
+# 다음 우선순위 — 0.7.0-dev/code29, 2026-11-16
+
+<!-- verified-companion-release-0.7.0-v1 -->
+기존 보관키0.7.0-dev/code29, 실제 APK출처 `ca54251a780f56b60aaecce0dbeb94a4f33061ed`, 172,509,168bytes, SHA256 `79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152`. 앱PR58·서명CI43761237483·대시보드PR30/main `9060d3661b70007ca189df12485bdae9075b9f57`와 운영13항목/새MainPNG4/새Node23개를 확인했다. [게시 검증](RELEASE_REVIEW_0.7.0_20261116.md)·[새 설계](../design-system/runmoni/pages/companion-redesign.md)·[실패 포함 근거](app-review/2026-11-15-companion/README.md)를 따른다. canonical raw피드 전문은 후속 병합 뒤 별도 확인하며 실제 APK출처C는 유지한다.
+
+1. 휴대폰에서 같은키 업데이트/기록·아이템 유지, 큰 글씨·옷장/페이지복귀·위젯 배치를 확인한다. Google 로그인·닉네임 중복/저장·재실행 연결 유지를 각각 확인한다. 소유자가 게시한 같은Rules/키를 반복 요구하지 않는다.
+2. 출발 전 약100m 공유 선택·동일계정 기억·실제 러닝 전송/일시정지/종료/계정전환을 운영에서 확인한다. CI ready·로컬SDK3·HTTP404를 운영쓰기 성공으로 바꾸지 않는다. 실제 위치는 사용자 명시 동의와 fresh RUNNING 세션이 필요하다.
+3. 야외GPS/화면끔/장시간BG·알림/위젯제어·Doze/OEM/API31+와 실제 사진선택/저장/SNS 전달을 확인한다. 이번 Launcher는 idle 독립2배치이고 실제 live FGS/같은위젯 resizing 검증이 아니다.
+4. 원인 미확정 SnapshotStateObserver 예외 재현/추적, 다른 글씨·화면·모션 조건과 승인 포즈 의복의 사용자 검토를 진행한다. 수영복/58종 완성·사용자 원화 승인을 추정하지 않는다. 크루 승계·신고/차단 등 남은 운영기능은 별도 후속 범위다.
+
+로컬 input6 219/lint0·경고66, 서명CI219/lint0·경고97, 이번 서로다른 입력의고유137/Main7/Launcher2와 과거실패·복원-only를 구분한다. 승인원본/58ID/13슬롯/9탭/0P/지갑·순차heavy/오프라인작업자1/클라우드전용AVD종료 제약을 유지한다. 휴대폰·Google 로그인·운영 프로필/위치 공유 쓰기·실제 live 위젯/알림 제어·야외 GPS/절전/OEM/API31이상·SNS 전달·공개 서명 APK 런타임·사용자 시각 승인은 별도다. 미승인 수영복은 포함하지 않는다.
+
+아래는 이전 구현·검토 시점의 보존 기록이다.
+
 # 최신 이어가기 — 0.6.0-dev/code28, 2026-11-14
 
 <!-- verified-sport-pages-release-0.6.0-v1 -->
