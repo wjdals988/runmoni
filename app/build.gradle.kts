@@ -55,8 +55,8 @@ android {
         applicationId = "com.runmoni.app"
         minSdk = 29
         targetSdk = 36
-        versionCode = 28
-        versionName = "0.6.0-dev"
+        versionCode = 29
+        versionName = "0.7.0-dev"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "PILOT_API_URL", "\"${configString("RUNMONI_API_URL", "http://127.0.0.1:8787")}\"")
         buildConfigField("String", "COMMUNITY_BACKEND", "\"$communityBackend\"")
@@ -118,7 +118,7 @@ dependencies {
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("io.livekit:livekit-android:2.29.0")
-    implementation("com.naver.maps:map-sdk:3.24.0")
+    implementation("org.maplibre.gl:android-sdk:12.0.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:runner:1.6.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

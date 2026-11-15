@@ -1,0 +1,95 @@
+{
+  "rootReviewed": true,
+  "scopeRetentionApproved": true,
+  "reviewNotes": {
+    "file": "INPUT5_TO_INPUT6_VALIDATION_SCOPE_REVIEW.md",
+    "sha256": "46cea7d6b4ff33d74bd539ca103e941702f2b434e26adcd55fd89a9122ab18da"
+  },
+  "fromBinary": {
+    "file": "binary-build5.json",
+    "sha256": "03ff698cbf11d9de77e9ed8cbef13a9404bfa06cb2723b72287cc65efc550da2"
+  },
+  "toBinary": {
+    "file": "binary-build6.json",
+    "sha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f"
+  },
+  "proofKeys": [
+    "input5-default",
+    "input5-native"
+  ],
+  "includedGroups": [
+    {
+      "proof": "input5-default",
+      "group": "screens"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-form-pages"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-large-text"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-share-font1"
+    }
+  ],
+  "exactSourceMapDelta": {
+    "productSources": {
+      "app/src/main/java/com/runmoni/app/ui/MapLibreMapPane.kt": {
+        "before": "31d564198fbd87f33b251d8e37895cecec71f9936fff4de1f9fb449aaf655b40",
+        "after": "b5ea1f0eafa5fbda8df770ef49f6c0d15be3978966ebc4f1054c2eab7d1c42fd"
+      }
+    },
+    "testSources": {
+      "app/src/androidTest/java/com/runmoni/app/ui/NativeVectorMapOnlineUiTest.kt": {
+        "before": "7ccb4c58469ae198ffbcf5418599dd381c8156b73419f1585c1ac95816a04460",
+        "after": "4ff6bcab1cb4d00b1a867c900175d046c8837f9607419cbb30fccc01d5967738"
+      }
+    },
+    "resources": {},
+    "rendererAssets": {},
+    "approvedSourceCopies": {},
+    "configurationSources": {}
+  },
+  "unaffectedRetainedGroupRationale": [
+    {
+      "proof": "input5-default",
+      "group": "screens",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-form-pages",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-large-text",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-share-font1",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    }
+  ],
+  "affectedGroupsRerun": [
+    {
+      "proof": "input6-sdk",
+      "group": "native-map-sdk"
+    },
+    {
+      "proof": "input6-online",
+      "group": "native-online-map"
+    }
+  ],
+  "additionalReviewReferences": [
+    {
+      "file": "INPUT3_TO_INPUT4_VALIDATION_SCOPE_REVIEW.md",
+      "sha256": "10660c66c1ccd9c6551ce807f8485b855c74b36df98fc41be2d11973f62dea64"
+    }
+  ],
+  "singleFinalApkExecutionClaimed": false
+}

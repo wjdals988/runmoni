@@ -1,0 +1,55 @@
+{
+  "ownedPid": 58580,
+  "avd": "Runmoni_Cloud_29",
+  "graphics": "swangle software GLES",
+  "acceleration": "TCG",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "2aace5903bc8115bef17803c2fb2d3de1e16b07d56f10a2b1d9ce3e965846da3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "map-sdk2": {
+      "file": "map-sdk2.json",
+      "sha256": "c7e12caf246d272da5e064502650d9f860d7d8fa54010779ae82f49f84ccbeda"
+    },
+    "map-online5": {
+      "file": "map-online5.json",
+      "sha256": "b0827e25344e15cca7261e524d6a3019e84dfb0d983dbb1147c9aa34e58f09fd"
+    },
+    "live1": {
+      "file": "live1.json",
+      "sha256": "3a25a9e574e09f34e90ff17d439440c2a6aecf9cb786806fbe13d9e7460abc21",
+      "parentPassed": false
+    },
+    "live2": {
+      "file": "live2.json",
+      "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d",
+      "parentPassed": true
+    },
+    "widget1": {
+      "file": "widget1.json",
+      "sha256": "43a67ac0822e2e5a86228b9c7c17c08da1712cd8f03500e5ad8209133c7c354d"
+    },
+    "root-map-input6-visual-review.json": {
+      "file": "root-map-input6-visual-review.json",
+      "sha256": "e57b52c8344a8c6aac22ff36cffa9ede4decff6eaba1557bf1e899e320be23ad"
+    },
+    "root-main-visual-review.json": {
+      "file": "root-main-visual-review.json",
+      "sha256": "95721b431d87b90b1cb41b7676313129efa76f5f7dbd636814062719c3a1cf6f"
+    },
+    "root-launcher-widget-visual-review.json": {
+      "file": "root-launcher-widget-visual-review.json",
+      "sha256": "fdb2d8b2d959dee3f5c2c9754fb5018844599a50b869c83b6a46e9061a9a8026"
+    },
+    "android-scope-summary.json": {
+      "file": "android-scope-summary.json",
+      "sha256": "32ce1fdae6ca447ee532f8b6c58523afd62d070184f4d68cacb0714f99b4f285"
+    }
+  },
+  "failedMain1PreservedAndSeparateFromPassedMain2": true,
+  "fullOsOrLauncherDatabaseByteRestorationClaimed": false,
+  "intentionalManagedProxyAndGraphicsConfigurationPreserved": true,
+  "completedAtUtc": "2026-11-15T20:49:41.471643+00:00"
+}

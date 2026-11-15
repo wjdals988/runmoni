@@ -427,9 +427,9 @@ class RunmoniUiTest {
             val current = state.value
             if (!enabled) {
                 locationChanges += false
-                state.value = current.copy(publicLocation = false, sharingConsentRunId = null, sharingConsentNonce = current.sharingConsentNonce + 1)
-            } else if (current.signedIn && current.communityUid.isNotBlank() && current.activeRun.phase == RunPhase.RUNNING) {
-                state.value = current.copy(sharingConsentRunId = current.activeRun.id, sharingConsentNonce = current.sharingConsentNonce + 1)
+                state.value = current.copy(publicLocation = false, sharingPreferenceEnabled = false, sharingConsentRunId = null, sharingConsentNonce = current.sharingConsentNonce + 1)
+            } else if (current.signedIn && current.communityUid.isNotBlank()) {
+                state.value = current.copy(sharingConsentRunId = if (current.activeRun.phase == RunPhase.RUNNING) current.activeRun.id else com.runmoni.app.data.RunnerSharingPreferenceStore.NEXT_RUN, sharingConsentNonce = current.sharingConsentNonce + 1)
             }
         }
         override fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {
@@ -437,9 +437,9 @@ class RunmoniUiTest {
             val current = state.value
             if (adultConfirmed && current.signedIn && current.communityUid.isNotBlank() &&
                 current.sharingConsentRunId == runId && current.sharingConsentNonce == requestNonce &&
-                current.activeRun.id == runId && current.activeRun.phase == RunPhase.RUNNING) {
+                (runId == com.runmoni.app.data.RunnerSharingPreferenceStore.NEXT_RUN || (current.activeRun.id == runId && current.activeRun.phase == RunPhase.RUNNING))) {
                 locationChanges += true
-                state.value = current.copy(publicLocation = true, sharingConsentRunId = null)
+                state.value = current.copy(publicLocation = current.activeRun.phase == RunPhase.RUNNING, sharingPreferenceEnabled = true, sharingConsentRunId = null)
             }
         }
         override fun dismissSharingConsent(requestNonce: Long) {

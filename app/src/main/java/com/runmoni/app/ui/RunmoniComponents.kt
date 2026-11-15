@@ -30,8 +30,11 @@ import androidx.compose.ui.unit.sp
 internal data class UiMetric(val label: String, val value: String, val unit: String = "", val tag: String = "")
 
 @Composable
-internal fun pageGutter() = if (LocalConfiguration.current.screenWidthDp >= 600)
-    RunmoniLayout.WideGutter else RunmoniLayout.Gutter
+internal fun pageGutter() = when {
+    LocalConfiguration.current.screenWidthDp >= 600 -> RunmoniLayout.WideGutter
+    LocalConfiguration.current.screenWidthDp < 360 -> RunmoniLayout.NarrowGutter
+    else -> RunmoniLayout.Gutter
+}
 
 /** Full-screen destinations own their system insets; the toolbar owns no insets. */
 @Composable
@@ -45,7 +48,7 @@ internal fun PageTopBar(
 ) {
     Box(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-            .heightIn(min = 64.dp).padding(horizontal = 8.dp, vertical = 4.dp),
+            .heightIn(min = 72.dp).padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             IconButton(onClick = onClose, modifier = Modifier.size(48.dp).testTag(closeTag)) {
                 Icon(Icons.AutoMirrored.Outlined.ArrowBack, closeLabel, tint = RunmoniColors.Primary)
@@ -67,10 +70,10 @@ internal fun ScreenSection(
     showDivider: Boolean = false,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Column(modifier.fillMaxWidth().padding(top = 8.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
         if (showDivider) HorizontalDivider(color = RunmoniColors.Line)
         SectionHeading(title, action, onAction)
-        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp), content = content)
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap), content = content)
     }
 }
 
@@ -86,12 +89,12 @@ internal fun AdaptiveActions(first: @Composable (Modifier) -> Unit, second: @Com
     val fontScale = LocalDensity.current.fontScale
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         if (maxWidth < 300.dp || (fontScale >= 1.3f && maxWidth < 480.dp)) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 first(Modifier.fillMaxWidth())
                 second(Modifier.fillMaxWidth())
             }
         } else {
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 first(Modifier.weight(1f))
                 second(Modifier.weight(1f))
             }

@@ -1,0 +1,35 @@
+{
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "proof": {
+    "file": "widget1.json",
+    "sha256": "43a67ac0822e2e5a86228b9c7c17c08da1712cd8f03500e5ad8209133c7c354d"
+  },
+  "sourceKind": "Actual API29 Launcher3 system screenshots, two independent idle widget placements at font1 andfont2; not one resize or live recorder",
+  "images": [
+    {
+      "file": "widget1-idle-font1.png",
+      "sha256": "aaf0e61796c2eb673420355578483469bf6c3750e7686136b60e2a4497df598f",
+      "source": "Launcher3",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "widget1-idle-font2.png",
+      "sha256": "6ba1845b16808a17bb26a662f3d462face5d3aa57551879fb3a72d0a01f3e4bd",
+      "source": "Launcher3",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualFindings": [
+    "Natural white panel with runner icon and Ocean app-open action is visible",
+    "Font1 status uses two lines without clipping; font2 uses a large simple open action",
+    "No original private metrics, identity or actual GPS are displayed"
+  ],
+  "actualRunningForegroundWidgetControlsVerified": false,
+  "allLaunchersSizesAndPhonesVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "originalDataAndControlledEnvironmentRestored": true
+}

@@ -1,0 +1,3 @@
+Exception in thread "main" java.lang.AssertionError: Equipment changed costume alpha
+	at VerifyCompanionAvatars.check(VerifyCompanionAvatars.java:14)
+	at VerifyCompanionAvatars.main(VerifyCompanionAvatars.java:62)

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.Crew
@@ -54,23 +53,14 @@ internal fun StudioAvatarStage(avatar: AvatarStyle, modifier: Modifier = Modifie
     }
 }
 
-/** Static sports illustration only: no GPS, progress, or achievement is implied. */
+/** A quiet footing for the real sprite, never a map, progress ring or extra artwork. */
 @Composable
 internal fun RunningTrackBackdrop(modifier: Modifier = Modifier) {
     Canvas(modifier.clipToBounds().clearAndSetSemantics { }) {
         // Keep the illustration inside its existing viewport, including tiny previews.
         val w = size.width
         val h = size.height
-        drawOval(RunmoniColors.MintWash, Offset(w * .04f, h * .08f), Size(w * .92f, h * .82f))
-        drawCircle(RunmoniColors.Lime, radius = minOf(w, h) * .13f, center = Offset(w * .77f, h * .23f))
-        drawOval(RunmoniColors.TrackClay, Offset(w * .04f, h * .72f), Size(w * .92f, h * .22f))
-        repeat(3) { lane ->
-            val inset = w * (.10f + lane * .09f)
-            drawOval(RunmoniColors.Paper.copy(alpha = .85f),
-                Offset(inset, h * (.75f + lane * .018f)),
-                Size(w - inset * 2, h * (.16f - lane * .025f)),
-                style = Stroke(width = 1.dp.toPx()))
-        }
+        drawOval(RunmoniColors.Mist, Offset(w * .12f, h * .88f), Size(w * .76f, h * .065f))
     }
 }
 
@@ -83,9 +73,9 @@ internal fun selectedTabSurface(selected: Boolean): Color = animateColorAsState(
 
 @Composable
 internal fun DestinationRow(title: String, subtitle: String, icon: ImageVector, onClick: () -> Unit, modifier: Modifier = Modifier,
-    iconContainer: Color = RunmoniColors.MintWash, iconTint: Color = RunmoniColors.Primary) {
-    Row(modifier.fillMaxWidth().heightIn(min = 72.dp).clickable(role = Role.Button, onClick = onClick).padding(vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.size(40.dp).background(iconContainer, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+    iconContainer: Color = Color.Transparent, iconTint: Color = RunmoniColors.Primary) {
+    Row(modifier.fillMaxWidth().heightIn(min = 72.dp).clickable(role = Role.Button, onClick = onClick).padding(vertical = 16.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        Box(Modifier.size(32.dp).background(iconContainer, RunmoniShapes.Action), contentAlignment = Alignment.Center) {
             Icon(icon, null, tint = iconTint, modifier = Modifier.size(24.dp))
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -131,8 +121,7 @@ internal fun CrewRoomCard(crew: Crew, onClick: () -> Unit) {
         .clickable(role = Role.Button, onClickLabel = "크루 보기", onClick = onClick).testTag("crew_${crew.id}")) {
         Row(Modifier.padding(vertical = 16.dp), verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Box(Modifier.size(40.dp).background(if (crew.joined || crew.isOwner) RunmoniColors.SecondaryMint else RunmoniColors.MintWash,
-                RunmoniShapes.Action), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(32.dp), contentAlignment = Alignment.Center) {
                 Icon(Icons.Outlined.Groups, null, tint = RunmoniColors.Primary, modifier = Modifier.size(24.dp))
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {

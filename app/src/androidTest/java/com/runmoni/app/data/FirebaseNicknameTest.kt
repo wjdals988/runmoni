@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.runmoni.app.domain.NicknameAvailability
+import com.runmoni.app.domain.CommunityProfileConnectionPhase
 import com.runmoni.app.domain.NewCrew
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -116,21 +117,30 @@ class FirebaseNicknameTest {
             assertNotNull(pending.presenceFirestore())
             assertFalse(preferences.contains("pendingAnonymousConnectV1:$appName"))
             pending.close()
+            database.disableNetwork().await()
             val confirmed = reopened()
-            // Even retained Auth with a real profile is gated until this process
-            // obtains its own server profile observation.
-            assertEquals("", confirmed.uid)
-            assertNull(confirmed.presenceFirestore())
+            // A matching durable server ACK preserves this connection offline;
+            // it is explicitly cached, not a fresh server/profile observation.
+            assertEquals(originalUid, confirmed.uid)
+            assertNotNull(confirmed.presenceFirestore())
+            assertTrue(confirmed.profileConnectionState.value.connected)
+            assertFalse(confirmed.profileConnectionState.value.serverVerified)
+            assertEquals(CommunityProfileConnectionPhase.CACHED, confirmed.profileConnectionState.value.phase)
+            assertEquals("재시도$suffix", confirmed.profileConnectionState.value.nickname)
+            assertEquals(originalUid, auth.currentUser?.uid)
+            database.enableNetwork().await()
             val snapshot = confirmed.snapshot()
             assertTrue(snapshot.signedIn)
             assertEquals("재시도$suffix", snapshot.nickname)
             assertEquals(originalUid, confirmed.uid)
             assertEquals(originalUid, auth.currentUser?.uid)
+            assertTrue(confirmed.profileConnectionState.value.serverVerified)
         } finally {
             repositories.lastOrNull()?.signOut()
             repositories.forEach { it.close() }
             database.terminate().await(); app.delete()
-            preferences.edit().remove("pendingAnonymousConnectV1:$appName").remove("verifiedGoogleUid:$appName").commit()
+            preferences.edit().remove("pendingAnonymousConnectV1:$appName").remove("verifiedGoogleUid:$appName")
+                .remove("verifiedProfileV1:$appName").commit()
         }
     }
 

@@ -1,0 +1,427 @@
+{
+  "schemaVersion": 2,
+  "scopeAcceptedByRoot": true,
+  "version": "0.7.0-dev",
+  "versionCode": 29,
+  "finalLocalBinary": "binary-build6.json",
+  "finalLocalBinarySha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f",
+  "proofReferences": {
+    "input3-default": {
+      "file": "android-review1.json",
+      "sha256": "2016ec626f351a4cdcd892190d26cc33121b459fc150393a2a58faf912e90e8b"
+    },
+    "input4-default": {
+      "file": "android-review2.json",
+      "sha256": "b994f925bafa6cacdbc8fe945b9002e57caf9026783dfd0a82fa388b4cfea53c"
+    },
+    "input4-firebase": {
+      "file": "firebase-sdk2.json",
+      "sha256": "88bdeb9333f24ced3ef75aecee078e3cdaf55aae8555079a092e5922b08f2a28"
+    },
+    "input4-landscape": {
+      "file": "landscape1.json",
+      "sha256": "3363b01907fbac41eafffe79f4cd3e8c9f561c6fd7fbb2d8618a4c9ff16c416d"
+    },
+    "input5-default": {
+      "file": "android-review3.json",
+      "sha256": "1a7cc8f55ba036bec09cd30b32043b033ab45244677e6ff8750883ce717fbc78"
+    },
+    "input5-native": {
+      "file": "native2.json",
+      "sha256": "eb64d85ff69b297538c1adf49ec67890162f2627a833ec17cbf31d103cbcf473"
+    },
+    "input6-sdk": {
+      "file": "map-sdk2.json",
+      "sha256": "c7e12caf246d272da5e064502650d9f860d7d8fa54010779ae82f49f84ccbeda"
+    },
+    "input6-online": {
+      "file": "map-online5.json",
+      "sha256": "b0827e25344e15cca7261e524d6a3019e84dfb0d983dbb1147c9aa34e58f09fd"
+    }
+  },
+  "includedGroups": [
+    {
+      "proof": "input3-default",
+      "group": "community",
+      "methodIds": [
+        "com.runmoni.app.ui.CommunityRoomsTest#browseSearchAndEnterCrewWithoutInviteCode",
+        "com.runmoni.app.ui.CommunityRoomsTest#failedCrewCreationKeepsDraftAndSuccessOpensCreatedCrew",
+        "com.runmoni.app.ui.CommunityRoomsTest#partyIsCreatedInsideCrewAndJoinedPartyOffersChat",
+        "com.runmoni.app.ui.CommunityRoomsTest#crewListDetailsAndCreationStayUsableAt320WithDoubleText",
+        "com.runmoni.app.ui.HierarchyClosetUxTest#publicCrewShowsItsPartiesAndBackReturnsThroughBothLevels",
+        "com.runmoni.app.ui.HierarchyClosetUxTest#newPartyCarriesTheSelectedCrewInsteadOfCreatingAnIndependentGroup",
+        "com.runmoni.app.ui.HierarchyClosetUxTest#partyRemovalNeedsConfirmationAndKeepsTheParentAndOtherParties",
+        "com.runmoni.app.ui.CommunityPageNavigationTest#crewCreationBackKeepsTheDraftAndSuccessStartsTheNextDraftEmpty",
+        "com.runmoni.app.ui.CommunityPageNavigationTest#partyCreationBackKeepsTheDraftInsideItsSelectedCrew",
+        "com.runmoni.app.ui.CommunityPageNavigationTest#newNavigationEpochAndInitialTupleReplaceSavedSubpagesAndDrafts",
+        "com.runmoni.app.ui.CommunityPageNavigationTest#profileBackReturnsToTheSamePartyWithoutJoining"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "account-information",
+      "methodIds": [
+        "com.runmoni.app.ui.AppInformationTest#aboutShowsInstalledVersionHistoryLinksLicensesAndHonestFailure",
+        "com.runmoni.app.ui.AppInformationTest#topVersionOpensConfirmationAndDownloadsOnlyAfterExplicitChoice",
+        "com.runmoni.app.ui.AppInformationTest#fullScreenChatKeepsCrewSelectionAndHidesBackgroundControls",
+        "com.runmoni.app.ui.AppVersionShortcutLayoutTest#updateIndicatorKeepsItsOwnSpaceInBothDirectionsAndLargeText",
+        "com.runmoni.app.ui.DeviceChecksTest#missingConfigurationAndManualConfirmationStayDistinct",
+        "com.runmoni.app.ui.DeviceChecksTest#anonymousRoomDisconnectRequiresExplicitConfirmation",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#onlineSaveRequiresMatchingNameUidAndAnAvailableOrOwnedObservation",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#changingTheOpenedCommunityUidBlocksSavingButKeepsCloseAvailable",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#onlineSavePassesExpectedUidAndClosesOnlyAfterTheSaveSerialAcknowledgement",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#guestLocalSaveUsesAnEmptyCommunityUidAndPreservesWalletAndBackupAccount",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#failedConnectionKeepsTheNicknameAndWalletAndClosesOnlyForItsConnectionAcknowledgement",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#aForeignConnectionUidCannotCloseOrAuthorizeTheOpenedProfile",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#httpConnectionAlsoRequiresItsOwnReceiptInsteadOfAnUnrelatedLocalSave",
+        "com.runmoni.app.ui.UnifiedProfileUiTest#changingTheBackendWithTheSameEmptyUidCannotAuthorizeTheOpenedEditor"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-consumer",
+      "methodIds": [
+        "com.runmoni.app.ui.ConsumerClosetTest#fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-colors",
+      "methodIds": [
+        "com.runmoni.app.ui.RunningKitColorsUiTest#namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#closetColorChangesKeepReadyItemSelectionsInventoryAndGender"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "record-share",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareUiTest#everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases",
+        "com.runmoni.app.ui.RunShareUiTest#shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll",
+        "com.runmoni.app.ui.RunShareUiTest#failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices",
+        "com.runmoni.app.ui.RunShareUiTest#rootEditorBackRestoresRecordScrollAndRejectsDisposedOrRemovedRecordShareCallbacks",
+        "com.runmoni.app.ui.RunShareControllerTest#actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#actionsKeepTheirRecordIdentityAndDeleteCancellationDoesNotLeaveThePage",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#oldConfirmationCannotApproveAReopenedDialogAndDisposedPageCannotAct",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#currentStorageAndPendingCreditStaySeparateFromGoogleBackup",
+        "com.runmoni.app.ui.RunRecordNavigationUiTest#detailReplacesMainNavigationAndBothBackActionsPreserveTheProfilePeriod",
+        "com.runmoni.app.ui.RunRecordNavigationUiTest#failedDeleteKeepsDetailAndOnlyCompletedActualRemovalReturnsToTheList"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "map-modal",
+      "methodIds": [
+        "com.runmoni.app.ui.RouteTileMapUiTest#aCanceledViewportCannotClearTheNextViewportsLoadingState",
+        "com.runmoni.app.ui.RouteTileMapUiTest#unavailableTilesKeepRealRouteControlsAttributionAndRetryAtLargeText",
+        "com.runmoni.app.ui.RouteTileMapUiTest#oneFingerDragMovesTheMapAndThePageScrollsFromOutsideTheMap",
+        "com.runmoni.app.ui.RouteTileMapUiTest#explorationPinchAndDragOverrideFollowingUntilTheUserRecenters",
+        "com.runmoni.app.ui.RouteTileMapUiTest#unlocatedExplorationShowsABrowsableWorldWithoutInventingARouteOrUserFix",
+        "com.runmoni.app.ui.RouteTileMapUiTest#aRecordWithoutLocationsNeverInventsACenterOrFetchesTiles",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#guestAlwaysHasAMapAndProfileEntryWithoutCrewPartyOrCachedRunnerLeakage",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#selfExpiredAndInvalidLocationsStayHiddenWhileOnlyFreshOtherRunnerReachesTheMap",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#sharingButtonRequestsConsentAndCannotDirectlyConfirmOrMutateSharingState",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#beforeRunningConsentIsExplicitAndPreparedStateIsNotLivePresence",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText",
+        "com.runmoni.app.ui.ModalDismissUiTest#informationChildrenHaveOneCloseOwnerAndReturnToTheirParent",
+        "com.runmoni.app.ui.ModalDismissUiTest#closingCloudDeletionDoesNotDeleteAndAccountChangeRevokesTheConfirmation",
+        "com.runmoni.app.ui.ModalDismissUiTest#blankPageBodyDoesNotDismissAndPlatformBackDismissesWithoutSubmitting",
+        "com.runmoni.app.ui.ModalDismissUiTest#confirmationOutsideTapAndPlatformBackDismissWithoutConfirming",
+        "com.runmoni.app.ui.PopupNavigationUiTest#closingInformationReturnsToTheSameSettingsScrollAndSelectedTab"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "share-png-renderer",
+      "methodIds": [
+        "com.runmoni.app.sharing.RunShareCardRendererTest#photoCoverAndEveryThemeKeepOpaqueRatiosWithoutChangingTheBorrowedPhoto",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#coralKeepsReadablePhotoSurfacesAndCanonicalPngAcrossAllRatios",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#coralLeavesApprovedMaleAndFemalePaletteAndBorrowedPixelsIntact",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#missingAvatarCannotSilentlyExportAndLongActualValuesStillRender",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#squareKeepsSixtyCodePointsAndACompleteLegibleAvatarWithAllMetadata"
+      ]
+    },
+    {
+      "proof": "input3-default",
+      "group": "avatar-renderers",
+      "methodIds": [
+        "com.runmoni.app.avatar.RunningKitRendererTest#originalColorsKeepEveryDecodedFrameAndGenderCropUnchanged",
+        "com.runmoni.app.avatar.RunningKitRendererTest#actualAndroidArgbProtectsOtherRegionsLocksAndAlphaInEveryFrame",
+        "com.runmoni.app.avatar.RunningKitRendererTest#sharedDisplayUsesColorsAndCacheStaysBoundedAcrossSelections",
+        "com.runmoni.app.avatar.RunningKitRendererTest#displayPaddingLeavesRawFramesAndEveryBodyPixelUnchanged",
+        "com.runmoni.app.avatar.WardrobeRendererTest#everySelectableNonDefaultItemActuallyChangesEveryApprovedPose",
+        "com.runmoni.app.avatar.WardrobeRendererTest#torsoEquipmentPreservesTheOriginalForegroundArmsAndHands",
+        "com.runmoni.app.avatar.WardrobeRendererTest#savedPendingCostumeKeepsOccupancyAndUnrelatedEquipmentWithoutMigratingIds",
+        "com.runmoni.app.avatar.WardrobeRendererTest#explicitColorsOverrideItemDefaultsAndReturningToZeroRestoresTheItemPalette",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#bothSockLengthsChangeAllPosesWhileIdentityShoesAndOtherMaterialsStayIntact",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#newMensShortsUseDistinctDefaultsAndExplicitColorWithoutInventingWomensLegs",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#closetSelectsNewFreeItemsAndGenderSwitchPreservesTheHiddenSavedShortsId",
+        "com.runmoni.app.ui.AvatarIntegrationTest#readyOutfitAndAvailableGearProduceEightDistinctRenderedCaptures",
+        "com.runmoni.app.ui.AvatarIntegrationTest#nineTabsExposeReadyItemsAndPreserveUnreadyStoredChoicesAndInventory",
+        "com.runmoni.app.ui.AvatarIntegrationTest#oldWalletMigratesAndEveryNewSlotSurvivesReloadWithoutChangingPoints"
+      ]
+    },
+    {
+      "proof": "input4-default",
+      "group": "closet-navigation",
+      "methodIds": [
+        "com.runmoni.app.ui.ClosetNavigationUiTest#rootClosetRemovesMainNavigationAndBackRestoresTheSelectedHistoryPeriod",
+        "com.runmoni.app.ui.ClosetNavigationUiTest#lastAvailableItemAndColorCanBeTouchedAboveSystemNavigation"
+      ]
+    },
+    {
+      "proof": "input4-default",
+      "group": "widget-measurement",
+      "methodIds": [
+        "com.runmoni.app.widget.RunWidgetFactoryTest#metricsCacheRoundTripsOnlyTheExplicitSafeFieldsAndRejectsCorruption",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#runningAndPausedViewsExposeCurrentMetricsAndSeparateControls",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#coldOrRecoveryViewsHaveNoServiceControlsAndNeverUseAChronometer",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#largeTextFallbackRetainsAnAccessibleAppActionWithoutTwoClippedButtons",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#immutableVerbAndRunIdentitiesSeparateOldControlsAndConfirmedFinish",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#narrowWidgetMatrixMeasuresWholeTextAndButtonsAtNormalAndEnlargedFontSizes",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#launcherPaddingAndTinyFallbackKeepTheAppActionAccessible",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#idlePanelUsesItsContentHeightAndRetainsIdentityWithoutEmptyStatistics",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#wideShortLiveWidgetKeepsTwoMetricsAndSeparateNamedIconControls"
+      ]
+    },
+    {
+      "proof": "input4-default",
+      "group": "profile-local",
+      "methodIds": [
+        "com.runmoni.app.ProfileConnectionViewModelTest#failedConnectionStaysInlineAndPreservesTheActualWalletAcrossSameNameRetry",
+        "com.runmoni.app.ProfileConnectionViewModelTest#staleUidAndBackendAreRejectedBeforeStartingAnotherProfileOperation",
+        "com.runmoni.app.data.CommunityProfileReceiptStoreTest#durableServerAckAndPendingRemovalShareOnePreferencesCommit",
+        "com.runmoni.app.data.CommunityProfileReceiptStoreTest#corruptAndUnknownReceiptsCannotRestoreAConnection",
+        "com.runmoni.app.data.CommunityProfileReceiptStoreTest#clearingReceiptLeavesOtherAccountAndLocalSettingsUntouched",
+        "com.runmoni.app.data.CommunityProfileFailureTest#nicknameReadPermissionDenialKeepsItsStageWithoutSdkPrivateDetails",
+        "com.runmoni.app.data.CommunityProfileFailureTest#transientReadExceptionsStayIntactSoTheSdkCanRetryTheTransaction",
+        "com.runmoni.app.data.CommunityProfileFailureTest#authenticationAndTimeoutDoNotBecomePermissionFailures"
+      ]
+    },
+    {
+      "proof": "input4-default",
+      "group": "sharing-preferences",
+      "methodIds": [
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#remembersOnlyTheConsentingAccountAcrossStoreRecreation",
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#missingConsentCannotCreateOrReplaceAChoice",
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#turningOffRemovesSavedConsentAndPreservesUnrelatedSettings",
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#failedAcceptanceDoesNotAuthorizeAnObservableInMemoryChoice",
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#failedClearIsReportedAndSuppressesTheRetainedChoiceInThisProcess",
+        "com.runmoni.app.data.RunnerSharingPreferenceStoreTest#suppressionDoesNotWaitForAnOlderCommitOrReopenAfterItsLateAcknowledgement"
+      ]
+    },
+    {
+      "proof": "input4-firebase",
+      "group": "firebase-demo-profile",
+      "methodIds": [
+        "com.runmoni.app.data.FirebaseNicknameTest#checkingNeverCreatesIdentityAndAtomicSaveRejectsAnAvailabilityRace",
+        "com.runmoni.app.data.FirebaseNicknameTest#pendingAndLegacyAnonymousAuthNeedServerProfileAcknowledgementAfterRecreation",
+        "com.runmoni.app.data.FirebaseCommunityTest#anonymousClientsShareRoomsAndLiveMessagesWithRulesEnforced"
+      ]
+    },
+    {
+      "proof": "input4-landscape",
+      "group": "community-return-scroll",
+      "methodIds": [
+        "com.runmoni.app.ui.CommunityPageNavigationTest#partyChatBackReturnsToTheSamePartyScrollAndCrewTab"
+      ]
+    },
+    {
+      "proof": "input5-default",
+      "group": "screens",
+      "methodIds": [
+        "com.runmoni.app.ui.StudioRefreshUiTest#runningDistanceIsVisibleBeforeAnyScrollAtLargeTextInAShortWindow",
+        "com.runmoni.app.ui.StudioRefreshUiTest#visibleShareLabelKeepsItsFullHeaderTargetAndOpensTheEditorAtLargeText",
+        "com.runmoni.app.ui.StudioRefreshUiTest#largeTextPrimaryJourneysRemainReachableWithoutChangingRecordsOrLocationConsent",
+        "com.runmoni.app.ui.RunmoniDesignTest#runningActionsStayVisibleAcrossNineViewportAndFontCases",
+        "com.runmoni.app.ui.RunmoniDesignTest#fiveTabsFitNineViewportAndFontCases",
+        "com.runmoni.app.ui.AppEntryUiTest#googleClickDoesNotEnterUntilTheAuthoritativeChoiceCompletes",
+        "com.runmoni.app.ui.AppEntryUiTest#busyGoogleKeepsGuestAvailableAndFailureRemainsRetryable",
+        "com.runmoni.app.ui.AppEntryUiTest#unconfiguredGoogleDoesNotBlockGuestAndSavingPreventsDuplicateChoices",
+        "com.runmoni.app.ui.AppEntryUiTest#returningOfflineUsersAndAnActiveRunDoNotWaitForEntryOrCloud",
+        "com.runmoni.app.ui.HomeWeatherLayoutTest#valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText",
+        "com.runmoni.app.ui.HomeWeatherLayoutTest#failedRefreshAndOldForecastKeepValuesWithoutFreshClothingAdvice"
+      ]
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-form-pages",
+      "methodIds": [
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#informationCloseStaysInTheWindowAfterScrollingLargeContent",
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss"
+      ]
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-large-text",
+      "methodIds": [
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeFontSettingsAndClosetKeepSingleCloseAndSelectableSlots",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#arrivingChatDoesNotMoveReadersAwayFromOlderMessages",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeLocationConsentRemainsScrollableWithoutEnablingSharing",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#nativePartyPickersAndStrictDateErrorRemainUsable",
+        "com.runmoni.app.ui.AppEntryNativeUiTest#bothChoicesRemainReachableAboveSystemNavigationAtLargeFont",
+        "com.runmoni.app.ui.AppInformationNativeTest#enlargedHeaderIndicatorStaysSeparateAndOpensTheUpdatePrompt",
+        "com.runmoni.app.ui.AppInformationNativeTest#largeAboutAndUpdateConfirmationRemainReadableAndScrollable",
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest#genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory",
+        "com.runmoni.app.ui.ClosetNavigationNativeUiTest#largeSystemTextKeepsTheLastItemAndPaletteAboveSystemNavigation",
+        "com.runmoni.app.ui.RunningKitColorsNativeUiTest#actualLargeTextClosetKeepsPreviewAndAllSixColorActionsAccessible",
+        "com.runmoni.app.ui.RunRecordScreenNativeUiTest#nativeLargeTextKeepsLowerActionsReachableAndBackCancelsBeforeLeaving",
+        "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars"
+      ]
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-share-font1",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareImeUiTest#normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize"
+      ]
+    },
+    {
+      "proof": "input6-sdk",
+      "group": "native-map-sdk",
+      "methodIds": [
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#offlineFixtureNeverConstructsTheProductionNativeProvider",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#initializationFailureIsReportedInsteadOfCrashingThePage",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#missingAssetStyleReportsFailureFromTheActualNativeSdk",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#directNativeFooterFitsAt320DpAndDoubleTextWithoutConstructingGl"
+      ]
+    },
+    {
+      "proof": "input6-online",
+      "group": "native-online-map",
+      "methodIds": [
+        "com.runmoni.app.ui.NativeVectorMapOnlineUiTest#publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera"
+      ]
+    }
+  ],
+  "excludedGroups": [
+    {
+      "proof": "input3-default",
+      "group": "screens",
+      "reason": "Original failed whole group excluded; no partial success adopted"
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-navigation",
+      "reason": "Original failed whole group excluded; no partial success adopted"
+    },
+    {
+      "proof": "input3-default",
+      "group": "widget-measurement",
+      "reason": "Superseded by explicitly selected newer whole-group execution"
+    },
+    {
+      "proof": "input3-default",
+      "group": "profile-local",
+      "reason": "Superseded by explicitly selected newer whole-group execution"
+    },
+    {
+      "proof": "input3-default",
+      "group": "sharing-preferences",
+      "reason": "Superseded by explicitly selected newer whole-group execution"
+    },
+    {
+      "proof": "input4-default",
+      "group": "screens",
+      "reason": "Superseded by explicitly selected newer whole-group execution"
+    }
+  ],
+  "distinctPassedMethods": 137,
+  "earlierInputResultsReused": true,
+  "singleFinalApkExecutionClaimed": false,
+  "singleEnvironmentExecutionClaimed": false,
+  "equivalenceReviews": [
+    {
+      "file": "root-source-equivalence-3-to6.json",
+      "sha256": "639ead443028083152fc098810243fbee2443764696ff07f2bedbc78f6739a9b"
+    },
+    {
+      "file": "root-source-equivalence-4-to6.json",
+      "sha256": "2fb2dff446d70cef19ca53aff4098f36e0440106c6728580b5b11f1735cd92ac"
+    },
+    {
+      "file": "root-source-equivalence-5-to6.json",
+      "sha256": "c95d3d8b5d2a8fe78cbdf0eeffd8519f37d8c3434d2e4f51a9c7b6d853e077c6"
+    }
+  ],
+  "restorationExceptions": [
+    {
+      "proof": "input4-landscape",
+      "recovery": {
+        "file": "landscape1-rotation-recovery.json",
+        "sha256": "16e6b1124903e254cf31f91a5c8afd03aa6a741990472bbf0e3bf47da5b0ef3f"
+      },
+      "rootReviewed": true,
+      "originalParentPassed": false,
+      "reason": "Original JUnit1 passed but exact persisted rotation policy restore failed; original parent remainsfalse. Separate restoration-only recovery restores originalpolicy/data/scoped environment and counts0 product methods."
+    }
+  ],
+  "supplementalRestorationReferences": [
+    {
+      "file": "firebase-sdk2-network-proxy-restoration-only.json",
+      "sha256": "52dbe78340ae1ce78e798293f2118afc0eaa48f55512ca8336011bd9b153db77"
+    },
+    {
+      "file": "firebase-sdk2-local-network-scope.json",
+      "sha256": "c7c9f1747dd860fea9ccdc8b9ee7c15fa3f22b0216d119cef8f19d2bdc8cbdab"
+    },
+    {
+      "file": "session2-cleanup.json",
+      "sha256": "a5abc1091e286b1d5b63ad591c962a655bdad714b4b2b0ffddfc438e408f18a0"
+    },
+    {
+      "file": "session3-cleanup.json",
+      "sha256": "2f5afba0b019c119e3ef66a42fd3a3b929910539a62257c0551c4bcea7e5022f"
+    },
+    {
+      "file": "session4-cleanup.json",
+      "sha256": "db27734efa1b26d18d2046f2f5cbb6983d9a94707934a319af60b7a2c013f2d7"
+    },
+    {
+      "file": "root-map-input6-visual-review.json",
+      "sha256": "e57b52c8344a8c6aac22ff36cffa9ede4decff6eaba1557bf1e899e320be23ad"
+    }
+  ],
+  "excludedAttempts": [
+    {
+      "file": "native1.json",
+      "sha256": "ccb6599ff4de465f7d94b90ae1c3b6dcc8ac8eb08720a1cbd32214c3fd9b067a"
+    },
+    {
+      "file": "map-online1.json",
+      "sha256": "bf3f7404526b820e84c5ef1c74babdbbecf89edf7a370401076dca7341092e65"
+    },
+    {
+      "file": "map-online2.json",
+      "sha256": "ab741c2aaf56644bbdcedc7ee77aa15b838c23368452402d41066524843d5b43"
+    },
+    {
+      "file": "map-online3.json",
+      "sha256": "d4cc0185aadd1c7281c05188c852076d21cf23afec8667bbcbecb5785ef1062b"
+    },
+    {
+      "file": "map-online4.json",
+      "sha256": "0eec3de45503b5abc393a8722db3d085750acb442ec30de42f9346a0a1db70ec"
+    },
+    {
+      "file": "firebase-sdk1.json",
+      "sha256": "6d0ecb545b7c3ed5216205d893e2cee62add67ef2fde2af84ab6de6e8370033e"
+    }
+  ],
+  "countsByExecutedInput": {
+    "3": 77,
+    "4": 29,
+    "5": 26,
+    "6": 5
+  },
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "previousVersionResultsReused": false,
+  "rootReviewScope": "Whole successful groups only; explicit source equivalence and original failed parent/recovery retained. Current0.7 inputs3/4/5/6 are distinct APKs. Not137 methods on finalAPK."
+}

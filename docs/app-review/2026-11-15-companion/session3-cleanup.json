@@ -1,0 +1,32 @@
+{
+  "ownedPid": 46971,
+  "avd": "Runmoni_Cloud_29",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "4ff6144ee7765916f7b86d365b8f536b62a39acfeb0669e77a53a258be1b94f3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "android-review3": {
+      "file": "android-review3.json",
+      "sha256": "1a7cc8f55ba036bec09cd30b32043b033ab45244677e6ff8750883ce717fbc78",
+      "parentPassed": true
+    },
+    "native2": {
+      "file": "native2.json",
+      "sha256": "eb64d85ff69b297538c1adf49ec67890162f2627a833ec17cbf31d103cbcf473",
+      "parentPassed": true
+    },
+    "map-online3": {
+      "file": "map-online3.json",
+      "sha256": "d4cc0185aadd1c7281c05188c852076d21cf23afec8667bbcbecb5785ef1062b",
+      "parentPassed": true
+    }
+  },
+  "originalPhaseFailuresPreserved": true,
+  "mainAndLauncherNotRunInThisSession": true,
+  "nativeMapVisualReviewAccepted": false,
+  "nextStep": "Controlled Cloud software graphics comparison with identical binary5",
+  "intentionalManagedProxyRefreshPreserved": true,
+  "completedAtUtc": "2026-11-15T18:57:43.255531+00:00"
+}

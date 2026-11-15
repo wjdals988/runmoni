@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/run_widget_root" android:forceDarkAllowed="false"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:id="@+id/run_widget_panel" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" android:orientation="horizontal" android:gravity="center_vertical"
+        android:padding="8dp" android:background="@drawable/run_widget_surface">
+        <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+            <LinearLayout android:id="@+id/run_widget_identity" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:visibility="gone">
+                <TextView android:id="@+id/run_widget_brand" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="@string/run_widget_brand" android:textSize="16sp" android:textColor="@color/run_widget_text" />
+            </LinearLayout>
+            <TextView android:id="@+id/run_widget_title" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="@string/run_widget_preview_title" android:textSize="14sp" android:textColor="@color/run_widget_muted"
+                android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
+            <LinearLayout android:id="@+id/run_widget_metrics" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" android:orientation="horizontal">
+                <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/run_widget_distance_label" android:textSize="14sp" android:textColor="@color/run_widget_muted"
+                        android:includeFontPadding="true" android:fallbackLineSpacing="true" />
+                    <TextView android:id="@+id/run_widget_distance" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/run_widget_preview_distance" android:textSize="20sp" android:textColor="@color/run_widget_text"
+                        android:fontFamily="sans-serif-medium" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:fontFeatureSettings="tnum" />
+                </LinearLayout>
+                <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="8dp">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/run_widget_duration_label" android:textSize="14sp" android:textColor="@color/run_widget_muted"
+                        android:includeFontPadding="true" android:fallbackLineSpacing="true" />
+                    <TextView android:id="@+id/run_widget_duration" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="@string/run_widget_preview_duration" android:textSize="20sp" android:textColor="@color/run_widget_text"
+                        android:fontFamily="sans-serif-medium" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:fontFeatureSettings="tnum" />
+                </LinearLayout>
+                <TextView android:id="@+id/run_widget_speed" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:visibility="gone" android:textSize="14sp" android:textColor="@color/run_widget_muted" />
+            </LinearLayout>
+            <TextView android:id="@+id/run_widget_footer" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:visibility="gone" android:textSize="14sp" android:textColor="@color/run_widget_muted" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/run_widget_actions" android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginStart="12dp" android:orientation="horizontal">
+            <ImageButton android:id="@+id/run_widget_control" style="@style/RunWidgetIconAction"
+                android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/run_widget_pause_icon"
+                android:contentDescription="@string/run_widget_pause" />
+            <ImageButton android:id="@+id/run_widget_finish" style="@style/RunWidgetIconAction"
+                android:layout_width="48dp" android:layout_height="48dp" android:layout_marginStart="8dp"
+                android:src="@drawable/run_widget_finish_icon" android:background="@drawable/run_widget_secondary_action"
+                android:contentDescription="@string/run_widget_finish_description" />
+        </LinearLayout>
+        <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction" android:layout_width="48dp" android:layout_height="wrap_content"
+            android:visibility="gone" android:text="@string/run_widget_open" />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,85 @@
+{
+  "completed": true,
+  "rootVisualAccepted": true,
+  "beforeAndAfterMiniMiVisible": true,
+  "sampledNativeAvatarPixelsVerified": true,
+  "rootViewedBothOriginalSystemScreenshots": true,
+  "rootPrivacyReviewed": true,
+  "userVisualApprovalClaimed": false,
+  "sourceKind": "Actual API29 ComponentActivity synthetic Seoul scene; not MainActivity/GPS/Firebase/phone",
+  "binary": {
+    "file": "binary-build6.json",
+    "sha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f"
+  },
+  "phase": {
+    "file": "map-online5.json",
+    "sha256": "b0827e25344e15cca7261e524d6a3019e84dfb0d983dbb1147c9aa34e58f09fd"
+  },
+  "observations": {
+    "file": "map-online5-native-online-observations.json",
+    "sha256": "47d514847bfa0cad063f040af7749e0714ea7cfd28c7e7f4734ba2ec9804f8d7"
+  },
+  "screenshots": [
+    {
+      "file": "map-online5-native-online-seoul-fixture.png",
+      "sha256": "99cda19c97a988fa2ec53462e92ad2ef785fa4cd05d3700aca9548f1496243d7"
+    },
+    {
+      "file": "map-online5-native-online-gestures-fixture.png",
+      "sha256": "513aff9710b487ec918592bc9e6660833ea3ccc2c0a67ec237a832ecae66a55a"
+    }
+  ],
+  "rootVisualFindings": [
+    "Initial Santa and changed bear outfit are identifiable at the synthetic runner position",
+    "Approved face/body appearance is retained while clothes change",
+    "Korean place names, route segments and required attribution are visible",
+    "Flat building footprints keep the route and runner unobscured"
+  ],
+  "actualSampledMetrics": [
+    {
+      "stage": "visible-avatar-before",
+      "globalMatches": 42,
+      "globalSamples": 48,
+      "bodyMatches": 17,
+      "bodySamples": 24,
+      "registeredRoundTripPixelMismatches": 0,
+      "projectedAnchorLocalPx": {
+        "x": 216,
+        "y": 381.20547
+      }
+    },
+    {
+      "stage": "visible-avatar-after",
+      "globalMatches": 48,
+      "globalSamples": 48,
+      "bodyMatches": 24,
+      "bodySamples": 24,
+      "registeredRoundTripPixelMismatches": 0,
+      "projectedAnchorLocalPx": {
+        "x": 240,
+        "y": 332
+      }
+    }
+  ],
+  "priorVisualRejections": [
+    {
+      "file": "map-online3-root-visual-review.json",
+      "sha256": "fc20f180bc532cdeafe8c5e8b906d445fb9301cdfdac7570038a4e0ff233edb5"
+    },
+    {
+      "file": "input5-graphics-backend-visual-comparison.json",
+      "sha256": "8ad5013c9c5c83eab63c3b440d7bad3dfdaf7e0ce87722057260c6ff6ee44583"
+    }
+  ],
+  "changesValidatedTogether": [
+    "swangle software GLES configuration",
+    "Versioned outfit image keys and bounded last-ready registry",
+    "Synchronous small runner source update before pruning unused images",
+    "Flat provider building policy and actual pixel readiness observation"
+  ],
+  "uniquePriorRootCauseConfirmed": false,
+  "allFramesAlwaysUnobscuredClaimed": false,
+  "physicalDeviceVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "completedAtUtc": "2026-11-15T20:02:22.628985+00:00"
+}

@@ -42,6 +42,13 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.7.0-dev", "2026-11-16", "가독성·연결 유지·벡터 지도 개편 · 실기기 검증 전", listOf(
+        "화면 여백과 글자, 아이콘을 정리하고 러닝 위젯을 다시 디자인했어요.",
+        "저장한 온라인 프로필 연결을 같은 계정에서 유지하고 연결 상태를 구분해요.",
+        "위치 공유를 출발 전에 설정하고, 실제 러닝 중에만 전송해요.",
+        "확대해도 선명한 벡터 지도와 한글 지명을 지원해요.",
+        "원본 미니미의 의복·장비 도트를 다듬고 산타·곰·골든 세트를 연결했어요.",
+    )),
     AppVersionEntry("0.6.0-dev", "2026-11-14", "페이지 이동·위젯·실제 기록 중심 개편 · 실기기 검증 전", listOf(
         "설정·프로필·크루 편집을 독립 페이지와 뒤로가기로 연결",
         "위젯의 거리·시간·제어를 중앙 배치하고 글자 확대 시 실제 높이 검사",

@@ -1,0 +1,23 @@
+{
+  "ownedPid": 21776,
+  "avd": "Runmoni_Cloud_29",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "4ff6144ee7765916f7b86d365b8f536b62a39acfeb0669e77a53a258be1b94f3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "runtimeProof": "android-review1.json",
+  "runtimeProofSha256": "2016ec626f351a4cdcd892190d26cc33121b459fc150393a2a58faf912e90e8b",
+  "runtimeParentPassed": false,
+  "restorationFlags": {
+    "preferencesRestoredExactly": true,
+    "profileRestoredExactly": true,
+    "communityAccountPreferencesRestoredExactly": true,
+    "controlledSettingsPermissionsPowerRestoredExactly": true,
+    "settingsPermissionsPowerRestoredExactly": true,
+    "driverSourceUnchanged": true,
+    "observerHelperSourceUnchanged": true,
+    "binaryEvidenceUnchanged": true
+  },
+  "completedAtUtc": "2026-11-15T16:34:41.217020+00:00"
+}

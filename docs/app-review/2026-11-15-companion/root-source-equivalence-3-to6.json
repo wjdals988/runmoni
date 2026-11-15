@@ -1,0 +1,210 @@
+{
+  "rootReviewed": true,
+  "scopeRetentionApproved": true,
+  "reviewNotes": {
+    "file": "INPUT5_TO_INPUT6_VALIDATION_SCOPE_REVIEW.md",
+    "sha256": "46cea7d6b4ff33d74bd539ca103e941702f2b434e26adcd55fd89a9122ab18da"
+  },
+  "fromBinary": {
+    "file": "binary-build3.json",
+    "sha256": "b83feaeeb976c3ba5c3f811e0bf930cc72041d93c8e912a1c6ae2df13cd6ed1e"
+  },
+  "toBinary": {
+    "file": "binary-build6.json",
+    "sha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f"
+  },
+  "proofKeys": [
+    "input3-default"
+  ],
+  "includedGroups": [
+    {
+      "proof": "input3-default",
+      "group": "community"
+    },
+    {
+      "proof": "input3-default",
+      "group": "account-information"
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-consumer"
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-colors"
+    },
+    {
+      "proof": "input3-default",
+      "group": "record-share"
+    },
+    {
+      "proof": "input3-default",
+      "group": "map-modal"
+    },
+    {
+      "proof": "input3-default",
+      "group": "share-png-renderer"
+    },
+    {
+      "proof": "input3-default",
+      "group": "avatar-renderers"
+    }
+  ],
+  "exactSourceMapDelta": {
+    "productSources": {
+      "app/src/main/java/com/runmoni/app/AppViewModel.kt": {
+        "before": "bd113d23b11c41bae56bd20df73a6d43f07fb0cc8c03cfaa73fef95949554bbc",
+        "after": "63cd545c63942921c59eafbecfb33a7f1417fb48742c4405e55763219a9b3ae8"
+      },
+      "app/src/main/java/com/runmoni/app/data/RunnerPresenceRepository.kt": {
+        "before": "0fed7fa28c3713c4e6ec289935df0eb102a4d39dbc2c2c82493da5da77b380d0",
+        "after": "24ebf07b83cb0a4e446ac3d1438be978e03ecde50d96a7920c0c07cf320a2f0f"
+      },
+      "app/src/main/java/com/runmoni/app/data/RunnerSharingController.kt": {
+        "before": "88a4229828c45ed326be488cb1725b051821a861520aad01a0f56a70417b5fbe",
+        "after": "8ce7bd479e6d2a427a2bd78d7590a231b17d24fb6367d9aa51d2ae1677b1244d"
+      },
+      "app/src/main/java/com/runmoni/app/data/RunnerSharingGateway.kt": {
+        "before": null,
+        "after": "d8934614250af855f574f43833f9853ea56df249985bed83d5ba064c939c56b2"
+      },
+      "app/src/main/java/com/runmoni/app/data/RunnerSharingPreferenceStore.kt": {
+        "before": "2e63baa7a0b3466a2f74cf78863d30a0543ab6212f408919ee137cf3f817511a",
+        "after": "221662f120c1e22e755ceaa46de6ad86961cca679a15b851e58f3ed03558914d"
+      },
+      "app/src/main/java/com/runmoni/app/ui/MapLibreMapPane.kt": {
+        "before": "e0aa8ed048fb298d0b1f32cf21288ae3ba9baa4015e80bcf317a8e3df8eff88d",
+        "after": "b5ea1f0eafa5fbda8df770ef49f6c0d15be3978966ebc4f1054c2eab7d1c42fd"
+      },
+      "app/src/main/java/com/runmoni/app/ui/RunmoniDestinations.kt": {
+        "before": "23354758581fbff9c1601bcb02e116bc8607ba9d81e2cca30f8283c578ae190f",
+        "after": "5f47a1cfeadf6a96eb670807c174420f90bdf176f80f7ff1b69ade3e0928d416"
+      }
+    },
+    "testSources": {
+      "app/src/androidTest/java/com/runmoni/app/data/RunnerSharingPreferenceStoreTest.kt": {
+        "before": "b81f4ba95b80bc0cfcae4117e55b6fec47cb096906a4ec593dfb0df633f202c1",
+        "after": "909408be34402e629f50a12f93cca4b505ccd819306f195bbfc9f1bd5caf908b"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/MapLibreMapPaneUiTest.kt": {
+        "before": "848af7de2eb94b8f53067a1b4cc2c18e10e320886d46f67d2c7db3944a3cce36",
+        "after": "db7925fd1ae91e5743ccb1f4e22dc2ae83f5c72297733ddfd16cb17c3bc587a2"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/NativeVectorMapOnlineUiTest.kt": {
+        "before": null,
+        "after": "4ff6bcab1cb4d00b1a867c900175d046c8837f9607419cbb30fccc01d5967738"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/RunmoniDesignTest.kt": {
+        "before": "a13432051a83ebfbd50c3a321d1ff41119e20867fc86f72fc53e3e07a4dd4ed6",
+        "after": "7fba6cd34a9b64462753b9fe1dff03eb521b112ebd3a95fec93c81f7f3b0847a"
+      },
+      "app/src/test/java/com/runmoni/app/data/RunnerSharingControllerTest.kt": {
+        "before": null,
+        "after": "728bfb0ceb17d8bde367ff8abd29e2a525d201119ef0902e751a267ae62254c4"
+      }
+    },
+    "resources": {},
+    "rendererAssets": {},
+    "approvedSourceCopies": {},
+    "configurationSources": {}
+  },
+  "unaffectedRetainedGroupRationale": [
+    {
+      "proof": "input3-default",
+      "group": "community",
+      "reason": "Identical concrete tests and exercised UI/Canvas fixtures; changed VM/sharing/native provider and Home decoration are outside this fixture contract. Exact path review is in both linked reviews; affected contracts are covered by selected newer input4 profile/sharing/widget, input5 Home/native UI and input6 native provider/pixel scopes."
+    },
+    {
+      "proof": "input3-default",
+      "group": "account-information",
+      "reason": "Identical information/version/navigation concrete tests and destination implementation; altered Home decoration/gap is outside asserted version entry contract, and new Home screens/native groups are executed on input5."
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-consumer",
+      "reason": "Identical concrete tests and exercised UI/Canvas fixtures; changed VM/sharing/native provider and Home decoration are outside this fixture contract. Exact path review is in both linked reviews; affected contracts are covered by selected newer input4 profile/sharing/widget, input5 Home/native UI and input6 native provider/pixel scopes."
+    },
+    {
+      "proof": "input3-default",
+      "group": "closet-colors",
+      "reason": "Identical concrete tests and exercised UI/Canvas fixtures; changed VM/sharing/native provider and Home decoration are outside this fixture contract. Exact path review is in both linked reviews; affected contracts are covered by selected newer input4 profile/sharing/widget, input5 Home/native UI and input6 native provider/pixel scopes."
+    },
+    {
+      "proof": "input3-default",
+      "group": "record-share",
+      "reason": "Identical concrete tests and exercised UI/Canvas fixtures; changed VM/sharing/native provider and Home decoration are outside this fixture contract. Exact path review is in both linked reviews; affected contracts are covered by selected newer input4 profile/sharing/widget, input5 Home/native UI and input6 native provider/pixel scopes."
+    },
+    {
+      "proof": "input3-default",
+      "group": "map-modal",
+      "reason": "Identical concrete tests and raster-injected fixture path; native map provider is not constructed. Native public provider and sampled avatar pixels are covered separately by input6-online."
+    },
+    {
+      "proof": "input3-default",
+      "group": "share-png-renderer",
+      "reason": "Identical concrete tests and exercised UI/Canvas fixtures; changed VM/sharing/native provider and Home decoration are outside this fixture contract. Exact path review is in both linked reviews; affected contracts are covered by selected newer input4 profile/sharing/widget, input5 Home/native UI and input6 native provider/pixel scopes."
+    },
+    {
+      "proof": "input3-default",
+      "group": "avatar-renderers",
+      "reason": "Identical approved source, all83 renderer assets, renderer/equipment/costume source and concrete test sources. This input3 current0.7 bitmap/Compose renderer execution does not enter changed Home/VM/sharing/native map paths."
+    }
+  ],
+  "affectedGroupsRerun": [
+    {
+      "proof": "input4-default",
+      "group": "closet-navigation"
+    },
+    {
+      "proof": "input4-default",
+      "group": "widget-measurement"
+    },
+    {
+      "proof": "input4-default",
+      "group": "profile-local"
+    },
+    {
+      "proof": "input4-default",
+      "group": "sharing-preferences"
+    },
+    {
+      "proof": "input4-firebase",
+      "group": "firebase-demo-profile"
+    },
+    {
+      "proof": "input4-landscape",
+      "group": "community-return-scroll"
+    },
+    {
+      "proof": "input5-default",
+      "group": "screens"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-form-pages"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-large-text"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-share-font1"
+    },
+    {
+      "proof": "input6-sdk",
+      "group": "native-map-sdk"
+    },
+    {
+      "proof": "input6-online",
+      "group": "native-online-map"
+    }
+  ],
+  "additionalReviewReferences": [
+    {
+      "file": "INPUT3_TO_INPUT4_VALIDATION_SCOPE_REVIEW.md",
+      "sha256": "10660c66c1ccd9c6551ce807f8485b855c74b36df98fc41be2d11973f62dea64"
+    }
+  ],
+  "singleFinalApkExecutionClaimed": false
+}

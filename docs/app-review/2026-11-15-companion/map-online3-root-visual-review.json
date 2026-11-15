@@ -1,0 +1,30 @@
+{
+  "rootViewedBothOriginalScreenshots": true,
+  "phase": {
+    "file": "map-online3.json",
+    "sha256": "d4cc0185aadd1c7281c05188c852076d21cf23afec8667bbcbecb5785ef1062b"
+  },
+  "phaseJUnitPassed": true,
+  "rootVisualAccepted": false,
+  "sourceKind": "Actual API29 ComponentActivity synthetic map scene; not MainActivity/GPS/Firebase/physical device",
+  "screenshots": [
+    {
+      "file": "map-online3-native-online-seoul-fixture.png",
+      "sha256": "545c38130132dfe82e683e51d61ece4e8e4f90fef0767518af3fc98755fac1d2"
+    },
+    {
+      "file": "map-online3-native-online-gestures-fixture.png",
+      "sha256": "0a588521ec3f46b25b223963e739886e48c56aba3e90c7c5ffa9e6fbca752f31"
+    }
+  ],
+  "observations": [
+    "MiniMi could not be identified in either screenshot at the synthetic runner position",
+    "A solid black rectangle appears near the initial marker label position",
+    "Street and point names were not visible in these screenshots despite rendered buildings/roads/route"
+  ],
+  "causeConfirmed": false,
+  "sourceBitmapAndNativeImageRoundtripInspected": false,
+  "cloudSoftwareGraphicsCompatibilityVerified": false,
+  "nextControlledDiagnostic": "Same APK/source/test/style on the emulator-supported swangle software GLES backend; no TLS/product change",
+  "automatedMethodPassIsNotVisualApproval": true
+}

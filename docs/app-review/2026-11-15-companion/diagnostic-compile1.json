@@ -1,0 +1,14 @@
+{
+  "scope": "Diagnostic source compilation only; mutable working tree, not final frozen verification",
+  "successful": false,
+  "exitCode": 1,
+  "buildDurationFromLogSeconds": 38,
+  "failure": "MapLibreMapPane.kt referenced nonexistent Bitmap.DENSITY_DEFAULT",
+  "fix": "Use android.util.DisplayMetrics.DENSITY_DEFAULT",
+  "testExecutionClaimed": false,
+  "apkRuntimeClaimed": false,
+  "logSha256": "c58e3917311dca0a93be24d86a8b2c1c392162c4a52cab25be28e38716ccf7e5",
+  "compilerDaemonStartupMessageObserved": true,
+  "compilerDaemonStartupCauseKnown": false,
+  "coordination": "Host avatar v6 start and diagnostic Gradle start crossed during message delivery. Exact process overlap duration was not measured; no causal attribution. Host v6 completion exit0 and Gradle exit1 were independently observed. Future heavy jobs require acknowledged handoff."
+}

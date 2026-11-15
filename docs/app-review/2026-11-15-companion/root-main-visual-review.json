@@ -1,0 +1,77 @@
+{
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "proof": {
+    "file": "live2.json",
+    "sha256": "247df1b921cfedaab97806c3c535a04407f89aa1f8f67d3ce6a77bbf9ee5ca3d"
+  },
+  "sourceKind": "Actual Android MainActivity, local TEST debug0.7/code29 on API29/TCG/swangle",
+  "images": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "d1f447b40e7745df3533047401f71418f5faa1b6f3f8694f1328a839308f3ab3",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-profile-ime.png",
+      "sha256": "dd352e0e7527441b594fb5ab1bcfc77fc8db47a72d954da77d7e909f31d8808b",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-studio-closet.png",
+      "sha256": "8ec0fa7d6e9ec6f342c0e823a2767048d8182e182a4a5167f62a94ab25bd23e0",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-record-result.png",
+      "sha256": "73b7da0450c6d299251f61b15a06e21f71762c65e2c16137319f5f36faf8e932",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-default-card.png",
+      "sha256": "90eae8df26235e8e55f8e6ecb4660dd64238d8a93ffc9ae2d4cb83692b6a6b4a",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-coral-card.png",
+      "sha256": "76e29a8d30989e879bd7c713919e24076a49f030aa03af50b23f379c47cd4478",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    },
+    {
+      "file": "live2-main-map-clean.png",
+      "sha256": "368625c62e1acb1830bcbf066e7137216d04080eb39346b096e61f954aa0a9b7",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "note": "Synthetic review record/profile alias; no injected GPS or real-person identity. Coral configuration screen is scrolled to its controls."
+    }
+  ],
+  "visualFindings": [
+    "Home has clear date/time, avatar/weather area and one run action",
+    "Profile Back/Save remain above actual IME",
+    "Santa outfit selection is visible and persisted; category strip scrolls horizontally",
+    "Record/share pages use separated sections and fixed export actions; square preview includes Santa",
+    "Explore renders Korean-labelled native flat map, honest unconfirmed-location caption and controls outside the map"
+  ],
+  "scopeNote": "실제 MainActivity 원본이며 표시된 기록·프로필 별칭은 검토용 합성 데이터다. GPS 주입 없이 촬영했고 운영 로그인·실제 러너 표시는 별도 확인 대상이다.",
+  "limits": "No physical phone/Google/production profile or presence writes/signed release runtime/social delivery verification"
+}

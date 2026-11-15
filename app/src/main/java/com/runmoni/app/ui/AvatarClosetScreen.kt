@@ -78,7 +78,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                         // Only the picker scrolls. The fitting preview yields
                         // height to the gender controls in short windows.
                         Column(Modifier.width(if (largeText) 160.dp else 144.dp).fillMaxHeight()
-                            .background(RunmoniColors.MintWash, RunmoniShapes.Surface)
+                            .background(RunmoniColors.Paper, RunmoniShapes.Surface)
                             .padding(8.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -131,7 +131,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
 private fun ClosetPreview(profile: Profile, actions: AppActions, playing: Boolean, height: Dp,
     onFrameRendered: ((Int) -> Unit)? = null,
 ) {
-    Box(Modifier.fillMaxWidth().background(RunmoniColors.MintWash), contentAlignment = Alignment.TopCenter) {
+    Box(Modifier.fillMaxWidth().background(RunmoniColors.Paper), contentAlignment = Alignment.TopCenter) {
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .padding(horizontal = pageGutter(), vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -220,10 +220,10 @@ private fun ClosetItems(
             // scrolling inside the picker. Names/actions exist while art loads.
             Column(Modifier.fillMaxWidth().selectableGroup()
                 .testTag(if (columns == 2) "closet_compare_grid" else "closet_compare_list"),
-                verticalArrangement = Arrangement.spacedBy(if (columns == 2) 12.dp else 0.dp)) {
+                verticalArrangement = Arrangement.spacedBy(if (columns == 2) 16.dp else 8.dp)) {
                 ready.chunked(columns).forEach { row ->
                     if (columns == 2) {
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.Top) {
                             row.forEach { variant ->
                                 ClosetItemOption(profile, actions, slot, variant, current == variant && !covered,

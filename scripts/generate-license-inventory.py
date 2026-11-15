@@ -2,13 +2,14 @@
 from __future__ import annotations
 import io
 import json
+import os
 from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-CACHE = ROOT / "work/gradle-home/caches/modules-2/files-2.1"
+CACHE = Path(os.environ.get("GRADLE_USER_HOME", ROOT / "work/gradle-home")) / "caches/modules-2/files-2.1"
 NS = {"m": "http://maven.apache.org/POM/4.0.0"}
 
 
@@ -80,7 +81,7 @@ def main():
     assets = ROOT / "app/src/main/assets"
     assets.mkdir(parents=True, exist_ok=True)
     (assets / "open-source-licenses.json").write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    report = ["# Third-party libraries and SDK notices", "", "Generated offline from the resolved releaseRuntimeClasspath, cached POM metadata and artifact LICENSE/NOTICE entries.", "NAVER Maps and Google SDK terms may be separate from open-source licenses. This inventory is not a legal compliance certification.", "", "| Runtime artifact | Published license / terms | Source |", "|---|---|---|"]
+    report = ["# Third-party libraries and SDK notices", "", "Generated offline from the resolved releaseRuntimeClasspath, cached POM metadata and artifact LICENSE/NOTICE entries.", "Google SDK and OpenFreeMap service/data terms may be separate from open-source licenses. OpenFreeMap is provided as-is without an SLA (https://openfreemap.org/terms-of-service/); map data attribution is shown on each map. This inventory is not a legal compliance certification.", "", "| Runtime artifact | Published license / terms | Source |", "|---|---|---|"]
     for entry in entries:
         link = f"[Provider notice]({entry['url']})" if entry["url"] else "Artifact notice bundled in app"
         report.append(f"| {entry['name']} | {entry['license']} | {link} |")

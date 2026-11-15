@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/run_widget_root" android:forceDarkAllowed="false"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:gravity="center_vertical" android:padding="8dp"
-    android:background="@drawable/run_widget_surface">
-    <TextView android:id="@+id/run_widget_title"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:text="@string/run_widget_preview_title" android:textSize="16sp"
-        android:textColor="@color/run_widget_muted" android:textStyle="bold" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
-    <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
-        android:text="@string/run_widget_open" />
-    <TextView android:id="@+id/run_widget_footer"
-        android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp"
-        android:text="@string/run_widget_preview_footer" android:textSize="14sp"
-        android:textColor="@color/run_widget_muted" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
-</LinearLayout>
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:id="@+id/run_widget_panel" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" android:orientation="vertical" android:padding="8dp" android:background="@drawable/run_widget_surface">
+        <LinearLayout android:id="@+id/run_widget_identity" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <ImageView android:id="@+id/run_widget_brand_icon" android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/run_widget_open_icon" android:importantForAccessibility="no" />
+            <TextView android:id="@+id/run_widget_brand" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginStart="6dp" android:text="@string/run_widget_brand" android:textSize="16sp"
+                android:textColor="@color/run_widget_text" android:fontFamily="sans-serif-medium"
+                android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="1" />
+        </LinearLayout>
+        <TextView android:id="@+id/run_widget_title" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="@string/run_widget_preview_title" android:textSize="14sp"
+            android:textColor="@color/run_widget_muted" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
+        <Button android:id="@+id/run_widget_open" style="@style/RunWidgetAction"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/run_widget_open" />
+        <TextView android:id="@+id/run_widget_footer" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:text="@string/run_widget_preview_footer" android:textSize="14sp"
+            android:textColor="@color/run_widget_muted" android:includeFontPadding="true" android:fallbackLineSpacing="true" android:maxLines="2" />
+    </LinearLayout>
+</FrameLayout>

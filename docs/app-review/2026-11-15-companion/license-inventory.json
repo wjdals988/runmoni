@@ -1,0 +1,12 @@
+{
+  "artifacts": 138,
+  "metadataGaps": 0,
+  "maplibreVersion": "12.0.1",
+  "naverRuntimeRemoved": true,
+  "offline": true,
+  "noticeFiles": {
+    "THIRD_PARTY_NOTICES.md": "49f7dca23ac01e806798a1b5b5d972ec8992804917c0f365bebf57502b544ca2",
+    "app/src/main/assets/open-source-licenses.json": "892c77e7160889425461909a96e82a76f2fa0e90552aeab76e06026620a76be9"
+  },
+  "serviceTermsAreSeparateFromSdkLicense": true
+}

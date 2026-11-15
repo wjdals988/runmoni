@@ -62,3 +62,9 @@ object RunnerPresencePolicy {
     fun fresh(updatedAt: Long, expiresAt: Long, now: Long): Boolean = expiresAt > now &&
         now - updatedAt in -15_000L..MAX_MARKER_AGE_MILLIS
 }
+
+/** A saved account choice cannot publish while idle, paused, recovering or under another recorder/account. */
+internal fun preparedSharingMayFollow(run: ActiveRun, live: Boolean, ownerRunId: String?,
+    acceptedUid: String, preferredUid: String): Boolean =
+    live && !ownerRunId.isNullOrBlank() && run.id == ownerRunId && run.phase == RunPhase.RUNNING &&
+        acceptedUid.isNotBlank() && acceptedUid == preferredUid

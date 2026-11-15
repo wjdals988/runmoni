@@ -1,0 +1,38 @@
+{
+  "priorAttempt": {
+    "file": "live1.json",
+    "sha256": "3a25a9e574e09f34e90ff17d439440c2a6aecf9cb786806fbe13d9e7460abc21"
+  },
+  "originalParentPassed": false,
+  "source": "Read-only failure accessibility XML, private WORK only",
+  "observedSelectedTab": {
+    "class": "android.view.View",
+    "selected": true,
+    "clickable": false,
+    "enabled": true,
+    "bounds": [
+      195,
+      296,
+      285,
+      344
+    ]
+  },
+  "observedScrollableCategoryAncestor": {
+    "class": "android.view.View",
+    "scrollable": true,
+    "bounds": [
+      0,
+      296,
+      480,
+      344
+    ]
+  },
+  "failureCause": "Observer required selected tab clickable=true and a HorizontalScrollView class; actual Compose accessibility exposes neither",
+  "observerFix": "Observe selected/enabled anchor without requiring a click action; identify its actual wide scrollable category ancestor by bounds and tab descendants",
+  "targetClickabilityAndWholeBoundsStillRequired": true,
+  "productOrTestApkChanged": false,
+  "privateFailureXmlSha256": "e15c3b6c7a83ad8446079f5024a6a7f1fcfda8eb0e0f6efe7ee5d4eab9b40e0a",
+  "nextObserverSha256": "a3c042f31ccaf983952e9a16770f026a66b7919d5e3247556c93f55e3c711383",
+  "priorPartialCapturesReusedAsFinal": false,
+  "restorationVerifiedBeforeNextAttempt": true
+}

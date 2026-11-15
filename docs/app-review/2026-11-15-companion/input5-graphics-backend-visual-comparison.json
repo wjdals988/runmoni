@@ -1,0 +1,37 @@
+{
+  "completed": true,
+  "rootViewedAllFourOriginalScreenshots": true,
+  "sourceKind": "API29 ComponentActivity synthetic public map, not Main/GPS/Firebase/physical device",
+  "prior": {
+    "file": "map-online3-root-visual-review.json",
+    "sha256": "fc20f180bc532cdeafe8c5e8b906d445fb9301cdfdac7570038a4e0ff233edb5"
+  },
+  "latestPhase": {
+    "file": "map-online4.json",
+    "sha256": "0eec3de45503b5abc393a8722db3d085750acb442ec30de42f9346a0a1db70ec"
+  },
+  "latestScreenshots": [
+    {
+      "file": "map-online4-native-online-seoul-fixture.png",
+      "sha256": "99fc27913c455afc011c1d721751cae090799834aa646e377e7f7cfe7df7f0f5"
+    },
+    {
+      "file": "map-online4-native-online-gestures-fixture.png",
+      "sha256": "808a750fe98bc8722cbc85e83cb8b972cb5a73cdd5458abb6343f79b8b2d60aa"
+    }
+  ],
+  "sameBinary": "binary-build5.json",
+  "sameProductAndTestSourceMaps": true,
+  "priorConfiguredGraphicsBackend": "swiftshader",
+  "latestConfiguredGraphicsBackend": "swangle",
+  "latestNativeRendererObserved": "Android Emulator OpenGL ES Translator (ANGLE (Google, Vulkan 1.2.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0))",
+  "latestInitialMiniMiAndKoreanMapNamesVisible": true,
+  "latestChangedCostumeMiniMiVisible": false,
+  "latestRootVisualAccepted": false,
+  "gpuSoleCauseConfirmed": false,
+  "identicalCacheAndExternalResponseConditionsClaimed": false,
+  "appCodeAndTlsChanged": false,
+  "newIssue": "After costume4 recomposition, marker point/name remain but the MiniMi is not identifiable at the expected projected position",
+  "nextStep": "Fix versioned marker image lifecycle and verify actual avatar pixels on native texture before/after change",
+  "completedAtUtc": "2026-11-15T19:11:46.464857+00:00"
+}

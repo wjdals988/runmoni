@@ -1,0 +1,10 @@
+
+com.runmoni.app.ProfileConnectionViewModelTest:..
+com.runmoni.app.data.CommunityProfileReceiptStoreTest:...
+com.runmoni.app.data.CommunityProfileFailureTest:...
+
+Time: 3.565
+
+OK (8 tests)
+
+

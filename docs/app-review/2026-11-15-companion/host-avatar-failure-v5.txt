@@ -1,0 +1,3 @@
+Exception in thread "main" java.lang.AssertionError: Face/hair/neck/hand changed 0/0/1/46731
+	at VerifyCompanionAvatars.check(VerifyCompanionAvatars.java:14)
+	at VerifyCompanionAvatars.main(VerifyCompanionAvatars.java:52)

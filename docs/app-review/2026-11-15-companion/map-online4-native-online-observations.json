@@ -1,0 +1,187 @@
+{
+  "syntheticFixture": true,
+  "actualMainActivity": false,
+  "actualGps": false,
+  "firebaseUsed": false,
+  "profileOrRecordingModified": false,
+  "styleUri": "https:\/\/tiles.openfreemap.org\/styles\/liberty",
+  "productionFactoryAndTransportUsed": true,
+  "httpCacheClearedOrWarmupForced": false,
+  "freshHttpFetchForEveryResourceClaimed": false,
+  "observationBudgetMillis": 120000,
+  "providerSlaClaimed": false,
+  "routePointCount": 4,
+  "routeSegmentCount": 2,
+  "runnerCount": 1,
+  "mapViewConstructions": 1,
+  "completed": true,
+  "failureClass": null,
+  "nativeFailure": null,
+  "stages": [
+    {
+      "stage": "production-pane-created",
+      "elapsedMillis": 4906,
+      "fullyRenderedMapCallbacks": 0,
+      "fullyRenderedFrameCallbacks": 0,
+      "cameraIdleCallbacks": 0,
+      "gestureStartCallbacks": 0
+    },
+    {
+      "stage": "native-feature-observations",
+      "routeSourceFeatureCount": 6,
+      "renderedProviderFeatureCount": 707,
+      "textureSampledDistinctColors": 1018,
+      "sourceFeatureDuplicatesNotDeduplicated": true
+    },
+    {
+      "stage": "ready-before-gestures",
+      "elapsedMillis": 36502,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 4,
+      "cameraIdleCallbacks": 3,
+      "gestureStartCallbacks": 0,
+      "camera": {
+        "latitude": 37.56775003398271,
+        "longitude": 126.97939999999966,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-input-geometry",
+      "elapsedMillis": 39935,
+      "accessibilityViewportBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "nativeMapViewVisible": true,
+      "nativeMapViewGlobalVisibleBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "gestureMarginFraction": 0.12,
+      "gestureFraction": 0.2,
+      "pixelsPerSecond": 350
+    },
+    {
+      "stage": "one-finger-drag-before-input",
+      "elapsedMillis": 39956,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 4,
+      "cameraIdleCallbacks": 3,
+      "gestureStartCallbacks": 0,
+      "camera": {
+        "latitude": 37.56775003398271,
+        "longitude": 126.97939999999966,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-drag-input-returned",
+      "elapsedMillis": 40971,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 4,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.98048333333435,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-drag-idle",
+      "elapsedMillis": 40979,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 4,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.98048333333435,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "two-finger-input-geometry",
+      "elapsedMillis": 42107,
+      "accessibilityViewportBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "nativeMapViewVisible": true,
+      "nativeMapViewGlobalVisibleBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "gestureMarginFraction": 0.12,
+      "gestureFraction": 0.45,
+      "pixelsPerSecond": 350
+    },
+    {
+      "stage": "two-finger-input-baselines",
+      "idleBaseline": 4,
+      "gestureBaseline": 1,
+      "fullyRenderedFrameBaseline": 7
+    },
+    {
+      "stage": "two-finger-pinch-before-input",
+      "elapsedMillis": 42108,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 7,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.98048333333435,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "two-finger-pinch-input-returned",
+      "elapsedMillis": 43734,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 9,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.5677500339334,
+        "longitude": 126.98048333338494,
+        "zoom": 15.865909367923424
+      }
+    },
+    {
+      "stage": "two-finger-pinch-idle",
+      "elapsedMillis": 43799,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 9,
+      "cameraIdleCallbacks": 5,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.56775003397004,
+        "longitude": 126.98048333332787,
+        "zoom": 15.922822952270508
+      }
+    },
+    {
+      "stage": "marker-update-keeps-gesture-camera",
+      "elapsedMillis": 48776,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 14,
+      "cameraIdleCallbacks": 5,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.56775003397004,
+        "longitude": 126.98048333332787,
+        "zoom": 15.922822952270508
+      }
+    }
+  ]
+}

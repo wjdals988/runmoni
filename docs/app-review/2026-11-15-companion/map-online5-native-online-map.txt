@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.NativeVectorMapOnlineUiTest:.
+
+Time: 62.205
+
+OK (1 test)
+
+

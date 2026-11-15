@@ -37,6 +37,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     constructor(context: Context) : this(context, null)
     private val lock = Any()
     private var epoch = 0L
+    private var profileObservation = 0L
     private var activeLogin = false
     private var closed = false
     private val firebaseApp = testApp?.also { require(BuildConfig.DEBUG && it.options.projectId.orEmpty().startsWith("demo-")) }
@@ -55,18 +56,24 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     private val accountPreferences = context.applicationContext.getSharedPreferences("runmoni-community-account", Context.MODE_PRIVATE)
     private val verifiedGoogleKey = "verifiedGoogleUid:${firebaseApp?.name.orEmpty()}"
     private val pendingAnonymousKey = "pendingAnonymousConnectV1:${firebaseApp?.name.orEmpty()}"
+    private val profileReceipts = CommunityProfileReceiptStore(accountPreferences, firebaseApp?.name.orEmpty())
+    private val retainedProfileReceipt = profileReceipts.read()
     private var pendingConnectUid = auth?.currentUser?.let { user -> pendingStoredCommunityUid(
         user.uid, user.isAnonymous, user.providerData.any { it.providerId == GoogleAuthProvider.PROVIDER_ID },
         accountPreferences.getBoolean(pendingAnonymousKey, false)) }.orEmpty()
-    // An auth session alone never exposes a connected profile to callers. The
-    // legacy auth candidate remains available for the first server read.
-    private var profileVerifiedUid = ""
     private var acceptedUid = auth?.currentUser?.let { user ->
         acceptedStoredCommunityUid(user.uid, user.isAnonymous,
             user.providerData.any { it.providerId == GoogleAuthProvider.PROVIDER_ID },
             accountPreferences.getString(verifiedGoogleKey, "").orEmpty(),
-            accountPreferences.getBoolean(pendingAnonymousKey, false))
+            accountPreferences.getBoolean(pendingAnonymousKey, false), retainedProfileReceipt?.uid.orEmpty())
     }.orEmpty()
+    private val restoredProfile = restoredCommunityProfile(acceptedUid, auth?.currentUser?.uid.orEmpty(), retainedProfileReceipt)
+    // A retained Auth session alone is insufficient; a same-UID server ACK
+    // receipt keeps a previously confirmed connection usable offline.
+    private var profileVerifiedUid = restoredProfile.uid
+    private val mutableProfileConnection = MutableStateFlow(if (restoredProfile.connected || (acceptedUid.isBlank() && pendingConnectUid.isBlank())) restoredProfile
+        else CommunityProfileConnectionState(phase = CommunityProfileConnectionPhase.PENDING))
+    val profileConnectionState: StateFlow<CommunityProfileConnectionState> = mutableProfileConnection.asStateFlow()
     private data class GoogleTicket(val epoch: Long, val operation: Long, val uid: String, val restoring: Boolean = false)
     private var googleOperation = 0L
     private var activeGoogle: GoogleTicket? = null
@@ -78,6 +85,8 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                 // Reject a late sign-in Task after cancellation/timeout.
                 epoch++; acceptedUid = ""; pendingConnectUid = ""; profileVerifiedUid = ""
                 accountPreferences.edit().remove(pendingAnonymousKey).commit()
+                profileReceipts.clear()
+                mutableProfileConnection.value = CommunityProfileConnectionState()
                 if (activeGoogle != null) {
                     activeGoogle = null
                     mutableGoogleLink.value = CommunityGoogleLinkState(status = "크루 프로필 연결 상태가 바뀌었어요 · 다시 확인해 주세요")
@@ -94,6 +103,43 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     }
     private fun profileCandidateLocked() = acceptedUid.ifBlank { pendingConnectUid }
         .takeIf { it.isNotBlank() && auth?.currentUser?.uid == it }.orEmpty()
+    private fun acknowledgeProfileLocked(receipt: CommunityProfileReceipt) {
+        check(!closed && auth?.currentUser?.uid == receipt.uid && profileCandidateLocked() == receipt.uid)
+        acceptedUid = receipt.uid; profileVerifiedUid = receipt.uid; pendingConnectUid = ""
+        val remembered = runCatching { profileReceipts.write(receipt, pendingAnonymousKey) }.getOrDefault(false)
+        mutableProfileConnection.value = CommunityProfileConnectionState(CommunityProfileConnectionPhase.VERIFIED,
+            receipt.uid, receipt.nickname, receipt.nicknameKey, if (remembered) null else
+                CommunityProfileFailure(CommunityProfileOperation.REMEMBER_CONNECTION, CommunityProfileFailureReason.LOCAL_STORAGE))
+        syncGoogleLinkLocked()
+    }
+    private fun missingProfileLocked(current: String) {
+        check(!closed && current.isNotBlank() && profileCandidateLocked() == current)
+        profileVerifiedUid = ""
+        profileReceipts.clear()
+        mutableProfileConnection.value = CommunityProfileConnectionState(phase = CommunityProfileConnectionPhase.PENDING)
+        // An authoritative missing document invalidates the receipt, while the
+        // same Auth UID remains available for the user's explicit retry.
+        if (auth?.currentUser?.isAnonymous == true) {
+            pendingConnectUid = current; acceptedUid = ""
+            accountPreferences.edit().putBoolean(pendingAnonymousKey, true).commit()
+        }
+    }
+    private fun profileFailure(ticket: Long, failure: CommunityProfileFailure): CommunityProfileException {
+        synchronized(lock) {
+            if (!closed && epoch == ticket) {
+                val previous = mutableProfileConnection.value
+                mutableProfileConnection.value = if (previous.connected && auth?.currentUser?.uid != previous.uid)
+                    CommunityProfileConnectionState() else previous.offline(failure)
+            }
+        }
+        return CommunityProfileException(failure)
+    }
+    private fun firestoreProfileFailure(failure: FirebaseFirestoreException, operation: CommunityProfileOperation): CommunityProfileException {
+        return CommunityProfileException(profileAccessFailure(failure.code, operation))
+    }
+    private fun transactionProfileRead(transaction: Transaction, document: DocumentReference,
+        operation: CommunityProfileOperation): DocumentSnapshot = try { transaction.get(document) }
+        catch (failure: FirebaseFirestoreException) { throw profileTransactionReadFailure(failure, operation) }
     /** Uses the existing accepted identity. Reading this never signs in or creates an account. */
     internal fun presenceFirestore(): FirebaseFirestore? = synchronized(lock) {
         database?.takeIf { !closed && uid.isNotBlank() }
@@ -229,6 +275,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         try {
             val credential = pickGoogleCredential(context)
             if (!currentGoogle(ticket)) return
+            var restoredReceipt: CommunityProfileReceipt? = null
             val result = withTimeout(15_000) {
                 restoreExistingCommunityIdentity(credential, object : CommunityRestoreSession<AuthCredential> {
                     override fun identity() = synchronized(lock) {
@@ -240,7 +287,9 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                     }
                     override suspend fun hasExistingProfile(uid: String): Boolean {
                         check(currentGoogle(ticket) && currentAuth.currentUser?.uid == uid)
-                        return profile(uid).get(Source.SERVER).await().exists()
+                        val document = profile(uid).get(Source.SERVER).await()
+                        if (document.exists()) restoredReceipt = CommunityProfileReceipt(uid, document.getString("nickname"), document.getString("nicknameKey"))
+                        return document.exists()
                     }
                     override fun rejectTemporaryIdentity(uid: String) = synchronized(lock) {
                         if (currentGoogleLocked(ticket) && currentAuth.currentUser?.uid == uid) currentAuth.signOut()
@@ -250,9 +299,12 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
             synchronized(lock) {
                 if (!currentGoogleLocked(ticket)) return
                 if (result.status == CommunityRestoreStatus.RESTORED && currentAuth.currentUser?.uid == result.uid) {
-                    check(accountPreferences.edit().putString(verifiedGoogleKey, result.uid).commit())
-                    acceptedUid = result.uid; profileVerifiedUid = result.uid; pendingConnectUid = ""
-                    accountPreferences.edit().remove(pendingAnonymousKey).commit()
+                    // The server already confirmed this UID. A local remember
+                    // failure must not throw away its valid current session;
+                    // the ACK receipt below reports persistence separately.
+                    accountPreferences.edit().putString(verifiedGoogleKey, result.uid).commit()
+                    acceptedUid = result.uid
+                    acknowledgeProfileLocked(requireNotNull(restoredReceipt))
                     activeLogin = false; activeGoogle = null
                     mutableGoogleLink.value = googleState(currentAuth.currentUser).copy(status = "기존 크루 프로필에 다시 연결했어요 · 소속은 목록을 새로고침해 확인해 주세요. 기기 기록·포인트·옷장은 별도예요")
                 } else {
@@ -283,7 +335,8 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         }
     }
 
-    private suspend fun <T> network(profileRequest: Boolean = false, action: suspend () -> T): T {
+    private suspend fun <T> network(profileRequest: Boolean = false,
+        operation: CommunityProfileOperation = CommunityProfileOperation.PROFILE_READ, action: suspend () -> T): T {
         val ticket = synchronized(lock) { check(!closed); epoch }
         try {
             val value = withTimeout(15_000) { action() }
@@ -293,20 +346,24 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
             }
             return value
         } catch (_: TimeoutCancellationException) {
+            if (profileRequest) throw profileFailure(ticket, CommunityProfileFailure(operation, CommunityProfileFailureReason.TIMEOUT))
             error(if (profileRequest) "온라인 프로필 응답을 확인하지 못했어요. 같은 닉네임으로 다시 확인해 주세요."
                 else "크루·파티 응답 시간이 초과됐어요. 저장 여부는 새로고침해 주세요.")
         }
         catch (cancelled: CancellationException) { throw cancelled }
+        catch (failure: CommunityProfileException) {
+            throw profileFailure(ticket, failure.failure)
+        }
         catch (failure: FirebaseFirestoreException) {
-            if (profileRequest && failure.code == FirebaseFirestoreException.Code.PERMISSION_DENIED)
-                error("온라인 프로필을 확인하거나 저장할 수 없어요. 입력한 닉네임은 유지되니 잠시 후 다시 시도해 주세요.")
-            if (profileRequest) error("온라인 프로필 응답을 확인하지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요.")
+            if (profileRequest) throw profileFailure(ticket, firestoreProfileFailure(failure, operation).failure)
             error(if (failure.code == FirebaseFirestoreException.Code.PERMISSION_DENIED)
                 "Firebase 크루·파티 규칙 또는 참여 권한을 확인해 주세요." else "크루·파티에 연결하지 못했어요. 저장 여부는 새로고침해 주세요.")
         } catch (_: FirebaseAuthException) {
+            if (profileRequest) throw profileFailure(ticket, CommunityProfileFailure(operation, CommunityProfileFailureReason.AUTHENTICATION))
             error(if (profileRequest) "프로필 로그인 상태를 확인하지 못했어요. 다시 연결해 주세요."
                 else "Firebase 로그인 설정과 현재 크루 프로필의 연결 상태를 확인해 주세요.")
         } catch (_: FirebaseException) {
+            if (profileRequest) throw profileFailure(ticket, CommunityProfileFailure(operation, CommunityProfileFailureReason.NETWORK))
             error(if (profileRequest) "온라인 프로필에 연결하지 못했어요. 네트워크를 확인한 뒤 다시 시도해 주세요."
                 else "Firebase 연결을 확인해 주세요. 계정 정보는 공유 결과에 포함되지 않아요.")
         }
@@ -328,6 +385,8 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                 }
             }
             epoch++; activeLogin = true
+            mutableProfileConnection.value = if (mutableProfileConnection.value.connected) mutableProfileConnection.value.copy(failure = null)
+                else CommunityProfileConnectionState(phase = CommunityProfileConnectionPhase.PENDING)
             ConnectTicket(epoch, initialUid, mode)
         }
         try {
@@ -346,22 +405,30 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
                 // public connected UID until the server profile is confirmed.
                 if (acceptedUid.isBlank()) pendingConnectUid = user.uid
             }
-            network(profileRequest = true) {
+            network(profileRequest = true, operation = CommunityProfileOperation.NICKNAME_SAVE) {
                 claimNickname(user.uid, requested) {
                     synchronized(lock) { currentConnectLocked(ticket, user) }
                 }
             }
             synchronized(lock) {
                 check(currentConnectLocked(ticket, user)) { "프로필 연결이 바뀌었어요." }
-                acceptedUid = user.uid; profileVerifiedUid = user.uid; pendingConnectUid = ""
-                accountPreferences.edit().remove(pendingAnonymousKey).commit()
+                acknowledgeProfileLocked(CommunityProfileReceipt(user.uid, requested.nickname, requested.key))
                 activeLogin = false
                 syncGoogleLinkLocked()
             }
-        } catch (_: TimeoutCancellationException) { reconcileLogin(ticket.epoch); error("프로필 연결 시간이 초과됐어요. 다시 시도해 주세요.") }
+        } catch (_: TimeoutCancellationException) {
+            val failure = profileFailure(ticket.epoch, CommunityProfileFailure(CommunityProfileOperation.AUTHENTICATION, CommunityProfileFailureReason.TIMEOUT))
+            reconcileLogin(ticket.epoch); throw failure
+        }
         catch (cancelled: CancellationException) { reconcileLogin(ticket.epoch); throw cancelled }
-        catch (_: FirebaseAuthException) { reconcileLogin(ticket.epoch); error("프로필 로그인에 실패했어요. 잠시 후 다시 시도해 주세요.") }
-        catch (_: FirebaseException) { reconcileLogin(ticket.epoch); error("프로필 연결에 실패했어요. 네트워크와 로그인 설정을 확인해 주세요.") }
+        catch (_: FirebaseAuthException) {
+            val failure = profileFailure(ticket.epoch, CommunityProfileFailure(CommunityProfileOperation.AUTHENTICATION, CommunityProfileFailureReason.AUTHENTICATION))
+            reconcileLogin(ticket.epoch); throw failure
+        }
+        catch (_: FirebaseException) {
+            val failure = profileFailure(ticket.epoch, CommunityProfileFailure(CommunityProfileOperation.AUTHENTICATION, CommunityProfileFailureReason.NETWORK))
+            reconcileLogin(ticket.epoch); throw failure
+        }
         catch (failure: Exception) { reconcileLogin(ticket.epoch); throw failure }
     }
     private data class ConnectTicket(val epoch: Long, val initialUid: String, val mode: CommunityConnectMode)
@@ -379,6 +446,8 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     fun signOut() = synchronized(lock) {
         epoch++; activeLogin = false; activeGoogle = null; acceptedUid = ""; pendingConnectUid = ""; profileVerifiedUid = ""
         accountPreferences.edit().remove(verifiedGoogleKey).remove(pendingAnonymousKey).commit()
+        profileReceipts.clear()
+        mutableProfileConnection.value = CommunityProfileConnectionState()
         auth?.signOut()
         mutableGoogleLink.value = CommunityGoogleLinkState(status = "크루 프로필 연결을 해제했어요 · Google에 연결했던 프로필은 같은 Google 계정으로 다시 연결할 수 있어요")
     }
@@ -387,7 +456,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val requested = NicknamePolicy.requireValid(value)
         val user = uid
         if (!configured || user.isBlank()) return NicknameCheck(requested.nickname, requested.key, "", NicknameAvailability.UNVERIFIED)
-        return network(profileRequest = true) {
+        return network(profileRequest = true, operation = CommunityProfileOperation.NICKNAME_READ) {
             val claim = nickname(requested.key).get(Source.SERVER).await()
             check(uid == user) { "프로필 연결이 바뀌었어요. 닉네임을 다시 확인해 주세요." }
             NicknameCheck(requested.nickname, requested.key, user, when {
@@ -402,35 +471,45 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
     suspend fun currentNickname(): String? {
         val user = uid
         if (user.isBlank()) return null
+        val (generation, observation) = synchronized(lock) { epoch to profileObservation }
         return network(profileRequest = true) {
             val document = profile(user).get(Source.SERVER).await()
-            check(uid == user) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+            synchronized(lock) {
+                check(!closed && epoch == generation && profileObservation == observation && uid == user) {
+                    "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+                if (document.exists()) acknowledgeProfileLocked(CommunityProfileReceipt(user,
+                    document.getString("nickname"), document.getString("nicknameKey"))) else missingProfileLocked(user)
+            }
             document.getString("nickname")?.takeIf { document.exists() }
         }
     }
 
     /** Availability checks are deliberately not accepted as proof: saving rechecks atomically. */
-    suspend fun updateNickname(value: String, expectedUid: String? = null) = network(profileRequest = true) {
+    suspend fun updateNickname(value: String, expectedUid: String? = null) = network(profileRequest = true, operation = CommunityProfileOperation.NICKNAME_SAVE) {
         val requested = NicknamePolicy.requireValid(value)
         val user = identity()
         check(expectedUid == null || expectedUid == user) { "프로필 연결이 바뀌었어요. 닉네임을 다시 확인해 주세요." }
-        val generation = synchronized(lock) { epoch }
+        val (generation, observation) = synchronized(lock) { profileObservation++; epoch to profileObservation }
         claimNickname(user, requested) {
-            synchronized(lock) { !closed && epoch == generation && !activeLogin && activeGoogle == null && uid == user }
+            synchronized(lock) { !closed && epoch == generation && profileObservation == observation && !activeLogin && activeGoogle == null && uid == user }
+        }
+        synchronized(lock) {
+            check(!closed && epoch == generation && profileObservation == observation && uid == user)
+            acknowledgeProfileLocked(CommunityProfileReceipt(user, requested.nickname, requested.key))
         }
     }
 
     private suspend fun claimNickname(user: String, requested: NormalizedNickname, current: () -> Boolean) {
         check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
-        db().runTransaction { transaction ->
+        try { db().runTransaction { transaction ->
             check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
             val own = profile(user)
-            val oldProfile = transaction.get(own)
+            val oldProfile = transactionProfileRead(transaction, own, CommunityProfileOperation.PROFILE_READ)
             val next = nickname(requested.key)
-            val nextClaim = transaction.get(next)
+            val nextClaim = transactionProfileRead(transaction, next, CommunityProfileOperation.NICKNAME_READ)
             val previousKey = oldProfile.getString("nicknameKey")
             val previous = previousKey?.takeIf { it != requested.key }?.let { nickname(it) }
-            val previousClaim = previous?.let { transaction.get(it) }
+            val previousClaim = previous?.let { transactionProfileRead(transaction, it, CommunityProfileOperation.NICKNAME_READ) }
             if (nextClaim.exists() && nextClaim.getString("uid") != user) throw NicknameTakenException()
             check(current()) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
             val now = FieldValue.serverTimestamp()
@@ -443,7 +522,9 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
             else transaction.set(next, mapOf("uid" to user, "nickname" to requested.nickname, "createdAt" to now, "updatedAt" to now))
             if (previous != null && previousClaim?.getString("uid") == user) transaction.delete(previous)
             Unit
-        }.await()
+        }.await() } catch (failure: FirebaseFirestoreException) {
+            throw firestoreProfileFailure(failure, CommunityProfileOperation.NICKNAME_SAVE)
+        }
         // A timed-out/cancelled SDK write may finish remotely. Never apply its
         // result to a different local account; a refresh reconciles the old UID.
         check(current()) { "프로필 연결이 바뀌었어요. 저장 결과를 다시 확인해 주세요." }
@@ -453,27 +534,24 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         val deleted = mutableListOf<String>()
         var cleanupIdentity = ""
         var snapshotEpoch = -1L
+        var snapshotProfileObservation = -1L
         val result = network {
         val readEpoch = synchronized(lock) { epoch }
+        val readProfileObservation = synchronized(lock) { profileObservation }
         snapshotEpoch = readEpoch
+        snapshotProfileObservation = readProfileObservation
         val current = synchronized(lock) { profileCandidateLocked() }
         cleanupIdentity = current
-        val own = if (current.isBlank()) null else profile(current).get(Source.SERVER).await().takeIf { it.exists() }
+        val own = if (current.isBlank()) null else network(profileRequest = true) { profile(current).get(Source.SERVER).await() }.takeIf { it.exists() }
         synchronized(lock) {
-            check(!closed && epoch == readEpoch && profileCandidateLocked() == current) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
+            check(!closed && epoch == readEpoch && profileObservation == readProfileObservation && profileCandidateLocked() == current) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
             if (own != null) {
-                acceptedUid = current; profileVerifiedUid = current; pendingConnectUid = ""
-                accountPreferences.edit().remove(pendingAnonymousKey).commit()
-                syncGoogleLinkLocked()
+                acknowledgeProfileLocked(CommunityProfileReceipt(current, own.getString("nickname"), own.getString("nicknameKey")))
             } else if (current.isNotBlank()) {
                 // v0.4.1 could persist anonymous Auth without a server profile.
                 // Preserve that exact UID for retry, rather than creating a new
                 // account or treating a missing profile as an online session.
-                profileVerifiedUid = ""
-                if (auth?.currentUser?.isAnonymous == true) {
-                    pendingConnectUid = current; acceptedUid = ""
-                    accountPreferences.edit().putBoolean(pendingAnonymousKey, true).commit()
-                }
+                missingProfileLocked(current)
             }
         }
         val joined = (own?.get("joinedRoomIds") as? List<*>)?.filterIsInstance<String>().orEmpty().toMutableSet()
@@ -514,7 +592,7 @@ class FirebaseCommunityRepository internal constructor(context: Context, testApp
         // Its own timeout cannot turn a successful snapshot into a failed read.
         cleanupDeletedMemberships(deleted, cleanupIdentity)
         check(synchronized(lock) {
-            !closed && epoch == snapshotEpoch && profileCandidateLocked() == cleanupIdentity &&
+            !closed && epoch == snapshotEpoch && profileObservation == snapshotProfileObservation && profileCandidateLocked() == cleanupIdentity &&
                 (!result.signedIn || uid == cleanupIdentity)
         }) { "프로필 연결이 바뀌었어요. 다시 확인해 주세요." }
         return result

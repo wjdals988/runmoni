@@ -1,0 +1,256 @@
+{
+  "name": "firebase-sdk2",
+  "version": "0.7.0-dev",
+  "versionCode": 29,
+  "binaryReference": "binary-build4.json",
+  "reviewPhase": "firebase-sdk",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-15T18:15:32.476166+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 3,
+  "plannedMethodIdsFromCurrentSource": [
+    "com.runmoni.app.data.FirebaseNicknameTest#checkingNeverCreatesIdentityAndAtomicSaveRejectsAnAvailabilityRace",
+    "com.runmoni.app.data.FirebaseNicknameTest#pendingAndLegacyAnonymousAuthNeedServerProfileAcknowledgementAfterRecreation",
+    "com.runmoni.app.data.FirebaseCommunityTest#anonymousClientsShareRoomsAndLiveMessagesWithRulesEnforced"
+  ],
+  "actualPassedProductMethods": 3,
+  "groups": [
+    {
+      "name": "firebase-demo-profile",
+      "expected": 3,
+      "classes": [
+        "com.runmoni.app.data.FirebaseNicknameTest",
+        "com.runmoni.app.data.FirebaseCommunityTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "firebase-sdk2-firebase-demo-profile.txt",
+      "startedAtUtc": "2026-11-15T18:16:13.304797+00:00",
+      "actual": 3,
+      "rawSha256": "7d94820835f650f30b8adb0d186284cf35bee35767a25aa3e920a56ea1bc1706",
+      "elapsedSeconds": 40.0,
+      "finishedAtUtc": "2026-11-15T18:16:53.303787+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "firebase-sdk2-executed-driver.py",
+  "executedDriverSha256": "026b8401a3160caa8a2f72743a4d74ab33bd8b1e49221c45909cf335e1aaa6e1",
+  "observerHelper": "firebase-sdk2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA."
+  ],
+  "updatedAtUtc": "2026-11-15T18:17:17.152095+00:00",
+  "sourceFreezeReference": "source-freeze4.json",
+  "sourceFreezeSha256": "26ebe86bcf861395ee8e267976db51e8b5c5a4cec3180d53c0ce726d0aead629",
+  "onlineNativeBasemapVerified": false,
+  "syntheticOnlineNativeMapFixtureVerified": false,
+  "publicMapRequestsPermitted": false,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": true,
+  "binaryReferenceSha256": "ec5003bacb11b4bf7929a783f351723101307e7ba9f1368c496678d0528e183c",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "2958bbdd2fd152855271662d28c36d4651520eb58a85e7abbb45058d70ca4bc7"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "8ad1013979f1bbd37bd451c4c0de8758f27f5ffd946c7b0365477dc08fad0c3d"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "firebase-sdk2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "firebase-sdk2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "firebase-sdk2-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-15T18:17:17.152081+00:00"
+}

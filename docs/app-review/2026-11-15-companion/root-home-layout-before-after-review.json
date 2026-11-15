@@ -1,0 +1,40 @@
+{
+  "sourceKind": "Actual API29 ComponentActivity fixture in native320dp/font2 window, not MainActivity or physical phone",
+  "rootViewedBothOriginalDeviceScreenshots": true,
+  "rootPrivacyReviewed": true,
+  "rootPrivacyNote": "Synthetic active run only; no personal identity or actual GPS",
+  "beforePhase": {
+    "file": "native1.json",
+    "sha256": "ccb6599ff4de465f7d94b90ae1c3b6dcc8ac8eb08720a1cbd32214c3fd9b067a"
+  },
+  "afterPhase": {
+    "file": "native2.json",
+    "sha256": "eb64d85ff69b297538c1adf49ec67890162f2627a833ec17cbf31d103cbcf473"
+  },
+  "beforeScreenshot": {
+    "file": "input4-home-active-native-font2-failed.png",
+    "sha256": "6f39ea4aaa5b04f22cc2b1c0c9505a5c737f839381e82c51ec289573fdfa85f8"
+  },
+  "afterScreenshot": {
+    "file": "native2-home-active-native-320-font2-device.png",
+    "sha256": "7ab5ed54748fd9e5ce130f2ffc616d9c64fab30a64a707ac9849ee552af9e776"
+  },
+  "beforeGeometry": {
+    "file": "input4-home-active-native-font2-geometry.json",
+    "sha256": "15845856fbfa6ff27e2f73f370ca8e6d051154e6dbbd0f0f7c0d8c625732c1d1"
+  },
+  "afterGeometry": {
+    "file": "input5-home-active-native-font2-geometry.json",
+    "sha256": "eb767850f8404910721305bc73c3d55f94ff32b41ed72838c1f09b9a54f801bb"
+  },
+  "afterProvenance": {
+    "file": "input5-home-active-native-font2-provenance.json",
+    "sha256": "bbe451fb4ccbe37b4c540c914d91eda4a60b39fb33cfa806bf6a1047983aca9c"
+  },
+  "beforeGapDp": -4.666659999999979,
+  "afterGapDp": 15.333340000000021,
+  "sameTestAssertionRetained": true,
+  "productChange": "Large-text decorative avatar56→48dp and hero/action gap24→16dp only",
+  "normalFontSpacingUnchanged": true,
+  "userVisualApprovalClaimed": false
+}
