@@ -1,0 +1,68 @@
+{
+  "ownedPid": 34317,
+  "avd": "Runmoni_Cloud_29",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "4ff6144ee7765916f7b86d365b8f536b62a39acfeb0669e77a53a258be1b94f3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "android-review2": {
+      "file": "android-review2.json",
+      "sha256": "b994f925bafa6cacdbc8fe945b9002e57caf9026783dfd0a82fa388b4cfea53c",
+      "parentPassed": true
+    },
+    "native1": {
+      "file": "native1.json",
+      "sha256": "ccb6599ff4de465f7d94b90ae1c3b6dcc8ac8eb08720a1cbd32214c3fd9b067a",
+      "parentPassed": false
+    },
+    "landscape1": {
+      "file": "landscape1.json",
+      "sha256": "3363b01907fbac41eafffe79f4cd3e8c9f561c6fd7fbb2d8618a4c9ff16c416d",
+      "parentPassed": false
+    },
+    "map-sdk1": {
+      "file": "map-sdk1.json",
+      "sha256": "815a0bd97671057e530b9fdcf8540fc01d7ec020cd83ab5ec36131532639ae5a",
+      "parentPassed": true
+    },
+    "map-online1": {
+      "file": "map-online1.json",
+      "sha256": "bf3f7404526b820e84c5ef1c74babdbbecf89edf7a370401076dca7341092e65",
+      "parentPassed": false
+    },
+    "map-online2": {
+      "file": "map-online2.json",
+      "sha256": "ab741c2aaf56644bbdcedc7ee77aa15b838c23368452402d41066524843d5b43",
+      "parentPassed": false
+    },
+    "firebase-sdk1": {
+      "file": "firebase-sdk1.json",
+      "sha256": "6d0ecb545b7c3ed5216205d893e2cee62add67ef2fde2af84ab6de6e8370033e",
+      "parentPassed": false
+    },
+    "firebase-sdk2": {
+      "file": "firebase-sdk2.json",
+      "sha256": "88bdeb9333f24ced3ef75aecee078e3cdaf55aae8555079a092e5922b08f2a28",
+      "parentPassed": true
+    },
+    "rotationRecovery": {
+      "file": "landscape1-rotation-recovery.json",
+      "sha256": "16e6b1124903e254cf31f91a5c8afd03aa6a741990472bbf0e3bf47da5b0ef3f",
+      "productMethodsCounted": 0
+    },
+    "localSdkProxyRecovery": {
+      "file": "firebase-sdk2-network-proxy-restoration-only.json",
+      "sha256": "52dbe78340ae1ce78e798293f2118afc0eaa48f55512ca8336011bd9b153db77"
+    },
+    "localSdkBackendCleanup": {
+      "file": "sdk-backend1-cleanup.json",
+      "sha256": "46c1e736ceef7ca01ca79c6ac86c85ac7533c05a4725b0328e67ef59cf7bba33"
+    }
+  },
+  "originalPhaseFailuresPreserved": true,
+  "rotationRecoveryIsSeparateRestorationOnly": true,
+  "intentionalManagedProxyRefreshPreserved": true,
+  "completedAtUtc": "2026-11-15T18:18:37.190928+00:00"
+}

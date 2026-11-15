@@ -4,6 +4,19 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class RunnerPresenceTest {
+    @Test fun savedConsentFollowsOnlyALiveRunningRecorderAndItsOwnAccount() {
+        val run = ActiveRun(id = "current-run", phase = RunPhase.RUNNING)
+        assertTrue(preparedSharingMayFollow(run, true, "current-run", "owner", "owner"))
+        for (phase in listOf(RunPhase.IDLE, RunPhase.PAUSED, RunPhase.RECOVERY))
+            assertFalse(preparedSharingMayFollow(run.copy(phase = phase), true, "current-run", "owner", "owner"))
+        assertFalse(preparedSharingMayFollow(run, false, "current-run", "owner", "owner"))
+        assertFalse(preparedSharingMayFollow(run, true, "stale-run", "owner", "owner"))
+        assertFalse(preparedSharingMayFollow(run, true, null, "owner", "owner"))
+        assertFalse(preparedSharingMayFollow(run, true, "current-run", "different-owner", "owner"))
+        assertFalse(preparedSharingMayFollow(run, true, "current-run", "", ""))
+        assertFalse(preparedSharingMayFollow(run, true, "current-run", "owner", ""))
+    }
+
     @Test fun publicLocationUsesOnlyRoundedCellsIncludingNegativeLatitudes() {
         val position = RunnerPresenceCell.from(37.566534, 126.978134)
         assertEquals(37567, position.latitudeE3); assertEquals(126978, position.longitudeE3)

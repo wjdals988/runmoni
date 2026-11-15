@@ -57,7 +57,7 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
         // status. Keep the map usable; the enclosing column remains scrollable.
         val mapHeight = if (LocalDensity.current.fontScale >= 1.8f) 360.dp else 280.dp
         Column(Modifier.fillMaxSize().then(if (constrained) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-            .padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            .padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
             Row(Modifier.fillMaxWidth().padding(horizontal = pageGutter(), vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -77,9 +77,9 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                 publicRunners.isEmpty() -> "이 화면에 표시할 공유 위치가 없어요."
                 else -> "위치를 공유한 러너 ${publicRunners.size}명 · 약 100m 단위"
             }
-            Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash)
-                .padding(horizontal = pageGutter(), vertical = 16.dp).testTag("runner_discovery_details"),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+                .padding(horizontal = pageGutter(), vertical = 20.dp).testTag("runner_discovery_details"),
+                verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 if (state.discovery.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
                 Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
                     color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
@@ -94,13 +94,17 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                         Text("내 위치")
                     }
                 }, second = { m ->
-                    OutlinedButton(onClick = { if (!state.signedIn) onProfile() else actions.setPublicLocation(!state.publicLocation) },
+                    OutlinedButton(onClick = { if (!state.signedIn) onProfile() else actions.setPublicLocation(!(state.sharingPreferenceEnabled || state.publicLocation)) },
                         enabled = !state.sharing.busy,
                         shape = RunmoniShapes.Action,
                         modifier = m.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
-                        Text(if (!state.signedIn) "프로필 연결" else if (state.sharing.busy) "연결 중…" else if (state.publicLocation) "공유 끄기" else "내 위치 공유")
+                        Text(if (!state.signedIn) "프로필 연결" else if (state.sharing.busy) "연결 중…" else if (state.sharingPreferenceEnabled || state.publicLocation) "공유 설정 끄기" else "러닝 위치 공유 설정")
                     }
                 })
+                if (state.sharingPreferenceEnabled && !state.publicLocation) Text(
+                    "공유 준비됨 · 러닝을 시작하면 약 100m 단위 위치를 공유해요.",
+                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary,
+                    modifier = Modifier.testTag("runner_sharing_prepared"))
                 state.sharing.error?.let { Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodySmall) }
             }
         }
@@ -116,7 +120,7 @@ internal fun RunnerSharingConsent(state: AppState, actions: AppActions) {
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text("러닝 중 닉네임·미니미와 약 100m 단위 위치를 다른 연결 사용자에게 보여줘요. 정확한 GPS 경로와 포인트는 공유하지 않아요.")
-                Text("일시정지·종료하면 공유를 해제해요. 연결이 끊기면 이전 위치가 최장 75초 남을 수 있어요.")
+                Text("이 계정의 선택을 기억해요. 다음 러닝을 시작하면 공유하고, 일시정지·종료하면 위치 전송을 멈춰요. 연결이 끊기면 이전 위치가 최장 75초 남을 수 있어요.")
                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp)
                     .toggleable(adult, role = Role.Checkbox, onValueChange = { adult = it }),
                     verticalAlignment = Alignment.CenterVertically) {
@@ -126,6 +130,6 @@ internal fun RunnerSharingConsent(state: AppState, actions: AppActions) {
             }
         }, confirmButton = {
             TextButton(onClick = { actions.confirmPublicLocation(runId, adult, requestNonce) }, enabled = adult,
-                modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_runner_sharing")) { Text("공유하기") }
+                modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_runner_sharing")) { Text(if (runId == com.runmoni.app.data.RunnerSharingPreferenceStore.NEXT_RUN) "설정 저장" else "공유 시작") }
         }, dismissButton = { TextButton(onClick = { actions.dismissSharingConsent(requestNonce) }, modifier = Modifier.heightIn(min = 48.dp)) { Text("취소") } })
 }

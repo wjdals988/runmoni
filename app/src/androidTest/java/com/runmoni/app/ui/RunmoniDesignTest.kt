@@ -62,8 +62,18 @@ abstract class RunmoniDesignTestBase {
                 val target = InstrumentationRegistry.getInstrumentation().targetContext
                 val directory = File(target.cacheDir, "design-review").apply { mkdirs() }
                 val diagnostic = File.createTempFile("minimi-timeout-${Integer.toHexString(context.hashCode())}-", ".txt", directory)
-                val report = buildString {
+                // Collect thread identity BEFORE another semantics/idle query.
+                // A drawing exception can make that secondary query fail again.
+                // This is failure-only evidence; the original failure is rethrown.
+                diagnostic.writeText(buildString {
                     appendLine("case=$context")
+                    appendLine("failureType=${failure.javaClass.name}")
+                    Thread.getAllStackTraces().entries.sortedBy { it.key.id }.take(128).forEach { (thread, stack) ->
+                        appendLine("threadId=${thread.id} name=${thread.name.take(160)} state=${thread.state}")
+                        stack.take(24).forEach { appendLine(it.toString().take(512)) }
+                    }
+                })
+                val layoutReport = runCatching { buildString {
                     val loading = compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true)
                     loading.fetchSemanticsNodes().forEachIndexed { index, node ->
                         appendLine("loading[$index] id=${node.id} full=${node.positionInRoot}+${node.size} clipped=${node.boundsInRoot}")
@@ -74,14 +84,8 @@ abstract class RunmoniDesignTestBase {
                             parent = parent.parent
                         }
                     }
-                    Thread.getAllStackTraces().filter { (thread, _) ->
-                        thread.name == "main" || thread.name.startsWith("DefaultDispatcher")
-                    }.forEach { (thread, stack) ->
-                        appendLine("thread=${thread.name} state=${thread.state}")
-                        stack.take(24).forEach { appendLine(it.toString()) }
-                    }
-                }
-                diagnostic.writeText(report)
+                } }.getOrElse { "semanticsDiagnosticFailure=${it.javaClass.name}\n" }
+                diagnostic.appendText(layoutReport)
                 runCatching {
                     UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
                         .takeScreenshot(File(directory, diagnostic.nameWithoutExtension + ".png"))
@@ -222,7 +226,10 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
             compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         }
         compose.onNodeWithTag("closet_slot_costume").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_costume_1").assertDoesNotExist()
+        compose.onNodeWithTag("closet_costume_2").assertDoesNotExist()
+        compose.onNodeWithTag("closet_costume_3").assertDoesNotExist()
+        for (costume in listOf(1, 4, 5))
+            compose.onNodeWithTag("closet_costume_$costume").performScrollTo().assertIsEnabled()
         compose.onNodeWithTag("closet_costume_0").performScrollTo().assertIsEnabled()
         compose.runOnIdle { assertEquals(0, state.value.profile.avatar.costume) }
         compose.onNodeWithTag("closet_slot_top").performScrollTo().performClick()

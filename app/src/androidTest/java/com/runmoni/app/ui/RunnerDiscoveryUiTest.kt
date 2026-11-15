@@ -144,6 +144,29 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         }
     }
 
+    @Test fun beforeRunningConsentIsExplicitAndPreparedStateIsNotLivePresence() {
+        val state = mutableStateOf(AppState(signedIn = true, communityUid = "self",
+            sharingConsentRunId = com.runmoni.app.data.RunnerSharingPreferenceStore.NEXT_RUN,
+            sharingConsentNonce = 42))
+        val actions = Actions(state)
+        compose.setContent { ViewportBox(Viewport(360, 1f)) { RunmoniTheme {
+            RunnerDiscoveryScreen(state.value, actions, onProfile = {})
+            RunnerSharingConsent(state.value, actions)
+        } } }
+        compose.onNodeWithTag("confirm_runner_sharing").assertTextContains("설정 저장").assertIsNotEnabled()
+        compose.onNode(isToggleable()).performClick()
+        compose.onNodeWithTag("confirm_runner_sharing").assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(listOf(Triple(com.runmoni.app.data.RunnerSharingPreferenceStore.NEXT_RUN, true, 42L)), actions.confirmations)
+            assertTrue(actions.sharingRequests.isEmpty())
+            state.value = state.value.copy(sharingConsentRunId = null, sharingPreferenceEnabled = true)
+        }
+        compose.onNodeWithTag("runner_sharing_prepared").assertIsDisplayed()
+        compose.runOnIdle { assertFalse(state.value.publicLocation); assertEquals(RunPhase.IDLE, state.value.activeRun.phase) }
+        compose.onNodeWithTag("toggle_runner_sharing").performClick()
+        compose.runOnIdle { assertEquals(listOf(false), actions.sharingRequests) }
+    }
+
     @Test fun mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText() {
         val viewport = mutableStateOf(Viewport())
         val state = mutableStateOf(AppState())

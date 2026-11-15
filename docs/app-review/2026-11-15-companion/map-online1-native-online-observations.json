@@ -1,0 +1,34 @@
+{
+  "syntheticFixture": true,
+  "actualMainActivity": false,
+  "actualGps": false,
+  "firebaseUsed": false,
+  "profileOrRecordingModified": false,
+  "styleUri": "https:\/\/tiles.openfreemap.org\/styles\/liberty",
+  "productionFactoryAndTransportUsed": true,
+  "httpCacheClearedOrWarmupForced": false,
+  "freshHttpFetchForEveryResourceClaimed": false,
+  "observationBudgetMillis": 120000,
+  "providerSlaClaimed": false,
+  "routePointCount": 4,
+  "routeSegmentCount": 2,
+  "runnerCount": 1,
+  "mapViewConstructions": 1,
+  "completed": false,
+  "failureClass": "java.lang.AssertionError",
+  "nativeFailure": "STYLE",
+  "stages": [
+    {
+      "stage": "production-pane-created",
+      "elapsedMillis": 3881,
+      "fullyRenderedCallbacks": 0,
+      "cameraIdleCallbacks": 2,
+      "gestureStartCallbacks": 0
+    },
+    {
+      "stage": "fully-rendered-public-style-and-own-overlays",
+      "conditionSatisfied": false,
+      "elapsedMillis": 5331
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.RemoteViews
 import android.widget.TextView
 import com.runmoni.app.MainActivity
@@ -52,6 +53,8 @@ internal object RunWidgetViews {
         if (widthDp <= 0 || heightDp <= 0 || Looper.myLooper() != Looper.getMainLooper())
             return iconOnly(context, snapshot, live)
         val candidates = sequence {
+            if (widthDp >= 240 && heightDp <= 180 && RunWidgetContent.from(snapshot, live).control != null)
+                yield(populate(context, snapshot, live, R.layout.run_widget_wide, compact = true, iconControls = true))
             yield(create(context, snapshot, live, minimal = false))
             yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true))
             if (RunWidgetContent.from(snapshot, live).control != null) {
@@ -68,6 +71,9 @@ internal object RunWidgetViews {
             yield(create(context, snapshot, live, minimal = true).apply {
                 setViewVisibility(R.id.run_widget_title, View.GONE)
                 setViewVisibility(R.id.run_widget_footer, View.GONE)
+                // Retain the running cue when enlarged text leaves room only
+                // for a short app action, rather than an empty branded panel.
+                setViewVisibility(R.id.run_widget_brand, View.GONE)
                 setTextViewText(R.id.run_widget_open, "열기")
             })
         }
@@ -87,7 +93,7 @@ internal object RunWidgetViews {
             val rect = Rect().also { view.getDrawingRect(it); root.offsetDescendantRectToMyCoords(view, it) }
             if (rect.left < 0 || rect.top < 0 || rect.right > width || rect.bottom > height) return false
             val minimumTarget = (48 * density).roundToInt()
-            if (view is Button && (view.width < minimumTarget || view.height < minimumTarget)) return false
+            if ((view is Button || view is ImageButton) && (view.width < minimumTarget || view.height < minimumTarget)) return false
             if (view is TextView && view.text.isNotEmpty()) {
                 val layout = view.layout ?: return false
                 val textWidth = view.width - view.compoundPaddingLeft - view.compoundPaddingRight
@@ -138,11 +144,12 @@ internal object RunWidgetViews {
         }
 
     private fun populate(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, layout: Int,
-                         compact: Boolean, minimal: Boolean = false): RemoteViews {
+                         compact: Boolean, minimal: Boolean = false, iconControls: Boolean = false): RemoteViews {
         val content = RunWidgetContent.from(snapshot, live)
         val idle = isIdle(snapshot)
         val views = RemoteViews(context.packageName, layout)
         val open = open(context, snapshot)
+        views.setViewVisibility(R.id.run_widget_identity, if (!compact || minimal || idle) View.VISIBLE else View.GONE)
         views.setTextViewText(R.id.run_widget_title, if (!compact) content.title else when {
             snapshot?.phase == RunPhase.RECOVERY -> "중단된 러닝"
             content.stale -> "마지막 러닝 정보"
@@ -157,6 +164,7 @@ internal object RunWidgetViews {
         views.setContentDescription(R.id.run_widget_root, description(content, footer, idle))
         views.setOnClickPendingIntent(R.id.run_widget_root, open)
         views.setOnClickPendingIntent(R.id.run_widget_open, open)
+        views.setContentDescription(R.id.run_widget_open, if (idle) "런모니 앱 열기" else "앱에서 러닝 확인")
         views.setTextViewText(R.id.run_widget_open, when {
             minimal -> "앱 열기"
             idle -> "런모니 열기"
@@ -177,8 +185,12 @@ internal object RunWidgetViews {
             views.setViewVisibility(R.id.run_widget_open, if (controls) View.GONE else View.VISIBLE)
             if (controls) {
                 val pause = content.control == RunWidgetControl.PAUSE
-                views.setTextViewText(R.id.run_widget_control, if (pause) "멈춤" else "재개")
+                if (iconControls) views.setImageViewResource(R.id.run_widget_control,
+                    if (pause) R.drawable.run_widget_pause_icon else R.drawable.run_widget_resume_icon)
+                else views.setTextViewText(R.id.run_widget_control, if (pause) "멈춤" else "재개")
                 views.setContentDescription(R.id.run_widget_control, if (pause) "러닝 일시정지" else "러닝 재개")
+                if (!compact) views.setTextViewCompoundDrawablesRelative(R.id.run_widget_control,
+                    if (pause) R.drawable.run_widget_pause_icon else R.drawable.run_widget_resume_icon, 0, 0, 0)
                 views.setOnClickPendingIntent(R.id.run_widget_control, control(context, snapshot!!.runId, content.control!!))
                 views.setOnClickPendingIntent(R.id.run_widget_finish, RunNotifications.activity(context, snapshot.runId, true))
             }

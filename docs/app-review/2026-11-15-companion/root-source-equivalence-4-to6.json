@@ -1,0 +1,134 @@
+{
+  "rootReviewed": true,
+  "scopeRetentionApproved": true,
+  "reviewNotes": {
+    "file": "INPUT5_TO_INPUT6_VALIDATION_SCOPE_REVIEW.md",
+    "sha256": "46cea7d6b4ff33d74bd539ca103e941702f2b434e26adcd55fd89a9122ab18da"
+  },
+  "fromBinary": {
+    "file": "binary-build4.json",
+    "sha256": "ec5003bacb11b4bf7929a783f351723101307e7ba9f1368c496678d0528e183c"
+  },
+  "toBinary": {
+    "file": "binary-build6.json",
+    "sha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f"
+  },
+  "proofKeys": [
+    "input4-default",
+    "input4-firebase",
+    "input4-landscape"
+  ],
+  "includedGroups": [
+    {
+      "proof": "input4-default",
+      "group": "closet-navigation"
+    },
+    {
+      "proof": "input4-default",
+      "group": "widget-measurement"
+    },
+    {
+      "proof": "input4-default",
+      "group": "profile-local"
+    },
+    {
+      "proof": "input4-default",
+      "group": "sharing-preferences"
+    },
+    {
+      "proof": "input4-firebase",
+      "group": "firebase-demo-profile"
+    },
+    {
+      "proof": "input4-landscape",
+      "group": "community-return-scroll"
+    }
+  ],
+  "exactSourceMapDelta": {
+    "productSources": {
+      "app/src/main/java/com/runmoni/app/ui/MapLibreMapPane.kt": {
+        "before": "31d564198fbd87f33b251d8e37895cecec71f9936fff4de1f9fb449aaf655b40",
+        "after": "b5ea1f0eafa5fbda8df770ef49f6c0d15be3978966ebc4f1054c2eab7d1c42fd"
+      },
+      "app/src/main/java/com/runmoni/app/ui/RunmoniDestinations.kt": {
+        "before": "6620d599e9b97d5b34681d18f6021a4b9d856d9b26b3ed434acc5d3adf93da3c",
+        "after": "5f47a1cfeadf6a96eb670807c174420f90bdf176f80f7ff1b69ade3e0928d416"
+      }
+    },
+    "testSources": {
+      "app/src/androidTest/java/com/runmoni/app/ui/NativeVectorMapOnlineUiTest.kt": {
+        "before": "cdc96c7e94585c045ec33dda4e926df8973bd1d38a6742975b2a13f6a1d41489",
+        "after": "4ff6bcab1cb4d00b1a867c900175d046c8837f9607419cbb30fccc01d5967738"
+      }
+    },
+    "resources": {},
+    "rendererAssets": {},
+    "approvedSourceCopies": {},
+    "configurationSources": {}
+  },
+  "unaffectedRetainedGroupRationale": [
+    {
+      "proof": "input4-default",
+      "group": "closet-navigation",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input4-default",
+      "group": "widget-measurement",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input4-default",
+      "group": "profile-local",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input4-default",
+      "group": "sharing-preferences",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input4-firebase",
+      "group": "firebase-demo-profile",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    },
+    {
+      "proof": "input4-landscape",
+      "group": "community-return-scroll",
+      "reason": "Changed native runner image lifecycle, flat map policy and the separate online pixel observer are outside the inert-raster, direct data or widget fixture path exercised by this group. Source4 also differs in Home large-font decorative geometry only; this group does not assert that Home decoration. Concrete tests and exercised contract remain unchanged as reviewed."
+    }
+  ],
+  "affectedGroupsRerun": [
+    {
+      "proof": "input5-default",
+      "group": "screens"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-form-pages"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-large-text"
+    },
+    {
+      "proof": "input5-native",
+      "group": "native-share-font1"
+    },
+    {
+      "proof": "input6-sdk",
+      "group": "native-map-sdk"
+    },
+    {
+      "proof": "input6-online",
+      "group": "native-online-map"
+    }
+  ],
+  "additionalReviewReferences": [
+    {
+      "file": "INPUT3_TO_INPUT4_VALIDATION_SCOPE_REVIEW.md",
+      "sha256": "10660c66c1ccd9c6551ce807f8485b855c74b36df98fc41be2d11973f62dea64"
+    }
+  ],
+  "singleFinalApkExecutionClaimed": false
+}

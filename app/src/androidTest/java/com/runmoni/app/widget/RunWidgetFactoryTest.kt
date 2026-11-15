@@ -52,8 +52,8 @@ class RunWidgetFactoryTest {
             view = (if (minimal) RunWidgetViews.forSize(display, state, live, 128, 140)
                 else RunWidgetViews.create(display, state, live, minimal = false)).apply(display, null)
             val density = display.resources.displayMetrics.density
-            view.measure(View.MeasureSpec.makeMeasureSpec(((if (minimal) 128 else 180) * density).toInt(), View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(((if (minimal) 140 else 200) * density).toInt(), View.MeasureSpec.AT_MOST))
+            view.measure(View.MeasureSpec.makeMeasureSpec(((if (minimal) 128 else 256) * density).toInt(), View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(((if (minimal) 140 else 220) * density).toInt(), View.MeasureSpec.AT_MOST))
             view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         }
         // The idle open action has a shared identity used by a real pinned widget.
@@ -102,7 +102,8 @@ class RunWidgetFactoryTest {
         val distance = running.findViewById<TextView>(R.id.run_widget_distance)
         val duration = running.findViewById<TextView>(R.id.run_widget_duration)
         val speed = running.findViewById<TextView>(R.id.run_widget_speed)
-        assertTrue("Distance remains the primary value", distance.textSize > duration.textSize)
+        assertEquals("Distance and time are equally legible, rather than one oversized KPI", distance.textSize, duration.textSize, .5f)
+        assertTrue("Both recorded values retain readable system-scaled type", duration.textSize >= 20 * duration.resources.displayMetrics.scaledDensity)
         assertTrue("Secondary metrics keep a different weight", duration.textSize > speed.textSize)
         assertEquals("러닝 시간 01:15", duration.contentDescription)
         val surface = context.getColor(R.color.run_widget_surface)
@@ -148,7 +149,10 @@ class RunWidgetFactoryTest {
         val view = inflate(snapshot(), live = true, minimal = true, fontScale = 2f)
         assertNull(view.findViewById<View>(R.id.run_widget_control))
         val button = view.findViewById<Button>(R.id.run_widget_open)
-        assertEquals("앱 열기", button.text.toString())
+        assertEquals("열기", button.text.toString())
+        assertEquals("The shortened visual label keeps a complete accessible action", "앱에서 러닝 확인", button.contentDescription)
+        assertEquals("The short action retains the app's running cue", View.VISIBLE,
+            view.findViewById<View>(R.id.run_widget_brand_icon).visibility)
         assertTrue(button.isClickable)
         assertTrue(button.measuredHeight >= 48 * context.resources.displayMetrics.density)
         assertTrue(button.measuredWidth >= 48 * context.resources.displayMetrics.density)
@@ -195,7 +199,8 @@ class RunWidgetFactoryTest {
             // 112x124 also represents a 128x140 cell with the common 8dp
             // launcher margins removed. The padding-specific test below uses
             // this platform's actual value rather than assuming all hosts do.
-            val sizes = listOf(96 to 96, 112 to 124, 128 to 140, 160 to 156, 180 to 156, 256 to 220)
+            val sizes = listOf(96 to 96, 112 to 124, 128 to 140, 160 to 156, 180 to 156, 256 to 220,
+                320 to 128, 360 to 156)
             for ((state, live) in states) for ((widthDp, heightDp) in sizes) for (scale in listOf(1f, 1.3f, 1.5f, 2f)) {
                 val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = scale })
                 val density = display.resources.displayMetrics.density
@@ -245,6 +250,7 @@ class RunWidgetFactoryTest {
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
                 assertFits(root, pixelsWide, pixelsHigh, density, "actual launcher padding, font=$scale")
                 assertTrue(root.findViewById<View>(R.id.run_widget_open).isClickable)
+                assertEquals("앱에서 러닝 확인", root.findViewById<View>(R.id.run_widget_open).contentDescription)
                 assertTrue(root.contentDescription.toString().contains("01:15"))
             }
             for ((width, height) in listOf(64 to 48, 0 to 0)) {
@@ -261,6 +267,70 @@ class RunWidgetFactoryTest {
                 assertTrue(root.contentDescription.toString().contains("1.23 km"))
             }
         }
+    }
+
+    @Test fun idlePanelUsesItsContentHeightAndRetainsIdentityWithoutEmptyStatistics() {
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            for (scale in listOf(1f, 2f)) {
+                val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = scale })
+                val density = display.resources.displayMetrics.density
+                val width = (256 * density).toInt()
+                val height = (320 * density).toInt()
+                val root = RunWidgetViews.forSize(display, null, false, 256, 320)
+                    .apply(display, FrameLayout(display)) as ViewGroup
+                root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, width, height)
+                assertFits(root, width, height, density, "idle content panel font=$scale")
+                val panel = root.findViewById<View>(R.id.run_widget_panel)
+                assertTrue("An idle widget must not stretch its paper panel through a tall empty host", panel.height < height - 24 * density)
+                val panelBounds = Rect().also { panel.getDrawingRect(it); root.offsetDescendantRectToMyCoords(panel, it) }
+                assertTrue("Unused host height is balanced around the content panel",
+                    kotlin.math.abs(panelBounds.top - (height - panelBounds.bottom)) <= 1)
+                assertEquals(View.VISIBLE, root.findViewById<View>(R.id.run_widget_identity).visibility)
+                assertEquals(View.VISIBLE, root.findViewById<View>(R.id.run_widget_brand_icon).visibility)
+                assertEquals("runmoni", root.findViewById<TextView>(R.id.run_widget_brand).text.toString())
+                assertTrue(root.findViewById<View>(R.id.run_widget_open).isClickable)
+                assertEquals("런모니 앱 열기", root.findViewById<View>(R.id.run_widget_open).contentDescription)
+                assertTrue(root.findViewById<View>(R.id.run_widget_metrics)?.visibility != View.VISIBLE)
+                assertFalse("Idle is not an unfinished live run", root.contentDescription.toString().contains("—"))
+            }
+        }
+        val idle = snapshot(run.copy(phase = RunPhase.IDLE))
+        rememberIntents(idle)
+        captureFixture("widget-refresh-idle-tall-256x320-fixture", idle, false, 256, 320)
+    }
+
+    @Test fun wideShortLiveWidgetKeepsTwoMetricsAndSeparateNamedIconControls() {
+        val running = snapshot()
+        val paused = snapshot(run.copy(phase = RunPhase.PAUSED))
+        val stale = running.copy()
+        listOf(running, paused, stale).forEach(::rememberIntents)
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = 1f })
+            val density = display.resources.displayMetrics.density
+            val width = (320 * density).toInt()
+            val height = (128 * density).toInt()
+            for (state in listOf(running, paused)) {
+                val views = RunWidgetViews.forSize(display, state, true, 320, 128)
+                assertEquals("A short wide live host uses its horizontal space", R.layout.run_widget_wide, views.layoutId)
+                val root = views.apply(display, FrameLayout(display)) as ViewGroup
+                root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, width, height)
+                assertFits(root, width, height, density, "wide live ${state.phase}")
+                assertEquals("1.23 km", root.findViewById<TextView>(R.id.run_widget_distance).text.toString())
+                assertEquals("01:15", root.findViewById<TextView>(R.id.run_widget_duration).text.toString())
+                val control = root.findViewById<ImageButton>(R.id.run_widget_control)
+                val finish = root.findViewById<ImageButton>(R.id.run_widget_finish)
+                assertTrue(control.isClickable && finish.isClickable)
+                assertEquals(if (state.phase == RunPhase.RUNNING) "러닝 일시정지" else "러닝 재개", control.contentDescription)
+                assertEquals("러닝 종료 확인창 열기", finish.contentDescription)
+            }
+            assertNotEquals("Cached data must not gain live controls from the wide layout",
+                R.layout.run_widget_wide, RunWidgetViews.forSize(display, stale, false, 320, 128).layoutId)
+        }
+        captureFixture("widget-refresh-running-wide-320x128-fixture", running, true, 320, 128)
     }
 
     /** Native RemoteViews draw with synthetic metrics. Not a launcher/MainActivity screenshot. */

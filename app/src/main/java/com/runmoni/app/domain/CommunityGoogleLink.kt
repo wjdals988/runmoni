@@ -14,8 +14,9 @@ internal class CommunityCredentialConflict : Exception()
 
 /** Recognizes an existing auth candidate, not proof that its server profile exists. */
 internal fun acceptedStoredCommunityUid(uid: String, anonymous: Boolean, googleLinked: Boolean, verifiedGoogleUid: String,
-    pendingAnonymousConnect: Boolean = false): String =
-    uid.takeIf { it.isNotBlank() && (anonymous && !googleLinked && !pendingAnonymousConnect || googleLinked && it == verifiedGoogleUid) }.orEmpty()
+    pendingAnonymousConnect: Boolean = false, verifiedProfileUid: String = ""): String =
+    uid.takeIf { it.isNotBlank() && (anonymous && !googleLinked && !pendingAnonymousConnect ||
+        googleLinked && (it == verifiedGoogleUid || it == verifiedProfileUid)) }.orEmpty()
 
 /** An interrupted reservation retains its own anonymous auth UID for an explicit retry. */
 internal fun pendingStoredCommunityUid(uid: String, anonymous: Boolean, googleLinked: Boolean, pendingAnonymousConnect: Boolean): String =

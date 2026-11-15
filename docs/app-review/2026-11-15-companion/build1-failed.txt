@@ -1,0 +1,60 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:kspDebugKotlin
+
+> Task :app:compileDebugKotlin
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/AppInformation.kt:251:43 'val Icons.Outlined.OpenInNew: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.OpenInNew.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt:638:236 'val Icons.Outlined.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.ArrowForward.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/CommunityRooms.kt:161:49 'val Icons.Outlined.ArrowBack: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.ArrowBack.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/DeviceChecksScreen.kt:41:49 'val Icons.Outlined.FactCheck: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.FactCheck.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniChat.kt:162:319 'val Icons.Outlined.Send: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.Send.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt:87:60 'val Icons.Outlined.DirectionsRun: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.DirectionsRun.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt:133:88 'val Icons.Outlined.FactCheck: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.FactCheck.
+
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:kspDebugUnitTestKotlin
+
+> Task :app:compileDebugUnitTestKotlin FAILED
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:10:17 Unresolved reference 'image'.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:11:14 Unresolved reference 'imageio'.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:18:47 Unresolved reference 'BufferedImage'.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:19:77 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:19:92 Cannot infer type for this parameter. Please specify it explicitly.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:19:94 Unresolved reference 'ImageIO'.
+e: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:20:10 Unresolved reference 'getRGB'.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugUnitTestKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 49s
+22 actionable tasks: 7 executed, 15 up-to-date

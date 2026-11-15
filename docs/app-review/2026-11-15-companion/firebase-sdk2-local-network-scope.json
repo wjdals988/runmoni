@@ -1,0 +1,12 @@
+{
+  "startedAtUtc": "2026-11-15T18:15:31.907395+00:00",
+  "scope": "Owned API29 local demo Auth/Firestore only; no production requests intended",
+  "privateBeforeSha256": "16cbcbdbea91b71457c7bb7c9d4fc747d39854469382f2f4b9ae08dbe516501b",
+  "productionMapTestRunInsideScope": false,
+  "appSourceOrTlsChanged": false,
+  "completed": false,
+  "proxyRestoredExactly": false,
+  "executedDriver": "firebase-sdk2-local-network-executed.py",
+  "executedDriverSha256": "710370f7845a346f4a1e79262ed1cd9fbeae02695e5ce237b38019ca36375e84",
+  "localFixtureProxyTemporarilyDisabled": true
+}

@@ -1,3 +1,17 @@
+# 런모니 / Runmoni
+
+현재 공개 APK는 **0.6.0-dev/code28 개발 프리뷰**입니다. [다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.6.0-dev) · [대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 근거](docs/RELEASE_REVIEW_0.6.0_20261114.md). 실제 APK출처는 `9a572de8da88ef42bf740d9424b22c7fa14e17cb`이며 후속 문서 커밋과 구분합니다. 휴대폰·Google 로그인 성공은 별도 확인 대상입니다.
+
+0.7.0-dev/code29는 UI·위젯·동일UID 연결 유지·출발 전 약100m 공유·벡터 지도·원본 포즈의 세트 의복 개편 후보입니다. [새 검토](docs/app-review/2026-11-15-companion/README.md). 새 서명/게시가 확인되기 전에는 기존 다운로드를 대체하지 않습니다.
+
+후보 지도는 별도 지도 키 없이 MapLibre Native/OpenFreeMap을 사용하며, 지도 조회 영역은 지도 제공자에게 드러날 수 있습니다. 출처와 실패 시 재시도를 표시하고 무료공용 서비스의 가용성을 보장하지 않습니다. 정확한 GPS 원본/지갑은 기기 데이터이고 약100m 위치 공개는 별도 계정별 동의·실제 러닝 중 전송입니다.
+
+---
+
+## 이전 공개·개발 시점 기록
+
+아래 버전·지도/환경 설명은 당시 이력입니다. 현재 상태는 위 공개 링크와 새 검토 문서를 따릅니다.
+
 # 런모니 / Runmoni — 현재 공개0.3.9-dev
 
 현재 공개 APK는 **실기기 검증 전 개발 프리뷰0.3.9-dev(code21)**다. [구현 PR](https://github.com/wjdals988/runmoni/pull/39) · [APK](https://github.com/wjdals988/runmoni/releases/download/v0.3.9-dev/runmoni-0.3.9-dev.apk) · [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.3.9-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni) · [게시 검증](docs/RELEASE_REVIEW_0.3.9_20261110.md).

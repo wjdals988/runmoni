@@ -1,0 +1,8 @@
+
+com.runmoni.app.widget.RunWidgetFactoryTest:.........
+
+Time: 55.152
+
+OK (9 tests)
+
+

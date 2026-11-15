@@ -1,0 +1,1 @@
+direct-native-map-320-font2-height360-failure-fixture: waitMillis=32; timeoutMillis=120000

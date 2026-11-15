@@ -1,0 +1,380 @@
+{
+  "name": "native1",
+  "version": "0.7.0-dev",
+  "versionCode": 29,
+  "binaryReference": "binary-build4.json",
+  "reviewPhase": "native",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-15T17:33:07.561614+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 15,
+  "plannedMethodIdsFromCurrentSource": [
+    "com.runmoni.app.ui.ModalDismissNativeUiTest#informationCloseStaysInTheWindowAfterScrollingLargeContent",
+    "com.runmoni.app.ui.ModalDismissNativeUiTest#imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss",
+    "com.runmoni.app.ui.RunmoniDialogDesignTest#largeFontSettingsAndClosetKeepSingleCloseAndSelectableSlots",
+    "com.runmoni.app.ui.RunmoniDialogDesignTest#arrivingChatDoesNotMoveReadersAwayFromOlderMessages",
+    "com.runmoni.app.ui.RunmoniDialogDesignTest#largeLocationConsentRemainsScrollableWithoutEnablingSharing",
+    "com.runmoni.app.ui.RunmoniDialogDesignTest#nativePartyPickersAndStrictDateErrorRemainUsable",
+    "com.runmoni.app.ui.AppEntryNativeUiTest#bothChoicesRemainReachableAboveSystemNavigationAtLargeFont",
+    "com.runmoni.app.ui.AppInformationNativeTest#enlargedHeaderIndicatorStaysSeparateAndOpensTheUpdatePrompt",
+    "com.runmoni.app.ui.AppInformationNativeTest#largeAboutAndUpdateConfirmationRemainReadableAndScrollable",
+    "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest#genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory",
+    "com.runmoni.app.ui.ClosetNavigationNativeUiTest#largeSystemTextKeepsTheLastItemAndPaletteAboveSystemNavigation",
+    "com.runmoni.app.ui.RunningKitColorsNativeUiTest#actualLargeTextClosetKeepsPreviewAndAllSixColorActionsAccessible",
+    "com.runmoni.app.ui.RunRecordScreenNativeUiTest#nativeLargeTextKeepsLowerActionsReachableAndBackCancelsBeforeLeaving",
+    "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars",
+    "com.runmoni.app.ui.RunShareImeUiTest#normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize"
+  ],
+  "actualPassedProductMethods": 3,
+  "groups": [
+    {
+      "name": "native-form-pages",
+      "expected": 2,
+      "classes": [
+        "com.runmoni.app.ui.ModalDismissNativeUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native1-native-form-pages.txt",
+      "startedAtUtc": "2026-11-15T17:34:11.238193+00:00",
+      "actual": 2,
+      "rawSha256": "954d07524ea330855bd38fb49e7d7804acde783d88275146453843bc63ea42e5",
+      "elapsedSeconds": 64.25,
+      "finishedAtUtc": "2026-11-15T17:35:15.491999+00:00",
+      "minimiReadinessRaw": "native1-native-form-pages-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "5a42aaa2f1109841a3598fa529ef8bfdd4423c2e283e76e6f2290541427b254d",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "pageWindowGeometry": "native1-native-form-page-bounds.jsonl",
+      "pageWindowGeometrySha256": "195875112e898ffe9aacba00d6fc29a0d5c22d96b53f7bc4f35b75969aaec0da",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "native-large-text",
+      "expected": 12,
+      "classes": [
+        "com.runmoni.app.ui.RunmoniDialogDesignTest",
+        "com.runmoni.app.ui.AppEntryNativeUiTest",
+        "com.runmoni.app.ui.AppInformationNativeTest",
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest",
+        "com.runmoni.app.ui.ClosetNavigationNativeUiTest",
+        "com.runmoni.app.ui.RunningKitColorsNativeUiTest",
+        "com.runmoni.app.ui.RunRecordScreenNativeUiTest",
+        "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160\nOverride density: 240",
+        "fontScale": "2.0",
+        "native320Font2RequiredByClass": true
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native1-native-large-text.txt",
+      "startedAtUtc": "2026-11-15T17:35:59.376723+00:00",
+      "actual": null,
+      "rawSha256": "6bde3d7fbac27448ed601ba7bda6cf3d66beeb73928c4a4a4b55e0c630504d59",
+      "elapsedSeconds": 280.23,
+      "finishedAtUtc": "2026-11-15T17:40:39.605626+00:00",
+      "minimiReadinessRaw": "native1-native-large-text-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "83a2298ec44d899d540732beba030e8a5a963beea7a85854cc79511e2320536a",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "indicatorLayoutRaw": "native1-native-large-text-indicator-layout.jsonl",
+      "indicatorLayoutRawSha256": "b1a57df396336999da94ffc64b7f8ea52d0a433d87d16ad6c929d68f32219dd7",
+      "indicatorLayoutRecordCount": 3,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "native-share-font1",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.RunShareImeUiTest#normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "native1-native-share-font1.txt",
+      "startedAtUtc": "2026-11-15T17:41:12.779268+00:00",
+      "actual": 1,
+      "rawSha256": "4315b2ad9b0f9587fd899074d5eeee912d6239a1feb432f23b79f50fb69c1a33",
+      "elapsedSeconds": 50.99,
+      "finishedAtUtc": "2026-11-15T17:42:03.770427+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "native1-modal-about-close-native320-font2-fixture.png",
+      "sha256": "d70f0cd6ca9b0fee1c54d00899cbadb9484db5804688712119dcd7f0d90a608a",
+      "bytes": 35349,
+      "width": 480,
+      "height": 854,
+      "sourceGroup": "native-form-pages",
+      "sourceRaw": "native1-native-form-pages.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": true,
+      "nativeLandscape320ShortSideFont1HostFixtureFont1Group": false
+    },
+    {
+      "file": "native1-modal-ime-close-native320-font2-fixture.png",
+      "sha256": "6a55d10477c1030ab1d90595b653eea538d5729175aeae04ba642f22340a29b3",
+      "bytes": 45040,
+      "width": 480,
+      "height": 854,
+      "sourceGroup": "native-form-pages",
+      "sourceRaw": "native1-native-form-pages.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": true,
+      "nativeLandscape320ShortSideFont1HostFixtureFont1Group": false
+    },
+    {
+      "file": "native1-run-share-native480-font1-ime-caption-fixture.png",
+      "sha256": "b955543708b11093e276513e36b8776bea760378377e143ce0fbedb4a841a044",
+      "bytes": 38434,
+      "width": 480,
+      "height": 854,
+      "sourceGroup": "native-share-font1",
+      "sourceRaw": "native1-native-share-font1.txt",
+      "sourceKind": "API29 ComponentActivity screenshot/Compose-target fixture with synthetic controls; not MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont1HostFixtureFont1Group": false
+    }
+  ],
+  "executedDriver": "native1-executed-driver.py",
+  "executedDriverSha256": "026b8401a3160caa8a2f72743a4d74ab33bd8b1e49221c45909cf335e1aaa6e1",
+  "observerHelper": "native1-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA."
+  ],
+  "updatedAtUtc": "2026-11-15T17:42:32.091351+00:00",
+  "sourceFreezeReference": "source-freeze4.json",
+  "sourceFreezeSha256": "26ebe86bcf861395ee8e267976db51e8b5c5a4cec3180d53c0ce726d0aead629",
+  "onlineNativeBasemapVerified": false,
+  "syntheticOnlineNativeMapFixtureVerified": false,
+  "publicMapRequestsPermitted": false,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": false,
+  "binaryReferenceSha256": "ec5003bacb11b4bf7929a783f351723101307e7ba9f1368c496678d0528e183c",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "2958bbdd2fd152855271662d28c36d4651520eb58a85e7abbb45058d70ca4bc7"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "8ad1013979f1bbd37bd451c4c0de8758f27f5ffd946c7b0365477dc08fad0c3d"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "native1-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "native1-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "native1-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "failureType": "AssertionError",
+  "failure": "Every method in this independent fresh phase passed",
+  "privateFailureScreenshot": "native1-private-failure.png",
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 3,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-15T17:42:32.091337+00:00"
+}

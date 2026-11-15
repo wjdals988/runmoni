@@ -1,0 +1,28 @@
+
+com.runmoni.app.ui.RunmoniDialogDesignTest:....
+com.runmoni.app.ui.AppEntryNativeUiTest:.
+com.runmoni.app.ui.AppInformationNativeTest:..
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:
+Error in genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest):
+java.lang.AssertionError: Full Home CTA must precede bottom navigation: DpRect(left=20.0.dp, top=330.66666.dp, right=300.0.dp, bottom=404.66666.dp) / DpRect(left=0.0.dp, top=400.0.dp, right=58.0.dp, bottom=497.33334.dp)
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:165)
+
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+com.runmoni.app.ui.RunningKitColorsNativeUiTest:.
+com.runmoni.app.ui.RunRecordScreenNativeUiTest:.
+com.runmoni.app.ui.RunShareImeUiTest:.
+
+Time: 264.34
+There was 1 failure:
+1) genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(com.runmoni.app.ui.HierarchyClosetLargeTextUxTest)
+java.lang.AssertionError: Full Home CTA must precede bottom navigation: DpRect(left=20.0.dp, top=330.66666.dp, right=300.0.dp, bottom=404.66666.dp) / DpRect(left=0.0.dp, top=400.0.dp, right=58.0.dp, bottom=497.33334.dp)
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.HierarchyClosetLargeTextUxTest.genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory(HierarchyClosetUxTest.kt:165)
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+

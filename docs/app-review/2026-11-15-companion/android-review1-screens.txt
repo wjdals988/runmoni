@@ -1,0 +1,24 @@
+
+com.runmoni.app.ui.StudioRefreshUiTest:...
+com.runmoni.app.ui.RunmoniDesignTest:..
+com.runmoni.app.ui.AppEntryUiTest:....
+com.runmoni.app.ui.HomeWeatherLayoutTest:
+Error in valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText(com.runmoni.app.ui.HomeWeatherLayoutTest):
+java.lang.AssertionError: Avatar and weather must align at top at 320
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.HomeWeatherLayoutTest.valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText(HomeWeatherLayoutTest.kt:39)
+.
+
+Time: 225.193
+There was 1 failure:
+1) valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText(com.runmoni.app.ui.HomeWeatherLayoutTest)
+java.lang.AssertionError: Avatar and weather must align at top at 320
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.HomeWeatherLayoutTest.valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText(HomeWeatherLayoutTest.kt:39)
+
+FAILURES!!!
+Tests run: 11,  Failures: 1
+
+

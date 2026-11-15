@@ -12,4 +12,6 @@
     <string name="run_widget_open">앱에서 확인</string>
     <string name="run_widget_preview_footer">러닝 시작 준비</string>
     <string name="run_widget_duration_label">시간</string>
+    <string name="run_widget_brand">runmoni</string>
+    <string name="run_widget_distance_label">거리</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.runmoni.app.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.Modifier
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
@@ -16,6 +19,22 @@ import org.junit.Test
  * Firebase authentication, physical-device tests, or signed-release runtime evidence.
  */
 class StudioRefreshUiTest : RunmoniDesignTestBase() {
+    @Test fun runningDistanceIsVisibleBeforeAnyScrollAtLargeTextInAShortWindow() {
+        val state = mutableStateOf(AppState(activeRun = ActiveRun(id = "reading-fixture", phase = RunPhase.RUNNING,
+            distanceMeters = 5230.0, activeDurationMillis = 1_200_000L),
+            runPersistence = RunPersistenceState(initialized = true)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport(320, 2f)) {
+            Box(Modifier.height(520.dp)) { RunmoniApp(state.value, actions) }
+        } }
+        compose.onNodeWithTag("nav_run").performClick()
+        val distance = compose.onNodeWithTag("run_distance").assertIsDisplayed().fetchSemanticsNode()
+        val safe = compose.onNodeWithTag("running_scroll_viewport").fetchSemanticsNode().boundsInRoot
+        assertTrue("Whole primary value is visible without scrolling", distance.positionInRoot.y >= safe.top &&
+            distance.positionInRoot.y + distance.size.height <= safe.bottom)
+        fullyInside("pause_run", "run_control_bar")
+    }
+
     /** Check the full measured hit target, not only the already-clipped semantic rectangle. */
     private fun fullyInside(tag: String, scopeTag: String): SemanticsNodeInteraction {
         val action = compose.onNodeWithTag(tag).assertIsDisplayed()

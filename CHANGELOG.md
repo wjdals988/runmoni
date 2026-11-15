@@ -1,3 +1,62 @@
+# 2026-11-16 실제 Main·Launcher 최종 검토
+
+Main2 전체 동선과 새 원본7장(홈/실제 프로필 IME/산타 선택/기록/기본1:1·코랄 공유/탐색 지도), 독립 Launcher idle font1/font2 배치2장 및 Root 픽셀·개인정보 검토를 확인했다. 산타의 선택 상태와 저장값1, 실제 기존 마일리지·보유항목 유지도 확인했다. Main1 관측기 실패와 부분2장은 보존하며 최종 갤러리에 재사용하지 않는다.
+
+원래 DB/XML·프로필·계정·위젯 cache/ID와 관리한 환경 복원을 확인하고 전용 AVD5 PID58580을 정확히 종료했다. 전체OS/Launcher DB의 byte 일치, 실제 live 위젯 제어·휴대폰/Google·운영쓰기·공개서명APK 실행·야외 GPS·SNS 전달·사용자 시각 승인을 뜻하지 않는다. [Main 검토](docs/app-review/2026-11-15-companion/root-main-visual-review.json)·[위젯 검토](docs/app-review/2026-11-15-companion/root-launcher-widget-visual-review.json)·[종료](docs/app-review/2026-11-15-companion/session5-cleanup.json). 서명·게시·대시보드는 다음 단계다.
+
+# 2026-11-16 input6 — 실제 지도 의상 표시 검증
+
+네이티브 이미지 키를 runner/전체Avatar 값으로 구분하고, 비동기 의상이 준비될 때까지 마지막 등록 이미지를 유지한다. 이름/위치 변경은 같은 이미지를 재사용하며, 작은 runner source만 Sync로 적용한 뒤 미사용 이미지를 정리한다. 독립 검토의 실제 순서 지적을 반영했고 큰 GPS 경로의 비동기 갱신은 유지했다. 입체 건물은 숨겨 경로·이름·미니미 중심의 평면 지도로 정리했다.
+
+새 input6 JVM219(실패/오류/skip0), lint오류0·경고66, TEST APK pair 생성 성공. SDK4와 실제 native pixel1이 통과하고 Root가 두 원본을 직접 확인했다. 전환 전 전체42/48·의복17/24, 전환 후48/48·24/24 샘플이 고정 기준을 통과했다. source/SDK bitmap roundtrip mismatch는 두 번 모두0이다. 원래 데이터·관리한 환경을 복원했고 source6/driver/APK 불변을 확인했다. [시각 검토](docs/app-review/2026-11-15-companion/root-map-input6-visual-review.json).
+
+[Android 고유137개](docs/app-review/2026-11-15-companion/android-scope-summary.json)는 이번0.7의 서로 다른 입력3/4/5/6에서77/29/26/5개다. 변경 없는 concrete 경로를 실제6맵·inert 주입·raw 전체PASS로 검토해 보존했다. 같은 APK137개나 이전0.6 성공을 새 결과로 합산하지 않는다. 이전 자동PASS/시각거절·observer/환경 복원 실패·후속 복원을 그대로 남기며 GPU/캐시/fade/교체 순서 중 하나만을 과거 원인으로 확정하지 않는다.
+
+실제 Main1은 선택 탭 clickable=true 및 HorizontalScrollView class 가정으로 중단됐다. 실제 API29 AX는 selected=true/clickable=false의 View와 wide scrollable View였다. 원래 DB/XML/프로필/계정/소유 환경을 복원한 뒤 관측 대상을 교정했다. 앱/검사 APK와 기존 실제 target의 전체 bounds·클릭 가능 조건은 유지하고 새 Main2를 실행한다. 서명/게시·대시보드는 아직 후속 단계다.
+
+# 2026-11-16 input5 실제 화면 검토 — 지도 시각 판정 보류
+
+screens11와 native15가 같은 input5 APK에서 통과했고 원래 데이터·관리한 환경 복원을 확인했다. 실제320dp/font2 홈 버튼은 기존4.67dp 겹침에서15.33dp 간격으로 바뀌었다. [원본 전후 검토](docs/app-review/2026-11-15-companion/root-home-layout-before-after-review.json).
+
+온라인 지도3은 실제 핀치 확대·드래그·카메라 유지까지 자동 검사1개가 통과했지만, Root가 원본 두 장을 직접 보니 미니미를 식별할 수 없고 마커 라벨 위치에 검은 사각형이 보였다. 자동 성공을 시각적 승인으로 취급하지 않고 [별도 시각 거절](docs/app-review/2026-11-15-companion/map-online3-root-visual-review.json)을 남겼다. 원인은 미확정이다. 해당 시점의 provider metadata timeout/재시도와 소프트웨어 그래픽도 구분한다.
+
+AVD3 PID46971의 데이터·환경 복원과 정확 종료 후, 동일 APK·소스·검사·스타일을 유지한 채 지원되는 swangle 소프트웨어 GLES 방식으로 비교 중이다. 코드·TLS·키를 바꾸지 않았다. 캐시/외부 응답 시점까지 동일하다고 주장하지 않으며, 결과 전에는 새 지도 시각 검증이나 배포 완료를 표기하지 않는다.
+
+# 2026-11-16 input5 — 홈 큰 글씨 배치·지도 관측 교정
+
+- Home의 큰 글씨 분기만 미니미 폭56→48dp, 구간 간격24→16dp로 조정했다. 일반 글씨, 본문 크기와 버튼 최소 조작 영역은 유지한다. 실제 같은 조건에서 재검사하기 전에는 가림 해결로 확정하지 않는다.
+- 온라인 지도 검사에서 Map 완료와 Frame 완료 콜백을 분리했다. 초기 Map·Frame 완료, 실제 경로·지도 픽셀, 제스처·idle 증가, 확대0.10 초과와 카메라 유지 조건, 공유120초 예산은 유지한다. 제스처 영역과 실패 최종 카메라도 기록한다. input4의 부분 지도 표시를 전체 성공으로 바꾸지 않는다.
+- input5 새 JVM219개(실패/오류/skip0), lint 오류0·경고66, 로컬 TEST APK pair 생성 성공. lint 분석은 새로 실행됐으나 보고서 task가 이전 출력을 유지해 시각 가드가 중단했다. 보고서 task를 명시적으로 새로 실행한 뒤 최신 보고서로 집계했다. [binary-build5](docs/app-review/2026-11-15-companion/binary-build5.json).
+- 로컬 Firebase SDK2는3개 전체 통과했다. 첫 SDK1은 로컬 테스트 요청이 외부 프록시로 향해 실패했다. SDK2는 로컬 테스트 구간에서만 프록시를 임시 해제했고, 종료 때 빈 문자열 인자 처리 오류로 원래 설정 복원이 중단됐다. 별도 복원-only에서5개 설정의 정확 복원을 확인했다. 원문 미완료 상태와 후속 복원을 나누며 복원은 제품 검사0개다.
+- 원래 데이터·관리한 환경의 복원을 확인한 뒤 소유 AVD2 PID34317을 정확히 종료했다. input5 검사는 별도 전용 AVD3에서 진행한다. 설치 보조 도구의 이전 백업명 가드가 한 번 중단시켰고 새 백업명으로 고친 뒤 데이터 초기화 없이 교체 설치했다.
+
+# 2026-11-16 0.7 후보 — 실행 중 발견한 문제와 수정 범위
+
+- 소유자 Rules 게시 뒤 새 임시 익명 계정으로 닉네임 조회를 다시 확인했다. 기존 403 권한 거절이 404(예약 없음)로 바뀌었고 계정 삭제를 확인했다. 운영 프로필·닉네임 문서 쓰기는 수행하지 않았다.
+- input3 Android 검사에서 홈의 날씨/미니미 상단 정렬 실패를 확인하고 정렬을 수정했다. 옷장에서는 SnapshotStateObserver 스레드 예외가 한 번 발생했다. 원인은 미확정이며 input4에서 같은 검사 2개가 통과한 사실과 구분한다.
+- input4는 새 JVM 219개, lint 오류 0·경고 66, 일반 Android 36개를 통과했다. 큰 글씨 검사에서는 홈의 러닝 버튼이 하단 내비게이션과 4.67dp 겹쳤다. 해당 12개 그룹의 부분 성공은 채택하지 않고 수정 후 다시 검사한다.
+- 가로 화면 검사 1개는 통과했으나 API29 회전 정책 복원에 실패했다. 원문 실패 상태를 보존하고 별도 복원 작업으로 원래 정책·앱 데이터·관리한 환경의 복원을 확인했다. 복원 작업은 제품 검사 수에 포함하지 않는다.
+- 새 지도 SDK의 실패 처리·큰 글씨 배치 4개는 통과했다. 첫 공개 지도 온라인 검사는 STYLE 실패로 끝났다. 해당 실행의 SDK 로그에서 이전 클라우드 프록시 연결 실패를 확인했다. 호스트의 같은 스타일 HTTPS 조회는 200이었으며, 전용 AVD의 저장된 프록시만 현재 상속된 프록시로 갱신했다. TLS·제품 코드·방화벽은 변경하지 않았다. Android 재검사는 진행 중이며 첫 실패를 성공으로 바꾸지 않는다.
+
+[입력별 원문과 검토](docs/app-review/2026-11-15-companion/README.md). 아직 새 서명 APK·대시보드 배포는 완료하지 않았다.
+
+# 2026-11-16 새 입력3 로컬 빌드
+
+새JVM209(실패/오류/skip0), lint오류0·경고64, 로컬TEST app/test APK를 생성했다. [binary-build3](docs/app-review/2026-11-15-companion/binary-build3.json)과6개입력맵/source-freeze3로바인딩한다. Android·실기기·서명/게시 성공은 별도다.
+
+- Diagnostic compile1: MapLibre의존성의 Bitmap.DENSITY_DEFAULT 참조오류를DisplayMetrics상수로교정. Kotlin daemonstartup메시지의원인은미확정. 호스트v6시작과Gradle지시교차/정확한겹침미측정은보존한다.
+- input1: 제품Main컴파일은완료했으나 Android컴파일API에없는java.desktop 테스트import로49초후실패. 제품의존성을늘리거나 PNG를수정하지않고 호스트JUnit에서표준JDK ImageIO를reflection adapter로호출하도록교정했다.
+- input2: 새JVM209는통과했지만 lint의AndroidTestClasspath 캐시2개가없어30초후실패. 첫warm-helper의app self-variant 선택모호성실패도보존. 필요한fragment1.1.0/activity1.9.3 AAR만별도detachedconfiguration으로순차캐시(19초성공)했다.
+- input3: 위와동일제품입력의새freeze후JVM을실제로재실행하고전체로컬빌드성공(2분28초). 과거실패·209부분결과를중복합산하지않는다.
+
+# 2026-11-16 러닝 동반자 개편 후보
+
+frontend-design의 계획·비평·구현 절차로 [차분한6색·페이지별 여백 설계](design-system/runmoni/pages/companion-redesign.md)를 적용한다. 큰 어두운 지표 패널을 밝은 표면으로 바꾸고 위젯에 러닝/제어 아이콘과 자연 높이 패널을 적용한다. 긴 작업은 기존 독립 페이지를 유지하며 큰 글씨의 실제 조작 가능성을 새 실행에서 확인한다. 한국어는 시스템 Sans, 본문16/24·구역32dp·내부16dp·좌우24dp·최소48dp 조작을 기준으로 한다.
+
+온라인 프로필은 서버ACK의 정확한AuthUID receipt만 복원하며 캐시와 온라인 확인을 구분한다. 출발 전 위치 공유 선택을UID에 묶고 실제 RUNNING recorder만 전송한다. 기본 지도는 MapLibre12.0.1/OpenFreeMap으로 교체하며 출처·오류fallback·48dp 바깥조작과 기존 오프라인 fixture를 보존한다. 지도는 무료공용 as-is이며 서비스/data약관과SDK라이선스를 구분한다. awesome-design-md와 Aseprite는 참고 출처이고 실제 Aseprite 제작물로 표시하지 않는다.
+
+[새 검토 근거](docs/app-review/2026-11-15-companion/README.md). 후보0.7.0-dev/code29는 새 검증·서명·게시 전까지 공개0.6.0과 실제 APK출처9a572de8da88ef42bf740d9424b22c7fa14e17cb를 대체하지 않는다. 원본/58아이템ID/보유 데이터/기존 키를 유지하고 미승인 수영복·휴대폰·Google 성공·사용자 시각 승인을 추정하지 않는다.
+
 # 0.6.0-dev 페이지 이동·위젯 공개 — 2026-11-14 한국 시간
 
 <!-- verified-sport-pages-release-0.6.0-v1 -->

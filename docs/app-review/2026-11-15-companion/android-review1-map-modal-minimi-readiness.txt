@@ -1,0 +1,11 @@
+inert unavailable basemap/real route controls at320dp-font2: waitMillis=639; timeoutMillis=120000
+map-first discovery 320 / 1.0: waitMillis=43; timeoutMillis=120000
+map-first discovery 320 / 1.5: waitMillis=12; timeoutMillis=120000
+map-first discovery 320 / 2.0: waitMillis=13; timeoutMillis=120000
+map-first discovery 360 / 1.0: waitMillis=8; timeoutMillis=120000
+map-first discovery 360 / 1.5: waitMillis=4; timeoutMillis=120000
+map-first discovery 360 / 2.0: waitMillis=14; timeoutMillis=120000
+map-first discovery 411 / 1.0: waitMillis=7; timeoutMillis=120000
+map-first discovery 411 / 1.5: waitMillis=16; timeoutMillis=120000
+map-first discovery 411 / 2.0: waitMillis=4; timeoutMillis=120000
+in-tree form blank body and Back fixture: waitMillis=8; timeoutMillis=120000

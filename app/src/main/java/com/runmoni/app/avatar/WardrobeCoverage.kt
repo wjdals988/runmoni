@@ -9,6 +9,12 @@ import java.security.MessageDigest
 internal object WardrobeCoverage {
     const val VERSION = "approved-wardrobe-v1"
     private var frames: Array<IntArray>? = null
+    private var protectedHands: Array<IntArray>? = null
+    /** The same pinned, independently authored hand labels validated below. */
+    @Synchronized fun handProtection(context: Context, row: Int, frame: Int): IntArray {
+        if (protectedHands == null) this.frame(context, row, frame)
+        return requireNotNull(protectedHands)[row * 8 + frame]
+    }
     @Synchronized fun frame(context: Context, row: Int, frame: Int): IntArray {
         frames?.let { return it[row*8+frame] }
         val assets=context.applicationContext.assets
@@ -48,6 +54,7 @@ internal object WardrobeCoverage {
                 } }
                 require(sleeves>100) { "Incomplete wardrobe cell" }
             }
+            protectedHands=protected
             frames=result
             return result[row*8+frame]
         } finally { bitmap.recycle() }

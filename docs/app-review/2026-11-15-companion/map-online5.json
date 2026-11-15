@@ -1,0 +1,300 @@
+{
+  "name": "map-online5",
+  "version": "0.7.0-dev",
+  "versionCode": 29,
+  "binaryReference": "binary-build6.json",
+  "reviewPhase": "native-online",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-15T19:57:17.504121+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 1,
+  "plannedMethodIdsFromCurrentSource": [
+    "com.runmoni.app.ui.NativeVectorMapOnlineUiTest#publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera"
+  ],
+  "actualPassedProductMethods": 1,
+  "groups": [
+    {
+      "name": "native-online-map",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.NativeVectorMapOnlineUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "nativeBitmapDiagnosticTargetsCleared": [
+        "native-online-before-app-source-icon.png",
+        "native-online-before-expected-display.png",
+        "native-online-before-native-registered-icon.png",
+        "native-online-before-native-texture-private.png",
+        "native-online-after-app-source-icon.png",
+        "native-online-after-expected-display.png",
+        "native-online-after-native-registered-icon.png",
+        "native-online-after-native-texture-private.png"
+      ],
+      "nativeBitmapDiagnosticsAreNotSystemScreenshots": true,
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "map-online5-native-online-map.txt",
+      "startedAtUtc": "2026-11-15T19:58:06.956722+00:00",
+      "actual": 1,
+      "rawSha256": "060678cd85de5fc299a932f0b3b94dc5aa3e841b48af1a99f01d441f6a288a0a",
+      "elapsedSeconds": 76.18,
+      "finishedAtUtc": "2026-11-15T19:59:23.140707+00:00",
+      "originalProfilePreserved": true,
+      "onlineNativeObservationRaw": "map-online5-native-online-observations.json",
+      "onlineNativeObservationRawSha256": "47d514847bfa0cad063f040af7749e0714ea7cfd28c7e7f4734ba2ec9804f8d7",
+      "onlineNativeObservationCompleted": true
+    }
+  ],
+  "fixtures": [
+    {
+      "file": "map-online5-native-online-seoul-fixture.png",
+      "sha256": "99cda19c97a988fa2ec53462e92ad2ef785fa4cd05d3700aca9548f1496243d7",
+      "bytes": 263635,
+      "width": 480,
+      "height": 854,
+      "sourceGroup": "native-online-map",
+      "sourceRaw": "map-online5-native-online-map.txt",
+      "sourceKind": "API29 system screenshot of actual production MapLibre/OpenFreeMap rendering in ComponentActivity with synthetic Seoul route/runner; no GPS/Firebase/MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont1HostFixtureFont1Group": false
+    },
+    {
+      "file": "map-online5-native-online-gestures-fixture.png",
+      "sha256": "513aff9710b487ec918592bc9e6660833ea3ccc2c0a67ec237a832ecae66a55a",
+      "bytes": 183770,
+      "width": 480,
+      "height": 854,
+      "sourceGroup": "native-online-map",
+      "sourceRaw": "map-online5-native-online-map.txt",
+      "sourceKind": "API29 system screenshot of actual production MapLibre/OpenFreeMap rendering in ComponentActivity with synthetic Seoul route/runner; no GPS/Firebase/MainActivity",
+      "freshness": "Cache target removed immediately before the successful current group; newly created file read afterward",
+      "actualMainActivityScreenshot": false,
+      "actualSystemNotificationInteraction": false,
+      "native320Font2Group": false,
+      "nativeLandscape320ShortSideFont1HostFixtureFont1Group": false
+    }
+  ],
+  "executedDriver": "map-online5-executed-driver.py",
+  "executedDriverSha256": "4a7629032eee061ce3a2aec76a5e35dbcc3d946a70de8cb82821dbb53793e144",
+  "observerHelper": "map-online5-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA."
+  ],
+  "updatedAtUtc": "2026-11-15T19:59:53.132666+00:00",
+  "sourceFreezeReference": "source-freeze6.json",
+  "sourceFreezeSha256": "0b9ee924c8bf814191f4565e559e70f9477d7b9bbd7c91a5176001d3f3634438",
+  "onlineNativeBasemapVerified": true,
+  "syntheticOnlineNativeMapFixtureVerified": true,
+  "publicMapRequestsPermitted": true,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": false,
+  "binaryReferenceSha256": "02254cd4b2df26f3199ae7dfdb5f7d099a6d3915df1867511a8dc24e04bf723f",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "fdbe5cd56282f13abd4ff4ce44ae6d37959b3ebfb183f18fb722ac5941d0be67"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "053a868002b8737738b2d2f9b6d3c233d98d3445d5e28eebd12d7b3a293b8890"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "map-online5-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "map-online5-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "map-online5-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": false,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "actualNativeAvatarPixelsVerified": true,
+  "actualNativeAvatarPixelsVerificationScope": "Synthetic ComponentActivity native texture before/after outfit change; not Main/GPS/phone",
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 114,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 99,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 34,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 83,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-15T19:59:53.132648+00:00"
+}

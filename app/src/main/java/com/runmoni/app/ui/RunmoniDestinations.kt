@@ -40,20 +40,20 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     ScreenContent {
         HomeDateTime(homeClock)
         BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val sceneInset = if (largeText) 16.dp else 20.dp
-            val sceneWidth = maxWidth - sceneInset * 2
+            val sceneInset = 0.dp
+            val sceneWidth = maxWidth
             // Preserve the existing measured weather width and avatar breakpoints.
             val besideAvatar = sceneWidth >= 240.dp && !largeText
             val avatarWidth = if (sceneWidth < 280.dp) 80.dp else 96.dp
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (largeText) 16.dp else 24.dp)) {
                 // The open departure scene and its full-width action are separate areas.
                 Column(Modifier.fillMaxWidth().testTag("home_run_hero")
-                    .background(RunmoniColors.MintWash, RunmoniShapes.Surface).padding(horizontal = sceneInset),
+                    .padding(vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (besideAvatar) {
                         HomeHeading(null, compact = false)
                         Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
-                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                             HomeRunnerStage(state.profile.avatar, avatarWidth)
                             HomeWeatherSummary(state.weather, homeClock, Modifier.weight(1f))
                         }
@@ -61,7 +61,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                             HomeHeading(null, compact = largeText, modifier = Modifier.weight(1f))
-                            HomeRunnerStage(state.profile.avatar, if (largeText) 56.dp else 80.dp)
+                            HomeRunnerStage(state.profile.avatar, if (largeText) 48.dp else 80.dp)
                         }
                     }
                 }
@@ -191,7 +191,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             contentPadding = PaddingValues(vertical = 12.dp),
             modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_mileage_help")) {
             Text("마일리지 ${state.profile.mileage} P", style = MaterialTheme.typography.titleMedium,
-                color = RunmoniColors.Navy, modifier = Modifier.weight(1f))
+                color = RunmoniColors.Muted, modifier = Modifier.weight(1f))
             Spacer(Modifier.width(12.dp))
             Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(20.dp), tint = RunmoniColors.Muted)
         }
@@ -205,21 +205,20 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
                 )
             }
-            Column(Modifier.fillMaxWidth().background(RunmoniColors.DeepGreen, RunmoniShapes.Surface).padding(20.dp)
-                .testTag("history_period_summary"), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
+            Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper, RunmoniShapes.Surface).padding(20.dp)
+                .testTag("history_period_summary"), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 val unavailable = (!state.runPersistence.initialized || state.runPersistence.historyUnavailable) && state.records.isEmpty()
-                DistanceNumber(if (unavailable) "—" else distance(records.sumOf { it.distanceMeters }), RunmoniColors.OnDark, maxSize = 48f)
-                Text("km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
+                DistanceNumber((if (unavailable) "—" else distance(records.sumOf { it.distanceMeters })) + " km", RunmoniColors.Ink, maxSize = 32f)
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (unavailable) "러닝 —회" else "러닝 ${records.size}회", style = MaterialTheme.typography.titleMedium,
-                        color = RunmoniColors.OnDark, modifier = Modifier.testTag("history_run_count"))
+                        color = RunmoniColors.Ink, modifier = Modifier.testTag("history_run_count"))
                     Text(if (unavailable) "시간 —" else "시간 ${duration(records.sumOf { it.activeDurationMillis })}",
-                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.OnDark,
+                        style = MaterialTheme.typography.titleMedium, color = RunmoniColors.Ink,
                         modifier = Modifier.testTag("history_active_duration"))
                 }
                 if (state.records.isNotEmpty() && (state.runPersistence.historyUnavailable || !state.runPersistence.initialized))
-                    Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
+                    Text("마지막으로 불러온 기록 기준", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
             }
             HorizontalDivider(color = RunmoniColors.Line)
             if (records.isEmpty() && state.runPersistence.initialized && !state.runPersistence.historyUnavailable)

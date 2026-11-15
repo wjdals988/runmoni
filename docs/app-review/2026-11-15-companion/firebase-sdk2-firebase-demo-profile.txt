@@ -1,0 +1,9 @@
+
+com.runmoni.app.data.FirebaseNicknameTest:..
+com.runmoni.app.data.FirebaseCommunityTest:.
+
+Time: 30.349
+
+OK (3 tests)
+
+

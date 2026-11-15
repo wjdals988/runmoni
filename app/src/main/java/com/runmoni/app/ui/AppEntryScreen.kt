@@ -61,78 +61,76 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).testTag("entry_scroll"),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Column(Modifier.widthIn(max = 480.dp).fillMaxWidth().heightIn(min = availableHeight).padding(horizontal = pageGutter(), vertical = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically)) {
-                    Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
-                        Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                EntryLogo(40.dp)
-                                Text("runmoni", style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Primary)
-                            }
+                    verticalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterVertically)) {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            EntryLogo(32.dp)
+                            Text("runmoni", style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Primary)
+                        }
+                        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                             Text("런모니 시작하기", style = MaterialTheme.typography.headlineLarge,
                                 modifier = Modifier.semantics { heading() })
-                            if (!compact && !largeText) {
-                                StudioAvatarStage(avatar, Modifier.fillMaxWidth().height(112.dp), running = false)
-                            }
-                            Text("로그인 방법을 선택해 주세요", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Navy)
+                            Text("로그인 방법을 선택해 주세요", style = MaterialTheme.typography.bodyLarge, color = RunmoniColors.Muted)
+                        }
+                        if (!compact && !largeText) {
+                            StudioAvatarStage(avatar, Modifier.fillMaxWidth().height(128.dp), running = false)
                         }
                     }
                     Column(Modifier.fillMaxWidth()) {
-                    OutlinedButton(
-                        onClick = onGoogle,
-                        enabled = googleEnabled,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_google"),
-                        shape = RunmoniShapes.Action,
-                        border = BorderStroke(1.dp, if (googleEnabled) RunmoniColors.Outline else RunmoniColors.Line),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = RunmoniColors.Paper,
-                            contentColor = RunmoniColors.Navy,
-                            disabledContainerColor = RunmoniColors.Paper,
-                        ),
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                    ) {
-                        // Official Google asset: no recoloring or invented brand mark.
-                        Image(
-                            painterResource(if (googleEnabled) GmsR.drawable.googleg_standard_color_18 else GmsR.drawable.googleg_disabled_color_18),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Spacer(Modifier.width(12.dp))
-                        Text("Google 로그인", style = MaterialTheme.typography.labelLarge)
-                    }
-                    EntryFeedback(entry)
-                    Spacer(Modifier.height(16.dp))
-                    if (entry.googleConfigured) {
-                        FilledTonalButton(
-                            onClick = onGuest,
-                            // Guest is deliberately available during Google sign-in:
-                            // the controller cancels late results and keeps local use.
-                            enabled = !entry.savingChoice,
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
+                        OutlinedButton(
+                            onClick = onGoogle,
+                            enabled = googleEnabled,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_google"),
                             shape = RunmoniShapes.Action,
-                            colors = ButtonDefaults.filledTonalButtonColors(
-                                containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
+                            border = BorderStroke(1.dp, if (googleEnabled) RunmoniColors.Outline else RunmoniColors.Line),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = RunmoniColors.Paper,
+                                contentColor = RunmoniColors.Navy,
+                                disabledContainerColor = RunmoniColors.Paper,
+                            ),
                             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                         ) {
-                            Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
+                            // Official Google asset: no recoloring or invented brand mark.
+                            Image(
+                                painterResource(if (googleEnabled) GmsR.drawable.googleg_standard_color_18 else GmsR.drawable.googleg_disabled_color_18),
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                            )
                             Spacer(Modifier.width(12.dp))
-                            Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                            Text("Google 로그인", style = MaterialTheme.typography.labelLarge)
                         }
-                    } else {
-                        Button(
-                            onClick = onGuest,
-                            enabled = !entry.savingChoice,
-                            modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
-                            shape = RunmoniShapes.Action,
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                        ) {
-                            Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
-                            Spacer(Modifier.width(12.dp))
-                            Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                        EntryFeedback(entry)
+                        Spacer(Modifier.height(16.dp))
+                        if (entry.googleConfigured) {
+                            TextButton(
+                                onClick = onGuest,
+                                // Guest is deliberately available during Google sign-in:
+                                // the controller cancels late results and keeps local use.
+                                enabled = !entry.savingChoice,
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
+                                shape = RunmoniShapes.Action,
+                                colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.Primary),
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                            ) {
+                                Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(12.dp))
+                                Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                            }
+                        } else {
+                            Button(
+                                onClick = onGuest,
+                                enabled = !entry.savingChoice,
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("entry_guest"),
+                                shape = RunmoniShapes.Action,
+                                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                            ) {
+                                Icon(Icons.Outlined.Person, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(12.dp))
+                                Text("게스트로 시작", style = MaterialTheme.typography.labelLarge)
+                            }
                         }
                     }
-
-                    }
-                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text("게스트도 로그인 없이 러닝을 기록할 수 있어요.", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
                         Text("Google 로그인은 기록 요약 백업에 사용해요. 러닝 경로·포인트·옷장은 이 기기에 저장돼요.",
                             style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted, modifier = Modifier.testTag("entry_scope"))

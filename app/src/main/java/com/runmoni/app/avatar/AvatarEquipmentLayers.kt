@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
  * Readiness here is an implemented pixel recipe; visual acceptance remains a separate review.
  */
 object AvatarEquipmentLayers {
-    const val VERSION = "approved-equipment-v1"
+    const val VERSION = "approved-equipment-v2-materials"
     private const val WIDTH = 256
     private const val HEIGHT = 384
     private const val INK = 0x10172c
@@ -75,11 +75,12 @@ object AvatarEquipmentLayers {
         return out
     }
 
-    // Four authored material shades. IDs match catalogue mint/coral/blue gear.
-    private fun palette(kind: Int) = when (kind) {
-        1 -> intArrayOf(0x235a50,0x358f7c,0x7cd4b8,0xc2ecda)
-        2 -> intArrayOf(0x773b4b,0xb55363,0xee8890,0xffd3c4)
-        else -> intArrayOf(0x25436c,0x4277b4,0x7cafe1,0xd4e8f5)
+    // The same five material stops as clothes: equipment no longer uses a
+    // second, unrelated mint/coral/blue palette. Small clusters describe seams,
+    // glass and buckles; the original face/body pixels are not resampled.
+    private fun palette(kind: Int): IntArray {
+        val color = when (kind) { 1 -> 1; 2 -> 2; else -> 3 }
+        return intArrayOf(0, 64, 128, 192, 255).map { GarmentPalette.shade(color, it) }.toIntArray()
     }
     private fun band(r: Raster, a: Anchors) {
         val x=a.eye.x; val y=a.eye.y+24; val c=palette(1)
@@ -88,6 +89,8 @@ object AvatarEquipmentLayers {
         r.poly(c[2],x-51,y-37,x+21,y-66,x+42,y-63,x+41,y-60,x+20,y-63,x-49,y-33)
         r.line(c[3],x-40,y-38,x-13,y-49,1)
         r.line(c[1],x+26,y-65,x+36,y-63,2)
+        r.line(c[4],x-37,y-39,x-28,y-43,1)
+        r.line(c[0],x+22,y-56,x+42,y-52,1)
     }
     private fun glasses(r: Raster, a: Anchors, kind: Int) {
         val x=a.eye.x; val y=a.eye.y; val c=palette(kind)
@@ -103,6 +106,9 @@ object AvatarEquipmentLayers {
         r.line(c[1],x+24,y-9,x+44,y-10,2)
         r.line(CREAM,x-2,y-7,x+10,y-7,2)
         r.line(CREAM,x+49,y-7,x+56,y-8,2)
+        r.line(c[3],x-2,y+6,x+14,y+8,1)
+        r.line(c[3],x+49,y+5,x+57,y+7,1)
+        r.rect(c[4],x-3,y-6,3,2);r.rect(c[4],x+48,y-6,2,2)
     }
     private fun watch(r: Raster, a: Anchors, kind: Int) {
         val c=palette(kind); val dx=a.nearWrist.x-a.nearElbow.x; val dy=a.nearWrist.y-a.nearElbow.y
@@ -117,6 +123,8 @@ object AvatarEquipmentLayers {
         box(INK,-4,-11,4,11);box(c[1],-2,-9,2,9)
         box(INK,-7,-7,7,7);box(c[3],-5,-5,5,5)
         box(c[0],-3,-3,3,3);box(c[2],-2,-2,1,1)
+        box(c[4],-4,-4,-1,-3);box(c[4],-4,-3,-3,-1)
+        box(c[0],1,7,2,9);box(c[3],-2,-9,-1,-7)
     }
     private fun ear(r: Raster, a: Anchors, kind: Int) {
         val x=a.ear.x;val y=a.ear.y;val c=palette(1)
@@ -142,29 +150,57 @@ object AvatarEquipmentLayers {
         val x=a.waist.x;val y=a.waist.y;val c=palette(kind)
         r.poly(INK,x-36,y-7,x+36,y-5,x+37,y+4,x-36,y+3)
         r.poly(c[1],x-34,y-4,x+34,y-3,x+34,y+1,x-34,y)
-        r.rect(INK,x-9,y-8,26,15);r.rect(c[0],x-6,y-5,20,9)
-        r.line(c[3],x-5,y-4,x+11,y-4,1);r.rect(c[2],x+9,y-1,3,3)
+        r.poly(INK,x-10,y-7,x+15,y-6,x+17,y+5,x-9,y+6)
+        r.poly(c[0],x-7,y-4,x+13,y-3,x+14,y+3,x-6,y+4)
+        r.poly(c[1],x-6,y-3,x+12,y-2,x+12,y+1,x-5,y+2)
+        r.line(c[3],x-5,y-4,x+10,y-3,1);r.rect(c[4],x+10,y-3,2,3)
+        for(offset in -28..-16 step 6)r.line(c[3],x+offset,y-2,x+offset+2,y-2,1)
+        r.line(c[0],x+19,y+1,x+30,y+1,1)
     }
     private fun vest(r: Raster, a: Anchors, kind: Int, gender: AvatarGender) {
         val x=a.waist.x;val y=a.waist.y;val c=palette(kind)
-        val top=if(gender==AvatarGender.MALE)y-63 else y-57
-        r.poly(INK,x-22,top,x-9,top+1,x-10,y-12,x-22,y-5,x-28,y-12)
-        r.poly(c[1],x-20,top+4,x-12,top+4,x-13,y-14,x-21,y-10,x-24,y-14)
-        r.poly(INK,x+16,top+2,x+27,top+6,x+29,y-9,x+18,y-6,x+12,y-15)
-        r.poly(c[1],x+18,top+6,x+24,top+8,x+25,y-12,x+19,y-10,x+16,y-16)
-        r.rect(INK,x-17,y-36,12,24);r.rect(c[0],x-14,y-33,6,18)
-        r.rect(0xb4d3de,x-13,y-32,4,14);r.rect(CREAM,x-13,y-38,4,7)
-        r.rect(INK,x+14,y-35,12,24);r.rect(c[0],x+17,y-32,6,18)
-        r.rect(0xb4d3de,x+18,y-31,4,14);r.rect(CREAM,x+18,y-37,4,7)
-        r.line(INK,x-8,top+21,x+17,top+22,4);r.line(c[3],x-7,top+20,x+16,top+21,1)
-        r.rect(c[2],x-19,top+10,3,6);r.rect(c[2],x+21,top+12,3,6)
+        // A bilinear cloth panel follows this cell's actual shoulder and waist,
+        // rather than moving two rectangular bottles with only the hip.
+        val topY=a.nearShoulder.y-if(gender==AvatarGender.MALE)5 else 3
+        val topLeft=a.nearShoulder.x+4;val topRight=x+28
+        fun point(u:Float,v:Float):Point {
+            val left=topLeft+(x-25-topLeft)*v;val right=topRight+(x+30-topRight)*v
+            return Point((left+(right-left)*u).roundToInt(),(topY+(y-8-topY)*v+u*3*(1-v)).roundToInt())
+        }
+        fun panel(color:Int,vararg uv:Float) {
+            val xy=IntArray(uv.size)
+            for(i in uv.indices step 2){val p=point(uv[i],uv[i+1]);xy[i]=p.x;xy[i+1]=p.y}
+            r.poly(color,*xy)
+        }
+        panel(INK,0f,0f,.29f,0f,.29f,.88f,.05f,1f,-.05f,.88f)
+        panel(c[1],.06f,.06f,.23f,.06f,.23f,.86f,.07f,.94f)
+        panel(c[3],.07f,.08f,.10f,.08f,.10f,.86f,.07f,.9f)
+        panel(INK,.69f,.02f,.96f,.08f,1.04f,.94f,.79f,1f,.65f,.86f)
+        panel(c[1],.75f,.08f,.90f,.13f,.96f,.91f,.81f,.94f,.72f,.84f)
+        panel(c[0],.88f,.14f,.91f,.14f,.97f,.9f,.93f,.91f)
+        for(u in floatArrayOf(.1f,.77f)) {
+            panel(INK,u,.44f,u+.19f,.44f,u+.2f,.87f,u,.89f)
+            panel(c[0],u+.035f,.49f,u+.15f,.49f,u+.15f,.83f,u+.035f,.85f)
+            panel(0x83b3c4,u+.055f,.5f,u+.13f,.5f,u+.13f,.75f,u+.055f,.78f)
+            panel(CREAM,u+.05f,.38f,u+.12f,.38f,u+.12f,.49f,u+.05f,.49f)
+            panel(c[4],u+.055f,.51f,u+.075f,.51f,u+.075f,.68f,u+.055f,.69f)
+        }
+        val near=point(.25f,.34f);val far=point(.76f,.35f)
+        r.line(INK,near.x,near.y,far.x,far.y,4)
+        r.line(c[3],near.x,near.y-1,far.x,far.y-1,1)
+        val buckle=point(.52f,.35f)
+        r.rect(INK,buckle.x-3,buckle.y-3,7,6);r.rect(c[4],buckle.x-1,buckle.y-1,3,2)
     }
     private class Raster(val out:IntArray,val original:IntArray,val mask:IntArray,val fabricOnly:Boolean) {
         private fun put(x:Int,y:Int,color:Int) {
             if(x !in 0 until WIDTH || y !in 0 until HEIGHT)return
-            val i=y*WIDTH+x;val alpha=original[i] ushr 24
-            if(alpha==0)return
+            val i=y*WIDTH+x
+            // Source-background fringe is not an attachment surface. A later
+            // hat/hood may occupy that background; gear must neither float on
+            // it nor replace its new clothing alpha with the old fringe alpha.
+            if((original[i] ushr 24)<=16)return
             if(fabricOnly && ((mask[i] ushr 24)!=255 || ((mask[i] ushr 16) and 255) !in 1..2))return
+            val alpha=out[i] ushr 24
             out[i]=(alpha shl 24) or (color and 0xffffff)
         }
         fun rect(c:Int,x:Int,y:Int,w:Int,h:Int) {

@@ -17,13 +17,30 @@ class WardrobeRendererTest {
         for(gender in AvatarGender.entries) for(frame in 0..7) {
             val base=AvatarStyle(gender=gender)
             val original=pixels(renderer.render(frame,true,base))
+            val fabric=RunningKitArtwork.frameMask(context,gender.spriteRow,frame)
             for(slot in AvatarCatalogue.slots) for(variant in 1 until slot.variants.size) {
                 if(!AvatarArtwork.itemReady(slot.key,variant,gender)) continue
                 val style=base.withItem(slot.key,variant)
                 val actual=pixels(renderer.render(frame,true,style))
                 assertTrue("Unchanged selectable ${gender.wireValue}/$frame/${slot.key}:$variant", original.indices.count { original[it]!=actual[it] }>20)
-                for(i in actual.indices) if((original[i] ushr 24)!=(actual[i] ushr 24))
-                    fail("Body alpha changed ${slot.key}:$variant at $i")
+                val costume=slot.key=="costume" && AvatarCostumeLayers.supports(variant)
+                val extension=if(costume) AvatarCostumeLayers.clothingExtensionMask(original,frame,gender,variant) else IntArray(original.size)
+                val headEnd=if(gender==AvatarGender.MALE)182 else 176
+                for(i in actual.indices) {
+                    if((original[i] ushr 24)!=(actual[i] ushr 24) && extension[i]==0)
+                        fail("Body alpha changed ${slot.key}:$variant at $i")
+                    if(extension[i]!=0) {
+                        assertEquals(-1,extension[i])
+                        assertTrue("Hat/hood allowance reaches the body",i/256 in 14 until headEnd)
+                        assertTrue("Hat/hood allowance reaches a frame edge",i%256 in 8..247)
+                        assertTrue("Hat/hood replaced original hair/face",(original[i] ushr 24)<=16)
+                    }
+                    // Shirt shoulders can be above this row boundary. Only the
+                    // existing pinned fabric1 label may change there; the
+                    // loader independently rejects labels on protected identity.
+                    if(costume && i/256 < headEnd && ((fabric[i] ushr 16)and 255)!=1 && (original[i] ushr 24)>16)
+                        assertEquals("Costume changed original face/hair at $i",original[i],actual[i])
+                }
                 assertArrayEquals("App/map entry point ignores equipped item",pixels(renderer.renderForDisplay(frame,true,style)),pixels(avatarBitmap(context,style,frame,true)))
             }
         }
@@ -46,13 +63,13 @@ class WardrobeRendererTest {
     @Test fun savedPendingCostumeKeepsOccupancyAndUnrelatedEquipmentWithoutMigratingIds() {
         val renderer=ApprovedAvatarRenderer(context)
         for(gender in AvatarGender.entries) for(frame in 0..7) {
-            val saved=AvatarStyle(gender=gender,costume=1,top=3,bottom=1,shoes=2,headwear=3,wrist=2)
+            val saved=AvatarStyle(gender=gender,costume=2,top=3,bottom=1,shoes=2,headwear=3,wrist=2)
             assertFalse(AvatarArtwork.styleReady(saved))
-            assertArrayEquals(pixels(renderer.render(frame,true,saved.copy(top=0,bottom=0,shoes=0,headwear=0))),pixels(renderer.render(frame,true,saved)))
+            assertArrayEquals(pixels(renderer.render(frame,true,saved.copy(top=0,bottom=0))),pixels(renderer.render(frame,true,saved)))
             val normal=saved.withItem("top",1)
             assertEquals(0,normal.costume); assertEquals(2,normal.wrist)
             assertFalse(pixels(renderer.render(frame,true,saved)).contentEquals(pixels(renderer.render(frame,true,normal))))
-            assertEquals(1,saved.costume);assertEquals(3,saved.top)
+            assertEquals(2,saved.costume);assertEquals(3,saved.top)
         }
     }
 

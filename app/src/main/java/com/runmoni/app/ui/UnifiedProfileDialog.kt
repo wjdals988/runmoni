@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material3.*
@@ -59,9 +60,17 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
                 Icon(Icons.Outlined.AccountCircle, null, Modifier.size(32.dp), tint = RunmoniColors.Primary)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(state.profile.name, style = MaterialTheme.typography.titleMedium)
-                    Text(if (online) "온라인 프로필 연결됨" else "이 기기에 저장된 프로필",
+                    Text(if (online && state.communityProfileConnection.phase == CommunityProfileConnectionPhase.CACHED) "프로필 연결 유지 중" else if (online) "온라인 프로필 연결됨" else "이 기기에 저장된 프로필",
                         style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 }
+            }
+        }
+        if (online && state.communityProfileConnection.phase == CommunityProfileConnectionPhase.CACHED) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Outlined.CloudOff, null, Modifier.size(20.dp), tint = RunmoniColors.Muted)
+                Text("저장된 연결을 사용하고 있어요. 인터넷에 연결되면 자동으로 확인해요.",
+                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                    modifier = Modifier.weight(1f).testTag("profile_connection_cached"))
             }
         }
         OutlinedTextField(name, { name = it; saveStartSerial = null; connectionStartSerial = null }, label = { Text("닉네임") }, singleLine = true,

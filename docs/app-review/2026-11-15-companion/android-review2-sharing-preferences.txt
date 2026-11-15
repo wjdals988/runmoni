@@ -1,0 +1,8 @@
+
+com.runmoni.app.data.RunnerSharingPreferenceStoreTest:......
+
+Time: 0.584
+
+OK (6 tests)
+
+

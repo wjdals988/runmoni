@@ -1,0 +1,23 @@
+{
+  "completed": true,
+  "passed": true,
+  "restorationOnly": true,
+  "productMethodsCounted": 0,
+  "priorScope": {
+    "file": "firebase-sdk2-local-network-scope.json",
+    "sha256": "c7c9f1747dd860fea9ccdc8b9ee7c15fa3f22b0216d119cef8f19d2bdc8cbdab",
+    "originalCompleted": false
+  },
+  "productPhase": {
+    "file": "firebase-sdk2.json",
+    "sha256": "88bdeb9333f24ced3ef75aecee078e3cdaf55aae8555079a092e5922b08f2a28",
+    "actualPassedProductMethods": 3
+  },
+  "failureReason": "ADB shell empty-string argument was not shell-quoted while restoring exclusion list; wrapper exited before proxy restoration completed",
+  "restorationMethod": "Restore the same allowlisted five original settings using shlex.join to preserve empty arguments",
+  "privateBeforeSha256": "16cbcbdbea91b71457c7bb7c9d4fc747d39854469382f2f4b9ae08dbe516501b",
+  "allFiveOriginalProxySettingsRestoredExactly": true,
+  "appOrTestSourceChanged": false,
+  "tlsVerificationChanged": false,
+  "completedAtUtc": "2026-11-15T18:18:14.308660+00:00"
+}

@@ -1,0 +1,37 @@
+
+com.runmoni.app.ui.NativeVectorMapOnlineUiTest:
+Error in publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera(com.runmoni.app.ui.NativeVectorMapOnlineUiTest):
+java.lang.AssertionError: Production native pane reported a failure: STYLE expected null, but was:<STYLE>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotNull(Assert.java:756)
+	at org.junit.Assert.assertNull(Assert.java:738)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera$await$lambda$6(NativeVectorMapOnlineUiTest.kt:91)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.$r8$lambda$9aDLtBdonSj-oF6MgVcWAUsW64E(Unknown Source:0)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:434)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera$await(NativeVectorMapOnlineUiTest.kt:90)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera(NativeVectorMapOnlineUiTest.kt:156)
+
+
+Time: 17.074
+There was 1 failure:
+1) publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera(com.runmoni.app.ui.NativeVectorMapOnlineUiTest)
+java.lang.AssertionError: Production native pane reported a failure: STYLE expected null, but was:<STYLE>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotNull(Assert.java:756)
+	at org.junit.Assert.assertNull(Assert.java:738)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera$await$lambda$6(NativeVectorMapOnlineUiTest.kt:91)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.$r8$lambda$9aDLtBdonSj-oF6MgVcWAUsW64E(Unknown Source:0)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:434)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera$await(NativeVectorMapOnlineUiTest.kt:90)
+	at com.runmoni.app.ui.NativeVectorMapOnlineUiTest.publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera(NativeVectorMapOnlineUiTest.kt:156)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

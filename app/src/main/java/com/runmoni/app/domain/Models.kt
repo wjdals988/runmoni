@@ -129,6 +129,8 @@ data class AppState(
     val signedIn: Boolean = false,
     val serverStatus: String = "기기 내 기록 모드",
     val publicLocation: Boolean = false,
+    val sharingPreferenceEnabled: Boolean = false,
+    val communityProfileConnection: CommunityProfileConnectionState = CommunityProfileConnectionState(),
     val autoPause: Boolean = false,
     val voiceGuidance: Boolean = true,
     val busy: Boolean = false,

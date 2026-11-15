@@ -1,0 +1,25 @@
+{
+  "reviewedAtUtc": "2026-11-15T15:33:30.628295+00:00",
+  "reviewer": "Root independent image inspection",
+  "surface": "HOST JVM production-layer output, not Android screenshot",
+  "reviewedFiles": {
+    "host-costume-contact-v4.png": "45d6e3b379b13805af0648b36334cf88968a6389d9a55d87d8856c0f485a1e3b",
+    "host-costume-contact-v6.png": "2b8d3fb3388eb1565846ef3e09345b2d5e15167551423cedc95abd8e73051c02",
+    "host-costume1-v6.png": "de5251bc638b995f0abe9e1223043999cd442cb799b38a721b3b7aa5d2595f3a",
+    "host-costume4-v6.png": "787f613242bc6f60748a4c2ab7ef6b4675ec23477ae82ecd38c3e8f67dc65761",
+    "host-costume5-v6.png": "93847e4e4194fb9b9aa1177a49e5f2211bcfdf26f9b0a237b9d430aa7f72c5fb",
+    "host-costume-equipment-v6.png": "a79028bf0c8570eb6c3cbd29eb1d4a1d38d5aaea922d331b5941edb92ae21312"
+  },
+  "v4VisualDecision": "withheld: pointed paper-like Santa cap, thick face-side hood ring, residual mint shoulder",
+  "v6VisualDecision": "suitable as selectable development preview, not user visual approval",
+  "observations": [
+    "All three costume sheets inspected across both genders and eight source poses",
+    "No replacement face or new body proportions observed",
+    "Thick hood ring and mint shoulder mismatch removed",
+    "Santa uses a small folded rear cap; bear/golden use ear bands and folded garment collars, not a new mascot body",
+    "Co-worn gear and bear garment sheet inspected across all sixteen cells; source foreground arms and garment head extensions remain coherent in this host output"
+  ],
+  "userVisualApproval": "pending",
+  "androidRuntimeVerifiedByThisReview": false,
+  "imageGenerationToolOrAsepriteUsed": false
+}

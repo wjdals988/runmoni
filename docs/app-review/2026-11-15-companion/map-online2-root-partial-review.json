@@ -1,0 +1,24 @@
+{
+  "sourceKind": "actual API29 ComponentActivity synthetic Seoul scene; not MainActivity, GPS or Firebase",
+  "originalPhasePassed": false,
+  "adoptedProductMethods": 0,
+  "rootViewedFailureScreenshot": true,
+  "rootPrivacyReview": "Only synthetic banner/public Seoul map/test route; no user identity or real GPS",
+  "observedInitialRenderedProviderFeatures": 707,
+  "observedInitialNativeTextureDistinctColors": 571,
+  "observedPanCameraChanged": true,
+  "pinchConjunctionPassed": false,
+  "failureFinalCameraWasNotRecordedByInput4Test": true,
+  "mapFinishedListenerIncorrectlyUsedAsPerGestureFrameCounter": true,
+  "pinchFailureSoleCauseConfirmed": false,
+  "references": [
+    {
+      "file": "map-online2-native-observations.json",
+      "sha256": "fa4b2ebb1052004ec3e19cf0ef5b02c5a59cf7126ef6bb4aff46abba2a067cfe"
+    },
+    {
+      "file": "map-online2-native-failed-pinch-fixture.png",
+      "sha256": "29e624c61a7b464c594cbc2a0c16b5bc3627bbeddd5c2ebb209be2bb87f995ce"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Before/after owner-reported Rules publication: isolated authenticated exact-read diagnosis",
+  "before": {
+    "proofFileLastWrittenAtUtc": "2026-11-15T14:59:28.889879+00:00",
+    "timestampSource": "Host filesystem mtime of final proof written after cleanup; not an HTTP server timestamp",
+    "rawPrivateProofSha256": "0ba56be956617be7494ec67ee68240a1503859244fd5f575c272b58ce3546fd4",
+    "probeSourceSha256": "5e473fea2e427b8d9b1a960cadf97a4bd3500da61eb1688bbd1d47c35a0d90b9",
+    "sourceHashCapturedAfterExecution": true,
+    "sameProjectAnonymousIdentityVerified": true,
+    "exactDocumentReadCount": 2,
+    "temporaryAnonymousCreateStatus": 200,
+    "ownMissingProfileRead": {
+      "status": 404,
+      "errorCode": 404,
+      "errorStatus": "NOT_FOUND"
+    },
+    "nonceMissingNicknameRead": {
+      "status": 403,
+      "errorCode": 403,
+      "errorStatus": "PERMISSION_DENIED"
+    },
+    "onlyOwnTemporaryAccountDeleteStatus": 200,
+    "ownTemporaryAccountDeleted": true,
+    "profileOrNicknameDocumentWrites": 0,
+    "privateAuthTokenFileDeleted": true
+  },
+  "after": {
+    "proofFileLastWrittenAtUtc": "2026-11-15T15:12:59.304716+00:00",
+    "timestampSource": "Host filesystem mtime of final proof written after cleanup; not an HTTP server timestamp",
+    "rawPrivateProofSha256": "ac8383e565557784fc602b76ea60ccf7777e3fa311e2a6f8e2144e262606f208",
+    "probeSourceSha256": "5e473fea2e427b8d9b1a960cadf97a4bd3500da61eb1688bbd1d47c35a0d90b9",
+    "sourceHashCapturedAfterExecution": false,
+    "sameProjectAnonymousIdentityVerified": true,
+    "exactDocumentReadCount": 2,
+    "temporaryAnonymousCreateStatus": 200,
+    "ownMissingProfileRead": {
+      "status": 404,
+      "errorCode": 404,
+      "errorStatus": "NOT_FOUND"
+    },
+    "nonceMissingNicknameRead": {
+      "status": 404,
+      "errorCode": 404,
+      "errorStatus": "NOT_FOUND"
+    },
+    "onlyOwnTemporaryAccountDeleteStatus": 200,
+    "ownTemporaryAccountDeleted": true,
+    "profileOrNicknameDocumentWrites": 0,
+    "privateAuthTokenFileDeleted": true
+  },
+  "afterExecutedWrapperSha256": "e151c56fa62e376fa67de6125eb02c7bf3e901c9c7ae80b58da3604f222c8bd8",
+  "ownerReportedRulesPublished": true,
+  "rulesPublishedByThisProbe": false,
+  "exactDeployedRulesTextOrVersionRead": false,
+  "observedNicknameReadTransition": "403 PERMISSION_DENIED -> 404 NOT_FOUND",
+  "totalExactDocumentReads": 4,
+  "totalProfileOrNicknameDocumentWrites": 0,
+  "temporaryAuthAccountsCreated": 2,
+  "temporaryAuthAccountsDeleted": 2,
+  "clientConfigurationValuesIncluded": false,
+  "privateUidOrTokenIncluded": false,
+  "configurationSource": "Exact published0.6.0 app BuildConfig static fields read using bounded public APK ZIP/DEX HTTP ranges",
+  "apkRangeBodyBytesRead": 10500480,
+  "apkRangeBodyCapBytes": 16777216,
+  "apkRangeResponsesAll206": true,
+  "fullApkDownloaded": false,
+  "fullApkSignatureOrShaVerifiedByProbe": false,
+  "productionProfileTransactionWriteVerified": false,
+  "androidSdkProfileConnectionVerified": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false
+}

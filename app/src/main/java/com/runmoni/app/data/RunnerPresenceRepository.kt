@@ -18,18 +18,18 @@ class RunnerPresenceRepository(
     private val firestore: () -> FirebaseFirestore?,
     private val acceptedUid: () -> String,
     private val nowMillis: () -> Long = System::currentTimeMillis,
-) {
+) : RunnerSharingGateway {
     private data class Context(val session: RunnerShareSession, val db: FirebaseFirestore)
     private val lock = Any()
     private var generation = 0L
     private var active: Context? = null
     private val contexts = linkedMapOf<String, Context>()
 
-    fun activeSession(): RunnerShareSession? = synchronized(lock) { active?.session }
+    override fun activeSession(): RunnerShareSession? = synchronized(lock) { active?.session }
 
     /** Fence pending SDK callbacks synchronously, before launching network cleanup.
      * An older captured session never invalidates a newer explicit consent. */
-    fun invalidate(session: RunnerShareSession? = activeSession()): RunnerShareSession? = synchronized(lock) {
+    override fun invalidate(session: RunnerShareSession?): RunnerShareSession? = synchronized(lock) {
         val expected = session ?: return@synchronized null
         val context = contexts[expected.token]?.takeIf { it.session === expected } ?: return@synchronized null
         if (active === context) { generation++; active = null }
@@ -43,15 +43,18 @@ class RunnerPresenceRepository(
     private fun requireCurrent(context: Context) { check(current(context)) { "위치 공유가 끝났어요. 다시 공유하려면 직접 켜 주세요." } }
 
     /** Create consent under the caller's controller lock; no Firebase request is made. */
-    fun prepareEnable(runId: String, adultConfirmed: Boolean): RunnerShareSession {
-        require(runId.isNotBlank() && adultConfirmed) { "진행 중인 러닝과 성인·위치 공개 동의를 확인해 주세요." }
+    override fun prepareEnable(runId: String, adultConfirmed: Boolean, expectedUid: String): RunnerShareSession {
+        require(runId.isNotBlank() && adultConfirmed && expectedUid.isNotBlank()) { "진행 중인 러닝과 성인·위치 공개 동의를 확인해 주세요." }
+        check(acceptedUid() == expectedUid) { "프로필 연결이 바뀌었어요. 위치 공개 동의를 다시 확인해 주세요." }
         val db = firestore() ?: error("러너 지도에 사용할 프로필을 먼저 연결해 주세요.")
-        val uid = acceptedUid().takeIf { it.isNotBlank() } ?: error("프로필을 먼저 연결해 주세요.")
         val context = synchronized(lock) {
+            check(acceptedUid() == expectedUid && firestore() === db) { "프로필 연결이 바뀌었어요. 위치 공개 동의를 다시 확인해 주세요." }
+            check(active == null) { "이전 위치 공유를 중단한 뒤 다시 시도해 주세요." }
+            check(contexts.values.none { it.session.uid == expectedUid }) { "이전 위치 공유 연결을 정리한 뒤 다시 시도해 주세요." }
             // Never evict the fence of an SDK transaction that may still finish
             // after coroutine cancellation. Successful revoke removes entries.
             check(contexts.size < 64) { "이전 위치 공유 연결을 정리한 뒤 다시 시도해 주세요." }
-            val session = RunnerShareSession(uid, runId, UUID.randomUUID().toString(), ++generation)
+            val session = RunnerShareSession(expectedUid, runId, UUID.randomUUID().toString(), ++generation)
             Context(session, db).also {
                 active = it
                 contexts[session.token] = it
@@ -60,11 +63,28 @@ class RunnerPresenceRepository(
         return context.session
     }
 
-    suspend fun enable(runId: String, adultConfirmed: Boolean): RunnerShareSession =
-        activate(prepareEnable(runId, adultConfirmed))
+    suspend fun enable(runId: String, adultConfirmed: Boolean): RunnerShareSession {
+        val expectedUid = acceptedUid()
+        require(runId.isNotBlank() && adultConfirmed && expectedUid.isNotBlank())
+        activeSession()?.let { invalidate(it) }
+        cleanupInvalidated(expectedUid)
+        return activate(prepareEnable(runId, adultConfirmed, expectedUid))
+    }
+
+    override suspend fun cleanupInvalidated(expectedUid: String) {
+        check(expectedUid.isNotBlank() && acceptedUid() == expectedUid) { "프로필 연결이 바뀌었어요." }
+        val pending = synchronized(lock) { contexts.values.filter { it !== active && it.session.uid == expectedUid }.map { it.session } }
+        for (session in pending) {
+            check(acceptedUid() == expectedUid) { "프로필 연결이 바뀌었어요." }
+            // Keep every context until this token-conditional server barrier is
+            // acknowledged. Offline failure cannot allocate another same-UID fence.
+            revoke(session)
+        }
+        check(acceptedUid() == expectedUid) { "프로필 연결이 바뀌었어요." }
+    }
 
     /** Late activation can only use its already prepared context, never replace a newer one. */
-    suspend fun activate(session: RunnerShareSession): RunnerShareSession {
+    override suspend fun activate(session: RunnerShareSession): RunnerShareSession {
         val context = synchronized(lock) { contexts[session.token]?.takeIf { it.session === session } }
             ?: error("위치 공개 동의가 바뀌었어요. 다시 확인해 주세요.")
         val db = context.db
@@ -88,7 +108,7 @@ class RunnerPresenceRepository(
         }
     }
 
-    suspend fun publish(session: RunnerShareSession, point: TrackPoint, nickname: String, avatar: AvatarStyle) {
+    override suspend fun publish(session: RunnerShareSession, point: TrackPoint, nickname: String, avatar: AvatarStyle) {
         val context = synchronized(lock) { contexts[session.token] }
             ?.takeIf { it.session === session } ?: error("다시 위치 공유를 켜 주세요.")
         requireCurrent(context)
@@ -116,7 +136,7 @@ class RunnerPresenceRepository(
     }
 
     /** Local revocation is immediate. Server removal needs connectivity; public reads expire within75s (normally60s). */
-    suspend fun revoke(session: RunnerShareSession? = null) {
+    override suspend fun revoke(session: RunnerShareSession?) {
         val expected = invalidate(session ?: activeSession()) ?: return
         val context = synchronized(lock) { contexts[expected.token]?.takeIf { it.session === expected } } ?: return
         withTimeout(10_000) {

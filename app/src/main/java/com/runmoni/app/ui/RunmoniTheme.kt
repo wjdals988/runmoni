@@ -16,31 +16,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 internal object RunmoniColors {
-    val Cream = Color(0xFFF5F7F6)
+    // Six base roles, shared with the native widget palette.
+    val Chalk = Color(0xFFF7F9FA)
     val Paper = Color(0xFFFFFFFF)
+    val Ink = Color(0xFF24343D)
+    val Muted = Color(0xFF5B6D73)
+    val Ocean = Color(0xFF356F78)
+    val Mist = Color(0xFFE7EFF1)
+    // Existing call sites keep their role names; garment palettes are separate.
+    val Cream = Chalk
+    val Primary = Ocean
+    val PrimarySoft = Mist
+    val Navy = Ink
+    val Line = Color(0xFFDCE4E7)
+    val Outline = Color(0xFF71858D)
+    val Mint = Mist
+    val Green = Ocean
+    val Lime = Mist
     val Coral = Color(0xFFF16D55)
-    val Primary = Color(0xFF205641)
-    val PrimarySoft = Color(0xFFE6F0EA)
-    val Navy = Color(0xFF192D25)
-    val Muted = Color(0xFF556158)
-    val Line = Color(0xFFDFE3DA)
-    val Outline = Color(0xFF748071)
-    val Mint = Color(0xFFE6F0EA)
-    val Green = Primary
-    val Lime = Color(0xFFD7F58A)
     val OnDark = Color(0xFFFFFFFF)
-    val OnDarkMuted = Color(0xFFD6E5DA)
-    // Local emphasis surfaces; keep the page canvas and existing roles stable.
-    val DeepGreen = Color(0xFF173E30)
-    val MintWash = Color(0xFFE0F0E8)
-    val SecondaryMint = Color(0xFFC5E1D2)
-    val LimeWash = Color(0xFFF0F5D8)
-    val CoralWash = Color(0xFFFBE7DE)
-    val CoralInk = Color(0xFF8D402B)
-    // Decorative clay track, never a status/text/control color.
-    val TrackClay = Color(0xFFC97558)
-    val RouteBlue = Color(0xFF2E6194)
-    val BlueWash = Color(0xFFE8F0FA)
+    val OnDarkMuted = Mist
+    val DeepGreen = Ocean
+    val MintWash = Mist
+    val SecondaryMint = Color(0xFFD5E4E7)
+    val LimeWash = Chalk
+    val CoralWash = Color(0xFFF8EFED)
+    val CoralInk = Color(0xFF974A43)
+    val TrackClay = Mist
+    val RouteBlue = Ocean
+    val BlueWash = Mist
 }
 
 /** Shared geometry: readable controls and contained surfaces, without pill chrome. */
@@ -55,10 +59,13 @@ internal object RunmoniShapes {
 internal object RunmoniLayout {
     val ContentWidth = 640.dp
     val DialogWidth = 560.dp
-    val Gutter = 20.dp
+    val Gutter = 24.dp
+    val NarrowGutter = 20.dp
     val WideGutter = 32.dp
-    val PageGap = 24.dp
-    val RowGap = 12.dp
+    val PageGap = 32.dp
+    val ContentGap = 16.dp
+    val RowGap = 16.dp
+    val ActionHeight = 56.dp
 }
 
 private val AlignedText = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -117,10 +124,10 @@ internal fun RunmoniTheme(content: @Composable () -> Unit) {
             titleMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp),
             titleSmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp),
             bodyLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 16.sp, lineHeight = 24.sp),
-            bodyMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 14.sp, lineHeight = 22.sp),
+            bodyMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 16.sp, lineHeight = 24.sp),
             bodySmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontSize = 14.sp, lineHeight = 22.sp),
-            labelLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, lineHeight = 22.sp),
-            labelMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 18.sp),
+            labelLarge = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp),
+            labelMedium = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp),
             labelSmall = AlignedText.copy(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 18.sp),
         ),
         content = content,

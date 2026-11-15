@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "costumeCases": 48,
+  "gearCases": 272,
+  "costumeEquipmentCases": 48,
+  "clothingExtensionPixelsAcrossCostumeCases": 116521,
+  "approvedSourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "sourceInputsUnchanged": true,
+  "originalFaceHairHandsUnchangedByCostumes": true,
+  "originalBodyAlphaPreservedOutsideAuthoredHeadClothing": true,
+  "eightOriginalPosesRetainedPerCostume": true,
+  "visualApproval": "pending",
+  "displayOnlyFemalePreviousRowPaddingClippedPx": 12,
+  "round": "v6",
+  "sourceKind": "HOST JVM production pixel code, NOT Android screenshot",
+  "kotlinCompiler": "2.0.21",
+  "sourceHashes": {
+    "app/src/main/java/com/runmoni/app/domain/Models.kt": "83d2ca439f77de3fff297d29d2c76abee7703c7e242d9d25e123495dd6298f32",
+    "app/src/main/java/com/runmoni/app/avatar/GarmentPalette.java": "efe7c2a80794591f43761682474ac5e288af2614fae2267edd703df382101dcf",
+    "app/src/main/java/com/runmoni/app/avatar/WardrobeClothing.java": "dfb7e8cca22a5e4bdb120af8fbf271de3be9b450dea4ac7d13303b29613bbc34",
+    "app/src/main/java/com/runmoni/app/avatar/SockClothing.java": "b6b3559ace8cf5996f5cb1be69a05d8869a4cab1429bd1b5ce759f78bcd1757c",
+    "app/src/main/java/com/runmoni/app/domain/RunningKitColors.kt": "00f30f04e328120320e7997bc4ac03c87f2144cc05668c6651abf14427e858cb",
+    "app/src/main/java/com/runmoni/app/domain/AvatarCatalogue.kt": "1708aea468803c17f7372de6da42ce9c4566e244d131b58de7ac10fe6b2f1230",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarEquipmentLayers.kt": "7703eae5763cbee4268346ac7194e57822cd26ec437334db82c0ca815620f6c6",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarCostumeLayers.kt": "9efa5141fc81be95c6320bb4ed1aac13008382412a023d281830bfac52deb7d2",
+    "work/companion-avatar-host/run-host.py": "5e3ca7f82e9dc63370d0f785585226e205112cf6e615038b503ed077022fa33c",
+    "work/companion-avatar-host/VerifyCompanionAvatars.java": "ab9397504b682466f8a7aa05e3a9b2623aadbea33cb7a786c7dfa4103e785dc4"
+  },
+  "extractedModelSha256": "d22cd80de2477aa93ab9cdb466d4b7473e6aa384fab40adeceeab9e48ffe99e0",
+  "imageHashes": {
+    "host-costume5-v6.png": "93847e4e4194fb9b9aa1177a49e5f2211bcfdf26f9b0a237b9d430aa7f72c5fb",
+    "host-costume-equipment-v6.png": "a79028bf0c8570eb6c3cbd29eb1d4a1d38d5aaea922d331b5941edb92ae21312",
+    "host-costume-contact-v6.png": "2b8d3fb3388eb1565846ef3e09345b2d5e15167551423cedc95abd8e73051c02",
+    "host-costume4-v6.png": "787f613242bc6f60748a4c2ab7ef6b4675ec23477ae82ecd38c3e8f67dc65761",
+    "host-equipment-v6.png": "31a3bc0842541334aa7f8b819ce24374aad807dcd317e1a54d619e49c9f095b2",
+    "host-costume1-v6.png": "de5251bc638b995f0abe9e1223043999cd442cb799b38a721b3b7aa5d2595f3a"
+  },
+  "androidExecution": false,
+  "userVisualApproval": false
+}

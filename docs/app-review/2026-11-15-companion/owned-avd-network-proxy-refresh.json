@@ -1,0 +1,16 @@
+{
+  "observedAtUtc": "2026-11-15T18:06:59.048338+00:00",
+  "scope": "Owned Runmoni_Cloud_29 only; intentional managed Cloud proxy configuration refresh",
+  "priorSavedProxyConnectionFailed": true,
+  "inheritedProxyResolvedAddressChanged": true,
+  "newProxySelectedFromInheritedHttpsProxy": true,
+  "proxyCredentialsPresent": false,
+  "privateBeforeSha256": "cc595b3159036f9053af0c2d4d45379eb70dd44d4210b4286ffd0ec88b3eb30c",
+  "privateAfterSha256": "996a38e84aff65f31c6eaee2be50732c902d4f8f4c18524bc8e09110373a0dba",
+  "exclusionsAndPacUnchanged": true,
+  "appCodeChanged": false,
+  "appTlsVerificationChanged": false,
+  "firewallOrExternalTunnelCreated": false,
+  "actualAndroidOnlineMapRetestCompleted": false,
+  "intentionalEnvironmentChangeNotClaimedAsRestoration": true
+}

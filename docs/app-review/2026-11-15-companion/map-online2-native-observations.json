@@ -1,0 +1,65 @@
+{
+  "syntheticFixture": true,
+  "actualMainActivity": false,
+  "actualGps": false,
+  "firebaseUsed": false,
+  "profileOrRecordingModified": false,
+  "styleUri": "https:\/\/tiles.openfreemap.org\/styles\/liberty",
+  "productionFactoryAndTransportUsed": true,
+  "httpCacheClearedOrWarmupForced": false,
+  "freshHttpFetchForEveryResourceClaimed": false,
+  "observationBudgetMillis": 120000,
+  "providerSlaClaimed": false,
+  "routePointCount": 4,
+  "routeSegmentCount": 2,
+  "runnerCount": 1,
+  "mapViewConstructions": 1,
+  "completed": false,
+  "failureClass": "androidx.compose.ui.test.ComposeTimeoutException",
+  "nativeFailure": null,
+  "stages": [
+    {
+      "stage": "production-pane-created",
+      "elapsedMillis": 3292,
+      "fullyRenderedCallbacks": 0,
+      "cameraIdleCallbacks": 0,
+      "gestureStartCallbacks": 0
+    },
+    {
+      "stage": "native-feature-observations",
+      "routeSourceFeatureCount": 6,
+      "renderedProviderFeatureCount": 707,
+      "textureSampledDistinctColors": 571,
+      "sourceFeatureDuplicatesNotDeduplicated": true
+    },
+    {
+      "stage": "ready-before-gestures",
+      "elapsedMillis": 41187,
+      "fullyRenderedCallbacks": 1,
+      "cameraIdleCallbacks": 3,
+      "gestureStartCallbacks": 0,
+      "camera": {
+        "latitude": 37.56775003398271,
+        "longitude": 126.97939999999966,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-drag-idle",
+      "elapsedMillis": 46750,
+      "fullyRenderedCallbacks": 1,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.98030000003655,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "two-finger-pinch-increases-native-zoom-and-renders",
+      "conditionSatisfied": false,
+      "elapsedMillis": 120008
+    }
+  ]
+}

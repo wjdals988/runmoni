@@ -1,3 +1,15 @@
+# 2026-11-16 0.7 후보 — 실제 앱·위젯·배포 계속
+
+frontend-design로 앱·위젯의 색/여백/글자/아이콘, 동일UID 서버 확인 연결 유지, 출발 전 약100m 공유 선택, 승인 포즈의 산타·곰·골든 의복과 MapLibre/OpenFreeMap을 구현했다. [설계](design-system/runmoni/pages/companion-redesign.md)·[검토](docs/app-review/2026-11-15-companion/README.md)·[클라우드 실행 메모](docs/CLOUD_ANDROID_RENDERING.md)를 따른다. 원본/58ID/13슬롯/9탭/데이터/보관키는 유지한다.
+
+소유자 Rules 게시 후 새 임시 익명 계정에서 닉네임 exact read403→404를 확인하고 삭제를 확인했다. 운영 문서 쓰기는0회다. 로컬 Firebase SDK3 성공과 외부 프록시 wrapper 미완료·후속 복원-only 완료를 분리한다. 운영 저장/휴대폰/Google 성공은 별개다.
+
+최신 input6 새JVM219개·lint오류0/경고66·TEST APK pair 생성 성공. 지도는 versioned image key/마지막 준비 이미지/작은runner Sync후prune와 평면 건물로 정리했다. 실제 Native 픽셀 검사·SDK5개와 Root 원본사진 검토를 통과했다. 교체 후48/48 전체샘플·24/24 의복샘플이 맞았으며 모든 프레임·기기/이전 원인 하나를 확정한 결과는 아니다. 두 이전 지도 자동PASS/시각거절, 과거 실패와 후속 복원은 보존한다.
+
+[최종 Android 범위](docs/app-review/2026-11-15-companion/android-scope-summary.json)는 이번0.7의 input3 77 +input4 29 +input5 26 +input6 5=고유137개다. 서로 다른 APK이며 변경 없는 경로만 소스 동등성 검토로 보존했다. 동일APK137개/이전0.6결과 재사용을 주장하지 않는다. Home의 실제320dp/font2 겹침은 새 입력에서15.33dp 간격으로 교정됐고 기존 스레드 예외 원인은 미확정이다.
+
+실제 Main 첫 시도의 탭 관측 오류/부분2장/복원을 보존했고, 관측기 교정 후 Main2 전체 동선·새 원본7장과 실제 Launcher widget1의 독립 font1/font2 배치2장을 통과했다. Root가 모든 최종 원본을 직접 확인했다. 원래 데이터·소유 환경 복원 후 전용 AVD5 PID58580을 정확히 종료했다. [종료 근거](docs/app-review/2026-11-15-companion/session5-cleanup.json). 같은 키 서명·공개APK·대시보드·피드는 계속 진행할 후속 단계다. 기존 공개0.6의 실제 APK출처9a572de8da88ef42bf740d9424b22c7fa14e17cb는 새 게시 전까지 유지한다. 아래 지속 제약과 기존 배포 승인을 지킨다.
+
 # 0.6.0-dev 페이지 이동·위젯 공개 — 2026-11-14 한국 시간
 
 <!-- verified-sport-pages-release-0.6.0-v1 -->

@@ -109,7 +109,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
         viewModelScope.launch { app.runs.active.collect { active ->
-            mutableState.update { it.copy(activeRun = active, sharingConsentRunId = it.sharingConsentRunId?.takeIf { id -> id == active.id && active.phase == RunPhase.RUNNING }, publicLocation = if (firebaseMode) app.runnerSharing.state.value.enabled else preferences.getBoolean("publicLocation", false)) }
+            mutableState.update { it.copy(activeRun = active, sharingConsentRunId = it.sharingConsentRunId?.takeIf { id -> id == RunnerSharingPreferenceStore.NEXT_RUN || id == active.id && active.phase == RunPhase.RUNNING }, publicLocation = if (firebaseMode) app.runnerSharing.state.value.enabled else preferences.getBoolean("publicLocation", false)) }
             if (active.phase != RunPhase.IDLE) preserveEntryForExistingUse()
         } }
         viewModelScope.launch { app.runs.persistence.collect { persistence ->
@@ -119,6 +119,27 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             mutableState.update { previous -> previous.copy(runPersistence = persistence,
                 profile = if (local != null && (api.token.isBlank() || previous.communityGuest))
                     previous.profile.mergeWalletMileage(before, local) else previous.profile) }
+        } }
+        viewModelScope.launch { firebaseRooms.profileConnectionState.collect { connection ->
+            if (!firebaseMode) return@collect
+            val before = state.value
+            // A connection operation publishes its own matching acknowledgement.
+            // Restoring an existing receipt must not invalidate that in-flight request.
+            if (!before.unifiedProfile.connecting) {
+                val accepted = connection.uid.takeIf { connection.connected }.orEmpty()
+                if (before.communityUid != accepted) app.runnerSharing.stop()
+                mutableState.update { previous -> previous.copy(
+                    communityProfileConnection = connection,
+                    signedIn = connection.connected, communityUid = accepted,
+                    sharingPreferenceEnabled = app.sharingPreference.enabledFor(accepted),
+                    sharingConsentRunId = previous.sharingConsentRunId.takeIf { before.communityUid == accepted },
+                    serverConnected = if (connection.serverVerified) previous.serverConnected else false,
+                    serverStatus = if (connection.phase == CommunityProfileConnectionPhase.CACHED)
+                        "프로필 연결 유지 중 · 온라인 확인 대기" else previous.serverStatus,
+                    unifiedProfile = previous.unifiedProfile.copy(connectedNickname = connection.nickname,
+                        connectedNicknameKey = connection.nicknameKey),
+                ) }
+            } else mutableState.update { it.copy(communityProfileConnection = connection) }
         } }
         viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
         viewModelScope.launch { app.cloud.state.collect { cloud ->
@@ -242,24 +263,42 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
     override fun setPublicLocation(enabled: Boolean) {
         if (!enabled) {
+            app.sharingPreference.suppressAutomaticSharing()
             app.runnerSharing.stop()
+            val cleared = app.sharingPreference.clear()
             preferences.edit().putBoolean("publicLocation", false).apply()
-            mutableState.update { it.copy(publicLocation = false, sharingConsentRunId = null) }
+            mutableState.update { it.copy(publicLocation = false, sharingPreferenceEnabled = false, sharingConsentRunId = null) }
+            if (!cleared) reportSharingPreferenceClearFailure()
             return
         }
         if (!firebaseMode || !state.value.signedIn || firebaseRooms.uid.isBlank()) {
-            permissionDenied("근처 위치 공유는 프로필 연결 후 사용할 수 있어요."); return
+            permissionDenied("프로필을 연결한 뒤 러닝 위치 공유를 준비할 수 있어요."); return
         }
         val run = state.value.activeRun
-        if (run.phase != RunPhase.RUNNING) { permissionDenied("러닝을 시작한 뒤 위치 공유를 켜 주세요."); return }
-        mutableState.update { it.copy(sharingConsentRunId = run.id, sharingConsentNonce = it.sharingConsentNonce + 1) }
+        val request = if (run.phase == RunPhase.RUNNING) run.id else RunnerSharingPreferenceStore.NEXT_RUN
+        mutableState.update { it.copy(sharingConsentRunId = request, sharingConsentNonce = it.sharingConsentNonce + 1) }
     }
     override fun dismissSharingConsent(requestNonce: Long) { mutableState.update { if (it.sharingConsentNonce == requestNonce) it.copy(sharingConsentRunId = null) else it } }
     override fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {
-        if (!adultConfirmed || state.value.communityUid != firebaseRooms.uid || requestNonce != state.value.sharingConsentNonce || !firebaseMode || !state.value.signedIn || state.value.sharingConsentRunId != runId ||
-            state.value.activeRun.id != runId || state.value.activeRun.phase != RunPhase.RUNNING) return
+        val current = state.value
+        if (!adultConfirmed || current.communityUid.isBlank() || current.communityUid != firebaseRooms.uid ||
+            requestNonce != current.sharingConsentNonce || !firebaseMode || !current.signedIn ||
+            current.sharingConsentRunId != runId || (runId != RunnerSharingPreferenceStore.NEXT_RUN &&
+                (current.activeRun.id != runId || current.activeRun.phase != RunPhase.RUNNING))) return
+        if (!app.sharingPreference.accept(current.communityUid, adultConfirmed)) {
+            permissionDenied("공유 설정을 저장하지 못했어요. 다시 시도해 주세요.")
+            return
+        }
         dismissSharingConsent(requestNonce)
-        app.runnerSharing.enable(runId, adultConfirmed)
+        mutableState.update { if (it.communityUid == current.communityUid && firebaseRooms.uid == current.communityUid)
+            it.copy(sharingPreferenceEnabled = true) else it }
+        if (current.activeRun.phase == RunPhase.RUNNING)
+            app.runnerSharing.enable(current.activeRun.id, adultConfirmed, expectedUid = current.communityUid)
+    }
+    private fun reportSharingPreferenceClearFailure() {
+        val message = "위치 전송은 중단했지만 공유 선택 해제를 기기에 저장하지 못했어요. 저장 공간을 확인한 뒤 다시 꺼 주세요."
+        mutableState.update { previous -> previous.copy(error = previous.error?.takeUnless { it.contains(message) }
+            ?.let { "$it\n$message" } ?: message) }
     }
     private fun hasPreviewLocationPermission() = listOf(android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION).any {
         androidx.core.content.ContextCompat.checkSelfPermission(app, it) == android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -553,13 +592,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         requests.emit(UiRequest.ShareFile(FileProvider.getUriForFile(app, "${BuildConfig.APPLICATION_ID}.files", file)))
     })
     override fun configureServer(url: String) {
+        var sharingChoiceCleared = true
         runCatching {
             val uri = URI(url.trim())
             require(uri.userInfo == null && uri.query == null && uri.fragment == null && uri.host != null && uri.scheme in setOf("http", "https")) { "올바른 서버 주소를 입력해 주세요." }
             require(uri.scheme == "https" || uri.host in setOf("127.0.0.1", "localhost", "10.0.2.2")) { "로컬 주소 외에는 HTTPS 주소를 사용해 주세요." }
             if (firebaseMode || api.baseUrl != url.trim().trimEnd('/')) {
-                invalidateProfileConnection()
+                app.sharingPreference.suppressAutomaticSharing()
                 app.runnerSharing.stop()
+                sharingChoiceCleared = app.sharingPreference.clear()
+                mutableState.update { it.copy(sharingPreferenceEnabled = false) }
+                invalidateProfileConnection()
                 profileOperation++; nicknameCheckOperation++; nicknameCheckJob?.cancel()
                 mutableState.update { it.copy(communityUid = "", sharingConsentRunId = null,
                     unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial)) }
@@ -585,7 +628,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 preferences.edit().putBoolean("publicLocation", false).apply()
                 mutableState.update { it.copy(apiUrl = api.baseUrl, signedIn = false, communityGuest = false, serverConnected = false, publicLocation = false, profile = readLocalProfile(), crews = emptyList(), parties = emptyList(), messages = emptyList(), liveRunners = emptyList(), crewMembers = emptyMap(), openedRoomId = "", openedRoomTitle = "", audio = it.audio.copy(roomId = "", canDj = false)) }
             }
-        }.onFailure { permissionDenied(it.message ?: "서버 주소를 확인해 주세요.") }.onSuccess { refreshCommunity() }
+        }.onFailure {
+            permissionDenied(it.message ?: "서버 주소를 확인해 주세요.")
+            if (!sharingChoiceCleared) reportSharingPreferenceClearFailure()
+        }.onSuccess {
+            val refresh = refreshCommunityJob()
+            if (!sharingChoiceCleared) {
+                reportSharingPreferenceClearFailure()
+                refresh.invokeOnCompletion { reportSharingPreferenceClearFailure() }
+            }
+            ignoreJob(refresh)
+        }
     }
     override fun connectUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) {
         val actualBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP
@@ -645,6 +698,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 profileOperation++ // A read started during the request cannot overwrite its ACKed nickname.
                 mutateLocalProfile { it.copy(name = requested.nickname) }
                 mutableState.update { it.copy(signedIn = true, communityUid = acknowledgedUid,
+                    communityProfileConnection = if (firebaseMode) firebaseRooms.profileConnectionState.value else it.communityProfileConnection,
+                    sharingPreferenceEnabled = app.sharingPreference.enabledFor(acknowledgedUid),
                     communityGuest = if (expectedBackend == CommunityBackend.FIREBASE || createdHttpGuest) true else it.communityGuest,
                     publicLocation = if (createdHttpGuest) false else it.publicLocation,
                     unifiedProfile = it.unifiedProfile.copy(connecting = false, error = null,
@@ -679,9 +734,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         })
     }
     override fun signOut() {
+        app.sharingPreference.suppressAutomaticSharing()
+        app.runnerSharing.stop()
+        val sharingChoiceCleared = app.sharingPreference.clear()
+        mutableState.update { it.copy(sharingPreferenceEnabled = false, publicLocation = false, sharingConsentRunId = null) }
         invalidateProfileConnection()
-        ignoreJob(work {
-            app.runnerSharing.stop(); profileOperation++; nicknameCheckJob?.cancel()
+        val logout = work {
+            if (!sharingChoiceCleared) reportSharingPreferenceClearFailure()
+            profileOperation++; nicknameCheckJob?.cancel()
             if (firebaseMode) {
                 firebaseRooms.signOut(); communityGeneration++
                 mutableState.update { it.copy(signedIn = false, communityGuest = true, communityUid = "",
@@ -693,7 +753,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             audio.disconnect(); api.token = ""; session.write(""); currentUserId = ""; preferences.edit().remove("userId").putBoolean("publicLocation", false).putBoolean("communityGuest", false).apply()
             mutableState.update { it.copy(signedIn = false, communityGuest = false, communityUid = "",
                 unifiedProfile = UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial, connectedSerial = it.unifiedProfile.connectedSerial), serverConnected = false, profile = readLocalProfile(), publicLocation = false, crews = emptyList(), parties = emptyList(), messages = emptyList(), crewMembers = emptyMap(), liveRunners = emptyList(), openedRoomId = "", openedRoomTitle = "", serverStatus = "기기 내 기록 모드") }
-        })
+        }
+        if (!sharingChoiceCleared) logout.invokeOnCompletion { reportSharingPreferenceClearFailure() }
+        ignoreJob(logout)
     }
     override fun signInGoogle() { requests.tryEmit(UiRequest.GoogleSignIn) }
     override fun useFirebaseCommunity() {
@@ -843,13 +905,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     })
     override fun refreshCloudSummaries(expectedUid: String) = ignoreJob(work { app.cloud.refreshSummaries(expectedUid) })
     override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work { app.cloud.deleteSummary(runId, expectedUid) })
-    override fun refreshCommunity() = ignoreJob(work {
+    override fun refreshCommunity() = ignoreJob(refreshCommunityJob())
+    private fun refreshCommunityJob() = work {
         val generation = communityGeneration
         try { refreshNow() } catch (failure: Exception) {
             mutableState.update { if (generation == communityGeneration) it.copy(serverConnected = false, serverStatus = "크루·파티 목록을 불러오지 못했어요. 연결 후 다시 시도해 주세요.") else it }
             if (failure is CancellationException) throw failure
         }
-    })
+    }
     private suspend fun refreshNow() = communityRefresh.withLock {
         val generation = communityGeneration
         if (firebaseMode) {
@@ -887,7 +950,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 val stillMember = it.openedRoomId.isBlank() || snapshot.crews.any { r -> r.id == openedId && r.joined } || visibleParties.any { r -> r.id == openedId && r.joined }
                 val profileUi = if (identityChanged) UnifiedProfileUi(savedSerial = it.unifiedProfile.savedSerial,
                     connectedSerial = it.unifiedProfile.connectedSerial, connecting = it.unifiedProfile.connecting) else it.unifiedProfile
-                it.copy(profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = visibleParties, crewPartiesError = scopedError,
+                it.copy(communityProfileConnection = firebaseRooms.profileConnectionState.value, sharingPreferenceEnabled = app.sharingPreference.enabledFor(accepted), profile = wallet.read(), crews = snapshot.crews.map { crew -> crew.copy(isDj = it.crews.any { old -> old.id == crew.id && old.isDj }) }, parties = visibleParties, crewPartiesError = scopedError,
                     signedIn = snapshot.signedIn, communityGuest = true, communityUid = accepted,
                     unifiedProfile = if (unchangedProfileOperation) profileUi.copy(connectedNickname = snapshot.nickname, connectedNicknameKey = snapshot.nicknameKey) else profileUi,
                     sharingConsentRunId = if (identityChanged) null else it.sharingConsentRunId,

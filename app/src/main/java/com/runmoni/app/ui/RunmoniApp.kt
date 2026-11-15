@@ -371,6 +371,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
 private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
+    val compactLive = run.phase != RunPhase.IDLE && LocalDensity.current.fontScale >= 1.3f
     val persistence = state.runPersistence
     val permissionMissing = state.locationAccess.precisePermissionGranted == false
     val gpsDisabled = state.locationAccess.gpsEnabled == false
@@ -382,16 +383,19 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
         accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            ScreenContent(centerWhenFits = run.phase == RunPhase.IDLE) {
+            ScreenContent(spacing = if (compactLive) 16.dp else RunmoniLayout.PageGap, centerWhenFits = run.phase == RunPhase.IDLE) {
+                val statusHeader: @Composable () -> Unit = {
                 Text(if (persistence.finishing) "러닝 마무리 중"
                     else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"
                     else if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
-                    style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
+                    style = if (compactLive) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
                 FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
                     accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                 }
-                if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.MintWash, shape = RunmoniShapes.Surface) {
+                }
+                if (!compactLive) statusHeader()
+                if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
                             val details: @Composable (Modifier) -> Unit = { m ->
@@ -416,30 +420,36 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                             Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
                         }
                     }
-                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.DeepGreen) {
-                    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.Paper) {
+                    Column(Modifier.fillMaxWidth().padding(if (compactLive) 12.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
                             val showAvatar = maxWidth >= 280.dp && LocalDensity.current.fontScale < 1.3f
                             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    Text("달린 거리 (km)", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodyMedium)
-                                    DistanceNumber(distance(run.distanceMeters), RunmoniColors.OnDark, Modifier.testTag("run_distance"))
+                                    if (!compactLive) Text("달린 거리 (km)", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
+                                    DistanceNumber(distance(run.distanceMeters), RunmoniColors.Ink, Modifier.testTag("run_distance"))
+                                    if (compactLive) Text("달린 거리 (km)", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
                                 }
                                 if (showAvatar) AvatarMini(state.profile.avatar, Modifier.width(64.dp).height(96.dp)
                                     .testTag("run_avatar"), running = run.phase == RunPhase.RUNNING, decorative = true)
                             }
                         }
-                        HorizontalDivider(color = RunmoniColors.OnDark.copy(alpha = 0.2f))
-                        MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"), UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = true)
+                        HorizontalDivider(color = RunmoniColors.Line)
+                        MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"), UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = false)
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text("현재 속도", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodyMedium)
+                            Text("현재 속도", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
                             Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
-                                color = RunmoniColors.OnDark, style = MaterialTheme.typography.bodyMedium,
+                                color = RunmoniColors.Ink, style = MaterialTheme.typography.bodyMedium,
                                 modifier = Modifier.testTag("run_speed"))
                         }
-                        Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.OnDarkMuted, style = MaterialTheme.typography.bodySmall)
+                        Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
+                if (compactLive) statusHeader()
+                if (run.phase == RunPhase.IDLE) ToggleRow("근처 러너에게 위치 공유",
+                    if (state.signedIn) "출발 전에 설정하세요. 러닝 중에만 약 100m 단위로 보여요."
+                    else "프로필을 연결한 뒤 미리 설정할 수 있어요.",
+                    state.sharingPreferenceEnabled || state.publicLocation, actions::setPublicLocation)
                 if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
                 if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
@@ -584,7 +594,7 @@ internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = RunmoniLayout.
         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .verticalScroll(rememberScrollState()).testTag("screen_scroll")
             .heightIn(min = maxHeight)
-            .padding(start = pageGutter(), end = pageGutter(), top = 20.dp, bottom = 32.dp),
+            .padding(start = pageGutter(), end = pageGutter(), top = 24.dp, bottom = 32.dp),
             verticalArrangement = Arrangement.spacedBy(spacing,
                 if (centerWhenFits) Alignment.CenterVertically else Alignment.Top), content = content)
     }
@@ -643,7 +653,7 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
 
 @Composable
 internal fun LocationSharingToggle(state: AppState, actions: AppActions) {
-    ToggleRow("근처 위치 공유", "러닝 중 약 100m 단위로 공유해요", state.publicLocation,
+    ToggleRow("러닝 위치 공유", "미리 설정하면 다음 러닝부터 약 100m 단위로 공유해요", state.sharingPreferenceEnabled || state.publicLocation,
         actions::setPublicLocation, enabled = state.signedIn && !state.sharing.busy, tag = "share_location")
 }
 

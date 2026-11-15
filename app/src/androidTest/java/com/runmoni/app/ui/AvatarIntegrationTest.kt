@@ -55,7 +55,7 @@ class AvatarIntegrationTest {
 
     @Test fun nineTabsExposeReadyItemsAndPreserveUnreadyStoredChoicesAndInventory() {
         val owned = AvatarCatalogue.slots.flatMap { slot -> slot.variants.indices.map { "${slot.key}:$it" } }.toSet()
-        val original = Profile(mileage = 4242, ownedItems = owned, avatar = AvatarStyle(hair = 2, face = 1, socks = 2, costume = 1))
+        val original = Profile(mileage = 4242, ownedItems = owned, avatar = AvatarStyle(hair = 2, face = 1, socks = 2, costume = 2))
         val state = mutableStateOf(AppState(profile = original))
         val actions = RunmoniUiTest.FakeActions(state)
         compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, actions) {} } }
@@ -66,8 +66,21 @@ class AvatarIntegrationTest {
             compose.onNodeWithTag("closet_${slot}_$variant").performScrollTo().assertIsEnabled().performClick()
         }
         compose.onNodeWithTag("closet_slot_costume").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_costume_1").assertDoesNotExist()
+        compose.onNodeWithTag("closet_costume_2").assertDoesNotExist()
+        compose.onNodeWithTag("closet_costume_3").assertDoesNotExist()
         compose.runOnIdle { assertEquals(original, state.value.profile) }
+        for (costume in listOf(1, 4, 5)) {
+            pick("costume", costume)
+            compose.onNodeWithTag("closet_costume_$costume").assertIsSelected()
+            compose.runOnIdle {
+                assertEquals(costume, state.value.profile.avatar.costume)
+                assertEquals(original.mileage, state.value.profile.mileage)
+                assertEquals(original.ownedItems, state.value.profile.ownedItems)
+                assertEquals(original.avatar.hair, state.value.profile.avatar.hair)
+                assertEquals(original.avatar.face, state.value.profile.avatar.face)
+                assertEquals(original.avatar.socks, state.value.profile.avatar.socks)
+            }
+        }
         pick("costume", 0)
         for ((slot, variant) in listOf("top" to 1, "bottom" to 1, "shoes" to 1)) pick(slot, variant)
         val availableGear = mutableMapOf<String, Int>()

@@ -151,14 +151,14 @@ private fun RunRecordPageContent(
                     verticalArrangement = Arrangement.spacedBy(32.dp)) {
                     // The result is the opening of the page, rather than one
                     // more card competing with the route and management tools.
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.DeepGreen)
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                            color = RunmoniColors.OnDarkMuted, modifier = Modifier.testTag("record_date"))
+                            color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
                         val recordedDistance = distance(record.distanceMeters)
                         RecordDistance(recordedDistance)
-                        HorizontalDivider(color = RunmoniColors.OnDarkMuted.copy(alpha = .3f))
+                        HorizontalDivider(color = RunmoniColors.Line)
                         val time = duration(record.activeDurationMillis)
                         val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
                         BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_duration_pace")
@@ -310,8 +310,8 @@ private fun RecordSectionTitle(title: String) {
 @Composable
 private fun RecordResultMetric(label: String, value: String) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.OnDarkMuted)
-        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.OnDark)
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Ink)
     }
 }
 
@@ -324,7 +324,7 @@ private fun RecordDistance(value: String) {
     val measurer = rememberTextMeasurer()
     val style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold,
         fontFeatureSettings = "tnum")
-    val unit = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = RunmoniColors.OnDarkMuted)
+    val unit = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = RunmoniColors.Muted)
     val label = buildAnnotatedString {
         append(value)
         withStyle(unit) { append(" km") }
@@ -346,7 +346,7 @@ private fun RecordDistance(value: String) {
                 low
             }
         }
-        Text(label, modifier = Modifier.fillMaxWidth(), color = RunmoniColors.OnDark,
+        Text(label, modifier = Modifier.fillMaxWidth(), color = RunmoniColors.Ink,
             style = style.copy(fontSize = size.sp, lineHeight = (size * 1.15f).sp), softWrap = true)
     }
 }
