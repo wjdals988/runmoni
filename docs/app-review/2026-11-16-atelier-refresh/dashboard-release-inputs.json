@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+  "ciRun": 43886075423,
+  "ciAttempt": 1,
+  "expectedJvmTests": 248,
+  "verification": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/connected-release-public.json",
+    "sha256": "4243ef3842523268bd6d835a717cbb13db54fbc9989448988fdb0446560fa2fe"
+  },
+  "metadata": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/runmoni-0.8.0-dev.metadata.json",
+    "sha256": "7415421ed9313ed63e1e905bd4c0d3c263bfe3b74da06748b7216cd098dd27bd"
+  },
+  "checksum": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/SHA256SUMS-0.8.0-dev.txt",
+    "sha256": "644feafae292464971502df09723ab3a943667d5a743e419316d389c05b0b708"
+  },
+  "featureMerge": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/feature-merge.json",
+    "sha256": "b007cdc21d105014e3146c937363fcc6ac23ae65fc08cfd6e857c73aa796f8a8"
+  },
+  "sourceComparison": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/release-source-comparison.json",
+    "sha256": "0846f32a478258c62805d6407c5c68db68a6a0d825b0096d43eb26bedd05d878"
+  },
+  "content": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/dashboard-content.json",
+    "sha256": "90e061bb0c4f0e971f303d9ac4afea3b4f3475d30fc1441ffed60f370e202d80"
+  }
+}

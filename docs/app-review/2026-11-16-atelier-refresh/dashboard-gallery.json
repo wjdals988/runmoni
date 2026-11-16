@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "version": "0.8.0-dev",
+  "versionCode": 31,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/release-source-comparison.json",
+      "sha256": "0846f32a478258c62805d6407c5c68db68a6a0d825b0096d43eb26bedd05d878"
+    }
+  },
+  "rootVisualProof": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/root-main-visual-review.json",
+    "sha256": "1f8120a32afcc347b64ad5484cfd0132953b471cea86c554ed9833dec2efbc48"
+  },
+  "scopeNote": "검토용 가명·5.24km 합성 기록과 합성 사진을 사용했습니다. 시스템 사진 선택과 전체 사진 공유 스타일·초안 복원, 무료 벡터 지도를 실제 앱에서 확인했습니다. 실제 위치/GPS 주입·운영 쓰기는0회이며 SNS 전달은 확인하지 않았습니다.",
+  "images": [
+    {
+      "key": "cap",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2-main-male-cap.png",
+      "sha256": "32f119161020df73b1abfdd3301c74efea89783e393c3f81f34a980c536ef2a7",
+      "width": 480,
+      "height": 854,
+      "caption": "러닝 캡 · Aseprite 소재 디테일과 부위별 목록",
+      "alt": "실제 Android 앱 화면: 러닝 캡 · Aseprite 소재 디테일과 부위별 목록",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2.json",
+        "sha256": "601ffc2f8e3a134f9de344f5720660a0cac88c8175128f2401d6fecc9754cb3f"
+      }
+    },
+    {
+      "key": "kit",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2-main-atelier-kit.png",
+      "sha256": "8016b052310a41a0d38d89fd7710d49a28b0eeaa8033d2d908047e8fed50bd9a",
+      "width": 480,
+      "height": 854,
+      "caption": "새 의복 · 메시 저지·리브 크루삭스·패널 러닝화",
+      "alt": "실제 Android 앱 화면: 새 의복 · 메시 저지·리브 크루삭스·패널 러닝화",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2.json",
+        "sha256": "601ffc2f8e3a134f9de344f5720660a0cac88c8175128f2401d6fecc9754cb3f"
+      }
+    },
+    {
+      "key": "photo",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2-main-full-photo-stamp.png",
+      "sha256": "a6384acaf0fe26f4817a4d1e1b0f4e66cb4f0bde3a17356c42c4f2170ce3fceb",
+      "width": 480,
+      "height": 854,
+      "caption": "사진 공유 · 합성 검토 이미지 위 미니미와 기록 스탬프",
+      "alt": "실제 Android 앱 화면: 사진 공유 · 합성 검토 이미지 위 미니미와 기록 스탬프",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2.json",
+        "sha256": "601ffc2f8e3a134f9de344f5720660a0cac88c8175128f2401d6fecc9754cb3f"
+      }
+    },
+    {
+      "key": "map",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2-main-map-clean.png",
+      "sha256": "237017e8597eb96f3af29a5fa04f9cfa457946607fb8ba5e777cd4d82155b13a",
+      "width": 480,
+      "height": 854,
+      "caption": "무료 벡터 지도 · 지도 밖 조작과 차분한 색상",
+      "alt": "실제 Android 앱 화면: 무료 벡터 지도 · 지도 밖 조작과 차분한 색상",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-atelier-refresh/live2.json",
+        "sha256": "601ffc2f8e3a134f9de344f5720660a0cac88c8175128f2401d6fecc9754cb3f"
+      }
+    }
+  ]
+}

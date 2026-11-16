@@ -1,0 +1,10 @@
+{
+  "observedAtUtc": "2026-11-16T14:55:49.822940+00:00",
+  "normalGithubApiRecovered": true,
+  "causeOfRecoveryEstablished": false,
+  "credentialValuesReadOrPrinted": false,
+  "credentialBindingsOrProxyBypassed": false,
+  "userReauthenticationStillRequired": false,
+  "newCiApiSourceAndReportsVerified": true,
+  "publicationProof": "connected-release-public.json"
+}

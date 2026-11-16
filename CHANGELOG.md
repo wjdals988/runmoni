@@ -1,3 +1,18 @@
+# 0.8.0-dev 의복·사진 공유·자동 백업 공개 — 2026-11-16 한국 시간
+
+<!-- verified-atelier-release-0.8.0-v1 -->
+기존 보관키0.8.0-dev/code31을 실기기 검증 전 개발 프리뷰로 공개했다. 실제 APK출처 `9a0051e28a2ac24badbbf1b57a554a37e4a9a85e`, 172,828,638bytes, SHA256 `5c2c6a12faf75d38f4328046a3a93537472d37842963e4357f0b45fbed62531b`다. 앱https://github.com/wjdals988/runmoni/pull/63·서명CI43886075423·대시보드https://github.com/wjdals988/mydashboard/pull/32/main `c89e16ccd9773594cc7e3fbbf75a203b817a9b4c`와 운영 다운로드/새MainPNG4/새Node23개를 확인했다. 첫 서명CI43883353138/source572939386fcf01c000f4604621e16b7dcc093169는 필수 배포 안내 누락으로 업로드 전 차단됐고, 안내 보완 뒤 실제 새 출처로 다시 서명했다. 첫 전체failure를 새 성공으로 합산하지 않았다. APK 본문을 다시 내려받거나 공개3자산을 교체하지 않았다. 후속 문서·피드D로 실제 APK출처C를 바꾸지 않는다.
+
+frontend-design와 실제 로컬 headless Aseprite1.3.18.6-dev의 소재80셀/프로젝트5개를 적용했다. 새 메시 저지·리브 양말·패널 신발3종과 부위별 옷장, 전체 사진 공유3스타일/독립 배치, Google 요약 자동 백업/Roomv2·고정UID/삭제억제, 무료 지도 정리/반복 오류 안내와 Stride R 앱/알림 아이콘을 반영했다. 원본 얼굴·체형·8프레임·기존58ID prefix/13슬롯/9탭/무료·보유·지갑·키를 보존하며 전체61ID다. Aseprite GUI 손그림·전신 털 인형 원화/모든61종 준비·사용자 시각 승인은 주장하지 않는다. 원본GPS/포인트·옷장 전체 백업과 다른 기기의 전역 삭제 동기화는 별도다. 새3ID Rules는 소유자 게시 완료 보고이며 관리 API/운영 쓰기 확인으로 바꾸지 않는다.
+
+최종 input4 새 로컬JVM248/lint오류0·경고65, 실제 연결 서명CI 새JVM248/lint오류0·경고97를 구분한다. Android 범위86는 input3 보존55+최종input4 새31이며 같은APK 전체나 이전0.7 재사용이 아니다. 원래 false parent와 실패 그룹 부분통과 제외, 실제46dp 버튼의48dp 수정·부분문구 검사 교정, 초기 재생4초 실패/원인미확정과 같은binary3 독립7 통과를 보존했다. 재생 실패를 제품 수정 완료나 초기 로딩 SLA로 바꾸지 않는다. 실제Main 원본7장과 선택/저장·사진Picker/스타일/초안/지도·Root 시각검토·원래 DB행/백업 origin·전체XML/계정·소유 설정 복원 및 AVD4 PID69127 정확 종료를 확인했다.
+
+휴대폰·실제 Google 로그인/자동 백업·운영 프로필/위치공유 쓰기·SNS 전달·야외GPS/절전/OEM/API31+·실제live위젯/알림·공개 서명APK 런타임과 사용자 시각 승인은 별도다. canonical raw피드는 이 문서/피드 병합 뒤 전체 바이트로 독립 확인한다.
+
+[게시 검증](docs/RELEASE_REVIEW_0.8.0_20261116.md) · [APK 다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.8.0-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni).
+
+아래는 이전 구현·검토 시점의 보존 기록이다.
+
 # 2026-11-16 0.8 배포 API 인증 갱신 대기
 
 PR62/63 main 반영 및 새 source9a0051e28a2ac24badbbf1b57a554a37e4a9a85e의 연결 서명CI43886075423 공개페이지Success를 확인했다. GitHub API401로 세부 CI/자산 독립검증·공개전환·대시보드PR은 진행하지 못했다. 공개0.7.1을 유지하며 같은workspace GitHub 재인증을 요청했다. 새 signing key/토큰값/서비스 계정키는 요구하지 않았다. [현재 경계](docs/app-review/2026-11-16-atelier-refresh/README.md).
