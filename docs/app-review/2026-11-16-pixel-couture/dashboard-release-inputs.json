@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
+  "ciRun": 43840377625,
+  "ciAttempt": 1,
+  "expectedJvmTests": 223,
+  "verification": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/connected-release-public.json",
+    "sha256": "28fa78a11f1d697f13517ebba1ca1d4a254a7a00c7d366c301360762c726a880"
+  },
+  "metadata": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/runmoni-0.7.1-dev.metadata.json",
+    "sha256": "3775f60479788c3837049aa69ab77fa06b71e603b18f6a23573979ef31f95d1e"
+  },
+  "checksum": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/SHA256SUMS-0.7.1-dev.txt",
+    "sha256": "12d674a6e54f5346a7a6d2bad4a54cf1706e3a30d876ca5f1f13ae5aaf70e708"
+  },
+  "featureMerge": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/feature-merge.json",
+    "sha256": "d554f6997f0e4db2e1a893ab292810d107696cf43256244b82faef46aba693e9"
+  },
+  "sourceComparison": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/release-source-comparison.json",
+    "sha256": "663e2e61b8d6dd4b66ed158673b6be2d2e529108c53902d613054fef37b7903b"
+  },
+  "content": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/dashboard-content.json",
+    "sha256": "3b282d342c5f82a2a1b05d55020d674de1fd573f07f648c9872be34024d8ec8a"
+  }
+}

@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.7.0-dev",
-    "versionCode": 29,
-    "fileName": "runmoni-0.7.0-dev.apk",
-    "sizeBytes": 172509168,
-    "sha256": "79d006bffacec3adc377476d97de6881424cfba48fc7b41b677f6b991228a152",
+    "version": "0.7.1-dev",
+    "versionCode": 30,
+    "fileName": "runmoni-0.7.1-dev.apk",
+    "sizeBytes": 172525552,
+    "sha256": "32604fb58617c477cfdda6fff58676cb09301facb4d83e0b87fc7aa3c4cf671c",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "ca54251a780f56b60aaecce0dbeb94a4f33061ed",
+    "sourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.7.0-dev/runmoni-0.7.0-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.7.0-dev",
-    "notes": "앱·위젯·프로필 연결 유지·출발 전 공유·벡터 지도·세트 의복을 개선한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.7.1-dev/runmoni-0.7.1-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.7.1-dev",
+    "notes": "미니미 캡·바이저의 착용면과 장비·세트·양말의 도트 명암을 다듬은 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "tests": 23,
+  "passed": 23,
+  "failed": 0,
+  "skipped": 0,
+  "rawLog": "dashboard-node-tests.txt",
+  "rawSha256": "645d67859420a2561996cfa7f9dac52fdb164771c94b8e70d3df74a532f33184",
+  "actualFreshExecution": true
+}

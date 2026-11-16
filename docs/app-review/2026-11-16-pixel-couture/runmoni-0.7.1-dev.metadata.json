@@ -1,0 +1,28 @@
+{
+  "version": "0.7.1-dev",
+  "versionCode": 30,
+  "packageName": "com.runmoni.app",
+  "fileName": "runmoni-0.7.1-dev.apk",
+  "sizeBytes": 172525552,
+  "sha256": "32604fb58617c477cfdda6fff58676cb09301facb4d83e0b87fc7aa3c4cf671c",
+  "signed": true,
+  "sourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
+  "sourceDirty": false,
+  "connectionReadiness": {
+    "schemaVersion": 1,
+    "checkedAt": "2026-11-16T09:30:49.116372+00:00",
+    "sourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
+    "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+    "certificateVerified": true,
+    "firebase": "ready",
+    "server": "ready",
+    "ready": true,
+    "physicalDeviceVerified": false,
+    "interactiveGoogleLoginVerified": false,
+    "anonymousProviderVerified": false,
+    "publicRoomWritesVerified": false,
+    "backend": "firebase"
+  },
+  "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+}

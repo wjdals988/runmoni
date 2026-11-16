@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "version": "0.7.1-dev",
+  "versionCode": 30,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/release-source-comparison.json",
+      "sha256": "663e2e61b8d6dd4b66ed158673b6be2d2e529108c53902d613054fef37b7903b"
+    }
+  },
+  "rootVisualProof": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/root-main-visual-review.json",
+    "sha256": "76776cc73a2d4b02a2dac851324b8cdc111378decd13132e5798863fbe21304d"
+  },
+  "scopeNote": "검토용 가명과5.24km 합성 기록·사진 준비 fixture를 사용했습니다. 사진을 적용하거나 실제 위치/GPS·공유·지도 동선을 새로 실행한 화면은 아닙니다.",
+  "images": [
+    {
+      "key": "male-cap",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1-main-male-cap.png",
+      "sha256": "470269b90cad6f3eeb2039ed8e12f09369a870a7a78f78af6856006946335e55",
+      "width": 480,
+      "height": 854,
+      "caption": "남자 러닝 캡 · 머리 앞 가림과 챙",
+      "alt": "실제 Android 옷장 화면: 남자 러닝 캡 · 머리 앞 가림과 챙",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1.json",
+        "sha256": "e09926c2686e65b0f72287b9cc5b073df7e6f86b6a5302acfebee9fc88207da6"
+      }
+    },
+    {
+      "key": "female-visor",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1-main-female-visor.png",
+      "sha256": "468509a6417b0e65bddbf9876571098462d434449703a03f5a74f87b539a6d90",
+      "width": 480,
+      "height": 854,
+      "caption": "여자 선바이저 · 원래 얼굴과 포니테일 유지",
+      "alt": "실제 Android 옷장 화면: 여자 선바이저 · 원래 얼굴과 포니테일 유지",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1.json",
+        "sha256": "e09926c2686e65b0f72287b9cc5b073df7e6f86b6a5302acfebee9fc88207da6"
+      }
+    },
+    {
+      "key": "santa",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1-main-studio-closet.png",
+      "sha256": "5294b3693fe8ce57d7c99abb68a49403af253e32a4cc9ece15b0254563bb9332",
+      "width": 480,
+      "height": 854,
+      "caption": "산타 러너 · 접힌 모자와 세트 소재",
+      "alt": "실제 Android 옷장 화면: 산타 러너 · 접힌 모자와 세트 소재",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1.json",
+        "sha256": "e09926c2686e65b0f72287b9cc5b073df7e6f86b6a5302acfebee9fc88207da6"
+      }
+    },
+    {
+      "key": "bear",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1-main-female-bear.png",
+      "sha256": "b1ef0dee3455a35ce64396636050974ff1c8d5b91194de5601c30b6edda039e3",
+      "width": 480,
+      "height": 854,
+      "caption": "곰인형 코스튬 · 둥근 귀와 후드 착용면",
+      "alt": "실제 Android 옷장 화면: 곰인형 코스튬 · 둥근 귀와 후드 착용면",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-16-pixel-couture/live1.json",
+        "sha256": "e09926c2686e65b0f72287b9cc5b073df7e6f86b6a5302acfebee9fc88207da6"
+      }
+    }
+  ]
+}
