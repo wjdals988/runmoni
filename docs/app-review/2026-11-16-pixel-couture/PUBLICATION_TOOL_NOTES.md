@@ -1,0 +1,5 @@
+# 게시 도구 검토
+
+첫 dashboard dry 검증은 verifier의실제executed-driver.py를다른보관이름으로복사한뒤고정basename참조가해결되지않아파일존재검사에서중단했다. B변경/새검사성공0회다. 같은바이트의실제실행소스를기대basename에도보관해해결하며서명CI/공개APK원문은변경하지않았다.
+
+대시보드첫staging명령에서catalog를src/data로잘못지정해commit이되지않았고,이어진PR생성은commits없음으로거절됐다. 실제파일src/lib/projects.json과새PNG4만staging해5파일commit/PR31을생성했다. 제품내용/새Node23의입력은바뀌지않아검사를중복실행하지않았다.

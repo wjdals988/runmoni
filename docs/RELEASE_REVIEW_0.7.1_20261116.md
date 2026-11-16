@@ -1,3 +1,18 @@
+# 0.7.1-dev 미니미 착용 도트 공개 — 2026-11-16
+
+<!-- verified-pixel-couture-release-0.7.1-v1 -->
+기존 보관키0.7.1-dev/code30을 개발 프리뷰로 공개했다. 실제 APK 출처는 `cb5b6cb3d70bb56e355bc45a8dc007617a3fa867`, 172,525,552bytes, SHA256 `32604fb58617c477cfdda6fff58676cb09301facb4d83e0b87fc7aa3c4cf671c`다. 앱PR60·서명CI43840377625·대시보드https://github.com/wjdals988/mydashboard/pull/31/main `f1640182cd2ea1cbcb08508a026bc024bc7e2456`와 운영13항목/새MainPNG4/새Node23개를 확인했다. APK 본문을 다시 내려받거나 공개3자산을 교체하지 않았다. 후속 문서·피드 커밋으로 APK 출처C를 바꾸지 않는다.
+
+Pixel Art With Code·frontend-design으로 캡/바이저의 머리 앞 가림·접점과 원근 장비, 세트·양말 소재를 다듬었다. 원본 얼굴·체형·8프레임·58ID/13슬롯/9탭·무료/지갑/보유·키/Rules는 보존한다. 곰은 단순화한 후드/운동복 재질이며 미승인 수영복을 포함하지 않는다.
+
+새 로컬JVM223/lint오류0·경고66, 실제 연결 서명CI 새JVM223/lint오류0·경고97를 구분한다. 최종input3 Android4+12와 별도cold중복1, 이번input1 share6 소스동등성보존을 포함한 범위22를 같은APK22나 이전0.7 재사용으로 부르지 않는다. 실제Main9 원본/선택·저장/Root검토·원래 데이터·소유 환경 복원과 AVD3 PID17380 정확 종료를 확인했다. v2시각거절·v3챙잘림·초기스레드/준비포함6초실패·intentional-loading검사상호대기·ar6관측기형식실패와parentfalse를 보존한다. 새 준비30초+재생6초 검사를 초기6초 성능 성공으로 바꾸지 않는다.
+
+휴대폰·Google 로그인·운영 쓰기·야외GPS/절전/OEM/API31+·실제live위젯/알림·SNS 전달·공개 서명APK 런타임과 사용자 시각 승인은 별도다. canonical raw피드는 이 문서/피드 병합 뒤 전체 바이트로 독립 확인한다.
+
+[APK 다운로드](https://github.com/wjdals988/runmoni/releases/tag/v0.7.1-dev) · [운영 대시보드](https://coldbrewventi.vercel.app/projects/runmoni).
+
+아래는 이전 구현·검토 시점의 보존 기록이다.
+
 # 0.7.1-dev 착용 도트 검토
 
 이 문서는 후보 구현/현재 실행 기록이다. 새로운 공개 APK 출처는 실제 병합과 connected 서명 CI·자산 검증 후 별도로 확정한다. 기존0.7.0 출처는ca54251a780f56b60aaecce0dbeb94a4f33061ed다.
