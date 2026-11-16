@@ -1,0 +1,89 @@
+{
+  "sourceRevision": "572939386fcf01c000f4604621e16b7dcc093169",
+  "ciRun": 43883353138,
+  "ciAttempt": 1,
+  "job": {
+    "id": 133354832370,
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": [
+      {
+        "name": "Set up job",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Validate requested mode and restore retained key",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Inspect connections and inject Android client configuration",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Retain sanitized connection readiness",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Prepare verified build tools, without an emulator",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Build, test and inspect unsigned candidate",
+        "status": "completed",
+        "conclusion": "skipped"
+      },
+      {
+        "name": "Build, test, sign and verify retained certificate",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Upload and verify private release draft",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "name": "Retain APK and verification sidecars",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Retain small verification reports",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Remove temporary signing and Android configuration files",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Post Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "Complete job",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publicationSucceeded": false,
+  "apkBodyDownloaded": false,
+  "rawPrivateLogSha256": "624dc26b95ba1afbed5363a81188cc9975ba4a0544f3837f39a70ae4f321ebc3",
+  "localPlanError": "Local plan has publication blockers; no credential or network was used.",
+  "confirmedMissingFile": "docs/RELEASE_NOTES_0.8.0-dev.md",
+  "newNotesSha256": "c44e9fd8e68eea077c20a6d084789f221eb481482f70a1ebc13e99cfc47b7fb5",
+  "newSourceAndFreshSigningStillRequired": true
+}
