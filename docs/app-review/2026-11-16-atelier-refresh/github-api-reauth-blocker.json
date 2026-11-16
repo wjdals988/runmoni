@@ -1,0 +1,18 @@
+{
+  "observedAtUtc": "2026-11-16T14:48:43.416445+00:00",
+  "actualSourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+  "ciRun": 43886075423,
+  "ciAttempt": 1,
+  "githubApiHttp": 401,
+  "githubApiMessage": "Bad credentials",
+  "normalRepositoryReadWorked": true,
+  "publicWorkflowPageHttp": 200,
+  "publicWorkflowPageStatusAtObservation": "In progress",
+  "workflowFailureInferredFromWatchAuthenticationError": false,
+  "environmentStatusObservedCurrent": true,
+  "outboundIdentityAliasesAvailable": 0,
+  "credentialValuesReadPrintedOrRequested": false,
+  "identityBindingsOrProxyBypassed": false,
+  "requiredAction": "Reconnect GitHub in same workspace Settings/Plugins, then retry actual normal GitHub API client",
+  "publicApkOrDashboardChangedByThisRecovery": false
+}

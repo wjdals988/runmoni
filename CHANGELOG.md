@@ -1,3 +1,7 @@
+# 2026-11-16 0.8 배포 API 인증 갱신 대기
+
+PR62/63 main 반영 및 새 source9a0051e28a2ac24badbbf1b57a554a37e4a9a85e의 연결 서명CI43886075423 공개페이지Success를 확인했다. GitHub API401로 세부 CI/자산 독립검증·공개전환·대시보드PR은 진행하지 못했다. 공개0.7.1을 유지하며 같은workspace GitHub 재인증을 요청했다. 새 signing key/토큰값/서비스 계정키는 요구하지 않았다. [현재 경계](docs/app-review/2026-11-16-atelier-refresh/README.md).
+
 # 2026-11-16 0.8 첫 게시 계획 차단 보완
 
 CI43883353138은 source572939386fcf01c000f4604621e16b7dcc093169의 빌드/테스트/서명 단계 성공 뒤 버전별 배포 안내 누락으로 업로드 전 차단됐다. RELEASE_NOTES_0.8.0-dev.md를 추가하고 원래 전체failure/미공개 상태를 보존했다. 앱451개 검증 소스는 동일하며, 새 문서 병합 출처로 다시 서명 CI를 실행한다. 기존 공개0.7.1 APK의 출처는 cb5b6cb3d70bb56e355bc45a8dc007617a3fa867로 유지한다.

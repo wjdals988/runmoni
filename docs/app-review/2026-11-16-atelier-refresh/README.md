@@ -1,3 +1,9 @@
+# 현재 배포 경계 · GitHub API 재인증 대기
+
+앱PR62와 필수안내PR63은 main에 반영됐고, 실제 새 서명 후보 출처는9a0051e28a2ac24badbbf1b57a554a37e4a9a85e다. 두 번째 CI43886075423의 공개 Actions 페이지에서 Success와 해당 전체SHA를 확인했다. 빌드/서명 단계 성공 뒤 비공개 초안 업로드를 수행하는 workflow지만, 현재 관리 API가401 Bad credentials를 반환해 원격3자산·메타데이터/CI XML의 독립 검증과 공개 전환은 보류한다. 이 상태를 공개APK/Google실행/대시보드 배포 완료로 바꾸지 않는다. 공개 피드와 운영 대시보드는0.7.1 그대로다.
+
+[공개페이지 상태 근거](ci2-public-page-status.json)·[API 인증 차단](github-api-reauth-blocker.json). 같은 workspace GitHub 연결을 다시 인증한 뒤 실제 정상API로 CI43886075423/attempt1/source9a0051e28a2ac24badbbf1b57a554a37e4a9a85e를 검증하고 공개/대시보드/피드를 마친다. 서명키나 토큰값을 채팅으로 요청하지 않는다. 이전 서명실패/SourceC0와 이 새출처를 구분한다.
+
 # 첫 서명 CI 게시 차단 · 안내 문서 보완
 
 초기 source572939386fcf01c000f4604621e16b7dcc093169의 CI43883353138은 빌드/테스트/서명 검증 단계 성공 뒤 업로드 전 로컬 계획에서 중단됐다. 버전별 RELEASE_NOTES_0.8.0-dev.md 누락을 확인해 추가한다. 원래 CI전체failure를 성공으로 바꾸지 않으며 API업로드/공개는 수행되지 않았다. 새 문서 커밋을 실제 APK 출처로 쓰려면 새 연결 서명CI를 실행해야 한다. 제품451개 소스 맵은 동일하다. [원래 차단 근거](first-signed-ci-publication-blocker.json).
