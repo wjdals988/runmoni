@@ -1,0 +1,42 @@
+{
+  "versionOutput": "Aseprite 1.3.18.6-dev",
+  "executable": "/workspace/runmoni/work/atelier-refresh/aseprite-build-headless/bin/aseprite",
+  "binarySha256": "0b3e47b9b0db34ad23f70edbe96aadbca1707177321424b79ff123dd624fe5a2",
+  "officialSourceArchive": {
+    "version": "v1.3.18.6",
+    "source": "https://github.com/aseprite/aseprite/releases/download/v1.3.18.6/Aseprite-v1.3.18.6-Source.zip",
+    "bytes": 80151325,
+    "sha256": "fa9dd07a0c2a5ec91a4166333296bbb9e5c237933b59875d0cfee849d2358306",
+    "officialAssetDigest": "sha256:fa9dd07a0c2a5ec91a4166333296bbb9e5c237933b59875d0cfee849d2358306",
+    "binaryNotRedistributed": true
+  },
+  "localHeadlessGlueModified": true,
+  "nativeClipboardVerified": false,
+  "guiVerified": false,
+  "binaryRedistributed": false,
+  "localPatches": [
+    {
+      "file": "aseprite-headless-glue.patch",
+      "sha256": "3b4c92d43e4af485c9e2cdde30c0f060f739c2c80905b19d6156819f9bb843b0"
+    },
+    {
+      "file": "aseprite-headless-memory-clip.patch",
+      "sha256": "9dc58ab908005186bff2fab66732a1990f9d566a4acee454a8662dd49e22c72b"
+    }
+  ],
+  "finalLocalPatchSha256": "1da26bf51ec7dffbb46534d29a2cd6fe23bdeb47e4a00530107e08e06cdbb3d0",
+  "localModifiedPaths": [
+    "laf/CMakeLists.txt",
+    "laf/clip/CMakeLists.txt",
+    "laf/dlgs/CMakeLists.txt",
+    "laf/dlgs/file_dialog.cpp",
+    "laf/os/CMakeLists.txt",
+    "laf/os/common/event_queue.cpp",
+    "laf/os/common/main.cpp",
+    "laf/os/common/system.cpp",
+    "laf/os/none/event_queue.h",
+    "src/app/app.cpp",
+    "src/app/file_selector.cpp",
+    "src/ui/drag_event.h"
+  ]
+}

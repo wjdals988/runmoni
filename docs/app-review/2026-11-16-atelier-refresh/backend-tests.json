@@ -1,0 +1,11 @@
+{
+  "command": "backend/.venv/bin/python -m pytest backend/tests/test_avatar.py backend/tests/test_running_kit_colors.py -q",
+  "output": "backend-tests2.txt",
+  "outputSha256": "00f3c1b4dfc1af229dbf14dcdc8f923330e5980691eb4b25ecfa447524cac9aa",
+  "tests": 12,
+  "passed": 12,
+  "failed": 0,
+  "warnings": 1,
+  "productionWrites": false,
+  "firstFailedRunPreserved": "backend-tests1-failed.txt"
+}

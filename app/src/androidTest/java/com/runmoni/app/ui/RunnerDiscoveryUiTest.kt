@@ -16,9 +16,11 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         val dismissedNonces = mutableListOf<Long>()
         val visibility = mutableListOf<Boolean>()
         var locates = 0
+        var refreshes = 0
         override fun setPublicLocation(enabled: Boolean) { sharingRequests += enabled }
         override fun setDiscoveryVisible(visible: Boolean) { visibility += visible }
         override fun locateExplore() { locates++ }
+        override fun refreshRunners() { refreshes++ }
         override fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {
             confirmations += Triple(runId, adultConfirmed, requestNonce)
         }
@@ -115,6 +117,32 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         }
     }
 
+    @Test fun explicitRefreshStaysOutsideTheMapAndCanRetryWithoutChangingConfirmedMarkersOrConsent() {
+        val now = System.currentTimeMillis()
+        val marker = LiveRunner("fresh-other", "확인된 러너", 37.567, 126.978, now)
+        val state = mutableStateOf(AppState(signedIn = true, communityUid = "self",
+            discovery = RunnerDiscoveryUi(checkedAtMillis = now), liveRunners = listOf(marker)))
+        val actions = Actions(state)
+        compose.setContent { ViewportBox(Viewport(360, 1f)) { RunmoniTheme {
+            RunnerDiscoveryScreen(state.value, actions, onProfile = {})
+        } } }
+        compose.onNodeWithTag("refresh_runners").assertIsDisplayed()
+            .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp).assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(1, actions.refreshes)
+            state.value = state.value.copy(discovery = discoveryReadFailed(state.value.discovery, userInitiated = true))
+        }
+        compose.onNodeWithTag("runner_discovery_status").assertTextContains("다시 시도", substring = true)
+        compose.onNodeWithTag("refresh_runners").assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(2, actions.refreshes)
+            assertEquals(listOf(marker), state.value.liveRunners)
+            assertEquals(now, state.value.discovery.checkedAtMillis)
+            assertTrue(actions.sharingRequests.isEmpty())
+            assertTrue(actions.confirmations.isEmpty())
+        }
+    }
+
     @Test fun centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent() {
         val state = mutableStateOf(AppState(signedIn = true, communityUid = "self",
             activeRun = ActiveRun(id = "run-a", phase = RunPhase.RUNNING),
@@ -188,7 +216,7 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             val map = compose.onNodeWithTag("route_map_viewport").fetchSemanticsNode().boundsInRoot
             val bar = compose.onNodeWithTag("map_control_bar").fetchSemanticsNode().boundsInRoot
             assertTrue("The map's persistent control is outside its pixels at $width/$scale", map.bottom <= bar.top)
-            for (tag in listOf("locate_explore", "toggle_runner_sharing")) {
+            for (tag in listOf("locate_explore", "toggle_runner_sharing", "refresh_runners")) {
                 reachable(tag).assertIsDisplayed()
                     .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
                 val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot

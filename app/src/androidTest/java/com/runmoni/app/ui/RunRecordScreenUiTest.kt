@@ -37,6 +37,31 @@ private fun OfflineRecordPageFixture(content: @Composable () -> Unit) {
 }
 
 class RunRecordScreenUiTest : RunmoniDesignTestBase() {
+    @Test fun automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction() {
+        val record = recordPageFixture()
+        val cloud = mutableStateOf(CloudAccountState(configured = true, uid = "account-a", accountLabel = "계정 A",
+            automaticBackup = AutomaticCloudBackupState(mapOf(record.id to AutomaticBackupRecordState.WAITING), initialized = true)))
+        val state = mutableStateOf(AppState(records = listOf(record)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { OfflineRecordPageFixture { RunRecordScreen(record, actions, cloud.value, onBack = {}) } }
+        compose.onNodeWithTag("automatic_cloud_backup_status").performScrollTo().assertTextContains("자동 백업 대기", substring = true)
+        compose.runOnIdle {
+            assertTrue(actions.cloudBackups.isEmpty())
+            cloud.value = cloud.value.copy(automaticBackup = AutomaticCloudBackupState(
+                mapOf(record.id to AutomaticBackupRecordState.SAVED), initialized = true))
+        }
+        compose.onNodeWithTag("automatic_cloud_backup_status").assertTextContains("자동 백업했어요", substring = true)
+        compose.onNodeWithTag("backup_cloud_run").assertDoesNotExist()
+        compose.runOnIdle {
+            assertTrue(actions.cloudBackups.isEmpty())
+            cloud.value = cloud.value.copy(uid = "account-b", accountLabel = "계정 B",
+                automaticBackup = AutomaticCloudBackupState(mapOf(record.id to AutomaticBackupRecordState.EXCLUDED), initialized = true))
+        }
+        compose.onNodeWithTag("automatic_cloud_backup_status").performScrollTo().assertTextContains("대상에서 제외", substring = true)
+        compose.onNodeWithTag("backup_cloud_run").assertDoesNotExist()
+        compose.runOnIdle { assertTrue(actions.cloudBackups.isEmpty()) }
+    }
+
     @Test fun actionsKeepTheirRecordIdentityAndDeleteCancellationDoesNotLeaveThePage() {
         val first = recordPageFixture()
         val second = recordPageFixture("record-page-b")

@@ -1,0 +1,86 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugBuildConfig
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:mergeDebugResources
+> Task :app:packageDebugResources
+> Task :app:parseDebugLocalResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:processDebugResources
+
+> Task :app:kspDebugKotlin
+e: The daemon has terminated unexpectedly on startup attempt #1 with error code: 0. The daemon process output:
+    1. Kotlin compile daemon is ready
+
+> Task :app:compileDebugKotlin
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/domain/RunShareCard.kt:106:28 Non-public primary constructor is exposed via the generated 'copy()' method of the 'data' class.
+
+The generated 'copy()' will change its visibility in future releases.
+
+To suppress the warning do one of the following:
+- Annotate the data class with the '@ConsistentCopyVisibility' annotation.
+- Use the '-Xconsistent-data-class-copy-visibility' compiler flag.
+- Annotate the data class with the '@ExposedCopyVisibility' annotation 
+  (Discouraged, but can be used to keep binary compatibility).
+
+To learn more, see the documentation of the '@ConsistentCopyVisibility' and '@ExposedCopyVisibility' annotations.
+
+This will become an error in Kotlin 2.1.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/AppInformation.kt:243:43 'val Icons.Outlined.OpenInNew: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.OpenInNew.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt:479:41 'val Icons.Outlined.KeyboardArrowLeft: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.KeyboardArrowLeft.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt:482:42 'val Icons.Outlined.KeyboardArrowRight: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.KeyboardArrowRight.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt:87:60 'val Icons.Outlined.DirectionsRun: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.DirectionsRun.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniDialogs.kt:138:88 'val Icons.Outlined.FactCheck: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.FactCheck.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/DeviceChecksScreen.kt:41:49 'val Icons.Outlined.FactCheck: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.FactCheck.
+w: file:///workspace/runmoni/app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt:638:236 'val Icons.Outlined.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Outlined.ArrowForward.
+
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:kspDebugUnitTestKotlin
+
+> Task :app:compileDebugUnitTestKotlin
+w: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AsepriteMaterialLayersTest.kt:11:46 Java type mismatch: inferred type is 'kotlin.String?', but 'kotlin.String' was expected.
+w: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarAtelierClothingTest.kt:15:46 Java type mismatch: inferred type is 'kotlin.String?', but 'kotlin.String' was expected.
+w: file:///workspace/runmoni/app/src/test/java/com/runmoni/app/avatar/AvatarCostumeLayersTest.kt:13:46 Java type mismatch: inferred type is 'kotlin.String?', but 'kotlin.String' was expected.
+
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:processDebugJavaRes
+> Task :app:processDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest
+
+AvatarAtelierClothingTest > allThreeConstructionsKeepRealIdentityAlphaSolesForegroundHandsAndEveryInput FAILED
+    java.lang.AssertionError at AvatarAtelierClothingTest.kt:72
+
+AvatarArtTest > everyVisibleSlotChangesPixelsAndNineTabsHideInternalEquipmentSlots FAILED
+    java.lang.AssertionError at AvatarArtTest.kt:80
+
+248 tests completed, 2 failed
+
+> Task :app:testDebugUnitTest FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file:///workspace/runmoni/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 1m 12s
+26 actionable tasks: 20 executed, 6 up-to-date

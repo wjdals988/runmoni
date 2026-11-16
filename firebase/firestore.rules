@@ -270,11 +270,11 @@ service cloud.firestore {
         && d.hair is int && d.hair >= 0 && d.hair <= 3
         && d.headwear is int && d.headwear >= 0 && d.headwear <= 3
         && d.face is int && d.face >= 0 && d.face <= 3
-        && d.top is int && d.top >= 0 && d.top <= 5
+        && d.top is int && d.top >= 0 && d.top <= 6
         && d.bottom is int && d.bottom >= 0 && d.bottom <= 5
         && d.costume is int && d.costume >= 0 && d.costume <= 5
-        && d.socks is int && d.socks >= 0 && d.socks <= 3
-        && d.shoes is int && d.shoes >= 0 && d.shoes <= 3
+        && d.socks is int && d.socks >= 0 && d.socks <= 4
+        && d.shoes is int && d.shoes >= 0 && d.shoes <= 4
         && d.ear is int && d.ear >= 0 && d.ear <= 3
         && d.eyewear is int && d.eyewear >= 0 && d.eyewear <= 3
         && d.wrist is int && d.wrist >= 0 && d.wrist <= 3

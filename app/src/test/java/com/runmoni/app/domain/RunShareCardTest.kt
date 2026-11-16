@@ -131,4 +131,21 @@ class RunShareCardTest {
                 assertEquals(.5f, rect.width / rect.height, .0001f)
             }
     }
+
+    @Test fun recordObjectStaysWithinEveryRatioAndNeverMovesTheIndependentAvatar() {
+        for (ratio in RunShareRatio.entries) for (position in listOf(-9f, 0f, .5f, 1f, 9f, Float.NaN)) {
+            val draft = RunShareDraft(ratio = ratio, recordX = position, recordY = position,
+                avatarX = .21f, avatarY = .34f)
+            val rect = RunShareRecordPlacement.rect(ratio.width, ratio.height, 800f, 500f, draft)
+            assertTrue(rect.left >= 0 && rect.top >= 0 && rect.right <= ratio.width && rect.bottom <= ratio.height)
+            assertEquals(800f, rect.width, .01f)
+            assertEquals(500f, rect.height, .01f)
+            assertEquals(.21f, draft.avatarX, 0f)
+            assertEquals(.34f, draft.avatarY, 0f)
+        }
+        assertEquals(.25f, RunShareDraft(placement = RunSharePlacement.TOP).normalized().recordY, 0f)
+        assertEquals(.5f, RunShareDraft(recordX = Float.NaN).normalized().recordX, 0f)
+        assertEquals(.80f, RunShareDraft(recordY = Float.NaN).normalized().recordY, 0f)
+        assertEquals(listOf("FOREST", "INK", "PAPER", "CORAL"), RunShareTheme.entries.map { it.name })
+    }
 }

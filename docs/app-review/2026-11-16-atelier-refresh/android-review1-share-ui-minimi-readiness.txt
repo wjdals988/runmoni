@@ -1,0 +1,3 @@
+failed restored URI recovery ComponentActivity/fake callbacks: awaitAvatarReady=true; waitMillis=107; timeoutMillis=120000
+independent record/avatar controls and no-photo CTA at320/font2; fake callbacks: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000

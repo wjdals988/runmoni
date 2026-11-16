@@ -42,7 +42,7 @@ powershell -NoProfile -File backend/run.ps1
 | 위치 | 본인 active run + 정확한 위치 명시 동의 + 허가된 범위, server TTL 45초. `pilot`은 모든 초대 인증 성인 테스터가 보는 범위 |
 | 보상 | 100점/km. accuracy ≤30m, speed ≤8m/s, gap ≤60s, 동일 segment만 거리 계산. 기본 일별 상한 10,000점은 조정 가능한 악용 방지 설정 |
 | 시간 | 밀리초 UTC 시작/종료 시각을 소수점 초로 변환. 0 ≤ 활동 시간 ≤ 경과 시간 ≤ 86,400초. 기존 완료 기록 재전송은 저장된 요약 반환 |
-| 꾸미기 | Android13개 슬롯/58개 현재 아이템 ID와 이전 accessory 호환을 보존. 이번 방 작업은 새 의복 표시를 완성한 작업이 아님 |
+| 꾸미기 | Android13개 슬롯/기존58개 ID 보존+새3개(메시 저지/리브 크루삭스/패널 러닝화)=61개, 이전 accessory4개 별칭 포함 HTTP 카탈로그65개. 무료 claim·보유/원장·구클라이언트 PATCH 호환 유지. 서버 목록은 Android의 원화/표시 승인과 별개 |
 | 기록 삭제 | GPS 삭제 + 이력/통계 숨김. 기존 보상을 유지하며 재적립 방지용 summary tombstone/ledger 보존 |
 | 오디오 | 음성 입장 JWT 5분, DJ music lease 15분, 방당 방송 1개, bridge 5초 lease 확인. 기술 테스트 확인 플래그가 음악 사용권 증명이 되지 않음 |
 

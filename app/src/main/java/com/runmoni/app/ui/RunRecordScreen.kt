@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.runmoni.app.domain.AppActions
 import com.runmoni.app.domain.CloudAccountState
+import com.runmoni.app.domain.AutomaticBackupRecordState
 import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPersistenceState
 import com.runmoni.app.domain.RunRecord
@@ -85,7 +86,14 @@ private fun RunRecordPageContent(
         onDispose { pageAlive = false; backupRequest = null; deleteRequest = null }
     }
     val hasRecordId = record.id.isNotBlank()
-    val canBackUp = hasRecordId && record.finishedAtMillis > 0 && cloud.uid.isNotBlank() && !cloud.busy && !operationBusy
+    val backupState = cloud.automaticBackup.record(record.id)
+    val canBackUp = hasRecordId && record.finishedAtMillis > 0 && cloud.uid.isNotBlank() && !cloud.busy && !operationBusy &&
+        backupState != AutomaticBackupRecordState.EXCLUDED && backupState != AutomaticBackupRecordState.SAVED
+    LaunchedEffect(backupState) {
+        if (backupState == AutomaticBackupRecordState.SAVED || backupState == AutomaticBackupRecordState.EXCLUDED) {
+            backupFor = null; backupRequest = null
+        }
+    }
     // A removed dialog can still have a queued click. Immutable values captured
     // by its old callback cannot establish the currently selected record/account.
     val confirmationContext = remember(record.id, cloud.uid) { Any() }
@@ -218,18 +226,22 @@ private fun RunRecordPageContent(
                             RunPersistenceNotice(RunPersistenceState(issue = RunPersistenceIssue.CREDIT,
                                 initialized = true, saving = persistence.saving, creditPending = true,
                                 pendingCreditRunIds = setOf(record.id)), actions::retryRunPersistence)
-                        Text("GPS 경로·포인트는 이 기기에 보관돼요. Google에는 날짜·거리·시간·GPS 포인트 수 요약만 백업해요.",
+                        Text(AUTOMATIC_BACKUP_PRIVACY,
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                         if (cloud.uid.isNotBlank()) {
-                            OutlinedButton(shape = RunmoniShapes.Action, onClick = {
-                                if (pageAlive && latestContext === confirmationContext && latestCanBackUp) { backupRequest = Any(); backupFor = record.id }
-                            }, enabled = canBackUp,
-                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("backup_cloud_run")) {
-                                Text("이 기록 요약을 계정에 백업")
+                            Text(cloud.automaticBackupMessage(record.id), style = MaterialTheme.typography.bodyMedium,
+                                modifier = Modifier.testTag("automatic_cloud_backup_status"))
+                            if (backupState != AutomaticBackupRecordState.SAVED && backupState != AutomaticBackupRecordState.EXCLUDED) {
+                                TextButton(shape = RunmoniShapes.Action, onClick = {
+                                    if (pageAlive && latestContext === confirmationContext && latestCanBackUp) { backupRequest = Any(); backupFor = record.id }
+                                }, enabled = canBackUp,
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("backup_cloud_run")) {
+                                    Text("자동 백업 다시 시도")
+                                }
                             }
                             Text("백업 계정: ${cloud.accountLabel}\n${cloud.status}",
                                 style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                        } else Text("요약 백업은 설정에서 Google 계정을 연결한 뒤 이용할 수 있어요.",
+                        } else Text("설정에서 Google 계정을 연결하면 완료 기록 요약을 자동 백업해요.",
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                         HorizontalDivider(color = RunmoniColors.Line)
                         OutlinedButton(shape = RunmoniShapes.Action, onClick = exportAction, enabled = hasRecordId && !operationBusy,
@@ -264,12 +276,12 @@ private fun RunRecordPageContent(
             }
         }
         DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { if (backupRequest === expectedRequest) { backupFor = null; backupRequest = null } },
-            title = { Text("이 계정에 기록 요약을 백업할까요?") },
-            text = { DialogMessage("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") },
+            title = { Text("자동 백업을 다시 시도할까요?") },
+            text = { DialogMessage("계정: ${cloud.accountLabel}\n\n완료 기록은 이미 자동 백업 대상이에요. 대기 중인 이 기록의 전송을 다시 요청해요.\n\n$AUTOMATIC_BACKUP_PRIVACY") },
             confirmButton = {
                 TextButton(shape = RunmoniShapes.Action, onClick = confirmBackup, enabled = canBackUp,
                     modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_cloud_backup").recordActionSnapshot(confirmBackup)) {
-                    Text("이 계정에 백업")
+                    Text("다시 시도")
                 }
             }, dismissButton = {
                 TextButton(shape = RunmoniShapes.Action, onClick = { if (backupRequest === expectedRequest) { backupFor = null; backupRequest = null } },

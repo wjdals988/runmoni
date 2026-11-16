@@ -1,0 +1,1443 @@
+{
+  "name": "live1",
+  "nonce": "atelierphoto16",
+  "version": "0.8.0-dev",
+  "versionCode": 31,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build4.json",
+  "sourceKind": "actual Android MainActivity",
+  "formalScopeReference": "android-scope-summary.json",
+  "formalScopeSha256": "710df1eebaeb67d137cd7868e9a0908a54ad74d1df2f28d52d3b172a1a04dfc6",
+  "formalScopeEarlierInputResultsReused": true,
+  "formalScopeSingleInputExecutionClaimed": false,
+  "passed": false,
+  "completed": true,
+  "captures": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "8c84309564d68a33eb53470095fa705253ddd03357f15fc2eb812f2f9751d1d8",
+      "bytes": 62725,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-profile-ime.png",
+      "sha256": "9468f9e1cd888c6dc1a9c325c3945e33a6d8d5d464ca8012b0ba4aac339b4667",
+      "bytes": 47555,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-male-cap.png",
+      "sha256": "3f35da28fd24ff7ada299477cc023a6414cdbc1ebcca8088692d1ce69b77eb21",
+      "bytes": 66166,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-male-visor.png",
+      "sha256": "20da218c3332a342709fad453eedcf1a516189f0ee33bbcf15ff2732c848e110",
+      "bytes": 67698,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-female-cap.png",
+      "sha256": "8309a240752a9fb47eeb1e00a578843ef5b30007ddb08494f514217ce73d348d",
+      "bytes": 71540,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-female-visor.png",
+      "sha256": "4901bf07538b1be18d8dbb1b1900b7e6063e1bbd0b32ceb88aa28ad64bbc0034",
+      "bytes": 72675,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-studio-closet.png",
+      "sha256": "b50c75e68ba0144556d93bc869c9ae166dcc4adc8e3f1988a9632dbfc6d3d196",
+      "bytes": 67380,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-female-bear.png",
+      "sha256": "ddabaadb6f4d8b82ddf0f4942d89deb419f765ceaa4f1b94c1927f29cd5a4cf9",
+      "bytes": 70490,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-female-golden.png",
+      "sha256": "4422dac3af2f5e02fe05ba19169d77411f671a3e807445f37c2105f112e9db25",
+      "bytes": 70005,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-atelier-kit.png",
+      "sha256": "ebb2108729a1646cecadeab84d36b57a7a81643f13ea77be73109ad8c3b85475",
+      "bytes": 68890,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-record-result.png",
+      "sha256": "c228b349a22b7d7b6a5f0923f426b7ff2af9f89cea5eb14695ff3c53d549f2a0",
+      "bytes": 38481,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-full-photo-clean.png",
+      "sha256": "13b733a32e10e3585a72e1fdf30d34546423b7c310e8cd4c28d176f8556aef70",
+      "bytes": 60858,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    },
+    {
+      "file": "live1-main-full-photo-stamp.png",
+      "sha256": "8700fd36a028847c0dd629f024fae2429bc71c4d46f833e32a2ccaed133e714d",
+      "bytes": 54820,
+      "width": 480,
+      "height": 854,
+      "kind": "main",
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true,
+      "syntheticGps": false,
+      "GPSInjectedByThisDriver": false
+    }
+  ],
+  "actualTaps": [
+    {
+      "label": "프로필 편집",
+      "description": false,
+      "system": false,
+      "bounds": [
+        128,
+        236,
+        235,
+        284
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        36,
+        56,
+        84
+      ]
+    },
+    {
+      "label": "미니미 꾸미기",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        324,
+        456,
+        380
+      ]
+    },
+    {
+      "label": "하의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        285,
+        296,
+        375,
+        344
+      ]
+    },
+    {
+      "label": "상의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        105,
+        296,
+        195,
+        344
+      ]
+    },
+    {
+      "label": "모자",
+      "description": false,
+      "system": false,
+      "bounds": [
+        15,
+        296,
+        105,
+        344
+      ]
+    },
+    {
+      "label": "러닝 캡",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        540,
+        456,
+        620
+      ]
+    },
+    {
+      "label": "선바이저",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        621,
+        456,
+        701
+      ]
+    },
+    {
+      "label": "여자",
+      "description": false,
+      "system": false,
+      "bounds": [
+        314,
+        188,
+        456,
+        236
+      ]
+    },
+    {
+      "label": "러닝 캡",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        540,
+        456,
+        620
+      ]
+    },
+    {
+      "label": "선바이저",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        621,
+        456,
+        701
+      ]
+    },
+    {
+      "label": "남자",
+      "description": false,
+      "system": false,
+      "bounds": [
+        165,
+        188,
+        306,
+        236
+      ]
+    },
+    {
+      "label": "세트",
+      "description": false,
+      "system": false,
+      "bounds": [
+        336,
+        296,
+        426,
+        344
+      ]
+    },
+    {
+      "label": "산타 러너",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        540,
+        456,
+        620
+      ]
+    },
+    {
+      "label": "여자",
+      "description": false,
+      "system": false,
+      "bounds": [
+        314,
+        188,
+        456,
+        236
+      ]
+    },
+    {
+      "label": "곰인형 코스튬",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        621,
+        456,
+        701
+      ]
+    },
+    {
+      "label": "골든 마스코트",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        702,
+        456,
+        782
+      ]
+    },
+    {
+      "label": "남자",
+      "description": false,
+      "system": false,
+      "bounds": [
+        165,
+        188,
+        306,
+        236
+      ]
+    },
+    {
+      "label": "상의",
+      "description": false,
+      "system": false,
+      "bounds": [
+        15,
+        296,
+        105,
+        344
+      ]
+    },
+    {
+      "label": "메시 러닝 저지",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        702,
+        456,
+        782
+      ]
+    },
+    {
+      "label": "양말",
+      "description": false,
+      "system": false,
+      "bounds": [
+        305,
+        296,
+        395,
+        344
+      ]
+    },
+    {
+      "label": "리브 크루삭스",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        702,
+        456,
+        782
+      ]
+    },
+    {
+      "label": "신발",
+      "description": false,
+      "system": false,
+      "bounds": [
+        285,
+        296,
+        375,
+        344
+      ]
+    },
+    {
+      "label": "패널 러닝화",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        541,
+        456,
+        621
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        36,
+        56,
+        84
+      ]
+    },
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        366,
+        32,
+        456,
+        80
+      ]
+    },
+    {
+      "label": "사진 추가",
+      "description": false,
+      "system": false,
+      "bounds": [
+        24,
+        504,
+        456,
+        560
+      ]
+    },
+    {
+      "label": "기록",
+      "description": false,
+      "system": false,
+      "bounds": [
+        112,
+        520,
+        192,
+        570
+      ]
+    },
+    {
+      "label": "스탬프",
+      "description": false,
+      "system": false,
+      "bounds": [
+        206,
+        643,
+        275,
+        691
+      ]
+    },
+    {
+      "label": "러닝 기록으로 돌아가기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        8,
+        32,
+        56,
+        80
+      ]
+    },
+    {
+      "label": "공유 이미지 만들기",
+      "description": true,
+      "system": false,
+      "bounds": [
+        366,
+        32,
+        456,
+        80
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-16T13:25:08.810114+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 1,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live1-executed-driver.py",
+  "executedDriverSha256": "2d83c927d96392ba59cf5216d1c1f117707cbe7228631b8c25ba9573565d6f5a",
+  "observerHelper": "live1-actual-ui-helper.py",
+  "observerHelperSha256": "8666d3088e3ca621bce115d92e4fdda84cd94f44b401993bf62021fcf902ed57",
+  "environmentHelper": "live1-environment-helper.py",
+  "environmentHelperSha256": "555bb352ee23979e6cb99a83b28daedc57a9820e0a22f863a0553cdfa98901a3",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-16T13:46:16.871346+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "148c2c8bfac201275b2ad761817859a49e389e3bd14255e325502c249edb9a6f",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "8667aed7ac895b8b4127655c6158fc27123fb4be9be3033356b84bf20529b5e2"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "31d8873f752dde75c182f5054c2a0774c0f7c5f9585761313cc2fcf531ffe7e4"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "a0d42e6972f5134324a031234ec6c39354f19f0b6da748c6abefeddbf3f83206",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.248,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.322,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.253,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 31.781,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 23.941,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main home avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 8.447,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.246,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main profile IME is shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 3.708,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Profile Back restores parent navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.643,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standalone closet visible",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 10.963,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Placed actual Main closet avatar leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.991,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main closet selected state observed: 하의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.831,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main closet selected state observed: 상의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.6,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 남자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 0.33,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual headwear tab selected",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.12,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 남자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 0.684,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual selected and persisted 남자/러닝 캡",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 9.489,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "New headwear actual Main bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.005,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 남자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 0.377,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual selected and persisted 남자/선바이저",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 8.188,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "New headwear actual Main bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.471,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 여자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 1.04,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual selected and persisted 여자/러닝 캡",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 9.541,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "New headwear actual Main bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.266,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 여자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 0.339,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual selected and persisted 여자/선바이저",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 9.997,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "New headwear actual Main bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.969,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 남자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 1.393,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main costume tab selected",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.865,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Santa item selection and persisted costume1 agree",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.47,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main Santa preview leaves loading state",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.734,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 여자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 0.713,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual female costume persisted 곰인형 코스튬",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 12.137,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new costume bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.641,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual female costume persisted 골든 마스코트",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 7.828,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new costume bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 7.047,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual persisted gender 남자",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 1.133,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material tab 상의",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.599,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material selected and persisted 메시 러닝 저지",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 7.792,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.421,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material tab 양말",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.551,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material selected and persisted 리브 크루삭스",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 8.301,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.46,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material tab 신발",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 6.91,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material selected and persisted 패널 러닝화",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 8.218,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual new material bitmap ready",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.475,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile navigation restored after closet",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 8.484,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual owned result page",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.848,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 6.766,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Real system image picker leaves Main",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 0.957,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual picker callback loads own synthetic photo",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 7.959,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 5.242,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual stamp style checked",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 4.789,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 4.249,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Editor back returns to canonical record",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.284,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual export controls enabled after image render",
+      "budgetSeconds": 120,
+      "elapsedHostSeconds": 8.243,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Selected photo preserved after Back and reopen",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 75.003,
+      "completed": false,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.24,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.651,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.26,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 140,
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "atelierphoto16",
+    "recordId": "runmoni-share-review-atelierphoto16",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-atelierphoto16.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "originalHistoryExcludedFromExtraScreenshots": true,
+  "homeCaptureContainsOnlyNonceReviewRun": true,
+  "actualProfileKeyboardObserved": true,
+  "actualProfileKeyboardControlBounds": {
+    "back": [
+      8,
+      36,
+      56,
+      84
+    ],
+    "save": [
+      378,
+      409,
+      456,
+      457
+    ]
+  },
+  "actualProfileKeyboardWindowVisibleFrame": [
+    0,
+    24,
+    480,
+    469
+  ],
+  "actualProfileKeyboardControlsInsideVisibleWindow": true,
+  "actualProfileKeyboardMinimum48dpTargetPx": 48.0,
+  "actualProfileKeyboardDensityDpi": 160,
+  "actualProfileClosedWithoutSaving": true,
+  "actualClosetTabSelectedObserved": true,
+  "genderObservations": [
+    {
+      "label": "남자",
+      "alreadyPersistedBeforeAction": true,
+      "tapPerformed": false,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "남자",
+      "alreadyPersistedBeforeAction": true,
+      "tapPerformed": false,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "남자",
+      "alreadyPersistedBeforeAction": true,
+      "tapPerformed": false,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "여자",
+      "alreadyPersistedBeforeAction": false,
+      "tapPerformed": true,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "여자",
+      "alreadyPersistedBeforeAction": true,
+      "tapPerformed": false,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "남자",
+      "alreadyPersistedBeforeAction": false,
+      "tapPerformed": true,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "여자",
+      "alreadyPersistedBeforeAction": false,
+      "tapPerformed": true,
+      "persistedGenderMatched": true
+    },
+    {
+      "label": "남자",
+      "alreadyPersistedBeforeAction": false,
+      "tapPerformed": true,
+      "persistedGenderMatched": true
+    }
+  ],
+  "actualClosetHorizontalTabReveal": {
+    "targetLabel": "신발",
+    "selectedAnchorLabel": "양말",
+    "actualDisplayBounds": [
+      0,
+      0,
+      480,
+      854
+    ],
+    "selectedTabBounds": [
+      195,
+      296,
+      285,
+      344
+    ],
+    "observedStripClass": "android.view.View",
+    "observedStripBounds": [
+      0,
+      296,
+      480,
+      344
+    ],
+    "stripOrientationEvidence": "Observed wide scrollable ancestor containing category tabs; not an inferred Android class",
+    "selectedAnchorClickable": false,
+    "visibleStripBounds": [
+      0,
+      296,
+      480,
+      344
+    ],
+    "horizontalOnly": true,
+    "maximumSwipes": 4,
+    "attempts": [
+      {
+        "observationIndex": 0,
+        "completeTargetCount": 1
+      }
+    ],
+    "completeTargetObserved": true,
+    "completeTargetBounds": [
+      285,
+      296,
+      375,
+      344
+    ],
+    "swipesPerformed": 0,
+    "targetClickable": true,
+    "targetEnabled": true
+  },
+  "actualHeadwearSelections": [
+    {
+      "gender": "남자",
+      "label": "러닝 캡",
+      "itemId": 1,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          540,
+          456,
+          620
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "gender": "남자",
+      "label": "선바이저",
+      "itemId": 2,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          621,
+          456,
+          701
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "gender": "여자",
+      "label": "러닝 캡",
+      "itemId": 1,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          540,
+          456,
+          620
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "gender": "여자",
+      "label": "선바이저",
+      "itemId": 2,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          621,
+          456,
+          701
+        ]
+      },
+      "persistedAvatarMatched": true
+    }
+  ],
+  "actualClosetCostumeSelection": {
+    "tabLabel": "세트",
+    "tabSelectedObserved": true,
+    "itemLabel": "산타 러너",
+    "itemSelectionSemantics": {
+      "checkable": "true",
+      "checked": "true",
+      "selected": "false",
+      "clickable": "false",
+      "enabled": "true",
+      "bounds": [
+        24,
+        540,
+        456,
+        620
+      ]
+    },
+    "costumeId": 1,
+    "persistedCostumeObserved": true,
+    "avatarLoadingAbsentBeforeCapture": true,
+    "allItemsFreeLabelObserved": true,
+    "profilePreservationComparison": {
+      "beforeProfileExisted": true,
+      "comparisonPerformed": true,
+      "mileageComparisonPerformed": true,
+      "ownedComparisonPerformed": true,
+      "nonAvatarProfileComparisonPerformed": true,
+      "mileageUnchanged": true,
+      "priorOwnershipRetained": true
+    }
+  },
+  "actualAdditionalCostumeSelections": [
+    {
+      "gender": "female",
+      "label": "곰인형 코스튬",
+      "itemId": 4,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          621,
+          456,
+          701
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "gender": "female",
+      "label": "골든 마스코트",
+      "itemId": 5,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          702,
+          456,
+          782
+        ]
+      },
+      "persistedAvatarMatched": true
+    }
+  ],
+  "actualNewItemSelections": [
+    {
+      "label": "메시 러닝 저지",
+      "slot": "top",
+      "itemId": 6,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          700,
+          456,
+          780
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "label": "리브 크루삭스",
+      "slot": "socks",
+      "itemId": 4,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          702,
+          456,
+          782
+        ]
+      },
+      "persistedAvatarMatched": true
+    },
+    {
+      "label": "패널 러닝화",
+      "slot": "shoes",
+      "itemId": 4,
+      "selectionSemantics": {
+        "checkable": "true",
+        "checked": "true",
+        "selected": "false",
+        "clickable": "false",
+        "enabled": "true",
+        "bounds": [
+          24,
+          541,
+          456,
+          621
+        ]
+      },
+      "persistedAvatarMatched": true
+    }
+  ],
+  "ownResultUiSignatureObserved": [
+    "11월 16일 (월) 12:53",
+    "5.24 km",
+    "30:00"
+  ],
+  "defaultPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.16 (월).  1:1, 미니미 포함",
+  "systemPhotoPickerRequestedByThisAttempt": true,
+  "systemPhotoPickerOwnFilename": "RunmoniReview-atelierphoto16.png",
+  "systemPhotoPickerOwnFilenameBounds": [
+    24,
+    152,
+    162,
+    290
+  ],
+  "systemPhotoPickerOwnFilenameResourceId": "",
+  "systemPhotoPickerOwnFilenameNodeClass": "android.widget.LinearLayout",
+  "systemPhotoPickerOwnFilenameIsGridDescription": true,
+  "systemPhotoPickerSelectionSource": "exact filename in a DocumentsUI list/grid document holder with MIME/thumbnail icon",
+  "actualSystemPhotoPickerUsed": true,
+  "photoCleanPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.16 (월).  1:1, 미니미 포함",
+  "photoStampPreviewDescription": "공유 이미지 미리보기. 거리 5.24 km, 러닝 시간 30:00, 평균 페이스 5′43″ /km. 2026.11.16 (월).  1:1, 미니미 포함",
+  "actualFullPhotoAndStampStyleSelected": true,
+  "failureType": "TimeoutExpired",
+  "failure": "Inspect retained private diagnostics",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerNoLongerForegroundAtCleanup": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "restorationCommandFailures": [],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "formalScopeEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-16T13:46:16.871329+00:00"
+}

@@ -1,15 +1,9 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- The existing route/waypoint mark, optically centered inside the adaptive safe circle. -->
-    <path android:fillColor="@android:color/transparent"
-        android:strokeColor="#FFFFFF" android:strokeWidth="6"
-        android:strokeLineCap="round" android:strokeLineJoin="round"
-        android:pathData="M37,63V58C37,51 42,47 49,47H61C68,47 72,43 72,36" />
-    <path android:fillColor="@android:color/transparent"
-        android:strokeColor="#FFFFFF" android:strokeWidth="3"
-        android:strokeLineCap="round" android:strokeLineJoin="round"
-        android:pathData="M43.5,71A6.5,6.5 0,1 1,30.5,71A6.5,6.5 0,1 1,43.5,71Z" />
-    <path android:fillColor="#D5ED98"
-        android:pathData="M78.5,36A6.5,6.5 0,1 1,65.5,36A6.5,6.5 0,1 1,78.5,36Z" />
+    <!-- Stride R: one forward-leaning ribbon, one clear counter, no route endpoints.
+         All identifying geometry stays inside the centered66dp adaptive safe circle.
+         The same contour is used by the themed monochrome asset. -->
+    <path android:fillColor="@color/ic_launcher_mark" android:fillType="evenOdd"
+        android:pathData="M32,76L42,32H59C72,32 79,39 76,51C74,58 69,62 62,63L75,76H61L47,61H46L42,76Z M50,43L48,52H59C63,52 66,50 67,47C68,44 65,43 61,43Z" />
 </vector>

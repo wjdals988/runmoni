@@ -78,6 +78,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var discoveryJob: Job? = null
     private var discoveryBounds: RouteMapBounds? = null
     private var discoveryVisible = false
+    private var discoveryOperation = 0L
+    private var discoveryContext: Pair<Long, String>? = null
     private var firebaseMode = preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http"
     private var communityGeneration = 0L
     private val audio = AudioController(app)
@@ -142,10 +144,23 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             } else mutableState.update { it.copy(communityProfileConnection = connection) }
         } }
         viewModelScope.launch { firebaseRooms.googleLinkState.collect { link -> mutableState.update { it.copy(communityGoogleLink = link) } } }
-        viewModelScope.launch { app.cloud.state.collect { cloud ->
-            entry.setGoogleConfigured(cloud.configured)
-            mutableState.update { it.copy(cloud = cloud) }
-        } }
+        viewModelScope.launch {
+            var scheduledUid = ""
+            app.cloud.state.collectLatest { cloud ->
+                entry.setGoogleConfigured(cloud.configured)
+                mutableState.update { it.copy(cloud = cloud) }
+                if (cloud.uid.isBlank()) { scheduledUid = ""; return@collectLatest }
+                if (scheduledUid != cloud.uid && app.cloud.backupSession(cloud.uid) != null) {
+                    scheduledUid = cloud.uid
+                    CloudSummaryBackupWorker.enqueue(app, cloud.uid) // Includes completed local backfill.
+                }
+                app.runs.cloudBackups.observe(cloud.uid).collect { automatic ->
+                    if (app.cloud.state.value === cloud) mutableState.update {
+                        it.copy(cloud = cloud.copy(automaticBackup = automatic))
+                    }
+                }
+            }
+        }
         viewModelScope.launch { app.runs.records.collect { records ->
             if (records.isNotEmpty()) preserveEntryForExistingUse()
             val before = state.value.profile
@@ -384,36 +399,51 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setDiscoveryVisible(visible: Boolean) {
         if (discoveryVisible == visible) return
         discoveryVisible = visible
-        if (visible) refreshRunners() else { discoveryJob?.cancel(); discoveryJob = null }
+        if (visible) startDiscoveryRefresh(userInitiated = false) else {
+            discoveryOperation++; discoveryJob?.cancel(); discoveryJob = null
+            mutableState.update { it.copy(discovery = it.discovery.copy(loading = false)) }
+        }
     }
     override fun setDiscoveryBounds(bounds: RouteMapBounds) {
         if (discoveryBounds == bounds) return
         discoveryBounds = bounds
-        if (discoveryVisible) refreshRunners()
+        if (discoveryVisible) startDiscoveryRefresh(userInitiated = false)
     }
-    override fun refreshRunners() {
+    override fun refreshRunners() = startDiscoveryRefresh(userInitiated = true)
+    private fun startDiscoveryRefresh(userInitiated: Boolean) {
         discoveryJob?.cancel()
+        val ticket = ++discoveryOperation
+        mutableState.update { it.copy(discovery = it.discovery.copy(loading = false, error = null)) }
         discoveryJob = viewModelScope.launch {
+            var reportFailure = userInitiated
             while (isActive && discoveryVisible) {
                 val bounds = discoveryBounds
                 val uid = firebaseRooms.uid
                 val generation = communityGeneration
                 if (bounds == null) { delay(500); continue }
                 if (!firebaseMode || !state.value.signedIn || uid.isBlank()) {
-                    mutableState.update { it.copy(discovery = RunnerDiscoveryUi(error = "러너를 보려면 프로필을 연결해 주세요."), liveRunners = emptyList()) }
+                    discoveryContext = null
+                    mutableState.update { it.copy(discovery = RunnerDiscoveryUi(), liveRunners = emptyList()) }
+                    reportFailure = false
                     delay(15_000); continue
                 }
-                mutableState.update { it.copy(discovery = it.discovery.copy(loading = true, error = null)) }
+                if (discoveryContext != (generation to uid)) {
+                    discoveryContext = generation to uid
+                    mutableState.update { it.copy(discovery = RunnerDiscoveryUi(), liveRunners = emptyList()) }
+                }
+                mutableState.update { it.copy(discovery = it.discovery.copy(loading = reportFailure, error = null)) }
                 try {
                     val result = app.runnerPresence.discover(bounds)
-                    if (discoveryVisible && generation == communityGeneration && uid == firebaseRooms.uid && discoveryBounds == bounds)
+                    if (ticket == discoveryOperation && discoveryVisible && firebaseMode && generation == communityGeneration && uid == firebaseRooms.uid && discoveryBounds == bounds)
                         mutableState.update { it.copy(liveRunners = result.runners, discovery = RunnerDiscoveryUi(
                             checkedAtMillis = result.checkedAtMillis, partial = result.partial, requiresZoom = result.requiresZoom)) }
                 } catch (cancelled: CancellationException) { throw cancelled }
                 catch (_: Exception) {
-                    if (discoveryVisible && generation == communityGeneration && uid == firebaseRooms.uid) mutableState.update { it.copy(
-                        discovery = it.discovery.copy(loading = false, error = "러너 위치를 확인하지 못했어요. 연결·기기 시각·서버 규칙과 색인을 확인해 주세요.")) }
+                    if (ticket == discoveryOperation && discoveryVisible && firebaseMode && generation == communityGeneration &&
+                        uid == firebaseRooms.uid && discoveryBounds == bounds) mutableState.update { it.copy(
+                        discovery = discoveryReadFailed(it.discovery, reportFailure)) }
                 }
+                reportFailure = false
                 delay(15_000)
             }
         }
@@ -900,11 +930,20 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     override fun signOutGoogle() = ignoreJob(work { app.cloud.signOut(app) })
     override fun backupCloudRun(runId: String, expectedUid: String) = ignoreJob(work {
-        val record = app.runs.record(runId) ?: error("기기 기록이 없습니다.")
-        app.cloud.backupRun(record, expectedUid)
+        if (app.cloud.backupSession(expectedUid) == null) return@work
+        val origin = app.runs.database.cloudBackups().origin(runId) ?: error("이 기기에서 생성한 기록만 자동 백업할 수 있어요.")
+        check(!origin.suppressed && (origin.ownerUid.isBlank() || origin.ownerUid == expectedUid)) { "이 기록은 현재 계정의 자동 백업 대상이 아니에요." }
+        app.runs.cloudBackups.retry(runId, expectedUid)
+        if (app.cloud.backupSession(expectedUid) != null) CloudSummaryBackupWorker.enqueue(app, expectedUid)
     })
     override fun refreshCloudSummaries(expectedUid: String) = ignoreJob(work { app.cloud.refreshSummaries(expectedUid) })
-    override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work { app.cloud.deleteSummary(runId, expectedUid) })
+    override fun deleteCloudSummary(runId: String, expectedUid: String) = ignoreJob(work {
+        if (app.cloud.backupSession(expectedUid) == null) return@work
+        // Persist the user's deletion intent before the remote request. Periodic
+        // reconciliation must never recreate this device's suppressed summary.
+        app.runs.cloudBackups.suppress(runId, expectedUid)
+        app.cloud.deleteSummary(runId, expectedUid)
+    })
     override fun refreshCommunity() = ignoreJob(refreshCommunityJob())
     private fun refreshCommunityJob() = work {
         val generation = communityGeneration

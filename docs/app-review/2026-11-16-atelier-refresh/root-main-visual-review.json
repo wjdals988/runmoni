@@ -1,0 +1,63 @@
+{
+  "proof": {
+    "file": "live2.json",
+    "sha256": "601ffc2f8e3a134f9de344f5720660a0cac88c8175128f2401d6fecc9754cb3f"
+  },
+  "wholeParentPassed": true,
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "live2-main-studio-home.png",
+      "sha256": "70c8fa370cc15812ece012f83497d3d9ab4226bd0e3293bf852319a0cef5ce50",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-male-cap.png",
+      "sha256": "32f119161020df73b1abfdd3301c74efea89783e393c3f81f34a980c536ef2a7",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-atelier-kit.png",
+      "sha256": "8016b052310a41a0d38d89fd7710d49a28b0eeaa8033d2d908047e8fed50bd9a",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-record-result.png",
+      "sha256": "77338bc22c035d56f89bab2a16b2a9a0d4fd5b65e6604d981654ae208de34643",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-full-photo-clean.png",
+      "sha256": "e3384a4bf8d81c579e479a84702bf77e1057a13fd340a938cbbea4dd342917f2",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-full-photo-stamp.png",
+      "sha256": "a6384acaf0fe26f4817a4d1e1b0f4e66cb4f0bde3a17356c42c4f2170ce3fceb",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-main-map-clean.png",
+      "sha256": "237017e8597eb96f3af29a5fa04f9cfa457946607fb8ba5e777cd4d82155b13a",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "notes": "All7 fresh local TEST MainActivity originals individually inspected. Approved face/body preserved, authored cap fits hair, combined new kit and part previews/selected state agree. Full synthetic photo has only character/outlined records, clean/stamp differ; source illustration has its own gradient. Restored photo/style checked after explicit photo-tab selection. Free map is legible with attribution/actions outside pixels; shows default Seoul/permission-before-current-location and guest profile CTA truthfully. No real GPS/Google/operating writes/signed runtime or prior female/set/ProfileIME rerun claimed. Main1 original false/13partial images remain separate.",
+  "reviewedAtUtc": "2026-11-16T14:06:09.932891+00:00"
+}

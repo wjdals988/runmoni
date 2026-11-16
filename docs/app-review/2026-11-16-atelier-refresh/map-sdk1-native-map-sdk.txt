@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.MapLibreMapPaneUiTest:....
+
+Time: 35.117
+
+OK (4 tests)
+
+

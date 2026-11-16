@@ -41,7 +41,7 @@ class RunningKitColorsTest {
         assertEquals(colors, costume.withItem("top", 0).runningKitColors)
         assertEquals(13, AvatarCatalogue.slots.size)
         assertEquals(9, AvatarCatalogue.tabs.size)
-        assertEquals(58, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
         assertFalse(AvatarCatalogue.valid("runningKitColors", 0))
     }
 }

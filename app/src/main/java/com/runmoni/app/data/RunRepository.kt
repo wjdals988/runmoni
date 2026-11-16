@@ -18,11 +18,25 @@ class RunRepository internal constructor(
     val database: RunDatabase,
     val dao: RunDao = database.runs(),
     private val credit: (String, Int) -> Unit,
+    private val backupOwner: () -> String = { "" },
+    private val completedBackup: () -> Unit = {},
 ) {
-    constructor(context: Context) : this(RunDatabase.create(context), credit = localCredit(context))
+    constructor(context: Context) : this(localDatabase(context), credit = localCredit(context),
+        backupOwner = { (context.applicationContext as? com.runmoni.app.RunmoniApplication)?.cloud?.backupSession()?.uid.orEmpty() },
+        completedBackup = {
+            val uid = (context.applicationContext as? com.runmoni.app.RunmoniApplication)?.cloud?.backupSession()?.uid
+            CloudSummaryBackupWorker.enqueue(context, uid)
+        })
+
+    val cloudBackups by lazy { CloudBackupRoomLedger(database.cloudBackups()) }
 
     private val mutex = Mutex()
-    private val checkpoints = RunCheckpointWriter { run, points -> dao.saveCheckpoint(run, points) }
+    private var pendingFinishBackupOwner = ""
+    private val checkpoints = RunCheckpointWriter { run, points ->
+        if (run.finishedAtMillis > 0 && pendingFinishBackupOwner.isNotBlank())
+            dao.saveOwnedCompletion(run, points, pendingFinishBackupOwner)
+        else dao.saveCheckpoint(run, points)
+    }
     private var engine = RunEngine()
     private var sequence = 0
     private var lastRecordedMillis = 0L
@@ -114,7 +128,7 @@ class RunRepository internal constructor(
                 persistenceState.update { it.copy(initialized = false, saving = false, issue = RunPersistenceIssue.RECOVERY) }
                 throw IllegalStateException("기기 기록을 다시 확인한 뒤 시작해 주세요.", failure)
             }
-            try { dao.save(row) }
+            try { if (previous == null) dao.createLocal(row, runCatching { backupOwner() }.getOrDefault("")) else dao.save(row) }
             catch (cancelled: CancellationException) {
                 persistenceState.update { it.copy(initialized = false, saving = false, issue = RunPersistenceIssue.RECOVERY) }
                 throw cancelled
@@ -224,6 +238,7 @@ class RunRepository internal constructor(
             val final = (stored ?: row).copy(finishedAtMillis = System.currentTimeMillis(), mileage = floor((stored ?: row).distanceMeters / 10).toInt())
             // Freeze time, route and reward on the first finish attempt. A retry must not add time.
             pendingFinish = final
+            pendingFinishBackupOwner = runCatching { backupOwner() }.getOrDefault("")
             active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
             persistenceState.update { it.copy(finishing = true) }
             finishPending()
@@ -246,15 +261,19 @@ class RunRepository internal constructor(
         val finishedPoints = active.value.points
         pendingCredits[final.id] = final.mileage
         pendingFinish = null
+        pendingFinishBackupOwner = ""
         stored = null
         active.value = ActiveRun()
         savedCheckpoint()
         persistenceState.update { it.copy(finishing = false) }
+        // Room completion is durable before any cloud job is requested. A scheduler
+        // failure cannot prevent recording, wallet credit or the periodic repair scan.
+        runCatching { completedBackup() }
         try { retryCredits() }
         finally { lastFinished.value = recordWithPoints(final, finishedPoints) }
     }
 
-    /** Retry only the unfinished local operation; cloud backup is a separate action. */
+    /** Retry only the unfinished local operation; cloud backup has its own durable worker. */
     suspend fun retryPersistence(expectedRunId: String? = null) {
         awaitRecorderCleanup()
         initialization.await()
@@ -399,6 +418,8 @@ class RunRepository internal constructor(
 
     companion object {
         private const val WRITE_RETRY_MILLIS = 5_000L
+        private fun localDatabase(context: Context) =
+            (context.applicationContext as? com.runmoni.app.RunmoniApplication)?.runDatabase ?: RunDatabase.create(context)
         private fun localCredit(context: Context): (String, Int) -> Unit {
             val wallet = LocalWallet(context)
             return { id, points -> wallet.credit(id, points); Unit }

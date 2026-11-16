@@ -1,0 +1,32 @@
+
+com.runmoni.app.ui.ApprovedAvatarRenderingTest:...
+com.runmoni.app.ui.AvatarPlaybackTest:..
+Error in lifecycleStopFreezesLastFrameAndStartResumes(com.runmoni.app.ui.AvatarPlaybackTest):
+java.lang.AssertionError: Normal playback did not produce three different actual captures
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.AvatarPlaybackTest.assertMoving(AvatarPlaybackTest.kt:72)
+	at com.runmoni.app.ui.AvatarPlaybackTest.lifecycleStopFreezesLastFrameAndStartResumes$lambda$19(AvatarPlaybackTest.kt:156)
+	at com.runmoni.app.ui.AvatarPlaybackTest.$r8$lambda$Z8-R2sfoLtYOMMgBeVufN7qdI30(Unknown Source:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest.withAnimators(AvatarPlaybackTest.kt:51)
+	at com.runmoni.app.ui.AvatarPlaybackTest.lifecycleStopFreezesLastFrameAndStartResumes(AvatarPlaybackTest.kt:147)
+.
+
+Time: 109.138
+There was 1 failure:
+1) lifecycleStopFreezesLastFrameAndStartResumes(com.runmoni.app.ui.AvatarPlaybackTest)
+java.lang.AssertionError: Normal playback did not produce three different actual captures
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.AvatarPlaybackTest.assertMoving(AvatarPlaybackTest.kt:72)
+	at com.runmoni.app.ui.AvatarPlaybackTest.lifecycleStopFreezesLastFrameAndStartResumes$lambda$19(AvatarPlaybackTest.kt:156)
+	at com.runmoni.app.ui.AvatarPlaybackTest.$r8$lambda$Z8-R2sfoLtYOMMgBeVufN7qdI30(Unknown Source:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest$$ExternalSyntheticLambda2.invoke(D8$$SyntheticClass:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest.withAnimators(AvatarPlaybackTest.kt:51)
+	at com.runmoni.app.ui.AvatarPlaybackTest.lifecycleStopFreezesLastFrameAndStartResumes(AvatarPlaybackTest.kt:147)
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

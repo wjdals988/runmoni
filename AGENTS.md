@@ -1,3 +1,13 @@
+# 2026-11-16 0.8 후보 최종 로컬 검증 완료
+
+input4 새JVM248/lint오류0·경고65, Android input3 보존55+input4 새31=검토범위86, 실제Main2 새7원본/Root검토·원래데이터/백업origin·소유환경복원과 AVD4 PID69127 정확종료를 확인했다. 두 입력/원래false·부분통과제외·초기재생원인미확정/분리7·첫Main관측실패를 보존한다. [검토](docs/app-review/2026-11-16-atelier-refresh/README.md). 새 서명/게시·운영은 후속 단계이며 공개0.7.1 실제출처cb5b6cb3d70bb56e355bc45a8dc007617a3fa867를 유지한다. 기존 PR/main·같은키 개발 프리뷰·대시보드/피드 승인을 이어간다.
+
+# 2026-11-16 0.8.0-dev 의복·사진 공유·자동 백업 후보
+
+frontend-design과 실제 로컬 headless Aseprite1.3.18.6-dev로 모자/세트 디테일80셀·프로젝트5개, 새 의복3종, 부위 목록 옷장, 전체 사진 공유3스타일, Google 요약 자동 백업·Roomv2, 무료 벡터 지도/오류 안내와 새 아이콘을 구현했다. [설계](design-system/runmoni/pages/atelier-refresh.md)·[원화 제작 경계](docs/design/avatars/v0.8.0/README.md). 원본·기존58ID prefix/13슬롯/9탭·지갑·보유권·같은 키를 보존하며 전체61ID다. 미승인 수영복·새 신체 재생성은 포함하지 않는다. 소유자가 새3ID Rules 게시 완료를 보고했고 같은 게시를 재요청하지 않는다. 관리 API/운영 쓰기·휴대폰/Google 성공·사용자 시각 승인은 별도다.
+
+이번 후보의 새 빌드/Android 실행/서명·게시를 검증 중이다. 기존 공개0.7.1-dev 실제APK출처 cb5b6cb3d70bb56e355bc45a8dc007617a3fa867와 다운로드는 새 게시 검증까지 유지한다. 과거 검사·호스트 이미지·Rules168 성공을 새 Android 실행으로 합치지 않는다. 자동 백업은 Google 요약만 대상으로 하며 원본GPS/포인트·옷장 전체 백업을 뜻하지 않는다. 기존 PR/main·같은 키 개발 프리뷰·대시보드/피드 승인과 순차heavy/오프라인 작업자1·소유AVD 정확 복원/종료 제약을 이어간다.
+
 # 0.7.1-dev 미니미 착용 도트 공개 — 2026-11-16
 
 <!-- verified-pixel-couture-release-0.7.1-v1 -->

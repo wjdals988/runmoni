@@ -1,0 +1,523 @@
+{
+  "name": "android-review1",
+  "version": "0.8.0-dev",
+  "versionCode": 31,
+  "binaryReference": "binary-build3.json",
+  "reviewPhase": "default",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-16T12:23:18.602799+00:00",
+  "phase": "complete-failed",
+  "passed": false,
+  "completed": true,
+  "plannedProductMethods": 66,
+  "plannedMethodIdsFromCurrentSource": [
+    "com.runmoni.app.data.CloudBackupPersistenceTest#v1MigrationPreservesCompletedUnfinishedPointsAndPendingLocalFields",
+    "com.runmoni.app.data.CloudBackupPersistenceTest#fixedOwnerAndPendingAckSurviveDatabaseReopenWithoutUploadingAnImportedRow",
+    "com.runmoni.app.data.CloudBackupPersistenceTest#suppressedSummaryRejectsLateOrForeignAckAndStaysSuppressedAfterReopen",
+    "com.runmoni.app.data.CloudBackupPersistenceTest#completedRecordingRequestsBackupAfterItsDurableCommitWithoutAViewModel",
+    "com.runmoni.app.data.CloudBackupPersistenceTest#aGuestRunBindsAtCompletionWhileAnAlreadyOwnedRunNeverMovesToAnotherAccount",
+    "com.runmoni.app.data.CloudBackupPersistenceTest#aFailedOwnedCompletionKeepsItsFirstUidAndEnqueuesOnlyAfterRetryCommits",
+    "com.runmoni.app.data.RunPersistenceTest#parentUpdatePreservesEntireTrackAndCascadeDeleteRemovesIt",
+    "com.runmoni.app.data.RunPersistenceTest#unfinishedTrackSurvivesDatabaseReopenWithSegments",
+    "com.runmoni.app.data.RunPersistenceTest#walletReplayedCompletionCreditsExactlyOnceAndDoesNotResetCosmetics",
+    "com.runmoni.app.data.RunReliabilityTest#failedPointWritePausesThenRetriesTheSamePointAndKeepsTheNextSequence",
+    "com.runmoni.app.data.RunReliabilityTest#finishFailureFreezesItsOriginalTimeAndRetryDoesNotCreditTwice",
+    "com.runmoni.app.data.RunReliabilityTest#committedRecordSurvivesCreditFailureAndReplayKeepsOneCredit",
+    "com.runmoni.app.data.RunReliabilityTest#startupCreditFailureDoesNotHideAnUnfinishedRunAndReadFailureBlocksANewId",
+    "com.runmoni.app.data.RunReliabilityTest#failedStartAcknowledgementReloadsItsCommittedIdInsteadOfCreatingAnotherRun",
+    "com.runmoni.app.data.RunReliabilityTest#creditRetryFromOldRecordDeletionDoesNotClearCurrentCheckpointFailure",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#missingRecoveryCannotCreateANewRunOrCredit",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#speedUsesAcceptedRouteAndClearsOnPauseSignalLossAndFinishWithoutLosingPoints",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#staleRunActionsAndStoppedCallbackCannotChangeANewerRunOrFlushItsFailedWrite",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#unexpectedRecorderStopPreservesTheRunAndResumeDoesNotBridgeItsGap",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#failedStopCheckpointCannotReloadAndLoseQueuedPointsOnWarmRecovery",
+    "com.runmoni.app.data.RunSpeedPersistenceTest#beginWaitsForThePriorRecorderCleanupBeforeRestoringItsCheckpoint",
+    "com.runmoni.app.avatar.AtelierWardrobeTest#appendedMaterialsReachTheAndroidAndMapOutputsWithoutChangingIdentityOrSourceCache",
+    "com.runmoni.app.avatar.AtelierWardrobeTest#appendedIdsRoundTripWithoutChargingOrErasingOldOwnedAndPendingChoices",
+    "com.runmoni.app.avatar.WardrobeRendererTest#everySelectableNonDefaultItemActuallyChangesEveryApprovedPose",
+    "com.runmoni.app.avatar.WardrobeRendererTest#capAndVisorKeepTheirClosedTipsAndOriginalFaceOnActualAndroidBitmaps",
+    "com.runmoni.app.avatar.WardrobeRendererTest#torsoEquipmentPreservesTheOriginalForegroundArmsAndHands",
+    "com.runmoni.app.avatar.WardrobeRendererTest#savedPendingCostumeKeepsOccupancyAndUnrelatedEquipmentWithoutMigratingIds",
+    "com.runmoni.app.avatar.WardrobeRendererTest#explicitColorsOverrideItemDefaultsAndReturningToZeroRestoresTheItemPalette",
+    "com.runmoni.app.ui.RunmoniIconTest#foregroundAndThemedSilhouetteShareAContourInsideTheAdaptiveSafeCircle",
+    "com.runmoni.app.ui.RunmoniIconTest#notificationRemainsAnUnpaddedAlphaMarkWithAnOpenCounterAt24Pixels",
+    "com.runmoni.app.ui.RunmoniIconTest#installedNormalRoundAndSmallNotificationResourcesRenderAtTheirConsumerSizes",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#fullBleedPhotoHasNoTintRibbonsOrGradientForEveryStyleToneAndRatio",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#stylesAndOppositeTextOutlinesRemainVisibleAndCanonicalOnBrightAndDarkPhotos",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#approvedMaleAndFemalePaletteStaysExactAndBorrowedSourcesStayAlive",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#recordAndAvatarMoveIndependentlyAndReactImmediatelyAtTheirCanvasEdges",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#missingAvatarAndLongUnicodeMetricsDoNotSilentlyDisappearOrClipTheCanvas",
+    "com.runmoni.app.sharing.RunShareCardRendererTest#legacyThemesRemainReadableButNeverIntroduceColoredPhotoOrFallbackSurfaces",
+    "com.runmoni.app.ui.RunShareUiTest#everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases",
+    "com.runmoni.app.ui.RunShareUiTest#shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll",
+    "com.runmoni.app.ui.RunShareUiTest#failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices",
+    "com.runmoni.app.ui.RunShareUiTest#recordAndAvatarHaveIndependentButtonAlternativesAndOldDraftsStillRestore",
+    "com.runmoni.app.ui.RunShareUiTest#rootEditorBackRestoresRecordScrollAndRejectsDisposedOrRemovedRecordShareCallbacks",
+    "com.runmoni.app.ui.RunShareControllerTest#actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks",
+    "com.runmoni.app.ui.RunRecordScreenUiTest#automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction",
+    "com.runmoni.app.ui.RunRecordScreenUiTest#actionsKeepTheirRecordIdentityAndDeleteCancellationDoesNotLeaveThePage",
+    "com.runmoni.app.ui.RunRecordScreenUiTest#backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges",
+    "com.runmoni.app.ui.RunRecordScreenUiTest#oldConfirmationCannotApproveAReopenedDialogAndDisposedPageCannotAct",
+    "com.runmoni.app.ui.RunRecordScreenUiTest#currentStorageAndPendingCreditStaySeparateFromGoogleBackup",
+    "com.runmoni.app.ui.RunningKitColorsUiTest#changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint",
+    "com.runmoni.app.ui.RunningKitColorsUiTest#unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds",
+    "com.runmoni.app.ui.RunningKitColorsUiTest#namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports",
+    "com.runmoni.app.ui.RunningKitColorsUiTest#closetColorChangesKeepReadyItemSelectionsInventoryAndGender",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#guestAlwaysHasAMapAndProfileEntryWithoutCrewPartyOrCachedRunnerLeakage",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#selfExpiredAndInvalidLocationsStayHiddenWhileOnlyFreshOtherRunnerReachesTheMap",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#sharingButtonRequestsConsentAndCannotDirectlyConfirmOrMutateSharingState",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#explicitRefreshStaysOutsideTheMapAndCanRetryWithoutChangingConfirmedMarkersOrConsent",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#beforeRunningConsentIsExplicitAndPreparedStateIsNotLivePresence",
+    "com.runmoni.app.ui.RunnerDiscoveryUiTest#mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText",
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding",
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#actualMiniMiComposableDrawsTheApprovedWholeBody",
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected",
+    "com.runmoni.app.ui.AvatarPlaybackTest#realClockPlaybackRendersAllEightFrames",
+    "com.runmoni.app.ui.AvatarPlaybackTest#actualClosetPauseAndResumeFreezeAndRestartPixels",
+    "com.runmoni.app.ui.AvatarPlaybackTest#lifecycleStopFreezesLastFrameAndStartResumes",
+    "com.runmoni.app.ui.AvatarPlaybackTest#systemDisabledAnimationsFreezeAndCanResume"
+  ],
+  "actualPassedProductMethods": 48,
+  "groups": [
+    {
+      "name": "backup-room",
+      "expected": 21,
+      "classes": [
+        "com.runmoni.app.data.CloudBackupPersistenceTest",
+        "com.runmoni.app.data.RunPersistenceTest",
+        "com.runmoni.app.data.RunReliabilityTest",
+        "com.runmoni.app.data.RunSpeedPersistenceTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-backup-room.txt",
+      "startedAtUtc": "2026-11-16T12:24:21.907976+00:00",
+      "actual": 21,
+      "rawSha256": "0b0dda485217abab3eae092c14d3dec72012b3e2a32f2597473004c59f6cac97",
+      "elapsedSeconds": 33.68,
+      "finishedAtUtc": "2026-11-16T12:24:55.590626+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "atelier-materials",
+      "expected": 7,
+      "classes": [
+        "com.runmoni.app.avatar.AtelierWardrobeTest",
+        "com.runmoni.app.avatar.WardrobeRendererTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-atelier-materials.txt",
+      "startedAtUtc": "2026-11-16T12:25:14.573464+00:00",
+      "actual": 7,
+      "rawSha256": "512cd5d55b2da2f71057ff0e564726682e60114642f0739b23d44f016889a138",
+      "elapsedSeconds": 511.32,
+      "finishedAtUtc": "2026-11-16T12:33:45.892752+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "icon",
+      "expected": 3,
+      "classes": [
+        "com.runmoni.app.ui.RunmoniIconTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-icon.txt",
+      "startedAtUtc": "2026-11-16T12:33:59.963239+00:00",
+      "actual": 3,
+      "rawSha256": "2d935eeabfbb9d0e9a2a6019e2358e1b1a3976276ca12829278c1e2a27aa198a",
+      "elapsedSeconds": 18.2,
+      "finishedAtUtc": "2026-11-16T12:34:18.163075+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "share-renderer",
+      "expected": 6,
+      "classes": [
+        "com.runmoni.app.sharing.RunShareCardRendererTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-share-renderer.txt",
+      "startedAtUtc": "2026-11-16T12:34:32.676419+00:00",
+      "actual": 6,
+      "rawSha256": "dc4c61c971a4386986af61150f2a8b1c391ae6a5bd3e0fabc82c6474ca0b1b59",
+      "elapsedSeconds": 91.79,
+      "finishedAtUtc": "2026-11-16T12:36:04.471272+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "share-ui",
+      "expected": 6,
+      "classes": [
+        "com.runmoni.app.ui.RunShareUiTest",
+        "com.runmoni.app.ui.RunShareControllerTest"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-share-ui.txt",
+      "startedAtUtc": "2026-11-16T12:36:18.106183+00:00",
+      "actual": null,
+      "rawSha256": "a33c9aedc6b1f08e406fe1b6fcb625a5abf26cc46b02a57200de63c422145b5a",
+      "elapsedSeconds": 123.11,
+      "finishedAtUtc": "2026-11-16T12:38:21.218027+00:00",
+      "minimiReadinessRaw": "android-review1-share-ui-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "43b5bfb1cb70d8b9276ec5e17b5ca8cdf16428222bf9b48660a90b8be0c9537e",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "record-auto-backup",
+      "expected": 5,
+      "classes": [
+        "com.runmoni.app.ui.RunRecordScreenUiTest"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-record-auto-backup.txt",
+      "startedAtUtc": "2026-11-16T12:38:36.443036+00:00",
+      "actual": null,
+      "rawSha256": "43e0401c5d5d4ce0fa290d9021586b2cb9a9cb559279a37b0f9f68881f71999a",
+      "elapsedSeconds": 103.5,
+      "finishedAtUtc": "2026-11-16T12:40:19.941843+00:00",
+      "minimiReadinessRaw": "android-review1-record-auto-backup-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "67239f99facc83469e94be371d20c6c543a73b06fdb02c812e1d813783b7e111",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "closet",
+      "expected": 4,
+      "classes": [
+        "com.runmoni.app.ui.RunningKitColorsUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-closet.txt",
+      "startedAtUtc": "2026-11-16T12:40:35.758147+00:00",
+      "actual": 4,
+      "rawSha256": "7c7074ae0c4e2e635800dcaf91c57d9bd36f443e8df65fd9a00bc1dc7ce74855",
+      "elapsedSeconds": 132.48,
+      "finishedAtUtc": "2026-11-16T12:42:48.244529+00:00",
+      "minimiReadinessRaw": "android-review1-closet-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "68f5d2ee241179e31749dda178a082886ced835a7c340cf20e79f214b9726778",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "discovery",
+      "expected": 7,
+      "classes": [
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-discovery.txt",
+      "startedAtUtc": "2026-11-16T12:43:02.063889+00:00",
+      "actual": 7,
+      "rawSha256": "895549d86ed4fb8157011f72bd9a611525620be407232c994554009982dea18d",
+      "elapsedSeconds": 96.76,
+      "finishedAtUtc": "2026-11-16T12:44:38.828994+00:00",
+      "minimiReadinessRaw": "android-review1-discovery-minimi-readiness.txt",
+      "minimiReadinessRawSha256": "56dae7fc901094de749f124dda4cc3603de21ec19de4b09d0ab9d3de3223da38",
+      "minimiReadinessPerformanceSlaClaimed": false,
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "avatar-identity-playback",
+      "expected": 7,
+      "classes": [
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest",
+        "com.runmoni.app.ui.AvatarPlaybackTest"
+      ],
+      "status": "failed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": false,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review1-avatar-identity-playback.txt",
+      "startedAtUtc": "2026-11-16T12:44:52.765201+00:00",
+      "actual": null,
+      "rawSha256": "8f4a06a2c0c9b19ae29506fc4eecf9b795e3f460ab825e632092fdc610bda530",
+      "elapsedSeconds": 125.83,
+      "finishedAtUtc": "2026-11-16T12:46:58.592404+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "android-review1-executed-driver.py",
+  "executedDriverSha256": "555bb352ee23979e6cb99a83b28daedc57a9820e0a22f863a0553cdfa98901a3",
+  "observerHelper": "android-review1-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA."
+  ],
+  "updatedAtUtc": "2026-11-16T12:47:27.970523+00:00",
+  "sourceFreezeReference": "source-freeze3.json",
+  "sourceFreezeSha256": "68959ada59e1097370cefd2a6de0b827b863928df08abcc8e66ef38dbae4ac7c",
+  "onlineNativeBasemapVerified": false,
+  "syntheticOnlineNativeMapFixtureVerified": false,
+  "publicMapRequestsPermitted": false,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": false,
+  "binaryReferenceSha256": "5da8cdebcfdebaa4a4d5951f3db4d78ec9ff10b15a948bc7e90bf53048570c26",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "5aa10c27cfdb7e7c5ae6993a23f6f4b0ba1970beded3501a4a111bf6c66d82f8"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "f09ca2b4a37d2d55065e33aaae48b8a36bdfb8531367d957b6ddc34127fa10d9"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "android-review1-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "android-review1-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "android-review1-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "failureType": "AssertionError",
+  "failure": "Every method in this independent fresh phase passed",
+  "privateFailureScreenshot": "android-review1-private-failure.png",
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 10,
+  "systemUiWaitActionCount": 1,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-16T12:47:27.970503+00:00"
+}

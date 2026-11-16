@@ -1,0 +1,135 @@
+{
+  "rootReviewed": true,
+  "scopeRetentionApproved": true,
+  "reviewNotes": {
+    "file": "INPUT3_TO_INPUT4_REVIEW.md",
+    "sha256": "87f8b448630e6366f2e166765beb4c2497126120f4e2601da81048798324ba8a"
+  },
+  "fromBinary": {
+    "file": "binary-build3.json",
+    "sha256": "5da8cdebcfdebaa4a4d5951f3db4d78ec9ff10b15a948bc7e90bf53048570c26"
+  },
+  "toBinary": {
+    "file": "binary-build4.json",
+    "sha256": "148c2c8bfac201275b2ad761817859a49e389e3bd14255e325502c249edb9a6f"
+  },
+  "exactSourceMapDelta": {
+    "productSources": {
+      "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt": {
+        "before": "eac5cb6302ab1f352caf6061670bbd339969c91478e4f3139baf9e5e7f6ca8ac",
+        "after": "52091c77456fcfa4002ed0871f2489940a6ccd2d43613fb20ddb96568ca35375"
+      }
+    },
+    "testSources": {
+      "app/src/androidTest/java/com/runmoni/app/ui/RunRecordScreenUiTest.kt": {
+        "before": "cc95de0f4cac9e61df762230ee7307012066d3640ae3323f7308cfb7b4faafb9",
+        "after": "fae9d17d7377c9ae2cd25c743bbaff6ccc8af833809d89ee99242f788f79de3a"
+      }
+    },
+    "resources": {},
+    "rendererAssets": {},
+    "approvedSourceCopies": {},
+    "configurationSources": {}
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "backup-room"
+    },
+    {
+      "proof": "android-review1",
+      "group": "atelier-materials"
+    },
+    {
+      "proof": "android-review1",
+      "group": "icon"
+    },
+    {
+      "proof": "android-review1",
+      "group": "share-renderer"
+    },
+    {
+      "proof": "android-review1",
+      "group": "closet"
+    },
+    {
+      "proof": "android-review1",
+      "group": "discovery"
+    },
+    {
+      "proof": "android-review2",
+      "group": "avatar-identity-playback"
+    }
+  ],
+  "proofKeys": [
+    "android-review1",
+    "android-review2"
+  ],
+  "unaffectedRetainedGroupRationale": [
+    {
+      "proof": "android-review1",
+      "group": "backup-room",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review1",
+      "group": "atelier-materials",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review1",
+      "group": "icon",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review1",
+      "group": "share-renderer",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review1",
+      "group": "closet",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review1",
+      "group": "discovery",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    },
+    {
+      "proof": "android-review2",
+      "group": "avatar-identity-playback",
+      "reason": "Only private ShareChoices minimum width and one excluded record test assertion changed. This retained group never executes ShareChoices or the changed method; concrete call/source review in notes, all resource/asset/config maps unchanged."
+    }
+  ],
+  "affectedGroupsRerun": [
+    {
+      "proof": "android-review3",
+      "group": "share-ui"
+    },
+    {
+      "proof": "android-review3",
+      "group": "record-auto-backup"
+    },
+    {
+      "proof": "native1",
+      "group": "native-form-pages"
+    },
+    {
+      "proof": "native1",
+      "group": "native-large-text"
+    },
+    {
+      "proof": "native1",
+      "group": "native-share-font1"
+    },
+    {
+      "proof": "map-sdk1",
+      "group": "native-map-sdk"
+    },
+    {
+      "proof": "map-online1",
+      "group": "native-online-map"
+    }
+  ]
+}

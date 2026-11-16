@@ -1,0 +1,8 @@
+{
+  "result": "Rejected before Android mutation",
+  "cause": "Copied helper retained expected scalar code30 despite candidate0.8.0-dev/code31; corrected to31, all other source/scope gates retained.",
+  "rawLogSha256": "3584e8a91339fc4a60f31943e209d7562b4903d25112671f7fe3fbc00eba6ad7",
+  "appOrTestSourceChanged": false,
+  "productTestsCounted": 0,
+  "mainScreenshotsClaimed": 0
+}

@@ -12,8 +12,15 @@ def test_catalogue_and_unclaimed_equipment_rejection_are_atomic(pilot):
     _, client, _, account = pilot
     _, h = account("꾸미기 카탈로그")
     items = client.get("/v1/shop/items", headers=h).json()["items"]
-    assert len(items) == 62
-    assert {"top:4", "bottom:4", "socks:2", "costume:5", "headwear:1", "ear:1"} <= {i["id"] for i in items}
+    assert len(items) == 65
+    assert {"top:4", "bottom:4", "socks:2", "costume:5", "headwear:1", "ear:1", "top:6", "socks:4", "shoes:4"} <= {i["id"] for i in items}
+    # Original catalogue response prefix remains byte-for-byte in identity/order.
+    old_slots = ["hair", "top", "bottom", "shoes", "accessory", "eyewear", "wrist", "waist", "hydration",
+                 "face", "socks", "headwear", "ear", "costume"]
+    original_ids = [f"{slot}:{value}" for slot in old_slots
+                    for value in range(6 if slot in {"top", "bottom", "costume"} else 4)]
+    assert [item["id"] for item in items[:62]] == original_ids
+    assert [item["id"] for item in items[62:]] == ["top:6", "socks:4", "shoes:4"]
     original = client.get("/v1/me", headers=h).json()
     assert client.patch("/v1/me", headers=h, json={"avatar": {"top": 0, "wrist": 1}}).status_code == 403
     assert client.get("/v1/me", headers=h).json() == original
@@ -91,7 +98,7 @@ def test_all_test_items_are_free_and_claims_preserve_existing_mileage(pilot):
     before = client.get("/v1/me", headers=h).json()
     assert before["mileage"] == 777
     items = client.get("/v1/shop/items", headers=h).json()["items"]
-    assert len(items) == 62 and all(item["cost"] == 0 for item in items)
+    assert len(items) == 65 and all(item["cost"] == 0 for item in items)
     for item in items:
         first = client.post("/v1/shop/purchase", headers=h, json={"item_id": item["id"]})
         assert first.status_code == 200, first.text
@@ -102,3 +109,39 @@ def test_all_test_items_are_free_and_claims_preserve_existing_mileage(pilot):
     after = client.get("/v1/me", headers=h).json()
     assert set(before["owned_items"]) <= set(after["owned_items"])
     assert {item["id"] for item in items} <= set(after["owned_items"])
+
+
+def test_appended_materials_claim_and_patch_without_resetting_old_ids_gender_or_balance(pilot):
+    app, client, clock, account = pilot
+    user, h = account("추가 소재 러너")
+    with app.state.db(True) as c:
+        c.execute("INSERT INTO ledger VALUES(?,?,NULL,NULL,?,?)", ("atelier-credit", user["id"], 777, clock[0]))
+    own(app, user, ["top:4", "socks:3", "costume:1", "wrist:2"])
+    seeded = client.patch("/v1/me", headers=h, json={"avatar": {
+        "top": 4, "socks": 3, "costume": 1, "wrist": 2, "gender": "female",
+        "runningKitColors": {"top": 4, "bottom": 2, "shoes": 3}}})
+    assert seeded.status_code == 200, seeded.text
+    before = seeded.json()
+    assert client.patch("/v1/me", headers=h, json={"avatar": {"top": 6}}).status_code == 403
+    assert client.get("/v1/me", headers=h).json() == before
+    for item in ["top:6", "socks:4", "shoes:4"]:
+        claimed = client.post("/v1/shop/purchase", headers=h, json={"item_id": item})
+        assert claimed.status_code == 200 and claimed.json()["mileage"] == 777
+        repeated = client.post("/v1/shop/purchase", headers=h, json={"item_id": item})
+        assert repeated.status_code == 200 and repeated.json()["already_owned"] is True
+        assert repeated.json()["mileage"] == 777
+    equipped = client.patch("/v1/me", headers=h, json={"avatar": {"top": 6, "socks": 4, "shoes": 4}})
+    assert equipped.status_code == 200, equipped.text
+    after = equipped.json()
+    assert after["avatar"]["top"] == 6 and after["avatar"]["socks"] == 4 and after["avatar"]["shoes"] == 4
+    assert after["avatar"]["costume"] == 0 and after["avatar"]["wrist"] == 2
+    assert after["avatar"]["gender"] == "female"
+    assert after["avatar"]["runningKitColors"] == before["avatar"]["runningKitColors"]
+    assert set(before["owned_items"]) <= set(after["owned_items"])
+    assert {"top:6", "socks:4", "shoes:4"} <= set(after["owned_items"])
+    assert after["mileage"] == 777
+    old_client = client.patch("/v1/me", headers=h, json={"avatar": {"hair": 0}})
+    assert old_client.status_code == 200 and old_client.json() == after
+    for slot, invalid in [("top", 7), ("socks", 5), ("shoes", 5)]:
+        assert client.patch("/v1/me", headers=h, json={"avatar": {slot: invalid}}).status_code == 422
+        assert client.get("/v1/me", headers=h).json() == after

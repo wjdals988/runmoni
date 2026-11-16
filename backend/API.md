@@ -18,9 +18,9 @@ Local-only base URL: `http://127.0.0.1:8787`. Android emulator uses `http://10.0
 - `GET /health`: `{status:"ok", version:"0.1.4", auth_mode:"invite_code_pilot", capabilities:{voice:false,music_broadcast:false}}` when audio credentials are unset.
 - `POST /v1/auth/pilot`: `{invite_code, nickname, adult_confirmed:true}` → `{access_token, token_type:"bearer", expires_at_ms, user:{id,nickname,mileage,avatar}}`. Explicit adult-attested invite-only pilot, NOT email OTP or verified identity. Nicknames unique. Existing nickname cannot be used to obtain another person's token. Persist the issued token on the device; lost-token recovery is operator-assisted in this pilot.
 - `DELETE /v1/auth/session`: revoke current bearer token.
-- `GET /v1/me`: `{id,nickname,mileage,avatar,owned_items}`. `owned_items` is a string array of SKUs (e.g. `["hair:0","hair:1","top:0"]`); all five variant-0 SKUs are always included.
-- `PATCH /v1/me`: `{nickname?, avatar?:{hair:0,top:0,bottom:0,shoes:0,accessory:0}}`; each variant is 0–3 and nonzero variants require owned SKU `slot:variant`. Duplicate nickname returns 400 `nickname_taken`.
-- `GET /v1/shop/items`: cosmetic catalogue `{items:[{id,name,cost,slot,value}]}`.
+- `GET /v1/me`: `{id,nickname,mileage,avatar,owned_items}`. `owned_items` is a string array of SKUs (e.g. `["hair:0","hair:1","top:0"]`); every slot's variant-0 SKU is included.
+- `PATCH /v1/me`: `{nickname?, avatar?:{hair:0,top:0,bottom:0,shoes:0,accessory:0,...}}`. Item IDs are 0–6 for `top`, 0–5 for `bottom/costume`, 0–4 for `socks/shoes`, and 0–3 for the other slots. Nonzero variants require owned SKU `slot:variant`; all claims currently cost0. Omitted slots, `gender` and `runningKitColors` remain unchanged. Palette IDs remain 0–5 independently of inventory IDs. Duplicate nickname returns400 `nickname_taken`.
+- `GET /v1/shop/items`: cosmetic catalogue `{items:[{id,name,cost,slot,value}]}`. Original62 entries (including four legacy `accessory` aliases) remain the response prefix; `top:6`, `socks:4`, `shoes:4` are appended, total65. Android has61 modern IDs in13 slots; legacy aliases do not create another wardrobe tab.
 - `POST /v1/shop/purchase`: `{item_id}` → `{item_id,mileage,already_owned}`. Repeated purchase does not debit again; one item ownership per user/SKU.
 - `POST /v1/blocks`: `{user_id}`; `DELETE /v1/blocks/{user_id}`; block hides presence and messages in both directions. A voice token is denied if a blocked pair would share the room.
 

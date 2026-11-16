@@ -42,6 +42,14 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.8.0-dev", "2026-11-16", "미니미·사진 공유·자동 백업 개편 · 실기기 검증 전", listOf(
+        "모자와 세트 의상의 디테일을 다듬고 메시 저지·리브 양말·패널 신발을 추가했어요.",
+        "옷장은 부위별 미리보기 목록에서 고르고 착용 모습을 확인해요.",
+        "사진 전체에 기록과 미니미를 배치하고 세 가지 스타일로 공유해요.",
+        "Google 계정 연결 후 완료한 러닝 요약을 자동 백업하고 상태를 알려줘요.",
+        "지도의 색과 경로를 정리하고 자동 갱신 중 반복 오류 안내를 줄였어요.",
+        "앱 아이콘을 새 러닝 심볼로 바꿨어요.",
+    )),
     AppVersionEntry("0.7.1-dev", "2026-11-16", "미니미 착용·도트 개편 · 실기기 검증 전", listOf(
         "모자의 앞단과 그림자를 머리 위에 연결하고 러닝 캡·바이저를 추가했어요.",
         "안경·이어폰·워치와 러닝 장비의 크기·원근·가림을 다듬었어요.",

@@ -8,6 +8,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -81,9 +82,19 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                 .padding(horizontal = pageGutter(), vertical = 20.dp).testTag("runner_discovery_details"),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 if (state.discovery.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
-                Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
-                    color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
-                    modifier = Modifier.testTag("runner_discovery_status"))
+                if (LocalDensity.current.fontScale >= 1.3f) {
+                    Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
+                        color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
+                        modifier = Modifier.fillMaxWidth().testTag("runner_discovery_status"))
+                    RunnerRefreshAction(state.signedIn && !state.discovery.loading, actions::refreshRunners,
+                        Modifier.align(Alignment.End))
+                } else Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
+                        color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
+                        modifier = Modifier.weight(1f).testTag("runner_discovery_status"))
+                    RunnerRefreshAction(state.signedIn && !state.discovery.loading, actions::refreshRunners)
+                }
                 AdaptiveActions(first = { m ->
                     FilledTonalButton(onClick = actions::locateExplore, shape = RunmoniShapes.Action,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash,
@@ -108,6 +119,16 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                 state.sharing.error?.let { Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodySmall) }
             }
         }
+    }
+}
+
+@Composable
+private fun RunnerRefreshAction(enabled: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    TextButton(onClick = onClick, enabled = enabled,
+        modifier = modifier.heightIn(min = 48.dp).testTag("refresh_runners")) {
+        Icon(Icons.Outlined.Refresh, null, Modifier.size(20.dp))
+        Spacer(Modifier.width(6.dp))
+        Text("새로고침")
     }
 }
 

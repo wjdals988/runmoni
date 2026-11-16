@@ -19,6 +19,8 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,6 +33,9 @@ import com.runmoni.app.BuildConfig
 import com.runmoni.app.domain.CloudAccountState
 import com.runmoni.app.domain.CloudRunSummary
 import com.runmoni.app.domain.RunRecord
+import com.runmoni.app.domain.AutomaticCloudBackupAccount
+import com.runmoni.app.domain.CloudBackupSession
+import com.runmoni.app.domain.CloudBackupWriteResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,8 +44,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withTimeout
 
-/** Private manual backups only. This service never reads or mutates the pilot session. */
-class FirebaseCloudAccount(context: Context) {
+/** Private summary backups only. This service never reads or mutates the pilot session. */
+class FirebaseCloudAccount(context: Context) : AutomaticCloudBackupAccount {
     private val lock = Any()
     private val mutableState = MutableStateFlow(CloudAccountState())
     val state: StateFlow<CloudAccountState> = mutableState.asStateFlow()
@@ -53,9 +58,13 @@ class FirebaseCloudAccount(context: Context) {
     private var firstAuthObservation = true
     private var activeLogin: Ticket? = null
     private var closed = false
+    private val revokedAutomaticRuns = mutableSetOf<Pair<String, String>>()
+    private val automaticTasks = mutableMapOf<Pair<String, String>, Task<Boolean>>()
 
     private data class Ticket(val epoch: Long, val operation: Long, val uid: String)
     private class MalformedSummary : Exception()
+    private class StaleAutomaticSession : Exception()
+    private class ConflictingAutomaticSummary : Exception()
 
     init {
         val hasConfiguration = BuildConfig.FIREBASE_ENABLED && listOf(
@@ -103,7 +112,9 @@ class FirebaseCloudAccount(context: Context) {
         synchronized(lock) {
             if (closed || activeLogin != null) return
             val user = firebaseAuth.currentUser
-            val actualUid = user?.uid.orEmpty()
+            val actualUid = user?.takeIf { !it.isAnonymous && it.providerData.any { provider ->
+                provider.providerId == GoogleAuthProvider.PROVIDER_ID
+            } }?.uid.orEmpty()
             if (firstAuthObservation) {
                 firstAuthObservation = false
                 acceptedUid = actualUid
@@ -111,8 +122,8 @@ class FirebaseCloudAccount(context: Context) {
                 operationSequence++
                 mutableState.value = mutableState.value.copy(
                     uid = actualUid, accountLabel = accountLabel(user), busy = false, summaries = emptyList(),
-                    status = if (actualUid.isBlank()) "Google 계정 연결 후 요약을 수동 백업할 수 있습니다"
-                    else "저장된 Google 계정 연결됨 · 백업과 조회는 수동으로 실행합니다",
+                    status = if (actualUid.isBlank()) "Google 계정을 연결하면 완료 기록 요약을 자동 백업해요"
+                    else "저장된 Google 계정 연결됨 · 완료 기록 요약을 자동 백업해요",
                 )
             } else if (actualUid != acceptedUid) {
                 // A timed-out Firebase Task can still finish. Never adopt its late UID.
@@ -176,7 +187,7 @@ class FirebaseCloudAccount(context: Context) {
                 mutableState.value = mutableState.value.copy(
                     uid = user.uid, accountLabel = accountLabel(user), busy = false, summaries = emptyList(),
                     interactiveSignInAt = System.currentTimeMillis(),
-                    status = "Google 계정 연결됨 · 요약 백업과 조회는 수동으로 실행합니다",
+                    status = "Google 계정 연결됨 · 완료 기록 요약을 자동 백업해요",
                 )
                 GoogleSignInOutcome.Success
             }
@@ -300,19 +311,61 @@ class FirebaseCloudAccount(context: Context) {
         }
     }
 
+    override fun backupSession(expectedUid: String?): CloudBackupSession? = synchronized(lock) {
+        val user = auth?.currentUser ?: return@synchronized null
+        if (closed || firstAuthObservation || activeLogin != null || !mutableState.value.configured || user.isAnonymous ||
+            user.providerData.none { it.providerId == GoogleAuthProvider.PROVIDER_ID } || acceptedUid.isBlank() ||
+            acceptedUid != user.uid || mutableState.value.uid != user.uid || expectedUid != null && expectedUid != user.uid) null
+        else CloudBackupSession(user.uid, sessionEpoch)
+    }
+
+    override fun isBackupSessionCurrent(session: CloudBackupSession): Boolean = backupSession(session.uid) == session
+
+    /** Online transaction: repeated delivery ACKs identical data, never overwrites a colliding run ID. */
+    override suspend fun writeAutomaticSummary(summary: CloudRunSummary, session: CloudBackupSession): CloudBackupWriteResult {
+        val database = firestore ?: return CloudBackupWriteResult.STALE_SESSION
+        val key = session.uid to summary.runId
+        fun allowed() = synchronized(lock) { isBackupSessionCurrent(session) && key !in revokedAutomaticRuns }
+        if (!allowed()) return CloudBackupWriteResult.STALE_SESSION
+        val task = synchronized(lock) {
+            if (!allowed()) return CloudBackupWriteResult.STALE_SESSION
+            // A timed-out await does not cancel Firebase's original Task.
+            // Retain one real in-flight Task per run so delete can await all of it.
+            if (automaticTasks[key]?.isComplete == false) return CloudBackupWriteResult.RETRY
+            database.runTransaction { transaction ->
+                if (!allowed()) throw StaleAutomaticSession()
+                val reference = database.collection("users").document(session.uid).collection("runSummaries").document(summary.runId)
+                val previous = transaction.get(reference)
+                if (!allowed()) throw StaleAutomaticSession()
+                if (previous.exists()) {
+                    val existing = try { parseSummary(previous) } catch (_: Exception) { throw MalformedSummary() }
+                    if (existing != summary) throw ConflictingAutomaticSummary()
+                } else transaction.set(reference, summary.toFields() + (BACKUP_TIMESTAMP_FIELD to FieldValue.serverTimestamp()))
+                true
+            }.also { automaticTasks[key] = it }
+        }
+        // Keep the real Task until it settles even if await times out. A delete
+        // must not overtake an older write that is still alive inside the SDK.
+        task.addOnCompleteListener { synchronized(lock) { if (automaticTasks[key] === task) automaticTasks.remove(key) } }
+        return try {
+            withTimeout(NETWORK_TIMEOUT_MILLIS) { task.await() }
+            if (allowed()) CloudBackupWriteResult.ACKNOWLEDGED else CloudBackupWriteResult.STALE_SESSION
+        } catch (_: TimeoutCancellationException) { CloudBackupWriteResult.RETRY }
+        catch (cancelled: CancellationException) { throw cancelled }
+        catch (failure: Exception) {
+            val causes = generateSequence<Throwable>(failure) { it.cause }.take(8).toList()
+            when {
+                !allowed() || causes.any { it is StaleAutomaticSession } -> CloudBackupWriteResult.STALE_SESSION
+                causes.any { it is ConflictingAutomaticSummary || it is MalformedSummary } -> CloudBackupWriteResult.CONFLICT
+                else -> CloudBackupWriteResult.RETRY
+            }
+        }
+    }
+
+    /** Compatibility entry; production uses the UID-bound durable Room queue. */
     suspend fun backupRun(record: RunRecord, expectedUid: String) {
-        accountOperation(expectedUid, "선택한 계정에 요약 백업 중", "요약 백업을 완료하지 못했습니다 · 설정과 네트워크를 확인해 주세요",
-            action = { database, uid ->
-                val summary = CloudRunSummary.fromRunRecord(record)
-                val fields = summary.toFields() + (BACKUP_TIMESTAMP_FIELD to FieldValue.serverTimestamp())
-                database.collection("users").document(uid).collection("runSummaries").document(summary.runId).set(fields).await()
-                summary
-            },
-            completed = { current, summary -> current.copy(
-                status = "요약 백업 완료 · GPS 경로와 마일리지는 업로드하지 않았습니다",
-                summaries = (current.summaries.filterNot { it.runId == summary.runId } + summary).sortedByDescending { it.startedAtMillis }.take(MAX_SUMMARIES),
-            ) },
-        )
+        val session = backupSession(expectedUid) ?: return
+        writeAutomaticSummary(CloudRunSummary.fromRunRecord(record), session)
     }
 
     suspend fun refreshSummaries(expectedUid: String) {
@@ -327,6 +380,22 @@ class FirebaseCloudAccount(context: Context) {
     }
 
     suspend fun deleteSummary(runId: String, expectedUid: String) {
+        CloudRunSummary.validateRunId(runId)
+        val session = backupSession(expectedUid) ?: return
+        val prior = synchronized(lock) {
+            revokedAutomaticRuns += expectedUid to runId
+            automaticTasks[expectedUid to runId]?.takeUnless { it.isComplete }
+        }
+        if (prior != null) {
+            try { withTimeout(NETWORK_TIMEOUT_MILLIS) { prior.await() } }
+            catch (_: TimeoutCancellationException) {
+                synchronized(lock) { if (isBackupSessionCurrent(session)) mutableState.value = mutableState.value.copy(
+                    status = "이전 백업 응답을 기다리고 있어요. 잠시 뒤 요약 삭제를 다시 시도해 주세요") }
+                return
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { /* A failed older write has settled; deletion may now proceed. */ }
+        }
+        if (!isBackupSessionCurrent(session)) return
         accountOperation(expectedUid, "선택한 클라우드 요약 삭제 중", "클라우드 요약을 삭제하지 못했습니다 · 설정과 네트워크를 확인해 주세요",
             action = { database, uid ->
                 CloudRunSummary.validateRunId(runId)
