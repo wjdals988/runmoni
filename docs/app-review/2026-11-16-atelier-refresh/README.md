@@ -1,3 +1,24 @@
+# 0.8.0-dev 공개 완료
+
+<!-- verified-atelier-release-0.8.0-v1 -->
+기존 보관키0.8.0-dev/code31을 실기기 검증 전 개발 프리뷰로 공개했다. 실제 APK출처 `9a0051e28a2ac24badbbf1b57a554a37e4a9a85e`, 172,828,638bytes, SHA256 `5c2c6a12faf75d38f4328046a3a93537472d37842963e4357f0b45fbed62531b`다. 앱https://github.com/wjdals988/runmoni/pull/63·서명CI43886075423·대시보드https://github.com/wjdals988/mydashboard/pull/32/main `c89e16ccd9773594cc7e3fbbf75a203b817a9b4c`와 운영 다운로드/새MainPNG4/새Node23개를 확인했다. 첫 서명CI43883353138/source572939386fcf01c000f4604621e16b7dcc093169는 필수 배포 안내 누락으로 업로드 전 차단됐고, 안내 보완 뒤 실제 새 출처로 다시 서명했다. 첫 전체failure를 새 성공으로 합산하지 않았다. APK 본문을 다시 내려받거나 공개3자산을 교체하지 않았다. 후속 문서·피드D로 실제 APK출처C를 바꾸지 않는다.
+
+frontend-design와 실제 로컬 headless Aseprite1.3.18.6-dev의 소재80셀/프로젝트5개를 적용했다. 새 메시 저지·리브 양말·패널 신발3종과 부위별 옷장, 전체 사진 공유3스타일/독립 배치, Google 요약 자동 백업/Roomv2·고정UID/삭제억제, 무료 지도 정리/반복 오류 안내와 Stride R 앱/알림 아이콘을 반영했다. 원본 얼굴·체형·8프레임·기존58ID prefix/13슬롯/9탭/무료·보유·지갑·키를 보존하며 전체61ID다. Aseprite GUI 손그림·전신 털 인형 원화/모든61종 준비·사용자 시각 승인은 주장하지 않는다. 원본GPS/포인트·옷장 전체 백업과 다른 기기의 전역 삭제 동기화는 별도다. 새3ID Rules는 소유자 게시 완료 보고이며 관리 API/운영 쓰기 확인으로 바꾸지 않는다.
+
+최종 input4 새 로컬JVM248/lint오류0·경고65, 실제 연결 서명CI 새JVM248/lint오류0·경고97를 구분한다. Android 범위86는 input3 보존55+최종input4 새31이며 같은APK 전체나 이전0.7 재사용이 아니다. 원래 false parent와 실패 그룹 부분통과 제외, 실제46dp 버튼의48dp 수정·부분문구 검사 교정, 초기 재생4초 실패/원인미확정과 같은binary3 독립7 통과를 보존했다. 재생 실패를 제품 수정 완료나 초기 로딩 SLA로 바꾸지 않는다. 실제Main 원본7장과 선택/저장·사진Picker/스타일/초안/지도·Root 시각검토·원래 DB행/백업 origin·전체XML/계정·소유 설정 복원 및 AVD4 PID69127 정확 종료를 확인했다.
+
+휴대폰·실제 Google 로그인/자동 백업·운영 프로필/위치공유 쓰기·SNS 전달·야외GPS/절전/OEM/API31+·실제live위젯/알림·공개 서명APK 런타임과 사용자 시각 승인은 별도다. canonical raw피드는 이 문서/피드 병합 뒤 전체 바이트로 독립 확인한다.
+
+[공개 검증](connected-release-public.json) · [실제 C/6맵 비교](release-source-comparison.json) · [운영 검증](dashboard-production.json).
+
+아래는 단계별 원래 검토 기록이다.
+
+# 현재 배포 경계 · GitHub API 재인증 대기
+
+앱PR62와 필수안내PR63은 main에 반영됐고, 실제 새 서명 후보 출처는9a0051e28a2ac24badbbf1b57a554a37e4a9a85e다. 두 번째 CI43886075423의 공개 Actions 페이지에서 Success와 해당 전체SHA를 확인했다. 빌드/서명 단계 성공 뒤 비공개 초안 업로드를 수행하는 workflow지만, 현재 관리 API가401 Bad credentials를 반환해 원격3자산·메타데이터/CI XML의 독립 검증과 공개 전환은 보류한다. 이 상태를 공개APK/Google실행/대시보드 배포 완료로 바꾸지 않는다. 공개 피드와 운영 대시보드는0.7.1 그대로다.
+
+[공개페이지 상태 근거](ci2-public-page-status.json)·[API 인증 차단](github-api-reauth-blocker.json). 같은 workspace GitHub 연결을 다시 인증한 뒤 실제 정상API로 CI43886075423/attempt1/source9a0051e28a2ac24badbbf1b57a554a37e4a9a85e를 검증하고 공개/대시보드/피드를 마친다. 서명키나 토큰값을 채팅으로 요청하지 않는다. 이전 서명실패/SourceC0와 이 새출처를 구분한다.
+
 # 첫 서명 CI 게시 차단 · 안내 문서 보완
 
 초기 source572939386fcf01c000f4604621e16b7dcc093169의 CI43883353138은 빌드/테스트/서명 검증 단계 성공 뒤 업로드 전 로컬 계획에서 중단됐다. 버전별 RELEASE_NOTES_0.8.0-dev.md 누락을 확인해 추가한다. 원래 CI전체failure를 성공으로 바꾸지 않으며 API업로드/공개는 수행되지 않았다. 새 문서 커밋을 실제 APK 출처로 쓰려면 새 연결 서명CI를 실행해야 한다. 제품451개 소스 맵은 동일하다. [원래 차단 근거](first-signed-ci-publication-blocker.json).

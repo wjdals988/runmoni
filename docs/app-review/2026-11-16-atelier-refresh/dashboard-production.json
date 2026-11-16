@@ -1,0 +1,119 @@
+{
+  "verifiedAtUtc": "2026-11-16T15:03:55.470929+00:00",
+  "productionVerified": true,
+  "executedDriverSha256": "af966d027d8c5f9030ac4fab77cb620028dfe23779827f2712584f21a7fa3a6e",
+  "dashboard": {
+    "repository": "wjdals988/mydashboard",
+    "pullRequest": "https://github.com/wjdals988/mydashboard/pull/32",
+    "mergeRevision": "c89e16ccd9773594cc7e3fbbf75a203b817a9b4c",
+    "mainCi": {
+      "runId": 43891984214,
+      "conclusion": "success",
+      "url": "https://github.com/wjdals988/mydashboard/actions/runs/43891984214"
+    },
+    "productionDeployment": {
+      "id": 7827609525,
+      "state": "success",
+      "environmentUrl": "https://mydashboard-lzaaa6vtg-wjdals988-6836s-projects.vercel.app"
+    },
+    "localNodeTests": {
+      "exitCode": 0,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "skipped": 0,
+      "rawLog": "dashboard-node-tests.txt",
+      "rawSha256": "d3d605dab818938c72f882c23915144f47acbbc328bae4193a59d526e91b0c78"
+    }
+  },
+  "productionPage": {
+    "url": "https://coldbrewventi.vercel.app/projects/runmoni",
+    "checks": {
+      "http200": true,
+      "canonicalUrl": true,
+      "downloadAnchor": true,
+      "versionAndCode": true,
+      "fileSize": true,
+      "sha256": true,
+      "previewLabel": true,
+      "description": true,
+      "screenshotsProvenance": true,
+      "gallery_cap": true,
+      "gallery_kit": true,
+      "gallery_photo": true,
+      "gallery_map": true
+    },
+    "responseSha256": "4500f1b360790bca41dee43efd42f8fc28c1c60d59483520c2d808a10732927c"
+  },
+  "apk": {
+    "version": "0.8.0-dev",
+    "versionCode": 31,
+    "packageName": "com.runmoni.app",
+    "fileName": "runmoni-0.8.0-dev.apk",
+    "sizeBytes": 172828638,
+    "sha256": "5c2c6a12faf75d38f4328046a3a93537472d37842963e4357f0b45fbed62531b",
+    "signed": true,
+    "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+    "sourceDirty": false,
+    "connectionReadiness": {
+      "schemaVersion": 1,
+      "checkedAt": "2026-11-16T14:28:36.806545+00:00",
+      "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+      "certificateSha1": "192a7e29843c90210eedd1373a78d4da77f09773",
+      "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
+      "certificateVerified": true,
+      "firebase": "ready",
+      "server": "ready",
+      "ready": true,
+      "physicalDeviceVerified": false,
+      "interactiveGoogleLoginVerified": false,
+      "anonymousProviderVerified": false,
+      "publicRoomWritesVerified": false,
+      "backend": "firebase"
+    },
+    "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a"
+  },
+  "gallery": [
+    {
+      "path": "/reviews/runmoni/0.8.0-dev/cap.png",
+      "httpStatus": 200,
+      "sizeBytes": 66337,
+      "sha256": "32f119161020df73b1abfdd3301c74efea89783e393c3f81f34a980c536ef2a7",
+      "matchesCommittedOriginal": true,
+      "source": "MainActivity"
+    },
+    {
+      "path": "/reviews/runmoni/0.8.0-dev/kit.png",
+      "httpStatus": 200,
+      "sizeBytes": 66936,
+      "sha256": "8016b052310a41a0d38d89fd7710d49a28b0eeaa8033d2d908047e8fed50bd9a",
+      "matchesCommittedOriginal": true,
+      "source": "MainActivity"
+    },
+    {
+      "path": "/reviews/runmoni/0.8.0-dev/photo.png",
+      "httpStatus": 200,
+      "sizeBytes": 54565,
+      "sha256": "a6384acaf0fe26f4817a4d1e1b0f4e66cb4f0bde3a17356c42c4f2170ce3fceb",
+      "matchesCommittedOriginal": true,
+      "source": "MainActivity"
+    },
+    {
+      "path": "/reviews/runmoni/0.8.0-dev/map.png",
+      "httpStatus": 200,
+      "sizeBytes": 208659,
+      "sha256": "237017e8597eb96f3af29a5fa04f9cfa457946607fb8ba5e777cd4d82155b13a",
+      "matchesCommittedOriginal": true,
+      "source": "MainActivity"
+    }
+  ],
+  "physicalDeviceVerified": false,
+  "interactiveGoogleLoginVerified": false,
+  "productionWritesVerified": false,
+  "userVisualApproval": false,
+  "limits": [
+    "HTTP/download anchor and four PNG bytes only; browser click not inferred.",
+    "Images are local TEST debug MainActivity/API29 with disclosed synthetic data, not public signed APK runtime.",
+    "No APK body downloaded. Canonical raw feed is a later independent check."
+  ]
+}

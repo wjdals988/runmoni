@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.7.1-dev",
-    "versionCode": 30,
-    "fileName": "runmoni-0.7.1-dev.apk",
-    "sizeBytes": 172525552,
-    "sha256": "32604fb58617c477cfdda6fff58676cb09301facb4d83e0b87fc7aa3c4cf671c",
+    "version": "0.8.0-dev",
+    "versionCode": 31,
+    "fileName": "runmoni-0.8.0-dev.apk",
+    "sizeBytes": 172828638,
+    "sha256": "5c2c6a12faf75d38f4328046a3a93537472d37842963e4357f0b45fbed62531b",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "cb5b6cb3d70bb56e355bc45a8dc007617a3fa867",
+    "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.7.1-dev/runmoni-0.7.1-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.7.1-dev",
-    "notes": "미니미 캡·바이저의 착용면과 장비·세트·양말의 도트 명암을 다듬은 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.8.0-dev/runmoni-0.8.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.8.0-dev",
+    "notes": "미니미 의복 디테일·새 아이템3종과 전체 사진 공유·Google 요약 자동 백업·무료 지도·앱 아이콘을 개선한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

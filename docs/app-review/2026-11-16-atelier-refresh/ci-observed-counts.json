@@ -1,0 +1,21 @@
+{
+  "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+  "ciRun": 43886075423,
+  "ciAttempt": 1,
+  "artifactId": 14235059485,
+  "archiveSha256": "583f25c68d2500d8ebf0d30b1efa1356db2df37131594e41edef38a492c986e6",
+  "observedJvm": {
+    "tests": 248,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "observedLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 97,
+    "Information": 0
+  },
+  "wholeCiSigningFreshnessStillRequiresVerifier": true,
+  "measuredAtUtc": "2026-11-16T14:53:14.593872+00:00"
+}

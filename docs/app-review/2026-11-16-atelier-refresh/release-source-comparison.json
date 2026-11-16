@@ -1,5 +1,5 @@
 {
-  "releaseSourceRevision": "572939386fcf01c000f4604621e16b7dcc093169",
+  "releaseSourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
   "allSourceMapsMatch": true,
   "sourceMaps": {
     "productSources": {
@@ -474,7 +474,7 @@
     "file": "binary-build4.json",
     "sha256": "148c2c8bfac201275b2ad761817859a49e389e3bd14255e325502c249edb9a6f"
   },
-  "comparedAtUtc": "2026-11-16T14:12:42.381726+00:00",
+  "comparedAtUtc": "2026-11-16T14:28:21.000432+00:00",
   "fileHashBasis": "SHA256 of complete mapped regular Git blobs at the actual commit C; no working-tree subset",
   "mainActivitySource": {
     "file": "app/src/main/java/com/runmoni/app/MainActivity.kt",

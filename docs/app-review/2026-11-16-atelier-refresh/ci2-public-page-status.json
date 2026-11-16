@@ -1,0 +1,15 @@
+{
+  "observedAtUtc": "2026-11-16T14:50:24.369192+00:00",
+  "url": "https://github.com/wjdals988/runmoni/actions/runs/43886075423",
+  "http": 200,
+  "htmlSha256": "17d18de6757b263de52e247ef88f4b1211544a99aa5c7b1a654b6d2484fb4e33",
+  "visibleStatus": "Success",
+  "fullExpectedSourceShaPresent": true,
+  "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+  "ciRun": 43886075423,
+  "ciAttempt": 1,
+  "privateMetadataAndCiXmlIndependentlyVerified": false,
+  "apkPublishedByAgent": false,
+  "githubApiBlockedBy401": true,
+  "publicFeedAndDashboardVersion": "0.7.1-dev"
+}
