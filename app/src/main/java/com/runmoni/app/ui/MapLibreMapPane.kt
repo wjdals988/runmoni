@@ -42,6 +42,8 @@ import org.maplibre.android.maps.Style
 import org.maplibre.android.module.http.HttpRequestUtil
 import org.maplibre.android.style.expressions.Expression
 import org.maplibre.android.style.layers.CircleLayer
+import org.maplibre.android.style.layers.BackgroundLayer
+import org.maplibre.android.style.layers.FillLayer
 import org.maplibre.android.style.layers.FillExtrusionLayer
 import org.maplibre.android.style.layers.LineLayer
 import org.maplibre.android.style.layers.Property
@@ -393,6 +395,7 @@ private fun endpoint(node: RouteMapPoint, label: String, kind: String) = Feature
 }
 
 private fun installRouteLayers(style: Style, fontScale: Float): NativeRouteLayers {
+    applyRunningMapAppearance(style)
     // A flat running map keeps routes and runners clear of 3D building clutter.
     style.layers.filterIsInstance<FillExtrusionLayer>().forEach { it.setProperties(visibility(Property.NONE)) }
     // Names only: preserve road refs/shields and the provider's cartography.
@@ -407,11 +410,11 @@ private fun installRouteLayers(style: Style, fontScale: Float): NativeRouteLayer
     val runners = GeoJsonSource("runmoni-runners", FeatureCollection.fromFeatures(emptyArray<Feature>()))
     style.addSource(route); style.addSource(endpoints); style.addSource(runners)
     style.addLayer(LineLayer("runmoni-route-outline", route.id).withProperties(
-        lineColor(android.graphics.Color.WHITE), lineWidth(7f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
+        lineColor(android.graphics.Color.WHITE), lineWidth(9f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
     style.addLayer(LineLayer("runmoni-route-line", route.id).withProperties(
-        lineColor(RunmoniColors.RouteBlue.toArgb()), lineWidth(4f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
+        lineColor(RunningMapColors.route), lineWidth(5f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
     style.addLayer(CircleLayer("runmoni-start", endpoints.id).withFilter(Expression.eq(Expression.get("kind"), Expression.literal("start")))
-        .withProperties(circleRadius(6f), circleColor(RunmoniColors.RouteBlue.toArgb()), circleStrokeColor(android.graphics.Color.WHITE), circleStrokeWidth(2f)))
+        .withProperties(circleRadius(6f), circleColor(RunningMapColors.route), circleStrokeColor(android.graphics.Color.WHITE), circleStrokeWidth(2f)))
     style.addLayer(CircleLayer("runmoni-finish", endpoints.id).withFilter(Expression.eq(Expression.get("kind"), Expression.literal("finish")))
         .withProperties(circleRadius(7f), circleColor(RunmoniColors.Navy.toArgb()), circleStrokeColor(android.graphics.Color.WHITE), circleStrokeWidth(2f)))
     style.addLayer(CircleLayer("runmoni-self", endpoints.id).withFilter(Expression.eq(Expression.get("kind"), Expression.literal("self")))
@@ -421,11 +424,48 @@ private fun installRouteLayers(style: Style, fontScale: Float): NativeRouteLayer
         textColor(RunmoniColors.Navy.toArgb()), textHaloColor(android.graphics.Color.WHITE), textHaloWidth(2f),
         textOffset(arrayOf(0f, 1.2f)), textAllowOverlap(false)))
     style.addLayer(CircleLayer("runmoni-runner-location", runners.id).withProperties(
-        circleRadius(4f), circleColor(RunmoniColors.Primary.toArgb()), circleStrokeColor(android.graphics.Color.WHITE), circleStrokeWidth(2f)))
+        circleRadius(5f), circleColor(RunningMapColors.route), circleStrokeColor(android.graphics.Color.WHITE), circleStrokeWidth(2.5f)))
     style.addLayer(SymbolLayer("runmoni-runner-icons", runners.id).withProperties(
         iconImage(Expression.get("icon")), iconSize(.5f), iconAnchor(Property.ICON_ANCHOR_BOTTOM),
         iconAllowOverlap(true), iconIgnorePlacement(true), iconOptional(true), textField(Expression.get("label")),
         textFont(arrayOf("Noto Sans Regular")), textSize(12f * fontScale), textAnchor(Property.TEXT_ANCHOR_TOP),
-        textOffset(arrayOf(0f, .3f)), textColor(RunmoniColors.Navy.toArgb()), textHaloColor(android.graphics.Color.WHITE), textHaloWidth(2f), textOptional(true)))
+        textOffset(arrayOf(0f, .3f)), textColor(RunningMapColors.ink), textHaloColor(android.graphics.Color.WHITE), textHaloWidth(2.5f), textOptional(true)))
     return NativeRouteLayers(route, endpoints, runners)
+}
+
+/** Restyle known cartographic roles, preserving provider geometry, road widths,
+ * shields, place names and transport. Unknown layers retain their own styling. */
+private fun applyRunningMapAppearance(style: Style) {
+    style.layers.forEach { layer ->
+        val id = layer.id.lowercase(java.util.Locale.ROOT)
+        when (layer) {
+            is BackgroundLayer -> layer.setProperties(backgroundColor(RunningMapColors.ground))
+            is FillLayer -> when {
+                layer.sourceLayer == "water" -> layer.setProperties(fillColor(RunningMapColors.water))
+                layer.sourceLayer == "building" -> layer.setProperties(fillColor(RunningMapColors.ink), fillOpacity(.075f))
+                layer.sourceLayer in setOf("landcover", "landuse") &&
+                    listOf("park", "wood", "grass").any { it in id } -> layer.setProperties(fillColor(RunningMapColors.park))
+                else -> Unit
+            }
+            is LineLayer -> when {
+                layer.sourceLayer == "waterway" -> layer.setProperties(lineColor(RunningMapColors.water))
+                layer.sourceLayer == "transportation" &&
+                    listOf("rail", "ferry", "aerialway").none { it in id } -> {
+                    val walking = listOf("path", "pedestrian", "cycleway", "track").any { it in id }
+                    layer.setProperties(lineColor(when {
+                        "casing" in id -> RunningMapColors.roadEdge
+                        walking -> RunningMapColors.secondary
+                        else -> RunningMapColors.road
+                    }))
+                }
+                else -> Unit
+            }
+            is SymbolLayer -> if (layer.sourceLayer == "poi") {
+                val transport = listOf("transit", "station", "bus").any { it in id }
+                layer.setProperties(textColor(RunningMapColors.secondary), textHaloColor(android.graphics.Color.WHITE),
+                    textHaloWidth(1.2f), iconOpacity(if (transport) .8f else .55f))
+            }
+            else -> Unit
+        }
+    }
 }

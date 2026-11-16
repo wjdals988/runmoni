@@ -165,8 +165,8 @@ class RunReliabilityTest {
         var failStartAcknowledgement = true
         var startedId: String? = null
         val faulty = object : RunDao by db.runs() {
-            override suspend fun save(run: StoredRun) {
-                db.runs().save(run)
+            override suspend fun createLocal(run: StoredRun, ownerUid: String) {
+                db.runs().createLocal(run, ownerUid)
                 startedId = run.id
                 if (failStartAcknowledgement) throw IllegalStateException("start committed before failure")
             }

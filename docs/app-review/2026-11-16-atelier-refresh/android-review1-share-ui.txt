@@ -1,0 +1,36 @@
+
+com.runmoni.app.ui.RunShareUiTest:.
+Error in everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(com.runmoni.app.ui.RunShareUiTest):
+java.lang.AssertionError: Actual width is 46.0.dp, expected at least 48.0.dp (tolerance: 0.5.dp)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU(BoundsAssertions.kt:290)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU$default(BoundsAssertions.kt:287)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertWidthIsAtLeast$1.invoke(BoundsAssertions.kt:86)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertWidthIsAtLeast$1.invoke(BoundsAssertions.kt:85)
+	at androidx.compose.ui.test.BoundsAssertionsKt.withUnclippedBoundsInRoot(BoundsAssertions.kt:211)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertWidthIsAtLeast-3ABfNKs(BoundsAssertions.kt:85)
+	at com.runmoni.app.ui.RunShareUiTest.action(RunShareUiTest.kt:53)
+	at com.runmoni.app.ui.RunShareUiTest.fullyVisible(RunShareUiTest.kt:57)
+	at com.runmoni.app.ui.RunShareUiTest.choose(RunShareUiTest.kt:89)
+	at com.runmoni.app.ui.RunShareUiTest.everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(RunShareUiTest.kt:124)
+...
+com.runmoni.app.ui.RunShareControllerTest:.
+
+Time: 106.348
+There was 1 failure:
+1) everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(com.runmoni.app.ui.RunShareUiTest)
+java.lang.AssertionError: Actual width is 46.0.dp, expected at least 48.0.dp (tolerance: 0.5.dp)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU(BoundsAssertions.kt:290)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertIsAtLeast-cWfXhoU$default(BoundsAssertions.kt:287)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertWidthIsAtLeast$1.invoke(BoundsAssertions.kt:86)
+	at androidx.compose.ui.test.BoundsAssertionsKt$assertWidthIsAtLeast$1.invoke(BoundsAssertions.kt:85)
+	at androidx.compose.ui.test.BoundsAssertionsKt.withUnclippedBoundsInRoot(BoundsAssertions.kt:211)
+	at androidx.compose.ui.test.BoundsAssertionsKt.assertWidthIsAtLeast-3ABfNKs(BoundsAssertions.kt:85)
+	at com.runmoni.app.ui.RunShareUiTest.action(RunShareUiTest.kt:53)
+	at com.runmoni.app.ui.RunShareUiTest.fullyVisible(RunShareUiTest.kt:57)
+	at com.runmoni.app.ui.RunShareUiTest.choose(RunShareUiTest.kt:89)
+	at com.runmoni.app.ui.RunShareUiTest.everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases(RunShareUiTest.kt:124)
+
+FAILURES!!!
+Tests run: 6,  Failures: 1
+
+

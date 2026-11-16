@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunShareImeUiTest:.
+
+Time: 39.768
+
+OK (1 test)
+
+

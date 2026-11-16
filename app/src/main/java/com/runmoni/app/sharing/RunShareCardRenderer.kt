@@ -3,230 +3,171 @@ package com.runmoni.app.sharing
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.Shader
 import android.graphics.Typeface
 import android.graphics.text.LineBreaker
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
-import com.runmoni.app.domain.RunShareAvatarPlacement
-import com.runmoni.app.domain.RunShareContent
-import com.runmoni.app.domain.RunShareDraft
-import com.runmoni.app.domain.RunSharePhotoRect
-import com.runmoni.app.domain.RunSharePhotoTransform
-import com.runmoni.app.domain.RunShareRatio
-import com.runmoni.app.domain.RunSharePlacement
-import com.runmoni.app.domain.RunShareText
-import com.runmoni.app.domain.RunShareTheme
+import com.runmoni.app.domain.*
 import kotlin.math.min
 
-/** The same opaque bitmap is used by the editor and PNG export. Inputs are borrowed and never recycled or changed. */
+/** Preview and PNG export borrow the very same opaque bitmap. Source pixels are never changed/recycled. */
 object RunShareCardRenderer {
-    private data class Palette(val background: Int, val foreground: Int, val secondary: Int, val photoPanelAlpha: Int)
     private data class BoundsKey(val bitmap: Bitmap, val generation: Int)
     private val boundsCache = object : LinkedHashMap<BoundsKey, Rect?>(8, .75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<BoundsKey, Rect?>?) = size > 8
     }
-    private data class LayoutKey(val width: Int, val height: Int, val theme: RunShareTheme,
-        val placement: RunSharePlacement, val caption: String, val showDate: Boolean,
-        val hasName: Boolean, val interrupted: Boolean)
-    private data class CardLayout(val headerBottom: Float, val caption: StaticLayout?,
-        val captionSpace: Float, val panelTop: Float, val panelBottom: Float)
+    private data class Line(val text: String, val x: Float, val baseline: Float, val width: Float,
+        val size: Float, val bold: Boolean = false, val centered: Boolean = false, val distance: Boolean = false)
+    private data class LayoutKey(val content: RunShareContent, val style: RunShareStyle,
+        val tone: RunShareTextTone, val caption: String, val date: Boolean, val name: String)
+    private data class CardLayout(val width: Float, val height: Float, val lines: List<Line>,
+        val caption: StaticLayout?, val captionY: Float)
     private val layoutCache = object : LinkedHashMap<LayoutKey, CardLayout>(8, .75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<LayoutKey, CardLayout>?) = size > 8
     }
 
-    /** Start/finish a drag from its real visible center, not a hidden out-of-bounds value.
-     * Shared bounded caches are warmed by render; ordinary gestures do not rescan borrowed avatar pixels.
-     * Keep the caller's raw caption and every field other than avatarX/Y unchanged.
-     */
     fun constrainAvatar(content: RunShareContent, draft: RunShareDraft, avatar: Bitmap?, runnerName: String = ""): RunShareDraft {
         val config = draft.normalized()
         if (!config.showAvatar || avatar == null || avatar.isRecycled || avatar.width.toLong() * avatar.height > 4_194_304L)
             return draft.copy(avatarX = config.avatarX, avatarY = config.avatarY)
         val source = opaqueBounds(avatar) ?: return draft.copy(avatarX = config.avatarX, avatarY = config.avatarY)
-        val name = if (config.showName) RunShareText.clean(runnerName, 32) else ""
-        val layout = layout(content, config, name.isNotBlank(), palette(config.theme))
-        val destination = avatarDestination(config, source, layout)
-        return draft.copy(avatarX = destination.centerX / config.ratio.width,
-            avatarY = destination.centerY / config.ratio.height)
+        val rect = avatarDestination(config, source)
+        return draft.copy(avatarX = rect.centerX / config.ratio.width, avatarY = rect.centerY / config.ratio.height)
+    }
+
+    fun constrainRecord(content: RunShareContent, draft: RunShareDraft, runnerName: String = ""): RunShareDraft {
+        val rect = recordBounds(content, draft, runnerName)
+        return draft.copy(recordX = rect.centerX / draft.ratio.width, recordY = rect.centerY / draft.ratio.height)
+    }
+
+    fun recordBounds(content: RunShareContent, draft: RunShareDraft, runnerName: String = ""): RunSharePhotoRect {
+        val config = draft.normalized()
+        val layout = layout(content, config, if (config.showName) RunShareText.clean(runnerName, 32) else "")
+        return RunShareRecordPlacement.rect(config.ratio.width, config.ratio.height, layout.width, layout.height, config)
     }
 
     fun render(content: RunShareContent, draft: RunShareDraft, photo: Bitmap?, avatar: Bitmap?, runnerName: String = ""): Bitmap {
         val config = draft.normalized()
         require(photo == null || !photo.isRecycled) { "사진을 다시 선택해 주세요." }
         require(!config.showAvatar || avatar != null && !avatar.isRecycled) { "미니미를 다시 불러오거나 표시를 꺼 주세요." }
-        val width = config.ratio.width
-        val height = config.ratio.height
-        val palette = palette(config.theme)
-        val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val result = Bitmap.createBitmap(config.ratio.width, config.ratio.height, Bitmap.Config.ARGB_8888)
         try {
             val canvas = Canvas(result)
-            canvas.drawColor(palette.background)
+            // Neutral fallback only. Legacy theme values remain readable saved
+            // state; they never tint the photo or create header/footer ribbons.
+            canvas.drawColor(if (config.textTone == RunShareTextTone.LIGHT) 0xff20272b.toInt() else 0xfff4f6f7.toInt())
             if (photo != null) {
-                val crop = RunSharePhotoTransform.cover(photo.width, photo.height, width, height,
+                val crop = RunSharePhotoTransform.cover(photo.width, photo.height, result.width, result.height,
                     config.photoZoom, config.photoX, config.photoY)
                 canvas.drawBitmap(photo, null, crop.androidRect(), Paint(Paint.FILTER_BITMAP_FLAG))
             }
-
-            val square = config.ratio == RunShareRatio.SQUARE
-            val padding = if (square) 52f else 72f
-            val textWidth = width - padding * 2
-            val name = if (config.showName) RunShareText.clean(runnerName, 32) else ""
-            val layout = layout(content, config, name.isNotBlank(), palette)
-            val headerBottom = layout.headerBottom
-            val caption = layout.caption
-            val captionSpace = layout.captionSpace
-            val panelTop = layout.panelTop
-            val panelBottom = layout.panelBottom
-
-            // Keep the complete genuine character outside the statistics ribbon.
-            // If a long caption changes available space, clamp/fit the sticker rather than cover essential numbers.
             if (config.showAvatar && avatar != null) {
                 val source = opaqueBounds(avatar) ?: throw IllegalArgumentException("미니미를 다시 불러와 주세요.")
-                val destination = avatarDestination(config, source, layout)
-                // Photos use interpolation. Approved pixel sprites deliberately do not.
-                canvas.drawBitmap(avatar, source, destination.androidRect(), Paint().apply {
+                canvas.drawBitmap(avatar, source, avatarDestination(config, source).androidRect(), Paint().apply {
                     isFilterBitmap = false; isAntiAlias = false; isDither = false
                 })
             }
-
-            // Text is always above image/sticker layers, with a strong opaque-enough theme surface.
-            val panelColor = if (photo == null) palette.background else withAlpha(palette.background, palette.photoPanelAlpha)
-            canvas.drawRect(0f, panelTop, width.toFloat(), panelBottom, Paint().apply { color = panelColor })
-            var metricsTop = panelTop + if (square) 32f else 40f
-            if (caption != null) {
-                canvas.save()
-                canvas.translate(padding, metricsTop)
-                // A cancelled preview may finish while its replacement starts.
-                // StaticLayout's internal work paint is not shared concurrently between those draws.
-                synchronized(caption) { caption.draw(canvas) }
+            val name = if (config.showName) RunShareText.clean(runnerName, 32) else ""
+            val layout = layout(content, config, name)
+            val rect = RunShareRecordPlacement.rect(result.width, result.height, layout.width, layout.height, config)
+            canvas.save()
+            canvas.translate(rect.left, rect.top)
+            for (line in layout.lines) drawLine(canvas, line, config.textTone)
+            layout.caption?.let { caption ->
+                canvas.save(); canvas.translate(0f, layout.captionY)
+                // The cache is shared by cancelled/concurrent preview renders.
+                synchronized(caption) {
+                    val paint = caption.paint
+                    paint.style = Paint.Style.STROKE; paint.strokeWidth = 4f; paint.color = outline(config.textTone)
+                    paint.clearShadowLayer(); caption.draw(canvas)
+                    paint.style = Paint.Style.FILL; paint.strokeWidth = 0f; paint.color = ink(config.textTone)
+                    paint.setShadowLayer(2f, 0f, 1f, outline(config.textTone)); caption.draw(canvas)
+                }
                 canvas.restore()
-                metricsTop += captionSpace
             }
-
-            val labelPaint = textPaint(if (square) 32f else 28f, palette.secondary, bold = false)
-            canvas.drawText("거리", padding, metricsTop + if (square) 28f else 26f, labelPaint)
-            val distancePaint = textPaint(if (square) 128f else 152f, palette.foreground, bold = true)
-            fit(distancePaint, content.distance, textWidth - 100f)
-            canvas.drawText(content.distance, padding, metricsTop + if (square) 152f else 172f, distancePaint)
-            canvas.drawText("km", padding + distancePaint.measureText(content.distance) + 18f,
-                metricsTop + if (square) 152f else 172f, textPaint(44f, palette.foreground, bold = false))
-
-            val gap = 56f
-            val columnWidth = (textWidth - gap) / 2
-            val rightColumn = padding + columnWidth + gap
-            canvas.drawText("러닝 시간", padding, metricsTop + if (square) 222f else 236f, labelPaint)
-            canvas.drawText("평균 페이스 /km", rightColumn, metricsTop + if (square) 222f else 236f, labelPaint)
-            val timePaint = textPaint(if (square) 64f else 76f, palette.foreground, bold = true)
-            fit(timePaint, content.duration, columnWidth)
-            canvas.drawText(content.duration, padding, metricsTop + if (square) 294f else 318f, timePaint)
-            val pacePaint = textPaint(if (square) 64f else 76f, palette.foreground, bold = true)
-            fit(pacePaint, content.pace, columnWidth)
-            canvas.drawText(content.pace, rightColumn, metricsTop + if (square) 294f else 318f, pacePaint)
-            if (content.interrupted) canvas.drawText("중단 구간 포함", padding, metricsTop + if (square) 340f else 364f, labelPaint)
-
-            // Brand/date/name remain legible independently from the chosen photo or stat placement.
-            val lightPhotoHeader = photo != null && config.theme == RunShareTheme.CORAL
-            if (lightPhotoHeader) {
-                // The bright theme keeps its dark text on the same measured coral
-                // surface over any photo. Stop at the header bound so no genuine
-                // avatar pixels in the adjacent sticker area receive this tint.
-                canvas.drawRect(0f, 0f, width.toFloat(), headerBottom, Paint().apply { color = panelColor })
-            } else if (photo != null) canvas.drawRect(0f, 0f, width.toFloat(), headerBottom + 24f, Paint().apply {
-                shader = LinearGradient(0f, 0f, 0f, headerBottom + 24f,
-                    intArrayOf(0xbc000000.toInt(), 0xaa000000.toInt(), Color.TRANSPARENT),
-                    floatArrayOf(0f, headerBottom / (headerBottom + 24f), 1f), Shader.TileMode.CLAMP)
-            })
-            val headerColor = if (photo != null && !lightPhotoHeader) Color.WHITE else palette.foreground
-            val headerSecondary = if (photo != null && !lightPhotoHeader) 0xffedf2ee.toInt() else palette.secondary
-            canvas.drawText("runmoni", padding, if (square) 80f else 96f, textPaint(44f, headerColor, bold = true))
-            var nextBaseline = if (square) 124f else 148f
-            if (config.showDate) {
-                canvas.drawText(content.date, padding, nextBaseline, textPaint(28f, headerSecondary, bold = false))
-                nextBaseline += if (square) 40f else 44f
-            }
-            if (name.isNotBlank()) {
-                val namePaint = textPaint(32f, headerColor, bold = false)
-                fit(namePaint, name, textWidth)
-                canvas.drawText(name, padding, nextBaseline, namePaint)
-            }
+            canvas.restore()
             return result
-        } catch (failure: Throwable) {
-            // Only this newly allocated output is owned here; shared avatar/photo inputs stay alive.
-            result.recycle()
-            throw failure
-        }
+        } catch (failure: Throwable) { result.recycle(); throw failure }
     }
 
-    private fun palette(theme: RunShareTheme) = when (theme) {
-        RunShareTheme.FOREST -> Palette(0xff205641.toInt(), Color.WHITE, 0xffd6e5da.toInt(), 236)
-        RunShareTheme.INK -> Palette(0xff18201c.toInt(), Color.WHITE, 0xffd6e5da.toInt(), 236)
-        RunShareTheme.PAPER -> Palette(0xfff5f3eb.toInt(), 0xff192d25.toInt(), 0xff556158.toInt(), 248)
-        RunShareTheme.CORAL -> Palette(0xfffbe7de.toInt(), 0xff192d25.toInt(), 0xff556158.toInt(), 248)
-    }
-
-    private fun layout(content: RunShareContent, config: RunShareDraft, hasName: Boolean, palette: Palette): CardLayout {
-        val key = LayoutKey(config.ratio.width, config.ratio.height, config.theme, config.placement,
-            config.caption, config.showDate, hasName, content.interrupted)
+    private fun layout(content: RunShareContent, config: RunShareDraft, name: String): CardLayout {
+        val key = LayoutKey(content, config.style, config.textTone, config.caption, config.showDate, name)
         return synchronized(layoutCache) {
             layoutCache[key] ?: run {
-                val square = config.ratio == RunShareRatio.SQUARE
-                val headerBottom = if (square) when {
-                    hasName && config.showDate -> 184f
-                    hasName || config.showDate -> 144f
-                    else -> 104f
-                } else when { hasName -> if (config.showDate) 208f else 164f
-                    config.showDate -> 164f
-                    else -> 120f }
-                val textWidth = config.ratio.width - if (square) 104 else 144
-                var caption = caption(config.caption, if (square) 36f else 44f, textWidth, palette.foreground)
-                // Two square lines keep the photo and whole avatar useful even with all metadata shown.
-                // Keep all 60 code points; only a long square caption uses the smaller fixed export type.
-                if (square && (caption?.lineCount ?: 0) > 2)
-                    caption = caption(config.caption, 32f, textWidth, palette.foreground)
-                val captionSpace = caption?.let { it.height + if (square) 18f else 28f } ?: 0f
-                val panelHeight = if (square) 32f + captionSpace + if (content.interrupted) 364f else 328f
-                    else 40f + captionSpace + if (content.interrupted) 410f else 370f
-                val panelTop = if (config.placement == RunSharePlacement.BOTTOM) config.ratio.height - panelHeight else headerBottom + 24f
-                CardLayout(headerBottom, caption, captionSpace, panelTop, panelTop + panelHeight).also { layoutCache[key] = it }
+                val centered = config.style == RunShareStyle.STAMP
+                val width = when (config.style) { RunShareStyle.CLEAN -> 800f; RunShareStyle.RECORD -> 880f; RunShareStyle.STAMP -> 620f }
+                val lines = mutableListOf<Line>()
+                var y = 0f
+                fun line(text: String, size: Float, bold: Boolean = false, distance: Boolean = false) {
+                    y += size
+                    lines += Line(text, 0f, y, width, size, bold, centered, distance)
+                    y += if (distance) 14f else 10f
+                }
+                line("runmoni", if (centered) 26f else 28f, true)
+                if (config.showDate) line(content.date, 26f)
+                if (name.isNotBlank()) line(name, 28f)
+                val captionY = y + 6f
+                val caption = if (config.caption.isBlank()) null else StaticLayout.Builder.obtain(config.caption, 0,
+                    config.caption.length, textPaint(32f, ink(config.textTone), false), width.toInt())
+                    .setAlignment(if (centered) Layout.Alignment.ALIGN_CENTER else Layout.Alignment.ALIGN_NORMAL)
+                    .setIncludePad(false).setUseLineSpacingFromFallbacks(true)
+                    .setBreakStrategy(LineBreaker.BREAK_STRATEGY_SIMPLE)
+                    .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NONE).setLineSpacing(4f, 1f).build()
+                if (caption != null) y = captionY + caption.height + 12f
+                y += 8f
+                line(content.distance, when (config.style) { RunShareStyle.CLEAN -> 124f; RunShareStyle.RECORD -> 180f; RunShareStyle.STAMP -> 104f }, true, true)
+                if (config.style == RunShareStyle.RECORD) {
+                    val column = (width - 40f) / 2
+                    y += 26f
+                    lines += Line("러닝 시간", 0f, y, column, 26f)
+                    lines += Line("평균 페이스 /km", column + 40f, y, column, 26f)
+                    y += 66f
+                    lines += Line(content.duration, 0f, y, column, 58f, true)
+                    lines += Line(content.pace, column + 40f, y, column, 58f, true)
+                    y += 14f
+                } else line("${content.duration}  ·  ${content.pace} /km", if (centered) 32f else 38f, true)
+                if (content.interrupted) line("중단 구간 포함", 26f)
+                CardLayout(width, y + 12f, lines, caption, captionY).also { layoutCache[key] = it }
             }
         }
     }
 
-    private fun caption(text: String, size: Float, width: Int, color: Int): StaticLayout? =
-        if (text.isEmpty()) null else StaticLayout.Builder.obtain(text, 0, text.length,
-            textPaint(size, color, bold = false), width)
-            .setAlignment(Layout.Alignment.ALIGN_NORMAL).setIncludePad(false)
-            .setUseLineSpacingFromFallbacks(true)
-            .setBreakStrategy(LineBreaker.BREAK_STRATEGY_SIMPLE)
-            .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NONE)
-            .setLineSpacing(4f, 1f).build()
-
-    private fun avatarDestination(config: RunShareDraft, source: Rect, layout: CardLayout): RunSharePhotoRect {
-        val topLimit = if (config.placement == RunSharePlacement.TOP) layout.panelBottom else layout.headerBottom
-        val bottomLimit = if (config.placement == RunSharePlacement.BOTTOM) layout.panelTop else config.ratio.height.toFloat()
-        return RunShareAvatarPlacement.rect(config.ratio.width, config.ratio.height,
-            source.width(), source.height(), config, topLimit, bottomLimit)
+    private fun drawLine(canvas: Canvas, line: Line, tone: RunShareTextTone) {
+        val paint = textPaint(line.size, ink(tone), line.bold)
+        val unit = if (line.distance) textPaint(line.size * .32f, ink(tone), false) else null
+        val unitWidth = unit?.measureText("km") ?: 0f
+        val gap = if (line.distance) 14f else 0f
+        fit(paint, line.text, line.width - unitWidth - gap)
+        val width = paint.measureText(line.text) + unitWidth + gap
+        val x = line.x + if (line.centered) (line.width - width) / 2 else 0f
+        outlined(canvas, line.text, x, line.baseline, paint, tone)
+        if (unit != null) outlined(canvas, "km", x + paint.measureText(line.text) + gap, line.baseline, unit, tone)
     }
 
+    private fun outlined(canvas: Canvas, text: String, x: Float, baseline: Float, paint: TextPaint, tone: RunShareTextTone) {
+        paint.style = Paint.Style.STROKE; paint.strokeWidth = 4f; paint.color = outline(tone)
+        canvas.drawText(text, x, baseline, paint)
+        paint.style = Paint.Style.FILL; paint.strokeWidth = 0f; paint.color = ink(tone)
+        paint.setShadowLayer(2f, 0f, 1f, outline(tone)); canvas.drawText(text, x, baseline, paint)
+    }
+
+    private fun ink(tone: RunShareTextTone) = if (tone == RunShareTextTone.LIGHT) Color.WHITE else 0xff17232a.toInt()
+    private fun outline(tone: RunShareTextTone) = if (tone == RunShareTextTone.LIGHT) 0xe0000000.toInt() else 0xf0ffffff.toInt()
     private fun textPaint(size: Float, color: Int, bold: Boolean) = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
-        this.color = color
-        textSize = size
+        this.color = color; textSize = size
         typeface = Typeface.create("sans-serif", if (bold) Typeface.BOLD else Typeface.NORMAL)
         fontFeatureSettings = "tnum"
     }
-
     private fun fit(paint: Paint, text: String, available: Float) {
         val measured = paint.measureText(text)
         if (measured > available) paint.textSize *= min(1f, available / measured)
     }
-
-    private fun withAlpha(color: Int, alpha: Int) = color and 0x00ffffff or (alpha shl 24)
+    private fun avatarDestination(config: RunShareDraft, source: Rect) = RunShareAvatarPlacement.rect(
+        config.ratio.width, config.ratio.height, source.width(), source.height(), config)
     private fun RunSharePhotoRect.androidRect() = RectF(left, top, right, bottom)
 
     /** Trims transparent cell margins only; every original nontransparent pixel and its aspect ratio are retained. */

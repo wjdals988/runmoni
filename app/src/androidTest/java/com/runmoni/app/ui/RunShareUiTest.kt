@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -120,15 +121,23 @@ class RunShareUiTest : RunmoniDesignTestBase() {
                         0 -> {
                             compose.onNodeWithTag("run_share_photo").performScrollTo()
                             action("run_share_photo")
-                            choose("run_share_theme_choices", "run_share_theme_2")
-                            action("run_share_theme_2")
-                            compose.runOnIdle { assertEquals(RunShareTheme.PAPER, draft.value.theme) }
+                            choose("run_share_ratio_choices", "run_share_ratio_1")
+                            compose.runOnIdle { assertEquals(RunShareRatio.POST, draft.value.ratio) }
                         }
                         1 -> {
-                            choose("run_share_placement_choices", "run_share_placement_1")
+                            choose("run_share_style_choices", "run_share_style_2")
+                            choose("run_share_tone_choices", "run_share_tone_1")
+                            choose("run_share_placement_choices", "run_share_placement_0")
                             compose.onNodeWithTag("run_share_name").performScrollTo()
                             action("run_share_name")
-                            compose.runOnIdle { assertEquals(RunSharePlacement.TOP, draft.value.placement) }
+                            compose.runOnIdle {
+                                assertEquals(RunShareStyle.STAMP, draft.value.style)
+                                assertEquals(RunShareTextTone.DARK, draft.value.textTone)
+                                assertEquals(RunSharePlacement.TOP, draft.value.placement)
+                                assertEquals(.22f, draft.value.recordY, 0f)
+                            }
+                            compose.onNodeWithTag("run_share_nudge_record_0").performScrollTo()
+                            action("run_share_nudge_record_0")
                         }
                         2 -> {
                             choose("run_share_avatar_side_choices", "run_share_avatar_side_1")
@@ -221,6 +230,58 @@ class RunShareUiTest : RunmoniDesignTestBase() {
                 assertEquals(original, draft.value)
             }
             noTextOverflow("failed restored URI recovery ComponentActivity/fake callbacks")
+        } finally {
+            compose.runOnIdle { attached.value = false }
+            compose.waitForIdle()
+            image.recycle()
+        }
+    }
+
+    @Test fun recordAndAvatarHaveIndependentButtonAlternativesAndOldDraftsStillRestore() {
+        val legacy = listOf<Any>("SQUARE", "FOREST", "TOP", "내 페이스로 ", true, false,
+            true, .76f, .5f, 1f, 1f, 0f, 0f)
+        val restored = requireNotNull(RunShareDraftSaver.restore(legacy))
+        assertEquals("내 페이스로 ", restored.caption)
+        assertEquals(RunShareStyle.CLEAN, restored.style)
+        assertEquals(.25f, restored.recordY, 0f)
+        val custom = restored.copy(style = RunShareStyle.STAMP, textTone = RunShareTextTone.DARK,
+            recordX = .23f, recordY = .63f)
+        val saverScope = object : SaverScope { override fun canBeSaved(value: Any) = true }
+        val saved = with(RunShareDraftSaver) { saverScope.save(custom) }
+        assertEquals(custom, RunShareDraftSaver.restore(requireNotNull(saved)))
+        val draft = mutableStateOf(RunShareDraft())
+        val tool = mutableStateOf(1)
+        val attached = mutableStateOf(true)
+        val image = preview()
+        try {
+            compose.setContent {
+                if (attached.value) RunmoniTheme { ViewportBox(Viewport(320, 2f)) {
+                    RunShareEditorUi(draft.value, tool.value, image, photoPresent = false,
+                        ready = true, busy = false, editable = true, error = null, message = null,
+                        onDraft = { draft.value = it }, onTool = { tool.value = it }, onPickPhoto = {}, onRemovePhoto = {},
+                        onTransform = { _, pan, _ -> draft.value = if (tool.value == 1)
+                            draft.value.copy(recordX = draft.value.recordX + pan.x, recordY = draft.value.recordY + pan.y)
+                        else draft.value.copy(avatarX = draft.value.avatarX + pan.x, avatarY = draft.value.avatarY + pan.y) },
+                        onSave = {}, onShare = {}, onBack = {})
+                } }
+            }
+            compose.onNodeWithTag("run_share_nudge_record_0").performScrollTo()
+            fullyVisible("run_share_nudge_record_0").performClick()
+            val recordX = compose.runOnIdle {
+                assertTrue(draft.value.recordX < .5f)
+                assertEquals(.76f, draft.value.avatarX, 0f)
+                draft.value.recordX
+            }
+            choose("run_share_tools", "run_share_tool_2")
+            compose.onNodeWithTag("run_share_nudge_avatar_0").performScrollTo()
+            fullyVisible("run_share_nudge_avatar_0").performClick()
+            compose.runOnIdle {
+                assertTrue(draft.value.avatarX < .76f)
+                assertEquals(recordX, draft.value.recordX, 0f)
+            }
+            compose.onNodeWithTag("run_share_photo").performScrollTo()
+            fullyVisible("run_share_photo").assertIsEnabled()
+            noTextOverflow("independent record/avatar controls and no-photo CTA at320/font2; fake callbacks")
         } finally {
             compose.runOnIdle { attached.value = false }
             compose.waitForIdle()

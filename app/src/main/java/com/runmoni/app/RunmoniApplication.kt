@@ -6,6 +6,7 @@ import com.runmoni.app.data.FirebaseCloudAccount
 import com.runmoni.app.data.FirebaseCommunityRepository
 
 class RunmoniApplication : Application() {
+    val runDatabase by lazy { com.runmoni.app.data.RunDatabase.create(this) }
     val runs by lazy { RunRepository(this) }
     val cloud by lazy { FirebaseCloudAccount(this) }
     val community by lazy { FirebaseCommunityRepository(this) }
@@ -23,5 +24,8 @@ class RunmoniApplication : Application() {
         getSharedPreferences("runmoni", MODE_PRIVATE).edit().putBoolean("publicLocation", false).apply()
         // A new process has no live recorder. Old widget controls must be stale.
         com.runmoni.app.widget.RunWidgetPublisher.processStarted(this)
+        // WorkManager retains this reconciliation across normal process restarts.
+        // No account is created or signed in by scheduling it.
+        com.runmoni.app.data.CloudSummaryBackupWorker.schedulePeriodic(this)
     }
 }

@@ -99,7 +99,9 @@ class RunShareControllerTest : RunmoniDesignTestBase() {
             assertEquals(before.keys, ownedImages().keys)
             assertEquals(0, chooserMonitor.hits)
 
-            val paperChoice = requireNotNull(compose.onNodeWithTag("run_share_theme_2").fetchSemanticsNode()
+            compose.onNodeWithTag("run_share_tool_1").performScrollTo().performClick()
+            compose.onNodeWithTag("run_share_style_2").performScrollTo()
+            val paperChoice = requireNotNull(compose.onNodeWithTag("run_share_style_2").fetchSemanticsNode()
                 .config[SemanticsActions.OnClick].action)
             compose.runOnIdle {
                 allowed.set(true)
@@ -112,18 +114,18 @@ class RunShareControllerTest : RunmoniDesignTestBase() {
             compose.waitUntil(120_000) {
                 compose.onAllNodes(hasTestTag("save_run_share") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
             }
-            compose.onNodeWithTag("run_share_theme_2").assertIsSelected()
+            compose.onNodeWithTag("run_share_style_2").assertIsSelected()
             assertEquals("A draft edit revokes the older export even without recomposition", before.keys, ownedImages().keys)
             assertEquals("The revoked draft must not create a cache image", beforeCache, ownedCacheFiles())
             assertEquals(0, chooserMonitor.hits)
 
-            val forestChoice = requireNotNull(compose.onNodeWithTag("run_share_theme_0").fetchSemanticsNode()
+            val forestChoice = requireNotNull(compose.onNodeWithTag("run_share_style_0").fetchSemanticsNode()
                 .config[SemanticsActions.OnClick].action)
             compose.runOnIdle { forestChoice.invoke() }
             compose.waitUntil(120_000) {
                 compose.onAllNodes(hasTestTag("save_run_share") and isEnabled()).fetchSemanticsNodes().isNotEmpty()
             }
-            compose.onNodeWithTag("run_share_theme_0").assertIsSelected()
+            compose.onNodeWithTag("run_share_style_0").assertIsSelected()
             val currentSave = compose.onNodeWithTag("save_run_share").fetchSemanticsNode().config[RecordActionSnapshot]
             val currentShare = compose.onNodeWithTag("send_run_share").fetchSemanticsNode().config[RecordActionSnapshot]
             compose.runOnIdle {

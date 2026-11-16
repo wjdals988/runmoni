@@ -53,12 +53,18 @@ import kotlinx.coroutines.flow.conflate
 
 internal val RunShareDraftSaver = listSaver<RunShareDraft, Any>(
     save = { listOf(it.ratio.name, it.theme.name, it.placement.name, it.caption, it.showDate, it.showName,
-        it.showAvatar, it.avatarX, it.avatarY, it.avatarScale, it.photoZoom, it.photoX, it.photoY) },
+        it.showAvatar, it.avatarX, it.avatarY, it.avatarScale, it.photoZoom, it.photoX, it.photoY,
+        it.style.name, it.textTone.name, it.recordX, it.recordY) },
     restore = { values -> runCatching {
         RunShareDraft(RunShareRatio.valueOf(values[0] as String), RunShareTheme.valueOf(values[1] as String),
             RunSharePlacement.valueOf(values[2] as String), values[3] as String, values[4] as Boolean,
             values[5] as Boolean, values[6] as Boolean, values[7] as Float, values[8] as Float,
-            values[9] as Float, values[10] as Float, values[11] as Float, values[12] as Float)
+            values[9] as Float, values[10] as Float, values[11] as Float, values[12] as Float).let { old ->
+                // Thirteen-field drafts predate styles and independent record placement.
+                if (values.size >= 17) old.copy(style = RunShareStyle.valueOf(values[13] as String),
+                    textTone = RunShareTextTone.valueOf(values[14] as String),
+                    recordX = values[15] as Float, recordY = values[16] as Float) else old
+            }
     }.getOrNull() },
 )
 
@@ -227,6 +233,11 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
                 val moved = RunSharePhotoTransform.gesture(draft, bitmap.width, bitmap.height,
                     centroid.x, centroid.y, pan.x, pan.y, zoom)
                 edit(draft.copy(photoZoom = moved.photoZoom, photoX = moved.photoX, photoY = moved.photoY))
+            } else if (tool == 1 && content != null) {
+                val placed = RunShareCardRenderer.constrainRecord(content, draft, runnerName)
+                val fitted = RunShareCardRenderer.constrainRecord(content,
+                    placed.copy(recordX = placed.recordX + pan.x, recordY = placed.recordY + pan.y), runnerName)
+                edit(draft.copy(recordX = fitted.recordX, recordY = fitted.recordY))
             } else if (tool == 2 && draft.showAvatar && avatarImage != null && rendered?.input?.avatar === avatarImage && content != null) {
                 val placed = RunShareCardRenderer.constrainAvatar(content, draft, avatarImage, runnerName)
                 val moved = placed.copy(avatarX = placed.avatarX + pan.x, avatarY = placed.avatarY + pan.y,
@@ -301,7 +312,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                             .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Line)
                             .testTag("run_share_preview")
                             .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
-                                if (editable && (tool == 0 && photoPresent || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
+                                if (editable && (tool == 0 && photoPresent || tool == 1 || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
                                     if (size.width > 0 && size.height > 0) latestTransform(
                                         Offset(centroid.x / size.width, centroid.y / size.height),
                                         Offset(pan.x / size.width, pan.y / size.height), zoom)
@@ -317,6 +328,15 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                     modifier = Modifier.padding(8.dp))
                             }
                         }
+                        if (!photoPresent) {
+                            Spacer(Modifier.height(16.dp))
+                            Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                                .padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                SharePhotoButton(false, editable, onPickPhoto)
+                                Text("사진을 넣으면 화면 전체에 채워요. 사진 없이 기록만 공유할 수도 있어요.",
+                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                            }
+                        }
                     }
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                         .background(RunmoniColors.Paper)
@@ -324,7 +344,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                         // Material Tab fixes its text-only height; let large Korean text choose its own height.
                         Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
                             .testTag("run_share_tools"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            listOf("배경", "기록", "미니미").forEachIndexed { index, label ->
+                            listOf("사진", "기록", "미니미").forEachIndexed { index, label ->
                                 Column(Modifier.widthIn(min = 80.dp).width(IntrinsicSize.Max).heightIn(min = 48.dp)
                                     .selectable(selected = tool == index, enabled = !busy, role = Role.Tab) { onTool(index) }
                                     .testTag("run_share_tool_$index"), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -348,13 +368,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                             modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         when (tool) {
                             0 -> {
-                                FilledTonalButton(onClick = onPickPhoto, enabled = editable, shape = RunmoniShapes.Action,
-                                    colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash,
-                                        contentColor = RunmoniColors.RouteBlue),
-                                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("run_share_photo")) {
-                                    Icon(Icons.Outlined.AddPhotoAlternate, null); Spacer(Modifier.width(8.dp))
-                                    Text(if (photoPresent) "사진 바꾸기" else "사진 추가")
-                                }
+                                if (photoPresent) SharePhotoButton(true, editable, onPickPhoto)
                                 if (photoPresent || photoClearable) {
                                     if (photoPresent) {
                                         Text("미리보기의 사진을 두 손가락으로 확대하거나 끌어 위치를 맞춰 보세요.", style = MaterialTheme.typography.bodyMedium)
@@ -383,14 +397,32 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                 Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
                                     modifier = Modifier.semantics { heading() })
                                 ShareChoices(RunShareRatio.entries, draft.ratio, { it.label }, editable, "ratio") { onDraft(draft.copy(ratio = it)) }
-                                Text("바탕 색", style = MaterialTheme.typography.titleSmall,
-                                    modifier = Modifier.semantics { heading() })
-                                ShareChoices(RunShareTheme.entries, draft.theme, { it.label }, editable, "theme") { onDraft(draft.copy(theme = it)) }
                             }
                             1 -> {
-                                Text("기록 배치", style = MaterialTheme.typography.titleSmall,
+                                Text("스타일", style = MaterialTheme.typography.titleSmall,
                                     modifier = Modifier.semantics { heading() })
-                                ShareChoices(RunSharePlacement.entries, draft.placement, { it.label }, editable, "placement") { onDraft(draft.copy(placement = it)) }
+                                ShareChoices(RunShareStyle.entries, draft.style, { it.label }, editable, "style") {
+                                    onDraft(draft.copy(style = it))
+                                }
+                                Text("글씨", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.semantics { heading() })
+                                ShareChoices(RunShareTextTone.entries, draft.textTone, { it.label }, editable, "tone") {
+                                    onDraft(draft.copy(textTone = it))
+                                }
+                                HorizontalDivider(color = RunmoniColors.Line)
+                                Text("기록 위치", style = MaterialTheme.typography.titleSmall,
+                                    modifier = Modifier.semantics { heading() })
+                                Text("미리보기에서 기록을 끌어 옮기세요. 방향 버튼으로도 위치를 맞출 수 있어요.",
+                                    style = MaterialTheme.typography.bodyMedium)
+                                val recordY = draft.normalized().recordY
+                                val currentPosition = if (recordY < .34f) "위쪽" else if (recordY > .66f) "아래쪽" else "가운데"
+                                ShareChoices(listOf("위쪽", "가운데", "아래쪽"), currentPosition, { it }, editable, "placement") {
+                                    onDraft(draft.copy(recordY = when (it) { "위쪽" -> .22f; "아래쪽" -> .80f; else -> .5f },
+                                        placement = if (it == "위쪽") RunSharePlacement.TOP else RunSharePlacement.BOTTOM))
+                                }
+                                ShareNudgeControls("기록", "record", editable && ready) {
+                                    latestTransform(Offset(.5f, .5f), it, 1f)
+                                }
                                 OutlinedTextField(draft.caption, { onDraft(draft.copy(caption = RunShareText.takeCodePoints(it, 60))) },
                                     label = { Text("한 줄 기록") }, placeholder = { Text("남기고 싶은 말이 있나요?") },
                                     singleLine = true,
@@ -428,6 +460,15 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
             if (!scrollFooter) RunShareExportActions(ready, busy, message, onSave, onShare)
           }
         }
+    }
+}
+
+@Composable
+private fun SharePhotoButton(present: Boolean, enabled: Boolean, onClick: () -> Unit) {
+    FilledTonalButton(onClick = onClick, enabled = enabled, shape = RunmoniShapes.Action,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("run_share_photo")) {
+        Icon(Icons.Outlined.AddPhotoAlternate, null); Spacer(Modifier.width(8.dp))
+        Text(if (present) "사진 바꾸기" else "사진 추가")
     }
 }
 
@@ -486,7 +527,7 @@ private fun <T> ShareChoices(options: List<T>, selected: T, label: (T) -> String
         .testTag("run_share_${tag}_choices"),
         horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         options.forEachIndexed { index, option ->
-            Row(Modifier.heightIn(min = 48.dp).background(if (selected == option) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
+            Row(Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp).background(if (selected == option) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
                 .selectable(selected == option, enabled, Role.RadioButton) { onSelect(option) }
                 .testTag("run_share_${tag}_$index").padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {

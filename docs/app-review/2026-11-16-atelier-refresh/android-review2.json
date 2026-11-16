@@ -1,0 +1,260 @@
+{
+  "name": "android-review2",
+  "version": "0.8.0-dev",
+  "versionCode": 31,
+  "binaryReference": "binary-build3.json",
+  "reviewPhase": "default",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-16T12:48:18.573564+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 7,
+  "plannedMethodIdsFromCurrentSource": [
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding",
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#actualMiniMiComposableDrawsTheApprovedWholeBody",
+    "com.runmoni.app.ui.ApprovedAvatarRenderingTest#readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected",
+    "com.runmoni.app.ui.AvatarPlaybackTest#realClockPlaybackRendersAllEightFrames",
+    "com.runmoni.app.ui.AvatarPlaybackTest#actualClosetPauseAndResumeFreezeAndRestartPixels",
+    "com.runmoni.app.ui.AvatarPlaybackTest#lifecycleStopFreezesLastFrameAndStartResumes",
+    "com.runmoni.app.ui.AvatarPlaybackTest#systemDisabledAnimationsFreezeAndCanResume"
+  ],
+  "actualPassedProductMethods": 7,
+  "groups": [
+    {
+      "name": "avatar-identity-playback",
+      "expected": 7,
+      "classes": [
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest",
+        "com.runmoni.app.ui.AvatarPlaybackTest"
+      ],
+      "status": "passed",
+      "source": "Fresh product am instrument run; no earlier execution reused",
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "fixtureFreshness": "Allowlisted cache images deleted before this exact execution",
+      "raw": "android-review2-avatar-identity-playback.txt",
+      "startedAtUtc": "2026-11-16T12:49:03.083559+00:00",
+      "actual": 7,
+      "rawSha256": "1efe76810f085cfb5c5468460ac6707a75741ee37aa6852bf5bd9f8ba09c9df2",
+      "elapsedSeconds": 119.23,
+      "finishedAtUtc": "2026-11-16T12:51:02.316762+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "android-review2-executed-driver.py",
+  "executedDriverSha256": "555bb352ee23979e6cb99a83b28daedc57a9820e0a22f863a0553cdfa98901a3",
+  "observerHelper": "android-review2-live-observer-helper.py",
+  "observerHelperSha256": "60c9fcdd737da94f5047367c8af23bacd337aaec46718fe9a73701423ece0109",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA."
+  ],
+  "updatedAtUtc": "2026-11-16T12:51:28.489241+00:00",
+  "sourceFreezeReference": "source-freeze3.json",
+  "sourceFreezeSha256": "68959ada59e1097370cefd2a6de0b827b863928df08abcc8e66ef38dbae4ac7c",
+  "onlineNativeBasemapVerified": false,
+  "syntheticOnlineNativeMapFixtureVerified": false,
+  "publicMapRequestsPermitted": false,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": false,
+  "binaryReferenceSha256": "5da8cdebcfdebaa4a4d5951f3db4d78ec9ff10b15a948bc7e90bf53048570c26",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "5aa10c27cfdb7e7c5ae6993a23f6f4b0ba1970beded3501a4a111bf6c66d82f8"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "f09ca2b4a37d2d55065e33aaae48b8a36bdfb8531367d957b6ddc34127fa10d9"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "privateEnvironmentBackup": {
+    "file": "android-review2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "privateXmlBackup": {
+    "file": "android-review2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "android-review2-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "observerExecutionCount": 1,
+  "systemUiWaitActionCount": 0,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 123,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 107,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 45,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 164,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-16T12:51:28.489225+00:00"
+}

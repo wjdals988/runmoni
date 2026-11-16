@@ -15,6 +15,8 @@ enum class RunShareRatio(val height: Int, val label: String) {
 
 enum class RunShareTheme(val label: String) { FOREST("초록"), INK("검정"), PAPER("밝게"), CORAL("코랄") }
 enum class RunSharePlacement(val label: String) { BOTTOM("하단"), TOP("상단") }
+enum class RunShareStyle(val label: String) { CLEAN("클린"), RECORD("기록 강조"), STAMP("스탬프") }
+enum class RunShareTextTone(val label: String) { LIGHT("밝은 글씨"), DARK("어두운 글씨") }
 
 /** Editor coordinates are fractions of the complete output canvas, not GPS or source-photo coordinates. */
 data class RunShareDraft(
@@ -31,6 +33,10 @@ data class RunShareDraft(
     val photoZoom: Float = 1f,
     val photoX: Float = 0f,
     val photoY: Float = 0f,
+    val style: RunShareStyle = RunShareStyle.CLEAN,
+    val textTone: RunShareTextTone = RunShareTextTone.LIGHT,
+    val recordX: Float = .5f,
+    val recordY: Float = if (placement == RunSharePlacement.TOP) .25f else .80f,
 ) {
     /** Call at the rendering/export boundary; editable text should retain its trailing spaces while typing. */
     fun normalized() = copy(
@@ -42,6 +48,8 @@ data class RunShareDraft(
         // The geometry boundary clamps offsets against the actual photo overflow.
         // A fixed [-1,1] range would prevent reaching the edge of a panoramic photo.
         photoX = photoX.finiteOr(0f), photoY = photoY.finiteOr(0f),
+        recordX = recordX.finiteOr(.5f).coerceIn(0f, 1f),
+        recordY = recordY.finiteOr(if (placement == RunSharePlacement.TOP) .25f else .80f).coerceIn(0f, 1f),
     )
 
     companion object {
@@ -50,6 +58,22 @@ data class RunShareDraft(
         const val MAX_PHOTO_ZOOM = 3f
         const val MIN_AVATAR_SCALE = .65f
         const val MAX_AVATAR_SCALE = 1.5f
+    }
+}
+
+/** Independent editor coordinates for the measured text object, never source-photo/GPS coordinates. */
+object RunShareRecordPlacement {
+    fun rect(canvasWidth: Int, canvasHeight: Int, measuredWidth: Float, measuredHeight: Float,
+             draft: RunShareDraft): RunSharePhotoRect {
+        require(canvasWidth > 0 && canvasHeight > 0 && measuredWidth.isFinite() && measuredHeight.isFinite() &&
+            measuredWidth > 0 && measuredHeight > 0)
+        val config = draft.normalized()
+        val padding = canvasWidth * .045f
+        val width = measuredWidth.coerceAtMost(canvasWidth - padding * 2)
+        val height = measuredHeight.coerceAtMost(canvasHeight - padding * 2)
+        val x = (config.recordX * canvasWidth).coerceIn(padding + width / 2, canvasWidth - padding - width / 2)
+        val y = (config.recordY * canvasHeight).coerceIn(padding + height / 2, canvasHeight - padding - height / 2)
+        return RunSharePhotoRect(x - width / 2, y - height / 2, x + width / 2, y + height / 2)
     }
 }
 

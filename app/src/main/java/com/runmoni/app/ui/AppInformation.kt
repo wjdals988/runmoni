@@ -5,7 +5,6 @@ package com.runmoni.app.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
@@ -19,8 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.Role
@@ -28,7 +25,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.BuildConfig
-import com.runmoni.app.R
 import com.runmoni.app.data.AppUpdateRepository
 import com.runmoni.app.data.AppUpdateSource
 import com.runmoni.app.domain.AppRelease
@@ -155,11 +151,7 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
     }
     if (!history && !licenses && !showingUpdatePrompt && linkError == null) FormDialog("앱 정보", onDismiss, dismissLabel = null, closeTag = "close_app_information", scrollState = infoScroll) {
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Surface(Modifier.size(64.dp), shape = RunmoniShapes.Surface, color = colorResource(R.color.ic_launcher_background)) {
-                Box(contentAlignment = Alignment.Center) {
-                    Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.requiredSize(96.dp))
-                }
-            }
+            IconMark(64.dp)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("런모니", style = MaterialTheme.typography.headlineSmall)
                 if (BuildConfig.VERSION_NAME.contains('-')) Text("개발 프리뷰", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)

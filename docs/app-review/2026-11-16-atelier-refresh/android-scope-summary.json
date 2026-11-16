@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 2,
+  "scopeAcceptedByRoot": true,
+  "version": "0.8.0-dev",
+  "versionCode": 31,
+  "finalLocalBinary": "binary-build4.json",
+  "finalLocalBinarySha256": "148c2c8bfac201275b2ad761817859a49e389e3bd14255e325502c249edb9a6f",
+  "proofReferences": {
+    "android-review1": {
+      "file": "android-review1.json",
+      "sha256": "6f10c7fd265dec8f83b1065b537ba8bed7352df51977ebaf22b4c0032bd21cfb"
+    },
+    "android-review2": {
+      "file": "android-review2.json",
+      "sha256": "7ff50df576ae70879a7ab84258ccc36493313050db9be7e2e9d7b8a9931bf82e"
+    },
+    "android-review3": {
+      "file": "android-review3.json",
+      "sha256": "c8923fc326aef97fa9a06a10613be63febf5daaa26aedd18538e2261170b2355"
+    },
+    "native1": {
+      "file": "native1.json",
+      "sha256": "084b84da85f35b023ea6cf7da642d48a72e1ac3296f2c4b4f4c399e792c50825"
+    },
+    "map-sdk1": {
+      "file": "map-sdk1.json",
+      "sha256": "87eed5954cf1adbe5aa6cc24cbac1fbdc5d00db65f40034aa03e78a2c9d68b7f"
+    },
+    "map-online1": {
+      "file": "map-online1.json",
+      "sha256": "5617f6c587867a0b55d7de65af38d5763ef4ffa7f238c7ca5657ac5366baf99f"
+    }
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "backup-room",
+      "methodIds": [
+        "com.runmoni.app.data.CloudBackupPersistenceTest#v1MigrationPreservesCompletedUnfinishedPointsAndPendingLocalFields",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#fixedOwnerAndPendingAckSurviveDatabaseReopenWithoutUploadingAnImportedRow",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#suppressedSummaryRejectsLateOrForeignAckAndStaysSuppressedAfterReopen",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#completedRecordingRequestsBackupAfterItsDurableCommitWithoutAViewModel",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#aGuestRunBindsAtCompletionWhileAnAlreadyOwnedRunNeverMovesToAnotherAccount",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#aFailedOwnedCompletionKeepsItsFirstUidAndEnqueuesOnlyAfterRetryCommits",
+        "com.runmoni.app.data.RunPersistenceTest#parentUpdatePreservesEntireTrackAndCascadeDeleteRemovesIt",
+        "com.runmoni.app.data.RunPersistenceTest#unfinishedTrackSurvivesDatabaseReopenWithSegments",
+        "com.runmoni.app.data.RunPersistenceTest#walletReplayedCompletionCreditsExactlyOnceAndDoesNotResetCosmetics",
+        "com.runmoni.app.data.RunReliabilityTest#failedPointWritePausesThenRetriesTheSamePointAndKeepsTheNextSequence",
+        "com.runmoni.app.data.RunReliabilityTest#finishFailureFreezesItsOriginalTimeAndRetryDoesNotCreditTwice",
+        "com.runmoni.app.data.RunReliabilityTest#committedRecordSurvivesCreditFailureAndReplayKeepsOneCredit",
+        "com.runmoni.app.data.RunReliabilityTest#startupCreditFailureDoesNotHideAnUnfinishedRunAndReadFailureBlocksANewId",
+        "com.runmoni.app.data.RunReliabilityTest#failedStartAcknowledgementReloadsItsCommittedIdInsteadOfCreatingAnotherRun",
+        "com.runmoni.app.data.RunReliabilityTest#creditRetryFromOldRecordDeletionDoesNotClearCurrentCheckpointFailure",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#missingRecoveryCannotCreateANewRunOrCredit",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#speedUsesAcceptedRouteAndClearsOnPauseSignalLossAndFinishWithoutLosingPoints",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#staleRunActionsAndStoppedCallbackCannotChangeANewerRunOrFlushItsFailedWrite",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#unexpectedRecorderStopPreservesTheRunAndResumeDoesNotBridgeItsGap",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#failedStopCheckpointCannotReloadAndLoseQueuedPointsOnWarmRecovery",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#beginWaitsForThePriorRecorderCleanupBeforeRestoringItsCheckpoint"
+      ]
+    },
+    {
+      "proof": "android-review1",
+      "group": "atelier-materials",
+      "methodIds": [
+        "com.runmoni.app.avatar.AtelierWardrobeTest#appendedMaterialsReachTheAndroidAndMapOutputsWithoutChangingIdentityOrSourceCache",
+        "com.runmoni.app.avatar.AtelierWardrobeTest#appendedIdsRoundTripWithoutChargingOrErasingOldOwnedAndPendingChoices",
+        "com.runmoni.app.avatar.WardrobeRendererTest#everySelectableNonDefaultItemActuallyChangesEveryApprovedPose",
+        "com.runmoni.app.avatar.WardrobeRendererTest#capAndVisorKeepTheirClosedTipsAndOriginalFaceOnActualAndroidBitmaps",
+        "com.runmoni.app.avatar.WardrobeRendererTest#torsoEquipmentPreservesTheOriginalForegroundArmsAndHands",
+        "com.runmoni.app.avatar.WardrobeRendererTest#savedPendingCostumeKeepsOccupancyAndUnrelatedEquipmentWithoutMigratingIds",
+        "com.runmoni.app.avatar.WardrobeRendererTest#explicitColorsOverrideItemDefaultsAndReturningToZeroRestoresTheItemPalette"
+      ]
+    },
+    {
+      "proof": "android-review1",
+      "group": "icon",
+      "methodIds": [
+        "com.runmoni.app.ui.RunmoniIconTest#foregroundAndThemedSilhouetteShareAContourInsideTheAdaptiveSafeCircle",
+        "com.runmoni.app.ui.RunmoniIconTest#notificationRemainsAnUnpaddedAlphaMarkWithAnOpenCounterAt24Pixels",
+        "com.runmoni.app.ui.RunmoniIconTest#installedNormalRoundAndSmallNotificationResourcesRenderAtTheirConsumerSizes"
+      ]
+    },
+    {
+      "proof": "android-review1",
+      "group": "share-renderer",
+      "methodIds": [
+        "com.runmoni.app.sharing.RunShareCardRendererTest#fullBleedPhotoHasNoTintRibbonsOrGradientForEveryStyleToneAndRatio",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#stylesAndOppositeTextOutlinesRemainVisibleAndCanonicalOnBrightAndDarkPhotos",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#approvedMaleAndFemalePaletteStaysExactAndBorrowedSourcesStayAlive",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#recordAndAvatarMoveIndependentlyAndReactImmediatelyAtTheirCanvasEdges",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#missingAvatarAndLongUnicodeMetricsDoNotSilentlyDisappearOrClipTheCanvas",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#legacyThemesRemainReadableButNeverIntroduceColoredPhotoOrFallbackSurfaces"
+      ]
+    },
+    {
+      "proof": "android-review1",
+      "group": "closet",
+      "methodIds": [
+        "com.runmoni.app.ui.RunningKitColorsUiTest#changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#closetColorChangesKeepReadyItemSelectionsInventoryAndGender"
+      ]
+    },
+    {
+      "proof": "android-review1",
+      "group": "discovery",
+      "methodIds": [
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#guestAlwaysHasAMapAndProfileEntryWithoutCrewPartyOrCachedRunnerLeakage",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#selfExpiredAndInvalidLocationsStayHiddenWhileOnlyFreshOtherRunnerReachesTheMap",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#sharingButtonRequestsConsentAndCannotDirectlyConfirmOrMutateSharingState",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#explicitRefreshStaysOutsideTheMapAndCanRetryWithoutChangingConfirmedMarkersOrConsent",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#beforeRunningConsentIsExplicitAndPreparedStateIsNotLivePresence",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText"
+      ]
+    },
+    {
+      "proof": "android-review2",
+      "group": "avatar-identity-playback",
+      "methodIds": [
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#actualMiniMiComposableDrawsTheApprovedWholeBody",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected",
+        "com.runmoni.app.ui.AvatarPlaybackTest#realClockPlaybackRendersAllEightFrames",
+        "com.runmoni.app.ui.AvatarPlaybackTest#actualClosetPauseAndResumeFreezeAndRestartPixels",
+        "com.runmoni.app.ui.AvatarPlaybackTest#lifecycleStopFreezesLastFrameAndStartResumes",
+        "com.runmoni.app.ui.AvatarPlaybackTest#systemDisabledAnimationsFreezeAndCanResume"
+      ]
+    },
+    {
+      "proof": "android-review3",
+      "group": "share-ui",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareUiTest#everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases",
+        "com.runmoni.app.ui.RunShareUiTest#shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll",
+        "com.runmoni.app.ui.RunShareUiTest#failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices",
+        "com.runmoni.app.ui.RunShareUiTest#recordAndAvatarHaveIndependentButtonAlternativesAndOldDraftsStillRestore",
+        "com.runmoni.app.ui.RunShareUiTest#rootEditorBackRestoresRecordScrollAndRejectsDisposedOrRemovedRecordShareCallbacks",
+        "com.runmoni.app.ui.RunShareControllerTest#actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks"
+      ]
+    },
+    {
+      "proof": "android-review3",
+      "group": "record-auto-backup",
+      "methodIds": [
+        "com.runmoni.app.ui.RunRecordScreenUiTest#automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#actionsKeepTheirRecordIdentityAndDeleteCancellationDoesNotLeaveThePage",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#oldConfirmationCannotApproveAReopenedDialogAndDisposedPageCannotAct",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#currentStorageAndPendingCreditStaySeparateFromGoogleBackup"
+      ]
+    },
+    {
+      "proof": "native1",
+      "group": "native-form-pages",
+      "methodIds": [
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#informationCloseStaysInTheWindowAfterScrollingLargeContent",
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss"
+      ]
+    },
+    {
+      "proof": "native1",
+      "group": "native-large-text",
+      "methodIds": [
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeFontSettingsAndClosetKeepSingleCloseAndSelectableSlots",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#arrivingChatDoesNotMoveReadersAwayFromOlderMessages",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeLocationConsentRemainsScrollableWithoutEnablingSharing",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#nativePartyPickersAndStrictDateErrorRemainUsable",
+        "com.runmoni.app.ui.AppEntryNativeUiTest#bothChoicesRemainReachableAboveSystemNavigationAtLargeFont",
+        "com.runmoni.app.ui.AppInformationNativeTest#enlargedHeaderIndicatorStaysSeparateAndOpensTheUpdatePrompt",
+        "com.runmoni.app.ui.AppInformationNativeTest#largeAboutAndUpdateConfirmationRemainReadableAndScrollable",
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest#genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory",
+        "com.runmoni.app.ui.ClosetNavigationNativeUiTest#largeSystemTextKeepsTheLastItemAndPaletteAboveSystemNavigation",
+        "com.runmoni.app.ui.RunningKitColorsNativeUiTest#actualLargeTextClosetKeepsPreviewAndAllSixColorActionsAccessible",
+        "com.runmoni.app.ui.RunRecordScreenNativeUiTest#nativeLargeTextKeepsLowerActionsReachableAndBackCancelsBeforeLeaving",
+        "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars"
+      ]
+    },
+    {
+      "proof": "native1",
+      "group": "native-share-font1",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareImeUiTest#normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize"
+      ]
+    },
+    {
+      "proof": "map-sdk1",
+      "group": "native-map-sdk",
+      "methodIds": [
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#offlineFixtureNeverConstructsTheProductionNativeProvider",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#initializationFailureIsReportedInsteadOfCrashingThePage",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#missingAssetStyleReportsFailureFromTheActualNativeSdk",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#directNativeFooterFitsAt320DpAndDoubleTextWithoutConstructingGl"
+      ]
+    },
+    {
+      "proof": "map-online1",
+      "group": "native-online-map",
+      "methodIds": [
+        "com.runmoni.app.ui.NativeVectorMapOnlineUiTest#publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera"
+      ]
+    }
+  ],
+  "excludedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "share-ui",
+      "reason": "Whole original failed group excluded, including partially passed methods. Share width and status assertion groups rerun on input4; playback rerun in a separate same-binary3 phase with unchanged criteria, original cause unresolved."
+    },
+    {
+      "proof": "android-review1",
+      "group": "record-auto-backup",
+      "reason": "Whole original failed group excluded, including partially passed methods. Share width and status assertion groups rerun on input4; playback rerun in a separate same-binary3 phase with unchanged criteria, original cause unresolved."
+    },
+    {
+      "proof": "android-review1",
+      "group": "avatar-identity-playback",
+      "reason": "Whole original failed group excluded, including partially passed methods. Share width and status assertion groups rerun on input4; playback rerun in a separate same-binary3 phase with unchanged criteria, original cause unresolved."
+    }
+  ],
+  "distinctPassedMethods": 86,
+  "earlierInputResultsReused": true,
+  "equivalenceReviews": [
+    {
+      "file": "input3-to-input4-equivalence.json",
+      "sha256": "f10b2db99bd0298da4d1af193abed6d6b8a835393a9ae84901cb20f3af7c6b2c"
+    }
+  ],
+  "restorationExceptions": [],
+  "supplementalRestorationReferences": [],
+  "scope": "Current0.8 input3 unchanged-path groups retained by exact source/call review, plus final input4 fresh share/record/native/map groups. Different TEST APK pairs, not one APK total or prior0.7 reuse. Original failed groups and false parent preserved.",
+  "userVisualApproval": false,
+  "signedReleaseRuntimeVerified": false,
+  "createdAtUtc": "2026-11-16T13:24:44.325823+00:00"
+}

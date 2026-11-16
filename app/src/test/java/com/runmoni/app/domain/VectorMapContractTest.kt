@@ -4,6 +4,26 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class VectorMapContractTest {
+    @Test fun passiveDiscoveryFailureKeepsTheLastConfirmationWithoutAWarningOrFreshTimestamp() {
+        val confirmed = RunnerDiscoveryUi(loading = true, error = "previous manual error", checkedAtMillis = 1234L,
+            partial = true, requiresZoom = true)
+        val failed = discoveryReadFailed(confirmed, userInitiated = false)
+        assertFalse(failed.loading)
+        assertNull(failed.error)
+        assertEquals(confirmed.checkedAtMillis, failed.checkedAtMillis)
+        assertEquals(confirmed.partial, failed.partial)
+        assertEquals(confirmed.requiresZoom, failed.requiresZoom)
+    }
+
+    @Test fun explicitDiscoveryFailureHasARetryDirectionWithoutServerImplementationDetails() {
+        val failed = discoveryReadFailed(RunnerDiscoveryUi(checkedAtMillis = 1234L), userInitiated = true)
+        assertTrue(failed.error.orEmpty().contains("다시 시도"))
+        assertFalse(failed.error.orEmpty().contains("규칙"))
+        assertFalse(failed.error.orEmpty().contains("색인"))
+        assertEquals(1234L, failed.checkedAtMillis)
+        assertFalse(failed.loading)
+    }
+
     @Test fun native512AndRaster256SeeTheSameGeographyAtDifferentDensities() {
         for (density in listOf(1.0, 2.75)) for (zoom in listOf(4.0, 11.5, 16.0, 18.0)) {
             val nativeZoom = VectorMapCoordinates.nativeZoom(zoom)

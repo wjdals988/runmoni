@@ -94,9 +94,14 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                         }, Icons.Outlined.Notifications, actions::openRunNotificationSettings, Modifier.testTag("settings_run_notifications"))
                         LocationSharingToggle(state, actions)
                     }
-                    SettingsGroup("기록 요약 백업", Icons.Outlined.CloudDone,
+                    SettingsGroup("기록 요약 자동 백업", Icons.Outlined.CloudDone,
                         "Google 계정에 보관한 러닝 요약") {
                         Text(if (state.cloud.configured) state.cloud.status else "이 앱에서는 Google 백업을 사용할 수 없어요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
+                        SmallNote(AUTOMATIC_BACKUP_PRIVACY)
+                        if (state.cloud.uid.isNotBlank() && state.cloud.automaticBackup.initialized) {
+                            Text("백업 완료 ${state.cloud.automaticBackup.savedCount}개 · 대기 ${state.cloud.automaticBackup.waitingCount}개 · 확인 필요 ${state.cloud.automaticBackup.reviewCount}개",
+                                style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("automatic_cloud_backup_counts"))
+                        }
                         if (state.cloud.uid.isBlank()) {
                             OutlinedButton(onClick = actions::signInGoogle, enabled = state.cloud.configured && !state.cloud.busy && !state.communityGoogleLink.busy && !state.busy, shape = RunmoniShapes.Action, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("google_sign_in")) { Text(if (state.cloud.busy) "연결 중…" else "Google로 로그인") }
                         } else {
@@ -104,7 +109,7 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                             OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.refreshCloudSummaries(state.cloud.uid); cloudHistory = true }, enabled = !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("cloud_history")) { Text("백업한 요약 보기") }
                             TextButton(shape = RunmoniShapes.Action, onClick = actions::signOutGoogle, enabled = !state.cloud.busy && !state.communityGoogleLink.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("google_sign_out")) { Text("Google 로그아웃") }
                         }
-                        SmallNote("기록 상세에서 요약을 백업할 수 있어요. 러닝 경로·포인트·옷장은 포함되지 않아요.")
+                        SmallNote("완료 기록과 기존 기기 기록의 요약을 자동으로 보관해요. 연결이 끊기면 대기했다가 다시 시도해요.")
                     }
                     SettingsGroup("온라인 계정", Icons.Outlined.Groups,
                         "크루 소속과 온라인 프로필") {
@@ -285,12 +290,16 @@ internal fun RecordDialog(record: RunRecord, actions: AppActions, cloud: CloudAc
         }
         OutlinedButton(shape = RunmoniShapes.Action, onClick = { actions.exportRun(record.id) }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export_run")) { Text("GPX 경로 내보내기") }
         if (cloud.uid.isNotBlank()) {
-            OutlinedButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = true }, enabled = record.finishedAtMillis > 0 && !cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("backup_cloud_run")) { Text("이 기록 요약을 계정에 백업") }
+            Text(cloud.automaticBackupMessage(record.id), style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.testTag("automatic_cloud_backup_status"))
+            if (cloud.automaticBackup.record(record.id) !in setOf(AutomaticBackupRecordState.SAVED, AutomaticBackupRecordState.EXCLUDED)) {
+                TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = true }, enabled = record.finishedAtMillis > 0 && !cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("backup_cloud_run")) { Text("자동 백업 다시 시도") }
+            }
             SmallNote("백업 계정: ${cloud.accountLabel}\n${cloud.status}")
         }
         TextButton(shape = RunmoniShapes.Action, onClick = { deleteConfirmation = true }, modifier = Modifier.heightIn(min = 48.dp).testTag("delete_run")) { Text("기록 삭제", color = MaterialTheme.colorScheme.error) }
     }
-    if (backupConfirmation && cloud.uid.isNotBlank()) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { backupConfirmation = false }, title = { Text("이 계정에 기록 요약을 백업할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n\n이 기기에서 선택한 본인의 기록인지 확인해 주세요. 날짜·거리·시간·GPS 포인트 수 요약만 저장해요. 경로 원본·마일리지는 포함하지 않으며, 보상을 검증한 기록으로 인정하지 않아요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false; actions.backupCloudRun(record.id, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_cloud_backup")) { Text("이 계정에 백업") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false }) { Text("취소") } })
+    if (backupConfirmation && cloud.uid.isNotBlank()) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { backupConfirmation = false }, title = { Text("자동 백업을 다시 시도할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n\n완료 기록은 이미 자동 백업 대상이에요. 대기 중인 이 기록의 전송을 다시 요청해요.\n\n$AUTOMATIC_BACKUP_PRIVACY") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false; actions.backupCloudRun(record.id, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_cloud_backup")) { Text("다시 시도") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { backupConfirmation = false }) { Text("취소") } })
     if (deleteConfirmation) DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { deleteConfirmation = false }, title = { Text("이 기록을 삭제할까요?") }, text = { DialogMessage("삭제한 기기 기록은 복구할 수 없어요. 클라우드에 백업한 요약은 계정 설정에서 별도로 삭제해 주세요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { actions.deleteRun(record.id); onDismiss() }, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_run")) { Text("삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { deleteConfirmation = false }) { Text("취소") } })
 }
 
@@ -325,7 +334,7 @@ internal fun CloudSummariesDialog(cloud: CloudAccountState, actions: AppActions,
             HorizontalDivider(color = RunmoniColors.Line)
         }
     }
-    pendingDelete?.let { summary -> DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n선택한 클라우드 요약만 삭제해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null }) { Text("취소") } }) }
+    pendingDelete?.let { summary -> DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = { pendingDelete = null }, title = { Text("이 백업 요약을 삭제할까요?") }, text = { DialogMessage("계정: ${cloud.accountLabel}\n선택한 클라우드 요약을 삭제하고 이 기기의 자동 재백업에서 제외해요. 기기 기록은 그대로 보관해요.") }, confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null; actions.deleteCloudSummary(summary.runId, cloud.uid) }, enabled = !cloud.busy, modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_delete_cloud")) { Text("요약 삭제") } }, dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { pendingDelete = null }) { Text("취소") } }) }
 }
 
 @Composable

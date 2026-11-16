@@ -1,0 +1,1 @@
+Actual Sprite/Image/PNG/ASE save and reopen passed

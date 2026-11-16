@@ -1,0 +1,67 @@
+{
+  "source": "Inkscape export of authored VectorDrawable-equivalent SVG; not Aseprite",
+  "exporterVersion": "Inkscape 1.4 (e7c3feb100, 2024-10-09)",
+  "rasters": [
+    {
+      "file": "app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "width": 48,
+      "height": 48,
+      "sha256": "f5ab61b00d81d8e64def98f3fad0a3f757a574f6dc171f14069958de9ab87dd7"
+    },
+    {
+      "file": "app/src/main/res/mipmap-mdpi/ic_launcher_round.png",
+      "width": 48,
+      "height": 48,
+      "sha256": "b492e32f997a548ff86e44f816217dbdf9f1c797d1cadac43fe1e1e64d8db28a"
+    },
+    {
+      "file": "app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "width": 72,
+      "height": 72,
+      "sha256": "6152a09c16fe0f31057907d8ee447b91491d7362ffe81cd2814011c7e6e557a4"
+    },
+    {
+      "file": "app/src/main/res/mipmap-hdpi/ic_launcher_round.png",
+      "width": 72,
+      "height": 72,
+      "sha256": "65ce2eedea306a3b971f0f4056c5004e38c4e2045a456134555fea721930e09f"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "width": 96,
+      "height": 96,
+      "sha256": "42162f74caccfac4e29cea27645e80e8d4a6ac860831411aba8ef2206a6dfbb6"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xhdpi/ic_launcher_round.png",
+      "width": 96,
+      "height": 96,
+      "sha256": "11e4b501b6ee9288c689f5d8ac244dcace95e9e9b0ce3825418a74503f61dca4"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "width": 144,
+      "height": 144,
+      "sha256": "dd6e7240b824c81e5b6f18ae7b903a558ace9f2a758ecc8ee936055f377c5861"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png",
+      "width": 144,
+      "height": 144,
+      "sha256": "1832a0c82d83a413a1b4d953020e88ee7d14163036ad8c51f497de78540d0b3c"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "width": 192,
+      "height": 192,
+      "sha256": "68fa0d28471c5e2584d2ac7117721ee36889f204f5ac999cb8e81a36e3e2db47"
+    },
+    {
+      "file": "app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "width": 192,
+      "height": 192,
+      "sha256": "bb2850bf4bfc614a4e2f700cb6241e6dc98caa82e8485c820828426aa7bbb23f"
+    }
+  ],
+  "androidExecution": false
+}

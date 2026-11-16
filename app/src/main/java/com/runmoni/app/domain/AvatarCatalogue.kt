@@ -10,11 +10,11 @@ object AvatarCatalogue {
         AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발")),
         AvatarSlot("headwear", "모자", listOf("모자 없음", "러닝 캡", "선바이저", "스웨트 헤드밴드")),
         AvatarSlot("face", "얼굴", listOf("편안한 표정", "활짝 웃음", "집중하는 표정", "윙크")),
-        AvatarSlot("top", "상의", listOf("코랄 싱글렛", "민트 러닝 반팔", "블루 긴팔", "옐로 바람막이", "스포츠 브라탑", "크롭 기능성 티")),
+        AvatarSlot("top", "상의", listOf("코랄 싱글렛", "민트 러닝 반팔", "블루 긴팔", "옐로 바람막이", "스포츠 브라탑", "크롭 기능성 티", "메시 러닝 저지")),
         AvatarSlot("bottom", "하의", listOf("네이비 쇼츠", "러닝 타이츠", "그린 쇼츠", "코랄 쇼츠", "하이웨이스트 바이커쇼츠", "스플릿 레이싱 쇼츠")),
         AvatarSlot("costume", "세트", listOf("일반 러닝복", "산타 러너", "스포츠 원피스 수영복", "스포츠 비키니", "곰인형 코스튬", "골든 마스코트")),
-        AvatarSlot("socks", "양말", listOf("발목 양말", "크루 양말", "니삭스", "양말 없음")),
-        AvatarSlot("shoes", "신발", listOf("민트 러닝화", "코랄 러닝화", "블루 러닝화", "골드 러닝화")),
+        AvatarSlot("socks", "양말", listOf("발목 양말", "크루 양말", "니삭스", "양말 없음", "리브 크루삭스")),
+        AvatarSlot("shoes", "신발", listOf("민트 러닝화", "코랄 러닝화", "블루 러닝화", "골드 러닝화", "패널 러닝화")),
         AvatarSlot("ear", "이어폰", listOf("귀 장비 없음", "오픈형 이어폰", "스포츠 이어버드", "스포츠 헤드셋")),
         AvatarSlot("eyewear", "선글라스", listOf("선글라스 없음", "민트 스포츠 선글라스", "코랄 스포츠 선글라스", "블루 스포츠 선글라스")),
         AvatarSlot("wrist", "워치", listOf("워치 없음", "민트 스포츠 워치", "코랄 스포츠 워치", "블루 스포츠 워치")),
@@ -27,8 +27,8 @@ object AvatarCatalogue {
     val defaultOwned: Set<String> = slots.map { "${it.key}:0" }.toSet() + "accessory:0"
     fun valid(slot: String, variant: Int) = if (slot == "accessory") variant in 0..3 else slots.firstOrNull { it.key == slot }?.let { variant in it.variants.indices } == true
     fun price(variant: Int): Int {
-        require(variant in 0..5)
-        return if (TEST_ITEMS_FREE) 0 else listOf(0, 500, 1000, 2000, 500, 1000)[variant]
+        require(slots.any { variant in it.variants.indices })
+        return if (TEST_ITEMS_FREE) 0 else listOf(0, 500, 1000, 2000, 500, 1000, 1000)[variant]
     }
     fun migrateOwned(owned: Set<String>): Set<String> = owned + defaultOwned + buildSet {
         if ("accessory:1" in owned) add("headwear:3")

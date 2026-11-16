@@ -33,7 +33,13 @@ AVATAR_SLOTS = {"hair": "헤어", "top": "상의", "bottom": "하의", "shoes": 
                 "eyewear": "선글라스", "wrist": "워치", "waist": "러닝 벨트", "hydration": "수분 조끼",
                 "face": "얼굴", "socks": "양말", "headwear": "모자", "ear": "귀 장비", "costume": "특수 코스튬"}
 CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost": 0, "slot": slot, "value": variant}
-             for slot, label in AVATAR_SLOTS.items() for variant in range(6 if slot in {"top", "bottom", "costume"} else 4)]
+             for slot, label in AVATAR_SLOTS.items() for variant in range(6 if slot in {"top", "bottom", "costume"} else 4)] + [
+    # Append to the legacy 62-item response, including its four accessory aliases.
+    # Existing SKUs, names, ordering, claims and ledger rows keep their meaning.
+    {"id": "top:6", "name": "메시 러닝 저지", "cost": 0, "slot": "top", "value": 6},
+    {"id": "socks:4", "name": "리브 크루삭스", "cost": 0, "slot": "socks", "value": 4},
+    {"id": "shoes:4", "name": "패널 러닝화", "cost": 0, "slot": "shoes", "value": 4},
+]
 
 
 def canonical_avatar(style):

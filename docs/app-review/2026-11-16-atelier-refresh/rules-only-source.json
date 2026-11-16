@@ -1,0 +1,26 @@
+{
+  "commit": "a49cadf328cdabec457c7b114e1137980c2237d3",
+  "parent": "037957014780522da5ab583c20712a6db003f330",
+  "branch": "codex/runmoni-atelier-rules",
+  "changedFiles": [
+    "firebase/firestore.rules",
+    "firebase/tests/presence.rules.test.mjs"
+  ],
+  "demoVerification": {
+    "project": "demo-runmoni",
+    "remoteFirebaseModifiedByAgent": false,
+    "exitCode": 0,
+    "tests": 168,
+    "passed": 168,
+    "failed": 0,
+    "skipped": 0,
+    "rawLog": "rules-test1.txt",
+    "rawSha256": "c76ce9877838a59caa1a28de1051c25b5513abc67aa5526ef004d1f83b116a8f",
+    "sourceHashes": {
+      "firebase/firestore.rules": "1b0dbfe659285c51809b46449708ae6756d8b5ffdc2f4e4a02fb9f5c54379bf3",
+      "firebase/tests/presence.rules.test.mjs": "b615581ec1ea0a79d3d7063538032f0cccd86114ea581f4a125f9aced6f3fb30"
+    },
+    "sourceVerifiedBeforeAndAfterTest": true,
+    "emulatorShutdownReported": true
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "proof": {
+    "file": "live1.json",
+    "sha256": "b214871ec6166723fc5636192dd1b4ae801d376d46af5ee86622a1628501abed"
+  },
+  "wholeParentPassed": false,
+  "partialImageCount": 13,
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "adoptedForPublicGallery": false,
+  "images": [
+    {
+      "file": "live1-main-studio-home.png",
+      "sha256": "8c84309564d68a33eb53470095fa705253ddd03357f15fc2eb812f2f9751d1d8",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-profile-ime.png",
+      "sha256": "9468f9e1cd888c6dc1a9c325c3945e33a6d8d5d464ca8012b0ba4aac339b4667",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-male-cap.png",
+      "sha256": "3f35da28fd24ff7ada299477cc023a6414cdbc1ebcca8088692d1ce69b77eb21",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-male-visor.png",
+      "sha256": "20da218c3332a342709fad453eedcf1a516189f0ee33bbcf15ff2732c848e110",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-female-cap.png",
+      "sha256": "8309a240752a9fb47eeb1e00a578843ef5b30007ddb08494f514217ce73d348d",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-female-visor.png",
+      "sha256": "4901bf07538b1be18d8dbb1b1900b7e6063e1bbd0b32ceb88aa28ad64bbc0034",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-studio-closet.png",
+      "sha256": "b50c75e68ba0144556d93bc869c9ae166dcc4adc8e3f1988a9632dbfc6d3d196",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-female-bear.png",
+      "sha256": "ddabaadb6f4d8b82ddf0f4942d89deb419f765ceaa4f1b94c1927f29cd5a4cf9",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-female-golden.png",
+      "sha256": "4422dac3af2f5e02fe05ba19169d77411f671a3e807445f37c2105f112e9db25",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-atelier-kit.png",
+      "sha256": "ebb2108729a1646cecadeab84d36b57a7a81643f13ea77be73109ad8c3b85475",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-record-result.png",
+      "sha256": "c228b349a22b7d7b6a5f0923f426b7ff2af9f89cea5eb14695ff3c53d549f2a0",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-full-photo-clean.png",
+      "sha256": "13b733a32e10e3585a72e1fdf30d34546423b7c310e8cd4c28d176f8556aef70",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live1-main-full-photo-stamp.png",
+      "sha256": "8700fd36a028847c0dd629f024fae2429bc71c4d46f833e32a2ccaed133e714d",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "notes": "Root inspected all13 actual TEST Main originals. Face/body and cap/set/new-cloth views consistent; full-photo clean/stamp have original source colors, legible outlined records, separate avatar. Original synthetic photo itself contains its own gradient; no UI ribbons are added. Main1 observation of restored photo was wrong-tab and failed; original false and cleanup preserved. No actual GPS/Google/production writes or whole-Main PASS claimed.",
+  "reviewedAtUtc": "2026-11-16T13:48:56.719700+00:00"
+}

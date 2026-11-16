@@ -1,0 +1,39 @@
+
+com.runmoni.app.ui.RunRecordScreenUiTest:..
+Error in automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction(com.runmoni.app.ui.RunRecordScreenUiTest):
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '자동 백업 대기' (ignoreCase: false))
+Semantics of the node:
+Node #381 at (l=24.0, t=782.0, r=186.0, b=806.0)px, Tag: 'automatic_cloud_backup_status'
+Text = '[자동 백업 대기 중이에요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 20 siblings
+Selector used: (TestTag = 'automatic_cloud_backup_status')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.RunRecordScreenUiTest.automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction(RunRecordScreenUiTest.kt:47)
+..
+
+Time: 86.346
+There was 1 failure:
+1) automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction(com.runmoni.app.ui.RunRecordScreenUiTest)
+java.lang.AssertionError: Failed to assert the following: (Text + EditableText contains '자동 백업 대기' (ignoreCase: false))
+Semantics of the node:
+Node #381 at (l=24.0, t=782.0, r=186.0, b=806.0)px, Tag: 'automatic_cloud_backup_status'
+Text = '[자동 백업 대기 중이에요]'
+Actions = [SetTextSubstitution, ShowTextSubstitution, ClearTextSubstitution, GetTextLayoutResult]
+Has 20 siblings
+Selector used: (TestTag = 'automatic_cloud_backup_status')
+
+	at androidx.compose.ui.test.AssertionsKt.assert(Assertions.kt:265)
+	at androidx.compose.ui.test.AssertionsKt.assert$default(Assertions.kt:255)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains(Assertions.kt:209)
+	at androidx.compose.ui.test.AssertionsKt.assertTextContains$default(Assertions.kt:204)
+	at com.runmoni.app.ui.RunRecordScreenUiTest.automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction(RunRecordScreenUiTest.kt:47)
+
+FAILURES!!!
+Tests run: 5,  Failures: 1
+
+

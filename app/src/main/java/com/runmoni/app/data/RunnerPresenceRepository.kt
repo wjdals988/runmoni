@@ -216,9 +216,15 @@ class RunnerPresenceRepository(
             val colors = avatar.runningKitColors.normalized()
             put("colors", mapOf("top" to colors.top, "bottom" to colors.bottom, "shoes" to colors.shoes))
         }
-        private fun decodeAvatar(data: Map<*, *>): AvatarStyle? {
+        internal fun decodeAvatar(data: Map<*, *>): AvatarStyle? {
             if (data.keys != SLOT_KEYS + setOf("gender", "colors")) return null
-            val slots = SLOT_KEYS.associateWith { slot -> (data[slot] as? Long)?.takeIf { it in 0..5 && AvatarCatalogue.valid(slot, it.toInt()) }?.toInt() ?: return null }
+            val slots = SLOT_KEYS.associateWith { slot ->
+                val raw = data[slot] as? Long ?: return null
+                // Validate before narrowing: an overflowing Long must not wrap
+                // into a valid catalogue ID such as the newly appended top6.
+                if (raw !in 0L..Int.MAX_VALUE.toLong()) return null
+                raw.toInt().takeIf { AvatarCatalogue.valid(slot, it) } ?: return null
+            }
             val gender = AvatarGender.entries.firstOrNull { it.wireValue == data["gender"] } ?: return null
             val colors = data["colors"] as? Map<*, *> ?: return null
             if (colors.keys != setOf("top", "bottom", "shoes")) return null

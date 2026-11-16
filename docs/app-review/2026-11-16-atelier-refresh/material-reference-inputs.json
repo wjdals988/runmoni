@@ -1,0 +1,18 @@
+{
+  "rendererReference": "previous0.7.1 pure host v4 classes; not new Android execution",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "files": {
+    "headwear-1-base.png": "ce403f32951d921aa48c33548569cf14d862edb8cc276abaa7210eca01e735a4",
+    "costume-4-allow.png": "c3eaf93fe18c4f6164bea553b14866dc3968340efdd05285eb717db931549d02",
+    "references.lua": "c913933485b299915fbf35034ee9018b7df84bd8ca06718abb64374dee54ded4",
+    "headwear-2-base.png": "d85915b93c03df1ad641fc9cc20344f4cb3fd2741412093b30eb7d7f2b0877a6",
+    "costume-1-allow.png": "9b118e7e3b6c07c9e4a2793316a77f3da292899810c964d4636d291e6633e7ae",
+    "headwear-2-allow.png": "a133658bac070599ad562107453f12f71627fbfd5db5a0317bab6d43534b4f57",
+    "costume-1-base.png": "503ec501ed809e5862e2c7674b5c46adde2e5331df21a5a38cff6edb49477598",
+    "costume-5-allow.png": "ada08e54ff3ccd73ec1176f93d88183703dad90d77900dba57af9815e3a4ec80",
+    "costume-4-base.png": "b4d604d883ceeefb1319d46b7f4aeaee8eb88ce32f9d626c1d50f9ed28afa29d",
+    "costume-5-base.png": "82ba1a2a5e710fd0b23913828f3635170b4cd2cac50813de19fcf4a0543b486a",
+    "headwear-1-allow.png": "bc9e1803e7f4c177ee49b4853e9ebe464b282203901f583156969993e9f39e64"
+  },
+  "exportProgramSha256": "ce3cfe03b29fabdef29eb30bf45cc9d2a05a295dc2be322553356359b16aa65b"
+}

@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
@@ -22,7 +21,6 @@ import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.runmoni.app.R
 import com.runmoni.app.domain.AppActions
 import com.runmoni.app.domain.AppEntryState
 import com.runmoni.app.domain.AvatarStyle
@@ -143,12 +141,7 @@ internal fun EntryScreen(entry: AppEntryState, onGoogle: () -> Unit, onGuest: ()
 
 @Composable
 private fun EntryLogo(size: Dp) {
-    Surface(modifier = Modifier.size(size), shape = RunmoniShapes.Surface,
-        color = colorResource(R.color.ic_launcher_background)) {
-        Box(contentAlignment = Alignment.Center) {
-            Image(painterResource(R.drawable.ic_launcher_foreground), null, Modifier.requiredSize(size * 1.5f))
-        }
-    }
+    IconMark(size)
 }
 
 /** Keep feedback next to the authentication action without changing its result semantics. */

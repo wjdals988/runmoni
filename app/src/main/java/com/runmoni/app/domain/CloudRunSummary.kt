@@ -64,4 +64,5 @@ data class CloudAccountState(
     val summaries: List<CloudRunSummary> = emptyList(),
     val interactiveSignInAt: Long = 0,
     val sessionCheckedAt: Long = 0,
+    val automaticBackup: AutomaticCloudBackupState = AutomaticCloudBackupState(),
 )

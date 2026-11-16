@@ -2,8 +2,8 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Pause
 import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,6 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -29,9 +34,15 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.avatar.AvatarArtwork
 import com.runmoni.app.domain.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlin.math.roundToInt
 
 /** Full-screen route content. The root hides its navigation while this is open. */
 @Composable
@@ -61,7 +72,6 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             val previewHeight = if (largeText) 112.dp else 176.dp
             val usePrimaryGate = !scrollingHeader && maxHeight >= 240.dp
             val secondaryReady = !usePrimaryGate || primaryDrawn.value
-            val allowComparisonGrid = !sidePreview && !scrollingHeader && !largeText && maxHeight >= 560.dp
             Column(Modifier.fillMaxSize()) {
                 PageTopBar("옷장", onDismiss, closeTag = "closet_close", actions = {
                     IconButton(onClick = { playing = !playing }, modifier = Modifier.size(48.dp)
@@ -119,7 +129,7 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
                     }
                     ClosetPicker(profile, actions, slot, categoryKey, accessorySlots, accessory, { accessory = it },
                         Modifier.weight(1f).widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                            .align(Alignment.CenterHorizontally), allowComparisonGrid = allowComparisonGrid,
+                            .align(Alignment.CenterHorizontally),
                         secondaryReady = secondaryReady)
                 }
             }
@@ -161,12 +171,12 @@ private fun ClosetPicker(
     profile: Profile, actions: AppActions, slot: AvatarSlot, categoryKey: String,
     accessorySlots: List<AvatarSlot>, accessory: Int, onAccessory: (Int) -> Unit,
     modifier: Modifier = Modifier, horizontalPadding: Dp = pageGutter(),
-    allowComparisonGrid: Boolean = false, secondaryReady: Boolean = true,
+    secondaryReady: Boolean = true,
 ) {
     key(slot.key) {
         Column(modifier.background(RunmoniColors.Paper).verticalScroll(rememberScrollState()).testTag("closet_item_list")) {
             ClosetItems(profile, actions, slot, categoryKey, accessorySlots, accessory, onAccessory,
-                Modifier.padding(horizontal = horizontalPadding), allowComparisonGrid, secondaryReady)
+                Modifier.padding(horizontal = horizontalPadding), secondaryReady)
         }
     }
 }
@@ -176,7 +186,7 @@ private fun ClosetItems(
     profile: Profile, actions: AppActions, slot: AvatarSlot, categoryKey: String,
     accessorySlots: List<AvatarSlot>, accessory: Int, onAccessory: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    allowComparisonGrid: Boolean = false, secondaryReady: Boolean = true,
+    secondaryReady: Boolean = true,
 ) {
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val ready = slot.variants.indices.filter { AvatarArtwork.itemReady(slot.key, it, profile.avatar.gender) }
@@ -199,7 +209,7 @@ private fun ClosetItems(
         Text(slot.label, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         if (currentReady && !covered) {
             Spacer(Modifier.height(4.dp))
-            Text("현재 선택: ${closetItemLabel(slot, current)}", style = MaterialTheme.typography.bodyMedium,
+            Text("현재 선택: ${avatarItemDisplayName(slot, current, profile.avatar.gender)}", style = MaterialTheme.typography.bodyMedium,
                 color = RunmoniColors.Muted)
         }
         Spacer(Modifier.height(4.dp))
@@ -215,29 +225,15 @@ private fun ClosetItems(
         }
         Spacer(Modifier.height(16.dp))
         BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val columns = if (allowComparisonGrid && !largeText && maxWidth >= 280.dp) 2 else 1
-            // A small catalogue needs one scrolling work area, not a grid
-            // scrolling inside the picker. Names/actions exist while art loads.
-            Column(Modifier.fillMaxWidth().selectableGroup()
-                .testTag(if (columns == 2) "closet_compare_grid" else "closet_compare_list"),
-                verticalArrangement = Arrangement.spacedBy(if (columns == 2) 16.dp else 8.dp)) {
-                ready.chunked(columns).forEach { row ->
-                    if (columns == 2) {
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.Top) {
-                            row.forEach { variant ->
-                                ClosetItemOption(profile, actions, slot, variant, current == variant && !covered,
-                                    secondaryReady, grid = true, largeText = false, modifier = Modifier.weight(1f))
-                            }
-                            repeat(columns - row.size) { Spacer(Modifier.weight(1f)) }
-                        }
-                    } else {
-                        val variant = row.single()
-                        ClosetItemOption(profile, actions, slot, variant, current == variant && !covered,
-                            secondaryReady, grid = false, largeText = largeText, modifier = Modifier.fillMaxWidth())
-                        if (variant != ready.last()) HorizontalDivider(color = RunmoniColors.Line,
-                            modifier = Modifier.padding(start = if (largeText) 12.dp else 72.dp, end = 12.dp))
-                    }
+            // One fitting scene, then small actual garment details. At narrow
+            // large type the full scene stays visible while names get the width.
+            val showThumbnail = !largeText || maxWidth >= 360.dp
+            Column(Modifier.fillMaxWidth().selectableGroup().testTag("closet_compare_list")) {
+                ready.forEachIndexed { index, variant ->
+                    ClosetItemOption(profile, actions, slot, variant, current == variant && !covered,
+                        secondaryReady, showThumbnail, Modifier.fillMaxWidth())
+                    if (index < ready.lastIndex) HorizontalDivider(color = RunmoniColors.Line,
+                        modifier = Modifier.padding(start = if (showThumbnail) 88.dp else 12.dp, end = 12.dp))
                 }
             }
         }
@@ -254,54 +250,96 @@ private fun ClosetItems(
 @Composable
 private fun ClosetItemOption(
     profile: Profile, actions: AppActions, slot: AvatarSlot, variant: Int, selected: Boolean,
-    secondaryReady: Boolean, grid: Boolean, largeText: Boolean, modifier: Modifier = Modifier,
+    secondaryReady: Boolean, showThumbnail: Boolean, modifier: Modifier = Modifier,
 ) {
-    val shape = if (grid) RunmoniShapes.Surface else RunmoniShapes.Action
-    val selectionBorder = if (grid && selected) Modifier.border(2.dp, RunmoniColors.Primary, shape) else Modifier
-    val choice = modifier.heightIn(min = 48.dp).clip(shape).then(selectionBorder)
+    val choice = modifier.heightIn(min = 48.dp).clip(RunmoniShapes.Action)
         .background(if (selected) RunmoniColors.PrimarySoft else Color.Transparent)
         .selectable(selected, role = Role.RadioButton, onClick = { actions.equipItem(slot.key, variant) })
         .testTag("closet_${slot.key}_$variant")
-    if (grid) {
-        Column(choice.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Box(Modifier.fillMaxWidth().height(120.dp), contentAlignment = Alignment.Center) {
-                ClosetItemThumbnail(profile.avatar.withSelectedItem(slot.key, variant), secondaryReady,
-                    "closet_preview_${slot.key}_$variant", Modifier.width(80.dp).height(120.dp))
-                if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary,
-                    modifier = Modifier.align(Alignment.TopEnd).size(20.dp))
-            }
-            Text(closetItemLabel(slot, variant), style = MaterialTheme.typography.bodyLarge,
-                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                modifier = Modifier.fillMaxWidth())
-        }
-    } else {
-        Row(choice.heightIn(min = if (largeText) 64.dp else 88.dp).padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            // The full fitting preview remains available. Preserve the compact
-            // text-first row when large type needs the item's complete name.
-            if (!largeText) ClosetItemThumbnail(profile.avatar.withSelectedItem(slot.key, variant), secondaryReady,
-                "closet_preview_${slot.key}_$variant", Modifier.width(48.dp).height(72.dp))
-            Text(closetItemLabel(slot, variant), style = MaterialTheme.typography.bodyLarge,
-                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                modifier = Modifier.weight(1f))
-            if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary,
-                modifier = Modifier.size(20.dp))
-            else Spacer(Modifier.size(20.dp))
-        }
+    Row(choice.heightIn(min = if (showThumbnail) 80.dp else 64.dp).padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        if (showThumbnail) ClosetItemThumbnail(profile.avatar.withSelectedItem(slot.key, variant), slot.key,
+            secondaryReady, "closet_preview_${slot.key}_$variant", Modifier.size(64.dp))
+        Text(avatarItemDisplayName(slot, variant, profile.avatar.gender), style = MaterialTheme.typography.bodyLarge,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+            modifier = Modifier.weight(1f))
+        if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary,
+            modifier = Modifier.size(20.dp))
+        else Spacer(Modifier.size(20.dp))
+    }
+}
+
+private data class ClosetThumbnail(val image: ImageBitmap? = null, val failed: Boolean = false)
+private data class ClosetCrop(val x: Int, val y: Int, val width: Int, val height: Int)
+
+/** Frame zero regions of the real composite, including its actual occlusion.
+ * A set uses the complete frame. No standalone product artwork is invented.
+ */
+private fun closetCrop(slot: String, gender: AvatarGender): ClosetCrop {
+    val female = gender == AvatarGender.FEMALE
+    return when (slot) {
+        "hair", "headwear", "face" -> ClosetCrop(0, 0, 256, 208)
+        "ear", "eyewear" -> ClosetCrop(60, 64, 184, 132)
+        "top", "hydration" -> ClosetCrop(40, if (female) 156 else 168, 200, 112)
+        "bottom" -> ClosetCrop(64, if (female) 224 else 236, 160, 112)
+        "wrist" -> ClosetCrop(32, 184, 208, 104)
+        "waist" -> ClosetCrop(64, if (female) 212 else 228, 160, 84)
+        "socks" -> ClosetCrop(12, 268, 232, 116)
+        "shoes" -> ClosetCrop(140, 304, 116, 80)
+        else -> ClosetCrop(0, 0, 256, 384)
     }
 }
 
 @Composable
-private fun ClosetItemThumbnail(avatar: AvatarStyle, ready: Boolean, tag: String, modifier: Modifier) {
-    Box(modifier.testTag(tag), contentAlignment = Alignment.Center) {
-        if (ready) AvatarMini(avatar, Modifier.fillMaxSize(), decorative = true)
-        else Icon(Icons.Outlined.HourglassEmpty, null,
-            modifier = Modifier.size(24.dp).testTag("minimi_loading"), tint = RunmoniColors.Muted)
+private fun ClosetItemThumbnail(avatar: AvatarStyle, slot: String, ready: Boolean, tag: String, modifier: Modifier) {
+    val context = LocalContext.current.applicationContext
+    var attempt by remember(avatar, slot) { mutableIntStateOf(0) }
+    // Never label the previous request's image as a newly selected garment.
+    key(context, avatar, slot, ready, attempt) {
+        val prepared by produceState(ClosetThumbnail()) {
+            if (ready) value = try {
+                ClosetThumbnail(withContext(Dispatchers.Default) { avatarBitmap(context, avatar).asImageBitmap() })
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                ClosetThumbnail(failed = true)
+            }
+        }
+        Box(modifier.testTag(tag), contentAlignment = Alignment.Center) {
+            val image = prepared.image
+            if (image != null) Canvas(Modifier.fillMaxSize()) {
+                val crop = closetCrop(slot, avatar.gender)
+                val scale = minOf(size.width / crop.width, size.height / crop.height)
+                val width = (crop.width * scale).roundToInt().coerceAtLeast(1)
+                val height = (crop.height * scale).roundToInt().coerceAtLeast(1)
+                drawImage(image, srcOffset = IntOffset(crop.x, crop.y), srcSize = IntSize(crop.width, crop.height),
+                    dstOffset = IntOffset(((size.width - width) / 2).roundToInt(), ((size.height - height) / 2).roundToInt()),
+                    dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
+            }
+            else if (prepared.failed) IconButton(onClick = { attempt++ }, modifier = Modifier.size(48.dp)
+                .testTag("minimi_retry")) {
+                Icon(Icons.Outlined.Refresh, "아이템 미리보기 다시 불러오기", tint = RunmoniColors.Muted)
+            }
+            else Icon(Icons.Outlined.HourglassEmpty, null,
+                modifier = Modifier.size(24.dp).testTag("minimi_loading"), tint = RunmoniColors.Muted)
+        }
     }
 }
 
-private fun closetItemLabel(slot: AvatarSlot, variant: Int): String =
-    if (variant == 0 && slot.key in setOf("hair", "top", "bottom", "shoes")) "기본 ${slot.label}" else slot.variants[variant]
+/** Display only: the approved male/female originals share stable item zero IDs.
+ * Name the actual shape without a fixed hue, since fabric tint is independent.
+ */
+internal fun avatarItemDisplayName(slot: AvatarSlot, variant: Int, gender: AvatarGender): String {
+    if (variant != 0) return slot.variants[variant]
+    val female = gender == AvatarGender.FEMALE
+    return when (slot.key) {
+        "hair" -> if (female) "기본 포니테일" else "기본 쇼트 헤어"
+        "top" -> if (female) "기본 러닝 반팔" else "기본 러닝 싱글렛"
+        "bottom" -> if (female) "기본 러닝 타이츠" else "기본 러닝 쇼츠"
+        "shoes" -> "기본 러닝화"
+        else -> slot.variants[variant]
+    }
+}
 
 @Composable
 private fun GenderSelector(profile: Profile, actions: AppActions, modifier: Modifier = Modifier) {
@@ -309,7 +347,7 @@ private fun GenderSelector(profile: Profile, actions: AppActions, modifier: Modi
         AvatarGender.entries.forEach { gender ->
             val selected = profile.avatar.gender == gender
             Column(Modifier.weight(1f).heightIn(min = 48.dp).clip(RunmoniShapes.Action)
-                .background(if (selected) RunmoniColors.Paper else Color.Transparent)
+                .background(if (selected) RunmoniColors.PrimarySoft else Color.Transparent)
                 .selectable(selected, role = Role.RadioButton,
                 onClick = { actions.setAvatarGender(gender) }).testTag("closet_gender_${gender.wireValue}")
                 .padding(vertical = 8.dp),

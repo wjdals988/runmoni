@@ -1,0 +1,30 @@
+failed restored URI recovery ComponentActivity/fake callbacks: awaitAvatarReady=true; waitMillis=81; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=0: awaitAvatarReady=true; waitMillis=12; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=1: awaitAvatarReady=true; waitMillis=10; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.0 tool=2: awaitAvatarReady=true; waitMillis=10; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=0: awaitAvatarReady=true; waitMillis=18; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=1: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 320/1.5 tool=2: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=0: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=1: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 320/2.0 tool=2: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=0: awaitAvatarReady=true; waitMillis=23; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=1: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.0 tool=2: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=0: awaitAvatarReady=true; waitMillis=25; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=1: awaitAvatarReady=true; waitMillis=11; timeoutMillis=120000
+share editor ComponentActivity fixture 360/1.5 tool=2: awaitAvatarReady=true; waitMillis=5; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=0: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=1: awaitAvatarReady=true; waitMillis=12; timeoutMillis=120000
+share editor ComponentActivity fixture 360/2.0 tool=2: awaitAvatarReady=true; waitMillis=10; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=0: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=1: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.0 tool=2: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=0: awaitAvatarReady=true; waitMillis=8; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=1: awaitAvatarReady=true; waitMillis=8; timeoutMillis=120000
+share editor ComponentActivity fixture 411/1.5 tool=2: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=0: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=1: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share editor ComponentActivity fixture 411/2.0 tool=2: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+independent record/avatar controls and no-photo CTA at320/font2; fake callbacks: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+share short 320x240/font2 ComponentActivity constraint fixture; not a physical rotation: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000

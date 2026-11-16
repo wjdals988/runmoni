@@ -41,9 +41,10 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
                 .captureToImage().asAndroidBitmap()
             val hsv = FloatArray(3)
             var count = 0
-            // Frame zero's forward shoe, excluding hair, skin and trousers.
-            for (y in bitmap.height * 7 / 8 until bitmap.height) {
-                for (x in bitmap.width * 5 / 8 until bitmap.width) {
+            // The wardrobe now shows an actual shoe-region crop. Its lower
+            // half contains frame zero's forward shoe, below the shin.
+            for (y in bitmap.height / 2 until bitmap.height) {
+                for (x in bitmap.width / 4 until bitmap.width) {
                     android.graphics.Color.colorToHSV(bitmap.getPixel(x, y), hsv)
                     if (hsv[0] in low..high && hsv[1] > .3f && hsv[2] > .45f) count++
                 }
@@ -176,7 +177,7 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
             assertEquals(original.copy(avatar = original.avatar.copy(runningKitColors = RunningKitColors(1, 5, 2))), state.value.profile)
             assertEquals(9, AvatarCatalogue.tabs.size)
             assertEquals(13, AvatarCatalogue.slots.size)
-            assertEquals(58, AvatarCatalogue.slots.sumOf { it.variants.size })
+            assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
         }
         compose.waitUntil(30_000) { compose.onAllNodesWithContentDescription("나의 러닝 미니미").fetchSemanticsNodes().isNotEmpty() }
         noTextOverflow("closet basic running kit color and unchanged inventory")

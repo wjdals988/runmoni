@@ -57,6 +57,28 @@ test('a new explicit session rejects a delayed publication from the previous tok
  const a=db('alice');await enable(a,'alice',nextToken);await assertFails(setDoc(marker(a),data()));await assertSucceeds(setDoc(marker(a),data('alice',{runSessionToken:nextToken})));
  await assertFails(setDoc(consent(a),{runSessionToken:token,enabled:false,updatedAt:serverTimestamp()}));
 });
+test('the three appended wardrobe IDs preserve exact values in an authorized approximate marker',async()=>{
+ const a=db('alice'),b=db('bobby');
+ const worn={...avatar(),top:6,socks:4,shoes:4};
+ await assertSucceeds(share(a,'alice',{avatar:worn}));
+ const own=(await assertSucceeds(getDoc(marker(a)))).data();assert.deepEqual(own.avatar,worn);
+ const result=await assertSucceeds(getDocs(scoped(b)));assert.equal(result.size,1);assert.deepEqual(result.docs[0].data().avatar,worn);
+});
+test('new wardrobe IDs do not widen owner, consent, precision or connected-reader permissions',async()=>{
+ const a=db('alice'),b=db('bobby');const worn={...avatar(),top:6,socks:4,shoes:4};
+ await enable(a);
+ await assertFails(setDoc(marker(b,'alice'),data('alice',{avatar:worn})));
+ for(const changes of [{runSessionToken:nextToken},{adultConfirmed:false},{visibility:'precise'},{latitude:37.566535}])
+  await assertFails(setDoc(marker(a),data('alice',{avatar:worn,...changes})));
+ await assertSucceeds(setDoc(marker(a),data('alice',{avatar:worn})));
+ await assertFails(getDoc(marker(db())));await assertFails(getDoc(marker(db('unconnected'))));
+ await assertFails(getDocs(collection(b,'runnerPresence')));
+});
+for(const [slot,value] of [['top',7],['socks',5],['shoes',5],['top',-1],['socks',4.5],['shoes',4294967300]])
+ test(`presence rejects invalid appended wardrobe boundary ${slot}:${value}`,async()=>{
+  const a=db('alice');await enable(a);
+  await assertFails(setDoc(marker(a),data('alice',{avatar:{...avatar(),[slot]:value}})));
+ });
 for(const [label,overrides] of [
  ['precise coordinates',{latitude:37.566535,longitude:126.978132}],['route history',{points:[]}],['wallet or ownership',{mileage:99999}],
  ['fractional cell',{latitudeE3:37567.123}],['wrong latitude band',{latBand:38}],['wrong longitude band',{lonBand:127}],

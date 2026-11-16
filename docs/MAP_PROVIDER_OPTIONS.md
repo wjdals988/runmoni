@@ -1,29 +1,27 @@
-# 런모니 지도 선택과 연결
+# 런모니 지도 선택
 
-2026-11-11 확인. 이번 변경은 지도 위의 버튼을 지도 아래 ‘지도 조작’ 메뉴로 모으고 화면을 정리한다. 지도 제공자를 바꾼 것으로 표시하지 않는다.
+2026-11-16 사용자 선택: **현재 무료 지도를 먼저 개선한다.** 현재 앱은 MapLibre Native12.0.1과 OpenFreeMap Liberty 벡터 스타일을 사용한다. 이전 네이버 SDK 연결이 현재 활성이라는 설명은 유효하지 않다. Google Maps SDK·API 키·결제 연결은 이번에 추가하지 않는다.
 
-한국 지역 러닝 앱에는 **기존 네이버 지도 연동을 활성화하는 방향**을 우선 권한다. 현재 앱에 NAVER Maps SDK 3.24.0과 `com.naver.maps.map.NCP_KEY_ID` 연결이 이미 있다. 설정이 비어 있거나 인증이 실패하면 기존 OpenStreetMap 배경으로 돌아간다. 네이버의 국내 지명·공원·도로 표기 적합성은 실제 지역과 기기로 추가 확인해야 한다.
+## 현재 제공자에서 반영할 내용
 
-|선택|장점|추가 조건|
-|---|---|---|
-|기존 네이버 SDK|현재 코드 활용, 국내 지도 제공|소유자의 Naver Cloud Maps 애플리케이션·Android 패키지 등록·사용 조건/요금 확인 필요|
-|MapLibre Native + 별도 벡터 지도 제공자|지도 색상·레이블 밀도·경로 강조를 세밀하게 설계 가능|렌더러는 무료 오픈소스지만 지도 데이터/타일·스타일 제공 계약은 별개. 제공자 선정·라이선스·키·비용 검토와 새 SDK 실행 검증 필요|
-|현재 OSM 래스터 배경|추가 서비스 설정 없이 기존 동작 유지|레이블·색상을 앱에서 임의로 재스타일링하기 어렵고 표준 서버는 best effort. 대량 타일 저장/사전 수집은 하지 않음|
+- 실제 지도 도형과 지명·도로·교통 단서는 유지하고 지면/물/공원/건물·일반 POI의 대비를 정리한다. 실제 경로와 미니미를 먼저 읽게 한다.
+- 화면 이동/주기 조회 실패에는 기존 지도·확인된 마커를 유지한다. 공개 마커의 기존 freshness/만료 기준은 연장하지 않는다. 수동 새로고침 실패만 지도 밖에 짧게 안내한다.
+- OpenFreeMap·OpenMapTiles·OpenStreetMap 출처와 실제 오류 fallback을 유지한다. 공개 무료 서비스의 가용성/SLA나 모든 지역 지도 정확도를 보장하지 않는다.
+- 기존 HTTPS 호스트 제한·동시 요청4개·24MiB HTTP 캐시·요청 timeout을 유지한다. 대량 타일 저장/사전 수집이나 외부 공개 터널을 추가하지 않는다.
 
-## 기존 네이버 경로를 연결할 때
+## Google Maps를 나중에 선택한다면
 
-1. 소유자가 Naver Cloud Maps의 Mobile Dynamic Map과 앱 사용 조건·요금을 확인한다. 이번 작업은 새 계정/서비스나 과금 설정을 만들지 않는다.
-2. 콘솔의 Android 앱 패키지에 `com.runmoni.app`을 등록하고 해당 SDK용 식별자를 확인한다. 키·비밀번호·서비스 계정 파일을 채팅에 보내지 않는다.
-3. GitHub 저장소 **Settings → Secrets and variables → Actions → Variables**에 기존 빌드 설정 이름인 `NAVER_MAP_CLIENT_ID`를 등록한다. 식별자는 Android Manifest/앱에 포함되는 값이며 비공개 서명키와는 다르다.
-4. 새 CI 빌드부터 선택적 변수를 기존 Gradle 설정/Manifest로 전달한다. 변수 이름의 `CLIENT_ID`는 기존 코드 호환 이름이며 Manifest 키는 신규 `NCP_KEY_ID`다.
-5. 실제 서명 APK에서 네이버 로고/지도·인증 오류·OSM fallback·드래그/핀치·경로/러너 위치를 확인한다. 빌드 설정 전달 성공만으로 네이버 온라인 지도 실행을 통과 처리하지 않는다.
+Android용 Google 지도를 정식 SDK로 연결할 수는 있다. 현재 앱에 Google 지도 사용 가능 키가 있다고 가정하지 않는다. Google 타일 URL을 MapLibre에 임의로 넣는 방식도 사용하지 않는다.
 
-현재 환경에서 Repository Variables 읽기는403으로 거절됐으므로 실제 등록 여부를 확인하지 못했다. API 식별자나 인증 성공을 추정하지 않는다. MapLibre의 공개 demo style을 운영용 데이터 계약으로 간주하지 않는다. 네이버의 지원 종료 예정 Lite mode도 신규 적용하지 않는다.
+1. 소유자가 Google Cloud 프로젝트, Maps SDK for Android 사용 설정, 현재 요금/이용조건과 Billing 연결을 확인하고 승인해야 한다. 이번 작업은 결제·프로젝트·크레딧을 만들지 않는다.
+2. 지도 API 키를 Android 앱용으로 제한하고 패키지 `com.runmoni.app`과 **동일 보관 서명 인증서의 SHA-1**을 등록한다. 기존 `a213…` SHA-256 지문은 보관 인증서를 식별하는 참고이며 SHA-1 필드를 대신하지 않는다. 기존 인증서에서 필요한 지문을 확인하며 새 서명키를 만들지 않는다. Google Play 배포를 선택하면 실제 앱 서명 인증서도 별도로 확인한다.
+3. API 키의 API 제한을 Maps SDK for Android로 좁히고 소유자가 사용량/쿼터·비용 알림 정책을 확인한다. 예산 알림이 과금의 강제 상한이라는 보장은 하지 않는다. 키·서비스 계정·서명 비밀번호를 채팅에 보내지 않는다.
+4. SDK/빌드 설정·라이선스 고지와 제공자별 카메라/경로/marker/출처 구현을 변경하고 별도 검증한다. 기존 무료 제공자 실행 성공을 Google 지도 검증으로 재사용하지 않는다. 실제 서명 APK에서 인증·한국어 지명·드래그/핀치·경로·미니미·작은 화면/큰 글씨를 확인해야 한다.
 
-확인한 공식 자료:
+공식 조건을 확인할 때 사용할 문서이며 이번 담당자가 새로 온라인 조회하거나 콘솔 설정을 완료했다는 뜻은 아니다.
 
-- [네이버 Android SDK 지도 유형·디스플레이 옵션](https://navermaps.github.io/android-map-sdk/guide-ko/2-3.html)
-- [MapLibre Native 공식 저장소](https://github.com/maplibre/maplibre-native)
-- [Android 위젯 디자인](https://developer.android.com/design/ui/mobile/guides/widgets)
-
-공식 자료를 읽은 사실과 실제 서비스/기기 검증은 구분한다. HTTP 원문·실패와 확인 시점은 검토 근거에 보존한다.
+- [Google Maps Android API 키](https://developers.google.com/maps/documentation/android-sdk/get-api-key)
+- [Google Maps API 키 제한](https://developers.google.com/maps/api-security-best-practices)
+- [Google Maps 요금](https://developers.google.com/maps/billing-and-pricing/overview)
+- [OpenFreeMap](https://openfreemap.org/quick_start/)
+- [MapLibre Native](https://github.com/maplibre/maplibre-native)
