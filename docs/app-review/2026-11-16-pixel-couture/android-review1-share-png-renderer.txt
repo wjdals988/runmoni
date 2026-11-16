@@ -1,0 +1,8 @@
+
+com.runmoni.app.sharing.RunShareCardRendererTest:......
+
+Time: 137.408
+
+OK (6 tests)
+
+

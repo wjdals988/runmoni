@@ -1,0 +1,25 @@
+
+com.runmoni.app.ui.MiniMiLoadingTest:.
+Error in delayedReadShowsStatusUntilAnApprovedFrameIsActuallyDrawn(com.runmoni.app.ui.MiniMiLoadingTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 120000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:57)
+	at com.runmoni.app.ui.MiniMiLoadingTest.delayedReadShowsStatusUntilAnApprovedFrameIsActuallyDrawn(MiniMiLoadingTest.kt:52)
+..
+
+Time: 154.105
+There was 1 failure:
+1) delayedReadShowsStatusUntilAnApprovedFrameIsActuallyDrawn(com.runmoni.app.ui.MiniMiLoadingTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 120000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunmoniDesignTestBase.noTextOverflow(RunmoniDesignTest.kt:57)
+	at com.runmoni.app.ui.MiniMiLoadingTest.delayedReadShowsStatusUntilAnApprovedFrameIsActuallyDrawn(MiniMiLoadingTest.kt:52)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+

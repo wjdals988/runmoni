@@ -1,0 +1,54 @@
+{
+  "sourceKind": "HOST JVM pixel output, not Android screenshot",
+  "proof": {
+    "file": "host-cap-v3.png",
+    "sha256": "07cbee54c713ab36e65d61901e14be9b1758374fe398e42d913bdfd8cc8bf67f"
+  },
+  "earlierOverallRootReviewPreserved": "root-host-visual-review.json",
+  "supersedesOverallAcceptanceForCapVisorTips": true,
+  "localizedPriority": "P1",
+  "actualMeasuredChangedHighAlphaPixelsAtX247": {
+    "femaleFrame0": [
+      86,
+      87
+    ],
+    "femaleFrame1": [
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97
+    ],
+    "femaleFrame5": [
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91
+    ]
+  },
+  "finding": "Female F1/F5 cap/visor tip is truncated to a vertical colored edge at the authored mask/cell boundary. A later enlarged peer review confirmed this, revising the earlier whole-sheet acceptance.",
+  "plannedCorrection": "Shorten and proportionally close all brim control points before x247; preserve face/hair/alpha gates. Prepared patch is not applied while input1 runs.",
+  "newAndroidTestPreparedNotExecuted": true,
+  "userVisualApproval": false
+}

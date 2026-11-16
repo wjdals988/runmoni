@@ -1,0 +1,39 @@
+{
+  "ownedPid": 17380,
+  "avd": "Runmoni_Cloud_29",
+  "ownedProcessExitObserved": true,
+  "signal": "SIGTERM",
+  "startTicksMatched": true,
+  "ownedCommandSha256": "2aace5903bc8115bef17803c2fb2d3de1e16b07d56f10a2b1d9ce3e965846da3",
+  "proofReferences": {
+    "android-review5": {
+      "file": "android-review5.json",
+      "sha256": "3603c0e141b7f07aedee75ba9a85b45bc18876170b568a6cf4a08d6b79423a2c",
+      "parentPassed": true
+    },
+    "android-review6": {
+      "file": "android-review6.json",
+      "sha256": "46033627873eb9e345baf041f6ecc8a4bc9379522dcc340cd8d99e0573cde04f",
+      "parentPassed": false
+    },
+    "android-review7": {
+      "file": "android-review7.json",
+      "sha256": "01667f52030f947de0c4f087c53378f92d9f5cc7036a47ce33d9a014a0572d24",
+      "parentPassed": true
+    },
+    "android-review8": {
+      "file": "android-review8.json",
+      "sha256": "bc836a67bff7e72ac4d416760d11e31716e021e86f7ad424e0b65d20d7e6e604",
+      "parentPassed": true
+    },
+    "live1": {
+      "file": "live1.json",
+      "sha256": "e09926c2686e65b0f72287b9cc5b073df7e6f86b6a5302acfebee9fc88207da6",
+      "parentPassed": true
+    }
+  },
+  "failedTestsAndObserverFailuresPreserved": true,
+  "productMethodsCountedByThisCleanup": 0,
+  "fullOsByteRestorationClaimed": false,
+  "completedAtUtc": "2026-11-16T09:28:29.952925+00:00"
+}

@@ -1,0 +1,1 @@
+{"passed":true,"headwearCases":96,"costumeCases":48,"singleEquipmentCases":288,"frontOcclusionPixels":450038,"sourceInputsUnchanged":true,"originalCostumePoseCount":48,"androidExecution":false,"userVisualApproval":false}

@@ -1,0 +1,189 @@
+{
+  "source": "docs/design/avatars/v0.3.0/running-motion-art-source.png",
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "preview": "docs/app-review/2026-11-16-pixel-couture/host-cap-v2.png",
+  "previewSha256": "685e417b212ef757d446139ac217e616ccb7f161ea2c61410a478909c7e3377a",
+  "scope": "Host v2 CAP, male frame0 only; half-open ROI x83..211/y30..86",
+  "darkOutputPredicate": "max(R,G,B)<85 and alpha>16",
+  "counts": [
+    {
+      "origin": "changed_or_authored",
+      "sourceAlpha": "0..16",
+      "count": 175
+    },
+    {
+      "origin": "changed_or_authored",
+      "sourceAlpha": "192..255",
+      "count": 178
+    },
+    {
+      "origin": "unchanged_source",
+      "sourceAlpha": "17..191",
+      "count": 245
+    }
+  ],
+  "unchangedSourceExamples": [
+    {
+      "x": 162,
+      "y": 33,
+      "sourceRgba": [
+        10,
+        16,
+        40,
+        37
+      ]
+    },
+    {
+      "x": 163,
+      "y": 33,
+      "sourceRgba": [
+        8,
+        15,
+        41,
+        72
+      ]
+    },
+    {
+      "x": 164,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        16,
+        42,
+        85
+      ]
+    },
+    {
+      "x": 165,
+      "y": 33,
+      "sourceRgba": [
+        10,
+        16,
+        42,
+        91
+      ]
+    },
+    {
+      "x": 166,
+      "y": 33,
+      "sourceRgba": [
+        10,
+        16,
+        41,
+        92
+      ]
+    },
+    {
+      "x": 167,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        15,
+        41,
+        91
+      ]
+    },
+    {
+      "x": 168,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        15,
+        40,
+        90
+      ]
+    },
+    {
+      "x": 169,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        15,
+        39,
+        87
+      ]
+    },
+    {
+      "x": 170,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        16,
+        39,
+        83
+      ]
+    },
+    {
+      "x": 171,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        16,
+        39,
+        81
+      ]
+    },
+    {
+      "x": 172,
+      "y": 33,
+      "sourceRgba": [
+        10,
+        16,
+        39,
+        78
+      ]
+    },
+    {
+      "x": 173,
+      "y": 33,
+      "sourceRgba": [
+        9,
+        14,
+        36,
+        68
+      ]
+    },
+    {
+      "x": 174,
+      "y": 33,
+      "sourceRgba": [
+        12,
+        16,
+        38,
+        42
+      ]
+    },
+    {
+      "x": 161,
+      "y": 34,
+      "sourceRgba": [
+        13,
+        18,
+        41,
+        18
+      ]
+    },
+    {
+      "x": 162,
+      "y": 34,
+      "sourceRgba": [
+        8,
+        15,
+        39,
+        142
+      ]
+    },
+    {
+      "x": 174,
+      "y": 34,
+      "sourceRgba": [
+        5,
+        10,
+        32,
+        187
+      ]
+    }
+  ],
+  "interpretation": "Surviving dark source pixels in this ROI all have alpha17..191; the old >=192 hair gate excluded them. Authored outer ink is separate. This does not establish every pose or other visual defect has the same cause.",
+  "writesImages": false
+}

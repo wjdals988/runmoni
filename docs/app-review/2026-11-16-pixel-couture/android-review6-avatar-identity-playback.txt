@@ -1,0 +1,9 @@
+
+com.runmoni.app.ui.ApprovedAvatarRenderingTest:...
+com.runmoni.app.ui.AvatarPlaybackTest:....
+
+Time: 95.73
+
+OK (7 tests)
+
+

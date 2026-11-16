@@ -1,0 +1,3 @@
+--------- beginning of main
+--------- beginning of system
+I/RunmoniAvatarClock( 3679): run=541664 seen=[] elapsedMillis=10294

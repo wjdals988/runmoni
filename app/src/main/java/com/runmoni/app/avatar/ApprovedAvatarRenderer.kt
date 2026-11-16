@@ -91,7 +91,7 @@ class ApprovedAvatarRenderer(context: Context) {
         val frameCostume = AvatarCostumeLayers.supports(style.costume)
         val noGear = listOf("headwear", "ear", "eyewear", "wrist", "waist", "hydration").all { effective.variantFor(it) == 0 }
         if (!frameCostume && kit.isOriginal && effective.top == 0 && effective.bottom == 0 && effective.shoes == 0 && effective.socks == 0 && noGear) return original
-        val key = "${WardrobeCoverage.VERSION}|${SockArtwork.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|$selected|$effective"
+        val key = "${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|$selected|$effective"
         colored.get(key)?.let { return it }
         val mask = RunningKitArtwork.frameMask(applicationContext, row, selected)
         val pixels = IntArray(WIDTH * HEIGHT)
@@ -107,7 +107,11 @@ class ApprovedAvatarRenderer(context: Context) {
             kit.top, kit.bottom, kit.shoes, row, selected)
         val socked = if (effective.socks == 0) changed else SockClothing.render(changed,
             SockArtwork.frameMask(applicationContext, row, selected), effective.socks)
-        val equipped = AvatarEquipmentLayers.render(socked, pixels, mask, selected, style.gender, effective)
+        // Only torso equipment needs the independent hand labels. A head piece,
+        // watch or ear device must not force an unrelated coverage PNG cold load.
+        val gearHands = if (effective.waist != 0 || effective.hydration != 0)
+            WardrobeCoverage.handProtection(applicationContext, row, selected) else null
+        val equipped = AvatarEquipmentLayers.render(socked, pixels, mask, selected, style.gender, effective, gearHands)
         return Bitmap.createBitmap(equipped, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888).also { colored.put(key, it) }
     }
 
@@ -127,7 +131,7 @@ class ApprovedAvatarRenderer(context: Context) {
         if (style.gender != AvatarGender.FEMALE) return image
         val selected = if (running) Math.floorMod(frame, FRAMES) else 0
         val original = image === frames[style.gender.spriteRow][selected]
-        val key = "display|${WardrobeCoverage.VERSION}|${SockArtwork.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|$selected|$style"
+        val key = "display|${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|$selected|$style"
         (if (original) femaleDisplayBases[selected] else colored.get(key))?.let { return it }
         val pixels = IntArray(WIDTH * HEIGHT)
         image.getPixels(pixels, 0, WIDTH, 0, 0, WIDTH, HEIGHT)

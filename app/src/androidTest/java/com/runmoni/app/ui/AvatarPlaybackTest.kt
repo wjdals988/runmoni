@@ -83,11 +83,48 @@ class AvatarPlaybackTest {
 
     @Test fun realClockPlaybackRendersAllEightFrames() = withAnimators {
         val drawn=Collections.synchronizedSet(mutableSetOf<Int>())
+        val started=SystemClock.uptimeMillis()
+        var playbackStarted: Long? = null // Read and changed only while holding drawn's monitor.
         compose.setContent {
             RunmoniTheme { MiniMi(avatar,Modifier.size(144.dp,168.dp).testTag("playback_avatar"),running=true,
-                onFrameRendered={ drawn.add(it) }) }
+                onFrameRendered={ index -> synchronized(drawn) {
+                    val now=SystemClock.uptimeMillis()
+                    val activeStart=playbackStarted
+                    val phase=if(activeStart == null) "preparing" else "playback"
+                    val origin=activeStart ?: started
+                    val budget=if(activeStart == null) 30_000L else 6_000L
+                    if(now-origin in 0L..budget && drawn.add(index)) android.util.Log.i("RunmoniAvatarClock",
+                        "run=$started phase=$phase frame=$index phaseElapsedMillis=${now-origin} elapsedMillis=${now-started}")
+                } }) }
         }
-        compose.waitUntil(timeoutMillis=6000) { drawn.containsAll((0..7).toList()) }
+        try {
+            // A single prepared frame can only draw0. With no override, a positive
+            // frame proves the complete eight-frame clip and real playback are ready.
+            // Preparation is separately bounded; it is not a six-second startup SLA.
+            val remainingPreparation=30_000L-(SystemClock.uptimeMillis()-started)
+            assertTrue("Avatar preparation exceeded its separate30s budget", remainingPreparation > 0L)
+            compose.waitUntil(timeoutMillis=remainingPreparation) { synchronized(drawn) { drawn.any { it > 0 } } }
+            // Canvas callbacks run on Main. Clear preparation samples between draws,
+            // so even frame0 must be observed again inside the new real-clock window.
+            instrumentation.runOnMainSync { synchronized(drawn) {
+                val now=SystemClock.uptimeMillis()
+                assertTrue("Avatar preparation exceeded its separate30s budget", now-started <= 30_000L)
+                drawn.clear()
+                playbackStarted=now
+                android.util.Log.i("RunmoniAvatarClock",
+                    "run=$started phase=playback event=window-start preparationMillis=${now-started} windowMillis=6000")
+            } }
+            // Keep the six-second motion criterion, without a frameOverride or clock advance.
+            // The callback also rejects samples after the actual wall-clock deadline.
+            compose.waitUntil(timeoutMillis=6000) { drawn.containsAll((0..7).toList()) }
+        } finally {
+            synchronized(drawn) {
+                val now=SystemClock.uptimeMillis()
+                val activeStart=playbackStarted
+                android.util.Log.i("RunmoniAvatarClock",
+                    "run=$started phase=${if(activeStart == null) "preparing" else "playback"} seen=${drawn.toSet().sorted()} preparationMillis=${(activeStart ?: now)-started} playbackMillis=${activeStart?.let { now-it } ?: 0L} elapsedMillis=${now-started}")
+            }
+        }
         assertEquals((0..7).toSet(),synchronized(drawn) { drawn.toSet() })
         assertMoving("playback_avatar")
     }

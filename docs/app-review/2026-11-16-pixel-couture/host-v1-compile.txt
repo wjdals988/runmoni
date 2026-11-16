@@ -1,0 +1,46 @@
+/workspace/runmoni/work/pixel-couture/v1/source/PreviewPixelCouture.java:26: error: no suitable constructor found for BufferedImage(int,int)
+  BufferedImage heads=new BufferedImage(W*kinds.length,H*2),contact=new BufferedImage(W*8,H*2),gear=new BufferedImage(W*8,H*2);
+                      ^
+    constructor BufferedImage.BufferedImage(int,int,int) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(int,int,int,IndexColorModel) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(ColorModel,WritableRaster,boolean,Hashtable<?,?>) is not applicable
+      (actual and formal argument lists differ in length)
+/workspace/runmoni/work/pixel-couture/v1/source/PreviewPixelCouture.java:26: error: no suitable constructor found for BufferedImage(int,int)
+  BufferedImage heads=new BufferedImage(W*kinds.length,H*2),contact=new BufferedImage(W*8,H*2),gear=new BufferedImage(W*8,H*2);
+                                                                    ^
+    constructor BufferedImage.BufferedImage(int,int,int) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(int,int,int,IndexColorModel) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(ColorModel,WritableRaster,boolean,Hashtable<?,?>) is not applicable
+      (actual and formal argument lists differ in length)
+/workspace/runmoni/work/pixel-couture/v1/source/PreviewPixelCouture.java:26: error: no suitable constructor found for BufferedImage(int,int)
+  BufferedImage heads=new BufferedImage(W*kinds.length,H*2),contact=new BufferedImage(W*8,H*2),gear=new BufferedImage(W*8,H*2);
+                                                                                                    ^
+    constructor BufferedImage.BufferedImage(int,int,int) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(int,int,int,IndexColorModel) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(ColorModel,WritableRaster,boolean,Hashtable<?,?>) is not applicable
+      (actual and formal argument lists differ in length)
+/workspace/runmoni/work/pixel-couture/v1/source/PreviewPixelCouture.java:27: error: no suitable constructor found for BufferedImage(int,int)
+  Map<String,BufferedImage> clips=new LinkedHashMap<>();for(var k:kinds)clips.put(k.name(),new BufferedImage(W*8,H*2));
+                                                                                           ^
+    constructor BufferedImage.BufferedImage(int,int,int) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(int,int,int,IndexColorModel) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(ColorModel,WritableRaster,boolean,Hashtable<?,?>) is not applicable
+      (actual and formal argument lists differ in length)
+/workspace/runmoni/work/pixel-couture/v1/source/PreviewPixelCouture.java:28: error: no suitable constructor found for BufferedImage(int,int)
+  for(int c:new int[]{1,4,5})clips.put("COSTUME"+c,new BufferedImage(W*8,H*2));
+                                                   ^
+    constructor BufferedImage.BufferedImage(int,int,int) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(int,int,int,IndexColorModel) is not applicable
+      (actual and formal argument lists differ in length)
+    constructor BufferedImage.BufferedImage(ColorModel,WritableRaster,boolean,Hashtable<?,?>) is not applicable
+      (actual and formal argument lists differ in length)
+5 errors

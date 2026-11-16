@@ -26,7 +26,7 @@ class AvatarCostumeLayersTest {
         return getRgb.invoke(image, frame * 256, row * 384, 256, 384, null, 0, 256) as IntArray
     }
 
-    @Test fun allCostumePosesKeepOriginalHeadHandsBodyBoundsAndImmutableInputs() {
+    @Test fun allCostumePosesKeepUncoveredIdentityHandsBodyBoundsAndImmutableInputs() {
         val sourceFile = File(assets, "v0.3.0/running-motion.png")
         assertEquals("f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
             MessageDigest.getInstance("SHA-256").digest(sourceFile.readBytes()).joinToString("") { "%02x".format(it) })
@@ -40,6 +40,7 @@ class AvatarCostumeLayersTest {
             for (costume in listOf(1, 4, 5)) {
                 val result = AvatarCostumeLayers.render(source, fabric, coverage, hands, frame, gender, costume)
                 val extensions = AvatarCostumeLayers.clothingExtensionMask(source, frame, gender, costume)
+                val hair = AvatarCostumeLayers.hairOcclusionMask(source, frame, gender, costume)
                 var changedBody = 0; var addedClothing = 0
                 val headEnd = if (gender == AvatarGender.MALE) 182 else 176
                 for (i in source.indices) {
@@ -53,13 +54,19 @@ class AvatarCostumeLayersTest {
                         assertEquals(253, result[i] ushr 24)
                         addedClothing++
                     } else {
-                        assertEquals("Costume changed original body alpha $gender/$frame/$costume/$i", alpha, result[i] ushr 24)
+                        val expectedAlpha = if (hair[i] != 0 && alpha in 17..191) 253 else alpha
+                        assertEquals("Costume changed alpha outside the diagnosed head fringe $gender/$frame/$costume/$i", expectedAlpha, result[i] ushr 24)
                     }
                     val eye = AvatarEquipmentLayers.anchors(frame, gender).eye
                     val headOrNeck = y < headEnd || x in eye.x - 14..eye.x + 10 && y in eye.y + 20..eye.y + 45
-                    if (headOrNeck && identity[i] == -1 && alpha > 16 || hands[i] == -1)
+                    if (headOrNeck && identity[i] == -1 && alpha > 16 && hair[i] == 0 || hands[i] == -1)
                         assertEquals("Original face/hair/hand changed $gender/$frame/$costume/$i", source[i], result[i])
-                    if (!bodyGarment && extensions[i] == 0)
+                    if (hair[i] != 0) {
+                        assertEquals(-1, hair[i])
+                        assertTrue("Occlusion must be opaque existing hair above the body", alpha > 16 && y in 14 until 174)
+                        assertEquals("Headwear covered a fabric label", 0, region)
+                    }
+                    if (!bodyGarment && extensions[i] == 0 && hair[i] == 0)
                         assertEquals("Costume invented clothing or skin outside its fixed labels", source[i], result[i])
                     if (bodyGarment && source[i] != result[i]) changedBody++
                 }
@@ -80,7 +87,7 @@ class AvatarCostumeLayersTest {
         assertEquals(13, AvatarCatalogue.slots.size)
         assertEquals(9, AvatarCatalogue.tabs.size)
         for (gender in AvatarGender.entries) {
-            assertEquals(if (gender == AvatarGender.MALE) 43 else 41,
+            assertEquals(if (gender == AvatarGender.MALE) 45 else 43,
                 AvatarCatalogue.slots.sumOf { slot -> slot.variants.indices.count { AvatarArtwork.itemReady(slot.key, it, gender) } })
             for (costume in listOf(1, 4, 5)) assertTrue(AvatarArtwork.itemReady("costume", costume, gender))
             for (pending in listOf(2, 3)) assertFalse(AvatarArtwork.itemReady("costume", pending, gender))
@@ -115,7 +122,7 @@ class AvatarCostumeLayersTest {
             for (costume in listOf(1, 4, 5)) {
                 val clothed = AvatarCostumeLayers.render(source, fabric, coverage, hands, frame, gender, costume)
                 val equipped = AvatarEquipmentLayers.render(clothed, source, fabric, frame, gender,
-                    AvatarStyle(gender = gender, costume = costume, ear = 1, eyewear = 1, wrist = 1, waist = 1, hydration = 1))
+                    AvatarStyle(gender = gender, costume = costume, ear = 1, eyewear = 1, wrist = 1, waist = 1, hydration = 1), hands)
                 for (i in source.indices) {
                     assertEquals("Equipment punched a hole in a clothing layer", clothed[i] ushr 24, equipped[i] ushr 24)
                     if ((source[i] ushr 24) <= 16)

@@ -1,0 +1,8 @@
+
+com.runmoni.app.avatar.RunningKitRendererTest:....
+
+Time: 42.644
+
+OK (4 tests)
+
+

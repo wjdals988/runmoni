@@ -49,7 +49,9 @@ class MiniMiLoadingTest : RunmoniDesignTestBase() {
             compose.onNodeWithContentDescription("미니미 준비 중").assertIsDisplayed()
         }
         assertEquals(-1, drawn.get())
-        noTextOverflow("avatar loading")
+        // This fixture intentionally keeps I/O gated while auditing the loading
+        // label. Waiting for readiness here would deadlock before gate.complete.
+        noTextOverflow("avatar loading", awaitAvatarReady = false)
         capture("avatar-loading-fixture")
         gate.complete(Unit)
         compose.waitUntil(30_000) { drawn.get() == 0 }

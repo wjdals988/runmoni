@@ -1,0 +1,81 @@
+diff --git a/app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt b/app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt
+--- a/app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt
++++ b/app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt
+@@ -12,7 +12,7 @@
+  * face, eyes and skin. No source file, face, pose or body part is regenerated.
+  */
+ object AvatarHeadwearLayers {
+-    const val VERSION = "approved-headwear-v2-fitted-crowns"
++    const val VERSION = "approved-headwear-v3-bounded-brims"
+     enum class Kind { CAP, VISOR, HEADBAND, SANTA, BEAR, GOLDEN }
+ 
+     private const val W = 256
+@@ -186,16 +186,21 @@
+     }
+ 
+     private fun brim(r: Raster,f: Fit,c: IntArray,wide: Boolean) {
+-        val x=f.eyeX;val y=f.bandY;val end=if(wide)89 else 74
+-        // Curved three-quarter top and tapered dark underside project in front.
+-        r.poly(INK,x+22,y-7,x+45,y-10,x+67,y-7,x+end,y,x+end+3,y+5,
+-            x+end-4,y+12,x+65,y+13,x+43,y+8,x+28,y+1)
+-        r.poly(c[0],x+28,y-5,x+46,y-7,x+66,y-4,x+end-2,y+2,x+end,y+5,
+-            x+end-5,y+9,x+65,y+9,x+44,y+5,x+31,y)
+-        r.poly(c[2],x+31,y-5,x+46,y-6,x+65,y-3,x+end-5,y+2,
+-            x+end-6,y+5,x+65,y+6,x+45,y+2)
+-        r.line(c[3],x+47,y-5,x+66,y-2,2)
+-        r.line(c[0],x+65,y+10,x+end-5,y+9,2)
++        val x=f.eyeX;val y=f.bandY;val nominal=if(wide)89 else 74
++        // Close the entire tip before the raster's x247 crop boundary. The
++        // female F1/F5 eye anchors need a shorter three-quarter projection.
++        val end=min(nominal,243-x)
++        // Foreshorten every curve control with the tip, not only its final x.
++        // Fixed x65/x67 controls would otherwise cross the shortened inner tip.
++        fun at(offset: Int)=x+22+(offset-22)*(end-22)/(nominal-22)
++        r.poly(INK,at(22),y-7,at(45),y-10,at(67),y-7,x+end,y,x+end+3,y+5,
++            x+end-4,y+12,at(65),y+13,at(43),y+8,at(28),y+1)
++        r.poly(c[0],at(28),y-5,at(46),y-7,at(66),y-4,x+end-2,y+2,x+end,y+5,
++            x+end-5,y+9,at(65),y+9,at(44),y+5,at(31),y)
++        r.poly(c[2],at(31),y-5,at(46),y-6,at(65),y-3,x+end-5,y+2,
++            x+end-6,y+5,at(65),y+6,at(45),y+2)
++        r.line(c[3],at(47),y-5,at(66),y-2,2)
++        r.line(c[0],at(65),y+10,x+end-5,y+9,2)
+     }
+ 
+     private fun santa(r: Raster,f: Fit,gender: AvatarGender) {
+diff --git a/app/src/test/java/com/runmoni/app/avatar/AvatarHeadwearLayersTest.kt b/app/src/test/java/com/runmoni/app/avatar/AvatarHeadwearLayersTest.kt
+--- a/app/src/test/java/com/runmoni/app/avatar/AvatarHeadwearLayersTest.kt
++++ b/app/src/test/java/com/runmoni/app/avatar/AvatarHeadwearLayersTest.kt
+@@ -87,6 +87,33 @@
+         }
+     }
+ 
++    @Test fun capAndVisorCloseBeforeTheRightCropBoundaryOnEveryApprovedPose() {
++        val sourceHash=digest()
++        for(gender in AvatarGender.entries)for(frame in 0..7) {
++            val original=source(gender,frame);val unchanged=original.clone()
++            val eye=AvatarEquipmentLayers.anchors(frame,gender).eye
++            for(kind in listOf(AvatarHeadwearLayers.Kind.CAP,AvatarHeadwearLayers.Kind.VISOR)) {
++                val result=AvatarHeadwearLayers.render(original,original,frame,gender,kind)
++                val cover=AvatarHeadwearLayers.occlusionMask(original,frame,gender,kind)
++                val extension=AvatarHeadwearLayers.extensionMask(original,frame,gender,kind)
++                for(y in 0 until 384) {
++                    val boundary=y*256+247
++                    assertEquals("Brim touched the right crop boundary $gender/$frame/$kind/$y",0,cover[boundary])
++                    assertEquals("Brim alpha ended at the crop boundary $gender/$frame/$kind/$y",0,extension[boundary])
++                    for(x in 247 until 256)assertEquals("Right margin source changed",original[y*256+x],result[y*256+x])
++                }
++                // Independent original face/ear landmarks remain locked while
++                // shortening a brim. Existing source hair can still be worn over.
++                for(y in eye.y-10..eye.y+28)for(x in eye.x-12..eye.x+66)
++                    assertEquals("Bounded brim changed original face $gender/$frame/$kind",original[y*256+x],result[y*256+x])
++                for(y in eye.y-5..eye.y+23)for(x in eye.x-58..eye.x-28)
++                    assertEquals("Bounded brim changed original ear",original[y*256+x],result[y*256+x])
++                assertArrayEquals("Bounded brim mutated the immutable input",unchanged,original)
++            }
++        }
++        assertEquals(sourceHash,digest())
++    }
++
+     @Test fun wrongDimensionsFailBeforeAnySourceCanBeModified() {
+         for(size in listOf(0,255*384,256*383)) {
+             try {

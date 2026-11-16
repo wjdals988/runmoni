@@ -46,7 +46,7 @@ abstract class RunmoniDesignTestBase {
         }
     }
 
-    protected fun noTextOverflow(context: String) {
+    protected fun noTextOverflow(context: String, awaitAvatarReady: Boolean = true) {
         val matcher = SemanticsMatcher.keyIsDefined(SemanticsProperties.Text) and
             SemanticsMatcher.keyIsDefined(SemanticsActions.GetTextLayoutResult)
         // Readiness precedes the text-layout audit; it is not a startup-speed SLA.
@@ -54,7 +54,7 @@ abstract class RunmoniDesignTestBase {
         // Keep the layout assertions intact and retain the actual wait time.
         val loadingWaitStarted = android.os.SystemClock.uptimeMillis()
         try {
-            compose.waitUntil(120_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
+            if (awaitAvatarReady) compose.waitUntil(120_000) { compose.onAllNodes(hasTestTag("minimi_loading"), useUnmergedTree = true).fetchSemanticsNodes().isEmpty() }
         } catch (failure: Throwable) {
             // Failure-only evidence. Keep the same readiness condition, timeout and exception.
             // Distinguish the fixed preview from a thumbnail, and full from clipped bounds.
@@ -95,7 +95,7 @@ abstract class RunmoniDesignTestBase {
         } finally {
             val target = InstrumentationRegistry.getInstrumentation().targetContext
             File(target.cacheDir, "design-review").apply { mkdirs() }
-                .resolve("minimi-readiness.txt").appendText("$context: waitMillis=${android.os.SystemClock.uptimeMillis() - loadingWaitStarted}; timeoutMillis=120000\n")
+                .resolve("minimi-readiness.txt").appendText("$context: awaitAvatarReady=$awaitAvatarReady; waitMillis=${android.os.SystemClock.uptimeMillis() - loadingWaitStarted}; timeoutMillis=120000\n")
         }
         val nodes = compose.onAllNodes(matcher, useUnmergedTree = true).fetchSemanticsNodes()
         assertTrue("No rendered text in $context", nodes.isNotEmpty())

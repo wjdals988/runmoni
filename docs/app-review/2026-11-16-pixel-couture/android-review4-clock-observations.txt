@@ -1,0 +1,12 @@
+--------- beginning of main
+--------- beginning of system
+I/RunmoniAvatarClock( 3679): run=541664 seen=[] elapsedMillis=10294
+--------- beginning of crash
+I/RunmoniAvatarClock( 4638): run=1070519 frame=0 elapsedMillis=3387
+I/RunmoniAvatarClock( 4638): run=1070519 frame=1 elapsedMillis=5497
+I/RunmoniAvatarClock( 4638): run=1070519 frame=2 elapsedMillis=5589
+I/RunmoniAvatarClock( 4638): run=1070519 frame=4 elapsedMillis=5707
+I/RunmoniAvatarClock( 4638): run=1070519 frame=5 elapsedMillis=5836
+I/RunmoniAvatarClock( 4638): run=1070519 frame=6 elapsedMillis=5934
+I/RunmoniAvatarClock( 4638): run=1070519 frame=7 elapsedMillis=6055
+I/RunmoniAvatarClock( 4638): run=1070519 seen=[0, 1, 2, 4, 5, 6, 7] elapsedMillis=6323

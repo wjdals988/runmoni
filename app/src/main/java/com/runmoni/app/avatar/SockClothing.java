@@ -6,8 +6,10 @@ package com.runmoni.app.avatar;
  */
 public final class SockClothing {
     private SockClothing() { }
-    private static final int[] CREAM = {0x718e89, 0xa6bdb3, 0xcbd9ce, 0xe8eee1, 0xf8faef};
-    private static final int[] CUFF = {0x1d4946, 0x28675c, 0x49957d, 0x83c2a5, 0xc1e4ca};
+    public static final String VERSION = "approved-socks-v2-knit";
+    private static final int[] CREW = {0x526574, 0x8398a3, 0xb7c6c9, 0xdce5e3, 0xf1f5eb};
+    private static final int[] KNEE = {0x172331, 0x263b49, 0x3d5864, 0x64848a, 0xa1bdb7};
+    private static final int[] CUFF = {0x16434b, 0x245d64, 0x3b7f80, 0x70b1a5, 0xb9d8c1};
 
     public static int[] render(int[] source, int[] mask, int variant) {
         if (source.length != mask.length || variant < 0 || variant > 2)
@@ -23,10 +25,12 @@ public final class SockClothing {
             if (selected == 0 || (flags & selected) == 0 || (source[i] >>> 24) == 0) continue;
             int shade = (label >>> 8) & 255;
             boolean cuff = (detail & selected) != 0;
-            // Subtle authored rib columns avoid a flat white block while the
-            // continuous source shade retains the approved pixel highlights.
-            if (!cuff && (detail & 4) != 0) shade = Math.max(0, shade - 8);
-            out[i] = (source[i] & 0xff000000) | ramp(cuff ? CUFF : CREAM, shade);
+            // A graphite knee sock reads as knitted sportswear over the dark
+            // tights, rather than a wide pale wrap. The crew sock stays light.
+            // Both retain the authored moving shin, cuff and rib labels.
+            if (!cuff && (detail & 4) != 0) shade = Math.max(0, shade - 12);
+            if (cuff) shade = Math.max(0, shade - 12);
+            out[i] = (source[i] & 0xff000000) | ramp(cuff ? CUFF : variant == 1 ? CREW : KNEE, shade);
         }
         return out;
     }

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 2,
+  "scopeAcceptedByRoot": true,
+  "version": "0.7.1-dev",
+  "versionCode": 30,
+  "finalLocalBinary": "binary-build3.json",
+  "finalLocalBinarySha256": "26150f58714b9cbd848cc512bf253e5672a452ffce234e47b7e08cb3d8a9a6e2",
+  "proofReferences": {
+    "android-review1": {
+      "file": "android-review1.json",
+      "sha256": "4804fb34508242afe08bd2dcc87064438b92bc9a694803472c05592835bb6c74"
+    },
+    "android-review7": {
+      "file": "android-review7.json",
+      "sha256": "01667f52030f947de0c4f087c53378f92d9f5cc7036a47ce33d9a014a0572d24"
+    },
+    "android-review8": {
+      "file": "android-review8.json",
+      "sha256": "bc836a67bff7e72ac4d416760d11e31716e021e86f7ad424e0b65d20d7e6e604"
+    }
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "share-png-renderer",
+      "methodIds": [
+        "com.runmoni.app.sharing.RunShareCardRendererTest#photoCoverAndEveryThemeKeepOpaqueRatiosWithoutChangingTheBorrowedPhoto",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#coralKeepsReadablePhotoSurfacesAndCanonicalPngAcrossAllRatios",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#coralLeavesApprovedMaleAndFemalePaletteAndBorrowedPixelsIntact",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#approvedMaleAndFemalePixelsRemainVisibleAndUnchangedUnderExtremeStickerControls",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#missingAvatarCannotSilentlyExportAndLongActualValuesStillRender",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#squareKeepsSixtyCodePointsAndACompleteLegibleAvatarWithAllMetadata"
+      ]
+    },
+    {
+      "proof": "android-review7",
+      "group": "avatar-loading",
+      "methodIds": [
+        "com.runmoni.app.ui.MiniMiLoadingTest#delayedReadShowsStatusUntilAnApprovedFrameIsActuallyDrawn",
+        "com.runmoni.app.ui.MiniMiLoadingTest#failedReadCanRetryWithoutCrashingOrShowingOldArtwork",
+        "com.runmoni.app.ui.MiniMiLoadingTest#firstFrameRemainsVisibleWhileTheRestOfTheClipLoads",
+        "com.runmoni.app.ui.MiniMiLoadingTest#cancelledSelectionCannotReplaceTheNewSelectionWithAnError"
+      ]
+    },
+    {
+      "proof": "android-review8",
+      "group": "kit-renderer",
+      "methodIds": [
+        "com.runmoni.app.avatar.RunningKitRendererTest#originalColorsKeepEveryDecodedFrameAndGenderCropUnchanged",
+        "com.runmoni.app.avatar.RunningKitRendererTest#actualAndroidArgbProtectsOtherRegionsLocksAndAlphaInEveryFrame",
+        "com.runmoni.app.avatar.RunningKitRendererTest#sharedDisplayUsesColorsAndCacheStaysBoundedAcrossSelections",
+        "com.runmoni.app.avatar.RunningKitRendererTest#displayPaddingLeavesRawFramesAndEveryBodyPixelUnchanged"
+      ]
+    },
+    {
+      "proof": "android-review8",
+      "group": "bounded-cap-renderer",
+      "methodIds": [
+        "com.runmoni.app.avatar.WardrobeRendererTest#capAndVisorKeepTheirClosedTipsAndOriginalFaceOnActualAndroidBitmaps"
+      ]
+    },
+    {
+      "proof": "android-review8",
+      "group": "avatar-identity-playback",
+      "methodIds": [
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#actualMiniMiComposableDrawsTheApprovedWholeBody",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected",
+        "com.runmoni.app.ui.AvatarPlaybackTest#realClockPlaybackRendersAllEightFrames",
+        "com.runmoni.app.ui.AvatarPlaybackTest#actualClosetPauseAndResumeFreezeAndRestartPixels",
+        "com.runmoni.app.ui.AvatarPlaybackTest#lifecycleStopFreezesLastFrameAndStartResumes",
+        "com.runmoni.app.ui.AvatarPlaybackTest#systemDisabledAnimationsFreezeAndCanResume"
+      ]
+    }
+  ],
+  "excludedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "avatar-identity-playback",
+      "reason": "Original preparation-inclusive six-second clock timeout; partial methods excluded, later new test boundary recorded separately."
+    }
+  ],
+  "distinctPassedMethods": 22,
+  "earlierInputResultsReused": true,
+  "equivalenceReviews": [
+    {
+      "file": "input1-to-input3-share-equivalence.json",
+      "sha256": "5c0b46c24185b49f65dbbeec198874d1e3667e252cf4989e38d29ebcb9778d2c"
+    }
+  ],
+  "restorationExceptions": [],
+  "supplementalRestorationReferences": [],
+  "separateColdObservation": {
+    "file": "android-review5.json",
+    "sha256": "3603c0e141b7f07aedee75ba9a85b45bc18876170b568a6cf4a08d6b79423a2c"
+  },
+  "oldFailuresPreserved": [
+    "android-review1.json",
+    "android-review2.json",
+    "android-review3.json",
+    "android-review4.json",
+    "android-review6.json"
+  ],
+  "scope": "Input3 fresh4+12 from separately complete phases, plus current0.7.1 input1 share6 retained by concrete source equivalence, not one APK22 or previous0.7 reuse. Separate cold duplicate1 is not counted twice.",
+  "userVisualApproval": false,
+  "signedReleaseRuntimeVerified": false,
+  "createdAtUtc": "2026-11-16T09:16:51.410376+00:00"
+}
