@@ -1,0 +1,49 @@
+{
+  "sourceKind": "HOST JVM production pixel code; NOT Android screenshot",
+  "actuallyViewedWithViewImage": true,
+  "rootVisualReviewAccepted": true,
+  "userVisualApproval": false,
+  "proof": {
+    "file": "host-checks-v3.json",
+    "sha256": "e77516819e98801f783724100f8b40e0c84d7cd77554512679dea4913511453d"
+  },
+  "images": [
+    {
+      "file": "host-contact-v3.png",
+      "sha256": "42d8d169ebdcbfebe6e300bcc1c005b4d333591e81bbdcea2887e69c998616a9",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "host-small-light-v3.png",
+      "sha256": "6df14916bf0ef8b97079e380fb59cc6f83444af72d65da11b4e9d0042a574f96",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "host-small-dark-v3.png",
+      "sha256": "98a549416db843e1ee37edc1c7e2e5d0117da8ff5833222d3592049bd94aa729",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "host-cap-v3.png",
+      "sha256": "07cbee54c713ab36e65d61901e14be9b1758374fe398e42d913bdfd8cc8bf67f",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "host-costume1-v3.png",
+      "sha256": "911ea61aaba9f624c80af93f9d50d874b81fdfd6830e4e6e09a7060c11fd01c4",
+      "actuallyViewedWithViewImage": true
+    }
+  ],
+  "findings": [
+    "Cap lower rounded crown and opaque material remove the tall cylinder and internal dark hair-fringe cracks.",
+    "Headwear front contact is visible at 80/112/140px on light/dark backgrounds, with original face/body/ponytail identity.",
+    "Santa has an asymmetric folded crown and tip-connected round pom; bear rounded ears differ from golden pointed ears.",
+    "Eight static cap/Santa poses retain original limbs and face. This does not measure every intermediate animation frame.",
+    "Large hoop-like ear device was replaced by an open upper hook and short front transducer."
+  ],
+  "remainingLimits": [
+    "Bear reads as a brown hood/tracksuit, not fully plush fur; Santa trim is simplified.",
+    "Tiny ear/gear details are subtle at 80px. All combinations/physical phones/actual Android playback and user approval are separate."
+  ],
+  "peerDesignReviewAdditionalP0P1FoundInTheseImages": false
+}

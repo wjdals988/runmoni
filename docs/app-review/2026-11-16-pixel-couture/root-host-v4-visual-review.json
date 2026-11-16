@@ -1,0 +1,31 @@
+{
+  "sourceKind": "HOST JVM pixels, NOT Android screenshot",
+  "rootVisualReviewAccepted": true,
+  "userVisualApproval": false,
+  "proof": {
+    "file": "host-checks-v4.json",
+    "sha256": "45ce5533928ac804449557f2f98cd5ace9206cf804fd075e2446ac416941d57a"
+  },
+  "images": [
+    {
+      "file": "host-cap-v4.png",
+      "sha256": "8859ec3178d6f68338861d88431aeeea51c73b1c8d9a3812f3b739d236c4bbf5",
+      "actuallyViewedWithViewImage": true
+    },
+    {
+      "file": "host-small-light-v4.png",
+      "sha256": "8e9dca8a99790f71fba5acd873d9efcd9a09333e701e3a4d53aa4cdc7ae68636",
+      "actuallyViewedWithViewImage": true
+    }
+  ],
+  "finding": "Female F1/F5 cap tip closes as a tapered/curved shape rather than a vertical crop edge; same face/body/ponytail retained.",
+  "changedPixelsAtX247AcrossAll16Poses": {
+    "CAP": 0,
+    "VISOR": 0
+  },
+  "measurementScope": "Actual unchanged original/output RGBA comparison at x247,y14..173 on both gender rows and all8frames; not every pixel/device/animation timing.",
+  "peerReview": "Independent design reviewer opened cap/visor16pose sheets and small-light sheet; localized P1 clipping accepted as corrected in these static pixels.",
+  "remainingLimits": [
+    "Simplified plush/fur material, tiny gear details at80px; Android runtime, cold preparation, interactive phone and user approval are separate."
+  ]
+}

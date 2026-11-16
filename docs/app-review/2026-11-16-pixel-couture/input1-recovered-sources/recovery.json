@@ -1,0 +1,25 @@
+{
+  "input1FreezeSha256": "4b1c940e466ce8e123b9027287e092d59a94f4eb95d0f19b7e308832508866e7",
+  "allRecoveredBytesMatchInput1FrozenHashes": true,
+  "recoveryTimeNotClaimedAsOriginalCaptureTime": true,
+  "files": [
+    {
+      "source": "app/src/main/java/com/runmoni/app/avatar/RunningKitArtwork.kt",
+      "recoveredFile": "RunningKitArtwork.kt",
+      "sha256": "bc552acaec6e8f75f57741bb447bb461babef43c75dd62db7553c5b3bed97e21",
+      "basis": "Actual committed base blob, identical SHA256 to input1 freeze"
+    },
+    {
+      "source": "app/src/main/java/com/runmoni/app/ui/MiniMi.kt",
+      "recoveredFile": "MiniMi.kt",
+      "sha256": "011d1c8b30cd3bf785a55880d7925a8f30b310382dadb1e696c6e3875f3a2fe5",
+      "basis": "Actual committed base blob, identical SHA256 to input1 freeze"
+    },
+    {
+      "source": "app/src/main/java/com/runmoni/app/avatar/ApprovedAvatarRenderer.kt",
+      "recoveredFile": "ApprovedAvatarRenderer.kt",
+      "sha256": "2c223e5343addc4c46514903282b0bbd66b83798bae6ff46b3f07f942383a7ea",
+      "basis": "Reconstructed only the recorded former two-line hand-mask call; exact full-file SHA256 independently matches input1 freeze. Not a capture made before build."
+    }
+  ]
+}

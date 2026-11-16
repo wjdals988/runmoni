@@ -1,0 +1,8 @@
+
+com.runmoni.app.avatar.WardrobeRendererTest:.
+
+Time: 28.672
+
+OK (1 test)
+
+

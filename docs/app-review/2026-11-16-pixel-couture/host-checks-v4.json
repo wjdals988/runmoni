@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "headwearCases": 96,
+  "costumeCases": 48,
+  "singleEquipmentCases": 288,
+  "frontOcclusionPixels": 449831,
+  "sourceInputsUnchanged": true,
+  "originalCostumePoseCount": 48,
+  "androidExecution": false,
+  "userVisualApproval": false,
+  "round": "v4",
+  "sourceKind": "HOST JVM production pixel code snapshot; NOT Android screenshot",
+  "sourceHashes": {
+    "app/src/main/java/com/runmoni/app/domain/Models.kt": "83d2ca439f77de3fff297d29d2c76abee7703c7e242d9d25e123495dd6298f32",
+    "app/src/main/java/com/runmoni/app/domain/RunningKitColors.kt": "00f30f04e328120320e7997bc4ac03c87f2144cc05668c6651abf14427e858cb",
+    "app/src/main/java/com/runmoni/app/domain/AvatarCatalogue.kt": "1708aea468803c17f7372de6da42ce9c4566e244d131b58de7ac10fe6b2f1230",
+    "app/src/main/java/com/runmoni/app/avatar/GarmentPalette.java": "efe7c2a80794591f43761682474ac5e288af2614fae2267edd703df382101dcf",
+    "app/src/main/java/com/runmoni/app/avatar/WardrobeClothing.java": "40dd03b7d739a54d3b76f92c179e1f8a9185d8adc59eb0aa66484e62f4d3c702",
+    "app/src/main/java/com/runmoni/app/avatar/SockClothing.java": "65e63132cd3b3dd03105e5799dc82fab070b6727ee7c62d5f07fbb1bd808c82d",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarEquipmentLayers.kt": "333341ff0055e8f081ddacf121489bc4925a251b6298a8cc09499311d5b5608e",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarCostumeLayers.kt": "2fbb63ca4de6d3eaa5c05baab0d43b2c2e5021811c1c965e2ff54d41572361c9",
+    "app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt": "f22b131bad5f8775ac87402e0323985dfd1d5839bac719121cbd356d88e1990e",
+    "work/pixel-couture/PreviewPixelCouture.java": "e9eb58502a99b173268d1cf3e4320610ec46f9539398fd1e9e623a0d9db5b70e",
+    "work/pixel-couture/run-host.py": "16e57ee658adce4ae2db0f6c40b7cd01471a7ef22a61b4dec601520facf6c11e"
+  },
+  "workingSourcesStillMatch": true,
+  "imageHashes": {
+    "host-headwear-v4.png": "d4acc99efbe0cf8aec56a007ef772ecc7bbb5b84cf86e143f408ef384a043d21",
+    "host-costume1-v4.png": "911ea61aaba9f624c80af93f9d50d874b81fdfd6830e4e6e09a7060c11fd01c4",
+    "host-contact-v4.png": "7bc63e43aa77336f64d8665946b853dcced5cbeedf07d9c498b02862627bdf67",
+    "host-visor-v4.png": "4c9b5960e80c99f61cdb01f29260b6f79593482f5ee19b5e6fcef3de1b8ad07f",
+    "host-costume5-v4.png": "0ac61d19667a16dee3b2d27cb58da39c8fafa5a123ff8823325da4221c57bc9c",
+    "host-bear-v4.png": "ee4ea5c45eac81d33403c161701d8ba4467e1f96deaa2936ec929801d5ee6e85",
+    "host-small-dark-v4.png": "6c8eae097b8b8b8af71ffb23fadcef075ff609c2441f1069211d60640a536a26",
+    "host-small-light-v4.png": "8e9dca8a99790f71fba5acd873d9efcd9a09333e701e3a4d53aa4cdc7ae68636",
+    "host-costume4-v4.png": "b0e30ceb2850381cf09b825efebb019222c1967fa40ed732881abc32d03edc01",
+    "host-headband-v4.png": "8921969109ca06811f676b4ef4186cf065cd577f5c2a940faee519eafdfe2c6b",
+    "host-golden-v4.png": "589566760b442c964d01abeb49493ea27769f8bf70dab8b9a250eae356791e72",
+    "host-santa-v4.png": "5b6bcbeae4dab0291a7e4b17b34a0f723a597b48ba4f23043fc6c6a6f2705f73",
+    "host-cap-v4.png": "8859ec3178d6f68338861d88431aeeea51c73b1c8d9a3812f3b739d236c4bbf5",
+    "host-gear-v4.png": "f8eff4382d018cd72690cd3d8c868ba6002501e4da3c6bf0099f3ef9c631bee5"
+  }
+}

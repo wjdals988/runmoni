@@ -3,8 +3,6 @@ package com.runmoni.app.avatar
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import org.json.JSONObject
 import java.security.MessageDigest
 
@@ -15,8 +13,6 @@ object RunningKitArtwork {
     private const val SHEET_WIDTH = 2048
     private const val SHEET_HEIGHT = 768
     private const val CELL_PIXELS = ApprovedAvatarRenderer.WIDTH * ApprovedAvatarRenderer.HEIGHT
-    private val loadedGeneration = MutableStateFlow(0)
-    val generation: StateFlow<Int> = loadedGeneration
     private var frames: Array<IntArray>? = null
 
     /** Call on a worker. A failed read is retryable and never replaces approved artwork. */
@@ -76,7 +72,6 @@ object RunningKitArtwork {
             }
         }
         frames = result
-        loadedGeneration.value = 1
         return result
     }
 }

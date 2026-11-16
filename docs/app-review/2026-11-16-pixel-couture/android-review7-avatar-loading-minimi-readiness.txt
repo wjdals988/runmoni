@@ -1,0 +1,2 @@
+avatar loading: awaitAvatarReady=false; waitMillis=28; timeoutMillis=120000
+avatar retry: awaitAvatarReady=true; waitMillis=15; timeoutMillis=120000

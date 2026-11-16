@@ -1,0 +1,96 @@
+{
+  "rootReviewed": true,
+  "scopeRetentionApproved": true,
+  "reviewNotes": {
+    "file": "INPUT1_TO_INPUT3_SHARE_SCOPE_REVIEW.md",
+    "sha256": "bb1866e39496fb925d19ea08920d19eff7ec9b850f18df8f48801ac7d8af68c7"
+  },
+  "fromBinary": {
+    "file": "binary-build1.json",
+    "sha256": "6a5f0be539f915290a21a7ebc992abff3601ebc5b6abb224a32189402a9ee13e"
+  },
+  "toBinary": {
+    "file": "binary-build3.json",
+    "sha256": "26150f58714b9cbd848cc512bf253e5672a452ffce234e47b7e08cb3d8a9a6e2"
+  },
+  "exactSourceMapDelta": {
+    "productSources": {
+      "app/src/main/java/com/runmoni/app/avatar/ApprovedAvatarRenderer.kt": {
+        "before": "2c223e5343addc4c46514903282b0bbd66b83798bae6ff46b3f07f942383a7ea",
+        "after": "079d69297199332033957b388fc2b3dd069e3e8a2f6ff1c9c469695e1b0070be"
+      },
+      "app/src/main/java/com/runmoni/app/avatar/AvatarHeadwearLayers.kt": {
+        "before": "4449160d6e13d1fd65af874afe07984f4eeac155f6b2f44377e85c2b436c2091",
+        "after": "f22b131bad5f8775ac87402e0323985dfd1d5839bac719121cbd356d88e1990e"
+      },
+      "app/src/main/java/com/runmoni/app/avatar/RunningKitArtwork.kt": {
+        "before": "bc552acaec6e8f75f57741bb447bb461babef43c75dd62db7553c5b3bed97e21",
+        "after": "b9ebfad37c86e09fb1647d7272763713ede93bf9fb6b563151b848bf12d696b9"
+      },
+      "app/src/main/java/com/runmoni/app/ui/MiniMi.kt": {
+        "before": "011d1c8b30cd3bf785a55880d7925a8f30b310382dadb1e696c6e3875f3a2fe5",
+        "after": "b594b9ad01dc0f8543af97767a4c8c3e662daf81150dc9e6f34bf4a2b65191a2"
+      }
+    },
+    "testSources": {
+      "app/src/androidTest/java/com/runmoni/app/avatar/WardrobeRendererTest.kt": {
+        "before": "98347f7a422ecbb8e7d25de65c52d342c25026f5c1dd36a1f2c8682a2020abcc",
+        "after": "3f40ce96b5e696af55da787ea24a2459e3c5cba63b4f6fb44502c49dc7c2035b"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/AvatarPlaybackTest.kt": {
+        "before": "663e43abb001d0abae34c21dd4d196bc84a354295687dd8a2d73b7635efeb901",
+        "after": "5a860418558531d2c7acc7a6bad0262601510ada4c2fd5e300704b0d056e93c0"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/MiniMiLoadingTest.kt": {
+        "before": "6b92c6dbdd6aa0c684db95bb15599cead062dff89cdd1aa5f647c942538eb853",
+        "after": "561ebc7990fd863d28728e81d3b0439a82dcee655205f9ad71576ecc25a25fbd"
+      },
+      "app/src/androidTest/java/com/runmoni/app/ui/RunmoniDesignTest.kt": {
+        "before": "7fba6cd34a9b64462753b9fe1dff03eb521b112ebd3a95fec93c81f7f3b0847a",
+        "after": "081d0914db64c938a89d1341f4f55efb8e7ecc08a91eb411c2e7ac25ed16ec95"
+      },
+      "app/src/test/java/com/runmoni/app/avatar/AvatarHeadwearLayersTest.kt": {
+        "before": "e6d712140d4d06061de6c49f5c576259dfb038e23abae9c33d56295651903012",
+        "after": "d5d2f5c82524c2de32bf5e08b10919833a8a2ae7db6c079a43dc79909d49ec56"
+      }
+    },
+    "resources": {},
+    "rendererAssets": {},
+    "approvedSourceCopies": {},
+    "configurationSources": {}
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review1",
+      "group": "share-png-renderer"
+    }
+  ],
+  "proofKeys": [
+    "android-review1"
+  ],
+  "unaffectedRetainedGroupRationale": [
+    {
+      "proof": "android-review1",
+      "group": "share-png-renderer",
+      "reason": "Actual direct Bitmap share6 style has headwear/accessory/costume/waist/hydration0; changed head bounds are unused, hand-load branch cannot draw body gear, Compose/generation/readiness paths are not consumed. Exact maps and unchanged compositor/test reviewed in notes."
+    }
+  ],
+  "affectedGroupsRerun": [
+    {
+      "proof": "android-review7",
+      "group": "avatar-loading"
+    },
+    {
+      "proof": "android-review8",
+      "group": "kit-renderer"
+    },
+    {
+      "proof": "android-review8",
+      "group": "bounded-cap-renderer"
+    },
+    {
+      "proof": "android-review8",
+      "group": "avatar-identity-playback"
+    }
+  ]
+}

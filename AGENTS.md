@@ -1,3 +1,11 @@
+# 2026-11-16 미니미 착용 도트 후보0.7.1
+
+최종 input3 새Android4+12와실제Main9원본/선택·저장값/Root시각검토·원래데이터복원/AVD3 PID17380 정확종료를확인했다. 전체22는이번input1 share6 소스동등성보존을포함하며같은APK22/이전0.7재사용이아니다. 새서명/배포는후속단계다.
+
+Pixel Art With Code·frontend-design으로 승인 원본의 얼굴·체형·8프레임을 보존하면서 cap/visor 앞가림·접점, 원근장비·세트/양말 소재를 개선했다. [설계](docs/design/avatars/PIXEL_COUTURE_20261116.md)·[검토](docs/app-review/2026-11-16-pixel-couture/README.md). 원본/58ID/13슬롯/9탭/0P·지갑·보유·키·Rules는 유지한다. 새몸통·Aseprite/생성모델 제작·사용자 승인을 주장하지 않는다.
+
+input3 새JVM223/lint오류0·경고66, 실제cold 재생1은 준비18.086초 뒤 별도6초창에서1.357초 안에8프레임을 관측했다. API29 TCG의 실제 시간이며 휴대폰 성능/FPS/SLA를 의미하지 않는다. input1~2의 스레드 예외·준비포함6초실패, v2시각거절/v3챙끝잘림과intentional-loading검사 상호대기는 보존한다. 새 결과·이전 자료를 같은APK 성공으로 합치지 않는다. 새 서명/게시 검증 전에는 아래0.7.0 공개출처가 유효하다. 기존 PR/main·같은보관키 개발APK·대시보드/피드 승인과순차heavy/오프라인작업자1·클라우드전용AVD·정확복원 제약을 이어간다.
+
 # 0.7.0-dev 앱·위젯·연결 유지 공개 — 2026-11-16 한국 시간
 
 <!-- verified-companion-release-0.7.0-v1 -->

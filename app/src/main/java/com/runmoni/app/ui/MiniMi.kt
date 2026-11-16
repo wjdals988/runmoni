@@ -26,7 +26,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import com.runmoni.app.avatar.ApprovedAvatarRenderer
-import com.runmoni.app.avatar.RunningKitArtwork
 import com.runmoni.app.domain.AvatarStyle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -52,13 +51,15 @@ internal fun MiniMi(
     val context = LocalContext.current.applicationContext
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     var attempt by remember(context, avatar, running) { mutableIntStateOf(0) }
-    val artworkGeneration by RunningKitArtwork.generation.collectAsState()
     // Asset decoding/cropping must not block the first home screen on the UI thread.
     // Publish the genuine first frame, then the complete clip. A changed selection
     // gets its own state, so an old outfit is never presented as a new one.
     // Keep loading state AND its subcomposition in the same request lifetime.
     // Replacing only the State delegate can leave a new loading child unplaced.
-    key(context, avatar, running, attempt, frameLoader, artworkGeneration) {
+    // Immutable mask loading does not invalidate this request. Its result is
+    // published below after returning to the UI context; worker I/O never emits
+    // a second global generation that cancels/restarts its own composition.
+    key(context, avatar, running, attempt, frameLoader) {
         var frame by remember { mutableIntStateOf(0) }
         val prepared by produceState(initialValue = MiniMiFrames()) {
             try {

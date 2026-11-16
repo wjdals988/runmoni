@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.MiniMiLoadingTest:....
+
+Time: 26.619
+
+OK (4 tests)
+
+

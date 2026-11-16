@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AvatarPlaybackTest:.
+
+Time: 27.947
+
+OK (1 test)
+
+

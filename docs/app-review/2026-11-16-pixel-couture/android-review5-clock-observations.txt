@@ -1,0 +1,14 @@
+--------- beginning of main
+--------- beginning of system
+11-16 09:01:25.400  3713  3713 I RunmoniAvatarClock: run=383073 phase=preparing frame=0 phaseElapsedMillis=15443 elapsedMillis=15443
+11-16 09:01:27.999  3713  3713 I RunmoniAvatarClock: run=383073 phase=preparing frame=1 phaseElapsedMillis=18042 elapsedMillis=18042
+11-16 09:01:28.044  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback event=window-start preparationMillis=18086 windowMillis=6000
+11-16 09:01:28.144  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=3 phaseElapsedMillis=85 elapsedMillis=18171
+11-16 09:01:28.321  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=5 phaseElapsedMillis=278 elapsedMillis=18364
+11-16 09:01:28.477  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=7 phaseElapsedMillis=429 elapsedMillis=18515
+11-16 09:01:28.609  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=0 phaseElapsedMillis=567 elapsedMillis=18653
+11-16 09:01:28.774  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=2 phaseElapsedMillis=729 elapsedMillis=18815
+11-16 09:01:28.918  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=4 phaseElapsedMillis=876 elapsedMillis=18962
+11-16 09:01:29.145  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=6 phaseElapsedMillis=1102 elapsedMillis=19188
+11-16 09:01:29.399  3713  3713 I RunmoniAvatarClock: run=383073 phase=playback frame=1 phaseElapsedMillis=1357 elapsedMillis=19443
+11-16 09:01:29.438  3713  3733 I RunmoniAvatarClock: run=383073 phase=playback seen=[0, 1, 2, 3, 4, 5, 6, 7] preparationMillis=18086 playbackMillis=1384 elapsedMillis=19470
