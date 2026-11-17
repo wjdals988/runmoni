@@ -267,19 +267,19 @@ service cloud.firestore {
       let fields = ['hair', 'headwear', 'face', 'top', 'bottom', 'costume', 'socks', 'shoes', 'ear', 'eyewear', 'wrist', 'waist', 'hydration', 'gender', 'colors'];
       return d is map && d.keys().hasAll(fields) && d.keys().hasOnly(fields)
         && d.gender in ['male', 'female']
-        && d.hair is int && d.hair >= 0 && d.hair <= 3
-        && d.headwear is int && d.headwear >= 0 && d.headwear <= 3
-        && d.face is int && d.face >= 0 && d.face <= 3
-        && d.top is int && d.top >= 0 && d.top <= 6
-        && d.bottom is int && d.bottom >= 0 && d.bottom <= 5
-        && d.costume is int && d.costume >= 0 && d.costume <= 5
-        && d.socks is int && d.socks >= 0 && d.socks <= 4
-        && d.shoes is int && d.shoes >= 0 && d.shoes <= 4
-        && d.ear is int && d.ear >= 0 && d.ear <= 3
-        && d.eyewear is int && d.eyewear >= 0 && d.eyewear <= 3
-        && d.wrist is int && d.wrist >= 0 && d.wrist <= 3
-        && d.waist is int && d.waist >= 0 && d.waist <= 3
-        && d.hydration is int && d.hydration >= 0 && d.hydration <= 3
+        && d.hair is int && d.hair >= 0 && d.hair <= 6
+        && d.headwear is int && d.headwear >= 0 && d.headwear <= 6
+        && d.face is int && d.face >= 0 && d.face <= 6
+        && d.top is int && d.top >= 0 && d.top <= 9
+        && d.bottom is int && d.bottom >= 0 && d.bottom <= 8
+        && d.costume is int && d.costume >= 0 && d.costume <= 8
+        && d.socks is int && d.socks >= 0 && d.socks <= 7
+        && d.shoes is int && d.shoes >= 0 && d.shoes <= 7
+        && d.ear is int && d.ear >= 0 && d.ear <= 6
+        && d.eyewear is int && d.eyewear >= 0 && d.eyewear <= 6
+        && d.wrist is int && d.wrist >= 0 && d.wrist <= 6
+        && d.waist is int && d.waist >= 0 && d.waist <= 6
+        && d.hydration is int && d.hydration >= 0 && d.hydration <= 6
         && d.colors is map && d.colors.keys().hasAll(['top', 'bottom', 'shoes'])
         && d.colors.keys().hasOnly(['top', 'bottom', 'shoes'])
         && d.colors.top is int && d.colors.top >= 0 && d.colors.top <= 5
