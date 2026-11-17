@@ -269,11 +269,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
     val scroll = rememberScrollState()
     val latestTransform by rememberUpdatedState(onTransform)
     var photoPositionExpanded by rememberSaveable { mutableStateOf(false) }
-    val frameworkFitted = legacyEditablePageWindowPolicy()
-    // API29 classic fitting owns both bars and IME. Compat may still infer raw IME
-    // from root visibleInsets after consumption, so adding it would count it twice.
-    val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
-        else WindowInsets.safeDrawing.union(WindowInsets.ime)
+    // API29 adds only residual occlusion after classic fitting, never raw IME twice.
+    val contentInsets = legacyEditablePageWindowPolicy()
+        ?: WindowInsets.safeDrawing.union(WindowInsets.ime)
     Surface(Modifier.fillMaxSize().testTag("run_share_page"), color = RunmoniColors.Cream) {
         BoxWithConstraints(Modifier.fillMaxSize().windowInsetsPadding(contentInsets)
             .testTag("run_share_safe_content")) {

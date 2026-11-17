@@ -1,0 +1,40 @@
+{
+  "ownedPid": 54166,
+  "avd": "Runmoni_Cloud_29",
+  "graphics": "swangle software GLES",
+  "acceleration": "TCG",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "2aace5903bc8115bef17803c2fb2d3de1e16b07d56f10a2b1d9ce3e965846da3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "android-review7.json": {
+      "file": "android-review7.json",
+      "sha256": "47192d0782c64a1fa6008743fd910ede17325bcba230f986736db858f928d197",
+      "parentPassed": true
+    },
+    "android-review8.json": {
+      "file": "android-review8.json",
+      "sha256": "8f44b42507b60657a26522e47e3cf97b7a697d1f277bf849685b23d85c716702",
+      "parentPassed": false
+    },
+    "android-review9.json": {
+      "file": "android-review9.json",
+      "sha256": "7e8c68ca62fbb71b84e388dfa238fe12ac63b877679d5878e159f4881bd1bf85",
+      "parentPassed": true
+    },
+    "native2.json": {
+      "file": "native2.json",
+      "sha256": "9eaf9015b15f7ed63d09f673960f24c1372c8685621457acc44e2297d4e328f4",
+      "parentPassed": false
+    },
+    "native3.json": {
+      "file": "native3.json",
+      "sha256": "36b61df1ef2485c33d01890d494d3f07713df71194f184e1528f0c0792bdb454",
+      "parentPassed": false
+    }
+  },
+  "fullOsRestorationClaimed": false,
+  "completedAtUtc": "2026-11-17T23:32:13.553944+00:00"
+}

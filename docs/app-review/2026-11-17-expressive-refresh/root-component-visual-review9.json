@@ -1,0 +1,47 @@
+{
+  "binaryReference": "binary-build9.json",
+  "binaryReferenceSha256": "000b6f323ec4cc1911a90addafc60b6cb57643882457e87238d03b0883607766",
+  "recordedAtUtc": "2026-11-17T23:01:35.731818+00:00",
+  "reviewer": "Parent Root; actual primary individual views and verdict delivered to single execution driver",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "images": [
+    {
+      "file": "android-review8-environment-score-320-font2-light-fixture.png",
+      "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "sourceGroup": "environment-score",
+      "freshExecutionProof": "android-review8.json",
+      "sourceKind": "Actual Android ComponentActivity synthetic35C forecast UI fixture at320dp/font2, not MainActivity or live weather",
+      "source9FreshExportByteIdenticalToEarlierInput8": true,
+      "visualVerdict": "Root saw readable25/100 score, red band and marker, indoor recommendation, headline/advice, criteria and refresh with contrast and no overlapping controls. Korean text wraps heavily at font2, so ideal extreme-size typography is not claimed. Below-viewport content remains scroll content. No user data visible.",
+      "acceptedAsInternalCandidate": true
+    },
+    {
+      "file": "android-review8-environment-score-320-font2-dark-fixture.png",
+      "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "sourceGroup": "environment-score",
+      "freshExecutionProof": "android-review8.json",
+      "sourceKind": "Actual Android ComponentActivity synthetic35C forecast UI fixture at320dp/font2, not MainActivity or live weather",
+      "source9FreshExportByteIdenticalToEarlierInput8": true,
+      "visualVerdict": "Root saw readable25/100 score, red band and marker, indoor recommendation, headline/advice, criteria and refresh with contrast and no overlapping controls. Korean text wraps heavily at font2, so ideal extreme-size typography is not claimed. Below-viewport content remains scroll content. No user data visible.",
+      "acceptedAsInternalCandidate": true
+    },
+    {
+      "file": "android-review8-widget-night-idle-font2-native-fixture.png",
+      "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "recordedAtUtc": "2026-11-17T23:03:09.868483+00:00",
+      "sourceGroup": "widget-night",
+      "freshExecutionProof": "android-review8.json",
+      "sourceKind": "Actual Android RemoteViews apply/crop fixture at OS night/font2, not Launcher/Main/device/live controls",
+      "source9FreshExportByteIdenticalToEarlierInput8": true,
+      "visualVerdict": "Root saw legible running glyph/brand, ready status and full-width open action with centred content and no text/button clipping or overlap. Black area outside the card is fixture surface. No private data visible.",
+      "acceptedAsInternalCandidate": true
+    }
+  ]
+}

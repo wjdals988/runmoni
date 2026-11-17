@@ -1,0 +1,34 @@
+
+com.runmoni.app.ui.ApprovedAvatarRenderingTest:...
+com.runmoni.app.ui.AvatarPlaybackTest:
+Error in actualClosetPauseAndResumeFreezeAndRestartPixels(com.runmoni.app.ui.AvatarPlaybackTest):
+java.lang.AssertionError: Stopped animation changed pixels expected:<875259981> but was:<688332127>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at com.runmoni.app.ui.AvatarPlaybackTest.assertFrozen(AvatarPlaybackTest.kt:81)
+	at com.runmoni.app.ui.AvatarPlaybackTest.actualClosetPauseAndResumeFreezeAndRestartPixels$lambda$14(AvatarPlaybackTest.kt:137)
+	at com.runmoni.app.ui.AvatarPlaybackTest.$r8$lambda$V66q3nVBRy4C7l6LooFVirKB4Hc(Unknown Source:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest.withAnimators(AvatarPlaybackTest.kt:51)
+	at com.runmoni.app.ui.AvatarPlaybackTest.actualClosetPauseAndResumeFreezeAndRestartPixels(AvatarPlaybackTest.kt:132)
+...
+
+Time: 106.785
+There was 1 failure:
+1) actualClosetPauseAndResumeFreezeAndRestartPixels(com.runmoni.app.ui.AvatarPlaybackTest)
+java.lang.AssertionError: Stopped animation changed pixels expected:<875259981> but was:<688332127>
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at com.runmoni.app.ui.AvatarPlaybackTest.assertFrozen(AvatarPlaybackTest.kt:81)
+	at com.runmoni.app.ui.AvatarPlaybackTest.actualClosetPauseAndResumeFreezeAndRestartPixels$lambda$14(AvatarPlaybackTest.kt:137)
+	at com.runmoni.app.ui.AvatarPlaybackTest.$r8$lambda$V66q3nVBRy4C7l6LooFVirKB4Hc(Unknown Source:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest$$ExternalSyntheticLambda6.invoke(D8$$SyntheticClass:0)
+	at com.runmoni.app.ui.AvatarPlaybackTest.withAnimators(AvatarPlaybackTest.kt:51)
+	at com.runmoni.app.ui.AvatarPlaybackTest.actualClosetPauseAndResumeFreezeAndRestartPixels(AvatarPlaybackTest.kt:132)
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

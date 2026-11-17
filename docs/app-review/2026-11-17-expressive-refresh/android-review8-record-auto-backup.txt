@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunRecordScreenUiTest:.....
+
+Time: 81.399
+
+OK (5 tests)
+
+

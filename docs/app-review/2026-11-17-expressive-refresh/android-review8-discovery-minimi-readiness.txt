@@ -1,0 +1,9 @@
+map-first discovery 320 / 1.0: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+map-first discovery 320 / 1.5: awaitAvatarReady=true; waitMillis=19; timeoutMillis=120000
+map-first discovery 320 / 2.0: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+map-first discovery 360 / 1.0: awaitAvatarReady=true; waitMillis=15; timeoutMillis=120000
+map-first discovery 360 / 1.5: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+map-first discovery 360 / 2.0: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+map-first discovery 411 / 1.0: awaitAvatarReady=true; waitMillis=15; timeoutMillis=120000
+map-first discovery 411 / 1.5: awaitAvatarReady=true; waitMillis=12; timeoutMillis=120000
+map-first discovery 411 / 2.0: awaitAvatarReady=true; waitMillis=5; timeoutMillis=120000
