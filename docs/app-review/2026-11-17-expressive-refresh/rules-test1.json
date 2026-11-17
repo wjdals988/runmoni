@@ -1,0 +1,21 @@
+{
+  "project": "demo-runmoni",
+  "remoteFirebaseModifiedByAgent": false,
+  "exitCode": 0,
+  "tests": 189,
+  "pass": 189,
+  "fail": 0,
+  "skipped": 0,
+  "rawLog": "rules-test1.txt",
+  "rawSha256": "42bd834cea316cfbe2a88e9ba5ac37f039d64e774b5ca98aa68188eb122b50d1",
+  "sourceHashes": {
+    "firebase/firestore.rules": "f0ef1d66fc117e9257b7b095057341adb732520ffbff79cc6c2efa7c241b3828",
+    "firebase/firestore.indexes.json": "56ca284f22e3906cd44db0508fef0e053f647456b716c1031c9a5991a6b236e8",
+    "firebase/tests/community.rules.test.mjs": "936ce248860b0aca0e1494341fb161ed970a8783f38c7513217b1ed70f705774",
+    "firebase/tests/firestore.rules.test.mjs": "3800375b7612599dd752260c3c565c59f912edfa52201a8861496f5d4113ffab",
+    "firebase/tests/nickname.rules.test.mjs": "ab54e0fa43638dd36079b09fd02afe12f5afb571be16325639fc439e4f03f640",
+    "firebase/tests/presence.rules.test.mjs": "8c19f780653844ac1a839207b70449a2e73d55720a76544fe56d44406f497b2c"
+  },
+  "sourceVerifiedAtTestStartAndAfterTest": true,
+  "emulatorShutdownReported": true
+}
