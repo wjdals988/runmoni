@@ -34,8 +34,10 @@ import org.junit.Test
 import java.io.File
 
 /** Offline visual/accessibility fixtures. Never claim real GPS or Firebase verification. */
-abstract class RunmoniDesignTestBase {
-    @get:Rule val compose = OfflineMapComposeRule()
+abstract class RunmoniDesignTestBase(
+    fixtureRule: OfflineMapComposeRule = OfflineMapComposeRule(),
+) {
+    @get:Rule val compose = fixtureRule
     protected data class Viewport(val width: Int = 360, val scale: Float = 1f)
 
     @Composable protected fun ViewportBox(viewport: Viewport, content: @Composable () -> Unit) {

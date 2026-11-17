@@ -1,3 +1,7 @@
+# 2026-11-18 0.9 후보9 테스트 문맥/스크롤 적용
+
+Root가 소유 AVD4 종료 후 독립 v2 제안의 해시 가드로 테스트4경로만 적용했다. 공통 fixtureRule 기본값 OfflineMapComposeRule()을 그대로 두고 색상 UI4/Native1에만 Standard 문맥을 주입했다. 검증된16회 제한 ScrollBy/프레임 진행을 공통 테스트 helper로 공유하며 기존 색상 assertion50·확장 assertion23, 모든30/20/10초 및 기본120초 대기와 실제 픽셀/Ripple을 유지했다. 제품·에셋·리소스·설정은 바꾸지 않았다. 후보9 실제 빌드/Android 검증은 후속 단계다. [독립 검토](docs/app-review/2026-11-17-expressive-refresh/COLORS_FIXTURE_PEER_REVIEW.md).
+
 # 2026-11-18 0.9 후보 검사 실행기 보완 중
 
 입력8 새 JVM266/lint오류0·경고67, 실제 Android 전포즈 이미지10·신규확장4와 여러 UI 묶음을 확인했다. 전체95 parent는 옷장 색상4개 묶음 중 로딩30초1실패로false이며, 같은APK 독립 재실행에서는 다른 색상 검사의 SnapshotStateObserver 작업스레드286/Main2 오류가 발생했다. 두 실패 그룹의 부분통과를 모두 제외하고 원래 데이터/계정·테마·소유 환경 복원 및 AVD4 PID42972 정확 종료를 확인했다. 테스트만 별도 Standard 문맥/제한 ScrollBy로 보완할 후보9를 준비한다. 실제 앱 코드/원화의 수정 완료나 원인 전체 해결을 주장하지 않는다. [실제 기록](docs/app-review/2026-11-17-expressive-refresh/input8-final-diagnostic-review.json).
