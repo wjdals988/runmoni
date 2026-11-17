@@ -35,7 +35,7 @@ private data class KitColorOption(val id: Int, val label: String, val swatch: Co
 
 // These are display samples of the fabric ramp, independent of inventory IDs.
 private val kitColorOptions = listOf(
-    KitColorOption(0, "기본색", RunmoniColors.Cream),
+    KitColorOption(0, "기본색", Color(0xFFF7F9FA)),
     KitColorOption(1, "민트", Color(0xFF21A3A8)),
     KitColorOption(2, "코랄", Color(0xFFF36870)),
     KitColorOption(3, "블루", Color(0xFF3487EC)),
@@ -46,8 +46,10 @@ private val kitColorOptions = listOf(
 private fun checkColor(swatch: Color): Color {
     val lightness = swatch.luminance()
     val whiteContrast = 1.05f / (lightness + .05f)
-    val inkContrast = (lightness + .05f) / (RunmoniColors.Navy.luminance() + .05f)
-    return if (whiteContrast >= inkContrast) Color.White else RunmoniColors.Navy
+    // This contrast is against a fixed garment swatch, not the page theme.
+    val ink = Color(0xFF24343D)
+    val inkContrast = (lightness + .05f) / (ink.luminance() + .05f)
+    return if (whiteContrast >= inkContrast) Color.White else ink
 }
 
 /** A fabric choice changes the selected garment; it never changes the inventory item. */

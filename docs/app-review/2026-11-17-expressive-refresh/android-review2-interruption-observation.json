@@ -1,0 +1,21 @@
+{
+  "observedAtUtc": "2026-11-17T20:11:54.770034+00:00",
+  "originalAttempt": {
+    "file": "android-review2.json",
+    "sha256": "dd1b5aaabe957c68fa388ed0e300f078b3605952de0cbe75556edb700ac9ff6d"
+  },
+  "originalAttemptCompleted": false,
+  "driverExitCodeKnown": false,
+  "causeEstablished": false,
+  "appFailureClaimed": false,
+  "appSuccessClaimed": false,
+  "wholeInterruptedAttemptResultsAccepted": false,
+  "actualAcceptedProductMethodsFromInterruptedAttempt": 0,
+  "originalDriverAbsentAtObservation": true,
+  "ownedEmulatorSurvivedWithMatchedStartTicks": true,
+  "recoveryReference": "android-review2-recovery1.json",
+  "partialRawLogHashes": {
+    "android-review2-atelier-materials.txt": "2754689e596fcb5dad1666559d027079daa107a731091fc48702b679952381ae",
+    "android-review2-backup-room.txt": "92d03acff1ccead49014d97d340d2c3b99a145f2d45b028c694956b024b2d91f"
+  }
+}

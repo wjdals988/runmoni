@@ -1,0 +1,9 @@
+{
+  "input": 3,
+  "buildStarted": false,
+  "runtimeStarted": false,
+  "status": "unused-source-snapshot",
+  "reason": "An owner failure-summary assertion expected the earlier partial2 rather than final4 failures; it stopped before source edits, then a separate freeze command recorded unchanged sources. No build3 was run. Preserve snapshot without counting results.",
+  "sourceFreezeReference": "source-freeze3.json",
+  "sourceFreezeSha256": "c78183bd661810cd36e90c0081b288597accbe11eb84a18cbe6f276450fc4006"
+}

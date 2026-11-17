@@ -20,7 +20,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.SystemBarStyle
 import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
@@ -78,11 +77,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
-        // The product currently has a light canvas in both system appearances.
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT),
-        )
+        // The initial system appearance is corrected to the local preference by RunmoniTheme.
+        enableEdgeToEdge()
         model.onEntryHostCreated()
         RunNotifications.createChannel(this)
         handledRunNotificationEvent = savedInstanceState?.getString("handledRunNotificationEvent")

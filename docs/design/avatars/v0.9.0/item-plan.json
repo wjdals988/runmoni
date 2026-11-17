@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65",
+  "status": "authorship-planned-not-visual-approval",
+  "items": [
+    {
+      "slot": "hair",
+      "variant": 4,
+      "name": "스트림 텍스처",
+      "referenceBase": 0,
+      "structure": "머리 흐름을 따르는 긴 명암 클러스터"
+    },
+    {
+      "slot": "hair",
+      "variant": 5,
+      "name": "레이어 하이라이트",
+      "referenceBase": 0,
+      "structure": "넓은 층별 광택과 끊어진 경계"
+    },
+    {
+      "slot": "hair",
+      "variant": 6,
+      "name": "백라이트 텍스처",
+      "referenceBase": 0,
+      "structure": "뒤쪽 크라운과 포니테일 끝의 연결 하이라이트"
+    },
+    {
+      "slot": "headwear",
+      "variant": 4,
+      "name": "메시 패널 캡",
+      "referenceBase": 1,
+      "structure": "측면 메시·크라운 절개"
+    },
+    {
+      "slot": "headwear",
+      "variant": 5,
+      "name": "리플렉트 바이저",
+      "referenceBase": 2,
+      "structure": "이중 챙·반사 밴드"
+    },
+    {
+      "slot": "headwear",
+      "variant": 6,
+      "name": "테크니트 밴드",
+      "referenceBase": 3,
+      "structure": "골지 니트·앞면 직조"
+    },
+    {
+      "slot": "face",
+      "variant": 4,
+      "name": "선스틱 라인",
+      "referenceBase": 0,
+      "structure": "볼에 짧은 이중 선"
+    },
+    {
+      "slot": "face",
+      "variant": 5,
+      "name": "트랙 페이스 마크",
+      "referenceBase": 0,
+      "structure": "볼에 작은 사선 마크"
+    },
+    {
+      "slot": "face",
+      "variant": 6,
+      "name": "스포츠 페이스 패치",
+      "referenceBase": 0,
+      "structure": "볼 한정 직조 테이프"
+    },
+    {
+      "slot": "top",
+      "variant": 7,
+      "name": "패널 레이싱 티",
+      "referenceBase": 1,
+      "structure": "측면 절개·라글란 선"
+    },
+    {
+      "slot": "top",
+      "variant": 8,
+      "name": "하프집 테크 롱슬리브",
+      "referenceBase": 2,
+      "structure": "하프 지퍼·소매 커프"
+    },
+    {
+      "slot": "top",
+      "variant": 9,
+      "name": "레이스 쉘 재킷",
+      "referenceBase": 3,
+      "structure": "가슴 포켓·견장 반사"
+    },
+    {
+      "slot": "bottom",
+      "variant": 6,
+      "name": "에어 메시 하의",
+      "referenceBase": 0,
+      "structure": "메시 옆면·허리 접점"
+    },
+    {
+      "slot": "bottom",
+      "variant": 7,
+      "name": "컴프레션 패널 하의",
+      "referenceBase": 1,
+      "structure": "허벅지 굴곡 패널"
+    },
+    {
+      "slot": "bottom",
+      "variant": 8,
+      "name": "리플렉트 트레일 하의",
+      "referenceBase": 0,
+      "structure": "수직 반사선·작은 지퍼 포켓"
+    },
+    {
+      "slot": "costume",
+      "variant": 6,
+      "name": "트랙 클럽 세트",
+      "referenceBase": 0,
+      "structure": "반팔·타이츠·크루삭스의 공통 패널"
+    },
+    {
+      "slot": "costume",
+      "variant": 7,
+      "name": "포레스트 트레일 세트",
+      "referenceBase": 0,
+      "structure": "쉘·타이츠·니삭스의 포켓·메시"
+    },
+    {
+      "slot": "costume",
+      "variant": 8,
+      "name": "나이트 페이서 세트",
+      "referenceBase": 0,
+      "structure": "긴팔·타이츠·니삭스의 반사 절개"
+    },
+    {
+      "slot": "socks",
+      "variant": 5,
+      "name": "트윈 스트라이프 크루",
+      "referenceBase": 1,
+      "structure": "이중 커프"
+    },
+    {
+      "slot": "socks",
+      "variant": 6,
+      "name": "컴프레션 니삭스",
+      "referenceBase": 2,
+      "structure": "종아리 축 패널"
+    },
+    {
+      "slot": "socks",
+      "variant": 7,
+      "name": "테크 도트 크루",
+      "referenceBase": 1,
+      "structure": "성긴 도트·니트"
+    },
+    {
+      "slot": "shoes",
+      "variant": 5,
+      "name": "웨이브 패널 러닝화",
+      "referenceBase": 2,
+      "structure": "굽부터 발등으로 흐르는 절개"
+    },
+    {
+      "slot": "shoes",
+      "variant": 6,
+      "name": "케이지 트레일 러닝화",
+      "referenceBase": 3,
+      "structure": "중족부 격자 보강"
+    },
+    {
+      "slot": "shoes",
+      "variant": 7,
+      "name": "레이스 플라이 러닝화",
+      "referenceBase": 1,
+      "structure": "사선 레이싱·토박스 구획"
+    },
+    {
+      "slot": "ear",
+      "variant": 4,
+      "name": "골전도 플렉스",
+      "referenceBase": 1,
+      "structure": "분절 후크·짧은 전면 포드"
+    },
+    {
+      "slot": "ear",
+      "variant": 5,
+      "name": "스포츠 클립 이어폰",
+      "referenceBase": 2,
+      "structure": "곡면 클립·짧은 패널"
+    },
+    {
+      "slot": "ear",
+      "variant": 6,
+      "name": "테크 메시 헤드셋",
+      "referenceBase": 3,
+      "structure": "통풍 그릴·쿠션"
+    },
+    {
+      "slot": "eyewear",
+      "variant": 4,
+      "name": "원피스 실드",
+      "referenceBase": 1,
+      "structure": "연속 실드·하이라이트"
+    },
+    {
+      "slot": "eyewear",
+      "variant": 5,
+      "name": "하프림 에어",
+      "referenceBase": 2,
+      "structure": "가벼운 하단·윗 프레임"
+    },
+    {
+      "slot": "eyewear",
+      "variant": 6,
+      "name": "듀얼 미러 고글",
+      "referenceBase": 3,
+      "structure": "분할 렌즈 반사·측면 홈"
+    },
+    {
+      "slot": "wrist",
+      "variant": 4,
+      "name": "링 다이얼 워치",
+      "referenceBase": 1,
+      "structure": "링 다이얼"
+    },
+    {
+      "slot": "wrist",
+      "variant": 5,
+      "name": "롱 디스플레이 워치",
+      "referenceBase": 2,
+      "structure": "세로 화면·분리 버클"
+    },
+    {
+      "slot": "wrist",
+      "variant": 6,
+      "name": "세그먼트 트랙 워치",
+      "referenceBase": 3,
+      "structure": "이중 세그먼트 화면"
+    },
+    {
+      "slot": "waist",
+      "variant": 4,
+      "name": "플랫 지퍼 벨트",
+      "referenceBase": 1,
+      "structure": "낮은 지퍼 포켓"
+    },
+    {
+      "slot": "waist",
+      "variant": 5,
+      "name": "트윈 포켓 벨트",
+      "referenceBase": 2,
+      "structure": "분리된 두 수납부"
+    },
+    {
+      "slot": "waist",
+      "variant": 6,
+      "name": "보틀 슬링 벨트",
+      "referenceBase": 3,
+      "structure": "보틀 입구·사선 슬링"
+    },
+    {
+      "slot": "hydration",
+      "variant": 4,
+      "name": "메시 라이트 조끼",
+      "referenceBase": 1,
+      "structure": "열린 메시 패널"
+    },
+    {
+      "slot": "hydration",
+      "variant": 5,
+      "name": "듀얼 포켓 조끼",
+      "referenceBase": 2,
+      "structure": "두 포켓·분리 스트랩"
+    },
+    {
+      "slot": "hydration",
+      "variant": 6,
+      "name": "레이스 하네스",
+      "referenceBase": 3,
+      "structure": "좁은 교차 하네스"
+    }
+  ]
+}

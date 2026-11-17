@@ -63,11 +63,17 @@ internal fun RouteTileMap(
     val avatars = remember(validRunners, context) { validRunners.associate { it.id to avatarBitmap(context, it.avatar).asImageBitmap() } }
     val tileSize = 256.0 * LocalDensity.current.density
     val captionSize = with(LocalDensity.current) { 12.sp.toPx() }
-    val captionPaint = remember(captionSize) { android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
-        color = RunmoniColors.Navy.toArgb(); textSize = captionSize
+    val mapPalette = RunningMapPalette.forDark(RunmoniColors.IsDark)
+    val routeColor = Color(mapPalette.route)
+    val routeInk = Color(mapPalette.ink)
+    val routeHalo = Color(mapPalette.halo)
+    val captionPaint = remember(captionSize, mapPalette.ink) { android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply {
+        color = mapPalette.ink; textSize = captionSize
         typeface = android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL)
     } }
-    val captionBackground = remember { android.graphics.Paint().apply { color = android.graphics.Color.argb(240, 255, 255, 255) } }
+    val captionBackground = remember(mapPalette.halo) { android.graphics.Paint().apply {
+        color = (mapPalette.halo and 0x00ffffff) or (240 shl 24)
+    } }
     var canvasSize by remember { mutableStateOf(IntSize.Zero) }
     var viewport by remember(fitRoute, interactiveMap) { mutableStateOf<RouteViewport?>(null) }
     var manual by remember(fitRoute, interactiveMap) { mutableStateOf(false) }
@@ -178,6 +184,9 @@ internal fun RouteTileMap(
                             dstSize = IntSize(placement.size.roundToInt() + 1, placement.size.roundToInt() + 1))
                     }
                 }
+                // Keep provider tiles intact; dim only their background pixels
+                // at night, before drawing full-contrast route and labels.
+                if (mapPalette.dark) drawRect(Color.Black.copy(alpha = .38f))
                 fun at(x: Double, y: Double): Offset = view.screen(x, y, size.width.toDouble(), size.height.toDouble(), tileSize)
                     .let { Offset(it.x.toFloat(), it.y.toFloat()) }
                 fun caption(text: String, position: Offset, below: Boolean) {
@@ -203,18 +212,18 @@ internal fun RouteTileMap(
                         if (previous == null || abs(p.x - previous!!.x) > halfWorld) path.moveTo(p.x, p.y) else path.lineTo(p.x, p.y)
                         previous = p
                     }
-                    drawPath(path, Color.White, style = Stroke(7.dp.toPx(), cap = StrokeCap.Round))
-                    drawPath(path, RunmoniColors.RouteBlue, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(path, routeHalo, style = Stroke(7.dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(path, routeColor, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
                 }
                 route.firstOrNull()?.let { first ->
-                    drawCircle(Color.White, 8.dp.toPx(), at(first.x, first.y))
-                    drawCircle(RunmoniColors.RouteBlue, 5.dp.toPx(), at(first.x, first.y))
+                    drawCircle(routeHalo, 8.dp.toPx(), at(first.x, first.y))
+                    drawCircle(routeColor, 5.dp.toPx(), at(first.x, first.y))
                     caption("시작", at(first.x, first.y), below = true)
                 }
                 route.lastOrNull()?.let { last ->
-                    drawCircle(Color.White, 9.dp.toPx(), at(last.x, last.y))
-                    drawCircle(RunmoniColors.Navy, 6.dp.toPx(), at(last.x, last.y))
-                    drawCircle(Color.White, 2.dp.toPx(), at(last.x, last.y))
+                    drawCircle(routeHalo, 9.dp.toPx(), at(last.x, last.y))
+                    drawCircle(routeInk, 6.dp.toPx(), at(last.x, last.y))
+                    drawCircle(routeHalo, 2.dp.toPx(), at(last.x, last.y))
                     caption("도착", at(last.x, last.y), below = false)
                 }
                 validRunners.forEach { runner ->

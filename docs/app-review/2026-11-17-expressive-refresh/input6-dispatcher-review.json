@@ -1,0 +1,18 @@
+{
+  "input": 6,
+  "scope": "Diagnostic only; product Android cases not run for this input",
+  "appPixelOrFeatureFailureClaimed": false,
+  "defaultAfterOffMain": 16,
+  "standardAfterOnMain": 16,
+  "standardWorkerObservationOnMain": 16,
+  "standardDiagnosticPassed": false,
+  "measurementConfound": "A suspend observer inside withContext(Default), after delay, was resumed via the Compose test ApplyingContinuationInterceptor. It did not identify a physical worker boundary.",
+  "nextChange": "A plain single-thread executor completes a cancellable continuation through an owned Main registration; observations/shutdown are gated. Existing16rounds/48stage/physical-worker-off-main/Standard-main assertions stay strict.",
+  "productionThreadingFixClaimed": false,
+  "exactOriginalDataAndAppearanceRestored": true,
+  "shutdownReference": "session2-cleanup.json",
+  "sourceFreezeReference": "source-freeze6.json",
+  "binaryReference": "binary-build6.json",
+  "diagnosticReference": "dispatcher1.json",
+  "diagnosticSha256": "6e65b5716b4d436e67df4418c085bfd19f3b44b613d5e6da27b34c08e4881303"
+}

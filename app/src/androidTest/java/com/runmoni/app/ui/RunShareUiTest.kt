@@ -289,6 +289,48 @@ class RunShareUiTest : RunmoniDesignTestBase() {
         }
     }
 
+    @Test fun canvasRatioStaysReachableFromEveryToolWithoutResettingIndependentEdits() {
+        val original = RunShareDraft(caption = "내가 고른 구도", avatarX = .31f, avatarY = .67f,
+            avatarScale = 1.22f, photoZoom = 1.6f, photoX = -.13f, photoY = .2f,
+            recordX = .38f, recordY = .72f, showName = true)
+        val draft = mutableStateOf(original)
+        val tool = mutableStateOf(1)
+        val attached = mutableStateOf(true)
+        val image = preview()
+        try {
+            compose.setContent {
+                if (attached.value) RunmoniTheme { ViewportBox(Viewport(320, 2f)) {
+                    RunShareEditorUi(draft.value, tool.value, image, photoPresent = true,
+                        ready = true, busy = false, editable = true, error = null, message = null,
+                        onDraft = { draft.value = it }, onTool = { tool.value = it }, onPickPhoto = {},
+                        onRemovePhoto = {}, onTransform = { _, _, _ -> }, onSave = {}, onShare = {}, onBack = {})
+                } }
+            }
+            // Ratio belongs to the canvas, so a person need not leave the tool they are editing.
+            choose("run_share_ratio_choices", "run_share_ratio_2")
+            compose.runOnIdle { assertEquals(original.copy(ratio = RunShareRatio.STORY), draft.value) }
+            choose("run_share_style_choices", "run_share_style_2")
+            choose("run_share_tone_choices", "run_share_tone_1")
+            compose.runOnIdle { assertEquals(original.copy(ratio = RunShareRatio.STORY,
+                style = RunShareStyle.STAMP, textTone = RunShareTextTone.DARK), draft.value) }
+            choose("run_share_tools", "run_share_tool_2")
+            choose("run_share_ratio_choices", "run_share_ratio_1")
+            compose.runOnIdle { assertEquals(original.copy(ratio = RunShareRatio.POST,
+                style = RunShareStyle.STAMP, textTone = RunShareTextTone.DARK), draft.value) }
+            choose("run_share_tools", "run_share_tool_0")
+            choose("run_share_ratio_choices", "run_share_ratio_0")
+            compose.runOnIdle { assertEquals(original.copy(style = RunShareStyle.STAMP,
+                textTone = RunShareTextTone.DARK), draft.value) }
+            fullyVisible("save_run_share").assertIsEnabled()
+            fullyVisible("send_run_share").assertIsEnabled()
+            noTextOverflow("shared canvas ratio and independent draft controls320/font2; synthetic preview")
+        } finally {
+            compose.runOnIdle { attached.value = false }
+            compose.waitForIdle()
+            image.recycle()
+        }
+    }
+
     @Test fun rootEditorBackRestoresRecordScrollAndRejectsDisposedOrRemovedRecordShareCallbacks() {
         val now = System.currentTimeMillis()
         val today = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()

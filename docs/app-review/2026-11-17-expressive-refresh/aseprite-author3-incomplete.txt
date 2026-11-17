@@ -1,0 +1,13 @@
+hair-4: 11039 actual Aseprite construction writes across16 cels
+hair-5: 6859 actual Aseprite construction writes across16 cels
+hair-6: 4989 actual Aseprite construction writes across16 cels
+headwear-4: 49008 actual Aseprite construction writes across16 cels
+headwear-5: 6580 actual Aseprite construction writes across16 cels
+headwear-6: 6552 actual Aseprite construction writes across16 cels
+face-4: 352 actual Aseprite construction writes across16 cels
+face-5: 384 actual Aseprite construction writes across16 cels
+face-6: 1152 actual Aseprite construction writes across16 cels
+top-7: 31069 actual Aseprite construction writes across16 cels
+top-8: 2553 actual Aseprite construction writes across16 cels
+top-9: 5347 actual Aseprite construction writes across16 cels
+bottom-6: 9780 actual Aseprite construction writes across16 cels

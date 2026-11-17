@@ -1,0 +1,151 @@
+{
+  "scope": "Declared semantic token pairs only; not runtime screenshot, all-page accessibility or user visual approval.",
+  "method": "sRGB linear luminance; WCAG ratio (Llighter+.05)/(Ldarker+.05)",
+  "pairs": [
+    {
+      "mode": "light",
+      "role": "body",
+      "foreground": "#24343D",
+      "background": "#F7F9FA",
+      "contrast": 12.172867085421696,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "muted",
+      "foreground": "#5B6D73",
+      "background": "#FFFFFF",
+      "contrast": 5.412586077904476,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "primarybutton",
+      "foreground": "#FFFFFF",
+      "background": "#356F78",
+      "contrast": 5.681255942285486,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "primarytext",
+      "foreground": "#356F78",
+      "background": "#E7EFF1",
+      "contrast": 4.8735870532312235,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "error",
+      "foreground": "#974A43",
+      "background": "#F8EFED",
+      "contrast": 5.497171613380896,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "environmentgood",
+      "foreground": "#246447",
+      "background": "#E9F3EC",
+      "contrast": 6.188358364152486,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "environmentcaution",
+      "foreground": "#805000",
+      "background": "#FFF1D5",
+      "contrast": 6.131510348464177,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "light",
+      "role": "environmentpoor",
+      "foreground": "#A32F31",
+      "background": "#FFE9E7",
+      "contrast": 6.003954380158891,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "body",
+      "foreground": "#E2ECEF",
+      "background": "#142128",
+      "contrast": 13.677092528335766,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "muted",
+      "foreground": "#ADBEC5",
+      "background": "#1D2E36",
+      "contrast": 7.3169889576803495,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "primarybutton",
+      "foreground": "#17393F",
+      "background": "#9BCDD1",
+      "contrast": 7.113801701880037,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "primarytext",
+      "foreground": "#9BCDD1",
+      "background": "#29454C",
+      "contrast": 5.876859423804321,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "error",
+      "foreground": "#FFB4A8",
+      "background": "#482E30",
+      "contrast": 7.223977733604074,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "environmentgood",
+      "foreground": "#8CD5AF",
+      "background": "#223E33",
+      "contrast": 6.7882027880369815,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "environmentcaution",
+      "foreground": "#E8C56C",
+      "background": "#40391F",
+      "contrast": 6.930315208266938,
+      "minRequired": 4.5,
+      "passed": true
+    },
+    {
+      "mode": "dark",
+      "role": "environmentpoor",
+      "foreground": "#FFB0AC",
+      "background": "#482E30",
+      "contrast": 7.055408308312081,
+      "minRequired": 4.5,
+      "passed": true
+    }
+  ],
+  "allDeclaredPairsPass": true
+}

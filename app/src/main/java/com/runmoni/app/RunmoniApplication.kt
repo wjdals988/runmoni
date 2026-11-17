@@ -6,6 +6,13 @@ import com.runmoni.app.data.FirebaseCloudAccount
 import com.runmoni.app.data.FirebaseCommunityRepository
 
 class RunmoniApplication : Application() {
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        // RemoteViews follows the launcher's system appearance. Refresh only
+        // the existing metrics cache; this callback never opens Auth or GPS.
+        com.runmoni.app.widget.RunWidgetPublisher.updateWidgets(this)
+    }
+
     val runDatabase by lazy { com.runmoni.app.data.RunDatabase.create(this) }
     val runs by lazy { RunRepository(this) }
     val cloud by lazy { FirebaseCloudAccount(this) }

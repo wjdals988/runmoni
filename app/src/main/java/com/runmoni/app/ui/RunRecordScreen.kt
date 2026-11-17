@@ -8,11 +8,13 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -36,6 +38,7 @@ import com.runmoni.app.domain.AutomaticBackupRecordState
 import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPersistenceState
 import com.runmoni.app.domain.RunRecord
+import com.runmoni.app.domain.KmSplit
 
 // A stable product callback for late-event regression checks. Foundation's
 // OnClick SemanticsAction is a live ClickableNode accessor, not a snapshot.
@@ -173,18 +176,18 @@ private fun RunRecordPageContent(
                             .clearAndSetSemantics { text = AnnotatedString("러닝 시간 $time · 평균 $pace /km") }) {
                             if (maxWidth < 320.dp || LocalDensity.current.fontScale >= 1.3f) {
                                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    RecordResultMetric("러닝 시간", time)
-                                    RecordResultMetric("평균 페이스", "$pace /km")
+                                    RecordResultMetric("러닝 시간", time, Icons.Outlined.Timer)
+                                    RecordResultMetric("평균 페이스", "$pace /km", Icons.Outlined.Speed)
                                 }
                             } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                                Box(Modifier.weight(1f)) { RecordResultMetric("러닝 시간", time) }
-                                Box(Modifier.weight(1f)) { RecordResultMetric("평균 페이스", "$pace /km") }
+                                Box(Modifier.weight(1f)) { RecordResultMetric("러닝 시간", time, Icons.Outlined.Timer) }
+                                Box(Modifier.weight(1f)) { RecordResultMetric("평균 페이스", "$pace /km", Icons.Outlined.Speed) }
                             }
                         }
                     }
 
                     Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        RecordSectionTitle("러닝 경로")
+                        RecordSectionTitle("러닝 경로", Icons.Outlined.Route)
                         Box(Modifier.fillMaxWidth()
                             .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 280.dp)
                             .clip(RunmoniShapes.Surface).testTag("record_map")) {
@@ -197,31 +200,21 @@ private fun RunRecordPageContent(
 
                     if (record.splits.isNotEmpty()) Column(Modifier.padding(horizontal = pageGutter()),
                         verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        RecordSectionTitle("킬로미터별 기록")
-                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text("구간", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
-                                modifier = Modifier.weight(1f))
-                            Text("시간", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                        }
-                        HorizontalDivider(color = RunmoniColors.Line)
-                        record.splits.forEach { split ->
-                            Row(Modifier.fillMaxWidth().testTag("record_split_${split.kilometer}"),
-                                horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.Top) {
-                                Text("${split.kilometer} km", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                                Text(duration(split.durationMillis), style = MaterialTheme.typography.bodyLarge)
-                            }
-                            HorizontalDivider(color = RunmoniColors.Line)
-                        }
+                        RecordSectionTitle("킬로미터별 기록", Icons.Outlined.Timer)
+                        Text("막대는 구간 시간의 비율이에요. 짧을수록 빨라요.",
+                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                        val longestSplit = record.splits.maxOf { it.durationMillis }.coerceAtLeast(0)
+                        record.splits.forEach { split -> RecordSplitRow(split, longestSplit) }
                     }
 
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        RecordSectionTitle("기록 관리")
+                        RecordSectionTitle("기록 관리", Icons.Outlined.FolderOpen)
                         HorizontalDivider(color = RunmoniColors.Line)
-                        Text(if (record.synced) "서버 동기화됨" else "기기에 저장됨",
-                            style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Primary,
-                            modifier = Modifier.testTag("record_storage_status"))
+                        RecordStatusLine(if (record.synced) Icons.Outlined.CloudDone else Icons.Outlined.PhoneAndroid,
+                            if (record.synced) "서버 동기화됨" else "기기에 저장됨",
+                            Modifier.testTag("record_storage_status"), RunmoniColors.Primary)
                         if (record.id in persistence.pendingCreditRunIds)
                             RunPersistenceNotice(RunPersistenceState(issue = RunPersistenceIssue.CREDIT,
                                 initialized = true, saving = persistence.saving, creditPending = true,
@@ -229,8 +222,12 @@ private fun RunRecordPageContent(
                         Text(AUTOMATIC_BACKUP_PRIVACY,
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                         if (cloud.uid.isNotBlank()) {
-                            Text(cloud.automaticBackupMessage(record.id), style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.testTag("automatic_cloud_backup_status"))
+                            RecordStatusLine(when (backupState) {
+                                AutomaticBackupRecordState.SAVED -> Icons.Outlined.CloudDone
+                                AutomaticBackupRecordState.EXCLUDED -> Icons.Outlined.CloudOff
+                                AutomaticBackupRecordState.CONFLICT -> Icons.Outlined.WarningAmber
+                                else -> Icons.Outlined.CloudQueue
+                            }, cloud.automaticBackupMessage(record.id), Modifier.testTag("automatic_cloud_backup_status"))
                             if (backupState != AutomaticBackupRecordState.SAVED && backupState != AutomaticBackupRecordState.EXCLUDED) {
                                 TextButton(shape = RunmoniShapes.Action, onClick = {
                                     if (pageAlive && latestContext === confirmationContext && latestCanBackUp) { backupRequest = Any(); backupFor = record.id }
@@ -246,6 +243,8 @@ private fun RunRecordPageContent(
                         HorizontalDivider(color = RunmoniColors.Line)
                         OutlinedButton(shape = RunmoniShapes.Action, onClick = exportAction, enabled = hasRecordId && !operationBusy,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("export_run").recordActionSnapshot(exportAction)) {
+                            Icon(Icons.Outlined.FileDownload, null, Modifier.size(20.dp))
+                            Spacer(Modifier.width(8.dp))
                             Text("GPX 경로 내보내기")
                         }
                         Text(if (record.points.isEmpty()) "저장된 GPS 지점이 없어 경로는 포함되지 않아요."
@@ -255,6 +254,8 @@ private fun RunRecordPageContent(
                             if (pageAlive && hasRecordId && latestContext === confirmationContext && !latestBusy) { deleteRequest = Any(); deleteFor = record.id }
                         }, enabled = hasRecordId && !operationBusy,
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("delete_run")) {
+                            Icon(Icons.Outlined.DeleteOutline, null, Modifier.size(20.dp), tint = MaterialTheme.colorScheme.error)
+                            Spacer(Modifier.width(8.dp))
                             Text("기록 삭제", color = MaterialTheme.colorScheme.error)
                         }
                     }
@@ -315,15 +316,54 @@ private fun RunRecordPageContent(
 }
 
 @Composable
-private fun RecordSectionTitle(title: String) {
-    Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+private fun RecordSectionTitle(title: String, icon: ImageVector) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Icon(icon, null, Modifier.size(22.dp), tint = RunmoniColors.Primary)
+        Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
+    }
 }
 
 @Composable
-private fun RecordResultMetric(label: String, value: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-        Text(value, style = MaterialTheme.typography.titleLarge, color = RunmoniColors.Ink)
+private fun RecordResultMetric(label: String, value: String, icon: ImageVector) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Icon(icon, null, Modifier.size(18.dp), tint = RunmoniColors.Muted)
+            Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        }
+        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontFeatureSettings = "tnum"), color = RunmoniColors.Ink)
+    }
+}
+
+@Composable
+private fun RecordStatusLine(icon: ImageVector, message: String, modifier: Modifier = Modifier,
+    color: Color = RunmoniColors.Muted) {
+    Row(modifier.fillMaxWidth().semantics(mergeDescendants = true) { },
+        verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Icon(icon, null, Modifier.padding(top = 2.dp).size(20.dp), tint = color)
+        Text(message, style = MaterialTheme.typography.bodyMedium, color = color)
+    }
+}
+
+/** Equal one-kilometre intervals compare elapsed split duration, never an invented pace target.
+ * The full range starts at zero: no minimum bar length or truncated axis exaggerates a difference.
+ */
+@Composable
+private fun RecordSplitRow(split: KmSplit, longestMillis: Long) {
+    val known = split.durationMillis > 0 && longestMillis > 0
+    val time = if (known) duration(split.durationMillis) else "시간 미확인"
+    Column(Modifier.fillMaxWidth().testTag("record_split_${split.kilometer}")
+        .clearAndSetSemantics { text = AnnotatedString("${split.kilometer} km, $time") }
+        .padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.Top) {
+            Text("${split.kilometer} km", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+            Text(time, style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"))
+        }
+        if (known) {
+            val ratio = (split.durationMillis.toDouble() / longestMillis.toDouble()).toFloat().coerceIn(0f, 1f)
+            Box(Modifier.fillMaxWidth().height(6.dp).clip(RunmoniShapes.Status).background(RunmoniColors.Mist)) {
+                Box(Modifier.fillMaxWidth(ratio).fillMaxHeight().clip(RunmoniShapes.Status).background(RunmoniColors.Primary))
+            }
+        }
     }
 }
 

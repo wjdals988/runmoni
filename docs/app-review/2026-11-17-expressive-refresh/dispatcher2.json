@@ -1,0 +1,427 @@
+{
+  "name": "dispatcher2",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "binaryReference": "binary-build7.json",
+  "reviewPhase": "dispatcher",
+  "independentPhaseNoPriorResultAggregation": true,
+  "startedAtUtc": "2026-11-17T19:47:58.976089+00:00",
+  "phase": "complete-passed",
+  "passed": true,
+  "completed": true,
+  "plannedProductMethods": 0,
+  "plannedMethodIdsFromCurrentSource": [],
+  "plannedDiagnosticMethods": 2,
+  "plannedDiagnosticMethodIdsFromCurrentSource": [
+    "com.runmoni.app.ui.FixtureDispatcherDefaultProbeTest#recordsDefaultContinuationLooperWithoutAssumingAnEscape",
+    "com.runmoni.app.ui.FixtureDispatcherStandardProbeTest#queuedContinuationsResumeOnAndroidMainLooper"
+  ],
+  "actualPassedProductMethods": 0,
+  "actualPassedDiagnosticMethods": 2,
+  "diagnosticMethodsCountAsProductTests": false,
+  "groups": [
+    {
+      "name": "fixture-dispatcher-default",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.FixtureDispatcherDefaultProbeTest"
+      ],
+      "status": "passed",
+      "source": "Fresh diagnostic am instrument run; no earlier execution reused",
+      "countsAsProductTest": false,
+      "diagnosticOnly": true,
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "diagnosticMode": "default",
+      "diagnosticReportDevicePath": "cache/fixture-dispatcher-probe-default.json",
+      "diagnosticTargetAbsentBeforeThisInstrumentation": true,
+      "fixtureFreshness": "Both dispatcher targets started absent; this target rechecked absent before execution; no existing report overwritten",
+      "raw": "dispatcher2-fixture-dispatcher-default.txt",
+      "startedAtUtc": "2026-11-17T19:49:10.166905+00:00",
+      "actual": 1,
+      "rawSha256": "196668ed153cf2ba86af28c16405130296ce471a693c6e56a6d165da83f50289",
+      "instrumentationPassed": true,
+      "diagnosticReportDeviceStateAfterRun": "regular",
+      "diagnosticReport": {
+        "file": "dispatcher2-diagnostic-fixture-dispatcher-default.json",
+        "sha256": "be396aefd1a82415c38b37563acba0b1fd221a5274946345b6dc77699a04847d",
+        "bytes": 11631,
+        "fileMode": "0600",
+        "mode": "default",
+        "devicePath": "cache/fixture-dispatcher-probe-default.json",
+        "copyLimitBytes": 65536,
+        "immutableExclusiveCreate": true,
+        "bothDeviceTargetsAbsentBeforeFirstInstrumentation": true,
+        "countsAsProductTest": false,
+        "schemaVersion": 1,
+        "completed": true,
+        "roundsRequested": 16,
+        "roundsObserved": 16,
+        "observationCount": 48,
+        "uniqueRoundStageObservations": 48,
+        "stageCounts": {
+          "before": 16,
+          "worker": 16,
+          "after": 16
+        },
+        "afterOnMainLooper": 0,
+        "afterOffMainLooper": 16,
+        "standardAll16AfterOnMainLooper": false,
+        "defaultMustEscapeAssertion": false
+      },
+      "diagnosticReportValidated": true,
+      "elapsedSeconds": 25.47,
+      "finishedAtUtc": "2026-11-17T19:49:35.642178+00:00",
+      "originalProfilePreserved": true
+    },
+    {
+      "name": "fixture-dispatcher-standard",
+      "expected": 1,
+      "classes": [
+        "com.runmoni.app.ui.FixtureDispatcherStandardProbeTest"
+      ],
+      "status": "passed",
+      "source": "Fresh diagnostic am instrument run; no earlier execution reused",
+      "countsAsProductTest": false,
+      "diagnosticOnly": true,
+      "passed": true,
+      "viewport": {
+        "density": "Physical density: 160",
+        "fontScale": "1.0",
+        "native320Font2RequiredByClass": false
+      },
+      "diagnosticMode": "standard",
+      "diagnosticReportDevicePath": "cache/fixture-dispatcher-probe-standard.json",
+      "diagnosticTargetAbsentBeforeThisInstrumentation": true,
+      "fixtureFreshness": "Both dispatcher targets started absent; this target rechecked absent before execution; no existing report overwritten",
+      "raw": "dispatcher2-fixture-dispatcher-standard.txt",
+      "startedAtUtc": "2026-11-17T19:49:48.492278+00:00",
+      "actual": 1,
+      "rawSha256": "8f143a22caf74a9edc0b9de36a017eee32cd4750957200ae922f46fb91090674",
+      "instrumentationPassed": true,
+      "diagnosticReportDeviceStateAfterRun": "regular",
+      "diagnosticReport": {
+        "file": "dispatcher2-diagnostic-fixture-dispatcher-standard.json",
+        "sha256": "4676392218855e2c0577667c818df1e1de1e6e1bdd184bafd6ce3b4b6e1ad253",
+        "bytes": 10696,
+        "fileMode": "0600",
+        "mode": "standard",
+        "devicePath": "cache/fixture-dispatcher-probe-standard.json",
+        "copyLimitBytes": 65536,
+        "immutableExclusiveCreate": true,
+        "bothDeviceTargetsAbsentBeforeFirstInstrumentation": true,
+        "countsAsProductTest": false,
+        "schemaVersion": 1,
+        "completed": true,
+        "roundsRequested": 16,
+        "roundsObserved": 16,
+        "observationCount": 48,
+        "uniqueRoundStageObservations": 48,
+        "stageCounts": {
+          "before": 16,
+          "worker": 16,
+          "after": 16
+        },
+        "afterOnMainLooper": 16,
+        "afterOffMainLooper": 0,
+        "standardAll16AfterOnMainLooper": true,
+        "defaultMustEscapeAssertion": false
+      },
+      "diagnosticReportValidated": true,
+      "elapsedSeconds": 18.96,
+      "finishedAtUtc": "2026-11-17T19:50:07.455323+00:00",
+      "originalProfilePreserved": true
+    }
+  ],
+  "fixtures": [],
+  "executedDriver": "dispatcher2-executed-driver.py",
+  "executedDriverSha256": "db3102239987f57ecc3c69fc2a5629c1dd895bf71cb3921811d500626f74693a",
+  "observerHelper": "dispatcher2-live-observer-helper.py",
+  "observerHelperSha256": "e7da573d8b77307a8c4501f61c6f7831196c0d3a18433acef1b2651a8f782e7d",
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "productionWritesVerified": false,
+  "android31RuntimeVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "observerMethodsCountAsProductTests": false,
+  "environmentRestorationScope": {
+    "controlledSettingsOnly": true,
+    "fullOsSettingsRestorationClaimed": false,
+    "settingsKeys": {
+      "system": [
+        "font_scale",
+        "accelerometer_rotation",
+        "user_rotation"
+      ],
+      "global": [
+        "window_animation_scale",
+        "transition_animation_scale",
+        "animator_duration_scale",
+        "display_size_forced"
+      ],
+      "secure": [
+        "display_density_forced",
+        "show_ime_with_hard_keyboard",
+        "ui_night_mode",
+        "location_mode",
+        "location_providers_allowed"
+      ]
+    },
+    "noUnrelatedSettingsRolledBack": true,
+    "unrelatedOsAutomaticChangesComparedOrReverted": false,
+    "windowManager": [
+      "size",
+      "density"
+    ],
+    "uiModeManagerNightMode": true,
+    "allOurPackageRuntimePermissions": "com.runmoni.app",
+    "runtimePermissionGrantAndFlags": true,
+    "power": "Observed Awake/Asleep wakefulness only"
+  },
+  "preferenceRestorationScope": {
+    "productFiles": [
+      "runmoni.xml",
+      "runmoni-community-account.xml",
+      "runmoni_appearance.xml"
+    ],
+    "equality": "Original presence plus whole bytes, checked again after environment restoration",
+    "fixtureFiles": "Only explicit nonce-owned allowlisted names, original bytes preserved",
+    "broadPreferenceDirectoryCleanup": false,
+    "livePreferenceReplacement": false
+  },
+  "limitations": [
+    "UI screens use safe ComponentActivity fixtures; share-card PNGs are direct Android Canvas renderer fixtures. Neither is actual MainActivity or production data.",
+    "Native page cases inspect actual OS/IME insets at320dp/font2. Map SDK failure cases use a missing local asset style, never the public basemap.",
+    "Appearance XML is restored byte-for-byte with original presence; this is a device preference, never an account/profile change. Database preservation includes backup origins; no DB copy-back is performed.",
+    "The explicit native-online phase alone permits the production OpenFreeMap HTTPS client: one ComponentActivity scene with synthetic Seoul points/runner and actual native touch/render observations. It is not GPS, Firebase, MainActivity, a real-person location, or a provider availability SLA.",
+    "The separate dispatcher phase measures two test effect contexts. Its method/report counts never contribute to product validation; Default has no must-escape assertion."
+  ],
+  "updatedAtUtc": "2026-11-17T19:50:45.564512+00:00",
+  "sourceFreezeReference": "source-freeze7.json",
+  "sourceFreezeSha256": "f76b4d5fd82218f2dcdae05fd39930fb6d8b382537994922d3a1e18e60db834d",
+  "onlineNativeBasemapVerified": false,
+  "syntheticOnlineNativeMapFixtureVerified": false,
+  "publicMapRequestsPermitted": false,
+  "actualMainActivityMapVerified": false,
+  "onlineNativeBasemapVerificationScope": "Only a successful explicit native-online ComponentActivity synthetic scene; never MainActivity/GPS/Firebase",
+  "productionMapAvailabilityContractClaimed": false,
+  "firebaseDemoSdkOnly": false,
+  "binaryReferenceSha256": "f795921555bc45d747f330a11b2fa83db29b90967c04327129de4d39057d2c34",
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 116,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "serial": "emulator-5556",
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "7bf27925028464bab91831b94d456f9bc891a8cf242b47926101ddea7333c3aa"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "3b76e8579847c490ba538f5fd89bf804b25f256019617873ad248e6121cd41e9"
+    }
+  ],
+  "observerJarSha256": "36e8fba20d0ce062c8e73bebc21e035529c079e1aa659e8bcca6e94ef3d5bd13",
+  "dispatcherReportPreflight": {
+    "deviceStates": {
+      "cache/fixture-dispatcher-probe-default.json": "absent",
+      "cache/fixture-dispatcher-probe-standard.json": "absent"
+    },
+    "bothAbsentBeforeFirstInstrumentation": true,
+    "existingReportsRemovedOrOverwritten": false
+  },
+  "privateEnvironmentBackup": {
+    "file": "dispatcher2-private-environment-before.json",
+    "sha256": "72ea65e656569195554311a9dda711a0edf35040137d7322c287ea9287634be3",
+    "mode": "0600"
+  },
+  "mainPreferencesOriginallyPresent": true,
+  "privateXmlBackup": {
+    "file": "dispatcher2-private-before.xml",
+    "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+    "mode": "0600"
+  },
+  "accountPreferencesOriginallyPresent": true,
+  "privateAccountBackup": {
+    "file": "dispatcher2-private-account-before.xml",
+    "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+    "mode": "0600"
+  },
+  "appearancePreferencesOriginallyPresent": false,
+  "privateAppearanceBackup": {
+    "file": "dispatcher2-private-appearance-before.xml",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mode": "0600"
+  },
+  "originalOwnedFixturePreferenceCount": 0,
+  "privateOwnedFixtureBackup": {
+    "file": "dispatcher2-private-fixture-preferences-before.json",
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "mode": "0600"
+  },
+  "privateDataBefore": {
+    "file": "dispatcher2-private-data-before.json",
+    "sha256": "49121d7e772d5970066762063f8181e54d05c2ed768aca6c893faeae1d081ce0",
+    "mode": "0600",
+    "tables": {
+      "runs": 0,
+      "points": 0,
+      "cloudBackupOrigins": 0
+    }
+  },
+  "previewLocationPermissionsTemporarilyRevokedForSyntheticFixtures": true,
+  "previewLocationPermissionsTemporarilyRevokedForOfflineFixtures": true,
+  "motionScaleObservedBeforeProductGroups": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObserved": true,
+  "sourceMapsAfter": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 116,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "appearancePreferencesRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "privateDataAfter": {
+    "file": "dispatcher2-private-data-after.json",
+    "sha256": "49121d7e772d5970066762063f8181e54d05c2ed768aca6c893faeae1d081ce0",
+    "mode": "0600",
+    "tables": {
+      "runs": 0,
+      "points": 0,
+      "cloudBackupOrigins": 0
+    }
+  },
+  "originalDatabaseRowsPreservedExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "settingsPermissionsPowerRestoredExactly": true,
+  "restorationCommandFailures": [],
+  "dispatcherReportCleanup": {
+    "ownedDevicePaths": [
+      "cache/fixture-dispatcher-probe-default.json",
+      "cache/fixture-dispatcher-probe-standard.json"
+    ],
+    "bothAbsentBeforeFirstInstrumentation": true,
+    "observedBeforeCleanup": {
+      "cache/fixture-dispatcher-probe-default.json": "regular",
+      "cache/fixture-dispatcher-probe-standard.json": "regular"
+    },
+    "afterCleanup": {
+      "cache/fixture-dispatcher-probe-default.json": "absent",
+      "cache/fixture-dispatcher-probe-standard.json": "absent"
+    },
+    "removedOnlyTwoNewKnownReportPaths": true,
+    "forceStoppedBeforeCleanup": true,
+    "verifiedAbsentAfterCleanup": true,
+    "verifiedAbsentAfterEnvironmentRestoration": true,
+    "broadCacheCleanup": false
+  },
+  "allPreferencesStillExactAfterEnvironmentRestoration": true,
+  "observerExecutionCount": 3,
+  "systemUiWaitActionCount": 1,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 116,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-17T19:50:45.564493+00:00"
+}

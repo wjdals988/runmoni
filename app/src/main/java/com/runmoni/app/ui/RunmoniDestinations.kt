@@ -32,8 +32,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     LaunchedEffect(Unit) { onWeatherEntry() }
     val todaysRuns = state.records.filter { localDate(it.startedAtMillis) == today }
     val largeText = LocalDensity.current.fontScale >= 1.3f
-    val todaySummary = if (!state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty())
-        "오늘 ${distance(todaysRuns.sumOf { it.distanceMeters })} km · ${todaysRuns.size}회" else null
+    val showTodaySummary = !state.runPersistence.historyUnavailable && todaysRuns.isNotEmpty()
     val recentActivity = remember(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable) {
         recentRunActivity(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable)
     }
@@ -68,15 +67,14 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                 Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(onClick = onRun, shape = RunmoniShapes.Action,
                         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.Primary, contentColor = RunmoniColors.OnDark),
+                        colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.Primary, contentColor = RunmoniColors.OnPrimary),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
                         Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp))
                         Spacer(Modifier.width(12.dp))
                         Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
                             modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                     }
-                    if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium,
-                        color = RunmoniColors.Primary)
+                    if (showTodaySummary) HomeTodaySummary(todaysRuns)
                 }
                 // Enlarged text keeps all weather values after the primary action.
                 if (!besideAvatar) Box(Modifier.fillMaxWidth().testTag("home_avatar_conditions_stacked")
@@ -110,9 +108,26 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 private fun HomeHeading(todaySummary: String?, compact: Boolean, modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(if (compact) "러닝" else "오늘의 러닝",
-            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold), color = RunmoniColors.DeepGreen,
+            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold), color = RunmoniColors.Ink,
             modifier = Modifier.semantics { heading() })
         if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
+    }
+}
+
+/** Only completed canonical records contribute; this is activity, not a target. */
+@Composable
+private fun HomeTodaySummary(runs: List<RunRecord>) {
+    FlowRow(Modifier.fillMaxWidth().padding(top = 8.dp).testTag("home_today_summary"),
+        horizontalArrangement = Arrangement.spacedBy(24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Icon(Icons.Outlined.Route, null, Modifier.size(20.dp), tint = RunmoniColors.Primary)
+            Text("오늘 ${distance(runs.sumOf { it.distanceMeters })} km", style = MaterialTheme.typography.titleMedium,
+                color = RunmoniColors.Ink)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Icon(Icons.Outlined.CheckCircleOutline, null, Modifier.size(20.dp), tint = RunmoniColors.Muted)
+            Text("${runs.size}회 완료", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+        }
     }
 }
 

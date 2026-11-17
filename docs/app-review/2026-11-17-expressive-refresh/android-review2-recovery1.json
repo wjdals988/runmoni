@@ -1,0 +1,66 @@
+{
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "completed": true,
+  "passed": true,
+  "scope": "Scoped restoration only after absent driver; no product execution success/count accepted",
+  "actualPassedProductMethods": 0,
+  "interruptedAttempt": {
+    "file": "android-review2.json",
+    "sha256": "dd1b5aaabe957c68fa388ed0e300f078b3605952de0cbe75556edb700ac9ff6d"
+  },
+  "originalAttemptRemainsIncomplete": true,
+  "driverExitCodeKnown": false,
+  "interruptionCauseEstablished": false,
+  "observedLiveOwnedAvdPid": 32887,
+  "binaryReference": "binary-build7.json",
+  "binaryReferenceSha256": "f795921555bc45d747f330a11b2fa83db29b90967c04327129de4d39057d2c34",
+  "startedAtUtc": "2026-11-17T20:09:26.296135+00:00",
+  "restorationCommandFailures": [],
+  "executedRecoveryDriver": {
+    "file": "recover-review2.py",
+    "sha256": "65c833bb113503f4a21ff0929fb4357633729a44fd7350018e409269a90af91d"
+  },
+  "preferencesRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "appearancePreferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "removedOnlyNewOwnedFixturePreferences": [],
+  "ownedFixturePreferencesCleaned": true,
+  "originalDatabaseRowsPreservedExactly": true,
+  "controlledSettingsPermissionsPowerRestoredExactly": true,
+  "allPreferencesStillExactAfterEnvironmentRestoration": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 116,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "finishedAtUtc": "2026-11-17T20:10:06.168136+00:00"
+}

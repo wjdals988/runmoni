@@ -1,0 +1,13 @@
+{
+  "binaryReference": "binary-build8.json",
+  "viewedAtUtc": "2026-11-17T21:35:29.445379+00:00",
+  "actuallyViewedWithViewImage": true,
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "sourceKind": "Actual Android production renderer contact export fixture, not a MainActivity screenshot",
+  "file": "android-review5-atelier-expansion-112.png",
+  "sha256": "5b62a026991f071172955b554ca11bd08ec86124136341f47c726f4b47cedeca",
+  "reviewedScope": "All39 item/gender pairs at one fixed running pose rendered112px. Original faces/proportions/outline retained to visual inspection; varied material and gear surfaces fitted to the same approved body. Small hair/cheek/ear/watch differences remain subtle. All624 poses have separate guards; this contact is not a visual review of all624 or every combination.",
+  "hostComparison": "Root previously viewed actual Aseprite V4 112px contact and hair reference; no obvious visual regression found in this Android fixed-pose contact.",
+  "acceptedAsInternalCandidate": true
+}

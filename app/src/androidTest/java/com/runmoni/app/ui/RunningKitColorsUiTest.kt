@@ -177,7 +177,7 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase() {
             assertEquals(original.copy(avatar = original.avatar.copy(runningKitColors = RunningKitColors(1, 5, 2))), state.value.profile)
             assertEquals(9, AvatarCatalogue.tabs.size)
             assertEquals(13, AvatarCatalogue.slots.size)
-            assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
+            assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
         }
         compose.waitUntil(30_000) { compose.onAllNodesWithContentDescription("나의 러닝 미니미").fetchSemanticsNodes().isNotEmpty() }
         noTextOverflow("closet basic running kit color and unchanged inventory")

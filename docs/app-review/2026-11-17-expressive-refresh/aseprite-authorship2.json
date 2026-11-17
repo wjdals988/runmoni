@@ -1,0 +1,303 @@
+{
+  "version": 2,
+  "capturedAtUtc": "2026-11-17T17:32:48.236889+00:00",
+  "sourceHashes": {
+    "docs/design/avatars/v0.9.0/ExportAtelierReferences.java": "d1a30288f1d1a4ffe27c2bd3dd1e368133090903108898ed29a41966cc689e01",
+    "docs/design/avatars/v0.9.0/author-expansion.lua": "386d6c518a9383454ab23eb26caa997e133f2628f69bd5be011d4a9134943867",
+    "docs/design/avatars/v0.9.0/item-plan.json": "3e17341222594fccad56c6bba3707d08b4a251a5fa90c4232df8561b13704b24",
+    "app/src/main/java/com/runmoni/app/avatar/ExpandedAtelierLayers.kt": "59955c017bce5a2f82622d31e4625ffeaf128aaf09407d0290e9189a18ec68fc"
+  },
+  "actualExecutedLua": "work/expressive-refresh/author-expansion-v2.lua",
+  "actualExecutedLuaSha256": "386d6c518a9383454ab23eb26caa997e133f2628f69bd5be011d4a9134943867",
+  "firstHairRoundRejected": true,
+  "program": "work/atelier-refresh/aseprite-build-headless/bin/aseprite",
+  "programSha256": "0b3e47b9b0db34ad23f70edbe96aadbca1707177321424b79ff123dd624fe5a2",
+  "referenceSheets": {
+    "bottom-6-allow.png": "8ead47189e45ca5649d42436271312e9addbb82248df00f771230bd830a065ae",
+    "bottom-6-base.png": "c595d778bfc67f1cc3b716b5c54fbda973c3c31dba6a89f6c383dbfae91562a3",
+    "bottom-6-roles.png": "3b741fae544104143ba92b8a097dc162394494deb327c7eb16544ac363e602a0",
+    "bottom-7-allow.png": "e1ea15e9ebc717ee465a7618c8773efc0f6338fb08ffd986249990b1fad7e766",
+    "bottom-7-base.png": "b0420d937c9c1b527b2a1af3f4d9c03158109c0b578af77fdcbcbd13d28fce2a",
+    "bottom-7-roles.png": "a29ade623648bfd8359d6db37f19b8f2508c91859a97c56b219f882e4a46f570",
+    "bottom-8-allow.png": "8ead47189e45ca5649d42436271312e9addbb82248df00f771230bd830a065ae",
+    "bottom-8-base.png": "4445326eae6b63ac9e93809f679ef3e01d82f52a282245595a54fe58e221ffff",
+    "bottom-8-roles.png": "3b741fae544104143ba92b8a097dc162394494deb327c7eb16544ac363e602a0",
+    "costume-6-allow.png": "cf22951b3a897cdbf30782a2c256dcb74279a38c97a77fcc8cac81933fd876f7",
+    "costume-6-base.png": "b084119e7c49a5fd8b18d22956a9c020da67ea89fd3a1bdd43096beb8af6b0fb",
+    "costume-6-roles.png": "ffee6b41e876485fd7a81e4db8604e47b99724d930e6d1472f650b70a72c5d49",
+    "costume-7-allow.png": "c1b95e30ad19447e629a84fcea5ca259e3282c60e147cc2638dca84db4c275ec",
+    "costume-7-base.png": "d852880eb8656cd0dec4226c32dacc4065bad2a231a50538dc5e0137e336fb20",
+    "costume-7-roles.png": "58c5f623d3bdb96656ab6ff01643c5b8d2379fba5e0f0b897e45711364ba5d7b",
+    "costume-8-allow.png": "c1b95e30ad19447e629a84fcea5ca259e3282c60e147cc2638dca84db4c275ec",
+    "costume-8-base.png": "9f7c58799ed69c17dbc0cbff8b47672ef2430631274af3c7dc516a5f0134f7d5",
+    "costume-8-roles.png": "58c5f623d3bdb96656ab6ff01643c5b8d2379fba5e0f0b897e45711364ba5d7b",
+    "ear-4-allow.png": "e010e36b0fcabcb65b477430e5fd8fa961d1711b91f1ee74e5b60a20cbda73c7",
+    "ear-4-base.png": "44c866b6c333da8f99dd89e4f26d58d8f0856b6eeed05a5f5cfdeebae7fb6448",
+    "ear-4-roles.png": "3b87c74eafb960fab5449627f1013126fc420f411b682b8ee5def3f357543061",
+    "ear-5-allow.png": "f915b105b0b77bc0e433f5c9f28033a1f935faa4049a928c06c471f1507866e6",
+    "ear-5-base.png": "3463a2b869ccd40f4908916f990811feaf57751bd72b6d9a20892aa4fa6adcc6",
+    "ear-5-roles.png": "83d5f6e442f3651e0d64e64df89032a11d25031c812e5c56a0c0c30d0a20345e",
+    "ear-6-allow.png": "8ffb91bb166b26a01e52ac291f79f6cbaac47f43a0461a6dba4feee795a0f2d1",
+    "ear-6-base.png": "133a2a5a2e88a8569d318bb37aabb7da21de1d0f808a532ca095a954e550eca0",
+    "ear-6-roles.png": "a937d695defe13e6f5439e1c00d573943bec5cdc8fc4f5a65adaa1f5cc99fd29",
+    "eyewear-4-allow.png": "3c67a44c891d5bb65de7a3745b93b66fc0cb93f5004376a1d7e69fa60192e009",
+    "eyewear-4-base.png": "998156a85b8427c3fb392b40f7fe402753ecbc475f163c87456ae8aafc0cc7b2",
+    "eyewear-4-roles.png": "33ef949d5ff0cfcff423937370d6ef87d4daec58b88b089d73a2f0942ac3a37c",
+    "eyewear-5-allow.png": "3c67a44c891d5bb65de7a3745b93b66fc0cb93f5004376a1d7e69fa60192e009",
+    "eyewear-5-base.png": "270c3053c48bf58cd283d8f0fe98578ebc57e7718c0027e175870f884ef994dc",
+    "eyewear-5-roles.png": "33ef949d5ff0cfcff423937370d6ef87d4daec58b88b089d73a2f0942ac3a37c",
+    "eyewear-6-allow.png": "3c67a44c891d5bb65de7a3745b93b66fc0cb93f5004376a1d7e69fa60192e009",
+    "eyewear-6-base.png": "56a70cfa2020dd8edab7690307a07dff35a969c6e391747f838167bf94fbdb11",
+    "eyewear-6-roles.png": "33ef949d5ff0cfcff423937370d6ef87d4daec58b88b089d73a2f0942ac3a37c",
+    "face-4-allow.png": "7cd827b7d9baa98478326d3cb149a1cd69320a8aa3f75241a348dd795b8054f9",
+    "face-4-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "face-4-roles.png": "3a7738760e3c832fba5bbe0a831fe45f556e2f93a8ff78c5a028fa8f96ab79b3",
+    "face-5-allow.png": "7cd827b7d9baa98478326d3cb149a1cd69320a8aa3f75241a348dd795b8054f9",
+    "face-5-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "face-5-roles.png": "3a7738760e3c832fba5bbe0a831fe45f556e2f93a8ff78c5a028fa8f96ab79b3",
+    "face-6-allow.png": "7cd827b7d9baa98478326d3cb149a1cd69320a8aa3f75241a348dd795b8054f9",
+    "face-6-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "face-6-roles.png": "3a7738760e3c832fba5bbe0a831fe45f556e2f93a8ff78c5a028fa8f96ab79b3",
+    "hair-4-allow.png": "21c9bb7c8f39c1fb133b399eec3025a9a0cc116abe6ba6da5a26a4a146315220",
+    "hair-4-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "hair-4-roles.png": "94068a743369aaf9dd8970a5efec166bb5e8652ed7835282cc9fc5807a95883c",
+    "hair-5-allow.png": "21c9bb7c8f39c1fb133b399eec3025a9a0cc116abe6ba6da5a26a4a146315220",
+    "hair-5-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "hair-5-roles.png": "94068a743369aaf9dd8970a5efec166bb5e8652ed7835282cc9fc5807a95883c",
+    "hair-6-allow.png": "abdfbcbc9f1eb4b27866620452dcd9c7235fa590a4ffef2302ca4fa7544c967a",
+    "hair-6-base.png": "2eb35ec32085e875945f2250a4360daa4a046b9a9dbe4a5cadeb4aba454b3190",
+    "hair-6-roles.png": "1d819c070589a4d0b6c70239a1a4e0077840ee3da8dfdb35b2a328e029b8b650",
+    "headwear-4-allow.png": "bc9e1803e7f4c177ee49b4853e9ebe464b282203901f583156969993e9f39e64",
+    "headwear-4-base.png": "ce403f32951d921aa48c33548569cf14d862edb8cc276abaa7210eca01e735a4",
+    "headwear-4-roles.png": "0315abb70f3b032510750f9d4afecacc4c7a3518e471869c3bd0df85c3bb96e2",
+    "headwear-5-allow.png": "a133658bac070599ad562107453f12f71627fbfd5db5a0317bab6d43534b4f57",
+    "headwear-5-base.png": "d85915b93c03df1ad641fc9cc20344f4cb3fd2741412093b30eb7d7f2b0877a6",
+    "headwear-5-roles.png": "7e11e129ba0490852c3cd24a4714d395ddea189a0c56d245dde19ba4b2d93c2b",
+    "headwear-6-allow.png": "7ad70f00fe481a3f38abc8449c86ac7d204f8a2dd7dc8db9d498d948f436fe8a",
+    "headwear-6-base.png": "4f408d96c96184e639addd3dd83c4bedba972961c9a199751266a2130317b8eb",
+    "headwear-6-roles.png": "fd8d4d46b76cc25d820fa36883f7a43f5f458bcdbbb9168d5add2a205b335d14",
+    "hydration-4-allow.png": "252f148146808851843dc9d1cab06f1f2890c0a247cca24f68f80244de58bb73",
+    "hydration-4-base.png": "ce2756ab2049603be9f9e9faf242b14484a24b6a8527ef72868a637fdf2e7d2a",
+    "hydration-4-roles.png": "0022465ffc843f3c0d5459e5e7d66a4ffc52901203f267af6175ec588ac0b0f6",
+    "hydration-5-allow.png": "252f148146808851843dc9d1cab06f1f2890c0a247cca24f68f80244de58bb73",
+    "hydration-5-base.png": "07516823d6f37d612dd12f36c13f2c5d5dcceea23804fe4bc059e7fdca6938e4",
+    "hydration-5-roles.png": "0022465ffc843f3c0d5459e5e7d66a4ffc52901203f267af6175ec588ac0b0f6",
+    "hydration-6-allow.png": "252f148146808851843dc9d1cab06f1f2890c0a247cca24f68f80244de58bb73",
+    "hydration-6-base.png": "b3cf3da41b17d4bfee00cfca74d52422f56613973d6d3c28648c0537cdefe5ee",
+    "hydration-6-roles.png": "0022465ffc843f3c0d5459e5e7d66a4ffc52901203f267af6175ec588ac0b0f6",
+    "references.lua": "48aa6aa47966dd7d18927d75962440754091fd665b513a0ae1909cfd9e96b345",
+    "shoes-5-allow.png": "7e72938904fb913ef19852deedd8bb62affeb0089d0baaf9cbd1440001577539",
+    "shoes-5-base.png": "02c9579d0b4d12b0018facfa962ce85658ee2974502d448fdc4d9d5bfca3409b",
+    "shoes-5-roles.png": "ac5f068d3721e996ca734ebc0c65eb3da3978c6c8f636a199fbbbcc1d59b6f0d",
+    "shoes-6-allow.png": "7e72938904fb913ef19852deedd8bb62affeb0089d0baaf9cbd1440001577539",
+    "shoes-6-base.png": "89bd98d155de7ab641ea7cccacf23707f7774d6a28c72f4d6265a8b1b4de25e4",
+    "shoes-6-roles.png": "ac5f068d3721e996ca734ebc0c65eb3da3978c6c8f636a199fbbbcc1d59b6f0d",
+    "shoes-7-allow.png": "7e72938904fb913ef19852deedd8bb62affeb0089d0baaf9cbd1440001577539",
+    "shoes-7-base.png": "e74e0352ca96fe7fd13e3910e2d02c1b414ee4bbba3736818b8f0ea2521a345b",
+    "shoes-7-roles.png": "ac5f068d3721e996ca734ebc0c65eb3da3978c6c8f636a199fbbbcc1d59b6f0d",
+    "socks-5-allow.png": "c6c2d01dd3dfcf144f2356be75dab6bd7835b9dbc18a5d8ba19a45cd0839a772",
+    "socks-5-base.png": "282344b8a9cd53a120acd1cc325361391207ab008aef5f6d8db4b598926a474e",
+    "socks-5-roles.png": "250ec9c9d9b83a794dbdbcddba9530bf59c4800dc74cf747290043ae88675590",
+    "socks-6-allow.png": "6c551a68510211417c1018aabf463cab3411c24f43bca4bd5da34628bee34ba8",
+    "socks-6-base.png": "ec5dc8e5a495366f909fad68fb7aae7728aa9fc9c52c5edd2ef6eae02b99d29a",
+    "socks-6-roles.png": "2d2b4629f95173912bb273c30340522985e73c3288db59404cc8d2f1558be7d5",
+    "socks-7-allow.png": "c6c2d01dd3dfcf144f2356be75dab6bd7835b9dbc18a5d8ba19a45cd0839a772",
+    "socks-7-base.png": "282344b8a9cd53a120acd1cc325361391207ab008aef5f6d8db4b598926a474e",
+    "socks-7-roles.png": "250ec9c9d9b83a794dbdbcddba9530bf59c4800dc74cf747290043ae88675590",
+    "top-7-allow.png": "34d4d4fede959ede673b59e0b84072b964c8686e52f80ece56e21f75b7b64d91",
+    "top-7-base.png": "1bf80aa3e43a857e806c14849341679d704860068a8918cd25a9efd46e9072f2",
+    "top-7-roles.png": "b681f99bae0c4d1d24111d4f07c84e0270f632651c18abf6227004aef3e8cbf7",
+    "top-8-allow.png": "dc8863e3c3c8d9e34528463d5a5fc5c979d7da582e775006697a5e1d1f60bf3d",
+    "top-8-base.png": "c078d4a1f56f31d5bb561e2240afed5acdb625dc79488da599524c905290334a",
+    "top-8-roles.png": "a203dc9a6f62d6389c533c699e6e385ff3345546fa5700337500424d327c260f",
+    "top-9-allow.png": "dc8863e3c3c8d9e34528463d5a5fc5c979d7da582e775006697a5e1d1f60bf3d",
+    "top-9-base.png": "d4e3dbb886f00d09d5a7c35b233c21f1ba4622a60d4be502746c880de281d032",
+    "top-9-roles.png": "a203dc9a6f62d6389c533c699e6e385ff3345546fa5700337500424d327c260f",
+    "waist-4-allow.png": "fec0e5d54c3341e2165cf5b73583ff659c0fba22c0f8c8511ae42a0ccc441d28",
+    "waist-4-base.png": "bd12a069cc3a5f202c3c0f2fbccca7e74c366596dfb8a828ba99a4f4b22bc9cf",
+    "waist-4-roles.png": "1a0d14b0fb383db878ebe5979d83cbea91c8d50a473898f2ac896bdd1ca21020",
+    "waist-5-allow.png": "fec0e5d54c3341e2165cf5b73583ff659c0fba22c0f8c8511ae42a0ccc441d28",
+    "waist-5-base.png": "0803bca6febc90b6661368508063dfc618d6982b5950632403e30fcedef14944",
+    "waist-5-roles.png": "1a0d14b0fb383db878ebe5979d83cbea91c8d50a473898f2ac896bdd1ca21020",
+    "waist-6-allow.png": "fec0e5d54c3341e2165cf5b73583ff659c0fba22c0f8c8511ae42a0ccc441d28",
+    "waist-6-base.png": "ce1b137cb6ab01458f58132df20f242d43829082d2e067c0ea6b11ea67c6299a",
+    "waist-6-roles.png": "1a0d14b0fb383db878ebe5979d83cbea91c8d50a473898f2ac896bdd1ca21020",
+    "wrist-4-allow.png": "d680a6cd47da8721eff2d8e029de321cc27631a0ff147a889614a118bae6c99e",
+    "wrist-4-base.png": "f0a9571bc4e12f80162b04974a79ba8a56a5f300f1107b593c7a8fc09e242d1f",
+    "wrist-4-roles.png": "5dce9bf470a40295a49edba1a5a997c4ffe4de389797b3fed796ac007c015fd2",
+    "wrist-5-allow.png": "d680a6cd47da8721eff2d8e029de321cc27631a0ff147a889614a118bae6c99e",
+    "wrist-5-base.png": "aebd6ec4cfbae68b646eb49b19a1a70186d960eb44158181bc59e036331f8608",
+    "wrist-5-roles.png": "5dce9bf470a40295a49edba1a5a997c4ffe4de389797b3fed796ac007c015fd2",
+    "wrist-6-allow.png": "d680a6cd47da8721eff2d8e029de321cc27631a0ff147a889614a118bae6c99e",
+    "wrist-6-base.png": "2a50aec1d4b6afcef001ad4843c35de7736f7a3a36d2a927b39687a6060eeb0b",
+    "wrist-6-roles.png": "5dce9bf470a40295a49edba1a5a997c4ffe4de389797b3fed796ac007c015fd2"
+  },
+  "actualToolVersion": "Aseprite 1.3.18.6-dev",
+  "localHeadlessBuild": true,
+  "officialUnmodifiedGuiClaimed": false,
+  "ownProjects": {
+    "bottom-6.aseprite": {
+      "bytes": 8847505,
+      "sha256": "c37f88d9e0f49d52efdf8da10d6c073798c8d60b25a36191c0f41884003f3fa7"
+    },
+    "bottom-7.aseprite": {
+      "bytes": 8854969,
+      "sha256": "9b32a827eac678a5de0bb04ed3417767feb4bcd9c63448a0936c65a4eae8c26a"
+    },
+    "bottom-8.aseprite": {
+      "bytes": 8806226,
+      "sha256": "d8a06a13d79c38ef29a4d5d44b6e75d8ca4db46efc39058a8e1a5eadb50f399f"
+    },
+    "costume-6.aseprite": {
+      "bytes": 8776611,
+      "sha256": "7df6145da87371ab867823f9e0471db032d559bc293b98145c28d686e28c0129"
+    },
+    "costume-7.aseprite": {
+      "bytes": 8663172,
+      "sha256": "21434987a418092a3135fbe769635910f2f55553a2ca316ec35841b1cd4f5862"
+    },
+    "costume-8.aseprite": {
+      "bytes": 8592887,
+      "sha256": "519a8f931c2da0a11c09c04f5ed5ecbe7e5f00d12287cf0dcea06b5c228c83d6"
+    },
+    "ear-4.aseprite": {
+      "bytes": 8815735,
+      "sha256": "1ace1d08560a689ce29b4fcad9cea96c66a361eb26742bbd763d5808c441eb49"
+    },
+    "ear-5.aseprite": {
+      "bytes": 8817902,
+      "sha256": "d21d35248833826cacb9d5047c9dcebcc4b9ca89e465c44af155833dc5a65b75"
+    },
+    "ear-6.aseprite": {
+      "bytes": 8806927,
+      "sha256": "579a71f80762ee87631b1f0da064a35a5df1605eee811216cddd779b0232c94c"
+    },
+    "eyewear-4.aseprite": {
+      "bytes": 8784872,
+      "sha256": "6a1bd70c6fe3a3369a68254218d84d5dc060586e03b826f8f211979e30593f44"
+    },
+    "eyewear-5.aseprite": {
+      "bytes": 8778284,
+      "sha256": "c5b051ec872514f84286946feb4cff20a6423f5c98c238cf73fdc46b2ef47368"
+    },
+    "eyewear-6.aseprite": {
+      "bytes": 8780465,
+      "sha256": "c31a222fe61fdb4a6befd2a1916416c6af881754a38d627a647812f40af912ed"
+    },
+    "face-4.aseprite": {
+      "bytes": 8822170,
+      "sha256": "d0197f34c416ea818c13d5b9e81d4a275b19de777f2dd8754231695843a7bedb"
+    },
+    "face-5.aseprite": {
+      "bytes": 8822254,
+      "sha256": "084a43e4ee804732cce21bb657b7f9af7f2d29f221e15105def3f49f5171681f"
+    },
+    "face-6.aseprite": {
+      "bytes": 8822510,
+      "sha256": "89d30a4bf7fbab9090f35e3c14626e39f233b40f85ea0e98e61eb676230a429a"
+    },
+    "hair-4.aseprite": {
+      "bytes": 8849841,
+      "sha256": "9f55ff9749559b2f1c31de224eff6d20ce687635ea3df57eb7bd738ee2b7a61a"
+    },
+    "hair-5.aseprite": {
+      "bytes": 8838286,
+      "sha256": "8477f5f7a62da17a9435cd6cc335ed0fa1eccfdb560d92147fa20ee1e7458cbd"
+    },
+    "hair-6.aseprite": {
+      "bytes": 8828334,
+      "sha256": "f687dda523511568f9daaaf656d4b5f14ba33da144f7e35e600d98b2b84665b0"
+    },
+    "headwear-4.aseprite": {
+      "bytes": 8425330,
+      "sha256": "69ff37694da7e04b6f565e20deeee4c222a3b6397de284de46b968a7c53e164f"
+    },
+    "headwear-5.aseprite": {
+      "bytes": 8742810,
+      "sha256": "391e7d50c27024e1006ddd3b4baa9c9ed2c9d2130e57b06123e0e13d3db17e6c"
+    },
+    "headwear-6.aseprite": {
+      "bytes": 8755991,
+      "sha256": "bda5db4a670cb9821bcb5772b060d2fa6ee9c501dd0187537200091bbf385816"
+    },
+    "hydration-4.aseprite": {
+      "bytes": 8786379,
+      "sha256": "3f7822507e77583e5e9ec989881314cfd3c6e7559279103bc5e7867e2c2c6ef4"
+    },
+    "hydration-5.aseprite": {
+      "bytes": 8785073,
+      "sha256": "258811f6586f6a86ca0f6736114b817ac0888ec1f882ae98778892c940d8c5e3"
+    },
+    "hydration-6.aseprite": {
+      "bytes": 8782700,
+      "sha256": "2ffe8795108897669d42e6f1692161184188f68613484dfc578eb1429badfc85"
+    },
+    "shoes-5.aseprite": {
+      "bytes": 8813148,
+      "sha256": "47db9f105258584b4f1ceaa73f425ffb2957efcf0ce543d58be8e57b246e505c"
+    },
+    "shoes-6.aseprite": {
+      "bytes": 8822756,
+      "sha256": "b3c7186cc733a2d1a9bb34b096dfa59d2acc33361f2df7c2146b8bbd58ee3d83"
+    },
+    "shoes-7.aseprite": {
+      "bytes": 8793403,
+      "sha256": "aec4a1a58810e17215257f723f9ea91cae08c31057b7f15409a2b0b26e75dff9"
+    },
+    "socks-5.aseprite": {
+      "bytes": 8815831,
+      "sha256": "799415f59abeb24c65043aa7931b0c73069c681e6ea6471b5521554f34c44efc"
+    },
+    "socks-6.aseprite": {
+      "bytes": 8796314,
+      "sha256": "5990968730023d0d2df36502f34052d9f9cf71561b011303d2b94b30402dcfba"
+    },
+    "socks-7.aseprite": {
+      "bytes": 8817971,
+      "sha256": "764bf6838fc50a060ad12e5205b82d874932080370e458c89440f11ae9abb480"
+    },
+    "top-7.aseprite": {
+      "bytes": 8802915,
+      "sha256": "e541729dad2317739ef2483ca5ec8db128f748c0833944a0c7f2fb2f2d48824f"
+    },
+    "top-8.aseprite": {
+      "bytes": 8689567,
+      "sha256": "d13e1151404b7db142a7d0ad19c9d841f327ccd76652a8a4e043f4f499cfab65"
+    },
+    "top-9.aseprite": {
+      "bytes": 8682598,
+      "sha256": "8b54c227b193ffd1b48a824af801a4d76418055ec66f6b6463b39204dbb29bcf"
+    },
+    "waist-4.aseprite": {
+      "bytes": 8809523,
+      "sha256": "dae76cff1b255bea7f6da67359aabb6c73e6d90b6ee9c2f3557789dac6d9bbd7"
+    },
+    "waist-5.aseprite": {
+      "bytes": 8810660,
+      "sha256": "cf289d2f7f7ef4d80a232cd3b5a1a842ff15de3fed2ebd65238c5716765e2ca9"
+    },
+    "waist-6.aseprite": {
+      "bytes": 8810455,
+      "sha256": "f2f0b12a73625a3ea07cc6431b3e405e26dc3e8c5cdf33a1422bca509f021e0f"
+    },
+    "wrist-4.aseprite": {
+      "bytes": 8817708,
+      "sha256": "44b67205844269e96c7067e973b957b9be819a87d18d241c4938431f7357320b"
+    },
+    "wrist-5.aseprite": {
+      "bytes": 8816942,
+      "sha256": "832d6e41bdeeee5ce1f7a05ea0e9e807625ada7f64a632a36d3c4e3646b3c9a3"
+    },
+    "wrist-6.aseprite": {
+      "bytes": 8818042,
+      "sha256": "273d7a161c2f7399e7ba3b05c67569258189e434eef65bbb9fc809afb0b8d847"
+    }
+  },
+  "projectCount": 39,
+  "projectBytes": 342505066,
+  "runtimeManifestSha256": "3daf94d16d46d4115f220459ff286c7fc9e18c38d709b186d7ba88f37103eb76",
+  "runtimePngCount": 816,
+  "actualAppRuntimeVerified": false,
+  "userVisualApproval": false,
+  "completedAtUtc": "2026-11-17T17:37:16.616087+00:00"
+}

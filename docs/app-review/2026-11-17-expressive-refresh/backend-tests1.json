@@ -1,0 +1,17 @@
+{
+  "command": "backend/.venv/bin/python -m pytest backend/tests/test_avatar.py backend/tests/test_running_kit_colors.py -q",
+  "exitCode": 0,
+  "tests": 15,
+  "passed": 15,
+  "warnings": 1,
+  "secondsReportedByPytest": 3.42,
+  "productionWritesVerified": false,
+  "sourceHashes": {
+    "backend/models.py": "f1cac8df06f872448bf83474e4e863422b375ae8a85f2999e9eef804d232510a",
+    "backend/main.py": "92de01b6f500404b21edb84ac9c02b651ac77c17e4f4080fa4c8103bfcfdb600",
+    "backend/tests/test_avatar.py": "05e598a5f3ad30bbb896e3a5c638aa7cddcae770a71d8bb158d16d998b8ab565",
+    "backend/tests/test_running_kit_colors.py": "d16904c1fa3d0e823680f46395d33adfca6d1a9a25fbbfb3ef3e7635c3bfc1ac"
+  },
+  "rawLog": "backend-tests1.txt",
+  "rawSha256": "143add9628f3197da5d69a7ecb28448c1373ed6bc96d716d20d3511683bfd636"
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "Interrupted/unobserved tool process; no full authoring success claimed",
+  "actualExitCodeObserved": false,
+  "formerExecSessionUnavailable": true,
+  "activeAsepriteProcessObserved": false,
+  "projectsPresent": 13,
+  "pngCellsPresent": 302,
+  "fullContactPresent": false,
+  "causeEstablished": false,
+  "sourceBeforeReference": "work/expressive-refresh/aseprite-source-before3.json",
+  "rawLog": "aseprite-author3-incomplete.txt",
+  "rawSha256": "88925258fc263745fbf2753105782ac9f7266768d524c764340ddfb19a53bc42",
+  "observedAtUtc": "2026-11-17T18:49:59.448179+00:00"
+}

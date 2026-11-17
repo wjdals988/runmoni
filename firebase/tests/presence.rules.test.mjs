@@ -10,6 +10,9 @@ const db=uid=>uid?env.authenticatedContext(uid,{firebase:{sign_in_provider:'anon
 const marker=(d,u='alice')=>doc(d,'runnerPresence',u);
 const consent=(d,u='alice')=>doc(d,'runnerConsents',u);
 const avatar=()=>({hair:0,headwear:0,face:0,top:0,bottom:0,costume:0,socks:0,shoes:0,ear:0,eyewear:0,wrist:0,waist:0,hydration:0,gender:'female',colors:{top:0,bottom:1,shoes:2}});
+const appended={hair:[4,5,6],headwear:[4,5,6],face:[4,5,6],top:[7,8,9],bottom:[6,7,8],costume:[6,7,8],
+ socks:[5,6,7],shoes:[5,6,7],ear:[4,5,6],eyewear:[4,5,6],wrist:[4,5,6],waist:[4,5,6],hydration:[4,5,6]};
+const expandedAvatar=()=>({...avatar(),...Object.fromEntries(Object.entries(appended).map(([slot,ids])=>[slot,ids.at(-1)]))});
 const data=(u='alice',changes={})=>({runSessionToken:token,latitudeE3:37567,longitudeE3:126978,latBand:37,lonBand:126,nickname:u,avatar:avatar(),visibility:'approximate',adultConfirmed:true,updatedAt:serverTimestamp(),expiresAt:Timestamp.fromMillis(Date.now()+60000),...changes});
 const scoped=(d,expires=Date.now()+30000,n=100)=>query(collection(d,'runnerPresence'),where('latBand','==',37),where('lonBand','==',126),where('expiresAt','>',Timestamp.fromMillis(expires)),orderBy('expiresAt'),limit(n));
 before(async()=>{
@@ -65,7 +68,7 @@ test('the three appended wardrobe IDs preserve exact values in an authorized app
  const result=await assertSucceeds(getDocs(scoped(b)));assert.equal(result.size,1);assert.deepEqual(result.docs[0].data().avatar,worn);
 });
 test('new wardrobe IDs do not widen owner, consent, precision or connected-reader permissions',async()=>{
- const a=db('alice'),b=db('bobby');const worn={...avatar(),top:6,socks:4,shoes:4};
+ const a=db('alice'),b=db('bobby');const worn=expandedAvatar();
  await enable(a);
  await assertFails(setDoc(marker(b,'alice'),data('alice',{avatar:worn})));
  for(const changes of [{runSessionToken:nextToken},{adultConfirmed:false},{visibility:'precise'},{latitude:37.566535}])
@@ -74,11 +77,35 @@ test('new wardrobe IDs do not widen owner, consent, precision or connected-reade
  await assertFails(getDoc(marker(db())));await assertFails(getDoc(marker(db('unconnected'))));
  await assertFails(getDocs(collection(b,'runnerPresence')));
 });
-for(const [slot,value] of [['top',7],['socks',5],['shoes',5],['top',-1],['socks',4.5],['shoes',4294967300]])
- test(`presence rejects invalid appended wardrobe boundary ${slot}:${value}`,async()=>{
-  const a=db('alice');await enable(a);
-  await assertFails(setDoc(marker(a),data('alice',{avatar:{...avatar(),[slot]:value}})));
+for(const [slot,ids] of Object.entries(appended)) {
+ test(`three appended ${slot} IDs preserve exact values and palette in authorized approximate markers`,async()=>{
+  assert.equal(ids.length,3);const a=db('alice'),b=db('bobby');await enable(a);
+  for(const value of ids) {
+   const worn={...avatar(),[slot]:value};
+   await assertSucceeds(setDoc(marker(a),data('alice',{avatar:worn})));
+   assert.deepEqual((await assertSucceeds(getDoc(marker(a)))).data().avatar,worn);
+   const result=await assertSucceeds(getDocs(scoped(b)));assert.equal(result.size,1);
+   assert.deepEqual(result.docs[0].data().avatar,worn);
+  }
  });
+ test(`presence rejects upper negative fractional and overflowing ${slot} IDs without changing the marker`,async()=>{
+  const a=db('alice');const worn=expandedAvatar();await share(a,'alice',{avatar:worn});
+  for(const value of [ids.at(-1)+1,-1,1.5,2**32+ids.at(-1)])
+   await assertFails(setDoc(marker(a),data('alice',{avatar:{...worn,[slot]:value}})));
+  assert.deepEqual((await assertSucceeds(getDoc(marker(a)))).data().avatar,worn);
+ });
+}
+test('all 39 appended IDs span exactly 13 slots and their simultaneous maxima retain privacy gates',async()=>{
+ assert.equal(Object.keys(appended).length,13);assert.equal(Object.values(appended).flat().length,39);
+ const a=db('alice'),b=db('bobby');const worn=expandedAvatar();
+ await assertSucceeds(share(a,'alice',{avatar:worn}));
+ const result=await assertSucceeds(getDocs(scoped(b)));assert.equal(result.size,1);
+ assert.deepEqual(result.docs[0].data().avatar,worn);
+ await assertFails(getDoc(marker(db())));await assertFails(getDoc(marker(db('unconnected'))));
+ await assertFails(setDoc(marker(b,'alice'),data('alice',{avatar:worn})));
+ const batch=writeBatch(a);batch.set(consent(a),{runSessionToken:token,enabled:false,updatedAt:serverTimestamp()});batch.delete(marker(a));
+ await assertSucceeds(batch.commit());await assertFails(setDoc(marker(a),data('alice',{avatar:worn})));
+});
 for(const [label,overrides] of [
  ['precise coordinates',{latitude:37.566535,longitude:126.978132}],['route history',{points:[]}],['wallet or ownership',{mileage:99999}],
  ['fractional cell',{latitudeE3:37567.123}],['wrong latitude band',{latBand:38}],['wrong longitude band',{lonBand:127}],

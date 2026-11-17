@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="run_widget_surface">#1D2E36</color>
+    <color name="run_widget_outline">#3B515B</color>
+    <color name="run_widget_text">#E2ECEF</color>
+    <color name="run_widget_muted">#ADBEC5</color>
+    <color name="run_widget_primary">#9BCDD1</color>
+    <color name="run_widget_on_primary">#12363C</color>
+    <color name="run_widget_primary_pressed">#85B8BD</color>
+    <color name="run_widget_secondary">#29454C</color>
+    <color name="run_widget_secondary_pressed">#385861</color>
+</resources>

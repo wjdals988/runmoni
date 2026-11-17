@@ -1,0 +1,3 @@
+
+com.runmoni.app.avatar.AtelierWardrobeTest:..
+com.runmoni.app.avatar.WardrobeRendererTest:.

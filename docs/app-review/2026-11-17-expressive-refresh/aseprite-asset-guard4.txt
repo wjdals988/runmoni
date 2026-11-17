@@ -1,0 +1,3 @@
+/workspace/runmoni/docs/design/avatars/v0.9.0/inspect-expansion.py:38: DeprecationWarning: Image.Image.getdata is deprecated and will be removed in Pillow 14 (2027-10-15). Use get_flattened_data instead.
+  changed_from_original = sum(a != b for a, b in zip(composite.getdata(), source.crop(box).getdata()))
+{"passed": true, "items": 39, "detailCells": 624, "tintCells": 192, "report": "/workspace/runmoni/work/expressive-refresh/aseprite-asset-guard4.json"}

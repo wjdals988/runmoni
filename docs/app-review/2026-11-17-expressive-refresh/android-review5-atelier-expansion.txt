@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AtelierExpansionRenderingTest:....
+
+Time: 289.023
+
+OK (4 tests)
+
+

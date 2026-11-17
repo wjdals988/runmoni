@@ -1,3 +1,11 @@
+# 0.9 UI·러닝 환경·도트 확장 기준 — 2026-11-18 한국 시간
+
+frontend-design를 적용한 [8개 UI 개선 설계](design-system/runmoni/pages/expressive-refresh.md)를 따른다. 의미별 라이트/다크 토큰·24dp 바깥/32dp 구역/16dp 내부 간격, 시스템 한글 Sans와 사용자 글자 크기,48dp 조작영역을 기준으로 한다. 원화/사용자 사진·실제 정보가 시각 중심이며 반복 카드/지표/전면 그라데이션을 늘리지 않는다. 긴 편집은 페이지 이동·뒤로가기/초안을 유지한다.
+
+[옷장](design-system/runmoni/pages/closet-atelier.md)·[사진 공유](design-system/runmoni/pages/share-expressive.md)·[테마/움직임](design-system/runmoni/pages/appearance-motion.md)·[환경 점수](design-system/runmoni/pages/environment-score.md)·[기록/크루](design-system/runmoni/pages/editorial-polish.md)를 구체 기준으로 삼는다. 실제 Aseprite 제작과 Android 화면·사용자 승인은 구분하며 [39종 제작/실패 검토](docs/app-review/2026-11-17-expressive-refresh/ASEPRITE_REVIEW.md)를 따른다. 원본 얼굴·몸·8프레임을 새로 생성하지 않는다. 최신 유행의 보급률/경쟁 앱 실사용·상업 품질 인증은 주장하지 않는다.
+
+아래는 이전 설계 이력이다.
+
 # 0.8.0-dev 의복·사진 공유·자동 백업 공개 — 2026-11-16 한국 시간
 
 <!-- verified-atelier-release-0.8.0-v1 -->
