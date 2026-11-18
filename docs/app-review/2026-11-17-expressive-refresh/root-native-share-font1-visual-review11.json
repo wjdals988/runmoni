@@ -1,0 +1,37 @@
+{
+  "recordedAtUtc": "2026-11-18T00:29:24.747242+00:00",
+  "reviewer": "Parent Root; actual individual original view, independent native proof/restoration checks and all2/12/1 raw hash/OK checks explicitly delivered to sole execution driver",
+  "sourceKind": "Actual API29 ComponentActivity native480/font1 share IME fixture, not MainActivity",
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "nativeProof": {
+    "file": "native5.json",
+    "sha256": "517d3469e7035f37b97132e57b11524caed8bb5f54e2eb53df4762369b73d71d"
+  },
+  "sourceRaw": {
+    "file": "native5-native-share-font1.txt",
+    "sha256": "7d345a0fea2b0c2861f7c0e80a9707db6855ceff5a4b5dd601c0a8e39d7ca48f"
+  },
+  "sourceDriver": {
+    "file": "native5-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "nativeStageAcceptedByRoot": true,
+  "finalScopeAccepted": false,
+  "userVisualApproval": false,
+  "publicSignedRuntimeVerified": false,
+  "realSnsDeliveryVerified": false,
+  "themeCausalityEstablished": false,
+  "images": [
+    {
+      "file": "native5-run-share-native480-font1-ime-caption-fixture.png",
+      "sha256": "3b099bdd9f476be8cf5e20861c114fecc743dc6f3ba1b2ba1f66d44559732a41",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Fixed back/header, full Morning Miles caption/caret and13/60 indicator, whole save/share buttons are visible above keyboard with comfortable gaps and no clipped control. Caption is fixture text; no private user data. ComponentActivity fixture only."
+    }
+  ]
+}

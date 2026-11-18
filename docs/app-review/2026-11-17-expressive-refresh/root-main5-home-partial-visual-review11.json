@@ -1,0 +1,40 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T02:37:03.235947+00:00",
+  "mainAttempt": "live5",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live5-executed-driver.py",
+    "sha256": "cac9bdf1bf4342adaa4d63eff680f1dd06a9abdc5a0e8e3030a743edbbae5c61"
+  },
+  "images": [
+    {
+      "file": "live5-main-home-light.png",
+      "sha256": "57c58364e83abbe0acb93bcc4f78c7479f6994f2c292ccf5288e8bc88ce2deb8",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live5-main-home-dark.png",
+      "sha256": "14ae41fae19a81c48886e4a1527ed7c60a36e2f1fde0be83fbbd528bab663702",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "R/version/settings, date/time, rendered MiniMi, large Run action and navigation remain legible without overlap or clipped controls. Dark contrast is readable; unavailable weather remains neutral without an invented score.",
+  "syntheticOwnedRunDistanceMeters": 5240.0,
+  "syntheticOwnedRunCount": 1,
+  "syntheticActivityExplicitlyRequiredInPublicationCaption": true,
+  "weatherInjectedByDriver": false,
+  "gpsInjectedByDriver": false,
+  "userPrivateInformationVisible": false,
+  "partialReviewOnly": true,
+  "actuallyViewedCurrentAttemptImages": 2,
+  "remainingOriginalImagesStillRequireActualReview": 5,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisPartialRecord": false,
+  "finalSourceAndRestorationReviewStillRequired": true,
+  "userVisualApproval": false
+}

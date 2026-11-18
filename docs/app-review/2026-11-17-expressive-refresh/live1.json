@@ -1,0 +1,403 @@
+{
+  "name": "live1",
+  "nonce": "e42e1fa9e31fdf68",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build11.json",
+  "sourceKind": "actual Android MainActivity",
+  "formalScopeReference": "android-scope-summary.json",
+  "formalScopeSha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf",
+  "formalScopeEarlierInputResultsReused": true,
+  "formalScopeSingleInputExecutionClaimed": false,
+  "passed": false,
+  "completed": true,
+  "captures": [],
+  "actualTaps": [
+    {
+      "label": "프로필 편집",
+      "description": false,
+      "system": false,
+      "bounds": [
+        150,
+        521,
+        397,
+        593
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-18T01:24:28.803297+00:00",
+  "systemUiWaitActions": [
+    {
+      "action": "Wait",
+      "dialog": "System UI not responding",
+      "file": "live1-system-ui-wait-1.png"
+    }
+  ],
+  "accessibilityRetries": 0,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "itemPlanSha256": "3e17341222594fccad56c6bba3707d08b4a251a5fa90c4232df8561b13704b24",
+  "weatherInjectedByThisDriver": false,
+  "appearancePreferencesRestoredExactly": true,
+  "allOwnedPreferencesStillExactAfterEnvironmentRestoration": true,
+  "restorationCommandFailures": [],
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live1-executed-driver.py",
+  "executedDriverSha256": "8fd421d179752a3cdf555355306c8f6673ec62e685135d7cfd53b755bb3fe641",
+  "observerHelper": "live1-actual-ui-helper.py",
+  "observerHelperSha256": "e7da573d8b77307a8c4501f61c6f7831196c0d3a18433acef1b2651a8f782e7d",
+  "environmentHelper": "live1-environment-helper.py",
+  "environmentHelperSha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8",
+  "scopeValidator": "live1-scope-validator.py",
+  "scopeValidatorSha256": "eabf5c8702e9eee1509157dc51e31ffd8277ddf07bc93b5bb239b7b055504223",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-18T01:33:14.596798+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3",
+  "installationReference": "installation11.json",
+  "installationReferenceSha256": "6b564db2f8ea69169f06c192331a8f3bbed0376be27a37e7e2c4005eabf6cbc1",
+  "preInstallInputNumber": 11,
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "3d598cb3afdbdcf24748b98eae2b1b20a608199caea98b95883be27ca7bb639a"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "37e87114a87f9fc70104ee47b7b0fd3c71d308c4803dcbc5df495fcb1cf9312f"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "a0d42e6972f5134324a031234ec6c39354f19f0b6da748c6abefeddbf3f83206",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "originalAppearancePreferenceExists": false,
+  "privateAppearanceBackup": {
+    "file": "live1-private-appearance-before.xml",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mode": "0600"
+  },
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.221,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.25,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.291,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 10.926,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 28.279,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.061,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.336,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.258,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.808,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main native320/font2 navigation",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 25.738,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 profile editor",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 6.453,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 Main profile IME shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 6.686,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.37,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.15,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.258,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.86,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standard Main navigation restored",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 25.775,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.866,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.275,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.267,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.29,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.28,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.376,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 40,
+  "privateObserverCaptures": [
+    {
+      "file": "live1-system-ui-wait-1.png",
+      "sha256": "853927213af81a6bc380c4e356e95b0c7c71f6c9d80786823a3d4737966436fa",
+      "privateWorkOnly": true
+    }
+  ],
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "e42e1fa9e31fdf68",
+    "recordId": "runmoni-share-review-e42e1fa9e31fdf68",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-e42e1fa9e31fdf68.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "actualProfileKeyboardNativeObservation": {
+    "sourceKind": "actual Android MainActivity",
+    "privateDiagnosticsOnly": true,
+    "startedAtUtc": "2026-11-18T01:26:28.489657+00:00",
+    "standardViewportBefore": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "profileSaveOrConnectionActionRequested": false,
+    "nativeViewport": {
+      "density": "Physical density: 160\nOverride density: 240",
+      "fontScale": "2.0",
+      "native320Font2RequiredByClass": true
+    },
+    "standardViewportAfter": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "viewportRestoredExactly": true,
+    "profileStillUnchanged": true,
+    "finishedAtUtc": "2026-11-18T01:32:10.445274+00:00"
+  },
+  "failureType": "AssertionError",
+  "failure": "",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerDismissalNotRequested": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "newOwnedFixturePreferenceFilesRemoved": [],
+  "ownedFixturePreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "formalScopeEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "scopeValidatorSourceUnchanged": true,
+  "itemPlanUnchanged": true,
+  "installationEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-18T01:33:14.596783+00:00"
+}

@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 2,
+  "scopeAcceptedByRoot": true,
+  "draftRequiresActualRootReviewBeforeApproval": false,
+  "finalLocalBinary": "binary-build11.json",
+  "finalLocalBinarySha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3",
+  "earlierInputResultsReused": true,
+  "equivalenceReviews": [
+    {
+      "file": "input9-to11-renderer-source-equivalence.json",
+      "sha256": "509b5df6c388dfef95b0d33e23f8a28318f456e7e4405128e82fa602ed1571e1"
+    }
+  ],
+  "restorationExceptions": [
+    {
+      "proof": "landscape2",
+      "field": "fixedToUserRotation.restoredExactly",
+      "observed": false,
+      "originalParentSha256": "3c475c9a4ead2ff45fb93909da43741a4add12a5e83275440f2aeb817ada960a",
+      "supplementalRestoration": "landscape2-rotation-recovery2.json",
+      "reason": "API29 shell default persisted disabled; passed whole product method retained only with separately executed restoration to original default/effective false. Original parent remains false; recovery adds zero product methods."
+    }
+  ],
+  "supplementalRestorationReferences": [
+    {
+      "file": "landscape2-rotation-recovery2.json",
+      "sha256": "7fd673ee6bef52b602cb29d3bad028309d56e8c054111dd46d97f5e2caa6d595"
+    }
+  ],
+  "proofReferences": {
+    "android-review8": {
+      "file": "android-review8.json",
+      "sha256": "8f44b42507b60657a26522e47e3cf97b7a697d1f277bf849685b23d85c716702"
+    },
+    "native5": {
+      "file": "native5.json",
+      "sha256": "517d3469e7035f37b97132e57b11524caed8bb5f54e2eb53df4762369b73d71d"
+    },
+    "android-review10": {
+      "file": "android-review10.json",
+      "sha256": "69e38039edfc5059662a1e8464cd1957612658144a1e829779e9f9a61b462ee2"
+    },
+    "map-sdk3": {
+      "file": "map-sdk3.json",
+      "sha256": "3c29c2ad79a32e7cc0f0e715ca4faa3bda5a3369676299fa4afdbf0e4c62c500"
+    },
+    "map-online3": {
+      "file": "map-online3.json",
+      "sha256": "0396d99b502126b9e38869f7baad5c17c3b6f351c6b745a38ae14a0e17f6ebea"
+    },
+    "landscape2": {
+      "file": "landscape2.json",
+      "sha256": "3c475c9a4ead2ff45fb93909da43741a4add12a5e83275440f2aeb817ada960a"
+    }
+  },
+  "includedGroups": [
+    {
+      "proof": "android-review8",
+      "group": "atelier-materials",
+      "methodIds": [
+        "com.runmoni.app.avatar.AtelierWardrobeTest#appendedIdsRoundTripWithoutChargingOrErasingOldOwnedAndPendingChoices",
+        "com.runmoni.app.avatar.AtelierWardrobeTest#appendedMaterialsReachTheAndroidAndMapOutputsWithoutChangingIdentityOrSourceCache",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#bothSockLengthsChangeAllPosesWhileIdentityShoesAndOtherMaterialsStayIntact",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#newIdsAndPendingGenderChoiceRoundTripInARealIsolatedWalletWithoutSpending",
+        "com.runmoni.app.avatar.ExpandedWardrobeTest#newMensShortsUseDistinctDefaultsAndExplicitColorWithoutInventingWomensLegs",
+        "com.runmoni.app.avatar.WardrobeRendererTest#capAndVisorKeepTheirClosedTipsAndOriginalFaceOnActualAndroidBitmaps",
+        "com.runmoni.app.avatar.WardrobeRendererTest#everySelectableNonDefaultItemActuallyChangesEveryApprovedPose",
+        "com.runmoni.app.avatar.WardrobeRendererTest#explicitColorsOverrideItemDefaultsAndReturningToZeroRestoresTheItemPalette",
+        "com.runmoni.app.avatar.WardrobeRendererTest#savedPendingCostumeKeepsOccupancyAndUnrelatedEquipmentWithoutMigratingIds",
+        "com.runmoni.app.avatar.WardrobeRendererTest#torsoEquipmentPreservesTheOriginalForegroundArmsAndHands"
+      ]
+    },
+    {
+      "proof": "android-review8",
+      "group": "atelier-expansion",
+      "methodIds": [
+        "com.runmoni.app.ui.AtelierExpansionRenderingTest#allThirtyNineItemsRenderForBothOriginalIdentities",
+        "com.runmoni.app.ui.AtelierExpansionRenderingTest#fullEquipmentAndNewSetsPreserveTheOriginalPoseAcrossEightFrames",
+        "com.runmoni.app.ui.AtelierExpansionRenderingTest#garmentPaletteChangesCannotTintHairSkinOrSoles",
+        "com.runmoni.app.ui.AtelierExpansionRenderingTest#mixedGenerationEquipmentKeepsBeltsAndGlassesInFrontOfVestsAndEarDevices"
+      ]
+    },
+    {
+      "proof": "native5",
+      "group": "native-form-pages",
+      "methodIds": [
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#imeKeepsCloseAndSubmitReachableWithoutSubmittingOnDismiss",
+        "com.runmoni.app.ui.ModalDismissNativeUiTest#informationCloseStaysInTheWindowAfterScrollingLargeContent"
+      ]
+    },
+    {
+      "proof": "native5",
+      "group": "native-large-text",
+      "methodIds": [
+        "com.runmoni.app.ui.AppEntryNativeUiTest#bothChoicesRemainReachableAboveSystemNavigationAtLargeFont",
+        "com.runmoni.app.ui.AppInformationNativeTest#enlargedHeaderIndicatorStaysSeparateAndOpensTheUpdatePrompt",
+        "com.runmoni.app.ui.AppInformationNativeTest#largeAboutAndUpdateConfirmationRemainReadableAndScrollable",
+        "com.runmoni.app.ui.ClosetNavigationNativeUiTest#largeSystemTextKeepsTheLastItemAndPaletteAboveSystemNavigation",
+        "com.runmoni.app.ui.HierarchyClosetLargeTextUxTest#genderAndScrollableCategoriesAllowOneTapFreeSelectionWithoutLosingInventory",
+        "com.runmoni.app.ui.RunRecordScreenNativeUiTest#nativeLargeTextKeepsLowerActionsReachableAndBackCancelsBeforeLeaving",
+        "com.runmoni.app.ui.RunShareImeUiTest#realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#arrivingChatDoesNotMoveReadersAwayFromOlderMessages",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeFontSettingsAndClosetKeepSingleCloseAndSelectableSlots",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#largeLocationConsentRemainsScrollableWithoutEnablingSharing",
+        "com.runmoni.app.ui.RunmoniDialogDesignTest#nativePartyPickersAndStrictDateErrorRemainUsable",
+        "com.runmoni.app.ui.RunningKitColorsNativeUiTest#actualLargeTextClosetKeepsPreviewAndAllSixColorActionsAccessible"
+      ]
+    },
+    {
+      "proof": "native5",
+      "group": "native-share-font1",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareImeUiTest#normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "backup-room",
+      "methodIds": [
+        "com.runmoni.app.data.CloudBackupPersistenceTest#aFailedOwnedCompletionKeepsItsFirstUidAndEnqueuesOnlyAfterRetryCommits",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#aGuestRunBindsAtCompletionWhileAnAlreadyOwnedRunNeverMovesToAnotherAccount",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#completedRecordingRequestsBackupAfterItsDurableCommitWithoutAViewModel",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#fixedOwnerAndPendingAckSurviveDatabaseReopenWithoutUploadingAnImportedRow",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#suppressedSummaryRejectsLateOrForeignAckAndStaysSuppressedAfterReopen",
+        "com.runmoni.app.data.CloudBackupPersistenceTest#v1MigrationPreservesCompletedUnfinishedPointsAndPendingLocalFields",
+        "com.runmoni.app.data.RunPersistenceTest#parentUpdatePreservesEntireTrackAndCascadeDeleteRemovesIt",
+        "com.runmoni.app.data.RunPersistenceTest#unfinishedTrackSurvivesDatabaseReopenWithSegments",
+        "com.runmoni.app.data.RunPersistenceTest#walletReplayedCompletionCreditsExactlyOnceAndDoesNotResetCosmetics",
+        "com.runmoni.app.data.RunReliabilityTest#committedRecordSurvivesCreditFailureAndReplayKeepsOneCredit",
+        "com.runmoni.app.data.RunReliabilityTest#creditRetryFromOldRecordDeletionDoesNotClearCurrentCheckpointFailure",
+        "com.runmoni.app.data.RunReliabilityTest#failedPointWritePausesThenRetriesTheSamePointAndKeepsTheNextSequence",
+        "com.runmoni.app.data.RunReliabilityTest#failedStartAcknowledgementReloadsItsCommittedIdInsteadOfCreatingAnotherRun",
+        "com.runmoni.app.data.RunReliabilityTest#finishFailureFreezesItsOriginalTimeAndRetryDoesNotCreditTwice",
+        "com.runmoni.app.data.RunReliabilityTest#startupCreditFailureDoesNotHideAnUnfinishedRunAndReadFailureBlocksANewId",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#beginWaitsForThePriorRecorderCleanupBeforeRestoringItsCheckpoint",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#failedStopCheckpointCannotReloadAndLoseQueuedPointsOnWarmRecovery",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#missingRecoveryCannotCreateANewRunOrCredit",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#speedUsesAcceptedRouteAndClearsOnPauseSignalLossAndFinishWithoutLosingPoints",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#staleRunActionsAndStoppedCallbackCannotChangeANewerRunOrFlushItsFailedWrite",
+        "com.runmoni.app.data.RunSpeedPersistenceTest#unexpectedRecorderStopPreservesTheRunAndResumeDoesNotBridgeItsGap"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "atelier-selection",
+      "methodIds": [
+        "com.runmoni.app.avatar.ExpandedWardrobeSelectionUiTest#closetSelectsNewFreeItemsAndGenderSwitchPreservesTheHiddenSavedShortsId"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "application-hierarchy",
+      "methodIds": [
+        "com.runmoni.app.ui.RunmoniDesignTest#fiveTabsFitNineViewportAndFontCases",
+        "com.runmoni.app.ui.RunmoniDesignTest#runningActionsStayVisibleAcrossNineViewportAndFontCases"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "appearance",
+      "methodIds": [
+        "com.runmoni.app.ui.AppearanceUiTest#choosingThemePersistsAcrossFreshReaderAndRecomposesCurrentContent",
+        "com.runmoni.app.ui.AppearanceUiTest#oppositeThemeRootsKeepTheirOwnSemanticColoursAndReadableContrast"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "environment-score",
+      "methodIds": [
+        "com.runmoni.app.ui.RunningEnvironmentUiTest#currentScoreExplainsItsCriteriaAndDisappearsDuringFailedRefresh",
+        "com.runmoni.app.ui.RunningEnvironmentUiTest#hazardScoreAndInlineCriteriaReflowAtNarrowWidthWithLargeText"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "closet-atelier",
+      "methodIds": [
+        "com.runmoni.app.ui.ClosetAtelierUiTest#changingAvailableHeightPreservesTheSearchAcrossFittingLayouts",
+        "com.runmoni.app.ui.ClosetAtelierUiTest#movingBetweenPartsDoesNotCarryAQueryThatHidesTheNextPart",
+        "com.runmoni.app.ui.ClosetAtelierUiTest#noMatchesOffersAnAccessibleResetAndNeverChangesTheOutfit",
+        "com.runmoni.app.ui.ClosetAtelierUiTest#partSearchFiltersRealNamesAndSelectingKeepsOtherEquipmentAndMileage"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "widget-night",
+      "methodIds": [
+        "com.runmoni.app.widget.RunWidgetNightTest#dayAndNightResourcesKeepReadableTextAndActions",
+        "com.runmoni.app.widget.RunWidgetNightTest#nightIdleRemoteViewsUsesNightInkAndKeepsItsOpenActionAtFontTwo"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "widget-existing-layouts",
+      "methodIds": [
+        "com.runmoni.app.widget.RunWidgetFactoryTest#coldOrRecoveryViewsHaveNoServiceControlsAndNeverUseAChronometer",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#idlePanelUsesItsContentHeightAndRetainsIdentityWithoutEmptyStatistics",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#immutableVerbAndRunIdentitiesSeparateOldControlsAndConfirmedFinish",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#largeTextFallbackRetainsAnAccessibleAppActionWithoutTwoClippedButtons",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#launcherPaddingAndTinyFallbackKeepTheAppActionAccessible",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#metricsCacheRoundTripsOnlyTheExplicitSafeFieldsAndRejectsCorruption",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#narrowWidgetMatrixMeasuresWholeTextAndButtonsAtNormalAndEnlargedFontSizes",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#runningAndPausedViewsExposeCurrentMetricsAndSeparateControls",
+        "com.runmoni.app.widget.RunWidgetFactoryTest#wideShortLiveWidgetKeepsTwoMetricsAndSeparateNamedIconControls"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "icon",
+      "methodIds": [
+        "com.runmoni.app.ui.RunmoniIconTest#foregroundAndThemedSilhouetteShareAContourInsideTheAdaptiveSafeCircle",
+        "com.runmoni.app.ui.RunmoniIconTest#installedNormalRoundAndSmallNotificationResourcesRenderAtTheirConsumerSizes",
+        "com.runmoni.app.ui.RunmoniIconTest#notificationRemainsAnUnpaddedAlphaMarkWithAnOpenCounterAt24Pixels"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "share-renderer",
+      "methodIds": [
+        "com.runmoni.app.sharing.RunShareCardRendererTest#approvedMaleAndFemalePaletteStaysExactAndBorrowedSourcesStayAlive",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#fullBleedPhotoHasNoTintRibbonsOrGradientForEveryStyleToneAndRatio",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#legacyThemesRemainReadableButNeverIntroduceColoredPhotoOrFallbackSurfaces",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#missingAvatarAndLongUnicodeMetricsDoNotSilentlyDisappearOrClipTheCanvas",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#recordAndAvatarMoveIndependentlyAndReactImmediatelyAtTheirCanvasEdges",
+        "com.runmoni.app.sharing.RunShareCardRendererTest#stylesAndOppositeTextOutlinesRemainVisibleAndCanonicalOnBrightAndDarkPhotos"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "share-ui",
+      "methodIds": [
+        "com.runmoni.app.ui.RunShareControllerTest#actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks",
+        "com.runmoni.app.ui.RunShareUiTest#canvasRatioStaysReachableFromEveryToolWithoutResettingIndependentEdits",
+        "com.runmoni.app.ui.RunShareUiTest#everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases",
+        "com.runmoni.app.ui.RunShareUiTest#failedRestoredPhotoCanBeRemovedWithoutLosingTheCaptionOrOtherDraftChoices",
+        "com.runmoni.app.ui.RunShareUiTest#recordAndAvatarHaveIndependentButtonAlternativesAndOldDraftsStillRestore",
+        "com.runmoni.app.ui.RunShareUiTest#rootEditorBackRestoresRecordScrollAndRejectsDisposedOrRemovedRecordShareCallbacks",
+        "com.runmoni.app.ui.RunShareUiTest#shortHeightWithLargeTextKeepsBackFixedAndBothFooterActionsReachableByScroll"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "record-auto-backup",
+      "methodIds": [
+        "com.runmoni.app.ui.RunRecordScreenUiTest#actionsKeepTheirRecordIdentityAndDeleteCancellationDoesNotLeaveThePage",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#backupRequiresANewConfirmationAfterEitherAccountOrRecordChanges",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#currentStorageAndPendingCreditStaySeparateFromGoogleBackup",
+        "com.runmoni.app.ui.RunRecordScreenUiTest#oldConfirmationCannotApproveAReopenedDialogAndDisposedPageCannotAct"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "closet",
+      "methodIds": [
+        "com.runmoni.app.ui.RunningKitColorsUiTest#changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#closetColorChangesKeepReadyItemSelectionsInventoryAndGender",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#namedRadioChoicesWrapWithoutShrinkingAcrossSmallAndLargeTextViewports",
+        "com.runmoni.app.ui.RunningKitColorsUiTest#unavailableArtworkDisablesChoicesUntilExplicitRetrySucceeds"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "discovery",
+      "methodIds": [
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#beforeRunningConsentIsExplicitAndPreparedStateIsNotLivePresence",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#explicitRefreshStaysOutsideTheMapAndCanRetryWithoutChangingConfirmedMarkersOrConsent",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#guestAlwaysHasAMapAndProfileEntryWithoutCrewPartyOrCachedRunnerLeakage",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#mapAndOutsideActionsRemainReadableAcrossNarrowScreensAndLargeText",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#selfExpiredAndInvalidLocationsStayHiddenWhileOnlyFreshOtherRunnerReachesTheMap",
+        "com.runmoni.app.ui.RunnerDiscoveryUiTest#sharingButtonRequestsConsentAndCannotDirectlyConfirmOrMutateSharingState"
+      ]
+    },
+    {
+      "proof": "android-review10",
+      "group": "avatar-identity-playback",
+      "methodIds": [
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#actualMiniMiComposableDrawsTheApprovedWholeBody",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#readyFreeItemChangesTheActualAvatarWithoutSpendingAndPendingItemsCannotBeSelected",
+        "com.runmoni.app.ui.ApprovedAvatarRenderingTest#sharedAppAndMapMatchesApprovedBodyAndClipsOnlyPreviousRowPadding",
+        "com.runmoni.app.ui.AvatarPlaybackTest#actualClosetPauseAndResumeFreezeAndRestartPixels",
+        "com.runmoni.app.ui.AvatarPlaybackTest#lifecycleStopFreezesLastFrameAndStartResumes",
+        "com.runmoni.app.ui.AvatarPlaybackTest#realClockPlaybackRendersAllEightFrames",
+        "com.runmoni.app.ui.AvatarPlaybackTest#systemDisabledAnimationsFreezeAndCanResume"
+      ]
+    },
+    {
+      "proof": "map-sdk3",
+      "group": "native-map-sdk",
+      "methodIds": [
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#directNativeFooterFitsAt320DpAndDoubleTextWithoutConstructingGl",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#initializationFailureIsReportedInsteadOfCrashingThePage",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#missingAssetStyleReportsFailureFromTheActualNativeSdk",
+        "com.runmoni.app.ui.MapLibreMapPaneUiTest#offlineFixtureNeverConstructsTheProductionNativeProvider"
+      ]
+    },
+    {
+      "proof": "map-online3",
+      "group": "native-online-map",
+      "methodIds": [
+        "com.runmoni.app.ui.NativeVectorMapOnlineUiTest#publicNativeMapRendersSyntheticRouteAndDressedRunnerAndKeepsGestureCamera"
+      ]
+    },
+    {
+      "proof": "landscape2",
+      "group": "community-return-scroll",
+      "methodIds": [
+        "com.runmoni.app.ui.CommunityPageNavigationTest#partyChatBackReturnsToTheSamePartyScrollAndCrewTab"
+      ]
+    }
+  ],
+  "excludedGroups": [
+    {
+      "proof": "android-review8",
+      "group": "backup-room",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "application-hierarchy",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "appearance",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "environment-score",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "closet-atelier",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "widget-night",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "widget-existing-layouts",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "icon",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "share-renderer",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "share-ui",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "record-auto-backup",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "discovery",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    },
+    {
+      "proof": "android-review8",
+      "group": "avatar-identity-playback",
+      "reason": "Changed UI/window dependency requires fresh11. Original failed whole playback7 and every partial method remain excluded; initial pause-pixel cause unconfirmed.",
+      "allPartialMethodsFromThisWholeGroupExcluded": true
+    }
+  ],
+  "sameBinaryEntireScopeClaimed": false,
+  "diagnosticMethodsIncluded": false,
+  "distinctPassedMethods": 117,
+  "freshFinalInputMethodCount": 103,
+  "equivalenceRetainedMethodCount": 14,
+  "actualRootAuditReference": {
+    "file": "root-android-scope-review11.json",
+    "sha256": "3f3dc0ccde487501b408e99ef5677ced2564b23caf3bd676b42f0ce15bd582aa"
+  }
+}

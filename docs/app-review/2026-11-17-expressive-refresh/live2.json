@@ -1,0 +1,819 @@
+{
+  "name": "live2",
+  "nonce": "e5f701fc96b372c1",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build11.json",
+  "sourceKind": "actual Android MainActivity",
+  "formalScopeReference": "android-scope-summary.json",
+  "formalScopeSha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf",
+  "formalScopeEarlierInputResultsReused": true,
+  "formalScopeSingleInputExecutionClaimed": false,
+  "passed": false,
+  "completed": true,
+  "captures": [],
+  "actualTaps": [
+    {
+      "label": "프로필 편집",
+      "description": false,
+      "system": false,
+      "bounds": [
+        150,
+        521,
+        397,
+        593
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        12,
+        55,
+        84,
+        127
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-18T01:40:43.959879+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "itemPlanSha256": "3e17341222594fccad56c6bba3707d08b4a251a5fa90c4232df8561b13704b24",
+  "weatherInjectedByThisDriver": false,
+  "appearancePreferencesRestoredExactly": true,
+  "allOwnedPreferencesStillExactAfterEnvironmentRestoration": true,
+  "restorationCommandFailures": [],
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live2-executed-driver.py",
+  "executedDriverSha256": "b5938643b66e26275d51e3c496e9dd5738072c00249814a3f5c8d8b7888c1e09",
+  "observerHelper": "live2-actual-ui-helper.py",
+  "observerHelperSha256": "e7da573d8b77307a8c4501f61c6f7831196c0d3a18433acef1b2651a8f782e7d",
+  "environmentHelper": "live2-environment-helper.py",
+  "environmentHelperSha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8",
+  "scopeValidator": "live2-scope-validator.py",
+  "scopeValidatorSha256": "eabf5c8702e9eee1509157dc51e31ffd8277ddf07bc93b5bb239b7b055504223",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-18T01:49:04.490909+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3",
+  "installationReference": "installation11.json",
+  "installationReferenceSha256": "6b564db2f8ea69169f06c192331a8f3bbed0376be27a37e7e2c4005eabf6cbc1",
+  "preInstallInputNumber": 11,
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "3d598cb3afdbdcf24748b98eae2b1b20a608199caea98b95883be27ca7bb639a"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "37e87114a87f9fc70104ee47b7b0fd3c71d308c4803dcbc5df495fcb1cf9312f"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "a0d42e6972f5134324a031234ec6c39354f19f0b6da748c6abefeddbf3f83206",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "originalAppearancePreferenceExists": false,
+  "privateAppearanceBackup": {
+    "file": "live2-private-appearance-before.xml",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mode": "0600"
+  },
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.705,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.296,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.272,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 12.568,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 23.053,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.952,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.781,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.24,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.448,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main native320/font2 navigation",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 25.159,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 profile editor",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.468,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 Main profile IME shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 3.615,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile close returns parent without save",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.6,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main profile close hides IME",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 30.002,
+      "completed": false,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.047,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.529,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.254,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.01,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standard Main navigation restored",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 22.332,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.203,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.219,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.211,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.228,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.257,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.236,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 31,
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "e5f701fc96b372c1",
+    "recordId": "runmoni-share-review-e5f701fc96b372c1",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-e5f701fc96b372c1.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "actualProfileKeyboardNativeObservation": {
+    "sourceKind": "actual Android MainActivity",
+    "privateDiagnosticsOnly": true,
+    "startedAtUtc": "2026-11-18T01:42:26.038859+00:00",
+    "standardViewportBefore": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "profileSaveOrConnectionActionRequested": false,
+    "nativeViewport": {
+      "density": "Physical density: 160\nOverride density: 240",
+      "fontScale": "2.0",
+      "native320Font2RequiredByClass": true
+    },
+    "nativeBeforeGeometryAssertions": {
+      "screenshot": {
+        "file": "live2-private-main-profile-ime320-font2-before-reveal.png",
+        "sha256": "2679e69fce2837e3e87afce9f3f0c218fb16e72b518a6985a23c04cd3f9cadaf",
+        "privateWorkOnly": true
+      },
+      "hierarchy": {
+        "file": "live2-private-main-profile-ime320-font2-before-reveal-ui.xml",
+        "sha256": "db5c7b54e99597aeea7918b17f169154ca592962acabe1a52e4f1040f62abe89",
+        "privateWorkOnly": true
+      },
+      "backBounds": [
+        [
+          12,
+          55,
+          84,
+          127
+        ]
+      ],
+      "saveBounds": []
+    },
+    "boundedAboveImeSaveReveal": {
+      "maximumAttempts": 28,
+      "minimum48dpTargetPx": 72.0,
+      "visibleWindowBounds": [
+        0,
+        36,
+        480,
+        413
+      ],
+      "saveOrConnectionTapped": false,
+      "attempts": [
+        {
+          "direction": "down",
+          "directionAttempt": 0,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 1,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 2,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 3,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 4,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 5,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 6,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 7,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 8,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 9,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 10,
+          "saveBounds": [
+            270,
+            393,
+            420,
+            413
+          ],
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 11,
+          "saveBounds": [
+            270,
+            264,
+            420,
+            351
+          ],
+          "fullTargetAboveIme": true
+        }
+      ]
+    },
+    "actualKeyboardVisible": true,
+    "visibleWindowBounds": [
+      0,
+      36,
+      480,
+      413
+    ],
+    "initialVisibleWindowBounds": [
+      0,
+      36,
+      480,
+      413
+    ],
+    "finalMainWindowCount": 1,
+    "actualControlBoundsBeforeAssertions": {
+      "back": [
+        [
+          12,
+          55,
+          84,
+          127
+        ]
+      ],
+      "save": [
+        [
+          270,
+          264,
+          420,
+          351
+        ]
+      ]
+    },
+    "minimum48dpTargetPx": 72.0,
+    "densityDpi": 240,
+    "physicalWidthPx": 480,
+    "actualComputedWidthDp": 320.0,
+    "actualFontScale": 2.0,
+    "screenshot": {
+      "file": "live2-private-main-profile-ime320-font2.png",
+      "sha256": "2dfb3dc54fb32782fede5ebdfdeb86ad6431f1ae0260c373672cc3d84e2cc671",
+      "privateWorkOnly": true,
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true
+    },
+    "nativeHierarchy": {
+      "file": "live2-private-main-profile-ime320-font2-ui.xml",
+      "sha256": "7eb0debdc267e03444c21e24450fce306d3831516f048d7314b9b01116c90b60",
+      "privateWorkOnly": true
+    },
+    "initialWindowDiagnostic": {
+      "file": "live2-private-main-profile-ime320-font2-windows.txt",
+      "sha256": "2baf827a64cc051a746dc86a7c8af76db6f5b3a1f2f48c3510456f1bcc6e2e5f",
+      "privateWorkOnly": true
+    },
+    "windowDiagnostic": {
+      "file": "live2-private-main-profile-ime320-font2-final-windows.txt",
+      "sha256": "fc6e830713dca07fda132a123321b50e1e00da58e9a835e79dbfe83b70ee90eb",
+      "privateWorkOnly": true
+    },
+    "finalInputMethodDiagnostic": {
+      "file": "live2-private-main-profile-ime320-font2-final-input-method.txt",
+      "sha256": "4b6111cf23e458902d9c2f4787de99d156f925b3cf778c0c5efdbd7879270265",
+      "privateWorkOnly": true
+    },
+    "actualControlsInsideVisibleWindow": true,
+    "actualControlBounds": {
+      "back": [
+        12,
+        55,
+        84,
+        127
+      ],
+      "save": [
+        270,
+        264,
+        420,
+        351
+      ]
+    },
+    "standardViewportAfter": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "viewportRestoredExactly": true,
+    "profileStillUnchanged": true,
+    "finishedAtUtc": "2026-11-18T01:47:58.327946+00:00"
+  },
+  "failureType": "TimeoutExpired",
+  "failure": "Inspect retained private diagnostics",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerDismissalNotRequested": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "newOwnedFixturePreferenceFilesRemoved": [],
+  "ownedFixturePreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "formalScopeEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "scopeValidatorSourceUnchanged": true,
+  "itemPlanUnchanged": true,
+  "installationEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-18T01:49:04.490894+00:00"
+}

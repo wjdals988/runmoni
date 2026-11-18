@@ -1,0 +1,37 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T03:34:00.402542+00:00",
+  "mainAttempt": "live6",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live6-executed-driver.py",
+    "sha256": "b787ba3972d6ede6408ad42b613eef7a9a06d519352b6c866842ed19ce5ec4ed"
+  },
+  "images": [
+    {
+      "file": "live6-main-settings-dark.png",
+      "sha256": "24a2dbcb4c8c551a24d9c5630f9017e9fcfeb9c76166ae75ef7368c7cd1218c4",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-map-dark.png",
+      "sha256": "9acf7d84665e58e99771d9406d25977b3882c8c43ac8403540fc42a64abd1c41",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "settingsVisualConclusion": "Dark theme is actually selected; theme icons/radios/section spacing are readable without private account data. Device-only status is not a connection-success proof.",
+  "mapVisualConclusion": "Actual dark native tiles, Korean labels and full credit are visible. Map controls are outside the map with clear navigation. Seoul is explicitly a before-location-confirmation exploration center with permission prompt, not currentGPS or real nearby-runner evidence.",
+  "actualGpsOrOperatingNearbyRunnerProofClaimed": false,
+  "userPrivateInformationVisible": false,
+  "actualCurrentAttemptOriginalViewsCumulative": 7,
+  "allSevenOriginalsActuallyViewedByParentRoot": true,
+  "wholeMainCompletionSourceRestorationAndBudgetAuditStillRequired": true,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisRecord": false,
+  "userVisualApproval": false,
+  "phoneGoogleSnsOrPublicSignedRuntimeApprovalClaimed": false
+}

@@ -1,0 +1,79 @@
+{
+  "recordedAtUtc": "2026-11-18T01:42:57.601378+00:00",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "failedMainAttempt": {
+    "file": "live1.json",
+    "sha256": "5c43182b842f521e0d435fe4a35afb9ac358bc2972b5f5a625579011266899cd",
+    "wholeAttemptPassed": false,
+    "acceptedCaptures": 0
+  },
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "formalScope": {
+    "file": "android-scope-summary.json",
+    "sha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf",
+    "distinctMethodsUnchanged": 117
+  },
+  "failure": {
+    "stage": "actual-main-native320-font2-profile-keyboard-without-save",
+    "type": "AssertionError",
+    "originalMessageWasEmpty": true,
+    "exactControlOrAssertionIdentified": false,
+    "productFaultEstablished": false,
+    "causeConfirmed": false
+  },
+  "privateWindowObservation": {
+    "sha256": "1305662b40e962332f0edf482ad45192c41d5a5e064d4528b9377ade44c0a9a3",
+    "visibleWindowBounds": [
+      0,
+      36,
+      480,
+      413
+    ],
+    "privateFullDumpPublished": false,
+    "nativeControlBoundsWereSavedBeforeAssertion": false,
+    "outerFailureScreenshotWasAfterNativeViewportRestoration": true
+  },
+  "restorationAndSourceGuards": {
+    "nonceFixtureCleanupSucceeded": true,
+    "ownGalleryOutputsRemoved": true,
+    "ownShareCacheOutputsRemoved": true,
+    "ownReceiverOutputsRemoved": true,
+    "databaseExactlyRestored": true,
+    "preferencesRestoredExactly": true,
+    "profileRestoredExactly": true,
+    "accountPreferencesRestoredExactly": true,
+    "appearancePreferencesRestoredExactly": true,
+    "ownedFixturePreferencesRestoredExactly": true,
+    "allOwnedPreferencesStillExactAfterEnvironmentRestoration": true,
+    "controlledEnvironmentExactlyRestored": true,
+    "binaryEvidenceUnchanged": true,
+    "driverSourceUnchanged": true,
+    "observerHelperSourceUnchanged": true,
+    "environmentHelperSourceUnchanged": true,
+    "scopeValidatorSourceUnchanged": true,
+    "formalScopeEvidenceUnchanged": true,
+    "itemPlanUnchanged": true,
+    "installationEvidenceUnchanged": true
+  },
+  "restorationCommandFailures": [],
+  "staticObserverCorrection": {
+    "reviewedByParentRoot": true,
+    "driverSha256": "b5938643b66e26275d51e3c496e9dd5738072c00249814a3f5c8d8b7888c1e09",
+    "onlyPrivateProfileFunctionChanged": true,
+    "originalMaximumRevealAttempts": 28,
+    "newMaximumRevealAttempts": 28,
+    "original48dpPlusOnePixelRuleUnchanged": true,
+    "rawNativeDiagnosticsBeforeAssertions": true,
+    "swipesBoundToObservedAppViewportAboveIme": true,
+    "finalImeAndVisibleFrameRereadWithoutExtraWait": true,
+    "saveOrConnectionTapRequested": false
+  },
+  "laterMainResultOrImagesImported": false,
+  "publicMainVisualApprovalClaimed": false,
+  "productOrFormalTestSourceChanged": false,
+  "productMethodsAddedByThisRecord": 0
+}

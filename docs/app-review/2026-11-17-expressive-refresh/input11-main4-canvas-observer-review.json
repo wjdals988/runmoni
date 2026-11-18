@@ -1,0 +1,65 @@
+{
+  "recordedAtUtc": "2026-11-18T02:25:59.325913+00:00",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "originalFailedMain": {
+    "file": "live4.json",
+    "sha256": "c59ae905ff52afe8efd4ebd279567056c57df86cb28db166b9fef62aabccabde",
+    "wholeAttemptPassed": false,
+    "partialCaptureCount": 2,
+    "acceptedPublicationCaptures": 0
+  },
+  "partialProfileObservation": {
+    "physicalKeyboardHiddenSampleElapsedHostSeconds": 0.632,
+    "same30SecondBudget": true,
+    "passed": true,
+    "wholeAttemptSuccessClaimed": false
+  },
+  "failureStage": "actual-closet-readiness-gated-pause-resume-observation",
+  "readiness": {
+    "actualPlacedAvatarPixelsReadyPassed": true,
+    "actualPlacedAvatarPixelsReadySeconds": 7.658,
+    "subsequentCanvasSelectorBudgetSeconds": 120,
+    "subsequentCanvasSelectorTimedOut": true,
+    "motionOrPausedSamplesTaken": 0
+  },
+  "observerMismatch": {
+    "lookedForExactAccessibleName": "러닝 미니미",
+    "actualMainAccessibleName": "나의 러닝 미니미",
+    "actualUniqueCanvasBounds": [
+      24,
+      108,
+      141,
+      284
+    ],
+    "actualPauseControlDescription": "달리기 멈춤",
+    "frozenProductionMainWrapper": "app/src/main/java/com/runmoni/app/ui/RunmoniApp.kt:722",
+    "defaultComponentDescriptionIsDifferent": true
+  },
+  "actualPrivateDiagnostic": {
+    "imageSha256": "9f27fa9690970ef2f53297f13d0e2e39fa9256c79fa582218282785ca5f9bd2e",
+    "hierarchySha256": "516c1964da66e2abd4e21c0d3f367a4dc45bc824201127843d9b851752649158",
+    "rawPrivateMediaPublished": false
+  },
+  "rootReview": {
+    "reviewer": "Parent Root",
+    "actuallyViewedReadyClosetDiagnostic": true,
+    "actuallyParsedUniqueCanvasAndPauseControl": true,
+    "actuallyReadFrozenWrapperAndExactOneLiteralObserverDiff": true,
+    "privacyReviewed": true
+  },
+  "observerOnlyCorrection": {
+    "sourceSha256": "cac9bdf1bf4342adaa4d63eff680f1dd06a9abdc5a0e8e3030a743edbbae5c61",
+    "exactlyOneLiteralChanged": true,
+    "productAndApkUnchanged": true,
+    "readiness120SecondsUnchanged": true,
+    "moving15SecondsUnchanged": true,
+    "threeMovingFivePausedThreeResumedRequirementsUnchanged": true
+  },
+  "all20FinalRestorationAndSourceGuardsTrue": true,
+  "restorationCommandFailures": [],
+  "timeoutEstablishesProductLoadOrPixelFailure": false,
+  "originalInput9PauseFailureCauseEstablished": false,
+  "partialImagesOrMethodsImportedIntoLaterAttempt": false,
+  "userVisualApproval": false
+}

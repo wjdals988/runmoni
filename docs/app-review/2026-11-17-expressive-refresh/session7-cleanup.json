@@ -1,0 +1,89 @@
+{
+  "ownedPid": 71005,
+  "avd": "Runmoni_Cloud_29",
+  "graphics": "swangle software GLES",
+  "acceleration": "TCG",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "2aace5903bc8115bef17803c2fb2d3de1e16b07d56f10a2b1d9ce3e965846da3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "native5.json": {
+      "file": "native5.json",
+      "sha256": "517d3469e7035f37b97132e57b11524caed8bb5f54e2eb53df4762369b73d71d",
+      "parentPassed": true
+    },
+    "android-review10.json": {
+      "file": "android-review10.json",
+      "sha256": "69e38039edfc5059662a1e8464cd1957612658144a1e829779e9f9a61b462ee2",
+      "parentPassed": true
+    },
+    "map-sdk3.json": {
+      "file": "map-sdk3.json",
+      "sha256": "3c29c2ad79a32e7cc0f0e715ca4faa3bda5a3369676299fa4afdbf0e4c62c500",
+      "parentPassed": true
+    },
+    "map-online3.json": {
+      "file": "map-online3.json",
+      "sha256": "0396d99b502126b9e38869f7baad5c17c3b6f351c6b745a38ae14a0e17f6ebea",
+      "parentPassed": true
+    },
+    "landscape2.json": {
+      "file": "landscape2.json",
+      "sha256": "3c475c9a4ead2ff45fb93909da43741a4add12a5e83275440f2aeb817ada960a",
+      "parentPassed": false
+    },
+    "landscape2-rotation-recovery2.json": {
+      "file": "landscape2-rotation-recovery2.json",
+      "sha256": "7fd673ee6bef52b602cb29d3bad028309d56e8c054111dd46d97f5e2caa6d595",
+      "parentPassed": true
+    },
+    "live1.json": {
+      "file": "live1.json",
+      "sha256": "5c43182b842f521e0d435fe4a35afb9ac358bc2972b5f5a625579011266899cd",
+      "parentPassed": false
+    },
+    "live2.json": {
+      "file": "live2.json",
+      "sha256": "4a2bd9b04269970684af2584b4ff1f63341b69c28ede994eee0db6802fa9409f",
+      "parentPassed": false
+    },
+    "live3.json": {
+      "file": "live3.json",
+      "sha256": "7b5c523b80b4ccd2bbfa93977789d64c0adad7b12feb16e343980f740da5be34",
+      "parentPassed": false
+    },
+    "live4.json": {
+      "file": "live4.json",
+      "sha256": "c59ae905ff52afe8efd4ebd279567056c57df86cb28db166b9fef62aabccabde",
+      "parentPassed": false
+    },
+    "live5.json": {
+      "file": "live5.json",
+      "sha256": "8bd0909d90564300c41fdd9cbbf3199e14f9c5ee834d86c536090d92af6c4617",
+      "parentPassed": false
+    },
+    "live6.json": {
+      "file": "live6.json",
+      "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3",
+      "parentPassed": true
+    }
+  },
+  "fullOsRestorationClaimed": false,
+  "acceptedScope": {
+    "file": "android-scope-summary.json",
+    "sha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf"
+  },
+  "landscapeOriginalParentRemainsFalse": true,
+  "supplementalRotationRecoveryVerified": true,
+  "supplementalRotationRecoveryAddsProductMethods": 0,
+  "failedMain1Through5WholeAttemptsStillExcluded": true,
+  "failedMain1Through5CapturesReused": 0,
+  "successfulMainProof": "live6.json",
+  "rotationStateBeforeShutdown": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "completedAtUtc": "2026-11-18T03:35:16.014267+00:00"
+}

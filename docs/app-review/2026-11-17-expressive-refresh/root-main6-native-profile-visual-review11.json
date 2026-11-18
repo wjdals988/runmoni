@@ -1,0 +1,95 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T03:21:07.410569+00:00",
+  "mainAttempt": "live6",
+  "sourceKind": "actual Android MainActivity private native profile observation",
+  "privateDiagnosticsOnly": true,
+  "executedDriver": {
+    "file": "live6-executed-driver.py",
+    "sha256": "b787ba3972d6ede6408ad42b613eef7a9a06d519352b6c866842ed19ce5ec4ed"
+  },
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "actualPhysicalVisibilitySample": {
+    "elapsedHostSeconds": 0.8,
+    "serverInputShown": false,
+    "serviceWindowVisible": false,
+    "serviceDecorViewVisible": false,
+    "serviceShowInputRequested": false,
+    "internalInputViewShown": true,
+    "originalAnyShownPredicate": true,
+    "inputMethodRawSha256": "d215175fcf9849baa41cf948b9ad55f582ae0fe19141b537b090f3e371b16ca4",
+    "nativeImeWindow": {
+      "viewVisibility": "0x8",
+      "hasSurface": false,
+      "isOnScreen": false
+    },
+    "nativeWindowRawSha256": "5d85d6f31904949e229da5fe5ce8f47f5071b4a4fbe8a0c81d551e69d6d76ef1",
+    "physicalKeyboardHidden": true
+  },
+  "originalBudgetSeconds": 30,
+  "sampleInsideOriginalBudgetIndependentlyVerifiedByRoot": true,
+  "inputMethodWithinWait": {
+    "file": "live6-private-main-profile-after-close-passed-input-method.txt",
+    "sha256": "d215175fcf9849baa41cf948b9ad55f582ae0fe19141b537b090f3e371b16ca4",
+    "privateWorkOnly": true,
+    "observedAtElapsedHostSeconds": 0.8
+  },
+  "nativeWindowWithinWait": {
+    "file": "live6-private-main-profile-after-close-passed-windows.txt",
+    "sha256": "5d85d6f31904949e229da5fe5ce8f47f5071b4a4fbe8a0c81d551e69d6d76ef1",
+    "privateWorkOnly": true,
+    "observedAtElapsedHostSeconds": 0.8
+  },
+  "afterPassingSampleScreenshot": {
+    "file": "live6-private-main-profile-after-close-passed-native.png",
+    "sha256": "fbbea685f213fe9405655d989a6d160a98cc9b9f37a6d004ad6946a0e7487a6a",
+    "privateWorkOnly": true,
+    "captureStartElapsedHostSeconds": 0.802,
+    "captureEndElapsedHostSeconds": 2.243,
+    "capturedAfterPassingPhysicalStateSample": true,
+    "actuallyViewedWithViewImage": true,
+    "privacyReviewed": true
+  },
+  "actualRootAudit": {
+    "independentlyReadPassingSampleAndBothRawDumps": true,
+    "rawHashesMatchProof": true,
+    "serverServiceAndNativeWindowHidden": true,
+    "oldInternalInputViewShownStillTrueIsNotRenderedIme": true,
+    "actualAfterCloseParentAndFullBottomNavigationVisible": true,
+    "physicalKeyboardVisibleInReviewedPng": false,
+    "onlySyntheticShareRunner26Visible": true
+  },
+  "actualControlChecksPassedBeforeClose": true,
+  "actualControlBounds": {
+    "back": [
+      12,
+      55,
+      84,
+      127
+    ],
+    "save": [
+      270,
+      230,
+      420,
+      317
+    ]
+  },
+  "visibleWindowBoundsBeforeClose": [
+    0,
+    36,
+    480,
+    413
+  ],
+  "minimum48dpTargetPx": 72.0,
+  "profileClosedWithoutSaving": true,
+  "viewportRestoredExactly": true,
+  "profileStillUnchanged": true,
+  "accountConnectionOrSaveSuccessClaimed": false,
+  "wholeMainPassClaimed": false,
+  "publicGalleryApprovalClaimed": false,
+  "userVisualApproval": false,
+  "privateRawMediaPublished": false
+}

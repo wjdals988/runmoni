@@ -1,0 +1,9 @@
+{
+  "recordedAtUtc": "2026-11-18T00:06:07.019579+00:00",
+  "status": "Rejected before any build or Android execution",
+  "rejectedFile": "source-freeze11-invalid-source-ref.json",
+  "rejectedSha256": "8387aac8143e9eb7a2dc560491e0ce59e5fdb13aaadc656304f2b6ad8f221cbc",
+  "reason": "Driver mistakenly supplied an unverified expanded commit reference; actual full Git HEAD read immediately afterwards disagreed. No build started or binary bound to this invalid preflight. Original bytes retained under explicit invalid filename; recreate candidate11 freeze with actual Git HEAD.",
+  "actualGitHead": "2e83db10d9d1e9652773d31e14a234cb52ccdb47",
+  "previousResultsReused": false
+}

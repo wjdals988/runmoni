@@ -1,0 +1,101 @@
+{
+  "recordedAtUtc": "2026-11-18T02:05:53.390934+00:00",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "actualFailedAttempt": {
+    "file": "live3.json",
+    "sha256": "7b5c523b80b4ccd2bbfa93977789d64c0adad7b12feb16e343980f740da5be34",
+    "wholeAttemptPassed": false,
+    "acceptedPublicCaptures": 0
+  },
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "withinOriginalWait": {
+    "originalBudgetSeconds": 30,
+    "actualSampleCount": 44,
+    "firstElapsedHostSeconds": 0.318,
+    "lastElapsedHostSeconds": 29.371,
+    "allInputMethodRawHashesIdentical": true,
+    "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa",
+    "allOriginalAnyShownPredicatesTrue": true,
+    "serverInputShown": false,
+    "serviceWindowVisible": false,
+    "serviceDecorViewVisible": false,
+    "serviceShowInputRequested": false,
+    "internalInputViewShown": true,
+    "nativeWindowOrPngClaimedInsideOriginalWait": false
+  },
+  "failureElapsedHostSeconds": 30.001,
+  "afterDeadlineReaderTimings": {
+    "screenshot": {
+      "startedAtUtc": "2026-11-18T02:00:28.674629+00:00",
+      "startElapsedHostSeconds": 30.003,
+      "finishedAtUtc": "2026-11-18T02:00:30.538974+00:00",
+      "endElapsedHostSeconds": 31.867,
+      "diagnosticElapsedHostSeconds": 1.864
+    },
+    "window": {
+      "startedAtUtc": "2026-11-18T02:00:30.539001+00:00",
+      "startElapsedHostSeconds": 31.867,
+      "finishedAtUtc": "2026-11-18T02:00:30.888183+00:00",
+      "endElapsedHostSeconds": 32.217,
+      "diagnosticElapsedHostSeconds": 0.349
+    },
+    "inputMethodAfterFailure": {
+      "startedAtUtc": "2026-11-18T02:00:30.888206+00:00",
+      "startElapsedHostSeconds": 32.217,
+      "finishedAtUtc": "2026-11-18T02:00:31.185424+00:00",
+      "endElapsedHostSeconds": 32.514,
+      "diagnosticElapsedHostSeconds": 0.297
+    }
+  },
+  "actualAfterDeadlineState": {
+    "screenshot": {
+      "file": "live3-private-main-profile-after-close-native.png",
+      "sha256": "5c54a42e6d90af15414a0edd2cf1edf1394aa0edbd0ea980d470322b3a3898b8",
+      "privateWorkOnly": true
+    },
+    "window": {
+      "file": "live3-private-main-profile-after-close-windows.txt",
+      "sha256": "096d777157e091625c25c9322c45341201103e9d2541bdcbe0610b920cff92ca",
+      "privateWorkOnly": true
+    },
+    "inputMethod": {
+      "file": "live3-private-main-profile-after-close-current-input-method.txt",
+      "sha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa",
+      "privateWorkOnly": true
+    },
+    "inputMethodMatchesLastWithinWaitExactly": true,
+    "nativeImeWindowVisibility": "0x8",
+    "nativeImeHasSurface": false,
+    "nativeImeIsOnScreen": false,
+    "parentMainVisibleWindow": [
+      0,
+      36,
+      480,
+      782
+    ],
+    "physicalKeyboardVisibleInActualPng": false
+  },
+  "actualRootReview": {
+    "reviewer": "Parent Root",
+    "actuallyViewedAfterCloseNativePng": true,
+    "privacyReviewed": true,
+    "onlySyntheticShareRunner26Visible": true,
+    "independentlyParsedLastAndCurrentInputMethodAndNativeWindows": true,
+    "independentlyAudited44SampleProofAndTimings": true
+  },
+  "conclusion": "The original OR predicate reports shown for the internal input-view field while the recorded server/service window and actual native IME window/surface are hidden. Actual PNG/WM are after the original deadline; they are not claimed as within30-second physical observations.",
+  "originalMain2ExactCauseConfirmed": false,
+  "productKeyboardRetainedFaultEstablished": false,
+  "oldFailedAttemptConvertedToPass": false,
+  "all20RestorationAndSourceGuardsTrue": true,
+  "restorationCommandFailures": [],
+  "rawPrivateDiagnosticsPublished": false,
+  "publicGalleryAcceptanceClaimed": false,
+  "userVisualApproval": false,
+  "productOrApkChanged": false,
+  "productMethodsAddedByDiagnostic": 0
+}

@@ -1,0 +1,1064 @@
+{
+  "name": "live3",
+  "nonce": "4d4138af545ba147",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "api": 29,
+  "avd": "Runmoni_Cloud_29",
+  "acceleration": "TCG",
+  "binaryReference": "binary-build11.json",
+  "sourceKind": "actual Android MainActivity",
+  "formalScopeReference": "android-scope-summary.json",
+  "formalScopeSha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf",
+  "formalScopeEarlierInputResultsReused": true,
+  "formalScopeSingleInputExecutionClaimed": false,
+  "passed": false,
+  "completed": true,
+  "captures": [],
+  "actualTaps": [
+    {
+      "label": "프로필 편집",
+      "description": false,
+      "system": false,
+      "bounds": [
+        150,
+        521,
+        397,
+        593
+      ]
+    },
+    {
+      "label": "뒤로",
+      "description": true,
+      "system": false,
+      "bounds": [
+        12,
+        55,
+        84,
+        127
+      ]
+    }
+  ],
+  "startedAtUtc": "2026-11-18T01:54:25.367072+00:00",
+  "systemUiWaitActions": [],
+  "accessibilityRetries": 0,
+  "syntheticGps": false,
+  "GPSInjectedByThisDriver": false,
+  "originalGpsFixRestoredByThisDriver": false,
+  "fixtureTrackPointCount": 0,
+  "syntheticCompletedRun": true,
+  "syntheticSourcePhoto": true,
+  "productionWritesVerified": false,
+  "newAuthenticationRequestedByDriver": false,
+  "physicalDeviceVerified": false,
+  "googleLoginVerified": false,
+  "signedReleaseRuntimeVerified": false,
+  "android31RuntimeVerified": false,
+  "socialAppDeliveryVerified": false,
+  "appTotalNetworkTrafficMeasured": false,
+  "itemPlanSha256": "3e17341222594fccad56c6bba3707d08b4a251a5fa90c4232df8561b13704b24",
+  "weatherInjectedByThisDriver": false,
+  "appearancePreferencesRestoredExactly": true,
+  "allOwnedPreferencesStillExactAfterEnvironmentRestoration": true,
+  "restorationCommandFailures": [],
+  "rootPrivacyReviewRequiredBeforePublication": true,
+  "requiredIndependentRootPixelReview": true,
+  "executedDriver": "live3-executed-driver.py",
+  "executedDriverSha256": "7ead84640b5c53316e7dc9ed79b06b33f412b78aa7f6f3b8070a021678ac52d2",
+  "observerHelper": "live3-actual-ui-helper.py",
+  "observerHelperSha256": "e7da573d8b77307a8c4501f61c6f7831196c0d3a18433acef1b2651a8f782e7d",
+  "environmentHelper": "live3-environment-helper.py",
+  "environmentHelperSha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8",
+  "scopeValidator": "live3-scope-validator.py",
+  "scopeValidatorSha256": "eabf5c8702e9eee1509157dc51e31ffd8277ddf07bc93b5bb239b7b055504223",
+  "stage": "complete-failed",
+  "updatedAtUtc": "2026-11-18T02:02:40.152062+00:00",
+  "deviceTimezone": "Etc/UTC",
+  "binaryReferenceSha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3",
+  "installationReference": "installation11.json",
+  "installationReferenceSha256": "6b564db2f8ea69169f06c192331a8f3bbed0376be27a37e7e2c4005eabf6cbc1",
+  "preInstallInputNumber": 11,
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installed": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "3d598cb3afdbdcf24748b98eae2b1b20a608199caea98b95883be27ca7bb639a"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "37e87114a87f9fc70104ee47b7b0fd3c71d308c4803dcbc5df495fcb1cf9312f"
+    }
+  ],
+  "originalPreferencesSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "originalDatabaseRowsSha256": "a0d42e6972f5134324a031234ec6c39354f19f0b6da748c6abefeddbf3f83206",
+  "originalAccountPreferenceExists": true,
+  "originalAccountPreferenceSha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793",
+  "originalAppearancePreferenceExists": false,
+  "privateAppearanceBackup": {
+    "file": "live3-private-appearance-before.xml",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mode": "0600"
+  },
+  "collectorWaits": [
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.22,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.262,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.719,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 11.807,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Guest Main navigation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 25.888,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.583,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.717,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.221,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 10.565,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main native320/font2 navigation",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 22.549,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 profile editor",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 5.932,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual native320/font2 Main profile IME shown",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 3.06,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual profile close returns parent without save",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 7.123,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual Main profile close hides IME",
+      "budgetSeconds": 30,
+      "elapsedHostSeconds": 30.001,
+      "completed": false,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.896,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual product group orientation",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 3.494,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Screen awake",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.229,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual MainActivity focused",
+      "budgetSeconds": 75,
+      "elapsedHostSeconds": 9.084,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "Actual standard Main navigation restored",
+      "budgetSeconds": 90,
+      "elapsedHostSeconds": 24.304,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 1.447,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.345,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.224,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.261,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.26,
+      "completed": true,
+      "latencySlaClaimed": false
+    },
+    {
+      "label": "App is force-stopped",
+      "budgetSeconds": 15,
+      "elapsedHostSeconds": 0.242,
+      "completed": true,
+      "latencySlaClaimed": false
+    }
+  ],
+  "observerDumps": 30,
+  "motionScaleObservedBeforeMain": {
+    "window_animation_scale": "0",
+    "transition_animation_scale": "0",
+    "animator_duration_scale": "0"
+  },
+  "motionScaleZeroObservedInActualMain": true,
+  "fixture": {
+    "schemaVersion": 1,
+    "nonce": "4d4138af545ba147",
+    "recordId": "runmoni-share-review-4d4138af545ba147",
+    "photoSha256": "5962d427ba0dd1dc097832610695311d3408444461328d5425aa7bbc7c072a58",
+    "photoDisplayName": "RunmoniReview-4d4138af545ba147.png",
+    "sourceKind": "synthetic completed run and Canvas photo for actual MainActivity review",
+    "rawGpsIncluded": false,
+    "fixtureDirectWalletWrites": false,
+    "distanceMeters": 5240.0,
+    "activeDurationMillis": 1800000
+  },
+  "actualProfileKeyboardNativeObservation": {
+    "sourceKind": "actual Android MainActivity",
+    "privateDiagnosticsOnly": true,
+    "startedAtUtc": "2026-11-18T01:56:07.775190+00:00",
+    "standardViewportBefore": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "profileSaveOrConnectionActionRequested": false,
+    "nativeViewport": {
+      "density": "Physical density: 160\nOverride density: 240",
+      "fontScale": "2.0",
+      "native320Font2RequiredByClass": true
+    },
+    "nativeBeforeGeometryAssertions": {
+      "screenshot": {
+        "file": "live3-private-main-profile-ime320-font2-before-reveal.png",
+        "sha256": "1e59b5c55405faa8cfd73479ca8af194d195871cb94589609ac167955beee054",
+        "privateWorkOnly": true
+      },
+      "hierarchy": {
+        "file": "live3-private-main-profile-ime320-font2-before-reveal-ui.xml",
+        "sha256": "db5c7b54e99597aeea7918b17f169154ca592962acabe1a52e4f1040f62abe89",
+        "privateWorkOnly": true
+      },
+      "backBounds": [
+        [
+          12,
+          55,
+          84,
+          127
+        ]
+      ],
+      "saveBounds": []
+    },
+    "boundedAboveImeSaveReveal": {
+      "maximumAttempts": 28,
+      "minimum48dpTargetPx": 72.0,
+      "visibleWindowBounds": [
+        0,
+        36,
+        480,
+        413
+      ],
+      "saveOrConnectionTapped": false,
+      "attempts": [
+        {
+          "direction": "down",
+          "directionAttempt": 0,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 1,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 2,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 3,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 4,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 5,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 6,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 7,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 8,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 9,
+          "saveBounds": null,
+          "fullTargetAboveIme": false,
+          "observedScrollableBounds": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "actualClippedViewport": [
+            0,
+            148,
+            480,
+            413
+          ],
+          "swipeCoordinates": [
+            12,
+            360,
+            12,
+            201
+          ],
+          "actualHierarchyUsed": true
+        },
+        {
+          "direction": "down",
+          "directionAttempt": 10,
+          "saveBounds": [
+            270,
+            275,
+            420,
+            362
+          ],
+          "fullTargetAboveIme": true
+        }
+      ]
+    },
+    "actualKeyboardVisible": true,
+    "visibleWindowBounds": [
+      0,
+      36,
+      480,
+      413
+    ],
+    "initialVisibleWindowBounds": [
+      0,
+      36,
+      480,
+      413
+    ],
+    "finalMainWindowCount": 1,
+    "actualControlBoundsBeforeAssertions": {
+      "back": [
+        [
+          12,
+          55,
+          84,
+          127
+        ]
+      ],
+      "save": [
+        [
+          270,
+          275,
+          420,
+          362
+        ]
+      ]
+    },
+    "minimum48dpTargetPx": 72.0,
+    "densityDpi": 240,
+    "physicalWidthPx": 480,
+    "actualComputedWidthDp": 320.0,
+    "actualFontScale": 2.0,
+    "screenshot": {
+      "file": "live3-private-main-profile-ime320-font2.png",
+      "sha256": "01e8a7456735d18eaee3294b07a9b48e934d205a705973dc5bcfff14f7d17fcc",
+      "privateWorkOnly": true,
+      "sourceKind": "actual Android MainActivity",
+      "expectedWindowFocused": true
+    },
+    "nativeHierarchy": {
+      "file": "live3-private-main-profile-ime320-font2-ui.xml",
+      "sha256": "eebd9bc44a183099bb9f73ee41ccc26bb2a41ce6a66aa16ca1b0b0e629ecacd0",
+      "privateWorkOnly": true
+    },
+    "initialWindowDiagnostic": {
+      "file": "live3-private-main-profile-ime320-font2-windows.txt",
+      "sha256": "388ec71f3f88d570cdc506f54d88a8586e3f29823706ba18d161663860363770",
+      "privateWorkOnly": true
+    },
+    "windowDiagnostic": {
+      "file": "live3-private-main-profile-ime320-font2-final-windows.txt",
+      "sha256": "eb8dd2d20d32a92a55c5add5b3921601db1b59105e01da9cd9a67ac58cf7300a",
+      "privateWorkOnly": true
+    },
+    "finalInputMethodDiagnostic": {
+      "file": "live3-private-main-profile-ime320-font2-final-input-method.txt",
+      "sha256": "cbed0fbf00245a583fb795d475d458508e7b04e3365d38cb32c0cb46fcbf246e",
+      "privateWorkOnly": true
+    },
+    "actualControlsInsideVisibleWindow": true,
+    "actualControlBounds": {
+      "back": [
+        12,
+        55,
+        84,
+        127
+      ],
+      "save": [
+        270,
+        275,
+        420,
+        362
+      ]
+    },
+    "closeImeFailureDiagnostic": {
+      "originalWaitFailed": true,
+      "originalBudgetSeconds": 30,
+      "failureTimeElapsedHostSeconds": 30.001,
+      "failureObservedAtUtc": "2026-11-18T02:00:28.672963+00:00",
+      "afterFailureReaderTimings": {
+        "screenshot": {
+          "startedAtUtc": "2026-11-18T02:00:28.674629+00:00",
+          "startElapsedHostSeconds": 30.003,
+          "finishedAtUtc": "2026-11-18T02:00:30.538974+00:00",
+          "endElapsedHostSeconds": 31.867,
+          "diagnosticElapsedHostSeconds": 1.864
+        },
+        "window": {
+          "startedAtUtc": "2026-11-18T02:00:30.539001+00:00",
+          "startElapsedHostSeconds": 31.867,
+          "finishedAtUtc": "2026-11-18T02:00:30.888183+00:00",
+          "endElapsedHostSeconds": 32.217,
+          "diagnosticElapsedHostSeconds": 0.349
+        },
+        "inputMethodAfterFailure": {
+          "startedAtUtc": "2026-11-18T02:00:30.888206+00:00",
+          "startElapsedHostSeconds": 32.217,
+          "finishedAtUtc": "2026-11-18T02:00:31.185424+00:00",
+          "endElapsedHostSeconds": 32.514,
+          "diagnosticElapsedHostSeconds": 0.297
+        }
+      },
+      "predicateUnchanged": true,
+      "samples": [
+        {
+          "elapsedHostSeconds": 0.318,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 0.97,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 1.618,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 2.424,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 3.079,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 3.727,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 4.523,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 5.277,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 5.934,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 6.734,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 7.401,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 8.552,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 9.263,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 9.932,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 10.613,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 11.282,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 11.938,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 12.618,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 13.29,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 13.988,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 14.637,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 15.279,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 15.907,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 16.534,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 17.174,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 17.789,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 18.411,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 19.057,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 19.691,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 20.337,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 21.037,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 21.668,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 22.291,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 22.93,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 23.573,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 24.225,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 24.861,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 25.501,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 26.131,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 26.756,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 27.398,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 28.053,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 28.717,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        },
+        {
+          "elapsedHostSeconds": 29.371,
+          "originalAnyShownPredicate": true,
+          "inputMethodRawSha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa"
+        }
+      ],
+      "diagnosticsCapturedAfterFailureBeforeForceStop": true,
+      "extraWaitOrRetryPerformed": false,
+      "lastRawObservedAtElapsedHostSeconds": 29.371,
+      "lastRawInsideOriginalWait": {
+        "file": "live3-private-main-profile-after-close-last-input-method.txt",
+        "sha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa",
+        "privateWorkOnly": true
+      },
+      "screenshot": {
+        "file": "live3-private-main-profile-after-close-native.png",
+        "sha256": "5c54a42e6d90af15414a0edd2cf1edf1394aa0edbd0ea980d470322b3a3898b8",
+        "privateWorkOnly": true
+      },
+      "window": {
+        "file": "live3-private-main-profile-after-close-windows.txt",
+        "sha256": "096d777157e091625c25c9322c45341201103e9d2541bdcbe0610b920cff92ca",
+        "privateWorkOnly": true
+      },
+      "inputMethodAfterFailure": {
+        "file": "live3-private-main-profile-after-close-current-input-method.txt",
+        "sha256": "a300d4cf5c50c8f079b933bb1cba40193f76bdd3c3523c4ee9df6c06da101cfa",
+        "privateWorkOnly": true
+      }
+    },
+    "standardViewportAfter": {
+      "density": "Physical density: 160",
+      "size": "Physical size: 480x854",
+      "fontScale": "1.0",
+      "userRotation": "0",
+      "accelerometerRotation": "0",
+      "hardwareKeyboardIme": "1"
+    },
+    "viewportRestoredExactly": true,
+    "profileStillUnchanged": true,
+    "finishedAtUtc": "2026-11-18T02:01:34.996086+00:00"
+  },
+  "failureType": "TimeoutExpired",
+  "failure": "Inspect retained private diagnostics",
+  "ownedPickerDismissalBackActions": 0,
+  "ownedPickerDismissalNotRequested": true,
+  "ownGalleryOutputsRemoved": true,
+  "ownShareCacheOutputsRemoved": true,
+  "ownReceiverOutputsRemoved": true,
+  "nonceFixtureCleanupSucceeded": true,
+  "databaseExactlyRestored": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "accountPreferencesRestoredExactly": true,
+  "newOwnedFixturePreferenceFilesRemoved": [],
+  "ownedFixturePreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "binaryEvidenceUnchanged": true,
+  "formalScopeEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "observerHelperSourceUnchanged": true,
+  "environmentHelperSourceUnchanged": true,
+  "scopeValidatorSourceUnchanged": true,
+  "itemPlanUnchanged": true,
+  "installationEvidenceUnchanged": true,
+  "finishedAtUtc": "2026-11-18T02:02:40.152044+00:00"
+}

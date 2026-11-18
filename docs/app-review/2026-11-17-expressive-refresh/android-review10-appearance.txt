@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.AppearanceUiTest:..
+
+Time: 18.735
+
+OK (2 tests)
+
+

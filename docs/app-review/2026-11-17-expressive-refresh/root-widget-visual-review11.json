@@ -1,0 +1,41 @@
+{
+  "recordedAtUtc": "2026-11-18T00:39:44.242692+00:00",
+  "reviewer": "Parent Root; actual primary individual original view explicitly delivered to sole execution driver",
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "sourceGroup": "widget-night",
+  "sourceRaw": {
+    "file": "android-review10-widget-night.txt",
+    "sha256": "5667126e699cede7035281a95aa460ca937899e3c179bc40593c324e7779e07b"
+  },
+  "sourceDriver": {
+    "file": "android-review10-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "parentProofName": "android-review10.json",
+  "parentPhaseStillRunningAtRecord": true,
+  "freshInput11Execution": true,
+  "previousExecutionResultReused": false,
+  "sourceKind": "Actual Android RemoteViews apply/crop fixture on API29 emulator, not Launcher or MainActivity",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "privacyReviewed": true,
+  "images": [
+    {
+      "file": "android-review10-widget-night-idle-font2-native-fixture.png",
+      "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Running glyph/brand/ready label and full-width open-app action are legible, centered and unclipped with no overlap. Black surround is fixture area, not widget padding. No private user data. RemoteViews apply/crop fixture only, not Launcher/Main/physical phone/active run controls.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-widget-night-idle-font2-native-fixture.png",
+        "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+        "identicalBytes": true
+      }
+    }
+  ],
+  "finalScopeAndMainAcceptancePending": true
+}

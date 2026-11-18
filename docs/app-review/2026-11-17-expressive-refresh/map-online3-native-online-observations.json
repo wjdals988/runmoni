@@ -1,0 +1,1515 @@
+{
+  "syntheticFixture": true,
+  "actualMainActivity": false,
+  "actualGps": false,
+  "firebaseUsed": false,
+  "profileOrRecordingModified": false,
+  "styleUri": "https:\/\/tiles.openfreemap.org\/styles\/liberty",
+  "productionFactoryAndTransportUsed": true,
+  "httpCacheClearedOrWarmupForced": false,
+  "freshHttpFetchForEveryResourceClaimed": false,
+  "observationBudgetMillis": 120000,
+  "providerSlaClaimed": false,
+  "routePointCount": 4,
+  "routeSegmentCount": 2,
+  "runnerCount": 1,
+  "mapViewConstructions": 1,
+  "completed": true,
+  "failureClass": null,
+  "nativeFailure": null,
+  "stages": [
+    {
+      "stage": "production-pane-created",
+      "elapsedMillis": 8499,
+      "fullyRenderedMapCallbacks": 0,
+      "fullyRenderedFrameCallbacks": 0,
+      "cameraIdleCallbacks": 2,
+      "gestureStartCallbacks": 0
+    },
+    {
+      "stage": "native-feature-observations",
+      "routeSourceFeatureCount": 6,
+      "renderedProviderFeatureCount": 573,
+      "textureSampledDistinctColors": 701,
+      "sourceFeatureDuplicatesNotDeduplicated": true
+    },
+    {
+      "stage": "ready-before-gestures",
+      "elapsedMillis": 32734,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 5,
+      "cameraIdleCallbacks": 3,
+      "gestureStartCallbacks": 0,
+      "camera": {
+        "latitude": 37.56775003398271,
+        "longitude": 126.97939999999966,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "visible-avatar-before",
+      "expectedImageId": "runmoni-runner-synthetic-native-runner-f63348de4f4131d84913f8a7c5c6ed62872cf87f10385775d7067c2911846d6d",
+      "projectionSupported": true,
+      "nativeViewPixelRatio": 1,
+      "projectedAnchorLocalPx": {
+        "x": 216,
+        "y": 381.20547
+      },
+      "iconBoundsLocalPx": {
+        "left": 195,
+        "top": 318.20547,
+        "right": 237,
+        "bottom": 381.20547
+      },
+      "cameraBearing": -0,
+      "cameraTilt": 0,
+      "sourceRefersToCurrentImage": true,
+      "renderedSymbolRefersToCurrentImage": true,
+      "renderedSymbolFeatures": [
+        {
+          "type": "Feature",
+          "id": "",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              126.9790001,
+              37.5670996
+            ]
+          },
+          "properties": {
+            "label": "합성 러너",
+            "icon": "runmoni-runner-synthetic-native-runner-f63348de4f4131d84913f8a7c5c6ed62872cf87f10385775d7067c2911846d6d"
+          }
+        }
+      ],
+      "bitmapRoundTripPixelMismatches": 0,
+      "global": {
+        "samples": 48,
+        "matched": 40,
+        "fraction": 0.8333333333333334,
+        "matchedDistinctChromaticColors": 37,
+        "points": [
+          {
+            "x": 16,
+            "y": 5,
+            "expectedArgb": -60476122,
+            "actualArgb": -9947607,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 15,
+            "y": 7,
+            "expectedArgb": -42845910,
+            "actualArgb": -9159381,
+            "maxChannelDelta": 4,
+            "matched": true
+          },
+          {
+            "x": 20,
+            "y": 8,
+            "expectedArgb": -34837391,
+            "actualArgb": -1282702,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 12,
+            "y": 9,
+            "expectedArgb": -45209564,
+            "actualArgb": -11589081,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 9,
+            "expectedArgb": -34837391,
+            "actualArgb": -1282702,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 9,
+            "expectedArgb": -37140651,
+            "actualArgb": -3585962,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 17,
+            "y": 10,
+            "expectedArgb": -34837391,
+            "actualArgb": -1282702,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 25,
+            "y": 10,
+            "expectedArgb": -37140651,
+            "actualArgb": -3585962,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 10,
+            "expectedArgb": -60938444,
+            "actualArgb": -11524808,
+            "maxChannelDelta": 14,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 11,
+            "expectedArgb": -38512800,
+            "actualArgb": -1743253,
+            "maxChannelDelta": 49,
+            "matched": false
+          },
+          {
+            "x": 28,
+            "y": 11,
+            "expectedArgb": -43241919,
+            "actualArgb": -3585962,
+            "maxChannelDelta": 93,
+            "matched": false
+          },
+          {
+            "x": 17,
+            "y": 12,
+            "expectedArgb": -39105191,
+            "actualArgb": -4370855,
+            "maxChannelDelta": 18,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 14,
+            "expectedArgb": -44815320,
+            "actualArgb": -11391703,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 30,
+            "y": 15,
+            "expectedArgb": -33906099,
+            "actualArgb": -549304,
+            "maxChannelDelta": 5,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 16,
+            "expectedArgb": -41394889,
+            "actualArgb": -8895702,
+            "maxChannelDelta": 26,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 17,
+            "expectedArgb": -37914310,
+            "actualArgb": -419252,
+            "maxChannelDelta": 60,
+            "matched": false
+          },
+          {
+            "x": 24,
+            "y": 18,
+            "expectedArgb": -34501826,
+            "actualArgb": -1537720,
+            "maxChannelDelta": 10,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 18,
+            "expectedArgb": -37650366,
+            "actualArgb": -744357,
+            "maxChannelDelta": 51,
+            "matched": false
+          },
+          {
+            "x": 31,
+            "y": 19,
+            "expectedArgb": -33969577,
+            "actualArgb": -349352,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 29,
+            "y": 20,
+            "expectedArgb": -33707692,
+            "actualArgb": -219053,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 21,
+            "expectedArgb": -41197770,
+            "actualArgb": -7840459,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 19,
+            "y": 22,
+            "expectedArgb": -36542160,
+            "actualArgb": -3119313,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 22,
+            "expectedArgb": -41593041,
+            "actualArgb": -8421241,
+            "maxChannelDelta": 88,
+            "matched": false
+          },
+          {
+            "x": 19,
+            "y": 23,
+            "expectedArgb": -35026621,
+            "actualArgb": -1606088,
+            "maxChannelDelta": 11,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 23,
+            "expectedArgb": -16930475,
+            "actualArgb": -153772,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 24,
+            "expectedArgb": -33708719,
+            "actualArgb": -154030,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 24,
+            "expectedArgb": -33774001,
+            "actualArgb": -219569,
+            "maxChannelDelta": 0,
+            "matched": true
+          },
+          {
+            "x": 30,
+            "y": 25,
+            "expectedArgb": -33773744,
+            "actualArgb": -219312,
+            "maxChannelDelta": 0,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 27,
+            "expectedArgb": -34899846,
+            "actualArgb": -1805963,
+            "maxChannelDelta": 7,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 28,
+            "expectedArgb": -42583517,
+            "actualArgb": -8635874,
+            "maxChannelDelta": 6,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 30,
+            "expectedArgb": -41993398,
+            "actualArgb": -7194809,
+            "maxChannelDelta": 19,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 31,
+            "expectedArgb": -44489930,
+            "actualArgb": -10869448,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 32,
+            "expectedArgb": -34438526,
+            "actualArgb": -884351,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 35,
+            "y": 32,
+            "expectedArgb": -35093959,
+            "actualArgb": -1210051,
+            "maxChannelDelta": 7,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 33,
+            "expectedArgb": -34967435,
+            "actualArgb": -1347211,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 35,
+            "y": 33,
+            "expectedArgb": -36476626,
+            "actualArgb": -2724557,
+            "maxChannelDelta": 5,
+            "matched": true
+          },
+          {
+            "x": 30,
+            "y": 34,
+            "expectedArgb": -35495575,
+            "actualArgb": -1875094,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 35,
+            "expectedArgb": -37266087,
+            "actualArgb": -1677459,
+            "maxChannelDelta": 31,
+            "matched": true
+          },
+          {
+            "x": 13,
+            "y": 36,
+            "expectedArgb": -41330079,
+            "actualArgb": -7577498,
+            "maxChannelDelta": 6,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 37,
+            "expectedArgb": -42112707,
+            "actualArgb": -8163257,
+            "maxChannelDelta": 10,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 40,
+            "expectedArgb": -41931201,
+            "actualArgb": -6014647,
+            "maxChannelDelta": 36,
+            "matched": false
+          },
+          {
+            "x": 19,
+            "y": 42,
+            "expectedArgb": -59759047,
+            "actualArgb": -8245183,
+            "maxChannelDelta": 18,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 43,
+            "expectedArgb": -42390466,
+            "actualArgb": -7917760,
+            "maxChannelDelta": 14,
+            "matched": true
+          },
+          {
+            "x": 25,
+            "y": 44,
+            "expectedArgb": -38698098,
+            "actualArgb": -4222051,
+            "maxChannelDelta": 16,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 45,
+            "expectedArgb": -37665966,
+            "actualArgb": -4111277,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 46,
+            "expectedArgb": -37590923,
+            "actualArgb": -4111277,
+            "maxChannelDelta": 36,
+            "matched": false
+          },
+          {
+            "x": 29,
+            "y": 48,
+            "expectedArgb": -54508718,
+            "actualArgb": -4176813,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 31,
+            "y": 52,
+            "expectedArgb": -40734627,
+            "actualArgb": -5074314,
+            "maxChannelDelta": 34,
+            "matched": false
+          }
+        ]
+      },
+      "clothingBand42To72Percent": {
+        "samples": 24,
+        "matched": 21,
+        "fraction": 0.875,
+        "matchedDistinctChromaticColors": 20,
+        "points": [
+          {
+            "x": 21,
+            "y": 27,
+            "expectedArgb": -34240121,
+            "actualArgb": -883837,
+            "maxChannelDelta": 6,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 28,
+            "expectedArgb": -34621265,
+            "actualArgb": -1000526,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 28,
+            "expectedArgb": -41569108,
+            "actualArgb": -5784399,
+            "maxChannelDelta": 34,
+            "matched": false
+          },
+          {
+            "x": 28,
+            "y": 30,
+            "expectedArgb": -41993398,
+            "actualArgb": -7194809,
+            "maxChannelDelta": 19,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 31,
+            "expectedArgb": -43504840,
+            "actualArgb": -10869448,
+            "maxChannelDelta": 14,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 31,
+            "expectedArgb": -34372733,
+            "actualArgb": -818044,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 32,
+            "expectedArgb": -34438526,
+            "actualArgb": -884351,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 29,
+            "y": 32,
+            "expectedArgb": -42253756,
+            "actualArgb": -8699582,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 33,
+            "expectedArgb": -36548260,
+            "actualArgb": -3520169,
+            "maxChannelDelta": 8,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 33,
+            "expectedArgb": -34900874,
+            "actualArgb": -1347211,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 34,
+            "y": 33,
+            "expectedArgb": -35029193,
+            "actualArgb": -1935051,
+            "maxChannelDelta": 7,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 34,
+            "expectedArgb": -35035026,
+            "actualArgb": -1545873,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 34,
+            "expectedArgb": -33709236,
+            "actualArgb": -154291,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 35,
+            "expectedArgb": -35232148,
+            "actualArgb": -1677459,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 35,
+            "expectedArgb": -34903184,
+            "actualArgb": -1348495,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 36,
+            "expectedArgb": -40741025,
+            "actualArgb": -8163257,
+            "maxChannelDelta": 25,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 37,
+            "expectedArgb": -42112707,
+            "actualArgb": -8163257,
+            "maxChannelDelta": 10,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 40,
+            "expectedArgb": -40410770,
+            "actualArgb": -3188125,
+            "maxChannelDelta": 56,
+            "matched": false
+          },
+          {
+            "x": 21,
+            "y": 41,
+            "expectedArgb": -38574478,
+            "actualArgb": -7381652,
+            "maxChannelDelta": 36,
+            "matched": false
+          },
+          {
+            "x": 20,
+            "y": 42,
+            "expectedArgb": -40751038,
+            "actualArgb": -7130557,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 18,
+            "y": 43,
+            "expectedArgb": -61923533,
+            "actualArgb": -12574666,
+            "maxChannelDelta": 15,
+            "matched": true
+          },
+          {
+            "x": 17,
+            "y": 44,
+            "expectedArgb": -57528254,
+            "actualArgb": -7130557,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 44,
+            "expectedArgb": -38387890,
+            "actualArgb": -4832945,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 45,
+            "expectedArgb": -37665966,
+            "actualArgb": -4111277,
+            "maxChannelDelta": 1,
+            "matched": true
+          }
+        ]
+      },
+      "opaqueAlphaMinimum": 250,
+      "chromaticChannelSpreadMinimum": 40,
+      "positionTolerancePx": 1,
+      "perChannelTolerance": 32,
+      "minimumMatchFraction": 0.6,
+      "passed": true,
+      "expectedSourceStats": {
+        "width": 84,
+        "height": 126,
+        "density": 160,
+        "rowBytes": 336,
+        "byteCount": 42336,
+        "config": "ARGB_8888",
+        "isPremultiplied": true,
+        "nonTransparentPixels": 5711,
+        "distinctArgbColors": 3199,
+        "argbBigEndianSha256": "c6aaa7d256759e0160027236e5fa81bb77c757e296d818a9cb468369a13689ac"
+      },
+      "expectedSourceFile": "native-online-before-app-source-icon.png",
+      "expectedDisplayFile": "native-online-before-expected-display.png",
+      "registeredStats": {
+        "width": 84,
+        "height": 126,
+        "density": 160,
+        "rowBytes": 336,
+        "byteCount": 42336,
+        "config": "ARGB_8888",
+        "isPremultiplied": true,
+        "nonTransparentPixels": 5711,
+        "distinctArgbColors": 3199,
+        "argbBigEndianSha256": "c6aaa7d256759e0160027236e5fa81bb77c757e296d818a9cb468369a13689ac"
+      },
+      "registeredFile": "native-online-before-native-registered-icon.png",
+      "nativeTextureFile": "native-online-before-native-texture-private.png"
+    },
+    {
+      "stage": "one-finger-input-geometry",
+      "elapsedMillis": 37075,
+      "accessibilityViewportBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "nativeMapViewVisible": true,
+      "nativeMapViewGlobalVisibleBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "gestureMarginFraction": 0.12,
+      "gestureFraction": 0.2,
+      "pixelsPerSecond": 350
+    },
+    {
+      "stage": "one-finger-drag-before-input",
+      "elapsedMillis": 37079,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 5,
+      "cameraIdleCallbacks": 3,
+      "gestureStartCallbacks": 0,
+      "camera": {
+        "latitude": 37.56775003398271,
+        "longitude": 126.97939999999966,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-drag-input-returned",
+      "elapsedMillis": 37895,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 5,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.9802500000373,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "one-finger-drag-idle",
+      "elapsedMillis": 37898,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 5,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.9802500000373,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "two-finger-input-geometry",
+      "elapsedMillis": 38929,
+      "accessibilityViewportBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "nativeMapViewVisible": true,
+      "nativeMapViewGlobalVisibleBoundsPx": {
+        "left": 0,
+        "top": 94,
+        "right": 480,
+        "bottom": 758
+      },
+      "gestureMarginFraction": 0.12,
+      "gestureFraction": 0.45,
+      "pixelsPerSecond": 350
+    },
+    {
+      "stage": "two-finger-input-baselines",
+      "idleBaseline": 4,
+      "gestureBaseline": 1,
+      "fullyRenderedFrameBaseline": 7
+    },
+    {
+      "stage": "two-finger-pinch-before-input",
+      "elapsedMillis": 38982,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 7,
+      "cameraIdleCallbacks": 4,
+      "gestureStartCallbacks": 1,
+      "camera": {
+        "latitude": 37.56775003398068,
+        "longitude": 126.9802500000373,
+        "zoom": 15.364527976598838
+      }
+    },
+    {
+      "stage": "two-finger-pinch-input-returned",
+      "elapsedMillis": 40470,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 8,
+      "cameraIdleCallbacks": 5,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.567750033939326,
+        "longitude": 126.980249999953,
+        "zoom": 15.992298914873025
+      }
+    },
+    {
+      "stage": "two-finger-pinch-idle",
+      "elapsedMillis": 40473,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 8,
+      "cameraIdleCallbacks": 5,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.567750033939326,
+        "longitude": 126.980249999953,
+        "zoom": 15.992298914873025
+      }
+    },
+    {
+      "stage": "marker-update-keeps-gesture-camera",
+      "elapsedMillis": 43733,
+      "fullyRenderedMapCallbacks": 1,
+      "fullyRenderedFrameCallbacks": 13,
+      "cameraIdleCallbacks": 5,
+      "gestureStartCallbacks": 2,
+      "camera": {
+        "latitude": 37.567750033939326,
+        "longitude": 126.980249999953,
+        "zoom": 15.992298914873025
+      }
+    },
+    {
+      "stage": "visible-avatar-after",
+      "expectedImageId": "runmoni-runner-synthetic-native-runner-2ba295398dd8c051a1c12659e50eb577be71d49766682efaaa99298da4dafb1f",
+      "projectionSupported": true,
+      "nativeViewPixelRatio": 1,
+      "projectedAnchorLocalPx": {
+        "x": 240,
+        "y": 332
+      },
+      "iconBoundsLocalPx": {
+        "left": 219,
+        "top": 269,
+        "right": 261,
+        "bottom": 332
+      },
+      "cameraBearing": -0,
+      "cameraTilt": 0,
+      "sourceRefersToCurrentImage": true,
+      "renderedSymbolRefersToCurrentImage": true,
+      "renderedSymbolFeatures": [
+        {
+          "type": "Feature",
+          "id": "",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              126.98025,
+              37.5677502
+            ]
+          },
+          "properties": {
+            "label": "합성 러너 · 변경",
+            "icon": "runmoni-runner-synthetic-native-runner-2ba295398dd8c051a1c12659e50eb577be71d49766682efaaa99298da4dafb1f"
+          }
+        }
+      ],
+      "bitmapRoundTripPixelMismatches": 0,
+      "global": {
+        "samples": 48,
+        "matched": 48,
+        "fraction": 1,
+        "matchedDistinctChromaticColors": 44,
+        "points": [
+          {
+            "x": 16,
+            "y": 5,
+            "expectedArgb": -60476122,
+            "actualArgb": -10012887,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 13,
+            "y": 8,
+            "expectedArgb": -43896280,
+            "actualArgb": -10472405,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 8,
+            "expectedArgb": -54556581,
+            "actualArgb": -4159140,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 19,
+            "y": 9,
+            "expectedArgb": -37713829,
+            "actualArgb": -4159140,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 9,
+            "expectedArgb": -40542140,
+            "actualArgb": -6921915,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 19,
+            "y": 10,
+            "expectedArgb": -37713829,
+            "actualArgb": -4159140,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 10,
+            "expectedArgb": -40542140,
+            "actualArgb": -6921915,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 18,
+            "y": 11,
+            "expectedArgb": -37713829,
+            "actualArgb": -4159140,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 11,
+            "expectedArgb": -37713829,
+            "actualArgb": -4159140,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 15,
+            "y": 12,
+            "expectedArgb": -43628484,
+            "actualArgb": -10008258,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 10,
+            "y": 13,
+            "expectedArgb": -45077977,
+            "actualArgb": -11457495,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 9,
+            "y": 14,
+            "expectedArgb": -45078234,
+            "actualArgb": -11589081,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 14,
+            "expectedArgb": -44815320,
+            "actualArgb": -11194838,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 31,
+            "y": 15,
+            "expectedArgb": -33710010,
+            "actualArgb": -155321,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 6,
+            "y": 17,
+            "expectedArgb": -61265373,
+            "actualArgb": -10867675,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 17,
+            "expectedArgb": -41855954,
+            "actualArgb": -8235471,
+            "maxChannelDelta": 3,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 18,
+            "expectedArgb": -33840818,
+            "actualArgb": -351665,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 29,
+            "y": 19,
+            "expectedArgb": -33708462,
+            "actualArgb": -88751,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 20,
+            "expectedArgb": -34100900,
+            "actualArgb": -480674,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 21,
+            "expectedArgb": -33707432,
+            "actualArgb": -152743,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 22,
+            "expectedArgb": -43502559,
+            "actualArgb": -9882077,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 30,
+            "y": 22,
+            "expectedArgb": -33708721,
+            "actualArgb": -154544,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 23,
+            "expectedArgb": -33708719,
+            "actualArgb": -154288,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 24,
+            "expectedArgb": -33906612,
+            "actualArgb": -286387,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 31,
+            "y": 24,
+            "expectedArgb": -37847487,
+            "actualArgb": -4227262,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 30,
+            "y": 25,
+            "expectedArgb": -33773744,
+            "actualArgb": -219055,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 25,
+            "y": 27,
+            "expectedArgb": -36411091,
+            "actualArgb": -2790865,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 28,
+            "expectedArgb": -42583517,
+            "actualArgb": -8897499,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 18,
+            "y": 30,
+            "expectedArgb": -36791701,
+            "actualArgb": -3237012,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 15,
+            "y": 31,
+            "expectedArgb": -55082666,
+            "actualArgb": -4751273,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 35,
+            "y": 31,
+            "expectedArgb": -51210170,
+            "actualArgb": -878264,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 32,
+            "expectedArgb": -36131715,
+            "actualArgb": -2511490,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 24,
+            "y": 33,
+            "expectedArgb": -34219348,
+            "actualArgb": -664915,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 34,
+            "y": 33,
+            "expectedArgb": -35029193,
+            "actualArgb": -1474247,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 34,
+            "expectedArgb": -39350932,
+            "actualArgb": -5664915,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 35,
+            "expectedArgb": -35141741,
+            "actualArgb": -1521515,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 36,
+            "expectedArgb": -39225516,
+            "actualArgb": -5539499,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 37,
+            "expectedArgb": -34878311,
+            "actualArgb": -1323878,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 40,
+            "expectedArgb": -41396161,
+            "actualArgb": -7775935,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 42,
+            "expectedArgb": -42709957,
+            "actualArgb": -9024195,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 9,
+            "y": 45,
+            "expectedArgb": -40471192,
+            "actualArgb": -6850710,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 13,
+            "y": 46,
+            "expectedArgb": -56463542,
+            "actualArgb": -6065845,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 10,
+            "y": 47,
+            "expectedArgb": -41527746,
+            "actualArgb": -8104640,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 48,
+            "expectedArgb": -41593538,
+            "actualArgb": -8170176,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 9,
+            "y": 50,
+            "expectedArgb": -41790659,
+            "actualArgb": -8170177,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 53,
+            "expectedArgb": -42053316,
+            "actualArgb": -8433090,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 35,
+            "y": 54,
+            "expectedArgb": -42513350,
+            "actualArgb": -8827332,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 56,
+            "expectedArgb": -37575270,
+            "actualArgb": -4020325,
+            "maxChannelDelta": 2,
+            "matched": true
+          }
+        ]
+      },
+      "clothingBand42To72Percent": {
+        "samples": 24,
+        "matched": 24,
+        "fraction": 1,
+        "matchedDistinctChromaticColors": 22,
+        "points": [
+          {
+            "x": 21,
+            "y": 27,
+            "expectedArgb": -36659603,
+            "actualArgb": -3039378,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 19,
+            "y": 28,
+            "expectedArgb": -57319356,
+            "actualArgb": -6921915,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 28,
+            "expectedArgb": -34962376,
+            "actualArgb": -1407686,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 29,
+            "expectedArgb": -40542140,
+            "actualArgb": -6921915,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 19,
+            "y": 30,
+            "expectedArgb": -37054617,
+            "actualArgb": -3434392,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 29,
+            "y": 30,
+            "expectedArgb": -40278197,
+            "actualArgb": -6657716,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 23,
+            "y": 31,
+            "expectedArgb": -34416985,
+            "actualArgb": -796760,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 14,
+            "y": 32,
+            "expectedArgb": -38437034,
+            "actualArgb": -4882601,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 25,
+            "y": 32,
+            "expectedArgb": -40863389,
+            "actualArgb": -7243164,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 36,
+            "y": 32,
+            "expectedArgb": -33773743,
+            "actualArgb": -153518,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 25,
+            "y": 33,
+            "expectedArgb": -40863389,
+            "actualArgb": -7243164,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 32,
+            "y": 33,
+            "expectedArgb": -37390275,
+            "actualArgb": -3835585,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 34,
+            "expectedArgb": -37379726,
+            "actualArgb": -3825037,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 28,
+            "y": 34,
+            "expectedArgb": -39350932,
+            "actualArgb": -5664915,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 13,
+            "y": 35,
+            "expectedArgb": -37386878,
+            "actualArgb": -3832189,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 35,
+            "expectedArgb": -34878310,
+            "actualArgb": -1258085,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 20,
+            "y": 36,
+            "expectedArgb": -59881673,
+            "actualArgb": -9418439,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 26,
+            "y": 36,
+            "expectedArgb": -39155350,
+            "actualArgb": -5535125,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 21,
+            "y": 39,
+            "expectedArgb": -36784730,
+            "actualArgb": -3229785,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 40,
+            "expectedArgb": -40010643,
+            "actualArgb": -6390418,
+            "maxChannelDelta": 1,
+            "matched": true
+          },
+          {
+            "x": 20,
+            "y": 41,
+            "expectedArgb": -42842058,
+            "actualArgb": -9221832,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 22,
+            "y": 42,
+            "expectedArgb": -42247087,
+            "actualArgb": -8561325,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 44,
+            "expectedArgb": -41593281,
+            "actualArgb": -7907519,
+            "maxChannelDelta": 2,
+            "matched": true
+          },
+          {
+            "x": 27,
+            "y": 45,
+            "expectedArgb": -41002175,
+            "actualArgb": -7381949,
+            "maxChannelDelta": 2,
+            "matched": true
+          }
+        ]
+      },
+      "opaqueAlphaMinimum": 250,
+      "chromaticChannelSpreadMinimum": 40,
+      "positionTolerancePx": 1,
+      "perChannelTolerance": 32,
+      "minimumMatchFraction": 0.6,
+      "passed": true,
+      "expectedSourceStats": {
+        "width": 84,
+        "height": 126,
+        "density": 160,
+        "rowBytes": 336,
+        "byteCount": 42336,
+        "config": "ARGB_8888",
+        "isPremultiplied": true,
+        "nonTransparentPixels": 5691,
+        "distinctArgbColors": 3218,
+        "argbBigEndianSha256": "1c3a0bc7c6bf976ee7f2626babce9911f0f5a6c6f0404769568e0c0386f8089d"
+      },
+      "expectedSourceFile": "native-online-after-app-source-icon.png",
+      "expectedDisplayFile": "native-online-after-expected-display.png",
+      "registeredStats": {
+        "width": 84,
+        "height": 126,
+        "density": 160,
+        "rowBytes": 336,
+        "byteCount": 42336,
+        "config": "ARGB_8888",
+        "isPremultiplied": true,
+        "nonTransparentPixels": 5691,
+        "distinctArgbColors": 3218,
+        "argbBigEndianSha256": "1c3a0bc7c6bf976ee7f2626babce9911f0f5a6c6f0404769568e0c0386f8089d"
+      },
+      "registeredFile": "native-online-after-native-registered-icon.png",
+      "nativeTextureFile": "native-online-after-native-texture-private.png"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "recordedAtUtc": "2026-11-18T00:36:23.103064+00:00",
+  "reviewer": "Parent Root; actual primary individual views explicitly reported to sole execution driver",
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "sourceGroup": "environment-score",
+  "sourceRaw": {
+    "file": "android-review10-environment-score.txt",
+    "sha256": "739a7d15f6c1af91024b2a3dce06a4da369c46514aea24ed9bd32eeba48c4b66"
+  },
+  "sourceDriver": {
+    "file": "android-review10-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "parentProofName": "android-review10.json",
+  "parentPhaseStillRunningAtRecord": true,
+  "freshInput11Execution": true,
+  "previousExecutionResultReused": false,
+  "sourceKind": "Actual Android ComponentActivity synthetic forecast fixtures, not MainActivity/current weather",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "privacyReviewed": true,
+  "images": [
+    {
+      "file": "android-review10-environment-score-320-font2-light-fixture.png",
+      "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "25/100 red band marker and indoor-advice/criteria/refresh legible with no button overlap. Extreme font2 Korean wraps heavily and content below viewport requires scrolling; no ideal typography claim. Synthetic35C forecast fixture only; no user data.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-environment-score-320-font2-light-fixture.png",
+        "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+        "identicalBytes": true
+      }
+    },
+    {
+      "file": "android-review10-environment-score-320-font2-dark-fixture.png",
+      "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "25/100 red band marker and indoor-advice/criteria/refresh legible with no button overlap. Extreme font2 Korean wraps heavily and content below viewport requires scrolling; no ideal typography claim. Synthetic35C forecast fixture only; no user data.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-environment-score-320-font2-dark-fixture.png",
+        "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+        "identicalBytes": true
+      }
+    }
+  ],
+  "finalScopeAndMainAcceptancePending": true
+}

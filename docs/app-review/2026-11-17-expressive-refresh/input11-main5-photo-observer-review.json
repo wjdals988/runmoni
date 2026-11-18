@@ -1,0 +1,63 @@
+{
+  "recordedAtUtc": "2026-11-18T03:00:51.193087+00:00",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "failedMain": {
+    "file": "live5.json",
+    "sha256": "8bd0909d90564300c41fdd9cbbf3199e14f9c5ee834d86c536090d92af6c4617",
+    "wholeAttemptPassed": false,
+    "partialCaptureCount": 4,
+    "acceptedPublicationCaptures": 0
+  },
+  "completedPartialObservations": {
+    "profilePhysicalImeWithin30Seconds": 0.714,
+    "closetRunningDistinctStates": 3,
+    "closetPausedIdenticalSamples": 5,
+    "closetResumedDistinctStates": 3,
+    "fourNewIndividualGarmentsPlusCap": true,
+    "costume": 0,
+    "wholeMainPassClaimed": false
+  },
+  "pickerObservedState": {
+    "realSystemPickerOpened": true,
+    "exactOwnedNonceDocumentRowSelected": true,
+    "ownFilename": "RunmoniReview-b6b902fc5ada0773.png",
+    "stage": "actual-nonce-document-file-row-selected",
+    "mainCallbackVisiblePhotoChangeButtonWaitBudgetSeconds": 90,
+    "waitFailed": true,
+    "photoPresentOnlyHintVisible": true,
+    "actualSyntheticPhotoRenderedInOneToOnePreview": true,
+    "photoChangeControlsBelowVisibleFold": true
+  },
+  "privateDiagnostics": {
+    "imageSha256": "f3c12c6e425b147d297477e08353ecf0cb598d812b2538d58eb0fc2927edc0e9",
+    "hierarchySha256": "0657b51328598076428be1e957300e91828014fa4524ec621b05fe41f7c750e8",
+    "rawPrivateMediaPublished": false
+  },
+  "actualRootReview": {
+    "reviewer": "Parent Root",
+    "actuallyViewedRenderedSyntheticPhotoAndNewMiniMi": true,
+    "actuallyParsedOnePreviewAndBelowFoldControls": true,
+    "previewBounds": [
+      73,
+      209,
+      408,
+      544
+    ],
+    "productPhotoLoadFailureEstablished": false
+  },
+  "sourceAudit": {
+    "photoPresentOnlyHint": "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt:329",
+    "expandedPhotoControls": "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt:362",
+    "photoChangeButton": "app/src/main/java/com/runmoni/app/ui/RunShareScreen.kt:617",
+    "sameBelowFoldRiskInLaterOriginal75SecondDraftObservation": true,
+    "otherStyleExportSettingsMapSelectorMismatchesFound": false
+  },
+  "proposedObserverChange": "Bounded observed-body edge reveal outside exactly one nonzero actual photo preview, within original90 and75-second waits; same Main-and-visible-photo-change criterion, no additional picker/export tap.",
+  "all20FinalRestorationAndSourceGuardsTrue": true,
+  "restorationCommandFailures": [],
+  "productSourceOrApkChanged": false,
+  "oldPartialImagesImportedIntoLaterMain": false,
+  "productMethodsAddedByRecord": 0,
+  "userVisualApproval": false
+}

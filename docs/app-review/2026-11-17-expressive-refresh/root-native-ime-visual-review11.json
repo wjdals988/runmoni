@@ -1,0 +1,62 @@
+{
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "recordedAtUtc": "2026-11-18T00:21:23.860720+00:00",
+  "reviewer": "Parent Root; actual primary individual image views and independent geometry parsing explicitly delivered to sole execution driver",
+  "sourceKind": "Actual Android ComponentActivity native UI fixtures, not MainActivity",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "privacyReviewed": true,
+  "sourceGroup": "native-form-pages",
+  "sourceRaw": {
+    "file": "native5-native-form-pages.txt",
+    "sha256": "ba32dc5d412a10e0bdd29876dfe74aee82243ce183604424b5e896fdd4faca6b"
+  },
+  "sourceGeometry": {
+    "file": "native5-native-form-page-bounds.jsonl",
+    "sha256": "3ce54b8b9b79f9f9467069ad08def855bd4ac31619b693c483a0c3d9bb556d38"
+  },
+  "sourceDriver": {
+    "file": "native5-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "nativePhaseStillRunningAtRecord": true,
+  "nativeParentProofName": "native5.json",
+  "nativeParentFinalAcceptanceClaimed": false,
+  "images": [
+    {
+      "file": "native5-modal-ime-close-native320-font2-fixture.png",
+      "sha256": "0136e15ae411d2a3ff1329c30e4479be95b799f48697dbb4b7b2e5e9b3787002",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Root saw full back/title and cancel/save entirely above keyboard. Extreme font2 wraps heavily and naturally clips scrolled guide8; no perfect typography claim or private user data."
+    },
+    {
+      "file": "native5-modal-about-close-native320-font2-fixture.png",
+      "sha256": "e555f67a542fdb8c5b1692104dc91995a7b18bacbe1c297466a579fabd59e187",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Root saw full back/title and close visible after long content scroll, with no user data."
+    }
+  ],
+  "measuredPhysicalCorrection": {
+    "contentFrameWithImePx": "480x746",
+    "pageAndSafeContentWithImePx": "480x377",
+    "contentFrameAndPageWithImeHiddenPx": "480x746",
+    "pageYWithImePx": 36,
+    "imeBottomPx": 441,
+    "parentPaddingCorrectionPx": 369,
+    "source10PageWithImeHeightPx": 746,
+    "source11PageWithImeHeightPx": 377,
+    "submitBottomInwardMarginPx": 0,
+    "closeBottomInwardMarginPx": 286,
+    "allFourOriginalEdgesPassForBothImeActions": true,
+    "physicalConstraintActivelyExercised": true,
+    "themeChangeCausalityEstablished": false
+  },
+  "remainingValidation": "Whole native15 including actual sharing font2/font1 and restoration, fresh UI/landscape and Main still required."
+}

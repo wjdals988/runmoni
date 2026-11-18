@@ -1,0 +1,85 @@
+{
+  "recordedAtUtc": "2026-11-18T00:29:24.748672+00:00",
+  "candidateInput": 11,
+  "nativeStageAcceptedByRoot": true,
+  "finalAndroidScopeAccepted": false,
+  "actualMainActivityRun": false,
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "nativeProof": {
+    "file": "native5.json",
+    "sha256": "517d3469e7035f37b97132e57b11524caed8bb5f54e2eb53df4762369b73d71d"
+  },
+  "sourceFreeze": {
+    "file": "source-freeze11.json",
+    "sha256": "9c84968d710ef03c0e4d551c8d6bd242acafbd3a2e4e445fead655d8d9b847dc"
+  },
+  "nativeMethodCount": 15,
+  "groups": [
+    {
+      "name": "native-form-pages",
+      "passed": true,
+      "actual": 2,
+      "expected": 2,
+      "raw": {
+        "file": "native5-native-form-pages.txt",
+        "sha256": "ba32dc5d412a10e0bdd29876dfe74aee82243ce183604424b5e896fdd4faca6b"
+      }
+    },
+    {
+      "name": "native-large-text",
+      "passed": true,
+      "actual": 12,
+      "expected": 12,
+      "raw": {
+        "file": "native5-native-large-text.txt",
+        "sha256": "33139262cd3bab570d6d861283037668317f8f85e2b7aca588ff86d67a8d1194"
+      }
+    },
+    {
+      "name": "native-share-font1",
+      "passed": true,
+      "actual": 1,
+      "expected": 1,
+      "raw": {
+        "file": "native5-native-share-font1.txt",
+        "sha256": "7d345a0fea2b0c2861f7c0e80a9707db6855ceff5a4b5dd601c0a8e39d7ca48f"
+      }
+    }
+  ],
+  "allRestorationFields": {
+    "driverSourceUnchanged": true,
+    "observerHelperSourceUnchanged": true,
+    "binaryEvidenceUnchanged": true,
+    "preferencesRestoredExactly": true,
+    "profileRestoredExactly": true,
+    "communityAccountPreferencesRestoredExactly": true,
+    "appearancePreferencesRestoredExactly": true,
+    "allPreferencesStillExactAfterEnvironmentRestoration": true,
+    "originalDatabaseRowsPreservedExactly": true,
+    "ownedFixturePreferencesCleaned": true,
+    "controlledSettingsPermissionsPowerRestoredExactly": true
+  },
+  "restorationCommandFailures": [],
+  "actualParentVisualReviews": [
+    {
+      "file": "root-native-ime-visual-review11.json",
+      "sha256": "0e8d00b8a0399966cebee97919d53bb8feafbb17176bb855cd9b229ec0e6f3c1"
+    },
+    {
+      "file": "root-native-share-font2-visual-review11.json",
+      "sha256": "00f88358b7a6338548426776578e60bcb4663806a574e62699bde1ff64d6acf1"
+    },
+    {
+      "file": "root-native-share-font1-visual-review11.json",
+      "sha256": "a48492712deb791fc1e773f54b2c5eec146c37f824187cbca5105e8d4212b194"
+    }
+  ],
+  "source9And10FailuresPreserved": true,
+  "failedGroupPartialMethodsRetained": 0,
+  "testAssertionOrDeadlineChanged": false,
+  "themeCausalityEstablished": false,
+  "phoneOrPublicSignedRuntimeClaimed": false
+}

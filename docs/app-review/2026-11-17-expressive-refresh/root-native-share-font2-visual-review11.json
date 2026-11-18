@@ -1,0 +1,34 @@
+{
+  "recordedAtUtc": "2026-11-18T00:26:31.722824+00:00",
+  "reviewer": "Parent Root; actual individual original image view explicitly reported to sole execution driver",
+  "sourceKind": "Actual API29 ComponentActivity native320/font2 synthetic share fixture",
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "sourceRaw": {
+    "file": "native5-native-large-text.txt",
+    "sha256": "33139262cd3bab570d6d861283037668317f8f85e2b7aca588ff86d67a8d1194"
+  },
+  "sourceDriver": {
+    "file": "native5-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "nativeParentProofName": "native5.json",
+  "nativeParentFinalAcceptanceClaimed": false,
+  "fullFont1AndRestorationPendingAtRecord": true,
+  "userVisualApproval": false,
+  "publicSignedRuntimeVerified": false,
+  "realSnsDeliveryVerified": false,
+  "themeCausalityEstablished": false,
+  "images": [
+    {
+      "file": "native5-run-share-native320-font2-ime-fixture.png",
+      "sha256": "fba55ce784f5dddda9d08b378763b60aca912e351c188e8e6770287b4e16ed04",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Full back/기록공유 header restored at positive y; 이미지 저장 and 공유하기 whole buttons are legible and above actual keyboard without overlap/clipping. Empty space is the scrolled body viewport. Direct comparison with actual private10 pan image confirms visible correction in this fixture. No private user data; synthetic preview and fake export callbacks only."
+    }
+  ]
+}

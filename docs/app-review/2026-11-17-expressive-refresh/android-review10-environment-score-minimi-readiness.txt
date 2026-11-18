@@ -1,0 +1,10 @@
+environment score 320 / 1.0 / dark=false: awaitAvatarReady=true; waitMillis=67; timeoutMillis=120000
+environment score 320 / 1.5 / dark=false: awaitAvatarReady=true; waitMillis=20; timeoutMillis=120000
+environment score 320 / 2.0 / dark=false: awaitAvatarReady=true; waitMillis=8; timeoutMillis=120000
+expanded environment criteria 320 / 2 / dark=false: awaitAvatarReady=true; waitMillis=17; timeoutMillis=120000
+collapsed environment score capture 320 / 2 / dark=false: awaitAvatarReady=true; waitMillis=64; timeoutMillis=120000
+environment score 320 / 1.0 / dark=true: awaitAvatarReady=true; waitMillis=20; timeoutMillis=120000
+environment score 320 / 1.5 / dark=true: awaitAvatarReady=true; waitMillis=29; timeoutMillis=120000
+environment score 320 / 2.0 / dark=true: awaitAvatarReady=true; waitMillis=11; timeoutMillis=120000
+expanded environment criteria 320 / 2 / dark=true: awaitAvatarReady=true; waitMillis=9; timeoutMillis=120000
+collapsed environment score capture 320 / 2 / dark=true: awaitAvatarReady=true; waitMillis=10; timeoutMillis=120000

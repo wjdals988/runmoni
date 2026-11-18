@@ -1,8 +1,25 @@
+# 0.9 UI·Aseprite39종 실제 검토 완료 후보 — 2026-11-18 한국 시간
+
+<!-- verified-expressive-local11-main6-v1 -->
+홈·테마·전환·옷장·공유·기록·크루·브랜드의8개 UI 영역을 구현했다. [현재 검토](docs/app-review/2026-11-17-expressive-refresh/README.md)와 아래 요구표를 기준으로 같은 보관키 개발 프리뷰·대시보드·피드 게시를 이어간다. 아직 공개0.8의 실제 APK출처9a0051e28a2ac24badbbf1b57a554a37e4a9a85e와 다운로드를 새 게시 성공으로 바꾸지 않는다.
+
+새 로컬 JVM266개/실패0·오류0·건너뜀0, lint오류0·경고67개다. Android 고유117개는 최종 입력11의 새103개와 별도 소스 동등성 검토를 통과한 입력9의 변경 없는 순수 렌더러14개다. 같은 APK 전체 실행·이전0.8 재사용이 아니다. 입력9/10 IME 실패·기존 정지 픽셀 실패/재실행 원인 미확정·실패 그룹 부분통과 제외를 보존한다. 가로 검사의 앱 동작1개는 통과했으나 원래 회전 복원 parent=false는 유지하고, 별도 복원으로 default/effective false와 전체 원래 상태를 확인했다. 이 복원은 제품 검사0개다. [정확한 범위](docs/app-review/2026-11-17-expressive-refresh/android-scope-summary.json).
+
+실제 Main6의 새 원본7장과 Root의 개별 시각/개인정보 검토를 확인했다. 밝음/어둠 선택·새 캡/개별 의복4종·시스템 사진 선택·공유 스타일/초안·어두운 무료 지도를 확인했다. 합성5.24km/1회 기록과 합성 사진이며 날씨·GPS 주입은 없다. private320dp/font2 프로필 입력창의 전체48dp Back/Save와 키보드 표시·닫기/저장 없는 복귀를 관측했고, 실제 물리적 숨김 상태는 같은30초 범위의0.8초 샘플로 확인했다. 준비 후 별도3개 재생/5개 동일 정지/3개 재개 픽셀과 OS 움직임을 켠 탐색을 관측했으며 FPS·휴대폰 성능이나 원래200ms 기준의 변경을 뜻하지 않는다. 이전 Main1~5의 false parent와 부분0/0/0/2/4장은 보존·전부 제외하며, 내부 input-view 상태의 OR 오판·Main Canvas 접근성 이름 차이·사진 선택 뒤 아래 접힌 도구의 노출은 관측기에서만 교정했고 원래90/75초 기준은 유지했다. [실제 Main](docs/app-review/2026-11-17-expressive-refresh/live6.json)·[Root7장 검토](docs/app-review/2026-11-17-expressive-refresh/root-main-visual-review.json).
+
+원본f903… 얼굴·몸·8프레임과 기존61ID prefix/13슬롯/9탭/무료·보유권·지갑·키를 보존한다. 실제 Aseprite V4의39편집 프로젝트와624디테일·192색상 역할 셀/816PNG를 확인했다. 전체100ID이며 준비됨은 남87/여85로, 모든100종 준비·상업 품질 인증·사용자 시각 승인을 주장하지 않는다. 원래 DB행/백업origin·전체XML/계정/appearance·nonce 파일·캐시/갤러리·소유 환경 복원 후 AVD7 PID71005를 정확 종료했다. [종료](docs/app-review/2026-11-17-expressive-refresh/session7-cleanup.json).
+
+요구9항목별 최신 완료/검증/남은 경계는 [현재 작업표](docs/app-review/2026-11-17-expressive-refresh/README.md)에 모았다.
+
+새39ID 운영 Rules 게시 답변은 아직 없으며 같은 질문을 반복하거나 운영 쓰기 성공으로 추정하지 않는다. 휴대폰·Google 로그인/백업·운영 프로필/위치 공유 쓰기·SNS·야외GPS/절전/OEM/API31+·공개 서명APK 런타임과 사용자 원화 승인은 별도다. 다음은 실제 C 병합/6-map 비교·새 연결 서명CI 검증·검증된 개발 프리뷰 게시, 최신 다른8프로젝트를 보존한 대시보드/fresh Node/운영 배포, D 문서·피드 및 canonical 전체 바이트 검증이다.
+
+아래는 이전 시점의 보존 기록이다.
+
 # 0.9 API29 입력창 실제 호스트 수정 후보11 — 2026-11-18 한국 시간
 
-입력10의 새 JVM266개·lint오류0/경고67과 Native 양식2개 통과를 확인했지만, 공유 화면의 실제 큰 글씨/보통 글씨 검사에서 헤더가 화면 위로 밀렸다. 원래 Native parent=false·실패 그룹 부분통과 제외와 전체 XML/계정/테마·DB·소유 설정 복원을 보존하고 AVD6 PID66700을 정확 종료했다. [실제 실패 근거](docs/app-review/2026-11-17-expressive-refresh/input10-native-failure-review.json). Theme 변경이 원인이라고 확정하지 않는다.
+입력11의 새 로컬 JVM266개·실패0, lint오류0/경고67과 실제 Native15개(양식2·큰 글씨12·보통 글씨1)를 모두 확인했다. API29 content frame의 바깥 높이는746px인 상태에서 실제 Compose 페이지를377px로 측정해 헤더와 저장/공유 동작이 키보드 위에 보인다. 실제 키 입력·닫기와 원래 XML/계정/테마·DB·소유 설정의 정확 복원도 통과했고 Root가 새 양식/공유 원본4장을 직접 확인했다. [실제 입력11 근거](docs/app-review/2026-11-17-expressive-refresh/input11-native-validation-summary.json).
 
-후보11은 API29 편집 화면의 content frame 바깥 경계를 기준으로 남은 가림만 Android 부모 padding에 반영해 실제 Compose 호스트의 측정 높이를 줄인다. 원래 padding/flags/mode·API30+ 경로를 보존하며 assertion/대기시간은 바꾸지 않는다. 현재 정적 검토 중이며 새 빌드/Android/Main·공개 게시 성공은 아직 주장하지 않는다. 같은키 개발 프리뷰·대시보드/피드까지 기존 승인 범위를 이어간다.
+원래 padding/flags/mode와 API30+ 경로를 보존하고 assertion/대기시간을 바꾸지 않았다. 입력9/10 실패와 부분통과 제외를 유지하며 Theme가 최초 실패의 원인이라고 확정하지 않는다. 같은 입력11의 나머지 UI82·지도/가로 검사와 실제 Main7장·공개 게시 검증은 진행 중이다. 변경 없는 순수 렌더러14개의 입력9 소스 동등성은 별도로 검토했으며 최종 전체 범위 승인은 아직 없다. 같은키 개발 프리뷰·대시보드/피드까지 기존 승인 범위를 이어간다.
 
 아래는 이전 후보 시점의 보존 기록이다.
 

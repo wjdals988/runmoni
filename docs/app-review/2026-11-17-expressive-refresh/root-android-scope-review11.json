@@ -1,0 +1,34 @@
+{
+  "reviewedBy": "Parent Root",
+  "reviewRecordedAtUtc": "2026-11-18T01:24:28.172455+00:00",
+  "actualIndependentAuditCompleted": true,
+  "acceptedBoundedScope": true,
+  "draft": {
+    "file": "work/expressive-refresh/android-scope-draft11.json",
+    "sha256": "742d7a780a9031e3d4c4167355947fdd2fc6345ae048e8f95d0279187369c91f"
+  },
+  "validator": {
+    "file": "work/expressive-refresh/validate-scope11.py",
+    "sha256": "eabf5c8702e9eee1509157dc51e31ffd8277ddf07bc93b5bb239b7b055504223"
+  },
+  "independentlyListedIncludedGroups": 23,
+  "distinctMethods": 117,
+  "freshInput11Methods": 103,
+  "retainedPureInput9Methods": 14,
+  "originalFailedGroupPartialMethodsRetained": 0,
+  "recoveryAddsProductMethods": 0,
+  "restorationException": {
+    "proof": "landscape2.json",
+    "sha256": "3c475c9a4ead2ff45fb93909da43741a4add12a5e83275440f2aeb817ada960a",
+    "field": "fixedToUserRotation.restoredExactly",
+    "originalParentRemainsFalse": true
+  },
+  "actualSupplementalRecovery": {
+    "file": "landscape2-rotation-recovery2.json",
+    "sha256": "7fd673ee6bef52b602cb29d3bad028309d56e8c054111dd46d97f5e2caa6d595"
+  },
+  "scope": "Exact current117 IDs, raw OK counts, source references; one policy restoration correction with whole product method passed and recovery0. All other parents/restores unchanged.",
+  "mainScreensViewedByThisReview": 0,
+  "mainVisualAndPrivacyReviewStillRequired": true,
+  "userVisualApproval": false
+}
