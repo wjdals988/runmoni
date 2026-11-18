@@ -1,0 +1,2 @@
+# Preserve the exact hash-bound CI build log, including its original CRLF bytes.
+dashboard-build1.txt -text
