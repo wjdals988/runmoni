@@ -1,0 +1,2 @@
+native320/font2 information fixed close: awaitAvatarReady=true; waitMillis=13; timeoutMillis=120000
+native320/font2 in-tree form with actual IME: awaitAvatarReady=true; waitMillis=24; timeoutMillis=120000

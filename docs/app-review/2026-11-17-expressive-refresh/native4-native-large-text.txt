@@ -1,0 +1,28 @@
+
+com.runmoni.app.ui.RunmoniDialogDesignTest:....
+com.runmoni.app.ui.AppEntryNativeUiTest:.
+com.runmoni.app.ui.AppInformationNativeTest:..
+com.runmoni.app.ui.HierarchyClosetLargeTextUxTest:.
+com.runmoni.app.ui.ClosetNavigationNativeUiTest:.
+com.runmoni.app.ui.RunningKitColorsNativeUiTest:.
+com.runmoni.app.ui.RunRecordScreenNativeUiTest:.
+com.runmoni.app.ui.RunShareImeUiTest:
+Error in realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars(com.runmoni.app.ui.RunShareImeUiTest):
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunShareImeUiTest.realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars$withinWindow(RunShareImeUiTest.kt:60)
+	at com.runmoni.app.ui.RunShareImeUiTest.realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars(RunShareImeUiTest.kt:140)
+
+
+Time: 261.945
+There was 1 failure:
+1) realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars(com.runmoni.app.ui.RunShareImeUiTest)
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunShareImeUiTest.realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars$withinWindow(RunShareImeUiTest.kt:60)
+	at com.runmoni.app.ui.RunShareImeUiTest.realKeyboardKeepsCloseAndScrollableExportActionsOutsideImeAndSystemBars(RunShareImeUiTest.kt:140)
+
+FAILURES!!!
+Tests run: 12,  Failures: 1
+
+

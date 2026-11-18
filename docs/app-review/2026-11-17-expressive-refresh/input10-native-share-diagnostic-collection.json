@@ -1,0 +1,33 @@
+{
+  "capturedAtUtc": "2026-11-17T23:58:29.487996+00:00",
+  "nativeProof": {
+    "file": "native4.json",
+    "sha256": "9ff07441c218ddaba0c37ea9e0a154fd450ff40514212751b574c6d06e7c71f9"
+  },
+  "beforeBaselineSha256": "0c202f9d8dde33de385bd2c88e54de1b6199dfa70931c2bbb1a79e5d03c5f461",
+  "appCacheMutatedByCollector": false,
+  "files": [
+    {
+      "sourceName": "run-share-native-ime-private-diagnostics.jsonl",
+      "beforeBytes": 1429,
+      "afterBytes": 2855,
+      "originalPrefixUnchanged": true,
+      "newOnly": {
+        "file": "input10-native-share-ime-new-failure.jsonl",
+        "sha256": "d35e75ee52f25f101ff067aba7f8df2f6904cb9585985c088ed3448af51e2614"
+      },
+      "newReports": 1
+    },
+    {
+      "sourceName": "run-share-native-ime-private-before-close_run_share.png",
+      "beforePresent": true,
+      "beforeSha256": "4ef3a7ce6f69979962db815e8c2c7585543a983c0d34ed7ca1de2db74835d018",
+      "changedFromBefore": true,
+      "privateCapture": {
+        "file": "input10-private-share-header-failure.png",
+        "sha256": "254562f8237dad67cee26b61aec40d5b96dbd3f4a078e0d97a80ff6b5d3ee9fd",
+        "privateWorkOnly": true
+      }
+    }
+  ]
+}
