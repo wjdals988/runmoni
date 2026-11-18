@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "mode": "default",
+  "scope": "Compose test effect context only; not a product threading fix or failure probability",
+  "roundsRequested": 16,
+  "roundsObserved": 16,
+  "afterOnMainLooper": 0,
+  "afterOffMainLooper": 16,
+  "completed": true,
+  "observations": [
+    {
+      "stage": "before",
+      "round": 0,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 419895289544,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 0,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420056763902,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 0,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420058164454,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 1,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420058392279,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 1,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420074588206,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 1,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420075096175,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 2,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420075446176,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 2,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420102143922,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 2,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420102784893,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 3,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420102955602,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 3,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420119905891,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 3,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420139490917,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 4,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420139791382,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 4,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420155863146,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 4,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420156262270,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 5,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420156481973,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 5,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420163898158,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 5,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420164570827,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 6,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420164755998,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 6,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420166677103,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 6,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420167156339,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 7,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420167326236,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 7,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420168363548,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 7,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420168720028,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 8,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420168881443,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 8,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420171899515,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 8,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420172330808,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 9,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420172498222,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 9,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420176184146,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 9,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420176525173,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 10,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420176725947,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 10,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420177838262,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 10,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420178172799,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 11,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420178332971,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 11,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420179378976,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 11,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420179736698,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 12,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420179904312,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 12,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420184170936,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 12,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420184527326,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 13,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420184722501,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 13,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420185833575,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 13,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420188083223,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 14,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420188257467,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 14,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420192339902,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 14,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420192828362,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 15,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420193088586,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 15,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420194762942,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 15,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 420195160725,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    }
+  ]
+}

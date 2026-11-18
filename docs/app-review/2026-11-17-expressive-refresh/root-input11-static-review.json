@@ -1,0 +1,15 @@
+{
+  "recordedAtUtc": "2026-11-18T00:05:45.617636+00:00",
+  "reviewer": "Parent Root; actual full diff read and explicit verdict delivered to sole execution driver",
+  "candidateInput": 11,
+  "source": {
+    "file": "app/src/main/java/com/runmoni/app/ui/RunmoniWindowPolicy.kt",
+    "sha256": "549aeb18b22af07081e2467c822972c776a18c5ac02fbcf3470bb35f613c1df4"
+  },
+  "acceptedForRuntimeValidation": true,
+  "runtimeAccepted": false,
+  "finding": "Correct original-bottom deduction, clamped usable height, parent outer bounds avoid feedback, descendant guard scopes the window, captured observer and original physical/relative padding/flags/mode restored. Active API29 returns zero Compose inset; API30+ null path retained. Cached default WRAP_CONTENT constraints described accurately.",
+  "requiredRuntimeValidation": "Full native15 including share header, font1, IME hide/close/restoration, then fresh UI, landscape and actual Main. First-composition descendant guard must be exercised.",
+  "testAssertionsOrDeadlinesChanged": false,
+  "themeCausalityEstablished": false
+}

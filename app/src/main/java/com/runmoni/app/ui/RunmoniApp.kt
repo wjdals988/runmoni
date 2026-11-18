@@ -42,6 +42,9 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
@@ -174,6 +177,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             ((configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 maxWidth > maxHeight && maxHeight <= 360.dp) ||
                 (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp))
+        PageTransitionFrame("$rootPage:$tab:${sharingRecordId != null}") {
         if (rootPage == "main") mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
             contentWindowInsets = if (communityDeep) WindowInsets(0) else ScaffoldDefaults.contentWindowInsets,
@@ -187,7 +191,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                             Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                                 .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
                                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(Icons.Outlined.Route, null, Modifier.size(22.dp), tint = RunmoniColors.Primary)
+                                    IconMark(size = 28.dp)
                                     Spacer(Modifier.width(8.dp))
                                     Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
                                         modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
@@ -352,6 +356,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     }
                 }
             }
+        }
         }
         if (finishRunId != null && finishRunId == state.activeRun.id && state.activeRun.phase != RunPhase.IDLE &&
             state.runPersistence.initialized && !state.runPersistence.finishing) {
@@ -686,7 +691,13 @@ internal fun RecordRow(record: RunRecord, onClick: () -> Unit) {
     Column(Modifier.fillMaxWidth().clickable(role = Role.Button, onClickLabel = "러닝 기록 자세히 보기", onClick = onClick).testTag("record_${record.id}").padding(vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                Text("${distance(record.distanceMeters)} km", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+                Text(buildAnnotatedString {
+                    append(distance(record.distanceMeters))
+                    withStyle(SpanStyle(fontSize = 16.sp, fontWeight = FontWeight.Medium, color = RunmoniColors.Muted)) {
+                        append(" km")
+                    }
+                }, style = MaterialTheme.typography.headlineMedium.copy(fontFeatureSettings = "tnum"),
+                    modifier = Modifier.weight(1f))
                 Icon(Icons.Outlined.ChevronRight, null, tint = RunmoniColors.Muted)
             }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -694,13 +705,17 @@ internal fun RecordRow(record: RunRecord, onClick: () -> Unit) {
                     Icon(Icons.Outlined.Timer, null, Modifier.size(16.dp), tint = RunmoniColors.Muted)
                     Text(duration(record.activeDurationMillis), style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 }
-                Text("${averagePace(record.distanceMeters, record.activeDurationMillis)} /km", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.RouteBlue)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Icon(Icons.Outlined.Speed, null, Modifier.size(16.dp), tint = RunmoniColors.Muted)
+                    Text("${averagePace(record.distanceMeters, record.activeDurationMillis)} /km",
+                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+                }
             }
             HorizontalDivider(color = RunmoniColors.Line)
     }
 }
 
-internal fun topColor(variant: Int): Color = when (variant % 4) { 1 -> RunmoniColors.Green; 2 -> Color(0xFF547FB3); 3 -> Color(0xFFD6AE48); else -> RunmoniColors.Coral }
+internal fun topColor(variant: Int): Color = when (variant % 4) { 1 -> Color(0xFF356F78); 2 -> Color(0xFF547FB3); 3 -> Color(0xFFD6AE48); else -> Color(0xFFF16D55) }
 @Composable
 internal fun AvatarMini(avatar: AvatarStyle, modifier: Modifier, running: Boolean = false, decorative: Boolean = false,
     onFrameRendered: ((Int) -> Unit)? = null) = MiniMi(avatar, modifier, running,

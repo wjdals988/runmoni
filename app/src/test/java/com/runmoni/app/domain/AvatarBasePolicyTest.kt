@@ -29,7 +29,7 @@ class AvatarBasePolicyTest {
         assertTrue(AvatarCatalogue.TEST_ITEMS_FREE)
         assertEquals(13, AvatarCatalogue.slots.size)
         assertEquals(9, AvatarCatalogue.tabs.size)
-        assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
         AvatarCatalogue.slots.forEach { slot ->
             slot.variants.indices.forEach { assertEquals("${slot.key}:$it", 0, AvatarCatalogue.price(it)) }
         }

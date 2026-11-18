@@ -1,0 +1,191 @@
+{
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "passed": true,
+  "completed": true,
+  "sourceKind": "restoration-only owned API29 rotation",
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "executedDriver": "landscape2-rotation-recovery2-executed-driver.py",
+  "executedDriverSha256": "19ff1a2893ff6689dd773b35924101d3dad4b69c1a731929daefeca9f132694e",
+  "startedAtUtc": "2026-11-18T01:19:05.132222+00:00",
+  "appOrTestApkChanged": false,
+  "userDataReset": false,
+  "networkOrFirewallModified": false,
+  "allOsBytesExactlyRestoredClaimed": false,
+  "restorationOnly": true,
+  "productMethodsCountedByRecovery": 0,
+  "originalFailedParentOverwritten": false,
+  "productInstrumentationInvoked": false,
+  "stage": "complete-passed",
+  "updatedAtUtc": "2026-11-18T01:22:40.988850+00:00",
+  "priorFailedRecoveryPreflight": {
+    "file": "landscape2-rotation-recovery.json",
+    "sha256": "3307d720b75db4c2b4caa505478631a039435446168e080c8fc23208f188d19f",
+    "frameworkStopOrRotationWriteReached": false,
+    "productMethodsCounted": 0
+  },
+  "ownedAvd": {
+    "pid": 71005,
+    "procStartTicks": "2867325",
+    "serial": "emulator-5556"
+  },
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "sourceMapsBefore": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "installedBefore": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "3d598cb3afdbdcf24748b98eae2b1b20a608199caea98b95883be27ca7bb639a"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "37e87114a87f9fc70104ee47b7b0fd3c71d308c4803dcbc5df495fcb1cf9312f"
+    }
+  ],
+  "environmentHelper": {
+    "file": "landscape2-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "observerHelper": {
+    "file": "landscape2-live-observer-helper.py",
+    "sha256": "e7da573d8b77307a8c4501f61c6f7831196c0d3a18433acef1b2651a8f782e7d"
+  },
+  "originalDatabaseRowsSha256": "a0d42e6972f5134324a031234ec6c39354f19f0b6da748c6abefeddbf3f83206",
+  "priorAttempt": {
+    "file": "landscape2.json",
+    "sha256": "3c475c9a4ead2ff45fb93909da43741a4add12a5e83275440f2aeb817ada960a",
+    "wholeAttemptPassed": false,
+    "productMethodsPassed": 1
+  },
+  "before": {
+    "effective": false,
+    "persistedPolicy": "disabled"
+  },
+  "target": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "originalPreferencePresenceAndHashes": {
+    "runmoni.xml": {
+      "present": true,
+      "sha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e"
+    },
+    "runmoni-community-account.xml": {
+      "present": true,
+      "sha256": "3325d2a819fdd8062c2cdc48a09b995c9b012915bcdf88b1cf9742a7f057c793"
+    },
+    "runmoni_appearance.xml": {
+      "present": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "beforeDisplayFileSha256": "37c0dd5078b73bbd26552582a706fd07af64c70e479a1c94e9fcaa6cfcbd56d6",
+  "beforeDisplayFileStat": "1000:1000:600",
+  "recoveryTempOriginallyAbsent": true,
+  "frameworkPidBefore": "1952",
+  "frozenDisplayFileStat": "1000:1000:600",
+  "recoveryTempStillAbsentBeforeWrite": true,
+  "onlyOwnedAttributeChanged": true,
+  "otherFileBytesPreserved": true,
+  "displayFileOwnerModePreserved": true,
+  "frozenDisplayFileSha256": "37c0dd5078b73bbd26552582a706fd07af64c70e479a1c94e9fcaa6cfcbd56d6",
+  "restoredDisplayFileSha256": "cb131f4c234f6c81b3bf18963d8f12493bc5c8778b64345ad4edb5f34a645046",
+  "frameworkPidAfter": "10505",
+  "frameworkRestarted": true,
+  "launcherAccessibilityVerifiedByThisRecovery": false,
+  "restorationCommandFailures": [],
+  "after": {
+    "effective": false,
+    "persistedPolicy": "default"
+  },
+  "policyAndEffectiveRestoredExactly": true,
+  "preferencesRestoredExactly": true,
+  "profileRestoredExactly": true,
+  "communityAccountPreferencesRestoredExactly": true,
+  "appearancePreferencesRestoredExactly": true,
+  "allPreferencesStillExactAfterEnvironmentRestoration": true,
+  "ownedFixturePreferencesRestoredExactly": true,
+  "controlledEnvironmentExactlyRestored": true,
+  "databaseExactlyRestored": true,
+  "originalDatabaseRowsAndBackupOriginsPreservedExactly": true,
+  "installedAfter": [
+    {
+      "package": "com.runmoni.app",
+      "sha256": "3d598cb3afdbdcf24748b98eae2b1b20a608199caea98b95883be27ca7bb639a"
+    },
+    {
+      "package": "com.runmoni.app.test",
+      "sha256": "37e87114a87f9fc70104ee47b7b0fd3c71d308c4803dcbc5df495fcb1cf9312f"
+    }
+  ],
+  "sourceMapsAfterRestoration": {
+    "productSources": {
+      "fileCount": 131,
+      "matches": true,
+      "mismatches": []
+    },
+    "testSources": {
+      "fileCount": 118,
+      "matches": true,
+      "mismatches": []
+    },
+    "resources": {
+      "fileCount": 48,
+      "matches": true,
+      "mismatches": []
+    },
+    "rendererAssets": {
+      "fileCount": 981,
+      "matches": true,
+      "mismatches": []
+    },
+    "approvedSourceCopies": {
+      "fileCount": 1,
+      "matches": true,
+      "mismatches": []
+    },
+    "configurationSources": {
+      "fileCount": 11,
+      "matches": true,
+      "mismatches": []
+    }
+  },
+  "originalFailedParentStillImmutable": true,
+  "binaryEvidenceUnchanged": true,
+  "driverSourceUnchanged": true,
+  "finishedAtUtc": "2026-11-18T01:22:40.988835+00:00"
+}

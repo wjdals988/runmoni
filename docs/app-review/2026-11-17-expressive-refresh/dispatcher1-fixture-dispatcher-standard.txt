@@ -1,0 +1,23 @@
+
+com.runmoni.app.ui.FixtureDispatcherStandardProbeTest:
+Error in queuedContinuationsResumeOnAndroidMainLooper(com.runmoni.app.ui.FixtureDispatcherStandardProbeTest):
+java.lang.AssertionError: Worker observation stays outside Android main Looper
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.FixtureDispatcherProbe.observeWorkerRoundTrips(FixtureDispatcherProbeTest.kt:74)
+	at com.runmoni.app.ui.FixtureDispatcherStandardProbeTest.queuedContinuationsResumeOnAndroidMainLooper(FixtureDispatcherProbeTest.kt:106)
+
+
+Time: 11.816
+There was 1 failure:
+1) queuedContinuationsResumeOnAndroidMainLooper(com.runmoni.app.ui.FixtureDispatcherStandardProbeTest)
+java.lang.AssertionError: Worker observation stays outside Android main Looper
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.FixtureDispatcherProbe.observeWorkerRoundTrips(FixtureDispatcherProbeTest.kt:74)
+	at com.runmoni.app.ui.FixtureDispatcherStandardProbeTest.queuedContinuationsResumeOnAndroidMainLooper(FixtureDispatcherProbeTest.kt:106)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

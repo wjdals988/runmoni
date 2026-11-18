@@ -1,0 +1,1 @@
+record detail page with unavailable map tiles: awaitAvatarReady=true; waitMillis=41; timeoutMillis=120000

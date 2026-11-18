@@ -48,9 +48,8 @@ internal fun FormDialog(
         confirm()
     })
     val bodyScroll = scrollState ?: rememberScrollState()
-    val frameworkFitted = legacyEditablePageWindowPolicy()
-    val contentInsets = if (frameworkFitted) WindowInsets(0, 0, 0, 0)
-        else WindowInsets.safeDrawing.union(WindowInsets.ime)
+    val contentInsets = legacyEditablePageWindowPolicy()
+        ?: WindowInsets.safeDrawing.union(WindowInsets.ime)
     BackHandler(onBack = dismiss)
     Surface(Modifier.fillMaxSize().testTag("form_dialog"), color = RunmoniColors.Cream) {
         BoxWithConstraints(Modifier.fillMaxSize()

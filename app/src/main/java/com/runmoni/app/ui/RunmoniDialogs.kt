@@ -131,6 +131,9 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("sign_out")) { Text(if (state.communityGuest) "온라인 연결 해제" else "파일럿 로그아웃") }
                         else OutlinedButton(shape = RunmoniShapes.Action, onClick = onSignIn, enabled = !state.communityGoogleLink.busy && !state.cloud.busy, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("open_sign_in")) { Text("닉네임으로 시작하기") }
                     }
+                    HorizontalDivider(color = RunmoniColors.Line)
+                    AppearanceSettingsSection()
+                    HorizontalDivider(color = RunmoniColors.Line)
                     SettingsGroup("앱 지원", Icons.Outlined.Info) {
                         DestinationRow("앱 정보와 업데이트", "버전 내역, 다운로드, 라이선스", Icons.Outlined.Info,
                             onAppInformation, Modifier.testTag("settings_app_information"))

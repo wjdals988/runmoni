@@ -1,0 +1,16 @@
+{
+  "input": 1,
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "buildSucceeded": false,
+  "stage": "compileDebugKotlin",
+  "failure": "ExpandedAtelierArtwork sumOf Int/Long overload ambiguity",
+  "secondsReportedByGradle": 33,
+  "freshJvmOrLintSuccessClaimed": false,
+  "runtimeVerified": false,
+  "rawLog": "build1-failed.txt",
+  "rawSha256": "f433ae6ab259d8cd31110de2e75dfe1104acd1c84bbce05f5e14d074ac9788af",
+  "sourceFreezeReference": "source-freeze1.json",
+  "sourceFreezeSha256": "56011dd968dbe06491a06aae2e81ba0b98e3b98a3a96cf381cfb791822ec9c50",
+  "nextChange": "Explicit Int fold for manifest cel count; no drawing recipe or assets changed"
+}

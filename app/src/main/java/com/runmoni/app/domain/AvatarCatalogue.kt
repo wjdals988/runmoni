@@ -7,19 +7,19 @@ object AvatarCatalogue {
     /** Temporary user-requested test policy. Ownership and existing mileage are never reset. */
     const val TEST_ITEMS_FREE = true
     val slots = listOf(
-        AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발")),
-        AvatarSlot("headwear", "모자", listOf("모자 없음", "러닝 캡", "선바이저", "스웨트 헤드밴드")),
-        AvatarSlot("face", "얼굴", listOf("편안한 표정", "활짝 웃음", "집중하는 표정", "윙크")),
-        AvatarSlot("top", "상의", listOf("코랄 싱글렛", "민트 러닝 반팔", "블루 긴팔", "옐로 바람막이", "스포츠 브라탑", "크롭 기능성 티", "메시 러닝 저지")),
-        AvatarSlot("bottom", "하의", listOf("네이비 쇼츠", "러닝 타이츠", "그린 쇼츠", "코랄 쇼츠", "하이웨이스트 바이커쇼츠", "스플릿 레이싱 쇼츠")),
-        AvatarSlot("costume", "세트", listOf("일반 러닝복", "산타 러너", "스포츠 원피스 수영복", "스포츠 비키니", "곰인형 코스튬", "골든 마스코트")),
-        AvatarSlot("socks", "양말", listOf("발목 양말", "크루 양말", "니삭스", "양말 없음", "리브 크루삭스")),
-        AvatarSlot("shoes", "신발", listOf("민트 러닝화", "코랄 러닝화", "블루 러닝화", "골드 러닝화", "패널 러닝화")),
-        AvatarSlot("ear", "이어폰", listOf("귀 장비 없음", "오픈형 이어폰", "스포츠 이어버드", "스포츠 헤드셋")),
-        AvatarSlot("eyewear", "선글라스", listOf("선글라스 없음", "민트 스포츠 선글라스", "코랄 스포츠 선글라스", "블루 스포츠 선글라스")),
-        AvatarSlot("wrist", "워치", listOf("워치 없음", "민트 스포츠 워치", "코랄 스포츠 워치", "블루 스포츠 워치")),
-        AvatarSlot("waist", "러닝 벨트", listOf("벨트 없음", "민트 러닝 벨트", "코랄 러닝 벨트", "블루 러닝 벨트")),
-        AvatarSlot("hydration", "수분 조끼", listOf("조끼 없음", "민트 수분 보급 조끼", "코랄 수분 보급 조끼", "블루 수분 보급 조끼")),
+        AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발", "스트림 텍스처", "레이어 하이라이트", "백라이트 텍스처")),
+        AvatarSlot("headwear", "모자", listOf("모자 없음", "러닝 캡", "선바이저", "스웨트 헤드밴드", "메시 패널 캡", "리플렉트 바이저", "테크니트 밴드")),
+        AvatarSlot("face", "얼굴", listOf("편안한 표정", "활짝 웃음", "집중하는 표정", "윙크", "선스틱 라인", "트랙 페이스 마크", "스포츠 페이스 패치")),
+        AvatarSlot("top", "상의", listOf("코랄 싱글렛", "민트 러닝 반팔", "블루 긴팔", "옐로 바람막이", "스포츠 브라탑", "크롭 기능성 티", "메시 러닝 저지", "패널 레이싱 티", "하프집 테크 롱슬리브", "레이스 쉘 재킷")),
+        AvatarSlot("bottom", "하의", listOf("네이비 쇼츠", "러닝 타이츠", "그린 쇼츠", "코랄 쇼츠", "하이웨이스트 바이커쇼츠", "스플릿 레이싱 쇼츠", "에어 메시 하의", "컴프레션 패널 하의", "리플렉트 트레일 하의")),
+        AvatarSlot("costume", "세트", listOf("일반 러닝복", "산타 러너", "스포츠 원피스 수영복", "스포츠 비키니", "곰인형 코스튬", "골든 마스코트", "트랙 클럽 세트", "포레스트 트레일 세트", "나이트 페이서 세트")),
+        AvatarSlot("socks", "양말", listOf("발목 양말", "크루 양말", "니삭스", "양말 없음", "리브 크루삭스", "트윈 스트라이프 크루", "컴프레션 니삭스", "테크 도트 크루")),
+        AvatarSlot("shoes", "신발", listOf("민트 러닝화", "코랄 러닝화", "블루 러닝화", "골드 러닝화", "패널 러닝화", "웨이브 패널 러닝화", "케이지 트레일 러닝화", "레이스 플라이 러닝화")),
+        AvatarSlot("ear", "이어폰", listOf("귀 장비 없음", "오픈형 이어폰", "스포츠 이어버드", "스포츠 헤드셋", "골전도 플렉스", "스포츠 클립 이어폰", "테크 메시 헤드셋")),
+        AvatarSlot("eyewear", "선글라스", listOf("선글라스 없음", "민트 스포츠 선글라스", "코랄 스포츠 선글라스", "블루 스포츠 선글라스", "원피스 실드", "하프림 에어", "듀얼 미러 고글")),
+        AvatarSlot("wrist", "워치", listOf("워치 없음", "민트 스포츠 워치", "코랄 스포츠 워치", "블루 스포츠 워치", "링 다이얼 워치", "롱 디스플레이 워치", "세그먼트 트랙 워치")),
+        AvatarSlot("waist", "러닝 벨트", listOf("벨트 없음", "민트 러닝 벨트", "코랄 러닝 벨트", "블루 러닝 벨트", "플랫 지퍼 벨트", "트윈 포켓 벨트", "보틀 슬링 벨트")),
+        AvatarSlot("hydration", "수분 조끼", listOf("조끼 없음", "민트 수분 보급 조끼", "코랄 수분 보급 조끼", "블루 수분 보급 조끼", "메시 라이트 조끼", "듀얼 포켓 조끼", "레이스 하네스")),
     )
     val accessoryKeys = setOf("ear", "eyewear", "wrist", "waist", "hydration")
     val tabs = listOf("hair" to "헤어", "headwear" to "모자", "face" to "얼굴", "top" to "상의", "bottom" to "하의",
@@ -28,7 +28,7 @@ object AvatarCatalogue {
     fun valid(slot: String, variant: Int) = if (slot == "accessory") variant in 0..3 else slots.firstOrNull { it.key == slot }?.let { variant in it.variants.indices } == true
     fun price(variant: Int): Int {
         require(slots.any { variant in it.variants.indices })
-        return if (TEST_ITEMS_FREE) 0 else listOf(0, 500, 1000, 2000, 500, 1000, 1000)[variant]
+        return if (TEST_ITEMS_FREE) 0 else listOf(0, 500, 1000, 2000, 500, 1000, 1000).getOrElse(variant) { 1000 }
     }
     fun migrateOwned(owned: Set<String>): Set<String> = owned + defaultOwned + buildSet {
         if ("accessory:1" in owned) add("headwear:3")
@@ -38,6 +38,7 @@ object AvatarCatalogue {
     fun coveredSlots(costume: Int): Set<String> = when (costume) {
         1, 4, 5 -> setOf("headwear", "top", "bottom", "socks", "shoes")
         2, 3 -> setOf("top", "bottom")
+        6, 7, 8 -> setOf("top", "bottom", "socks", "shoes")
         else -> emptySet()
     }
 }

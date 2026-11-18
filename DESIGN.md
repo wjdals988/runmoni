@@ -1,3 +1,38 @@
+# 0.9 UI·Aseprite39종 실제 검토 완료 후보 — 2026-11-18 한국 시간
+
+<!-- verified-expressive-local11-main6-v1 -->
+홈·테마·전환·옷장·공유·기록·크루·브랜드의8개 UI 영역을 구현했다. [현재 검토](docs/app-review/2026-11-17-expressive-refresh/README.md)와 아래 요구표를 기준으로 같은 보관키 개발 프리뷰·대시보드·피드 게시를 이어간다. 아직 공개0.8의 실제 APK출처9a0051e28a2ac24badbbf1b57a554a37e4a9a85e와 다운로드를 새 게시 성공으로 바꾸지 않는다.
+
+새 로컬 JVM266개/실패0·오류0·건너뜀0, lint오류0·경고67개다. Android 고유117개는 최종 입력11의 새103개와 별도 소스 동등성 검토를 통과한 입력9의 변경 없는 순수 렌더러14개다. 같은 APK 전체 실행·이전0.8 재사용이 아니다. 입력9/10 IME 실패·기존 정지 픽셀 실패/재실행 원인 미확정·실패 그룹 부분통과 제외를 보존한다. 가로 검사의 앱 동작1개는 통과했으나 원래 회전 복원 parent=false는 유지하고, 별도 복원으로 default/effective false와 전체 원래 상태를 확인했다. 이 복원은 제품 검사0개다. [정확한 범위](docs/app-review/2026-11-17-expressive-refresh/android-scope-summary.json).
+
+실제 Main6의 새 원본7장과 Root의 개별 시각/개인정보 검토를 확인했다. 밝음/어둠 선택·새 캡/개별 의복4종·시스템 사진 선택·공유 스타일/초안·어두운 무료 지도를 확인했다. 합성5.24km/1회 기록과 합성 사진이며 날씨·GPS 주입은 없다. private320dp/font2 프로필 입력창의 전체48dp Back/Save와 키보드 표시·닫기/저장 없는 복귀를 관측했고, 실제 물리적 숨김 상태는 같은30초 범위의0.8초 샘플로 확인했다. 준비 후 별도3개 재생/5개 동일 정지/3개 재개 픽셀과 OS 움직임을 켠 탐색을 관측했으며 FPS·휴대폰 성능이나 원래200ms 기준의 변경을 뜻하지 않는다. 이전 Main1~5의 false parent와 부분0/0/0/2/4장은 보존·전부 제외하며, 내부 input-view 상태의 OR 오판·Main Canvas 접근성 이름 차이·사진 선택 뒤 아래 접힌 도구의 노출은 관측기에서만 교정했고 원래90/75초 기준은 유지했다. [실제 Main](docs/app-review/2026-11-17-expressive-refresh/live6.json)·[Root7장 검토](docs/app-review/2026-11-17-expressive-refresh/root-main-visual-review.json).
+
+원본f903… 얼굴·몸·8프레임과 기존61ID prefix/13슬롯/9탭/무료·보유권·지갑·키를 보존한다. 실제 Aseprite V4의39편집 프로젝트와624디테일·192색상 역할 셀/816PNG를 확인했다. 전체100ID이며 준비됨은 남87/여85로, 모든100종 준비·상업 품질 인증·사용자 시각 승인을 주장하지 않는다. 원래 DB행/백업origin·전체XML/계정/appearance·nonce 파일·캐시/갤러리·소유 환경 복원 후 AVD7 PID71005를 정확 종료했다. [종료](docs/app-review/2026-11-17-expressive-refresh/session7-cleanup.json).
+
+요구9항목별 최신 완료/검증/남은 경계는 [현재 작업표](docs/app-review/2026-11-17-expressive-refresh/README.md)에 모았다.
+
+새39ID 운영 Rules 게시 답변은 아직 없으며 같은 질문을 반복하거나 운영 쓰기 성공으로 추정하지 않는다. 휴대폰·Google 로그인/백업·운영 프로필/위치 공유 쓰기·SNS·야외GPS/절전/OEM/API31+·공개 서명APK 런타임과 사용자 원화 승인은 별도다. 다음은 실제 C 병합/6-map 비교·새 연결 서명CI 검증·검증된 개발 프리뷰 게시, 최신 다른8프로젝트를 보존한 대시보드/fresh Node/운영 배포, D 문서·피드 및 canonical 전체 바이트 검증이다.
+
+아래는 이전 시점의 보존 기록이다.
+
+# 0.9 API29 키보드 가림 수정 후보10 — 2026-11-18 한국 시간
+
+입력9의 실제 Native 검사에서 키보드가 열린 양식의 저장 버튼이 가려졌고, 별도 동일 APK 전체 양식2개 재현에서도 같은 결함을 확인했다. 버튼 아래764px·키보드 위413px, 실제 내용 호스트480×746px가 줄지 않은 상태다. 공유 화면의 큰 글씨 헤더/보통 글씨 높이 검사도 실패했다. 원래 parent=false와 각 실패 그룹의 부분통과를 모두 보존·제외하고 전체 원래 XML/계정/테마·DB/소유 환경 복원 후 AVD5 PID54166을 정확 종료했다. [실제 근거](docs/app-review/2026-11-17-expressive-refresh/input9-native-failure-review.json).
+
+API29 편집 화면에만, 기존 framework fitting을 유지하면서 실제 호스트에 남은 가림만 보정하는 제품3경로 수정 후보를 적용했다. 관측369px를 보정하고 이미 정상적으로 줄어든 호스트에는0px를 더하도록 하며 API30+ 경로·원래 flags/mode 복원은 유지한다. 독립 정적 검토를 마쳤고 새 입력10의 빌드/실행은 아직 미검증이다. Theme 변경이 원인이라고 확정하거나 테스트 기준을 낮추지 않았다.
+
+입력9의 옷장 색상 UI5와 전체 성공 그룹84/별도 재생7은 새 입력10 성공이 아니다. 최초 정지 픽셀 불안정1회와 동일 입력 전체7 재실행 통과를 보존하며 원인은 미확정이다. 바뀌지 않은 순수 렌더러14개의 입력 간 소스 동등성은 검토 후보일 뿐, 아직 최종 범위로 승인하지 않았다. 공개0.8의 실제 APK출처9a0051e28a2ac24badbbf1b57a554a37e4a9a85e와 다운로드는 새 검증·게시까지 유지한다. 기존 PR/main·같은 보관키 개발 프리뷰·운영 대시보드/피드 승인을 이어간다.
+
+아래는 이전 후보 시점의 보존 기록이다.
+
+# 0.9 UI·러닝 환경·도트 확장 기준 — 2026-11-18 한국 시간
+
+frontend-design를 적용한 [8개 UI 개선 설계](design-system/runmoni/pages/expressive-refresh.md)를 따른다. 의미별 라이트/다크 토큰·24dp 바깥/32dp 구역/16dp 내부 간격, 시스템 한글 Sans와 사용자 글자 크기,48dp 조작영역을 기준으로 한다. 원화/사용자 사진·실제 정보가 시각 중심이며 반복 카드/지표/전면 그라데이션을 늘리지 않는다. 긴 편집은 페이지 이동·뒤로가기/초안을 유지한다.
+
+[옷장](design-system/runmoni/pages/closet-atelier.md)·[사진 공유](design-system/runmoni/pages/share-expressive.md)·[테마/움직임](design-system/runmoni/pages/appearance-motion.md)·[환경 점수](design-system/runmoni/pages/environment-score.md)·[기록/크루](design-system/runmoni/pages/editorial-polish.md)를 구체 기준으로 삼는다. 실제 Aseprite 제작과 Android 화면·사용자 승인은 구분하며 [39종 제작/실패 검토](docs/app-review/2026-11-17-expressive-refresh/ASEPRITE_REVIEW.md)를 따른다. 원본 얼굴·몸·8프레임을 새로 생성하지 않는다. 최신 유행의 보급률/경쟁 앱 실사용·상업 품질 인증은 주장하지 않는다.
+
+아래는 이전 설계 이력이다.
+
 # 0.8.0-dev 의복·사진 공유·자동 백업 공개 — 2026-11-16 한국 시간
 
 <!-- verified-atelier-release-0.8.0-v1 -->

@@ -1,0 +1,89 @@
+{
+  "recordedAtUtc": "2026-11-18T00:04:47.909383+00:00",
+  "candidateInput": 10,
+  "acceptedForFinalScope": false,
+  "unchangedRetryAuthorized": false,
+  "actualNativeProof": {
+    "file": "native4.json",
+    "sha256": "9ff07441c218ddaba0c37ea9e0a154fd450ff40514212751b574c6d06e7c71f9"
+  },
+  "completed": true,
+  "parentPassed": false,
+  "wholeGroups": [
+    {
+      "name": "native-form-pages",
+      "passed": true,
+      "expected": 2,
+      "actual": 2,
+      "raw": "native4-native-form-pages.txt",
+      "rawSha256": "40b608f848382f183bce58ac47c284f841c4da3fe774835dc45030862dfd2ce3"
+    },
+    {
+      "name": "native-large-text",
+      "passed": false,
+      "expected": 12,
+      "actual": null,
+      "raw": "native4-native-large-text.txt",
+      "rawSha256": "0e87d30aa289e890fe9cf9972d616416e7ff69a857a0743f34a8b4f00881ed3b"
+    },
+    {
+      "name": "native-share-font1",
+      "passed": false,
+      "expected": 1,
+      "actual": null,
+      "raw": "native4-native-share-font1.txt",
+      "rawSha256": "76b90454bee11d4e7cd98ea93dbf0f035a85c0ccbc0952cd7f064dfbb872eab9"
+    }
+  ],
+  "failedGroupPartialMethodsRetained": 0,
+  "allRestorationFields": {
+    "preferencesRestoredExactly": true,
+    "profileRestoredExactly": true,
+    "communityAccountPreferencesRestoredExactly": true,
+    "appearancePreferencesRestoredExactly": true,
+    "originalDatabaseRowsPreservedExactly": true,
+    "controlledSettingsPermissionsPowerRestoredExactly": true,
+    "settingsPermissionsPowerRestoredExactly": true,
+    "restorationCommandFailures": []
+  },
+  "diagnosticCollection": {
+    "file": "input10-native-share-diagnostic-collection.json",
+    "sha256": "12fa21b0742b9378241e77c186205054d958acbc69e2cf13d2be49f66de0332e"
+  },
+  "newFailureJsonl": {
+    "file": "input10-native-share-ime-new-failure.jsonl",
+    "sha256": "d35e75ee52f25f101ff067aba7f8df2f6904cb9585985c088ed3448af51e2614"
+  },
+  "actualParentVisualReview": {
+    "file": "root-native-ime-visual-review10.json",
+    "sha256": "dd5878628a93ad49f04162f548e2f31ffa53548928b54d71af6c14e920e1cf68"
+  },
+  "privateActualShareScreenshot": {
+    "file": "work/expressive-refresh/input10-private-share-header-failure.png",
+    "sha256": "254562f8237dad67cee26b61aec40d5b96dbd3f4a078e0d97a80ff6b5d3ee9fd",
+    "publicCopyCreated": false,
+    "actualParentViewReportedInTakeover": true
+  },
+  "actualGeometry": {
+    "decorOnScreen": [
+      0,
+      -146
+    ],
+    "contentOnScreen": [
+      0,
+      -110
+    ],
+    "contentSize": [
+      480,
+      746
+    ],
+    "safeHeight": 377,
+    "closeY": -98,
+    "imeBottom": 441
+  },
+  "finding": "Actual share header root pan remains after form bottom was corrected. Source10 rejected. Theme causality is unconfirmed. Candidate11 will physically constrain the content frame instead of adding only Compose padding.",
+  "ownedCleanup": {
+    "file": "session6-cleanup.json",
+    "sha256": "fbe62a55037ef430e32deb27c1ef35145418ff22ac9f90bf61eaaf3b2a343788"
+  }
+}

@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunningEnvironmentUiTest:..
+
+Time: 27.714
+
+OK (2 tests)
+
+

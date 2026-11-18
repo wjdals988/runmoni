@@ -1,0 +1,19 @@
+{
+  "binaryReference": "binary-build9.json",
+  "binaryReferenceSha256": "000b6f323ec4cc1911a90addafc60b6cb57643882457e87238d03b0883607766",
+  "recordedAtUtc": "2026-11-17T22:59:16.781257+00:00",
+  "actuallyViewedWithViewImage": true,
+  "reviewer": "Parent Root; actual primary view and verdict delivered to single execution driver",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "sourceKind": "Actual Android production renderer contact export fixture, not a MainActivity screenshot",
+  "file": "android-review8-atelier-expansion-112.png",
+  "sha256": "5b62a026991f071172955b554ca11bd08ec86124136341f47c726f4b47cedeca",
+  "freshExecutionProof": "android-review8.json",
+  "sourceGroup": "atelier-expansion",
+  "sourceRaw": "android-review8-atelier-expansion.txt",
+  "source9FreshExportByteIdenticalToEarlierInput8": true,
+  "privacyReviewed": true,
+  "reviewedScope": "All39 new item/gender pairs at one fixed running pose at112px. Root saw preserved faces/body/head proportions and rich outline/shading, fitted caps/garments, and no floating/disconnected body parts in this contact. Hair texture/cheek/ear/watch remain subtle. This is not a visual review of all animation frames or every combination.",
+  "acceptedAsInternalCandidate": true
+}

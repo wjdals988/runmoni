@@ -1,0 +1,136 @@
+{
+  "proof": {
+    "file": "live6.json",
+    "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3"
+  },
+  "wholeParentPassed": true,
+  "reviewedBy": "Parent Root",
+  "reviewedAtUtc": "2026-11-18T03:35:14.407305+00:00",
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "images": [
+    {
+      "file": "live6-main-home-light.png",
+      "sha256": "9ad75ab0f2d80e4bf490ebd4aaac3e3fb94ffb4195bce72ef108959c80e091e1",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-home-dark.png",
+      "sha256": "305a93acfec20ab35602622b815e7d508061b22cc12f78280c9cbdd032d16f0c",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-new-cap.png",
+      "sha256": "a364ced41a9e063b9486ae74a64323dc3aa20d95120bdcc2289cf4ea34c25fc3",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-new-technical-set.png",
+      "sha256": "01f3c2386b6c8408daf81a53ac4394c9418807cd72a73b9020914db88eb0c2ab",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-sharedphoto-stamp.png",
+      "sha256": "73b7cd1fc439ee17478f6c81ac8c957a9f0588c79d7a0c1e0e126709c8bcf86c",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-settings-dark.png",
+      "sha256": "24a2dbcb4c8c551a24d9c5630f9017e9fcfeb9c76166ae75ef7368c7cd1218c4",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-map-dark.png",
+      "sha256": "9acf7d84665e58e99771d9406d25977b3882c8c43ac8403540fc42a64abd1c41",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "acceptedFormalScope": {
+    "file": "android-scope-summary.json",
+    "sha256": "bd430920723d8d49ba528bfaa2fdeb7ade50cb42a79174bb6008b2733d95d9cf"
+  },
+  "independentRootSourceAudit": {
+    "allSixCurrentFrozenMapsRehashed": true,
+    "mapCounts": [
+      131,
+      118,
+      48,
+      981,
+      1,
+      11
+    ],
+    "sourceBeforeAfterAndAfterRestorationMatch": true,
+    "driverObserverEnvironmentValidatorBinaryAndScopeReferencesIndependentlyHashed": true,
+    "allSevenOriginalPngHashesAndDimensionsIndependentlyVerified": true
+  },
+  "actualBoundedObservations": {
+    "physicalImeHiddenSeconds": 0.8,
+    "physicalImeOriginalBudgetSeconds": 30,
+    "pickerCallbackSeconds": 16.700219,
+    "pickerCallbackOriginalBudgetSeconds": 90,
+    "draftPhotoRestoreSeconds": 13.618874,
+    "draftOriginalBudgetSeconds": 75,
+    "callbackAndDraftEachOneObservedEdgeSwipeOutsidePhoto": true,
+    "noAdditionalPickerOrExportTap": true,
+    "runningDistinctStates": 3,
+    "pausedIdenticalSamples": 5,
+    "resumedDistinctStates": 3,
+    "osMotionEnabledSettledNavigationObserved": true
+  },
+  "privateNativeReview": {
+    "file": "root-main6-native-profile-visual-review11.json",
+    "sha256": "869eac24ea1e91d94b4f1bc19178621983fd241651f9ab3286e38616400570d0"
+  },
+  "failedEarlierMainAttempts": [
+    {
+      "file": "live1.json",
+      "sha256": "5c43182b842f521e0d435fe4a35afb9ac358bc2972b5f5a625579011266899cd",
+      "acceptedPublicationCaptures": 0
+    },
+    {
+      "file": "live2.json",
+      "sha256": "4a2bd9b04269970684af2584b4ff1f63341b69c28ede994eee0db6802fa9409f",
+      "acceptedPublicationCaptures": 0
+    },
+    {
+      "file": "live3.json",
+      "sha256": "7b5c523b80b4ccd2bbfa93977789d64c0adad7b12feb16e343980f740da5be34",
+      "acceptedPublicationCaptures": 0
+    },
+    {
+      "file": "live4.json",
+      "sha256": "c59ae905ff52afe8efd4ebd279567056c57df86cb28db166b9fef62aabccabde",
+      "acceptedPublicationCaptures": 0
+    },
+    {
+      "file": "live5.json",
+      "sha256": "8bd0909d90564300c41fdd9cbbf3199e14f9c5ee834d86c536090d92af6c4617",
+      "acceptedPublicationCaptures": 0
+    }
+  ],
+  "notes": "All seven fresh Main6 originals were individually viewed by Parent Root and privacy-reviewed. Synthetic5.24km/1run and synthetic photo are explicitly demo data; forecast/GPS were not injected. Missing weather remains neutral. New cap and four individual garments fit original face/body proportions; costume0 is not a single costume selection. Stamp uses a full synthetic-photo background. Dark native map has real tiles/Korean labels/fullcredit and controls outside; Seoul is before location confirmation, not currentGPS/operating nearby-runner evidence. Actual full restoration/source and unchanged original budgets were independently audited. Earlier five failed whole attempts and every partial image remain excluded.",
+  "physicalDeviceVerified": false,
+  "publicSignedRuntimeVerified": false,
+  "googleOrOperatingWritesVerified": false,
+  "snsDeliveryVerified": false,
+  "commercialQualityCertificationClaimed": false
+}

@@ -28,20 +28,20 @@ class RunningKitColors(Model):
 
 class Avatar(Model):
     gender: Literal["male", "female"] = "male"
-    hair: int = Field(default=0, ge=0, le=3)
-    top: int = Field(default=0, ge=0, le=6)
-    bottom: int = Field(default=0, ge=0, le=5)
-    shoes: int = Field(default=0, ge=0, le=4)
+    hair: int = Field(default=0, ge=0, le=6)
+    top: int = Field(default=0, ge=0, le=9)
+    bottom: int = Field(default=0, ge=0, le=8)
+    shoes: int = Field(default=0, ge=0, le=7)
     accessory: int = Field(default=0, ge=0, le=3)
-    eyewear: int = Field(default=0, ge=0, le=3)
-    wrist: int = Field(default=0, ge=0, le=3)
-    waist: int = Field(default=0, ge=0, le=3)
-    hydration: int = Field(default=0, ge=0, le=3)
-    face: int = Field(default=0, ge=0, le=3)
-    socks: int = Field(default=0, ge=0, le=4)
-    headwear: int | None = Field(default=None, ge=0, le=3)
-    ear: int | None = Field(default=None, ge=0, le=3)
-    costume: int = Field(default=0, ge=0, le=5)
+    eyewear: int = Field(default=0, ge=0, le=6)
+    wrist: int = Field(default=0, ge=0, le=6)
+    waist: int = Field(default=0, ge=0, le=6)
+    hydration: int = Field(default=0, ge=0, le=6)
+    face: int = Field(default=0, ge=0, le=6)
+    socks: int = Field(default=0, ge=0, le=7)
+    headwear: int | None = Field(default=None, ge=0, le=6)
+    ear: int | None = Field(default=None, ge=0, le=6)
+    costume: int = Field(default=0, ge=0, le=8)
     runningKitColors: RunningKitColors = Field(default_factory=RunningKitColors)
 
 

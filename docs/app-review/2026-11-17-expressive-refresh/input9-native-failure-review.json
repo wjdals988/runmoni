@@ -1,0 +1,68 @@
+{
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "binaryReference": {
+    "file": "binary-build9.json",
+    "sha256": "000b6f323ec4cc1911a90addafc60b6cb57643882457e87238d03b0883607766"
+  },
+  "recordedAtUtc": "2026-11-17T23:38:45.287804+00:00",
+  "finalScopeAccepted": false,
+  "source9RejectedForFinalUiRelease": true,
+  "defaultParent": {
+    "file": "android-review8.json",
+    "sha256": "8f44b42507b60657a26522e47e3cf97b7a697d1f277bf849685b23d85c716702"
+  },
+  "defaultWholePassedMethods": 84,
+  "failedDefaultWholeGroup": "avatar-identity-playback",
+  "allFailedGroupPartialMethodsExcluded": true,
+  "singleStrictWholeAvatarRetry": {
+    "file": "android-review9.json",
+    "sha256": "7e8c68ca62fbb71b84e388dfa238fe12ac63b877679d5878e159f4881bd1bf85"
+  },
+  "singleStrictWholeAvatarRetryActualPassedMethods": 7,
+  "initialPauseStabilityFailureCauseEstablished": false,
+  "nativeParents": [
+    {
+      "file": "native2.json",
+      "sha256": "9eaf9015b15f7ed63d09f673960f24c1372c8685621457acc44e2297d4e328f4"
+    },
+    {
+      "file": "native3.json",
+      "sha256": "36b61df1ef2485c33d01890d494d3f07713df71194f184e1528f0c0792bdb454"
+    }
+  ],
+  "nativeMethodsAccepted": 0,
+  "native2FailedWholeGroups": [
+    "native-form-pages",
+    "native-large-text",
+    "native-share-font1"
+  ],
+  "controlledFormReproductionOnly": true,
+  "reproducedHiddenSubmit": {
+    "formNative2": {
+      "file": "native2-native-form-page-bounds.jsonl",
+      "sha256": "a893eeec2203498b8e1ac2d6f6ce36fdefd2874587856ad54694247258626828"
+    },
+    "formNative3": {
+      "file": "native3-native-form-page-bounds.jsonl",
+      "sha256": "cfff788f8e9d8537ecb76301b3ea7471b195ea064e186bbc0d32874be6204f4f"
+    },
+    "submitBottomPx": 764,
+    "imeTopPx": 413,
+    "outsideByPx": 351,
+    "unresizedHostSizePx": "480x746",
+    "decorSizePx": "480x854",
+    "hostScreenYPx": 36,
+    "actualResidualOcclusionPx": 369
+  },
+  "themeChangeCausedFailureEstablished": false,
+  "restorationAndExactAvdStop": {
+    "file": "session5-cleanup.json",
+    "sha256": "826be0fba91f7749a6dd443c675c8f31fbb6197d6553198682fb6f704b59f0b9"
+  },
+  "allOriginalFailuresRetained": true,
+  "productFixCandidate": "API29 editable pages preserve classic fitting, add only measured remaining host occlusion, and restore scoped listener/window state. No test thresholds, assertions or waits changed.",
+  "source10ValidationExecuted": false,
+  "operatingRulesForNew39OwnerReportReceived": false,
+  "publicApkStill": "0.8.0-dev/source9a0051e28a2ac24badbbf1b57a554a37e4a9a85e"
+}

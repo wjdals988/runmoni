@@ -1,0 +1,8 @@
+environment score 320 / 1.0 / dark=false: awaitAvatarReady=true; waitMillis=28; timeoutMillis=120000
+environment score 320 / 1.5 / dark=false: awaitAvatarReady=true; waitMillis=34; timeoutMillis=120000
+environment score 320 / 2.0 / dark=false: awaitAvatarReady=true; waitMillis=23; timeoutMillis=120000
+expanded environment criteria 320 / 2 / dark=false: awaitAvatarReady=true; waitMillis=8; timeoutMillis=120000
+environment score 320 / 1.0 / dark=true: awaitAvatarReady=true; waitMillis=14; timeoutMillis=120000
+environment score 320 / 1.5 / dark=true: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000
+environment score 320 / 2.0 / dark=true: awaitAvatarReady=true; waitMillis=34; timeoutMillis=120000
+expanded environment criteria 320 / 2 / dark=true: awaitAvatarReady=true; waitMillis=7; timeoutMillis=120000

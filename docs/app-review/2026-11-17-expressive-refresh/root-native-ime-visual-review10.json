@@ -1,0 +1,54 @@
+{
+  "binaryReference": {
+    "file": "binary-build10.json",
+    "sha256": "6702170e869f941bb4b949e8a4683b5b62df433ccdd29bf379fff65ad65a03c4"
+  },
+  "recordedAtUtc": "2026-11-17T23:51:58.516603+00:00",
+  "reviewer": "Parent Root; actual primary individual views and geometry comparison delivered to sole execution driver",
+  "sourceKind": "Actual Android ComponentActivity native UI fixtures, not MainActivity",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "privacyReviewed": true,
+  "sourceGroup": "native-form-pages",
+  "sourceRaw": {
+    "file": "native4-native-form-pages.txt",
+    "sha256": "40b608f848382f183bce58ac47c284f841c4da3fe774835dc45030862dfd2ce3"
+  },
+  "sourceGeometry": {
+    "file": "native4-native-form-page-bounds.jsonl",
+    "sha256": "d71d3fd6ca34d10598eb03df4638886335d274ad94f1f7db13d7ea90d49a0494"
+  },
+  "sourceDriver": {
+    "file": "native4-executed-driver.py",
+    "sha256": "6d43af7a83a1e5a154134d7156de6c0f3f8f9981403442c558b46ac66a3255f8"
+  },
+  "nativePhaseStillRunningAtRecord": true,
+  "images": [
+    {
+      "file": "native4-modal-ime-close-native320-font2-fixture.png",
+      "sha256": "d12ba5028e5823acfed2f4be1a8092318325334677d56ff3061c9dd29ae22bd9",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Root saw full cancel/save actions above actual keyboard, fully visible back arrow/title and naturally scrolled guides8/9. This corrects the observed hidden-button scene in source9 at this tested viewport; Theme causality is not claimed."
+    },
+    {
+      "file": "native4-modal-about-close-native320-font2-fixture.png",
+      "sha256": "8eee5f212551db4da546dde6a4c8288aa58b7e7086b127ed183ac460a4999c26",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Root saw fixed back arrow/title visible after long content scroll. Extreme font2 wraps Korean heavily, but no control overlap or private user data was visible."
+    }
+  ],
+  "measuredResidualCorrection": {
+    "focusedContentSizeWithImePx": "480x746",
+    "hostScreenYPx": 36,
+    "decorHeightPx": 854,
+    "imeBottomPx": 441,
+    "safeContentSizeWithImePx": "480x377",
+    "remainingOcclusionCorrectedPx": 369,
+    "normallyUnobscuredSafeContentPx": "480x746",
+    "themeChangeCausalityEstablished": false
+  }
+}

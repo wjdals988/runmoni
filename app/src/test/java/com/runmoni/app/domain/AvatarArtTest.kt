@@ -77,6 +77,9 @@ class AvatarArtTest {
         AvatarCatalogue.slots.forEach { slot -> assertFalse("Invisible slot ${slot.key}", plain.contentEquals(pixels(base.withItem(slot.key, 1)))) }
         assertEquals(9, AvatarCatalogue.tabs.size)
         assertEquals(5, AvatarCatalogue.accessoryKeys.size)
-        assertTrue(AvatarCatalogue.valid("top", 6)); assertFalse(AvatarCatalogue.valid("top", 7)); assertFalse(AvatarCatalogue.valid("unknown", 0))
+        assertTrue(AvatarCatalogue.valid("top", 6))
+        assertTrue(AvatarCatalogue.valid("top", 9))
+        assertFalse(AvatarCatalogue.valid("top", 10))
+        assertFalse(AvatarCatalogue.valid("unknown", 0))
     }
 }

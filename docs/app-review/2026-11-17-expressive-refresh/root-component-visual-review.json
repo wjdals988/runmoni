@@ -1,0 +1,36 @@
+{
+  "binaryReference": "binary-build8.json",
+  "viewedAtUtc": "2026-11-17T21:38:37.509920+00:00",
+  "userVisualApproval": false,
+  "commercialQualityCertification": false,
+  "images": [
+    {
+      "file": "android-review5-environment-score-320-font2-light-fixture.png",
+      "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+      "actuallyViewedWithViewImage": true,
+      "sourceGroup": "environment-score",
+      "sourceKind": "Actual Android ComponentActivity synthetic35C forecast UI fixture, not MainActivity or live weather",
+      "visualVerdict": "Score25/100, red band, marker, short advice, criteria and refresh actions visible; headline/body wrap at320dp/font2 and lower details remain scrollable. Light/dark text and controls remain legible.",
+      "acceptedAsInternalCandidate": true
+    },
+    {
+      "file": "android-review5-environment-score-320-font2-dark-fixture.png",
+      "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+      "actuallyViewedWithViewImage": true,
+      "sourceGroup": "environment-score",
+      "sourceKind": "Actual Android ComponentActivity synthetic35C forecast UI fixture, not MainActivity or live weather",
+      "visualVerdict": "Score25/100, red band, marker, short advice, criteria and refresh actions visible; headline/body wrap at320dp/font2 and lower details remain scrollable. Light/dark text and controls remain legible.",
+      "acceptedAsInternalCandidate": true
+    },
+    {
+      "file": "android-review5-widget-night-idle-font2-native-fixture.png",
+      "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+      "actuallyViewedWithViewImage": true,
+      "viewedAtUtc": "2026-11-17T21:42:02.236387+00:00",
+      "sourceGroup": "widget-night",
+      "sourceKind": "Actual Android RemoteViews apply/crop fixture at OS night/font2, not Launcher placement or MainActivity",
+      "visualVerdict": "Idle widget has centred bounded content, readable runmoni/status and a full-width primary open action; no observed text clipping at this tested host/font2. Active controls and other launchers are separate.",
+      "acceptedAsInternalCandidate": true
+    }
+  ]
+}

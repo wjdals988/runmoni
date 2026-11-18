@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "mode": "standard",
+  "scope": "Compose test effect context only; not a product threading fix or failure probability",
+  "roundsRequested": 16,
+  "roundsObserved": 16,
+  "afterOnMainLooper": 16,
+  "afterOffMainLooper": 0,
+  "completed": true,
+  "observations": [
+    {
+      "stage": "before",
+      "round": 0,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455531459131,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 0,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455580318021,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 0,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455585319268,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 1,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455585583198,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 1,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455593579582,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 1,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455598021131,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 2,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455598202175,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 2,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455599723309,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 2,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455616150556,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 3,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455616374996,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 3,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455618927033,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 3,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455628656693,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 4,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455628874643,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 4,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455631509595,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 4,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455641041936,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 5,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455641264363,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 5,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455642765918,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 5,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455653390564,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 6,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455654757605,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 6,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455656656662,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 6,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455667435942,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 7,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455667610016,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 7,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455674630993,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 7,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455679604998,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 8,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455679807315,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 8,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455682024814,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 8,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455694536990,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 9,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455694728960,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 9,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455696404489,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 9,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455706571572,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 10,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455706752366,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 10,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455708134590,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 10,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455718588567,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 11,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455718767508,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 11,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455723168826,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 11,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455731127153,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 12,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455731455450,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 12,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455738509487,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 12,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455743751098,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 13,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455743952272,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 13,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455745542772,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 13,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455757244330,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 14,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455757427788,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 14,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455760028227,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 14,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455769729024,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "before",
+      "round": 15,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455769923448,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    },
+    {
+      "stage": "worker",
+      "round": 15,
+      "thread": "fixture-dispatcher-producer",
+      "mainLooper": false,
+      "monotonicNanos": 455772540853,
+      "interceptor": "external-java-executor"
+    },
+    {
+      "stage": "after",
+      "round": 15,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 455782400991,
+      "interceptor": "kotlinx.coroutines.test.StandardTestDispatcherImpl"
+    }
+  ]
+}

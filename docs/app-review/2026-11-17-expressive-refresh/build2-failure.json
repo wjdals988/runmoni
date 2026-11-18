@@ -1,0 +1,83 @@
+{
+  "input": 2,
+  "buildSucceeded": false,
+  "stage": "testDebugUnitTest",
+  "secondsReportedByGradle": 88,
+  "freshJvm": {
+    "tests": 266,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0
+  },
+  "failures": [
+    {
+      "suite": "TEST-com.runmoni.app.avatar.AvatarAtelierClothingTest.xml",
+      "test": "originalFiftyEightIdsStayAsPrefixesAndNewSelectionsKeepGenderEquipmentAndFreePolicy",
+      "message": "java.lang.AssertionError: expected:<61> but was:<100>"
+    },
+    {
+      "suite": "TEST-com.runmoni.app.avatar.AvatarCostumeLayersTest.xml",
+      "test": "costumesHaveDistinctAuthoredShapesAndKeepAllEightOriginalPoses",
+      "message": "java.lang.AssertionError: expected:<61> but was:<100>"
+    },
+    {
+      "suite": "TEST-com.runmoni.app.domain.AvatarArtTest.xml",
+      "test": "everyVisibleSlotChangesPixelsAndNineTabsHideInternalEquipmentSlots",
+      "message": "java.lang.AssertionError"
+    },
+    {
+      "suite": "TEST-com.runmoni.app.domain.RunningKitColorsTest.xml",
+      "test": "equipmentAndGenderChangesKeepFabricSettingsSeparateFromInventory",
+      "message": "java.lang.AssertionError: expected:<61> but was:<100>"
+    }
+  ],
+  "newLintOrApkSuccessClaimed": false,
+  "runtimeVerified": false,
+  "rawLog": "build2-failed.txt",
+  "rawSha256": "c806421a81e7335ddec93301503472a12f4ea553890ba38520d3e61b9a6e8f8d",
+  "sourceFreezeReference": "source-freeze2.json",
+  "sourceFreezeSha256": "2a422ed0a84c88ac589ccbf932fcdb6ed20941bf5b436bd1933619cfdd952ea5",
+  "jvmReportHashes": {
+    "TEST-com.runmoni.app.avatar.AsepriteMaterialLayersTest.xml": "e0b37786804a3fcaac90db04c05df91c4baded3d253d6bc1232f0b4802e9d118",
+    "TEST-com.runmoni.app.avatar.AvatarAtelierClothingTest.xml": "950f382605fd1f8bd55478ec7966cd576e72cbbefb5034d3fba930b621520028",
+    "TEST-com.runmoni.app.avatar.AvatarCostumeLayersTest.xml": "2c27b1555fa315b53caec62dade6779057083ad9d9aaa258d4d192c9f8203791",
+    "TEST-com.runmoni.app.avatar.AvatarHeadwearLayersTest.xml": "baca7a9ef37b1a2a266415a27227d2caae65a9bf4838018280d1a54f3998a232",
+    "TEST-com.runmoni.app.avatar.ExpandedAtelierLayersTest.xml": "0499a9868b2b2021d44d24c8ce722e64b584450ea7d37e4a345a31abe4ed4ba7",
+    "TEST-com.runmoni.app.data.CloudSignInMessagesTest.xml": "1bd315fcb11f17b958c31848d587de40430d2083f011c0dab6c941efa7cf2dca",
+    "TEST-com.runmoni.app.data.GooglePickerGateTest.xml": "a6b4d765d47a4da68608b8ad4b48eaa39ce5488954cbe5daa2979152fdabf736",
+    "TEST-com.runmoni.app.data.RunCheckpointWriterTest.xml": "95317e2c7221707c6f34c3aa5a97822dc2ab78b39edbb7aee25389e446899f15",
+    "TEST-com.runmoni.app.data.RunnerPresenceAvatarTest.xml": "4409650b60feff565b8b2cdc06a1f30acec73dea87d2e9b906def2a55a1d5d2e",
+    "TEST-com.runmoni.app.data.RunnerSharingControllerTest.xml": "f80c2222cf2d256bb7e4f49cf48eab61407fb126e93d13c10e4f1c5c61eadeba",
+    "TEST-com.runmoni.app.data.TileHttpCachePolicyTest.xml": "ad46e4a6631ea169e0e0eb41d99aec1dcebe6205e231eb7cd9e51f6ae2706790",
+    "TEST-com.runmoni.app.domain.AppAppearanceTest.xml": "ffb3d8808c9d3b2a310343f08e25496cb244e04eea908592545601d89095c156",
+    "TEST-com.runmoni.app.domain.AppEntryControllerTest.xml": "db304fcd9cd640ef90943657bde3d9215dba3844fd265d2ea6f23fd61004e1ec",
+    "TEST-com.runmoni.app.domain.AppReleaseTest.xml": "933600408ed279050fa3ef239fe73460f5984eec01d8b37661d5489a53289c8d",
+    "TEST-com.runmoni.app.domain.AutoPauseControllerTest.xml": "c80b0c55e46933d0d4e3249c2c9c377cf345fd8c98f2e1b797a5641601a97d11",
+    "TEST-com.runmoni.app.domain.AvatarArtTest.xml": "b0fdd87f7cd89bbfb05fca0884df9743069b359099e5bc1b92c2631a1643b8b4",
+    "TEST-com.runmoni.app.domain.AvatarBasePolicyTest.xml": "52da52091ad3e3a138200bec975acc02d54b973d83d5f6d6e62baa3ace914853",
+    "TEST-com.runmoni.app.domain.CloudBackupReconcilerTest.xml": "5515cdff733f2e18a57aebeb8d2fef626eca765124b9448c77934b2c3915c4c7",
+    "TEST-com.runmoni.app.domain.CloudRunSummaryTest.xml": "f4d7f2f10742ca2eb345a5a82baf3914f7d1d5970f8260091479fd20000fba4a",
+    "TEST-com.runmoni.app.domain.CommunityGoogleLinkTest.xml": "4a03cf1c055c1c967a3ee3c60a8fe9384e6a7f731c097b965daab60d90174037",
+    "TEST-com.runmoni.app.domain.CommunityProfileConnectionTest.xml": "2dec228138f16cb90c44f45b478c0a45bec6f191c9d8e40c0317c0ece739a936",
+    "TEST-com.runmoni.app.domain.CurrentAreaTest.xml": "fe8767a528fb28bb311e3a4b38ab12e6b020461b30a8e136e30defe36b7da0d4",
+    "TEST-com.runmoni.app.domain.DeviceChecksTest.xml": "35a1fce0bf5343c86a9627428f6c3bc93f1c8bfafb925a6630736924966be05c",
+    "TEST-com.runmoni.app.domain.GpsSignalFreshnessTest.xml": "cf911c289c672e5d9dbe7ce5e822f069914f22ad201ffd423fb2551e36fac7be",
+    "TEST-com.runmoni.app.domain.NicknameTest.xml": "dfc3370edb27634d1c315909550c0c9a096c25099d3e799d661c6301e7a5b442",
+    "TEST-com.runmoni.app.domain.RecentRunActivityTest.xml": "cf90da26e1d5c82a6dd93fb70acf2a4676c9da3dafe375ba0f0e4408117aec0f",
+    "TEST-com.runmoni.app.domain.RouteViewportTest.xml": "c19e261b190457bc12fe2f73393b609513b7eeaf0283fa297860638a03f22efc",
+    "TEST-com.runmoni.app.domain.RunEngineTest.xml": "a9a986d1e4504fb6b2cbb4063eca96207a2bf8639ed18ef7854753dd3d6e9b45",
+    "TEST-com.runmoni.app.domain.RunNotificationTest.xml": "ed7459a3e3b5feb898ed254fc0a15a7c6455388087d1de4a9e4484b48aa9dc88",
+    "TEST-com.runmoni.app.domain.RunShareAccessTest.xml": "125745e5fdef01d63a4603afa3309372b3fb27f5f712b34b4594d0f3d16bcec9",
+    "TEST-com.runmoni.app.domain.RunShareCardTest.xml": "04ae2afe5545673c47d8ff17f5989666701363a141fa756243dc6fb556854495",
+    "TEST-com.runmoni.app.domain.RunWidgetContentTest.xml": "88483a3f6b772da0eeb96f29cb27e801a929cadeb477d969785de9f68453b690",
+    "TEST-com.runmoni.app.domain.RunnerPresenceTest.xml": "9337932b71b3d172cf2965ebcae9b7c88f8dd54855298fd47f1d811782eebcb9",
+    "TEST-com.runmoni.app.domain.RunningEnvironmentScoreTest.xml": "d0fb39d1ce16eefac73d58f93aea823d4149950f14ed8ba970774e5166b3542f",
+    "TEST-com.runmoni.app.domain.RunningKitColorsTest.xml": "f3f29d6b45172b2348fd62f3eb65f71e07d18a03e93ef71d7f6b88a72168b67e",
+    "TEST-com.runmoni.app.domain.RunningWeatherTest.xml": "2fef0d72645916ab37b15c6937d1746d1513ca3fcff65f10bdb21d3dc034277c",
+    "TEST-com.runmoni.app.domain.SockClothingTest.xml": "a672ae1f389c7e97bfe5b495ff37405e7fdd697f14ed721ac787bd8a56ae0e36",
+    "TEST-com.runmoni.app.domain.VectorMapContractTest.xml": "4b63da745d684c5cb99958fd2f221f822d7bdcce430ab53de1d65d7c80c136a1",
+    "TEST-com.runmoni.app.domain.WalletMileageMergeTest.xml": "2834958c04b2b4c925612dae1723db7c3a6d867cc02e3c551af74b9630ff403f",
+    "TEST-com.runmoni.app.domain.WardrobeSelectionTest.xml": "7c19c6e014e53c9d04158ac001cbfa34521a557c74bf5956ebb6aed000693dac"
+  },
+  "testsCriterionChange": "Strict catalogue count100/ready87male85female and validtop9/invalid10 reflect exact39 append; original ID/source mask/identity gates remain"
+}

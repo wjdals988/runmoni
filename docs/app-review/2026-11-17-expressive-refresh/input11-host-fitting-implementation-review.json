@@ -1,0 +1,51 @@
+{
+  "recordedAtUtc": "2026-11-18T00:05:31.768722+00:00",
+  "candidateInput": 11,
+  "status": "Static implementation candidate; Parent review and runtime acceptance pending",
+  "productPath": "app/src/main/java/com/runmoni/app/ui/RunmoniWindowPolicy.kt",
+  "productSha256": "549aeb18b22af07081e2467c822972c776a18c5ac02fbcf3470bb35f613c1df4",
+  "actualCachedBytecode": {
+    "activityCompose": {
+      "privateWorkPath": "work/expressive-refresh/input11-activityCompose-bytecode.txt",
+      "sha256": "a8153cff8266e215a88728a2e85b7f3e5ad58c3ce290b00be485ad4b524ac06e",
+      "cachedClassesJarSha256": "87288dbba7cc67a2598d62e44bb66566aba53006724efbd35426a82f9da79ae5"
+    },
+    "abstractComposeView": {
+      "privateWorkPath": "work/expressive-refresh/input11-abstractComposeView-bytecode.txt",
+      "sha256": "9bcd5abeba9997b68a9bf7167697531f0da51a1c50cf269efc064947b1f72d08",
+      "cachedClassesJarSha256": "07e549553b67025902fbe109dcc270be330e6f1efe7ebeaff5c03347441dad86"
+    }
+  },
+  "findings": [
+    "activity-compose1.9.3 installs ComposeView below android.R.id.content with default WRAP_CONTENT width/height, not MATCH_PARENT.",
+    "AbstractComposeView1.7 measures the AndroidComposeView child from incoming measure-spec size minus its own padding and propagates the incoming spec mode.",
+    "AndroidComposeView1.7 converts AT_MOST to constraints 0..size, so fillMaxSize content follows the frame-constrained maximum.",
+    "AOSP10 ViewRootImpl scrollToRectOrFocus evaluates visible-inset focus panning even with adjustResize; performLayout resets mScrollMayChange. The actual source10 failure proves root pan despite decor.scrollY0."
+  ],
+  "cachedSourceReferences": {
+    "work/run-share/compose17-AndroidComposeView.android.kt": "b500145b78e0502c3b7ac14f36915ad8ac1ae85324b70920ac5503ce37409276",
+    "work/run-share/aosp10-ViewRootImpl.java": "762c240cce29e4eb90723fd27dc0fb3782982d5975478e10af50733921fa9a4c",
+    "work/run-share/core116-WindowInsetsCompat.java": "136a4e376eef81ca1b4d268c9da69dffa329603d67a4e75089f5727e10750e25"
+  },
+  "boundedCorrection": {
+    "api": 29,
+    "surface": "Only existing in-tree editable page call sites",
+    "referenceGeometry": "content frame outer bottom relative to decor, less original bottom padding",
+    "additionalBottom": "max(0, baseBottom - (decor.height - max(systemBars, displayCutout, ime).bottom)), capped by original usable outer height",
+    "physicalPadding": "originalBottom + additionalBottom",
+    "feedbackAvoided": "Does not derive correction from shortened Compose child or current added padding",
+    "imeHiddenOrFrameworkAlreadyFits": "Additional zero, preserving original padding",
+    "composeInsets": "Zero only when guarded physical content-frame policy active",
+    "originalStateRestoration": [
+      "left/top/right/bottom and relative start/end mode",
+      "three owned layout flags only",
+      "whole original softInputMode",
+      "captured ViewTreeObserver removal",
+      "posted callback removal"
+    ],
+    "otherApi": "Existing null-result Compose inset path unchanged"
+  },
+  "testAssertionOrDeadlineChanged": false,
+  "runtimePassClaimed": false,
+  "themeCausalityEstablished": false
+}

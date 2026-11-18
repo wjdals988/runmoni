@@ -1,0 +1,396 @@
+{
+  "schemaVersion": 1,
+  "mode": "default",
+  "scope": "Compose test effect context only; not a product threading fix or failure probability",
+  "roundsRequested": 16,
+  "roundsObserved": 16,
+  "afterOnMainLooper": 0,
+  "afterOffMainLooper": 16,
+  "completed": true,
+  "observations": [
+    {
+      "stage": "before",
+      "round": 0,
+      "thread": "main",
+      "mainLooper": true,
+      "monotonicNanos": 734463867617,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 0,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734857322461,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 0,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734858245605,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 1,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734858595182,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 1,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734911926613,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 1,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734912582864,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 2,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 734912745349,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 2,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735001344217,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 2,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735001853856,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 3,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735002014749,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 3,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735036215287,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 3,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735041347653,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 4,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735041730090,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 4,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735061997859,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 4,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735062426306,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 5,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735062592306,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 5,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735082386641,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 5,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735082845594,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 6,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735171168846,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 6,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735187634707,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 6,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735188189675,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 7,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735188460984,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 7,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735221530870,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 7,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735221960579,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 8,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735222134341,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 8,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735233538653,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 8,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735233981000,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 9,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735292987196,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 9,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735334308420,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 9,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735334874995,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 10,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735335049669,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 10,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735371861057,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 10,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735390754602,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 11,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735391012621,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 11,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735434796748,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 11,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735435607141,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 12,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735435814274,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 12,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735454002595,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 12,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735454484973,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 13,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735454645115,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 13,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735473581815,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 13,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735474112226,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 14,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735474418698,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 14,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735503897559,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 14,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735504485426,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "before",
+      "round": 15,
+      "thread": "DefaultDispatcher-worker-1",
+      "mainLooper": false,
+      "monotonicNanos": 735504650145,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    },
+    {
+      "stage": "worker",
+      "round": 15,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735523308726,
+      "interceptor": "kotlinx.coroutines.scheduling.DefaultScheduler"
+    },
+    {
+      "stage": "after",
+      "round": 15,
+      "thread": "DefaultDispatcher-worker-2",
+      "mainLooper": false,
+      "monotonicNanos": 735523956343,
+      "interceptor": "androidx.compose.ui.test.ApplyingContinuationInterceptor"
+    }
+  ]
+}

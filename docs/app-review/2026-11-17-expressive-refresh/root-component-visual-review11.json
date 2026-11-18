@@ -1,0 +1,77 @@
+{
+  "recordedAtUtc": "2026-11-18T00:39:44.243443+00:00",
+  "reviewer": "Parent Root; actual individual views preserved in exact linked review records",
+  "binaryReference": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "actualReviews": [
+    {
+      "file": "root-environment-visual-review11.json",
+      "sha256": "fea679894cb81794b9c2ed638cade0789fd07ec353b5b8e5cb4a13efcf118000"
+    },
+    {
+      "file": "root-widget-visual-review11.json",
+      "sha256": "8c403edc7db3d6b77c4f5bea7fa68b3930e8cf26090c5d3ff1adb7cdd171c54a"
+    }
+  ],
+  "images": [
+    {
+      "file": "android-review10-environment-score-320-font2-light-fixture.png",
+      "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "25/100 red band marker and indoor-advice/criteria/refresh legible with no button overlap. Extreme font2 Korean wraps heavily and content below viewport requires scrolling; no ideal typography claim. Synthetic35C forecast fixture only; no user data.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-environment-score-320-font2-light-fixture.png",
+        "sha256": "cf1cf7e84341fe748fc1d0e42239a515d95ad2731004675b518cd0d7f6bf928c",
+        "identicalBytes": true
+      }
+    },
+    {
+      "file": "android-review10-environment-score-320-font2-dark-fixture.png",
+      "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "25/100 red band marker and indoor-advice/criteria/refresh legible with no button overlap. Extreme font2 Korean wraps heavily and content below viewport requires scrolling; no ideal typography claim. Synthetic35C forecast fixture only; no user data.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-environment-score-320-font2-dark-fixture.png",
+        "sha256": "0c782c8bedffd8f9311ea9dfbec04f996b90726ff8011d6367fd71d752e0f423",
+        "identicalBytes": true
+      }
+    },
+    {
+      "file": "android-review10-widget-night-idle-font2-native-fixture.png",
+      "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "acceptedAsInternalCandidate": true,
+      "visualVerdict": "Running glyph/brand/ready label and full-width open-app action are legible, centered and unclipped with no overlap. Black surround is fixture area, not widget padding. No private user data. RemoteViews apply/crop fixture only, not Launcher/Main/physical phone/active run controls.",
+      "earlierInput9ByteComparison": {
+        "file": "android-review8-widget-night-idle-font2-native-fixture.png",
+        "sha256": "ab11190f24fb14e02446bc11a3e29499dc65bad8029d4d1dcae4ff3ddb80bc36",
+        "identicalBytes": true
+      }
+    }
+  ],
+  "actuallyViewedWithViewImage": true,
+  "privacyReviewed": true,
+  "userVisualApproval": false,
+  "finalScopeAcceptanceClaimed": false,
+  "actualMainActivityRun": false,
+  "freshInput11FixtureExecution": true,
+  "unchangedRendererArtReviewRetainedThroughExplicitSourceEquivalence": {
+    "earlierReview": {
+      "file": "root-renderer-visual-review9.json",
+      "sha256": "5821574553199496dfdbfd06c033142e1b531d33872542c6694c15fe9d4ab7a8"
+    },
+    "equivalenceReview": {
+      "file": "input9-to11-renderer-source-equivalence.json",
+      "sha256": "509b5df6c388dfef95b0d33e23f8a28318f456e7e4405128e82fa602ed1571e1"
+    },
+    "newRendererExecutionClaimed": false,
+    "retainedPureMethodsOnly": 14
+  }
+}

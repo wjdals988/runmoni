@@ -83,11 +83,11 @@ class AvatarCostumeLayersTest {
     @Test fun costumesHaveDistinctAuthoredShapesAndKeepAllEightOriginalPoses() {
         assertFalse(AvatarCostumeLayers.supports(2))
         assertFalse(AvatarCostumeLayers.supports(3))
-        assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
         assertEquals(13, AvatarCatalogue.slots.size)
         assertEquals(9, AvatarCatalogue.tabs.size)
         for (gender in AvatarGender.entries) {
-            assertEquals(if (gender == AvatarGender.MALE) 48 else 46,
+            assertEquals(if (gender == AvatarGender.MALE) 87 else 85,
                 AvatarCatalogue.slots.sumOf { slot -> slot.variants.indices.count { AvatarArtwork.itemReady(slot.key, it, gender) } })
             for (costume in listOf(1, 4, 5)) assertTrue(AvatarArtwork.itemReady("costume", costume, gender))
             for (pending in listOf(2, 3)) assertFalse(AvatarArtwork.itemReady("costume", pending, gender))

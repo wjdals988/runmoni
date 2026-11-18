@@ -1,0 +1,21 @@
+
+com.runmoni.app.ui.RunShareImeUiTest:
+Error in normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(com.runmoni.app.ui.RunShareImeUiTest):
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize$entireTargetWithinWindow(RunShareImeUiTest.kt:239)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(RunShareImeUiTest.kt:271)
+
+
+Time: 31.693
+There was 1 failure:
+1) normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(com.runmoni.app.ui.RunShareImeUiTest)
+java.lang.AssertionError: Assert failed: The component is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize$entireTargetWithinWindow(RunShareImeUiTest.kt:239)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(RunShareImeUiTest.kt:271)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

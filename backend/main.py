@@ -39,6 +39,47 @@ CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost
     {"id": "top:6", "name": "메시 러닝 저지", "cost": 0, "slot": "top", "value": 6},
     {"id": "socks:4", "name": "리브 크루삭스", "cost": 0, "slot": "socks", "value": 4},
     {"id": "shoes:4", "name": "패널 러닝화", "cost": 0, "slot": "shoes", "value": 4},
+] + [
+    # New pose-bound atelier items append after the unchanged 65-item response.
+    {"id": "hair:4", "name": "스트림 텍스처", "cost": 0, "slot": "hair", "value": 4},
+    {"id": "hair:5", "name": "레이어 하이라이트", "cost": 0, "slot": "hair", "value": 5},
+    {"id": "hair:6", "name": "백라이트 텍스처", "cost": 0, "slot": "hair", "value": 6},
+    {"id": "headwear:4", "name": "메시 패널 캡", "cost": 0, "slot": "headwear", "value": 4},
+    {"id": "headwear:5", "name": "리플렉트 바이저", "cost": 0, "slot": "headwear", "value": 5},
+    {"id": "headwear:6", "name": "테크니트 밴드", "cost": 0, "slot": "headwear", "value": 6},
+    {"id": "face:4", "name": "선스틱 라인", "cost": 0, "slot": "face", "value": 4},
+    {"id": "face:5", "name": "트랙 페이스 마크", "cost": 0, "slot": "face", "value": 5},
+    {"id": "face:6", "name": "스포츠 페이스 패치", "cost": 0, "slot": "face", "value": 6},
+    {"id": "top:7", "name": "패널 레이싱 티", "cost": 0, "slot": "top", "value": 7},
+    {"id": "top:8", "name": "하프집 테크 롱슬리브", "cost": 0, "slot": "top", "value": 8},
+    {"id": "top:9", "name": "레이스 쉘 재킷", "cost": 0, "slot": "top", "value": 9},
+    {"id": "bottom:6", "name": "에어 메시 하의", "cost": 0, "slot": "bottom", "value": 6},
+    {"id": "bottom:7", "name": "컴프레션 패널 하의", "cost": 0, "slot": "bottom", "value": 7},
+    {"id": "bottom:8", "name": "리플렉트 트레일 하의", "cost": 0, "slot": "bottom", "value": 8},
+    {"id": "costume:6", "name": "트랙 클럽 세트", "cost": 0, "slot": "costume", "value": 6},
+    {"id": "costume:7", "name": "포레스트 트레일 세트", "cost": 0, "slot": "costume", "value": 7},
+    {"id": "costume:8", "name": "나이트 페이서 세트", "cost": 0, "slot": "costume", "value": 8},
+    {"id": "socks:5", "name": "트윈 스트라이프 크루", "cost": 0, "slot": "socks", "value": 5},
+    {"id": "socks:6", "name": "컴프레션 니삭스", "cost": 0, "slot": "socks", "value": 6},
+    {"id": "socks:7", "name": "테크 도트 크루", "cost": 0, "slot": "socks", "value": 7},
+    {"id": "shoes:5", "name": "웨이브 패널 러닝화", "cost": 0, "slot": "shoes", "value": 5},
+    {"id": "shoes:6", "name": "케이지 트레일 러닝화", "cost": 0, "slot": "shoes", "value": 6},
+    {"id": "shoes:7", "name": "레이스 플라이 러닝화", "cost": 0, "slot": "shoes", "value": 7},
+    {"id": "ear:4", "name": "골전도 플렉스", "cost": 0, "slot": "ear", "value": 4},
+    {"id": "ear:5", "name": "스포츠 클립 이어폰", "cost": 0, "slot": "ear", "value": 5},
+    {"id": "ear:6", "name": "테크 메시 헤드셋", "cost": 0, "slot": "ear", "value": 6},
+    {"id": "eyewear:4", "name": "원피스 실드", "cost": 0, "slot": "eyewear", "value": 4},
+    {"id": "eyewear:5", "name": "하프림 에어", "cost": 0, "slot": "eyewear", "value": 5},
+    {"id": "eyewear:6", "name": "듀얼 미러 고글", "cost": 0, "slot": "eyewear", "value": 6},
+    {"id": "wrist:4", "name": "링 다이얼 워치", "cost": 0, "slot": "wrist", "value": 4},
+    {"id": "wrist:5", "name": "롱 디스플레이 워치", "cost": 0, "slot": "wrist", "value": 5},
+    {"id": "wrist:6", "name": "세그먼트 트랙 워치", "cost": 0, "slot": "wrist", "value": 6},
+    {"id": "waist:4", "name": "플랫 지퍼 벨트", "cost": 0, "slot": "waist", "value": 4},
+    {"id": "waist:5", "name": "트윈 포켓 벨트", "cost": 0, "slot": "waist", "value": 5},
+    {"id": "waist:6", "name": "보틀 슬링 벨트", "cost": 0, "slot": "waist", "value": 6},
+    {"id": "hydration:4", "name": "메시 라이트 조끼", "cost": 0, "slot": "hydration", "value": 4},
+    {"id": "hydration:5", "name": "듀얼 포켓 조끼", "cost": 0, "slot": "hydration", "value": 5},
+    {"id": "hydration:6", "name": "레이스 하네스", "cost": 0, "slot": "hydration", "value": 6},
 ]
 
 
@@ -70,6 +111,8 @@ def migrated_owned(items):
 def costume_covers(costume):
     if costume in {1, 4, 5}:
         return {"headwear", "top", "bottom", "socks", "shoes"}
+    if costume in {6, 7, 8}:
+        return {"top", "bottom", "socks", "shoes"}
     return {"top", "bottom"} if costume in {2, 3} else set()
 LOG = logging.getLogger("runmoni")
 

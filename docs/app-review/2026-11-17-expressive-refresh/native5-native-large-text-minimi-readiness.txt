@@ -1,0 +1,10 @@
+large settings: awaitAvatarReady=true; waitMillis=51; timeoutMillis=120000
+large closet: awaitAvatarReady=true; waitMillis=9702; timeoutMillis=120000
+native entry 320dp / fontScale 2: awaitAvatarReady=true; waitMillis=5; timeoutMillis=120000
+native large app information: awaitAvatarReady=true; waitMillis=6; timeoutMillis=120000
+native 320dp / font2 active Home action: awaitAvatarReady=true; waitMillis=2684; timeoutMillis=120000
+native 320dp / font2 gender and free closet: awaitAvatarReady=true; waitMillis=517; timeoutMillis=120000
+native 320dp / font2 main after closet: awaitAvatarReady=true; waitMillis=9; timeoutMillis=120000
+native320/font2 root closet safe navigation: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+native320dp/font2 basic running kit colors: awaitAvatarReady=true; waitMillis=4; timeoutMillis=120000
+native320/font2 record detail footer, unavailable map tiles: awaitAvatarReady=true; waitMillis=8; timeoutMillis=120000

@@ -1,0 +1,8 @@
+
+com.runmoni.app.avatar.ExpandedWardrobeSelectionUiTest:.
+
+Time: 77.584
+
+OK (1 test)
+
+

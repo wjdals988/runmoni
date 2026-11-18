@@ -1,0 +1,9 @@
+
+com.runmoni.app.ui.RunShareUiTest:......
+com.runmoni.app.ui.RunShareControllerTest:.
+
+Time: 176.62
+
+OK (7 tests)
+
+

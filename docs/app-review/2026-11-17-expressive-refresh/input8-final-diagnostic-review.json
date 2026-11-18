@@ -1,0 +1,19 @@
+{
+  "input": 8,
+  "writtenAtUtc": "2026-11-17T22:12:49.220259+00:00",
+  "binaryReference": "binary-build8.json",
+  "earlyUi1Passed": true,
+  "default95ParentPassed": false,
+  "default95WholePassedGroupsMethods": 91,
+  "default95FailedGroup": "closet (whole4 excluded, including3 partial)",
+  "firstFailure": "changingShoes: all-preview loading condition exceeded unchanged30s",
+  "independentWhole4RetryPassed": false,
+  "retryFailure": "different method closetColorChanges: SnapshotStateObserver previousThread286(DefaultDispatcher-worker-2) vscurrent2(main)",
+  "originalTimeoutMethodPassedInRetryButNotCountedFromFailedGroup": true,
+  "partialMethodsAcceptedFromEitherFailedGroup": 0,
+  "source8MethodsReusedAsFinalNextInputResults": 0,
+  "wholeOriginalPreferencesDataAppearanceAndOwnedEnvironmentRestoredExactly": true,
+  "shutdownReference": "session4-cleanup.json",
+  "productCodeOrAssetsChangedToAddressTheseFailures": false,
+  "nextStep": "Guarded test-only candidate9: optional injected rule with exact old default; Standard only for colour UI/native; shared bounded ScrollBy with explicit frame. All original assertions/order/deadlines/Ripple retained. Full fresh execution required; not a production-threading-fix claim."
+}

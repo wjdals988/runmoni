@@ -1,0 +1,14 @@
+{"completedSlot": "hair", "projects": 3, "pngCells": 48, "receiptSha256": "f02d138d661286485cc4723c2abea2aaaa8e0431b55bd1f578720c26d7e035f9"}
+{"completedSlot": "headwear", "projects": 3, "pngCells": 48, "receiptSha256": "344f3652a07cc081d1067023de88d9ed235eec8a7bae36d9089230393943b6db"}
+{"completedSlot": "face", "projects": 3, "pngCells": 48, "receiptSha256": "4f0a4dd54c2a547104f3f13aff472bf72087914a72e8f005321501a7258a406f"}
+{"completedSlot": "top", "projects": 3, "pngCells": 96, "receiptSha256": "4e2f2ec9b2d2cfb56abcbb5127c548e2c56691e42d59e323e61e72c3c5860e9c"}
+{"completedSlot": "bottom", "projects": 3, "pngCells": 96, "receiptSha256": "a9ae20c92bba17c3894806f9b3baa0812d8288c56e545090704897f25dd2a505"}
+{"completedSlot": "costume", "projects": 3, "pngCells": 96, "receiptSha256": "5d09469bddbd354c9c55297c4ed2484195cf639e5ea9c18c5f478e59f75898dc"}
+{"completedSlot": "socks", "projects": 3, "pngCells": 48, "receiptSha256": "3fecbcd0f999b7651f17fc050e634ec75f212758f3c9587a40b42ca66b77e58e"}
+{"completedSlot": "shoes", "projects": 3, "pngCells": 96, "receiptSha256": "4a98d14c1c7c899de8fa78f4c7f6946002c3e5a46c76e1afa62940ecc2cbe25b"}
+{"completedSlot": "ear", "projects": 3, "pngCells": 48, "receiptSha256": "cc50d2ebb443aed0cf1ee37de8c2d764699ca02abb1d52bb14dbb41a07896cd0"}
+{"completedSlot": "eyewear", "projects": 3, "pngCells": 48, "receiptSha256": "535646d70834d8a2239cb4ffeecffa9643c958e133b6ce2bf7c656ead03b21c2"}
+{"completedSlot": "wrist", "projects": 3, "pngCells": 48, "receiptSha256": "03ef6e969bf67bda5f6378161dc27003a877928bbcfef927f00f62605781b583"}
+{"completedSlot": "waist", "projects": 3, "pngCells": 48, "receiptSha256": "7d2507b61d6e09241f287705e1bbb543f61b37ed5ba9da7c8c9b01763d3c5e20"}
+{"completedSlot": "hydration", "projects": 3, "pngCells": 48, "receiptSha256": "3628e2f42dba864dfd9332c30b4f1f82c5fbca30229a52cfebc8a200b3a93f77"}
+{"completedSlots": 13, "projects": 39, "pngCells": 816, "fullGuardAndVisualReviewStillRequired": true}

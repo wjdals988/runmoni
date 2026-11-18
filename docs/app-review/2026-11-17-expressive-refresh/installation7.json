@@ -1,0 +1,18 @@
+{
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "avd": "Runmoni_Cloud_29",
+  "api": 29,
+  "acceleration": "TCG",
+  "binaryReference": "binary-build7.json",
+  "appReplaceInstallPerformed": false,
+  "testApkReinstalled": true,
+  "uninstallOrDataReset": false,
+  "preInstallPreferencesPreservedExactly": true,
+  "preInstallAppearancePreferencesPreservedExactly": true,
+  "preInstallXmlSha256": "e4d8da1a2693d12b3935c1e1907f9c7aaf0f904aef06e1b044e3373a68001c2e",
+  "appearancePreferencesOriginallyPresent": false,
+  "appearancePreferencesSha256": null,
+  "changedFileSizeSkipsUnnecessaryOldApkHash": true,
+  "installedHashesDeferredToFollowingAndroidDriver": true
+}

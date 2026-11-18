@@ -1,0 +1,34 @@
+# Input5 실제 Android 검토
+
+{
+  "input": 5,
+  "finalCandidateAdopted": false,
+  "completed": true,
+  "parentPassed": false,
+  "plannedProductMethods": 96,
+  "wholePassedGroupMethods": 78,
+  "individualFailures": 3,
+  "failedGroups": {
+    "atelier-materials": {
+      "testsRun": 11,
+      "failures": 2,
+      "details": [
+        "Hair6 male0 changed only3pixels; originalstrict >20 gate retained",
+        "FixtureRipple Looper exception; exactproducerunidentified, diagnostic+queuedtestcontext next"
+      ]
+    },
+    "share-ui": {
+      "testsRun": 7,
+      "failures": 1,
+      "details": [
+        "Childhorizontaltoolscroll didnot first revealverticalparent; no productprivacygates changed"
+      ]
+    }
+  },
+  "allFailedGroupPartialPassesExcluded": true,
+  "allOriginalDataAndAppearanceRestored": true,
+  "androidProofSha256": "0650c63d1cbddb9c69523e7152d163aae72e790efd29fb8a758b450c5ec5c962",
+  "exactOwnedAvdShutdownReference": "session1-cleanup.json",
+  "scopeTransferredToNewInput6": false,
+  "nativeOrMainInput5Claimed": false
+}

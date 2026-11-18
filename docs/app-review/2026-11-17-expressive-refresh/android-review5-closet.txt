@@ -1,0 +1,23 @@
+
+com.runmoni.app.ui.RunningKitColorsUiTest:.
+Error in changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint(com.runmoni.app.ui.RunningKitColorsUiTest):
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint(RunningKitColorsUiTest.kt:38)
+..
+
+Time: 137.777
+There was 1 failure:
+1) changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint(com.runmoni.app.ui.RunningKitColorsUiTest)
+androidx.compose.ui.test.ComposeTimeoutException: Condition still not satisfied after 30000 ms
+	at androidx.compose.ui.test.AndroidComposeUiTestEnvironment$AndroidComposeUiTestImpl.waitUntil(ComposeUiTest.android.kt:441)
+	at androidx.compose.ui.test.junit4.AndroidComposeTestRule.waitUntil(AndroidComposeTestRule.android.kt:306)
+	at com.runmoni.app.ui.OfflineMapComposeRule.waitUntil(Unknown Source:7)
+	at com.runmoni.app.ui.RunningKitColorsUiTest.changingShoesUsesTheirDefaultColorWhileRetappingKeepsTheCustomTint(RunningKitColorsUiTest.kt:38)
+
+FAILURES!!!
+Tests run: 4,  Failures: 1
+
+

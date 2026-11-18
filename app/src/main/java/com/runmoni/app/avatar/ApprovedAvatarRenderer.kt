@@ -15,7 +15,7 @@ import java.security.MessageDigest
 object AvatarArtwork {
     fun itemReady(slot: String, variant: Int, gender: AvatarGender = AvatarGender.MALE): Boolean {
         if (!AvatarCatalogue.valid(slot, variant)) return false
-        if (variant == 0) return true
+        if (variant == 0 || ExpandedAtelierLayers.supports(slot, variant)) return true
         return when (slot) {
             "top" -> variant in 1..3 || variant == AvatarAtelierClothing.MESH_TOP
             "bottom" -> variant == 1 || (gender == AvatarGender.MALE && variant in 2..3)
@@ -84,14 +84,17 @@ class ApprovedAvatarRenderer(context: Context) {
         val covered = AvatarCatalogue.coveredSlots(style.costume)
         fun ready(slot: String) = if (slot in covered) 0 else
             style.variantFor(slot).takeIf { AvatarArtwork.itemReady(slot, it, style.gender) } ?: 0
-        val effective = AvatarStyle(gender = style.gender, top = ready("top"), bottom = ready("bottom"),
-            shoes = ready("shoes"), headwear = ready("headwear"), ear = ready("ear"),
-            eyewear = ready("eyewear"), wrist = ready("wrist"), waist = ready("waist"),
+        val requested = AvatarStyle(gender = style.gender, hair = ready("hair"), face = ready("face"),
+            top = ready("top"), bottom = ready("bottom"), shoes = ready("shoes"), headwear = ready("headwear"),
+            ear = ready("ear"), eyewear = ready("eyewear"), wrist = ready("wrist"), waist = ready("waist"),
             hydration = ready("hydration"), socks = ready("socks"), costume = style.costume, runningKitColors = kit)
+        val expanded = ExpandedAtelierLayers.selected(requested).isNotEmpty()
+        val effective = ExpandedAtelierLayers.foundation(requested)
+        val drawKit = effective.runningKitColors
         val frameCostume = AvatarCostumeLayers.supports(style.costume)
         val noGear = listOf("headwear", "ear", "eyewear", "wrist", "waist", "hydration").all { effective.variantFor(it) == 0 }
-        if (!frameCostume && kit.isOriginal && effective.top == 0 && effective.bottom == 0 && effective.shoes == 0 && effective.socks == 0 && noGear) return original
-        val key = "${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|${AvatarAtelierClothing.VERSION}|${AsepriteMaterialLayers.VERSION}|$selected|$effective"
+        if (!expanded && !frameCostume && kit.isOriginal && effective.top == 0 && effective.bottom == 0 && effective.shoes == 0 && effective.socks == 0 && noGear) return original
+        val key = "${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|${AvatarAtelierClothing.VERSION}|${AsepriteMaterialLayers.VERSION}|${ExpandedAtelierLayers.VERSION}|$selected|$requested|$effective"
         colored.get(key)?.let { return it }
         val mask = RunningKitArtwork.frameMask(applicationContext, row, selected)
         val pixels = IntArray(WIDTH * HEIGHT)
@@ -100,7 +103,7 @@ class ApprovedAvatarRenderer(context: Context) {
         val coverage = if (needsCoverage) WardrobeCoverage.frame(applicationContext, row, selected) else null
         val baseTop = AvatarAtelierClothing.baseTop(effective.top)
         val baseShoes = AvatarAtelierClothing.baseShoes(effective.shoes)
-        val topColor = AvatarAtelierClothing.topColor(effective.top, kit.top)
+        val topColor = AvatarAtelierClothing.topColor(effective.top, drawKit.top)
         val changed = if (frameCostume) {
             val costumeCoverage = WardrobeCoverage.frame(applicationContext, row, selected)
             val costumeHands = WardrobeCoverage.handProtection(applicationContext, row, selected)
@@ -113,9 +116,9 @@ class ApprovedAvatarRenderer(context: Context) {
         }
         else if (needsCoverage) WardrobeClothing.render(pixels, mask,
             coverage, baseTop, effective.bottom,
-            baseShoes, topColor, kit.bottom, kit.shoes, row, selected)
+            baseShoes, topColor, drawKit.bottom, drawKit.shoes, row, selected)
         else WardrobeClothing.render(pixels, mask, IntArray(pixels.size), 0, 0, baseShoes,
-            kit.top, kit.bottom, kit.shoes, row, selected)
+            drawKit.top, drawKit.bottom, drawKit.shoes, row, selected)
         val sockMask = if (effective.socks == 0) null else SockArtwork.frameMask(applicationContext, row, selected)
         val socked = if (effective.socks == 0) changed else SockClothing.render(changed,
             sockMask, AvatarAtelierClothing.baseSocks(effective.socks))
@@ -129,10 +132,36 @@ class ApprovedAvatarRenderer(context: Context) {
         // A head piece/watch/ear device alone must not cold-load unrelated labels.
         val gearHands = if (effective.waist != 0 || effective.hydration != 0)
             meshHands ?: WardrobeCoverage.handProtection(applicationContext, row, selected) else null
-        val equipped = AvatarEquipmentLayers.render(atelier, pixels, mask, selected, style.gender, effective, gearHands)
-        val detailed = AsepriteDetailArtwork.headwear(applicationContext, equipped, pixels,
-            selected, style.gender, effective.headwear ?: 0)
-        return Bitmap.createBitmap(detailed, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888).also { colored.put(key, it) }
+        val expandedCoverage = if (expanded) coverage ?: WardrobeCoverage.frame(applicationContext, row, selected) else null
+        val expandedSocks = if (expanded) sockMask ?: SockArtwork.frameMask(applicationContext, row, selected) else null
+        val expandedHands = if (expanded) gearHands ?: WardrobeCoverage.handProtection(applicationContext, row, selected) else null
+        // Independent hand plates override sleeve/torso labels in new constructions.
+        val expandedBase = if (expanded) atelier.copyOf().also { out ->
+            for (i in out.indices) if (expandedHands!![i] != 0) out[i] = pixels[i]
+        } else atelier
+        val constructed = if (expanded) ExpandedAtelierArtwork.render(applicationContext, expandedBase, pixels, mask,
+            expandedCoverage!!, expandedSocks!!, expandedHands!!, selected, requested, effective, equipment = false) else expandedBase
+        val completed = if (expanded) {
+            // A newly authored vest must remain behind an older belt/watch,
+            // and a new ear device behind older glasses. Interleave generations.
+            var out = constructed
+            for (slot in listOf("headwear", "hydration", "waist", "wrist", "ear", "eyewear")) {
+                val component = ExpandedAtelierLayers.gearOnly(effective, slot)
+                if (component.variantFor(slot) != 0)
+                    out = AvatarEquipmentLayers.render(out, pixels, mask, selected, style.gender, component, expandedHands)
+                val authored = ExpandedAtelierLayers.supports(slot, requested.variantFor(slot))
+                if (slot == "headwear" && !authored)
+                    out = AsepriteDetailArtwork.headwear(applicationContext, out, pixels, selected, style.gender, effective.headwear ?: 0)
+                if (authored) out = ExpandedAtelierArtwork.render(applicationContext, out, pixels, mask,
+                    expandedCoverage!!, expandedSocks!!, expandedHands!!, selected, requested, effective,
+                    equipment = true, onlySlot = slot)
+            }
+            out
+        } else {
+            val equipped = AvatarEquipmentLayers.render(constructed, pixels, mask, selected, style.gender, effective, gearHands)
+            AsepriteDetailArtwork.headwear(applicationContext, equipped, pixels, selected, style.gender, effective.headwear ?: 0)
+        }
+        return Bitmap.createBitmap(completed, WIDTH, HEIGHT, Bitmap.Config.ARGB_8888).also { colored.put(key, it) }
     }
 
     @Synchronized internal fun cachedColorBytes() = colored.size()
@@ -151,7 +180,7 @@ class ApprovedAvatarRenderer(context: Context) {
         if (style.gender != AvatarGender.FEMALE) return image
         val selected = if (running) Math.floorMod(frame, FRAMES) else 0
         val original = image === frames[style.gender.spriteRow][selected]
-        val key = "display|${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|${AvatarAtelierClothing.VERSION}|${AsepriteMaterialLayers.VERSION}|$selected|$style"
+        val key = "display|${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|${AvatarAtelierClothing.VERSION}|${AsepriteMaterialLayers.VERSION}|${ExpandedAtelierLayers.VERSION}|$selected|$style"
         (if (original) femaleDisplayBases[selected] else colored.get(key))?.let { return it }
         val pixels = IntArray(WIDTH * HEIGHT)
         image.getPixels(pixels, 0, WIDTH, 0, 0, WIDTH, HEIGHT)

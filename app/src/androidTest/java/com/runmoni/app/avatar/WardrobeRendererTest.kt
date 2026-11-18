@@ -24,7 +24,10 @@ class WardrobeRendererTest {
                 val actual=pixels(renderer.render(frame,true,style))
                 assertTrue("Unchanged selectable ${gender.wireValue}/$frame/${slot.key}:$variant", original.indices.count { original[it]!=actual[it] }>20)
                 val costume=slot.key=="costume" && AvatarCostumeLayers.supports(variant)
-                val headKind=if(slot.key=="headwear") when(variant) {
+                // Appended headwear reuses the same independently bounded fitted form.
+                // Keep the existing alpha/face/body assertions for every new pose.
+                val headBase=ExpandedAtelierLayers.spec("headwear",variant)?.base ?: variant
+                val headKind=if(slot.key=="headwear") when(headBase) {
                     1 -> AvatarHeadwearLayers.Kind.CAP
                     2 -> AvatarHeadwearLayers.Kind.VISOR
                     3 -> AvatarHeadwearLayers.Kind.HEADBAND

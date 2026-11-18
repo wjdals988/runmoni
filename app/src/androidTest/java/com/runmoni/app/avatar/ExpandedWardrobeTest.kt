@@ -2,31 +2,22 @@ package com.runmoni.app.avatar
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.test.*
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.data.LocalWallet
 import com.runmoni.app.data.PilotClient
 import com.runmoni.app.domain.*
-import com.runmoni.app.ui.ClosetDialog
-import com.runmoni.app.ui.RunmoniTheme
-import com.runmoni.app.ui.RunmoniUiTest
 import com.runmoni.app.ui.avatarBitmap
 import java.io.File
 import java.util.UUID
 import org.json.JSONObject
 import org.junit.Assert.*
-import org.junit.Rule
 import org.junit.Test
 
-/** Native Android bitmap checks and an offline Compose fixture. Exported sheets
+/** Native Android bitmap checks and isolated wallet persistence. Exported sheets
  * are renderer output, not MainActivity screenshots or user visual approval.
  * Persistence uses a dedicated SharedPreferences file, never the user's wallet.
  */
 class ExpandedWardrobeTest {
-    @get:Rule val compose = createComposeRule()
     private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
     private fun pixels(image: Bitmap) = IntArray(image.width * image.height).also {
         image.getPixels(it, 0, image.width, 0, 0, image.width, image.height)
@@ -202,61 +193,4 @@ class ExpandedWardrobeTest {
         } finally { assertTrue(context.deleteSharedPreferences(name)) }
     }
 
-    @Test fun closetSelectsNewFreeItemsAndGenderSwitchPreservesTheHiddenSavedShortsId() {
-        val original = Profile(name = "검토 러너", mileage = 4242,
-            ownedItems = AvatarCatalogue.defaultOwned + setOf("top:3", "shoes:2", "wrist:2", "headwear:3"),
-            avatar = AvatarStyle(top = 3, bottom = 1, shoes = 2, wrist = 2, headwear = 3,
-                runningKitColors = RunningKitColors(3, 0, 5)))
-        val state = mutableStateOf(AppState(profile = original))
-        compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, RunmoniUiTest.FakeActions(state)) {} } }
-        compose.onNodeWithTag("closet_animation").performClick()
-        fun preview(): IntArray {
-            compose.waitUntil(30_000) {
-                compose.onAllNodes(hasContentDescription("나의 러닝 미니미") and
-                    hasAnyAncestor(hasTestTag("closet_avatar_preview")), useUnmergedTree = true)
-                    .fetchSemanticsNodes().size == 1
-            }
-            return pixels(compose.onNodeWithTag("closet_avatar_preview").captureToImage().asAndroidBitmap())
-        }
-        fun pick(slot: String, variant: Int) {
-            compose.onNodeWithTag("closet_slot_$slot").performScrollTo().performClick()
-            compose.onNodeWithTag("closet_${slot}_$variant").performScrollTo().assertIsEnabled().performClick()
-            compose.onNodeWithTag("closet_${slot}_$variant").assertIsSelected()
-        }
-        var last = preview()
-        for ((slot, variant) in listOf("socks" to 1, "socks" to 2, "bottom" to 2, "bottom" to 3)) {
-            pick(slot, variant)
-            val image = preview()
-            assertFalse("Visible closet preview ignored $slot:$variant", last.contentEquals(image))
-            last = image
-            compose.runOnIdle {
-                assertEquals(variant, state.value.profile.avatar.variantFor(slot))
-                assertEquals(4242, state.value.profile.mileage)
-                assertEquals(0, AvatarCatalogue.price(variant))
-                assertTrue("$slot:$variant" in state.value.profile.ownedItems)
-                assertEquals(original.avatar.top, state.value.profile.avatar.top)
-                assertEquals(original.avatar.shoes, state.value.profile.avatar.shoes)
-                assertEquals(original.avatar.wrist, state.value.profile.avatar.wrist)
-                assertEquals(original.avatar.headwear, state.value.profile.avatar.headwear)
-                assertEquals(original.avatar.runningKitColors.top, state.value.profile.avatar.runningKitColors.top)
-                assertEquals(original.avatar.runningKitColors.shoes, state.value.profile.avatar.runningKitColors.shoes)
-            }
-        }
-        compose.onNodeWithTag("closet_gender_female").performClick()
-        compose.onNodeWithTag("closet_bottom_2").assertDoesNotExist()
-        compose.onNodeWithTag("closet_bottom_3").assertDoesNotExist()
-        compose.runOnIdle {
-            assertEquals(AvatarGender.FEMALE, state.value.profile.avatar.gender)
-            assertEquals(3, state.value.profile.avatar.bottom)
-            assertEquals(2, state.value.profile.avatar.socks)
-            assertTrue(state.value.profile.ownedItems.containsAll(setOf("bottom:2", "bottom:3", "socks:1", "socks:2")))
-        }
-        compose.onNodeWithTag("closet_slot_socks").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_socks_1").performScrollTo().assertIsEnabled()
-        compose.onNodeWithTag("closet_socks_2").performScrollTo().assertIsSelected()
-        compose.onNodeWithTag("closet_socks_3").assertDoesNotExist()
-        compose.onNodeWithTag("closet_gender_male").performClick()
-        compose.onNodeWithTag("closet_slot_bottom").performScrollTo().performClick()
-        compose.onNodeWithTag("closet_bottom_3").performScrollTo().assertIsSelected()
-    }
 }

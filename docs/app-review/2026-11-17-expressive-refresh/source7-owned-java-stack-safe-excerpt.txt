@@ -1,0 +1,8 @@
+Owned TEST fixture stack excerpt; no full private trace, product success or frame timing claim.
+  at android.app.Instrumentation.runOnMainSync(Instrumentation.java:439)
+  at androidx.test.runner.MonitoringInstrumentation.runOnMainSync(MonitoringInstrumentation.java:485)
+  at androidx.compose.ui.test.AndroidSynchronization_androidKt.runOnUiThread(AndroidSynchronization.android.kt:38)
+  at androidx.compose.ui.test.ActionsKt.scrollToNode(Actions.kt:127)
+  at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:76)
+  at com.runmoni.app.avatar.ExpandedWardrobeTest.closetSelectsNewFreeItemsAndGenderSwitchPreservesTheHiddenSavedShortsId$pick(ExpandedWardrobeTest.kt:224)
+  at com.runmoni.app.avatar.ExpandedWardrobeTest.closetSelectsNewFreeItemsAndGenderSwitchPreservesTheHiddenSavedShortsId(ExpandedWardrobeTest.kt:230)

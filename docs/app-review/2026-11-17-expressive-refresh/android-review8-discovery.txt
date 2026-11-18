@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.RunnerDiscoveryUiTest:.......
+
+Time: 77.693
+
+OK (7 tests)
+
+

@@ -1,0 +1,36 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T02:48:53.978831+00:00",
+  "mainAttempt": "live5",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live5-executed-driver.py",
+    "sha256": "cac9bdf1bf4342adaa4d63eff680f1dd06a9abdc5a0e8e3030a743edbbae5c61"
+  },
+  "images": [
+    {
+      "file": "live5-main-new-cap.png",
+      "sha256": "c60b637f15798dfa58896d29c27670ec6922465ae4555da95aabc329771dc75a",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live5-main-new-technical-set.png",
+      "sha256": "e9788eecc249f9abbe1ecfea7d2aca51e3ccd04bbdbf1a2c387eea4e72f70e5e",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "Mesh-panel cap fits the original head with connected brim/outline/shading/texture. New teal upper, blue lower, socks and shoes stay attached to original body proportions with clean joins. Actual cropped thumbnails, selected rows/checks, Back/Pause and fixed preview remain legible. Lower partial rows are natural viewport scrolling.",
+  "technicalSetMeaning": "Four individually selected new garments plus new cap; costume remains0. This is not one selected costume item or every catalogue row fully visible.",
+  "userPrivateInformationVisible": false,
+  "partialReviewOnly": true,
+  "actuallyViewedCurrentAttemptImagesCumulative": 4,
+  "remainingOriginalImagesStillRequireActualReview": 3,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisPartialRecord": false,
+  "finalSourceAndRestorationReviewStillRequired": true,
+  "userVisualApproval": false
+}

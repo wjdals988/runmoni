@@ -1,0 +1,1 @@
+direct-native-map-320-font2-height360-failure-fixture: awaitAvatarReady=true; waitMillis=86; timeoutMillis=120000

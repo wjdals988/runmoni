@@ -9,14 +9,24 @@ import org.junit.Test
 
 /** Firestore-shaped maps only. No SDK client, identity, recorder or public writes. */
 class RunnerPresenceAvatarTest {
+    private val appended = linkedMapOf("hair" to 4..6, "headwear" to 4..6, "face" to 4..6,
+        "top" to 7..9, "bottom" to 6..8, "costume" to 6..8, "socks" to 5..7, "shoes" to 5..7,
+        "ear" to 4..6, "eyewear" to 4..6, "wrist" to 4..6, "waist" to 4..6, "hydration" to 4..6)
+
     private fun wireAvatar(): Map<String, Any> = buildMap {
         AvatarCatalogue.slots.forEach { put(it.key, 0L) }
         put("gender", "female")
         put("colors", mapOf("top" to 1L, "bottom" to 2L, "shoes" to 3L))
     }
 
-    @Test fun everyCatalogueIdIncludingTheThreeAppendedItemsDecodesWithoutChangingItsSlot() {
-        assertEquals(61, AvatarCatalogue.slots.sumOf { it.variants.size })
+    @Test fun everyCatalogueIdIncluding39AppendedItemsDecodesWithoutChangingItsSlot() {
+        assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(AvatarCatalogue.slots.map { it.key }, appended.keys.toList())
+        assertEquals(39, appended.values.sumOf { it.count() })
+        appended.forEach { (slot, ids) ->
+            assertEquals(3, ids.count())
+            assertEquals(ids.last + 1, AvatarCatalogue.slots.first { it.key == slot }.variants.size)
+        }
         for (slot in AvatarCatalogue.slots) for (id in slot.variants.indices) {
             val decoded = RunnerPresenceRepository.decodeAvatar(wireAvatar() + (slot.key to id.toLong()))
             assertNotNull("${slot.key}:$id", decoded)
@@ -33,6 +43,22 @@ class RunnerPresenceAvatarTest {
         assertEquals(4, decoded.shoes)
         assertEquals(AvatarGender.FEMALE, decoded.gender)
         assertEquals(RunningKitColors(1, 2, 3), decoded.runningKitColors)
+    }
+
+    @Test fun all39AppendedIdsAndTheirSimultaneousMaximaKeepBothGenderBasesAndIndependentPalette() {
+        for (gender in AvatarGender.entries) {
+            val base = wireAvatar() + ("gender" to gender.wireValue)
+            for ((slot, ids) in appended) for (id in ids) {
+                val decoded = RunnerPresenceRepository.decodeAvatar(base + (slot to id.toLong()))!!
+                assertEquals("$slot:$id", id, decoded.variantFor(slot))
+                assertEquals(gender, decoded.gender)
+                assertEquals(RunningKitColors(1, 2, 3), decoded.runningKitColors)
+            }
+            val all = RunnerPresenceRepository.decodeAvatar(base + appended.mapValues { it.value.last.toLong() })!!
+            appended.forEach { (slot, ids) -> assertEquals(slot, ids.last, all.variantFor(slot)) }
+            assertEquals(gender, all.gender)
+            assertEquals(RunningKitColors(1, 2, 3), all.runningKitColors)
+        }
     }
 
     @Test fun overflowingNegativeFractionalOrNonFirestoreIntegersCannotBecomeValidIds() {

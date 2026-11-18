@@ -1,0 +1,30 @@
+
+com.runmoni.app.ui.RunShareUiTest:......
+com.runmoni.app.ui.RunShareControllerTest:
+Error in actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks(com.runmoni.app.ui.RunShareControllerTest):
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'run_share_style_2')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:75)
+	at com.runmoni.app.ui.RunShareControllerTest.actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks(RunShareControllerTest.kt:103)
+
+
+Time: 187.135
+There was 1 failure:
+1) actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks(com.runmoni.app.ui.RunShareControllerTest)
+java.lang.AssertionError: Action performScrollTo() failed.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'run_share_style_2')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performScrollTo(Actions.kt:75)
+	at com.runmoni.app.ui.RunShareControllerTest.actualControllerSavesOnceAndRevokesUnrecomposedAndDisposedExportCallbacks(RunShareControllerTest.kt:103)
+
+FAILURES!!!
+Tests run: 7,  Failures: 1
+
+

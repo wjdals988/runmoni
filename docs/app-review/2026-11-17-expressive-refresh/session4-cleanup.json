@@ -1,0 +1,30 @@
+{
+  "ownedPid": 42972,
+  "avd": "Runmoni_Cloud_29",
+  "graphics": "swangle software GLES",
+  "acceleration": "TCG",
+  "signal": "SIGTERM",
+  "ownedCommandSha256": "2aace5903bc8115bef17803c2fb2d3de1e16b07d56f10a2b1d9ce3e965846da3",
+  "startTicksMatched": true,
+  "ownedProcessExitObserved": true,
+  "allQemuAbsentOrZombie": true,
+  "proofReferences": {
+    "android-review4.json": {
+      "file": "android-review4.json",
+      "sha256": "0f1a58ed380dfc9ba3a3dc208b96d428fe2af89821ce4d8544173f85b0c22098",
+      "parentPassed": true
+    },
+    "android-review5.json": {
+      "file": "android-review5.json",
+      "sha256": "734c8e36f022f5ef98439569420fd900fde0a68f06e66d7aa690755203eaf105",
+      "parentPassed": false
+    },
+    "android-review6.json": {
+      "file": "android-review6.json",
+      "sha256": "169b048555dea4176f88ede54893bcfd13607fcdfb97fd8000b7b5adcdfdb8a0",
+      "parentPassed": false
+    }
+  },
+  "fullOsRestorationClaimed": false,
+  "completedAtUtc": "2026-11-17T22:07:31.781517+00:00"
+}

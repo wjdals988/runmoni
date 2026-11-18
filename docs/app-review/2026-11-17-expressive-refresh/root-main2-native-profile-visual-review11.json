@@ -1,0 +1,66 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T01:54:04.690049+00:00",
+  "sourceKind": "actual Android MainActivity private native profile observation",
+  "privateDiagnosticsOnly": true,
+  "mainAttempt": {
+    "file": "live2.json",
+    "sha256": "4a2bd9b04269970684af2584b4ff1f63341b69c28ede994eee0db6802fa9409f",
+    "wholeAttemptPassed": false,
+    "acceptedPublicCaptures": 0
+  },
+  "binary": {
+    "file": "binary-build11.json",
+    "sha256": "13b25e0a2706183c96bff43f0a05fe9548211e308a22c194cb3086bc3cc2dba3"
+  },
+  "images": [
+    {
+      "file": "live2-private-main-profile-ime320-font2-before-reveal.png",
+      "sha256": "2679e69fce2837e3e87afce9f3f0c218fb16e72b518a6985a23c04cd3f9cadaf",
+      "privateWorkOnly": true,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live2-private-main-profile-ime320-font2.png",
+      "sha256": "2dfb3dc54fb32782fede5ebdfdeb86ad6431f1ae0260c373672cc3d84e2cc671",
+      "privateWorkOnly": true,
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "Actual profile header/Back and synthetic nickname are legible above IME. Bounded body scrolling reveals complete Save above actual keyboard without overlap; only expected body-tail text is clipped at scroll edge.",
+  "visibleWindowBounds": [
+    0,
+    36,
+    480,
+    413
+  ],
+  "actualBackAndSaveBounds": {
+    "back": [
+      12,
+      55,
+      84,
+      127
+    ],
+    "save": [
+      270,
+      264,
+      420,
+      351
+    ]
+  },
+  "minimum48dpTargetPx": 72.0,
+  "original28AttemptBoundUnchanged": true,
+  "parentNavigationAfterBackObserved": true,
+  "closeImeWaitPassed": false,
+  "originalCloseImeBudgetSeconds": 30,
+  "closeImeFailureCauseConfirmed": false,
+  "postCloseNativeWindowBeforeForceStopWasCaptured": false,
+  "publicGalleryAcceptanceClaimed": false,
+  "saveOrConnectionSuccessClaimed": false,
+  "userVisualApproval": false,
+  "allOriginalDataAndEnvironmentRestored": true,
+  "productSourceChanged": false,
+  "productMethodsAdded": 0
+}

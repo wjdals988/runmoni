@@ -1,0 +1,21 @@
+
+com.runmoni.app.ui.RunShareImeUiTest:
+Error in normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(com.runmoni.app.ui.RunShareImeUiTest):
+java.lang.AssertionError: The actual IME changes the tall editor into a short window
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(RunShareImeUiTest.kt:235)
+
+
+Time: 19.87
+There was 1 failure:
+1) normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(com.runmoni.app.ui.RunShareImeUiTest)
+java.lang.AssertionError: The actual IME changes the tall editor into a short window
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.assertTrue(Assert.java:42)
+	at com.runmoni.app.ui.RunShareImeUiTest.normalTextStoryCaptionStaysVisibleAndAcceptsRealKeysAcrossImeResize(RunShareImeUiTest.kt:235)
+
+FAILURES!!!
+Tests run: 1,  Failures: 1
+
+

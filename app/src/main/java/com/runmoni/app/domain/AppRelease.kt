@@ -42,6 +42,13 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.9.0-dev", "2026-11-18", "환경 지수·다크모드·옷장 개편 · 실기기 검증 전", listOf(
+        "최신 예보로 러닝 환경 지수와 준비할 내용을 확인해요.",
+        "기기 설정을 따르거나 밝게·어둡게 화면을 고를 수 있어요.",
+        "옷장에 새 의복과 장비를 추가하고 부위 안에서 이름으로 찾아요.",
+        "사진 공유의 비율·스타일·글씨 색을 더 쉽게 고를 수 있어요.",
+        "홈·기록·크루의 글자와 아이콘, 화면 전환을 정리했어요.",
+    )),
     AppVersionEntry("0.8.0-dev", "2026-11-16", "미니미·사진 공유·자동 백업 개편 · 실기기 검증 전", listOf(
         "모자와 세트 의상의 디테일을 다듬고 메시 저지·리브 양말·패널 신발을 추가했어요.",
         "옷장은 부위별 미리보기 목록에서 고르고 착용 모습을 확인해요.",

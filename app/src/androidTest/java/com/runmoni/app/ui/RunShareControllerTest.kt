@@ -99,7 +99,10 @@ class RunShareControllerTest : RunmoniDesignTestBase() {
             assertEquals(before.keys, ownedImages().keys)
             assertEquals(0, chooserMonitor.hits)
 
-            compose.onNodeWithTag("run_share_tool_1").performScrollTo().performClick()
+            // The tabs scroll horizontally inside the vertical body. Reveal their
+            // parent row first, as the other editor UI cases do before a tab tap.
+            compose.onNodeWithTag("run_share_tools").performScrollTo()
+            compose.onNodeWithTag("run_share_tool_1").performScrollTo().performClick().assertIsSelected()
             compose.onNodeWithTag("run_share_style_2").performScrollTo()
             val paperChoice = requireNotNull(compose.onNodeWithTag("run_share_style_2").fetchSemanticsNode()
                 .config[SemanticsActions.OnClick].action)

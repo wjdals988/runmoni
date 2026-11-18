@@ -1,0 +1,36 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T03:24:30.278021+00:00",
+  "mainAttempt": "live6",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live6-executed-driver.py",
+    "sha256": "b787ba3972d6ede6408ad42b613eef7a9a06d519352b6c866842ed19ce5ec4ed"
+  },
+  "images": [
+    {
+      "file": "live6-main-new-cap.png",
+      "sha256": "a364ced41a9e063b9486ae74a64323dc3aa20d95120bdcc2289cf4ea34c25fc3",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-new-technical-set.png",
+      "sha256": "01f3c2386b6c8408daf81a53ac4394c9418807cd72a73b9020914db88eb0c2ab",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "Mesh-panel cap/brim fits the original head; face/body proportions remain intact. Mesh jersey, blue panel shorts, sock/shoe details remain integrated with clean joins. Actual thumbnails/selected checks/text and sticky fitting preview/Back/Pause are clear without bottom-navigation obstruction. Partial surrounding rows are ordinary scrolling.",
+  "technicalSetMeaning": "Four individually selected new garments plus cap; costume0. Not one costume, three new costumes, every row visible or all100 user-approved.",
+  "userPrivateInformationVisible": false,
+  "partialReviewOnly": true,
+  "actuallyViewedCurrentAttemptImagesCumulative": 4,
+  "remainingOriginalImagesStillRequireActualReview": 3,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisPartialRecord": false,
+  "finalSourceAndRestorationReviewStillRequired": true,
+  "userVisualApproval": false
+}

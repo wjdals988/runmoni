@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.CommunityPageNavigationTest:.
+
+Time: 35.484
+
+OK (1 test)
+
+

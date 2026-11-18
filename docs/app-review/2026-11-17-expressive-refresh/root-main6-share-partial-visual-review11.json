@@ -1,0 +1,31 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T03:30:57.693643+00:00",
+  "mainAttempt": "live6",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live6-executed-driver.py",
+    "sha256": "b787ba3972d6ede6408ad42b613eef7a9a06d519352b6c866842ed19ce5ec4ed"
+  },
+  "images": [
+    {
+      "file": "live6-main-sharedphoto-stamp.png",
+      "sha256": "73b7cd1fc439ee17478f6c81ac8c957a9f0588c79d7a0c1e0e126709c8bcf86c",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "Selected1:1 frame shows full synthetic-photo background with actual new MiniMi and5.24km stamp. Source-photo gradient is not an added app color band. Ratio/tool choices, active Record underline and Save/Share controls remain clear above Android navigation. Fine date/text is naturally small in the335px preview and record scale can be adjusted.",
+  "syntheticRunAndPhoto": true,
+  "userPrivateInformationVisible": false,
+  "fullResolutionExportVerifiedByThisImage": false,
+  "socialAppDeliveryVerified": false,
+  "partialReviewOnly": true,
+  "actuallyViewedCurrentAttemptImagesCumulative": 5,
+  "remainingOriginalImagesStillRequireActualReview": 2,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisPartialRecord": false,
+  "finalSourceRestorationAnd90And75BudgetAuditStillRequired": true,
+  "userVisualApproval": false
+}

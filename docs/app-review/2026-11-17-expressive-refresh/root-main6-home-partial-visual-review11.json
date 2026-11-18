@@ -1,0 +1,42 @@
+{
+  "reviewedBy": "Parent Root",
+  "recordedAtUtc": "2026-11-18T03:17:35.789082+00:00",
+  "mainAttempt": "live6",
+  "sourceKind": "actual Android MainActivity",
+  "executedDriver": {
+    "file": "live6-executed-driver.py",
+    "sha256": "b787ba3972d6ede6408ad42b613eef7a9a06d519352b6c866842ed19ce5ec4ed"
+  },
+  "images": [
+    {
+      "file": "live6-main-home-light.png",
+      "sha256": "9ad75ab0f2d80e4bf490ebd4aaac3e3fb94ffb4195bce72ef108959c80e091e1",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    },
+    {
+      "file": "live6-main-home-dark.png",
+      "sha256": "305a93acfec20ab35602622b815e7d508061b22cc12f78280c9cbdd032d16f0c",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true
+    }
+  ],
+  "visualConclusion": "Full header/date/time/run CTA/navigation are legible without clipping or action overlap. Original MiniMi face/proportions remain intact. Dark text/control contrast is readable; unavailable weather remains neutral without an invented score.",
+  "syntheticOwnedRunDistanceMeters": 5240.0,
+  "syntheticOwnedRunCount": 1,
+  "syntheticActivityExplicitlyRequiredInPublicationCaption": true,
+  "weatherInjectedByDriver": false,
+  "gpsInjectedByDriver": false,
+  "userPrivateInformationVisible": false,
+  "partialReviewOnly": true,
+  "actuallyViewedCurrentAttemptImages": 2,
+  "remainingOriginalImagesStillRequireActualReview": 5,
+  "wholeMainPassClaimed": false,
+  "publicationGalleryApprovedByThisPartialRecord": false,
+  "finalSourceAndRestorationReviewStillRequired": true,
+  "userVisualApproval": false,
+  "commercialQualityCertificationClaimed": false,
+  "physicalDeviceOrPublicSignedRuntimeApprovalClaimed": false
+}

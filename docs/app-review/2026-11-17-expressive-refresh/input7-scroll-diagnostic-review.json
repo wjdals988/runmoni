@@ -1,0 +1,20 @@
+{
+  "input": 7,
+  "observedAtUtc": "2026-11-17T20:51:49.884528+00:00",
+  "binaryReference": "binary-build7.json",
+  "actualDriverParentPassed": false,
+  "actualDriverCompleted": true,
+  "actualDriverFailureType": "KeyboardInterrupt (explicit Root stop after bounded diagnosis)",
+  "wholePassedBackupGroupMethods": 21,
+  "partialAtelierGroupAcceptedMethods": 0,
+  "source7AndroidMethodsReusedInNextInput": 0,
+  "observedTestLocation": "ExpandedWardrobeTest first pick, ActionsKt.performScrollTo → scrollToNode; initial TOP tab still visible and pause control already Play",
+  "privateStackBytes": 40146,
+  "safeStackExcerpt": "source7-owned-java-stack-safe-excerpt.txt",
+  "stackCaptureScope": "Only own package SIGQUIT; complete own PID header/end validated. Initial filename guard failed on trace_00; separate continuation captured and removed only own new trace, previous ANR filenames preserved.",
+  "mechanismAssessment": "Cached Compose unbounded performScrollTo + queued Standard ScrollBy is supported by static source/API and observed stack; not a universal app cause claim or successful workaround yet.",
+  "originalDataAndAppearanceAndOwnedEnvironmentRestoredExactly": true,
+  "cleanupReference": "session3-cleanup.json",
+  "productCodeOrAssetsChanged": false,
+  "nextCandidateScope": "Fixture-only bounded same ScrollBy plus explicit frame progress; isolate UI method from pure rendering methods; retain all assertions and Ripple; fresh build/execution required."
+}

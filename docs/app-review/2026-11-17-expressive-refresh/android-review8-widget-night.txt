@@ -1,0 +1,8 @@
+
+com.runmoni.app.widget.RunWidgetNightTest:..
+
+Time: 1.307
+
+OK (2 tests)
+
+

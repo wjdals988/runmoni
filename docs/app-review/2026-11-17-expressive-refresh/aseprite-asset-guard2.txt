@@ -1,0 +1,1 @@
+{"passed": true, "items": 39, "detailCells": 624, "tintCells": 192, "report": "/workspace/runmoni/work/expressive-refresh/aseprite-asset-guard2.json"}

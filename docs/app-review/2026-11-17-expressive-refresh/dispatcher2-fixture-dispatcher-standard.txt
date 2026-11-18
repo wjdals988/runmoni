@@ -1,0 +1,8 @@
+
+com.runmoni.app.ui.FixtureDispatcherStandardProbeTest:.
+
+Time: 6.205
+
+OK (1 test)
+
+
