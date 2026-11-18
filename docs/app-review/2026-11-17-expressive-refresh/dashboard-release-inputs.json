@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "sourceRevision": "3d48c39102f33c36828be224a22a3d95b1018c7e",
+  "ciRun": 44232478964,
+  "ciAttempt": 1,
+  "expectedJvmTests": 266,
+  "verification": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/connected-release-public.json",
+    "sha256": "1a43e2553c1c05e4994cc90fe2e3673f1b25d23e1a65a37d91e2771439c32695"
+  },
+  "metadata": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/runmoni-0.9.0-dev.metadata.json",
+    "sha256": "e87f2ae9784c850b99ceedb18197187ac1464ac3b53a6102a3d4aaba8fb91ae5"
+  },
+  "checksum": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/SHA256SUMS-0.9.0-dev.txt",
+    "sha256": "99eb885c0594883634625b4e212ea69082bb5ac7329b044494a5cac0fcc9fe09"
+  },
+  "featureMerge": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/feature-merge.json",
+    "sha256": "8968554f1e5432fb0cd174b89acbcb7d0127d29c2dd6af8c14f48298f34146d7"
+  },
+  "sourceComparison": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/release-source-comparison.json",
+    "sha256": "e318c4233c4d5c91f9a918f3b784d9e40a7b646c4a24dc6ffaab26686b9413b2"
+  },
+  "content": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/dashboard-content.json",
+    "sha256": "bee9e81c4337f5ac8970c55e3952737da44bf4ba2491e56c70e70d5c508c9087"
+  }
+}

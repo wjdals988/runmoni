@@ -1,0 +1,44 @@
+{
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": "/workspace/mydashboard",
+  "startedAtUtc": "2026-11-18T04:11:12.202161+00:00",
+  "testedHeadRevision": "72fd4b253145197fc9bab51c28527701f4f1b549",
+  "testedIndexTreeOidBefore": "aed6d06b411eb6421aef2149bf5b28175e57bb45",
+  "preparedPlan": {
+    "file": "dashboard-prepared-apply.json",
+    "sha256": "e56a82f36318d7762cc57f14c16b83cd0e7725638b1e0e1a80e447bddf0916fc"
+  },
+  "catalogSha256": "bbe797a42ad15bdfb0de94c8af0eaeb402f5fdfc6b25139f525cc063d4a61931",
+  "updaterSha256": "93d815405020fb97385f9d8f855793b776e240b8e883cf81765c8e18ab3ec9e7",
+  "gallerySha256": {
+    "public/reviews/runmoni/0.9.0-dev/home.png": "305a93acfec20ab35602622b815e7d508061b22cc12f78280c9cbdd032d16f0c",
+    "public/reviews/runmoni/0.9.0-dev/kit.png": "01f3c2386b6c8408daf81a53ac4394c9418807cd72a73b9020914db88eb0c2ab",
+    "public/reviews/runmoni/0.9.0-dev/photo.png": "73b7cd1fc439ee17478f6c81ac8c957a9f0588c79d7a0c1e0e126709c8bcf86c",
+    "public/reviews/runmoni/0.9.0-dev/map.png": "9acf7d84665e58e99771d9406d25977b3882c8c43ac8403540fc42a64abd1c41"
+  },
+  "inputFileHashes": {
+    "src/lib/projects.json": "bbe797a42ad15bdfb0de94c8af0eaeb402f5fdfc6b25139f525cc063d4a61931",
+    "scripts/update-project-apk.mjs": "93d815405020fb97385f9d8f855793b776e240b8e883cf81765c8e18ab3ec9e7",
+    "package.json": "3d1224400182a919da8dc00d04ab96359cdcda9d133d5f8fafe42c1025a83fe4",
+    "package-lock.json": "b31ada884045d3dbcda0e96c8edda21ee0ebb25cd932bda9d020ce16a663ee44",
+    "public/reviews/runmoni/0.9.0-dev/home.png": "305a93acfec20ab35602622b815e7d508061b22cc12f78280c9cbdd032d16f0c",
+    "public/reviews/runmoni/0.9.0-dev/kit.png": "01f3c2386b6c8408daf81a53ac4394c9418807cd72a73b9020914db88eb0c2ab",
+    "public/reviews/runmoni/0.9.0-dev/photo.png": "73b7cd1fc439ee17478f6c81ac8c957a9f0588c79d7a0c1e0e126709c8bcf86c",
+    "public/reviews/runmoni/0.9.0-dev/map.png": "9acf7d84665e58e99771d9406d25977b3882c8c43ac8403540fc42a64abd1c41"
+  },
+  "nodeVersion": "v24.19.0",
+  "executedDriverSha256": "33f6b04b3b57d3e0d5fa85ccd548103ba83ea79cb14938829b68747c6005c61a",
+  "exitCode": 0,
+  "finishedAtUtc": "2026-11-18T04:11:12.568103+00:00",
+  "rawLog": "node-tests2.txt",
+  "rawSha256": "65a9368bb0cab9ff5214a04d1783b3025cde5c2047e970823d8a5921e525d90a",
+  "testedIndexTreeOidAfter": "aed6d06b411eb6421aef2149bf5b28175e57bb45",
+  "testedFilesMatchIndex": true,
+  "tests": 24,
+  "passed": 24,
+  "failed": 0,
+  "skipped": 0
+}

@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.8.0-dev",
-    "versionCode": 31,
-    "fileName": "runmoni-0.8.0-dev.apk",
-    "sizeBytes": 172828638,
-    "sha256": "5c2c6a12faf75d38f4328046a3a93537472d37842963e4357f0b45fbed62531b",
+    "version": "0.9.0-dev",
+    "versionCode": 32,
+    "fileName": "runmoni-0.9.0-dev.apk",
+    "sizeBytes": 174915411,
+    "sha256": "2c8061338d9b25917d46b5dacec3fcc9bc7412c99429e96bbf20d1cb01d2c5ae",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "9a0051e28a2ac24badbbf1b57a554a37e4a9a85e",
+    "sourceRevision": "3d48c39102f33c36828be224a22a3d95b1018c7e",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.8.0-dev/runmoni-0.8.0-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.8.0-dev",
-    "notes": "미니미 의복 디테일·새 아이템3종과 전체 사진 공유·Google 요약 자동 백업·무료 지도·앱 아이콘을 개선한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.9.0-dev/runmoni-0.9.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.9.0-dev",
+    "notes": "러닝 환경 지수·다크모드·새 꾸미기 아이템39종과 옷장·사진 공유·홈·기록·크루 UI를 개선한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null

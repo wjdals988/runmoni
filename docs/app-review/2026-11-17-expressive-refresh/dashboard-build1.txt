@@ -1,0 +1,46 @@
+
+> mydashboard@0.1.0 build
+> next build
+
+▲ Next.js 16.4.3 (Turbopack)
+✓ Running next.config.ts took 26ms
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.3s
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 4 workers ...
+  Generating static pages using 4 workers (0/25) ...
+  Generating static pages using 4 workers (6/25) 
+  Generating static pages using 4 workers (12/25) 
+  Generating static pages using 4 workers (18/25) 
+✓ Generating static pages using 4 workers (25/25) in 839ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /icon
+├ ○ /opengraph-image
+├   /projects/[slug]
+│ ├ ● /projects/runmoni
+│ ├ ● /projects/starlink-duo
+│ ├ ● /projects/reaction-speed-test
+│ └ ● [+6 more paths]
+├   /projects/[slug]/opengraph-image
+│ ├ ● /projects/runmoni/opengraph-image
+│ ├ ● /projects/starlink-duo/opengraph-image
+│ ├ ● /projects/reaction-speed-test/opengraph-image
+│ └ ● [+6 more paths]
+├ ○ /robots.txt
+└ ○ /sitemap.xml
+
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses generateStaticParams)
+

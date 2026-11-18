@@ -1,0 +1,17 @@
+{
+  "observedAtUtc": "2026-11-18T04:11:39.898499+00:00",
+  "rawLog": "node-tests1.txt",
+  "rawSha256": "9caeba1783bce28e628e396248ebc5a43261fe61de35e60b06f81623475cfcfb",
+  "actualNodeSummary": {
+    "tests": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0
+  },
+  "originalWrapperProducedResultJson": false,
+  "originalWrapperFailure": "Original TAP-only parser did not recognize actual Node spec summary prefix ℹ; failure occurred after npm test returned.",
+  "acceptedNodeEvidence": "node-tests2.json",
+  "aggregateTestCounts": false,
+  "productTestsOrCriteriaChanged": false,
+  "correction": "Exact single TAP or Node spec summary prefix accepted; fresh full npm test preserves unchanged staged tree and all-zero failure/skip requirements."
+}

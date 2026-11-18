@@ -1,0 +1,30 @@
+{
+  "checkedAtUtc": "2026-11-18T05:12:40.968617+00:00",
+  "passed": true,
+  "alreadyPublicReleaseId": 449502105,
+  "sourceRevision": "3d48c39102f33c36828be224a22a3d95b1018c7e",
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "previousFeedVersionCode": 31,
+  "stableChannelUnchanged": true,
+  "publicSidecarBodiesMatchExactly": true,
+  "publicMetadataSha256": "e87f2ae9784c850b99ceedb18197187ac1464ac3b53a6102a3d4aaba8fb91ae5",
+  "publicChecksumSha256": "99eb885c0594883634625b4e212ea69082bb5ac7329b044494a5cac0fcc9fe09",
+  "publicAssetIdsUnchanged": [
+    761785152,
+    761816407,
+    761816424
+  ],
+  "feedSha256": "eb77a053c893b0de2d4a6197d5f8aebc11ce582ff4ed43b1b3f4deb6e4a988f8",
+  "allSixRuntimeSourceMapsUnchanged": true,
+  "apkBodyDownloaded": false,
+  "apkRebuiltOrReuploaded": false,
+  "nativeAppUpdateCheckExecuted": false,
+  "redDotObservedOnPhysicalDevice": false,
+  "dashboardProductionPublished": false,
+  "dashboardPullRequest": "https://github.com/wjdals988/mydashboard/pull/34",
+  "dashboardAuditBlocker": "GHSA-fc5q-39xc-vjpf; no verified published picomatch patch as of 2026-11-18 05:09 UTC",
+  "manualRefresh": "설정 → 앱 정보와 업데이트 → 업데이트 확인 (or 버전 정보 다시 확인)",
+  "cacheBoundary": "Automatic checks honor a six-hour successful-result cache; manual force check bypasses it subject to a thirty-second retry limit.",
+  "executedDriverSha256": "006f56ae485deca681dd71beb2b78201b0997b892d4f66807a669fb0783dde30"
+}
