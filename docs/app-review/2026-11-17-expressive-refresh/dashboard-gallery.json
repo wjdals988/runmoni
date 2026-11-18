@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "version": "0.9.0-dev",
+  "versionCode": 32,
+  "rootVisualReviewVerified": true,
+  "userVisualApproval": false,
+  "sourceComparison": {
+    "releaseSourceRevision": "3d48c39102f33c36828be224a22a3d95b1018c7e",
+    "runtimeAppSourcesMatchRelease": true,
+    "proof": {
+      "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/release-source-comparison.json",
+      "sha256": "e318c4233c4d5c91f9a918f3b784d9e40a7b646c4a24dc6ffaab26686b9413b2"
+    }
+  },
+  "rootVisualProof": {
+    "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/root-main-visual-review.json",
+    "sha256": "d344c01fdba3f810e991f95dec871267c95267ef1eafe26db4804489be9ece6e"
+  },
+  "scopeNote": "검토용 가명·5.24km 합성 기록과 합성 사진을 사용했습니다. 실제 앱에서 밝음/어둠 선택·새 의복 조합·시스템 사진 선택·공유 스타일/초안 복원과 어두운 무료 지도를 확인했습니다. 날씨·GPS를 주입하지 않았으며 운영 쓰기와 실제 Google·SNS 전달은 확인하지 않았습니다.",
+  "images": [
+    {
+      "key": "home",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6-main-home-dark.png",
+      "sha256": "305a93acfec20ab35602622b815e7d508061b22cc12f78280c9cbdd032d16f0c",
+      "width": 480,
+      "height": 854,
+      "caption": "다크모드 홈 · 검토용 합성 기록과 러닝 시작",
+      "alt": "실제 Android 앱 화면: 다크모드 홈 · 검토용 합성 기록과 러닝 시작",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6.json",
+        "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3"
+      }
+    },
+    {
+      "key": "kit",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6-main-new-technical-set.png",
+      "sha256": "01f3c2386b6c8408daf81a53ac4394c9418807cd72a73b9020914db88eb0c2ab",
+      "width": 480,
+      "height": 854,
+      "caption": "새 러닝웨어 · 개별 의복4종과 메시 캡 조합",
+      "alt": "실제 Android 앱 화면: 새 러닝웨어 · 개별 의복4종과 메시 캡 조합",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6.json",
+        "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3"
+      }
+    },
+    {
+      "key": "photo",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6-main-sharedphoto-stamp.png",
+      "sha256": "73b7cd1fc439ee17478f6c81ac8c957a9f0588c79d7a0c1e0e126709c8bcf86c",
+      "width": 480,
+      "height": 854,
+      "caption": "사진 공유 · 검토용 합성 사진 위 미니미와 기록 스탬프",
+      "alt": "실제 Android 앱 화면: 사진 공유 · 검토용 합성 사진 위 미니미와 기록 스탬프",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6.json",
+        "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3"
+      }
+    },
+    {
+      "key": "map",
+      "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6-main-map-dark.png",
+      "sha256": "9acf7d84665e58e99771d9406d25977b3882c8c43ac8403540fc42a64abd1c41",
+      "width": 480,
+      "height": 854,
+      "caption": "무료 벡터 지도 · 어두운 테마와 지도 밖 조작",
+      "alt": "실제 Android 앱 화면: 무료 벡터 지도 · 어두운 테마와 지도 밖 조작",
+      "source": "MainActivity",
+      "actuallyViewedWithViewImage": true,
+      "privacyReviewed": true,
+      "captureProof": {
+        "file": "/workspace/runmoni/docs/app-review/2026-11-17-expressive-refresh/live6.json",
+        "sha256": "f306b98478236ed041df1a9932bb846c588c80b9bf2b1af334b12cb52370ecb3"
+      }
+    }
+  ]
+}

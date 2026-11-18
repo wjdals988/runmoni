@@ -1,3 +1,16 @@
+# 0.9 APK 공개·앱 업데이트 피드 연결 — 2026-11-18 한국 시간
+
+<!-- verified-expressive-public-apk-feed-v1 -->
+0.9.0-dev/code32 APK는 실제 연결 서명 CI44232478964/attempt1 검증 후 공개했다. 실제 APK출처는 `3d48c39102f33c36828be224a22a3d95b1018c7e`, 174,915,411bytes/SHA256 `2c8061338d9b25917d46b5dacec3fcc9bc7412c99429e96bbf20d1cb01d2c5ae`이며 기존 보관키를 유지한다. 새 CI JVM266/실패0·lint오류0/경고99와 로컬/Android 검토 범위는 구분한다.
+
+APK 게시 뒤 앱 확인용 피드가0.8/code31에 남아 레드닷이 보이지 않는 원인을 확인했다. 이 변경은 검증된 공개0.9/code32를 preview 피드에 연결한다. 앱 코드·버전·APK를 다시 만들거나 과거 APK출처를 바꾸지 않는다. 자동 확인은6시간 캐시하며 설정의 ‘앱 정보와 업데이트 → 업데이트 확인’은 강제 확인이다. 이미0.9/code32이면 새 버전 레드닷이 없는 것이 정상이다. 실제 휴대폰 레드닷 관측과 main 병합 후 canonical 응답 검증은 별도다.
+
+대시보드 PR34는 기존 picomatch 의존성의 필수 보안 감사 실패로 미병합이며 운영0.9 배포는 미완료다. 05:09 UTC 기준 검증된 발행 패치가 없고 미병합 upstream 후보를 패치로 가장하거나 검사를 생략하지 않는다. 첫 Node24 통과 뒤 관측기 형식 실패와 새24 재확인(48로 합산하지 않음), eslint 없음/127 뒤 잠금 의존성 설치·새 lint/build0의 근거도 보존한다. 앱의 공개 업데이트 피드는 이 대시보드 차단과 분리해 게시한다. 새39ID 운영 Rules 게시·휴대폰/Google/운영 쓰기·SNS·야외/OEM/API31+·공개 서명 APK 런타임·사용자 원화 승인은 여전히 별도다.
+
+[게시 검토](docs/RELEASE_REVIEW_0.9.0_20261118.md) · [APK](https://github.com/wjdals988/runmoni/releases/tag/v0.9.0-dev) · [대시보드 미병합 PR](https://github.com/wjdals988/mydashboard/pull/34).
+
+아래는 이전 시점의 보존 기록이다.
+
 # 0.9 UI·Aseprite39종 실제 검토 완료 후보 — 2026-11-18 한국 시간
 
 <!-- verified-expressive-local11-main6-v1 -->

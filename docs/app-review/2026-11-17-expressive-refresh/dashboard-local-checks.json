@@ -1,0 +1,41 @@
+{
+  "verifiedAtUtc": "2026-11-18T04:12:21.198461+00:00",
+  "nodeEvidence": "node-tests2.json",
+  "lint": {
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "exitCode": 0,
+    "rawLog": "dashboard-lint3.txt",
+    "rawSha256": "3a70ea70ab9befb0427955b1555f914c5ebcb1db77e8e3a38fd16fdbf8cf94cc"
+  },
+  "build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "rawLog": "dashboard-build1.txt",
+    "rawSha256": "72917d691c5841a582be562cc1bdd530f1d48e8263ff9285bc2d5b92ce32dbd5"
+  },
+  "dependencyInstall": {
+    "command": [
+      "npm",
+      "ci",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "exitCode": 0,
+    "rawLog": "dashboard-npm-ci.txt",
+    "rawSha256": "dabec7ab83d85d5c2fea034135df5da96c854588722e0fe23ce445bad6d8943a"
+  },
+  "initialLint": {
+    "exitCode": 127,
+    "rawLog": "dashboard-lint2.txt",
+    "reason": "Dependencies were not yet installed; eslint not found. Locked npm ci followed before successful lint/build.",
+    "rawSha256": "5f261c5b842062b73e8276a0e91c6172a1b2e267d0f401afdf640b12bfc4f88c"
+  }
+}
