@@ -47,18 +47,26 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("runner_discovery").assertIsDisplayed()
         compose.onNodeWithTag("route_canvas").assertIsDisplayed()
         compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("세계 지도", substring = true)
-        compose.onNodeWithTag("runner_discovery_status").assertTextContains("프로필을 연결", substring = true)
+        compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.onNodeWithTag("explore_current_area").assertDoesNotExist()
+        compose.onNodeWithTag("toggle_runner_sharing").assertDoesNotExist()
         compose.onNodeWithText("탐색에 보이면 안 되는 크루").assertDoesNotExist()
         compose.onNodeWithText("탐색에 보이면 안 되는 파티").assertDoesNotExist()
         compose.onNodeWithTag("rooms_search").assertDoesNotExist()
-        compose.onNodeWithTag("toggle_runner_sharing").assertIsEnabled().performClick()
         compose.onNodeWithTag("locate_explore").performClick()
+        compose.onNodeWithTag("explore_current_area").assertExists()
+        compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.onNodeWithTag("refresh_runners").assertTextContains("러너 보기").performClick()
+        compose.onNodeWithTag("explore_current_area").assertDoesNotExist()
+        compose.onNodeWithTag("runner_discovery_status").assertTextContains("프로필을 연결", substring = true)
+        compose.onNodeWithTag("toggle_runner_sharing").assertIsEnabled().performClick()
         compose.runOnIdle {
             assertEquals(1, profiles)
             assertEquals(1, actions.locates)
             assertTrue(actions.sharingRequests.isEmpty())
             assertTrue(actions.confirmations.isEmpty())
             assertTrue(actions.visibility.contains(true))
+            assertEquals(0, actions.refreshes)
         }
     }
 
@@ -67,9 +75,10 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         val self = LiveRunner("self", "나의 서버 표시", 37.567, 126.978, now)
         val stale = LiveRunner("stale", "만료 러너", 37.567, 126.978, now - 90_000)
         val invalid = LiveRunner("invalid", "잘못된 위치", Double.NaN, 126.978, now)
+        val fresh = LiveRunner("fresh", "최근 위치 러너", 37.567, 126.978, now)
         val state = mutableStateOf(AppState(signedIn = true, communityUid = "self",
             discoveryCenter = RouteMapCenter(37.567, 126.978),
-            discovery = RunnerDiscoveryUi(checkedAtMillis = now), liveRunners = listOf(self, stale, invalid)))
+            discovery = RunnerDiscoveryUi(checkedAtMillis = now), liveRunners = listOf(self, stale, invalid, fresh)))
         val actions = Actions(state)
         compose.setContent {
             ViewportBox(Viewport(360, 1f)) {
@@ -77,16 +86,9 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             }
         }
         compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("확인된 위치 주변 지도", substring = true)
-        compose.onNodeWithTag("runner_discovery_status").assertTextContains("표시할 공유 위치가 없어요", substring = true)
-        compose.runOnIdle {
-            state.value = state.value.copy(liveRunners = listOf(self, stale, invalid,
-                LiveRunner("fresh", "최근 위치 러너", 37.567, 126.978, System.currentTimeMillis())))
-        }
-        // The screen deliberately refuses future timestamps, including the next
-        // instant before its wall-clock tick. Wait for the actual derived state.
-        compose.waitUntil(20_000) {
-            compose.onAllNodes(hasText("러너 1명", substring = true)).fetchSemanticsNodes().isNotEmpty()
-        }
+        compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.onNodeWithTag("refresh_runners").performClick()
+        compose.onNodeWithTag("runner_discovery_status").assertTextContains("러너 1명", substring = true)
         compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("위치를 공유한 러너 1명", substring = true)
         compose.runOnIdle { state.value = state.value.copy(liveRunners = listOf(self, stale, invalid)) }
         compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("확인된 위치 주변 지도", substring = true)
@@ -216,7 +218,7 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             val map = compose.onNodeWithTag("route_map_viewport").fetchSemanticsNode().boundsInRoot
             val bar = compose.onNodeWithTag("map_control_bar").fetchSemanticsNode().boundsInRoot
             assertTrue("The map's persistent control is outside its pixels at $width/$scale", map.bottom <= bar.top)
-            for (tag in listOf("locate_explore", "toggle_runner_sharing", "refresh_runners")) {
+            for (tag in listOf("locate_explore", "refresh_runners")) {
                 reachable(tag).assertIsDisplayed()
                     .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
                 val bounds = compose.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot

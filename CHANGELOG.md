@@ -1,3 +1,18 @@
+# 0.9.1-dev 개발 프리뷰 후보 · 2026-11-27
+
+위젯, 홈 출발, 옷장 피팅, 기록 공유, 러닝 결과, 탐색·크루, 업데이트 알림 순으로 검토했다. 버전은 0.9.1-dev/code33이다. 서명 APK, 공개 다운로드, 업데이트 피드는 실제 확인 결과를 기록한다. [릴리스 안내](docs/RELEASE_NOTES_0.9.1-dev.md)
+
+# 2026-11-27 러닝 위젯과 미니미 피팅 검토
+
+- 위젯은 대기 화면의 준비 문구를 정리하고 **러닝 열기**를 표시한다. 좁은 크기에는 경과 시간과 **일시정지·재개**, 넓은 크기에는 거리와 종료 확인을 배치했다.
+- 홈의 출발 판단과 시작 동선, 옷장 피팅, 기록 공유의 편집 도구 위치, 기록의 GPS 안내, 탐색과 크루의 첫 행동을 개선했다.
+- 승인 남녀 미니미의 두 포즈에 세 코디를 맞췄다. 확대본과 96dp·64dp 비교, Aseprite 편집 파일은 [착용 검토](docs/app-review/2026-11-27-outfit-concepts/README.md)에 있다.
+- 디버그 앱과 Android 검사 APK를 빌드했다. JVM 266개가 통과했다. 현재 공개 0.9의 피드와 서명 릴리스 메타데이터 6개 필드가 일치했고 APK 다운로드 링크는 HTTP 200으로 응답했다.
+- API 29에서 위젯·알림 17개를 독립 실행해 확인했다. 렌더링은 [좁은 일시정지](docs/app-review/2026-11-27-widget-refresh/paused-small-native.png), [넓은 러닝 중](docs/app-review/2026-11-27-widget-refresh/running-wide-native.png), [어두운 대기와 200% 글씨](docs/app-review/2026-11-27-widget-refresh/idle-dark-font2-native.png)를 확인했다.
+- 검토 앱의 실제 Launcher에 위젯을 추가했다. 위젯에서 멈췄을 때 [위젯](docs/app-review/2026-11-27-widget-refresh/launcher-paused.png), [앱](docs/app-review/2026-11-27-widget-refresh/app-paused.png), [알림](docs/app-review/2026-11-27-widget-refresh/notification-paused.png)이 모두 01:13을 표시했다. 앱의 재개 후 [위젯](docs/app-review/2026-11-27-widget-refresh/launcher-resumed.png)과 [알림](docs/app-review/2026-11-27-widget-refresh/notification-resumed.png)이 다시 일시정지를 표시했다. 실행 중 알림은 캡처로 확인했다. [실제 홈 화면](docs/app-review/2026-11-27-widget-refresh/home-main.png)
+- 늦은 일시정지·재개 요청으로 남은 알림을 정리하도록 보정했고 최종 API 29 앱에서 기록기 검사 2개가 통과했다. 이전 두 번의 시간 초과는 실행 기록에 남겼다.
+- 홈·공유·기록·탐색·크루·업데이트 표시 19개가 통과했다. 옷장 검사는 최초 환경 전제 조건을 교정한 뒤 최종 빌드에서 320dp·200% 글씨로 통과했다. 최종 에뮬레이터 패키지의 앱 코드·리소스 및 x86_64 라이브러리는 전체 디버그 패키지와 일치했다. 전용 에뮬레이터는 종료했고 설정 복원 값 대조가 실패한 검토 전용 인스턴스는 별도로 보관했다. [큰 글씨 옷장](docs/app-review/2026-11-27-widget-refresh/closet-font2-native.png)
+
 # 0.9 APK 공개·앱 업데이트 피드 연결 — 2026-11-18 한국 시간
 
 <!-- verified-expressive-public-apk-feed-v1 -->

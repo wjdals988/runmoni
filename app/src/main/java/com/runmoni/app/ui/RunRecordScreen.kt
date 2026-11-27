@@ -38,6 +38,7 @@ import com.runmoni.app.domain.AutomaticBackupRecordState
 import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPersistenceState
 import com.runmoni.app.domain.RunRecord
+import com.runmoni.app.domain.RouteGeometry
 import com.runmoni.app.domain.KmSplit
 
 // A stable product callback for late-event regression checks. Foundation's
@@ -164,7 +165,7 @@ private fun RunRecordPageContent(
                     // more card competing with the route and management tools.
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                         .padding(horizontal = pageGutter(), vertical = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
                             color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
                         val recordedDistance = distance(record.distanceMeters)
@@ -188,10 +189,19 @@ private fun RunRecordPageContent(
 
                     Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         RecordSectionTitle("러닝 경로", Icons.Outlined.Route)
-                        Box(Modifier.fillMaxWidth()
-                            .height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 280.dp)
-                            .clip(RunmoniShapes.Surface).testTag("record_map")) {
-                            MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true)
+                        val hasRoute = remember(record.points) {
+                            RouteGeometry.from(record.points).segments.any { it.size >= 2 }
+                        }
+                        if (hasRoute) {
+                            Box(Modifier.fillMaxWidth().height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 240.dp)
+                                .clip(RunmoniShapes.Surface).testTag("record_map")) {
+                                MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true)
+                            }
+                        } else {
+                            Text(if (record.points.isEmpty()) "저장된 GPS 위치가 없어 경로를 표시할 수 없어요."
+                                else "연결할 수 있는 GPS 위치가 부족해 경로를 표시할 수 없어요.",
+                                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                                modifier = Modifier.testTag("record_no_route"))
                         }
                         if (record.interrupted) Text("중단된 구간이 있어요. 확인되지 않은 거리는 더하지 않았어요.",
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,

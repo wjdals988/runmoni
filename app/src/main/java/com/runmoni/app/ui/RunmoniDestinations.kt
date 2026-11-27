@@ -39,11 +39,8 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     ScreenContent {
         HomeDateTime(homeClock)
         BoxWithConstraints(Modifier.fillMaxWidth()) {
-            val sceneInset = 0.dp
-            val sceneWidth = maxWidth
-            // Preserve the existing measured weather width and avatar breakpoints.
-            val besideAvatar = sceneWidth >= 240.dp && !largeText
-            val avatarWidth = if (sceneWidth < 280.dp) 80.dp else 96.dp
+            val besideAvatar = maxWidth >= 240.dp && !largeText
+            val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp
             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (largeText) 16.dp else 24.dp)) {
                 // The open departure scene and its full-width action are separate areas.
                 Column(Modifier.fillMaxWidth().testTag("home_run_hero")
@@ -54,7 +51,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                         Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
                             verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                             HomeRunnerStage(state.profile.avatar, avatarWidth)
-                            HomeWeatherSummary(state.weather, homeClock, Modifier.weight(1f))
+                            HomeDepartureWeather(state.weather, homeClock, onWeather, Modifier.weight(1f))
                         }
                     } else {
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
@@ -77,13 +74,15 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                     if (showTodaySummary) HomeTodaySummary(todaysRuns)
                 }
                 // Enlarged text keeps all weather values after the primary action.
-                if (!besideAvatar) Box(Modifier.fillMaxWidth().testTag("home_avatar_conditions_stacked")
-                    .padding(horizontal = sceneInset)) {
-                    HomeWeatherSummary(state.weather, homeClock)
+                if (!besideAvatar) Box(Modifier.fillMaxWidth().testTag("home_avatar_conditions_stacked")) {
+                    HomeDepartureWeather(state.weather, homeClock, onWeather)
                 }
             }
         }
-        HomeWeatherDetails(state.weather, homeClock, onWeather)
+        if (state.weather.snapshot != null) {
+            HomeWeatherSummary(state.weather, homeClock)
+            HomeWeatherDetails(state.weather, homeClock, onWeather, showAssessmentSummary = false)
+        }
         RunPersistenceNotice(state.runPersistence, onRetrySave)
         Box(Modifier.fillMaxWidth().testTag("home_recent_activity")) {
             RecentRunActivitySection(recentActivity)

@@ -84,6 +84,12 @@ class RunTrackingService : Service(), LocationListener {
             }
         } else if (!foreground && action in setOf(PAUSE, RESUME)) {
             // A delayed old PendingIntent may create a Service, but must not restart GPS.
+            // Remove the orphaned notification when there is no active recorder or pending save.
+            val phase = repository.active.value.phase
+            if (pendingCommands == 0 && !repository.persistence.value.finishing &&
+                (phase == RunPhase.IDLE || phase == RunPhase.RECOVERY)) {
+                getSystemService(NotificationManager::class.java).cancel(RunNotifications.ID)
+            }
             stopSelfResult(startId)
             return START_NOT_STICKY
         }

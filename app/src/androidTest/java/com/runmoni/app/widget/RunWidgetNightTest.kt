@@ -63,7 +63,7 @@ class RunWidgetNightTest {
                 assertTrue(open.isClickable)
                 assertTrue(open.height >= 48 * density - 1)
                 assertTrue(open.width >= 48 * density - 1)
-                assertEquals("런모니 앱 열기", open.contentDescription)
+                assertEquals("러닝 열기", open.contentDescription)
                 bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).also { root.draw(Canvas(it)) }
             }
             val target = File(context.cacheDir, "widget-review/widget-night-idle-font2-native-fixture.png")

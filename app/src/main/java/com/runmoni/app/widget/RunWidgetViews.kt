@@ -52,14 +52,14 @@ internal object RunWidgetViews {
         // than an unmeasured block of potentially clipped Korean text.
         if (widthDp <= 0 || heightDp <= 0 || Looper.myLooper() != Looper.getMainLooper())
             return iconOnly(context, snapshot, live)
+        val content = RunWidgetContent.from(snapshot, live)
         val candidates = sequence {
-            if (widthDp >= 240 && heightDp <= 180 && RunWidgetContent.from(snapshot, live).control != null)
+            if (widthDp >= 240 && heightDp <= 180 && content.control != null)
                 yield(populate(context, snapshot, live, R.layout.run_widget_wide, compact = true, iconControls = true))
-            yield(create(context, snapshot, live, minimal = false))
+            if (widthDp >= 208) yield(create(context, snapshot, live, minimal = false))
             yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true))
-            if (RunWidgetContent.from(snapshot, live).control != null) {
-                // Keep current metrics and controls before giving up to an
-                // app link. Stale/blocked information must retain its title.
+            if (content.control != null) {
+                // Keep the elapsed time and primary action on short hosts.
                 yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true).apply {
                     setViewVisibility(R.id.run_widget_title, View.GONE)
                 })
@@ -74,7 +74,7 @@ internal object RunWidgetViews {
                 // Retain the running cue when enlarged text leaves room only
                 // for a short app action, rather than an empty branded panel.
                 setViewVisibility(R.id.run_widget_brand, View.GONE)
-                setTextViewText(R.id.run_widget_open, "열기")
+                setTextViewText(R.id.run_widget_open, context.getString(R.string.run_widget_open_short))
             })
         }
         return candidates.firstOrNull { fits(context, it, widthDp, heightDp) } ?: iconOnly(context, snapshot, live)
@@ -126,19 +126,20 @@ internal object RunWidgetViews {
         snapshot == null || snapshot.runId.isBlank() || snapshot.phase == RunPhase.IDLE
 
     private fun description(content: RunWidgetContent, footer: String, idle: Boolean): String =
-        if (idle) "런모니, ${content.title}, 앱에서 확인"
-        else "런모니, ${content.title}, ${content.distance}, 러닝 시간 ${content.duration}, ${content.speed}, $footer"
+        if (idle) "런모니, ${content.title}"
+        else listOf("런모니", content.title, "러닝 시간 ${content.duration}", content.distance, content.speed, footer)
+            .filter { it.isNotEmpty() }.joinToString(", ")
 
     private fun footer(snapshot: RunWidgetSnapshot?, compact: Boolean): String = snapshot?.updatedAtMillis?.takeIf { it > 0 }?.let {
         SimpleDateFormat(if (compact) "HH:mm" else "HH:mm:ss", Locale.KOREA).format(Date(it)) + " 기준"
-    } ?: if (compact) "러닝 시작 준비" else "앱에서 러닝을 시작하세요"
+    }.orEmpty()
 
     private fun iconOnly(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean): RemoteViews =
         RemoteViews(context.packageName, R.layout.run_widget_action_only).apply {
             val content = RunWidgetContent.from(snapshot, live)
             val action = open(context, snapshot)
             setContentDescription(R.id.run_widget_root, description(content, footer(snapshot, compact = true), isIdle(snapshot)))
-            setContentDescription(R.id.run_widget_open, "앱에서 러닝 확인")
+            setContentDescription(R.id.run_widget_open, context.getString(R.string.run_widget_open))
             setOnClickPendingIntent(R.id.run_widget_root, action)
             setOnClickPendingIntent(R.id.run_widget_open, action)
         }
@@ -147,52 +148,53 @@ internal object RunWidgetViews {
                          compact: Boolean, minimal: Boolean = false, iconControls: Boolean = false): RemoteViews {
         val content = RunWidgetContent.from(snapshot, live)
         val idle = isIdle(snapshot)
+        val idleReady = idle && snapshot?.blocked != true && snapshot?.finishing != true
+        val durationOnly = layout == R.layout.run_widget_compact
         val views = RemoteViews(context.packageName, layout)
         val open = open(context, snapshot)
-        views.setViewVisibility(R.id.run_widget_identity, if (!compact || minimal || idle) View.VISIBLE else View.GONE)
+        views.setViewVisibility(R.id.run_widget_identity, if (idle || minimal) View.VISIBLE else View.GONE)
+        views.setViewVisibility(R.id.run_widget_title, if (idleReady) View.GONE else View.VISIBLE)
         views.setTextViewText(R.id.run_widget_title, if (!compact) content.title else when {
             snapshot?.phase == RunPhase.RECOVERY -> "중단된 러닝"
             content.stale -> "마지막 러닝 정보"
             snapshot?.blocked == true || snapshot?.finishing == true -> "저장 확인"
             content.control == RunWidgetControl.PAUSE -> "러닝 중"
-            content.control == RunWidgetControl.RESUME -> if (snapshot?.automaticPause == true) "자동 멈춤" else "일시정지"
+            content.control == RunWidgetControl.RESUME -> if (snapshot?.automaticPause == true) "자동 일시정지" else "일시정지 중"
             else -> content.title
         })
         val footer = footer(snapshot, compact)
         views.setTextViewText(R.id.run_widget_footer, footer)
-        if (idle) views.setViewVisibility(R.id.run_widget_footer, View.GONE)
+        views.setViewVisibility(R.id.run_widget_footer,
+            if (!idle && footer.isNotEmpty() && (!compact || content.control == null)) View.VISIBLE else View.GONE)
         views.setContentDescription(R.id.run_widget_root, description(content, footer, idle))
         views.setOnClickPendingIntent(R.id.run_widget_root, open)
         views.setOnClickPendingIntent(R.id.run_widget_open, open)
-        views.setContentDescription(R.id.run_widget_open, if (idle) "런모니 앱 열기" else "앱에서 러닝 확인")
-        views.setTextViewText(R.id.run_widget_open, when {
-            minimal -> "앱 열기"
-            idle -> "런모니 열기"
-            else -> "앱에서 확인"
-        })
+        views.setContentDescription(R.id.run_widget_open, context.getString(R.string.run_widget_open))
+        views.setTextViewText(R.id.run_widget_open, context.getString(R.string.run_widget_open))
         if (!minimal) {
             // Empty placeholders are not run metrics. Keep idle focused on one app action.
             views.setViewVisibility(R.id.run_widget_metrics, if (idle) View.GONE else View.VISIBLE)
-            views.setTextViewText(R.id.run_widget_distance, content.distance)
+            if (!durationOnly) views.setTextViewText(R.id.run_widget_distance, content.distance)
             views.setTextViewText(R.id.run_widget_duration, content.duration)
             views.setContentDescription(R.id.run_widget_duration, "러닝 시간 ${content.duration}")
-            views.setTextViewText(R.id.run_widget_speed, content.speed)
-            // Speed is useful during a live run. Paused/past data has no current speed.
-            views.setViewVisibility(R.id.run_widget_speed,
-                if (!compact && content.control == RunWidgetControl.PAUSE) View.VISIBLE else View.GONE)
+            if (!compact) {
+                views.setTextViewText(R.id.run_widget_speed, content.speed)
+                views.setViewVisibility(R.id.run_widget_speed,
+                    if (content.control == RunWidgetControl.PAUSE) View.VISIBLE else View.GONE)
+            }
             val controls = content.control != null && content.canFinish
             views.setViewVisibility(R.id.run_widget_actions, if (controls) View.VISIBLE else View.GONE)
             views.setViewVisibility(R.id.run_widget_open, if (controls) View.GONE else View.VISIBLE)
             if (controls) {
                 val pause = content.control == RunWidgetControl.PAUSE
+                val controlLabel = context.getString(if (pause) R.string.run_widget_pause else R.string.run_widget_resume)
                 if (iconControls) views.setImageViewResource(R.id.run_widget_control,
                     if (pause) R.drawable.run_widget_pause_icon else R.drawable.run_widget_resume_icon)
-                else views.setTextViewText(R.id.run_widget_control, if (pause) "멈춤" else "재개")
-                views.setContentDescription(R.id.run_widget_control, if (pause) "러닝 일시정지" else "러닝 재개")
-                if (!compact) views.setTextViewCompoundDrawablesRelative(R.id.run_widget_control,
-                    if (pause) R.drawable.run_widget_pause_icon else R.drawable.run_widget_resume_icon, 0, 0, 0)
+                else views.setTextViewText(R.id.run_widget_control, controlLabel)
+                views.setContentDescription(R.id.run_widget_control, "러닝 $controlLabel")
                 views.setOnClickPendingIntent(R.id.run_widget_control, control(context, snapshot!!.runId, content.control!!))
-                views.setOnClickPendingIntent(R.id.run_widget_finish, RunNotifications.activity(context, snapshot.runId, true))
+                if (!durationOnly) views.setOnClickPendingIntent(R.id.run_widget_finish,
+                    RunNotifications.activity(context, snapshot.runId, true))
             }
         }
         return views

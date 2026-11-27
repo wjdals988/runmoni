@@ -23,6 +23,11 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.onNodeWithText("검색한 크루가 없어요").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("rooms_search").performScrollTo().performTextClearance()
         compose.onNodeWithTag("crew_${crew.id}").performScrollTo().performClick()
+        val intro = compose.onNodeWithTag("crew_intro").assertTextEquals(crew.description).fetchSemanticsNode()
+        val join = compose.onNodeWithTag("join_crew_${crew.id}").fetchSemanticsNode()
+        val schedule = compose.onNodeWithTag("crew_detail_0").fetchSemanticsNode()
+        assertTrue(intro.positionInRoot.y < join.positionInRoot.y && join.positionInRoot.y < schedule.positionInRoot.y)
+        compose.onNodeWithTag("crew_next_party").assertDoesNotExist()
         compose.onNodeWithTag("join_crew_${crew.id}").performScrollTo().performClick()
         compose.onNodeWithTag("invite_code").assertDoesNotExist()
         compose.onNodeWithTag("profile_name").performTextClearance()
@@ -37,6 +42,31 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.onNodeWithText("크루 공지 · 채팅").performScrollTo().assertIsDisplayed()
         compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.onNodeWithTag("rooms_search").performScrollTo().assertIsDisplayed()
+    }
+
+    @Test fun joinedCrewPutsUpcomingPartyAndJoinActionBeforeTheRestOfTheSchedule() {
+        val now = System.currentTimeMillis()
+        val past = party.copy(id = "past", startsAtMillis = now - 60_000)
+        val cancelled = party.copy(id = "cancelled", startsAtMillis = now + 60_000, cancelled = true)
+        val later = party.copy(id = "later", startsAtMillis = party.startsAtMillis + 60_000)
+        val state = mutableStateOf(AppState(signedIn = true, serverConnected = true,
+            crews = listOf(crew.copy(joined = true)), parties = listOf(later, past, cancelled, party)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport()) { RunmoniApp(state.value, actions) } }
+        compose.onNodeWithTag("nav_crew").performClick()
+        compose.onNodeWithTag("crew_${crew.id}").performScrollTo().performClick()
+        compose.onNodeWithTag("crew_intro").assertDoesNotExist()
+        val nextParty = compose.onNodeWithTag("crew_next_party")
+        val createParty = compose.onNodeWithTag("create_party_${crew.id}")
+        assertTrue(nextParty.fetchSemanticsNode().positionInRoot.y < createParty.fetchSemanticsNode().positionInRoot.y)
+        compose.onNodeWithTag("join_next_party_${party.id}").performScrollTo().assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(listOf(party.id), actions.joinedParties)
+            state.value = state.value.copy(parties = listOf(later, past, cancelled, party.copy(joined = true)))
+        }
+        compose.onNodeWithTag("join_next_party_${party.id}").assertDoesNotExist()
+        compose.onNodeWithTag("party_${party.id}").performScrollTo().performClick()
+        compose.onNodeWithTag("open_party_chat").performScrollTo().assertIsDisplayed()
     }
 
     @Test fun failedCrewCreationKeepsDraftAndSuccessOpensCreatedCrew() {

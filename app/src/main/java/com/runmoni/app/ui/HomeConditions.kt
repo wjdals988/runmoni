@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.DirectionsRun
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -38,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
@@ -149,7 +149,29 @@ internal fun HomeConditions(state: RunningWeatherState, onRefresh: () -> Unit, m
     }
 }
 
-/** Essential values and clothing fit beside the avatar without fixed line caps. */
+@Composable
+internal fun HomeDepartureWeather(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+    val assessment = RunningEnvironmentScore.from(state, nowMillis)
+    val advice = weatherAdvice(state, nowMillis)
+    Column(modifier.fillMaxWidth().testTag("home_departure_weather"), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (assessment != null) {
+            Text("러닝 환경", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
+            EnvironmentScore(assessment, environmentTint(assessment.band))
+            Text(assessment.headline, style = MaterialTheme.typography.titleSmall,
+                color = RunmoniColors.Navy, modifier = Modifier.testTag("home_running_guidance"))
+        } else if (advice != null) {
+            Text(advice.headline, style = MaterialTheme.typography.titleSmall,
+                color = if (advice.caution == WeatherCaution.HIGH) RunmoniColors.CoralInk else RunmoniColors.Navy,
+                modifier = Modifier.testTag("home_running_guidance"))
+        } else if (state.snapshot == null) {
+            if (state.phase != WeatherPhase.IDLE) WeatherStatus(state, nowMillis)
+            WeatherRefreshButton(state, onRefresh)
+        } else {
+            WeatherStatus(state, nowMillis)
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, modifier: Modifier = Modifier) {
@@ -190,16 +212,17 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
  * forcing a provider button or safety guidance into the avatar's narrow column. */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier,
+    showAssessmentSummary: Boolean = true,
+) {
     val uri = LocalUriHandler.current
     val snapshot = state.snapshot
     val advice = weatherAdvice(state, nowMillis)
     val assessment = RunningEnvironmentScore.from(state, nowMillis)
-    val loading = state.phase == WeatherPhase.LOCATING || state.phase == WeatherPhase.LOADING
     Column(modifier.fillMaxWidth().testTag("home_weather"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        if (snapshot != null) WeatherStatus(state, nowMillis)
+        if (snapshot != null && showAssessmentSummary) WeatherStatus(state, nowMillis)
         if (assessment != null) {
-            RunningEnvironmentPanel(assessment, advice?.detail)
+            RunningEnvironmentPanel(assessment, advice?.detail, showAssessmentSummary)
         } else if (advice != null) {
             val caution = advice.caution == WeatherCaution.HIGH
             Surface(color = if (caution) RunmoniColors.CoralWash else RunmoniColors.BlueWash,
@@ -210,7 +233,7 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
                         null, Modifier.size(24.dp),
                         tint = if (caution) RunmoniColors.CoralInk else RunmoniColors.RouteBlue)
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(advice.headline, style = MaterialTheme.typography.titleSmall,
+                        if (showAssessmentSummary) Text(advice.headline, style = MaterialTheme.typography.titleSmall,
                             color = if (caution) RunmoniColors.CoralInk else RunmoniColors.Navy,
                             modifier = Modifier.testTag("home_running_guidance"))
                         advice.detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted) }
@@ -221,12 +244,7 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            TextButton(onClick = onRefresh, enabled = !loading, shape = RunmoniShapes.Action,
-                modifier = Modifier.heightIn(min = 48.dp).testTag("refresh_home_weather")) {
-                Icon(Icons.Outlined.Refresh, null, Modifier.size(20.dp))
-                Text(if (loading) "확인 중…" else if (snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인",
-                    modifier = Modifier.padding(start = 8.dp))
-            }
+            WeatherRefreshButton(state, onRefresh)
             if (snapshot != null) TextButton(onClick = { uri.openUri(RunningWeatherRepository.LICENSE_URL) },
                 shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("home_weather_source")) {
                 Text("예보: ${RunningWeatherRepository.SOURCE_NAME}", style = MaterialTheme.typography.bodySmall)
@@ -240,21 +258,46 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
     }
 }
 
+@Composable
+private fun WeatherRefreshButton(state: RunningWeatherState, onRefresh: () -> Unit) {
+    val loading = state.phase == WeatherPhase.LOCATING || state.phase == WeatherPhase.LOADING
+    TextButton(onClick = onRefresh, enabled = !loading, shape = RunmoniShapes.Action,
+        modifier = Modifier.heightIn(min = 48.dp).testTag("refresh_home_weather")) {
+        Text(if (loading) "확인 중…" else if (state.snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인")
+    }
+}
+
+@Composable
+private fun environmentTint(band: RunningEnvironmentBand) = when (band) {
+    RunningEnvironmentBand.GOOD -> RunmoniColors.EnvironmentGood
+    RunningEnvironmentBand.CAUTION -> RunmoniColors.EnvironmentCaution
+    RunningEnvironmentBand.POOR -> RunmoniColors.EnvironmentPoor
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun EnvironmentScore(assessment: RunningEnvironmentAssessment, tint: Color) {
+    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text("${assessment.score}점 / 100", color = tint,
+            style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"),
+            modifier = Modifier.testTag("home_environment_score"))
+        Text(assessment.band.label, color = tint, style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.align(Alignment.CenterVertically).testTag("home_environment_band"))
+    }
+}
+
 /** A single, accessible departure cue. The scale is deliberately not a health
  * gauge; its rules expand in the page and never cover the primary run action.
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RunningEnvironmentPanel(assessment: RunningEnvironmentAssessment, detail: String?) {
+private fun RunningEnvironmentPanel(assessment: RunningEnvironmentAssessment, detail: String?, showSummary: Boolean) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     val good = RunmoniColors.EnvironmentGood
     val caution = RunmoniColors.EnvironmentCaution
     val poor = RunmoniColors.EnvironmentPoor
-    val tint = when (assessment.band) {
-        RunningEnvironmentBand.GOOD -> good
-        RunningEnvironmentBand.CAUTION -> caution
-        RunningEnvironmentBand.POOR -> poor
-    }
+    val tint = environmentTint(assessment.band)
     val wash = when (assessment.band) {
         RunningEnvironmentBand.GOOD -> RunmoniColors.EnvironmentGoodWash
         RunningEnvironmentBand.CAUTION -> RunmoniColors.EnvironmentCautionWash
@@ -268,14 +311,7 @@ private fun RunningEnvironmentPanel(assessment: RunningEnvironmentAssessment, de
                     else Icons.Outlined.WarningAmber, null, Modifier.size(24.dp), tint = tint)
                 Text("러닝 환경", style = MaterialTheme.typography.titleSmall, color = RunmoniColors.Navy)
             }
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("${assessment.score}점 / 100", color = tint,
-                    style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"),
-                    modifier = Modifier.testTag("home_environment_score"))
-                Text(assessment.band.label, color = tint, style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.align(Alignment.CenterVertically).testTag("home_environment_band"))
-            }
+            if (showSummary) EnvironmentScore(assessment, tint)
             Canvas(Modifier.fillMaxWidth().height(24.dp).testTag("home_environment_scale").semantics {
                 contentDescription = "러닝 환경 척도: ${assessment.band.label}"
                 progressBarRangeInfo = ProgressBarRangeInfo(assessment.score.toFloat(), 0f..100f)
@@ -303,7 +339,7 @@ private fun RunningEnvironmentPanel(assessment: RunningEnvironmentAssessment, de
                 drawCircle(paper, radius, center)
                 drawCircle(tint, radius, center, style = Stroke(3.dp.toPx()))
             }
-            Text(assessment.headline, style = MaterialTheme.typography.titleSmall,
+            if (showSummary) Text(assessment.headline, style = MaterialTheme.typography.titleSmall,
                 color = RunmoniColors.Navy, modifier = Modifier.testTag("home_running_guidance"))
             detail?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted) }
             TextButton(onClick = { expanded = !expanded }, shape = RunmoniShapes.Action,
