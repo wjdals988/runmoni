@@ -4,6 +4,9 @@
 - 홈의 출발 판단과 시작 동선, 옷장 피팅, 기록 공유의 편집 도구 위치, 기록의 GPS 안내, 탐색과 크루의 첫 행동을 개선했다.
 - 승인 남녀 미니미의 두 포즈에 세 코디를 맞췄다. 확대본과 96dp·64dp 비교, Aseprite 편집 파일은 [착용 검토](docs/app-review/2026-11-27-outfit-concepts/README.md)에 있다.
 - 디버그 앱과 Android 검사 APK를 빌드했다. JVM 266개가 통과했다. 현재 공개 0.9의 피드와 서명 릴리스 메타데이터 6개 필드가 일치했고 APK 다운로드 링크는 HTTP 200으로 응답했다.
+- API 29에서 위젯·알림 17개를 독립 실행해 확인했다. 렌더링은 [좁은 일시정지](docs/app-review/2026-11-27-widget-refresh/paused-small-native.png), [넓은 러닝 중](docs/app-review/2026-11-27-widget-refresh/running-wide-native.png), [어두운 대기와 200% 글씨](docs/app-review/2026-11-27-widget-refresh/idle-dark-font2-native.png)를 확인했다.
+- 검토 앱의 실제 Launcher에 위젯을 추가했다. 위젯에서 멈췄을 때 [위젯](docs/app-review/2026-11-27-widget-refresh/launcher-paused.png), [앱](docs/app-review/2026-11-27-widget-refresh/app-paused.png), [알림](docs/app-review/2026-11-27-widget-refresh/notification-paused.png)이 모두 01:13을 표시했다. 앱의 재개 후 [위젯](docs/app-review/2026-11-27-widget-refresh/launcher-resumed.png)과 [알림](docs/app-review/2026-11-27-widget-refresh/notification-resumed.png)이 다시 일시정지를 표시했다. 실행 중 알림은 캡처로 확인했다. [실제 홈 화면](docs/app-review/2026-11-27-widget-refresh/home-main.png)
+- 기존 기록기 검사에서 늦은 일시정지·재개에 대한 알림 제거 대기가 두 번 시간 초과했다. 실행 중인 기록기나 저장 요청이 없고 대기·복구 상태일 때 남은 알림을 정리하도록 보정했다. 큰 글씨 옷장 항목은 첫 실행에서 시스템 글자 크기 전제 조건이 맞지 않아 별도 실행으로 확인한다.
 
 # 0.9 APK 공개·앱 업데이트 피드 연결 — 2026-11-18 한국 시간
 
