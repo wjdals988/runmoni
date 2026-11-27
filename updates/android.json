@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.9.1-dev",
-    "versionCode": 33,
-    "fileName": "runmoni-0.9.1-dev.apk",
-    "sizeBytes": 174915411,
-    "sha256": "89b2519d93ba387bdb6a596a19db9eeeb1d0bc52a8af499e83dca27e4fcec0da",
+    "version": "0.10.0-dev",
+    "versionCode": 34,
+    "fileName": "runmoni-0.10.0-dev.apk",
+    "sizeBytes": 175807560,
+    "sha256": "8423c1a4a55f88fe4fa3f035302e58ed455cea31eca231678ae7177b31cc20ca",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "4db9502b969542b44c3e8129ae620f72aba50782",
+    "sourceRevision": "c2c00c73bc852af0ff802126ab3d5648c0ebea90",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.9.1-dev/runmoni-0.9.1-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.9.1-dev",
-    "notes": "위젯·홈 출발·옷장·기록 공유·러닝 결과·탐색과 크루 화면을 개편한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.10.0-dev/runmoni-0.10.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.10.0-dev",
+    "notes": "레이스·야간 도심·트레일 의상과 장비 15종을 추가하고 러닝·기록·탐색 화면을 개선한 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null
