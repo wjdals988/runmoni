@@ -97,12 +97,12 @@ class RunWidgetFactoryTest {
         assertEquals("현재 9.0 km/h", running.findViewById<TextView>(R.id.run_widget_speed).text.toString())
         assertEquals(View.VISIBLE, running.findViewById<View>(R.id.run_widget_actions).visibility)
         assertEquals(View.GONE, running.findViewById<View>(R.id.run_widget_open).visibility)
-        assertEquals("멈춤", running.findViewById<Button>(R.id.run_widget_control).text.toString())
+        assertEquals("일시정지", running.findViewById<Button>(R.id.run_widget_control).text.toString())
         assertEquals(View.VISIBLE, running.findViewById<View>(R.id.run_widget_metrics).visibility)
         val distance = running.findViewById<TextView>(R.id.run_widget_distance)
         val duration = running.findViewById<TextView>(R.id.run_widget_duration)
         val speed = running.findViewById<TextView>(R.id.run_widget_speed)
-        assertEquals("Distance and time are equally legible, rather than one oversized KPI", distance.textSize, duration.textSize, .5f)
+        assertTrue("Elapsed time has priority over distance", duration.textSize > distance.textSize)
         assertTrue("Both recorded values retain readable system-scaled type", duration.textSize >= 20 * duration.resources.displayMetrics.scaledDensity)
         assertTrue("Secondary metrics keep a different weight", duration.textSize > speed.textSize)
         assertEquals("러닝 시간 01:15", duration.contentDescription)
@@ -138,21 +138,18 @@ class RunWidgetFactoryTest {
                 assertEquals("Idle does not publish empty run statistics", View.GONE,
                     view.findViewById<View>(R.id.run_widget_metrics).visibility)
                 assertEquals(View.GONE, view.findViewById<View>(R.id.run_widget_footer).visibility)
-                assertEquals("런모니 열기", view.findViewById<Button>(R.id.run_widget_open).text.toString())
+                assertEquals("러닝 열기", view.findViewById<Button>(R.id.run_widget_open).text.toString())
                 assertFalse(view.contentDescription.toString().contains("—"))
                 captureFixture("widget-refresh-idle-256x160-fixture", state, false, 256, 160)
             } else assertEquals(View.VISIBLE, view.findViewById<View>(R.id.run_widget_metrics).visibility)
         }
     }
 
-    @Test fun largeTextFallbackRetainsAnAccessibleAppActionWithoutTwoClippedButtons() {
+    @Test fun largeTextKeepsOneCompleteAccessibleAction() {
         val view = inflate(snapshot(), live = true, minimal = true, fontScale = 2f)
-        assertNull(view.findViewById<View>(R.id.run_widget_control))
-        val button = view.findViewById<Button>(R.id.run_widget_open)
-        assertEquals("열기", button.text.toString())
-        assertEquals("The shortened visual label keeps a complete accessible action", "앱에서 러닝 확인", button.contentDescription)
-        assertEquals("The short action retains the app's running cue", View.VISIBLE,
-            view.findViewById<View>(R.id.run_widget_brand_icon).visibility)
+        val direct = view.findViewById<View>(R.id.run_widget_actions)?.visibility == View.VISIBLE
+        val button = view.findViewById<View>(if (direct) R.id.run_widget_control else R.id.run_widget_open)
+        assertTrue(button.contentDescription in listOf("러닝 열기", "러닝 일시정지"))
         assertTrue(button.isClickable)
         assertTrue(button.measuredHeight >= 48 * context.resources.displayMetrics.density)
         assertTrue(button.measuredWidth >= 48 * context.resources.displayMetrics.density)
@@ -222,7 +219,9 @@ class RunWidgetFactoryTest {
                 if (widthDp == 256 && heightDp == 220 && scale == 1f && state == snapshot())
                     assertEquals("A roomy widget retains direct controls", View.VISIBLE, root.findViewById<View>(R.id.run_widget_actions).visibility)
                 if (widthDp == 128 && heightDp == 140 && scale == 1f && state == snapshot()) {
-                    assertEquals("Default widget retains distance", View.VISIBLE, root.findViewById<View>(R.id.run_widget_distance).visibility)
+                    assertNull("Small widget reserves room for the time and primary action", root.findViewById<View>(R.id.run_widget_distance))
+                    assertEquals("일시정지", root.findViewById<Button>(R.id.run_widget_control).text.toString())
+                    assertNull(root.findViewById<View>(R.id.run_widget_finish))
                     assertEquals("Default widget retains duration", View.VISIBLE, root.findViewById<View>(R.id.run_widget_duration).visibility)
                     assertEquals("Default widget retains direct controls", View.VISIBLE, root.findViewById<View>(R.id.run_widget_actions).visibility)
                 }
@@ -249,8 +248,11 @@ class RunWidgetFactoryTest {
                     View.MeasureSpec.makeMeasureSpec(pixelsHigh, View.MeasureSpec.EXACTLY))
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
                 assertFits(root, pixelsWide, pixelsHigh, density, "actual launcher padding, font=$scale")
-                assertTrue(root.findViewById<View>(R.id.run_widget_open).isClickable)
-                assertEquals("앱에서 러닝 확인", root.findViewById<View>(R.id.run_widget_open).contentDescription)
+                val direct = root.findViewById<View>(R.id.run_widget_actions)?.visibility == View.VISIBLE
+                val action = root.findViewById<View>(if (direct) R.id.run_widget_control else R.id.run_widget_open)
+                assertEquals(View.VISIBLE, action.visibility)
+                assertTrue(action.isClickable)
+                assertEquals(if (direct) "러닝 일시정지" else "러닝 열기", action.contentDescription)
                 assertTrue(root.contentDescription.toString().contains("01:15"))
             }
             for ((width, height) in listOf(64 to 48, 0 to 0)) {
@@ -263,7 +265,7 @@ class RunWidgetFactoryTest {
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
                 assertFits(root, root.width, root.height, density, "icon-only app action")
                 assertTrue(root.findViewById<ImageButton>(R.id.run_widget_open).isClickable)
-                assertEquals("앱에서 러닝 확인", root.findViewById<View>(R.id.run_widget_open).contentDescription)
+                assertEquals("러닝 열기", root.findViewById<View>(R.id.run_widget_open).contentDescription)
                 assertTrue(root.contentDescription.toString().contains("1.23 km"))
             }
         }
@@ -291,7 +293,7 @@ class RunWidgetFactoryTest {
                 assertEquals(View.VISIBLE, root.findViewById<View>(R.id.run_widget_brand_icon).visibility)
                 assertEquals("runmoni", root.findViewById<TextView>(R.id.run_widget_brand).text.toString())
                 assertTrue(root.findViewById<View>(R.id.run_widget_open).isClickable)
-                assertEquals("런모니 앱 열기", root.findViewById<View>(R.id.run_widget_open).contentDescription)
+                assertEquals("러닝 열기", root.findViewById<View>(R.id.run_widget_open).contentDescription)
                 assertTrue(root.findViewById<View>(R.id.run_widget_metrics)?.visibility != View.VISIBLE)
                 assertFalse("Idle is not an unfinished live run", root.contentDescription.toString().contains("—"))
             }

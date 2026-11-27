@@ -37,6 +37,17 @@ private fun OfflineRecordPageFixture(content: @Composable () -> Unit) {
 }
 
 class RunRecordScreenUiTest : RunmoniDesignTestBase() {
+    @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {
+        val record = recordPageFixture().copy(points = emptyList())
+        val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
+        compose.setContent {
+            OfflineRecordPageFixture { RunRecordScreen(record, actions, onBack = {}, onShare = {}) }
+        }
+        compose.onNodeWithTag("record_map").assertDoesNotExist()
+        compose.onNodeWithTag("record_no_route").performScrollTo().assertTextContains("저장된 GPS 위치가 없어", substring = true)
+        compose.onNodeWithTag("share_run_record").assertIsDisplayed().assertIsEnabled()
+    }
+
     @Test fun automaticBackupShowsItsQueueAndAcknowledgementWithoutARequiredPerRecordAction() {
         val record = recordPageFixture()
         val cloud = mutableStateOf(CloudAccountState(configured = true, uid = "account-a", accountLabel = "계정 A",

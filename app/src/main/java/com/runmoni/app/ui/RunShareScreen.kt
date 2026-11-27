@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -289,19 +288,23 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
             HorizontalDivider(color = RunmoniColors.Line)
             BoxWithConstraints(Modifier.fillMaxWidth().weight(1f)) {
                 val small = scrollFooter || LocalDensity.current.fontScale >= 1.3f || maxHeight < 500.dp
-                val previewHeight = if (small) 220.dp else minOf(maxHeight * .52f, 350.dp)
+                val previewHeight = if (small) 200.dp else minOf(maxHeight * .46f, 330.dp)
                 val previewWidth = minOf(maxWidth - pageGutter() * 2, previewHeight * draft.ratio.aspectRatio)
                 // Keep one scroll owner when IME/viewport changes. The focused field stays
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
                     horizontalAlignment = Alignment.CenterHorizontally) {
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Cream)
-                        .padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        .padding(vertical = 12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                             .padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
                                 modifier = Modifier.semantics { heading() })
                             ShareRatioChoices(draft.ratio, editable) { onDraft(draft.copy(ratio = it)) }
+                            Text("스타일", style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.semantics { heading() })
+                            ShareStyleChoices(draft.style, editable) { onDraft(draft.copy(style = it)) }
+                            ShareToolTabs(tool, !busy, onTool)
                         }
                         Spacer(Modifier.height(16.dp))
                         Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
@@ -335,17 +338,10 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                         if (!photoPresent) {
                             Spacer(Modifier.height(16.dp))
                             Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                                .padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                .padding(horizontal = pageGutter())) {
                                 SharePhotoButton(false, editable, onPickPhoto)
-                                Text("사진을 넣으면 화면 전체에 채워요. 사진 없이 기록만 공유할 수도 있어요.",
-                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                             }
                         }
-                    }
-                    Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                        .background(RunmoniColors.Paper)
-                        .padding(horizontal = pageGutter(), vertical = 8.dp)) {
-                        ShareToolTabs(tool, !busy, onTool)
                     }
                     HorizontalDivider(color = RunmoniColors.Line)
                     // One flat property area follows the selected tool. Preview,
@@ -385,9 +381,6 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                 }
                             }
                             1 -> {
-                                Text("스타일", style = MaterialTheme.typography.titleSmall,
-                                    modifier = Modifier.semantics { heading() })
-                                ShareStyleChoices(draft.style, editable) { onDraft(draft.copy(style = it)) }
                                 Text("글씨", style = MaterialTheme.typography.titleSmall,
                                     modifier = Modifier.semantics { heading() })
                                 ShareToneChoices(draft.textTone, editable) { onDraft(draft.copy(textTone = it)) }
@@ -445,33 +438,22 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
     }
 }
 
-/** A single tool strip: the icon identifies what moves, the caption names its controls. */
 @Composable
 private fun ShareToolTabs(tool: Int, enabled: Boolean, onTool: (Int) -> Unit) {
     val labels = listOf("사진", "기록", "미니미")
-    val descriptions = listOf("구도·확대", "글씨·배치", "크기·위치")
     val icons = listOf(Icons.Outlined.Image, Icons.Outlined.TextFields, Icons.Outlined.DirectionsRun)
     Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).selectableGroup()
         .testTag("run_share_tools"), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         labels.forEachIndexed { index, label ->
             val selected = tool == index
             val color = if (selected) RunmoniColors.Primary else RunmoniColors.Muted
-            Column(Modifier.widthIn(min = 80.dp).width(IntrinsicSize.Max).heightIn(min = 48.dp)
+            Row(Modifier.heightIn(min = 48.dp)
+                .background(if (selected) RunmoniColors.PrimarySoft else Color.Transparent, RunmoniShapes.Action)
                 .selectable(selected, enabled, Role.Tab) { onTool(index) }
-                .testTag("run_share_tool_$index"), horizontalAlignment = Alignment.CenterHorizontally) {
-                Column(Modifier.padding(horizontal = 12.dp, vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Icon(icons[index], null, Modifier.size(22.dp), tint = color)
-                        Text(label, style = MaterialTheme.typography.titleSmall, color = color)
-                    }
-                    Text(descriptions[index], style = MaterialTheme.typography.bodySmall,
-                        color = RunmoniColors.Muted)
-                }
-                Box(Modifier.fillMaxWidth().height(3.dp)
-                    .background(if (selected) RunmoniColors.Primary else Color.Transparent))
+                .testTag("run_share_tool_$index").padding(horizontal = 10.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(icons[index], null, Modifier.size(20.dp), tint = color)
+                Text(label, style = MaterialTheme.typography.titleSmall, color = color)
             }
         }
     }
@@ -511,76 +493,22 @@ private fun ShareRatioChoices(selected: RunShareRatio, enabled: Boolean, onSelec
     }
 }
 
-/** These diagrams explain a style's hierarchy; no example distance or time is invented. */
 @Composable
+@OptIn(ExperimentalLayoutApi::class)
 private fun ShareStyleChoices(selected: RunShareStyle, enabled: Boolean, onSelect: (RunShareStyle) -> Unit) {
-    BoxWithConstraints(Modifier.fillMaxWidth().selectableGroup().testTag("run_share_style_choices")) {
-        val vertical = maxWidth < 340.dp || LocalDensity.current.fontScale >= 1.3f
-        if (vertical) Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            RunShareStyle.entries.forEachIndexed { index, style ->
-                ShareStyleOption(style, index, selected == style, enabled, compact = true,
-                    modifier = Modifier.fillMaxWidth()) { onSelect(style) }
-            }
-        } else Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            RunShareStyle.entries.forEachIndexed { index, style ->
-                ShareStyleOption(style, index, selected == style, enabled, compact = false,
-                    modifier = Modifier.weight(1f)) { onSelect(style) }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ShareStyleOption(style: RunShareStyle, index: Int, selected: Boolean, enabled: Boolean,
-    compact: Boolean, modifier: Modifier, onSelect: () -> Unit) {
-    val detail = when (style) {
-        RunShareStyle.CLEAN -> "사진을 넓게"
-        RunShareStyle.RECORD -> "거리를 크게"
-        RunShareStyle.STAMP -> "기록을 모아서"
-    }
-    val surface = if (selected) RunmoniColors.PrimarySoft else RunmoniColors.Paper
-    val outline = if (selected) RunmoniColors.Primary else RunmoniColors.Line
-    val option = modifier.heightIn(min = 48.dp).background(surface, RunmoniShapes.Action)
-        .border(if (selected) 2.dp else 1.dp, outline, RunmoniShapes.Action)
-        .selectable(selected, enabled, Role.RadioButton, onSelect)
-        .testTag("run_share_style_$index").padding(12.dp)
-    if (compact) Row(option, verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-        ShareStyleDiagram(style, Modifier.width(60.dp).height(52.dp))
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(style.label, style = MaterialTheme.typography.titleSmall)
-            Text(detail, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-        }
-        if (selected) Icon(Icons.Outlined.Check, null, Modifier.size(20.dp), tint = RunmoniColors.Primary)
-    } else Column(option, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        ShareStyleDiagram(style, Modifier.fillMaxWidth().height(64.dp))
-        Text(style.label, style = MaterialTheme.typography.titleSmall)
-        Text(detail, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-        Box(Modifier.height(20.dp)) {
-            if (selected) Icon(Icons.Outlined.Check, null, Modifier.size(20.dp), tint = RunmoniColors.Primary)
-        }
-    }
-}
-
-@Composable
-private fun ShareStyleDiagram(style: RunShareStyle, modifier: Modifier) {
-    val ink = RunmoniColors.Primary
-    val wash = RunmoniColors.SecondaryMint
-    Canvas(modifier.clearAndSetSemantics { }) {
-        val x = size.width * .14f
-        val w = size.width * .72f
-        drawRect(wash, Offset.Zero, size)
-        fun line(y: Float, width: Float, thickness: Float) = drawLine(ink,
-            Offset(x, size.height * y), Offset(x + w * width, size.height * y),
-            strokeWidth = thickness.dp.toPx(), cap = StrokeCap.Square)
-        when (style) {
-            RunShareStyle.CLEAN -> { line(.64f, .68f, 3f); line(.80f, 1f, 1f) }
-            RunShareStyle.RECORD -> { line(.43f, 1f, 7f); line(.68f, .58f, 2f); line(.84f, .85f, 1f) }
-            RunShareStyle.STAMP -> {
-                drawRect(ink, Offset(x - 3.dp.toPx(), size.height * .28f),
-                    androidx.compose.ui.geometry.Size(w + 6.dp.toPx(), size.height * .58f),
-                    style = Stroke(1.dp.toPx()))
-                line(.44f, .65f, 3f); line(.62f, .9f, 1f); line(.75f, .7f, 1f)
+    FlowRow(Modifier.fillMaxWidth().selectableGroup().testTag("run_share_style_choices"),
+        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        RunShareStyle.entries.forEachIndexed { index, style ->
+            val active = selected == style
+            val surface = if (active) RunmoniColors.PrimarySoft else RunmoniColors.Paper
+            val outline = if (active) RunmoniColors.Primary else RunmoniColors.Line
+            Row(Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
+                .background(surface, RunmoniShapes.Action)
+                .border(if (active) 2.dp else 1.dp, outline, RunmoniShapes.Action)
+                .selectable(active, enabled, Role.RadioButton) { onSelect(style) }
+                .testTag("run_share_style_$index").padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Text(style.label, style = MaterialTheme.typography.bodyMedium)
             }
         }
     }

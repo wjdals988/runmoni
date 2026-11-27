@@ -6,16 +6,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -25,10 +27,14 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.runmoni.app.domain.*
 import kotlinx.coroutines.delay
 
+private enum class DiscoveryPanel { LOCATION, RUNNERS }
+
 @Composable
 internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfile: () -> Unit) {
     val owner = LocalLifecycleOwner.current
     var clock by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var panel by rememberSaveable { mutableStateOf<DiscoveryPanel?>(null) }
+    var showRunners by rememberSaveable { mutableStateOf(false) }
     DisposableEffect(owner, actions) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) actions.setDiscoveryVisible(true)
@@ -41,7 +47,7 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
     LaunchedEffect(owner) {
         while (true) { if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) clock = System.currentTimeMillis(); delay(1000) }
     }
-    val publicRunners = if (state.signedIn && state.communityUid.isNotBlank()) state.liveRunners.filter {
+    val publicRunners = if (showRunners && state.signedIn && state.communityUid.isNotBlank()) state.liveRunners.filter {
         it.id != state.communityUid && it.hasValidCoordinates() &&
             clock - it.updatedAtMillis in 0..RunnerPresencePolicy.MAX_MARKER_AGE_MILLIS
     } else emptyList()
@@ -51,52 +57,22 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
     }
     val center = state.discoveryCenter ?: own?.let { RouteMapCenter(it.latitude, it.longitude) }
     BoxWithConstraints(Modifier.fillMaxSize().testTag("runner_discovery")) {
-        // Reserve usable map/attribution space as the region, status and actions
-        // grow. A weighted map can otherwise collapse to a few pixels at 1.5x.
-        val constrained = maxHeight < 520.dp || LocalDensity.current.fontScale >= 1.3f
-        // Large type expands the attribution and independent map/location
-        // status. Keep the map usable; the enclosing column remains scrollable.
-        val mapHeight = if (LocalDensity.current.fontScale >= 1.8f) 360.dp else 280.dp
+        val fontScale = LocalDensity.current.fontScale
+        val constrained = maxHeight < 560.dp || fontScale >= 1.3f || (panel != null && maxHeight < 640.dp)
+        val mapHeight = if (fontScale >= 1.8f) 360.dp else 280.dp
         Column(Modifier.fillMaxSize().then(if (constrained) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-            .padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            Row(Modifier.fillMaxWidth().padding(horizontal = pageGutter(), vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("근처 러너", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
-                    CurrentAreaLabel(state.currentArea, clock)
-                }
-            }
+            .padding(vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Text("탐색", style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(horizontal = pageGutter()).semantics { heading() })
             MapPane(emptyList(), publicRunners + listOfNotNull(own),
                 modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(mapHeight) else Modifier.weight(1f)),
                 interactiveMap = true, followCenter = center, onBoundsChanged = actions::setDiscoveryBounds)
-            val status = when {
-                !state.signedIn -> "지도는 둘러볼 수 있어요. 러너를 보려면 프로필을 연결해 주세요."
-                state.discovery.error != null -> state.discovery.error
-                state.discovery.requiresZoom -> "지도를 확대하면 근처 러너를 확인할 수 있어요."
-                state.discovery.checkedAtMillis == null -> "보고 있는 지역의 위치 공유를 확인해요."
-                state.discovery.partial -> "일부 러너를 표시했어요. 지도를 더 확대해 보세요."
-                publicRunners.isEmpty() -> "이 화면에 표시할 공유 위치가 없어요."
-                else -> "위치를 공유한 러너 ${publicRunners.size}명 · 약 100m 단위"
-            }
             Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
-                .padding(horizontal = pageGutter(), vertical = 20.dp).testTag("runner_discovery_details"),
-                verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                if (state.discovery.loading) LinearProgressIndicator(Modifier.fillMaxWidth())
-                if (LocalDensity.current.fontScale >= 1.3f) {
-                    Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
-                        color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
-                        modifier = Modifier.fillMaxWidth().testTag("runner_discovery_status"))
-                    RunnerRefreshAction(state.signedIn && !state.discovery.loading, actions::refreshRunners,
-                        Modifier.align(Alignment.End))
-                } else Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(status.orEmpty(), style = MaterialTheme.typography.bodyMedium,
-                        color = if (state.discovery.error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
-                        modifier = Modifier.weight(1f).testTag("runner_discovery_status"))
-                    RunnerRefreshAction(state.signedIn && !state.discovery.loading, actions::refreshRunners)
-                }
+                .padding(horizontal = pageGutter(), vertical = 12.dp).testTag("runner_discovery_details"),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 AdaptiveActions(first = { m ->
-                    FilledTonalButton(onClick = actions::locateExplore, shape = RunmoniShapes.Action,
+                    FilledTonalButton(onClick = { panel = DiscoveryPanel.LOCATION; actions.locateExplore() },
+                        shape = RunmoniShapes.Action,
                         colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash,
                             contentColor = RunmoniColors.RouteBlue),
                         modifier = m.heightIn(min = 48.dp).testTag("locate_explore")) {
@@ -105,13 +81,38 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                         Text("내 위치")
                     }
                 }, second = { m ->
-                    OutlinedButton(onClick = { if (!state.signedIn) onProfile() else actions.setPublicLocation(!(state.sharingPreferenceEnabled || state.publicLocation)) },
-                        enabled = !state.sharing.busy,
+                    OutlinedButton(onClick = {
+                        panel = DiscoveryPanel.RUNNERS
+                        showRunners = true
+                        if (state.signedIn && !state.discovery.loading) actions.refreshRunners()
+                    }, enabled = panel != DiscoveryPanel.RUNNERS || !state.signedIn || !state.discovery.loading,
                         shape = RunmoniShapes.Action,
-                        modifier = m.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
-                        Text(if (!state.signedIn) "프로필 연결" else if (state.sharing.busy) "연결 중…" else if (state.sharingPreferenceEnabled || state.publicLocation) "공유 설정 끄기" else "러닝 위치 공유 설정")
+                        modifier = m.heightIn(min = 48.dp).testTag("refresh_runners")) {
+                        Icon(Icons.Outlined.Groups, null, Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(if (state.signedIn && panel == DiscoveryPanel.RUNNERS) "러너 새로고침" else "러너 보기")
                     }
                 })
+                when (panel) {
+                    DiscoveryPanel.LOCATION -> CurrentAreaLabel(state.currentArea, clock,
+                        Modifier.semantics { liveRegion = LiveRegionMode.Polite })
+                    DiscoveryPanel.RUNNERS -> RunnerDiscoveryStatus(state, publicRunners.size)
+                    null -> Unit
+                }
+                if (state.signedIn || panel == DiscoveryPanel.RUNNERS) TextButton(
+                    onClick = {
+                        if (state.signedIn) actions.setPublicLocation(!(state.sharingPreferenceEnabled || state.publicLocation))
+                        else onProfile()
+                    }, enabled = !state.sharing.busy, shape = RunmoniShapes.Action,
+                    contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
+                    Text(when {
+                        !state.signedIn -> "프로필 연결"
+                        state.sharing.busy -> "연결 중…"
+                        state.sharingPreferenceEnabled || state.publicLocation -> "공유 설정 끄기"
+                        else -> "러닝 위치 공유 설정"
+                    })
+                }
                 if (state.sharingPreferenceEnabled && !state.publicLocation) Text(
                     "공유 준비됨 · 러닝을 시작하면 약 100m 단위 위치를 공유해요.",
                     style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary,
@@ -123,13 +124,21 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
 }
 
 @Composable
-private fun RunnerRefreshAction(enabled: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    TextButton(onClick = onClick, enabled = enabled,
-        modifier = modifier.heightIn(min = 48.dp).testTag("refresh_runners")) {
-        Icon(Icons.Outlined.Refresh, null, Modifier.size(20.dp))
-        Spacer(Modifier.width(6.dp))
-        Text("새로고침")
+private fun RunnerDiscoveryStatus(state: AppState, runnerCount: Int) {
+    val error = state.discovery.error
+    val status = when {
+        !state.signedIn -> "위치를 공유한 러너를 보려면 프로필을 연결해 주세요."
+        error != null -> error
+        state.discovery.loading -> "근처 러너를 확인하고 있어요…"
+        state.discovery.requiresZoom -> "지도를 확대하면 근처 러너를 확인할 수 있어요."
+        state.discovery.checkedAtMillis == null -> "보고 있는 지역의 위치 공유를 확인해요."
+        state.discovery.partial -> "일부 러너를 표시했어요. 지도를 더 확대해 보세요."
+        runnerCount == 0 -> "이 화면에 표시할 공유 위치가 없어요."
+        else -> "위치를 공유한 러너 ${runnerCount}명 · 약 100m 단위"
     }
+    Text(status, style = MaterialTheme.typography.bodyMedium,
+        color = if (state.signedIn && error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
+        modifier = Modifier.fillMaxWidth().testTag("runner_discovery_status").semantics { liveRegion = LiveRegionMode.Polite })
 }
 
 @Composable

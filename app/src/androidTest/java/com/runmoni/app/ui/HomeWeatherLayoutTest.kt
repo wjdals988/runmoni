@@ -34,16 +34,19 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
             if (scale == 1f) {
                 compose.onNodeWithTag("home_avatar_conditions_row").assertExists()
                 compose.onNodeWithTag("home_avatar_conditions_stacked").assertDoesNotExist()
-                val weather = compose.onNodeWithTag("home_weather_summary").getUnclippedBoundsInRoot()
+                val weather = compose.onNodeWithTag("home_departure_weather").getUnclippedBoundsInRoot()
                 assertTrue("Avatar must precede weather at $width", avatar.right <= weather.left)
                 assertTrue("Avatar and weather must align at top at $width", abs(avatar.top.value - weather.top.value) <= 1f)
+                val action = compose.onNodeWithTag("home_start_run").getUnclippedBoundsInRoot()
+                assertTrue("Departure conditions precede the run action", weather.bottom <= action.top)
+                compose.onNodeWithTag("home_environment_score").assertExists()
                 if (width == 320) capture("home-weather-beside-320-fixture")
             } else {
                 compose.onNodeWithTag("home_avatar_conditions_row").assertDoesNotExist()
                 compose.onNodeWithTag("home_avatar_conditions_stacked").assertExists()
                 compose.onNodeWithTag("home_start_run").assertIsDisplayed()
                 val action = compose.onNodeWithTag("home_start_run").getUnclippedBoundsInRoot()
-                val weather = compose.onNodeWithTag("home_weather_summary").getUnclippedBoundsInRoot()
+                val weather = compose.onNodeWithTag("home_departure_weather").getUnclippedBoundsInRoot()
                 assertTrue("Large text weather must follow the primary action", weather.top >= action.bottom)
                 if (width == 320 && scale == 2f) capture("home-weather-stacked-320-font2-fixture")
             }

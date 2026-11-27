@@ -177,6 +177,7 @@ class RunmoniUiTest {
         compose.setContent { RunmoniApp(state.value, actions) }
         compose.onNodeWithTag("nav_explore").performClick()
         compose.onNodeWithTag("runner_discovery").assertIsDisplayed()
+        compose.onNodeWithTag("refresh_runners").performClick()
         compose.onNodeWithTag("toggle_runner_sharing").assertIsEnabled().performClick()
         compose.onNodeWithTag("profile_name").assertIsDisplayed()
         compose.onNodeWithTag("confirm_runner_sharing").assertDoesNotExist()
@@ -215,6 +216,7 @@ class RunmoniUiTest {
             discovery = RunnerDiscoveryUi(checkedAtMillis = System.currentTimeMillis())))
         compose.setContent { RunmoniApp(state.value, FakeActions(state)) }
         compose.onNodeWithTag("nav_explore").performClick()
+        compose.onNodeWithTag("refresh_runners").performClick()
         val now = System.currentTimeMillis()
         val rejected = listOf(
             LiveRunner("expired", "만료 러너", 37.5, 127.0, now - RunnerPresencePolicy.MAX_MARKER_AGE_MILLIS - 60_000),

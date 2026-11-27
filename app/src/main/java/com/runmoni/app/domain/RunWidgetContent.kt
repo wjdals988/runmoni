@@ -46,7 +46,7 @@ internal data class RunWidgetContent(
         fun from(snapshot: RunWidgetSnapshot?, live: Boolean): RunWidgetContent {
             val idle = snapshot == null || snapshot.runId.isBlank() || snapshot.phase == RunPhase.IDLE
             if (idle) return RunWidgetContent(
-                if (snapshot?.blocked == true || snapshot?.finishing == true) "러닝 저장 상태 확인" else "러닝 시작 준비",
+                if (snapshot?.blocked == true || snapshot?.finishing == true) "러닝 저장 상태 확인" else "러닝 대기",
                 "— km", "—", "현재 속도 —", null, false, false)
             requireNotNull(snapshot)
             val stale = !live || snapshot.phase == RunPhase.RECOVERY
