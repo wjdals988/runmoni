@@ -1,5 +1,9 @@
 # 0.10.0-dev 미니미 의상과 러닝 화면 · 2026-11-28 한국 시간
 
+기존 배포 키로 서명한 `0.10.0-dev/code34`를 한국 시간 01:19에 개발 프리뷰로 공개했다. APK 출처는 `c2c00c73bc852af0ff802126ab3d5648c0ebea90`이며 크기는 175,807,560바이트다. SHA-256은 `8423c1a4a55f88fe4fa3f035302e58ed455cea31eca231678ae7177b31cc20ca`다. 서명 CI의 JVM 267개와 릴리스 린트 오류 0개를 확인했다. [릴리스](https://github.com/wjdals988/runmoni/releases/tag/v0.10.0-dev) · [서명 CI](https://github.com/wjdals988/runmoni/actions/runs/46029745465)
+
+- 공개 APK 메타데이터를 업데이트 피드에 연결했다. 앱의 버전 판정에서 code33은 업데이트를 표시하고 code34는 최신 버전으로 판정했다. [업데이트 피드](updates/android.json)
+- API 29에서 착용 셀 240개, 원단 색상 셀 144개, 탐색·날씨 검사 26개를 확인했다. Python 서버 검사 47개가 통과했다. [앱 화면](docs/app-review/2026-11-28-studio-refresh/README.md)
 - Aseprite로 레이스·야간 도심·트레일 의상과 장비 15종을 제작했다. 남녀 각 8포즈의 착용 셀 240개와 원단 색상 셀 144개를 사용한다. 기존 옷장 ID와 보유 내역을 유지하며 새 의상은 무료로 착용할 수 있다. [피팅과 편집 원본](docs/design/avatars/atelier-v3/README.md)
 - 홈의 러닝 준비와 프로필 연결, 빈 주간 기록 안내, 주변 러너 표시 전환, 지도에서 내 위치 재중심화, 크루의 예정·지난 파티 확인을 개선했다.
 - `frontend-design`을 적용해 러닝 중과 기록 상세의 측정 패널, 미니미 피팅, 하단 탐색의 선택 표시, 공유 카드 미리보기를 다듬었다. [설계](DESIGN.md) · [릴리스 안내](docs/RELEASE_NOTES_0.10.0-dev.md)
