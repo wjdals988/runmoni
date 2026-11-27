@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.9.0-dev",
-    "versionCode": 32,
-    "fileName": "runmoni-0.9.0-dev.apk",
+    "version": "0.9.1-dev",
+    "versionCode": 33,
+    "fileName": "runmoni-0.9.1-dev.apk",
     "sizeBytes": 174915411,
-    "sha256": "2c8061338d9b25917d46b5dacec3fcc9bc7412c99429e96bbf20d1cb01d2c5ae",
+    "sha256": "89b2519d93ba387bdb6a596a19db9eeeb1d0bc52a8af499e83dca27e4fcec0da",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "3d48c39102f33c36828be224a22a3d95b1018c7e",
+    "sourceRevision": "4db9502b969542b44c3e8129ae620f72aba50782",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.9.0-dev/runmoni-0.9.0-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.9.0-dev",
-    "notes": "러닝 환경 지수·다크모드·새 꾸미기 아이템39종과 옷장·사진 공유·홈·기록·크루 UI를 개선한 실기기 검증 전 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.9.1-dev/runmoni-0.9.1-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.9.1-dev",
+    "notes": "위젯·홈 출발·옷장·기록 공유·러닝 결과·탐색과 크루 화면을 개편한 실기기 검증 전 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null
