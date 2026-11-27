@@ -159,7 +159,8 @@ private fun ClosetPreview(profile: Profile, actions: AppActions, playing: Boolea
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .padding(horizontal = pageGutter(), vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            ClosetAvatarStage(profile.avatar, playing, Modifier.width(height * 2f / 3f).height(height), onFrameRendered)
+            ClosetAvatarStage(profile.avatar, playing,
+                Modifier.width(height * 2f / 3f).height(height).align(Alignment.Top), onFrameRendered)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 ClosetFittedItem(profile.avatar, slot)
                 GenderSelector(profile, actions, Modifier.fillMaxWidth())
