@@ -1,6 +1,12 @@
-# 0.9.1-dev 개발 프리뷰 후보 · 2026-11-27
+# 0.9.1-dev 서명 개발 프리뷰 · 2026-11-28 한국 시간
 
-위젯, 홈 출발, 옷장 피팅, 기록 공유, 러닝 결과, 탐색·크루, 업데이트 알림 순으로 검토했다. 버전은 0.9.1-dev/code33이다. 서명 APK, 공개 다운로드, 업데이트 피드는 실제 확인 결과를 기록한다. [릴리스 안내](docs/RELEASE_NOTES_0.9.1-dev.md)
+위젯, 홈 출발, 옷장 피팅, 기록 공유, 러닝 결과, 탐색·크루, 업데이트 알림 순으로 반영했다. 기존 보관 키로 서명한 `0.9.1-dev/code33`을 실기기 검증 전 개발 프리뷰로 공개했다. 실제 빌드 출처는 `4db9502b969542b44c3e8129ae620f72aba50782`이고 APK는 174,915,411바이트다. SHA-256은 `89b2519d93ba387bdb6a596a19db9eeeb1d0bc52a8af499e83dca27e4fcec0da`이다. 서명 CI의 JVM 266개와 릴리스 린트 오류 0개를 확인했다. [릴리스 안내](docs/RELEASE_NOTES_0.9.1-dev.md) · [공개 APK](https://github.com/wjdals988/runmoni/releases/tag/v0.9.1-dev) · [서명 CI](https://github.com/wjdals988/runmoni/actions/runs/46020435380)
+
+서버 자산과 실제 메타데이터를 대조한 뒤 앱의 업데이트 피드를 code33에 연결한다. 앱의 버전 판정에 이 메타데이터를 넣어 code32에서는 새 버전을 표시하고 code33에서는 표시하지 않음을 확인했다. [업데이트 피드](updates/android.json)
+
+새 미니미 코디는 승인 원본 남녀 각각 세 포즈에 피팅했다. 확대, 이전과 비교, 96dp·64dp 크기, 아이템 조합을 확인할 수 있다. [Aseprite 시안과 편집 원본](docs/app-review/2026-11-27-outfit-fitting-v2/README.md)
+
+운영 대시보드의 필수 감사에서 기존 `picomatch` 의존성이 차단되고 수정 npm 버전이 확인되지 않아 대시보드 다운로드 갱신은 보류했다. [대시보드 검사](https://github.com/wjdals988/mydashboard/actions/runs/44235724792) · [보안 권고](https://github.com/advisories/GHSA-fc5q-39xc-vjpf)
 
 # 2026-11-27 러닝 위젯과 미니미 피팅 검토
 
