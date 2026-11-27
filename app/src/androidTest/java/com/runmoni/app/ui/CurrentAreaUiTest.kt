@@ -64,7 +64,7 @@ class CurrentAreaUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("home_attire_guidance").assertDoesNotExist()
         compose.runOnIdle {
             weather.value = RunningWeatherState(WeatherPhase.READY, snapshot(now).copy(forecastAtMillis = now - 2 * 60 * 60_000L),
-                area = area(now - 16 * 60_000L))
+                area = area(now))
         }
         compose.onNodeWithTag("home_current_area").assertTextEquals("예보 위치 · " + region + " 부근")
         compose.onNodeWithTag("home_attire_guidance").assertDoesNotExist()

@@ -11,6 +11,8 @@ APPENDED = {"hair": range(4, 7), "headwear": range(4, 7), "face": range(4, 7),
             "socks": range(5, 8), "shoes": range(5, 8), "ear": range(4, 7),
             "eyewear": range(4, 7), "wrist": range(4, 7), "waist": range(4, 7),
             "hydration": range(4, 7)}
+STUDIO = {"headwear": range(7, 10), "top": range(10, 13), "bottom": range(9, 12),
+          "shoes": range(8, 11), "hydration": range(7, 8), "waist": range(7, 8), "eyewear": range(7, 8)}
 
 
 def own(app, user, items):
@@ -22,7 +24,7 @@ def test_catalogue_and_unclaimed_equipment_rejection_are_atomic(pilot):
     _, client, _, account = pilot
     _, h = account("꾸미기 카탈로그")
     items = client.get("/v1/shop/items", headers=h).json()["items"]
-    assert len(items) == 104
+    assert len(items) == 119
     assert {"top:4", "bottom:4", "socks:2", "costume:5", "headwear:1", "ear:1", "top:6", "socks:4", "shoes:4"} <= {i["id"] for i in items}
     # Original catalogue response prefix remains byte-for-byte in identity/order.
     old_slots = ["hair", "top", "bottom", "shoes", "accessory", "eyewear", "wrist", "waist", "hydration",
@@ -35,8 +37,9 @@ def test_catalogue_and_unclaimed_equipment_rejection_are_atomic(pilot):
     # UTF-8 names, cost, values and order must serialize to the same exact bytes.
     prefix_bytes = json.dumps(items[:65], ensure_ascii=False, separators=(",", ":")).encode()
     assert hashlib.sha256(prefix_bytes).hexdigest() == "8390e7027fdfaced7dddc34785634b98381d8febfbae87f2213d30c3de29ffa0"
-    assert [item["id"] for item in items[65:]] == [f"{slot}:{value}" for slot, values in APPENDED.items() for value in values]
-    assert len({item["id"] for item in items}) == 104
+    assert [item["id"] for item in items[65:104]] == [f"{slot}:{value}" for slot, values in APPENDED.items() for value in values]
+    assert [item["id"] for item in items[104:]] == [f"{slot}:{value}" for slot, values in STUDIO.items() for value in values]
+    assert len({item["id"] for item in items}) == 119
     original = client.get("/v1/me", headers=h).json()
     assert client.patch("/v1/me", headers=h, json={"avatar": {"top": 0, "wrist": 1}}).status_code == 403
     assert client.get("/v1/me", headers=h).json() == original
@@ -114,7 +117,7 @@ def test_all_test_items_are_free_and_claims_preserve_existing_mileage(pilot):
     before = client.get("/v1/me", headers=h).json()
     assert before["mileage"] == 777
     items = client.get("/v1/shop/items", headers=h).json()["items"]
-    assert len(items) == 104 and all(item["cost"] == 0 for item in items)
+    assert len(items) == 119 and all(item["cost"] == 0 for item in items)
     for item in items:
         first = client.post("/v1/shop/purchase", headers=h, json={"item_id": item["id"]})
         assert first.status_code == 200, first.text
@@ -125,6 +128,13 @@ def test_all_test_items_are_free_and_claims_preserve_existing_mileage(pilot):
     after = client.get("/v1/me", headers=h).json()
     assert set(before["owned_items"]) <= set(after["owned_items"])
     assert {item["id"] for item in items} <= set(after["owned_items"])
+    outfit = {slot: variants.stop - 1 for slot, variants in STUDIO.items()}
+    equipped = client.patch("/v1/me", headers=h, json={"avatar": {**outfit, "gender": "female"}})
+    assert equipped.status_code == 200, equipped.text
+    saved = client.get("/v1/me", headers=h).json()
+    assert {slot: saved["avatar"][slot] for slot in outfit} == outfit
+    assert saved["avatar"]["gender"] == "female"
+    assert saved["mileage"] == 777
 
 
 def test_appended_materials_claim_and_patch_without_resetting_old_ids_gender_or_balance(pilot):
@@ -158,7 +168,7 @@ def test_appended_materials_claim_and_patch_without_resetting_old_ids_gender_or_
     assert after["mileage"] == 777
     old_client = client.patch("/v1/me", headers=h, json={"avatar": {"hair": 0}})
     assert old_client.status_code == 200 and old_client.json() == after
-    for slot, invalid in [("top", 10), ("socks", 8), ("shoes", 8)]:
+    for slot, invalid in [("top", 13), ("socks", 8), ("shoes", 11)]:
         assert client.patch("/v1/me", headers=h, json={"avatar": {slot: invalid}}).status_code == 422
         assert client.get("/v1/me", headers=h).json() == after
 
@@ -230,7 +240,7 @@ def test_expanded_slot_boundaries_and_legacy_alias_limit_reject_without_profile_
     _, client, _, account = pilot
     _, h = account("경계 검토 러너")
     before = client.get("/v1/me", headers=h).json()
-    for slot, values in {**APPENDED, "accessory": range(1, 4)}.items():
+    for slot, values in {**APPENDED, **STUDIO, "accessory": range(1, 4)}.items():
         for invalid in [-1, values.stop, values.stop + 2**32, 1.5]:
             response = client.patch("/v1/me", headers=h, json={"avatar": {slot: invalid}})
             assert response.status_code == 422, (slot, invalid, response.text)

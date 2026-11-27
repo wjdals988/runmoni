@@ -42,6 +42,13 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.10.0-dev", "2026-11-28", "미니미 의상과 러닝 화면 개편 · 개발 프리뷰", listOf(
+        "레이스·야간 도심·트레일 의상과 장비 15종을 내 미니미에 입혀요.",
+        "옷장에서 고른 아이템을 보고 상의·하의·신발 원단의 색을 바꿔요.",
+        "출발 전에 준비할 내용을 확인하고, 달리는 중과 기록에서 거리를 빠르게 읽어요.",
+        "탐색 지도에서 내 위치로 돌아오고, 러너 보기를 선택할 때 주변 러너를 불러와요.",
+        "공유 카드의 미리보기에서 선택한 비율과 스타일을 바로 확인해요.",
+    )),
     AppVersionEntry("0.9.1-dev", "2026-11-27", "러닝 위젯·출발·옷장 개편 · 실기기 검증 전", listOf(
         "위젯에서 러닝을 열고 진행 중인 기록을 일시정지하거나 재개해요.",
         "출발 전에 미니미 옆에서 러닝 환경을 확인해요.",

@@ -1,3 +1,9 @@
+# 0.10.0-dev 미니미 의상과 러닝 화면 · 2026-11-28 한국 시간
+
+- Aseprite로 레이스·야간 도심·트레일 의상과 장비 15종을 제작했다. 남녀 각 8포즈의 착용 셀 240개와 원단 색상 셀 144개를 사용한다. 기존 옷장 ID와 보유 내역을 유지하며 새 의상은 무료로 착용할 수 있다. [피팅과 편집 원본](docs/design/avatars/atelier-v3/README.md)
+- 홈의 러닝 준비와 프로필 연결, 빈 주간 기록 안내, 주변 러너 표시 전환, 지도에서 내 위치 재중심화, 크루의 예정·지난 파티 확인을 개선했다.
+- `frontend-design`을 적용해 러닝 중과 기록 상세의 측정 패널, 미니미 피팅, 하단 탐색의 선택 표시, 공유 카드 미리보기를 다듬었다. [설계](DESIGN.md) · [릴리스 안내](docs/RELEASE_NOTES_0.10.0-dev.md)
+
 # 0.9.1-dev 서명 개발 프리뷰 · 2026-11-28 한국 시간
 
 위젯, 홈 출발, 옷장 피팅, 기록 공유, 러닝 결과, 탐색·크루, 업데이트 알림 순으로 반영했다. 기존 보관 키로 서명한 `0.9.1-dev/code33`을 실기기 검증 전 개발 프리뷰로 공개했다. 실제 빌드 출처는 `4db9502b969542b44c3e8129ae620f72aba50782`이고 APK는 174,915,411바이트다. SHA-256은 `89b2519d93ba387bdb6a596a19db9eeeb1d0bc52a8af499e83dca27e4fcec0da`이다. 서명 CI의 JVM 266개와 릴리스 린트 오류 0개를 확인했다. [릴리스 안내](docs/RELEASE_NOTES_0.9.1-dev.md) · [공개 APK](https://github.com/wjdals988/runmoni/releases/tag/v0.9.1-dev) · [서명 CI](https://github.com/wjdals988/runmoni/actions/runs/46020435380)

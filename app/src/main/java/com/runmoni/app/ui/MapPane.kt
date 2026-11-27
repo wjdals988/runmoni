@@ -10,19 +10,26 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 
+internal class MapRecenterRequest(val center: RouteMapCenter)
+
 @Composable
 internal fun MapPane(
     points: List<TrackPoint>, runners: List<LiveRunner> = emptyList(), modifier: Modifier = Modifier,
     fitRoute: Boolean = false, interactiveMap: Boolean = false, followCenter: RouteMapCenter? = null,
     onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
+    recenterRequest: MapRecenterRequest? = null,
 ) {
     val validRunners = remember(runners) { runners.filter { it.hasValidCoordinates() } }
     val hasRoute = remember(points) { RouteGeometry.from(points).points.isNotEmpty() }
+    var appliedRecenter by remember { mutableStateOf<MapRecenterRequest?>(null) }
+    val pendingRecenter = recenterRequest?.takeUnless { it === appliedRecenter }
+    val onRecenterApplied: (MapRecenterRequest) -> Unit = { appliedRecenter = it }
     // Existing offline tests must never instantiate a networked native provider.
     // A record without a position also stays empty rather than inventing a map fix.
     if (LocalMapTileSource.current != null ||
         (!interactiveMap && !hasRoute && validRunners.isEmpty() && followCenter?.valid() != true)) {
-        RouteTileMap(points, validRunners, modifier, fitRoute, interactiveMap, followCenter, onBoundsChanged)
+        RouteTileMap(points, validRunners, modifier, fitRoute, interactiveMap, followCenter,
+            onBoundsChanged, pendingRecenter, onRecenterApplied)
         return
     }
     var failure by remember { mutableStateOf<VectorMapFailure?>(null) }
@@ -31,7 +38,8 @@ internal fun MapPane(
     if (failure == null) {
         key(attempt) {
             MapLibreMapPane(points, validRunners, modifier, fitRoute, interactiveMap, followCenter,
-                onBoundsChanged, savedCamera, onCameraSaved = { savedCamera = it }, onFailure = { failure = it })
+                onBoundsChanged, savedCamera, onCameraSaved = { savedCamera = it }, onFailure = { failure = it },
+                recenterRequest = pendingRecenter, onRecenterApplied = onRecenterApplied)
         }
     } else {
         Column(modifier) {
@@ -43,7 +51,7 @@ internal fun MapPane(
             // This is the actual raster fallback, with its own loading/error and
             // attribution. It is never reported as a rendered vector basemap.
             RouteTileMap(points, validRunners, Modifier.fillMaxWidth().weight(1f), fitRoute, interactiveMap,
-                savedCamera ?: followCenter, onBoundsChanged)
+                savedCamera ?: followCenter, onBoundsChanged, pendingRecenter, onRecenterApplied)
         }
     }
 }

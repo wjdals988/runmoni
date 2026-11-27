@@ -14,6 +14,25 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
     private fun snapshot(now: Long = System.currentTimeMillis()) = RunningWeatherSnapshot(
         WeatherLocation(3757, 12698), now, now, now, 7.0, 7.2, 3.6, WeatherCondition.RAIN)
 
+    @Test fun emptyRecentActivityKeepsTheRunPreparationAndFirstWeekReadable() {
+        val state = mutableStateOf(AppState())
+        var preparationOpens = 0
+        compose.setContent { RunmoniTheme { ViewportBox(Viewport(320, 2f)) {
+            HomeScreen(state.value, { preparationOpens++ }, {}, {})
+        } } }
+        compose.onNodeWithTag("home_start_run").assertTextContains("러닝 준비").performScrollTo().performClick()
+        compose.onNodeWithTag("recent_run_activity_empty").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("recent_run_activity_rows").assertDoesNotExist()
+        compose.runOnIdle {
+            assertEquals(1, preparationOpens)
+            val now = System.currentTimeMillis()
+            state.value = state.value.copy(records = listOf(RunRecord("home-run", now, now + 300_000L,
+                distanceMeters = 1000.0, activeDurationMillis = 300_000L)))
+        }
+        compose.onNodeWithTag("recent_run_activity_empty").assertDoesNotExist()
+        compose.onNodeWithTag("recent_run_activity_rows").assertExists()
+    }
+
     @Test fun valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText() {
         val viewport = mutableStateOf(Viewport(320, 1f))
         val state = AppState(weather = RunningWeatherState(WeatherPhase.READY, snapshot()))

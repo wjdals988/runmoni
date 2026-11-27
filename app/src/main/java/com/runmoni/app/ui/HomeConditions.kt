@@ -180,7 +180,8 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
     Column(modifier.fillMaxWidth().testTag("home_weather_summary"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (snapshot != null) {
             val area = state.area
-            val areaTitle = if (state.phase == WeatherPhase.READY && area?.isRecent(nowMillis) == true) "현재 위치" else "예보 위치"
+            val currentForecast = state.phase == WeatherPhase.READY && snapshot.isCurrent(nowMillis)
+            val areaTitle = if (currentForecast && area?.isRecent(nowMillis) == true) "현재 위치" else "예보 위치"
             Text("$areaTitle · ${area?.name?.let { "$it 부근" } ?: snapshot.location.nearbyCoordinates()}",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                 modifier = Modifier.testTag("home_current_area"))
@@ -201,7 +202,7 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
             val forecast = Instant.ofEpochMilli(snapshot.forecastAtMillis).atZone(ZoneId.systemDefault())
             val today = Instant.ofEpochMilli(nowMillis).atZone(ZoneId.systemDefault()).toLocalDate()
             val format = DateTimeFormatter.ofPattern(if (forecast.toLocalDate() == today) "HH:mm" else "M/d HH:mm", Locale.KOREAN)
-            Text("${forecast.format(format)} 예보" + if (!snapshot.isCurrent(nowMillis)) " · 이전 정보" else "",
+            Text("${forecast.format(format)} 예보" + if (!currentForecast) " · 이전 정보" else "",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                 modifier = Modifier.testTag("home_weather_forecast"))
         } else WeatherStatus(state, nowMillis)

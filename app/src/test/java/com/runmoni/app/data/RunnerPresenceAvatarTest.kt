@@ -2,8 +2,11 @@ package com.runmoni.app.data
 
 import com.runmoni.app.domain.AvatarCatalogue
 import com.runmoni.app.domain.AvatarGender
+import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.RunningKitColors
+import com.runmoni.app.domain.StudioCollection
 import com.runmoni.app.domain.variantFor
+import com.runmoni.app.domain.withItem
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -20,12 +23,13 @@ class RunnerPresenceAvatarTest {
     }
 
     @Test fun everyCatalogueIdIncluding39AppendedItemsDecodesWithoutChangingItsSlot() {
-        assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(115, AvatarCatalogue.slots.sumOf { it.variants.size })
         assertEquals(AvatarCatalogue.slots.map { it.key }, appended.keys.toList())
         assertEquals(39, appended.values.sumOf { it.count() })
         appended.forEach { (slot, ids) ->
             assertEquals(3, ids.count())
-            assertEquals(ids.last + 1, AvatarCatalogue.slots.first { it.key == slot }.variants.size)
+            assertEquals(ids.last + 1 + StudioCollection.inSlot(slot).size,
+                AvatarCatalogue.slots.first { it.key == slot }.variants.size)
         }
         for (slot in AvatarCatalogue.slots) for (id in slot.variants.indices) {
             val decoded = RunnerPresenceRepository.decodeAvatar(wireAvatar() + (slot.key to id.toLong()))
@@ -33,6 +37,22 @@ class RunnerPresenceAvatarTest {
             for (other in AvatarCatalogue.slots)
                 assertEquals("${slot.key}:$id changed ${other.key}", if (other.key == slot.key) id else 0,
                     decoded!!.variantFor(other.key))
+        }
+    }
+
+    @Test fun newLocalItemsPublishCompatibleMarkersWithoutChangingOwnedSelections() {
+        val base = AvatarStyle(gender = AvatarGender.FEMALE, wrist = 6, runningKitColors = RunningKitColors(1, 2, 3))
+        assertEquals(15, StudioCollection.items.size)
+        for (item in StudioCollection.items) {
+            val style = base.withItem(item.slot, item.variant)
+            val wire = RunnerPresenceRepository.publicAvatar(style)
+            assertEquals(item.sharedVariant, wire[item.slot])
+            assertTrue(item.sharedVariant in 0..appended.getValue(item.slot).last)
+            assertEquals(6, wire["wrist"])
+            assertEquals("female", wire["gender"])
+            assertEquals(mapOf("top" to 1, "bottom" to 2, "shoes" to 3), wire["colors"])
+            assertEquals(item.variant, style.variantFor(item.slot))
+            assertFalse("${item.slot}:${item.variant}" in AvatarCatalogue.defaultOwned)
         }
     }
 

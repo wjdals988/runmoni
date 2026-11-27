@@ -21,7 +21,7 @@ def test_colors_preserve_existing_mileage_and_do_not_grant_or_require_items(pilo
         k: v for k, v in before["avatar"].items() if k != "runningKitColors"
     }
     items = client.get("/v1/shop/items", headers=h).json()["items"]
-    assert len(items) == 104 and all(not item["id"].startswith("runningKitColors:") for item in items)
+    assert len(items) == 119 and all(not item["id"].startswith("runningKitColors:") for item in items)
     rejected = client.patch("/v1/me", headers=h, json={"avatar": {"top": 4, "runningKitColors": {"top": 1}}})
     assert rejected.status_code == 403
     assert client.get("/v1/me", headers=h).json() == after

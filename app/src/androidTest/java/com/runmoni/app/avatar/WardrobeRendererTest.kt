@@ -12,14 +12,14 @@ class WardrobeRendererTest {
     private val context get() = InstrumentationRegistry.getInstrumentation().targetContext
     private fun pixels(image: Bitmap)=IntArray(image.width*image.height).also { image.getPixels(it,0,image.width,0,0,image.width,image.height) }
 
-    @Test fun everySelectableNonDefaultItemActuallyChangesEveryApprovedPose() {
+    @Test fun everyLegacySelectableNonDefaultItemActuallyChangesEveryApprovedPose() {
         val renderer=ApprovedAvatarRenderer(context)
         for(gender in AvatarGender.entries) for(frame in 0..7) {
             val base=AvatarStyle(gender=gender)
             val original=pixels(renderer.render(frame,true,base))
             val fabric=RunningKitArtwork.frameMask(context,gender.spriteRow,frame)
             for(slot in AvatarCatalogue.slots) for(variant in 1 until slot.variants.size) {
-                if(!AvatarArtwork.itemReady(slot.key,variant,gender)) continue
+                if(!AvatarArtwork.itemReady(slot.key,variant,gender) || StudioCollection.item(slot.key, variant) != null) continue
                 val style=base.withItem(slot.key,variant)
                 val actual=pixels(renderer.render(frame,true,style))
                 assertTrue("Unchanged selectable ${gender.wireValue}/$frame/${slot.key}:$variant", original.indices.count { original[it]!=actual[it] }>20)

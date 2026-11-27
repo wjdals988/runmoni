@@ -211,6 +211,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             },
             bottomBar = {
                 if (!communityDeep) Surface(color = RunmoniColors.Paper) {
+                    val selectedContainer = if (RunmoniColors.IsDark) RunmoniTrack.Stage else RunmoniTrack.Board
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
                         if (compactActiveRun) {
@@ -248,7 +249,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                         val item = if (labelsFit) Modifier.weight(1f) else Modifier.width(labelOnlyWidth)
                                         Row(item.fillMaxHeight()
                                             .clip(RunmoniShapes.Action)
-                                            .background(if (tab == index) RunmoniColors.PrimarySoft else Color.Transparent)
+                                            .background(if (tab == index) selectedContainer else Color.Transparent)
                                             .selectable(selected = tab == index, role = Role.Tab, onClick = {
                                                 if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
                                                 tab = index
@@ -257,12 +258,12 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.spacedBy(if (showIcons) 8.dp else 0.dp)) {
                                             if (showIcons) Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
-                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                                tint = if (tab == index) RunmoniTrack.Highlight else RunmoniColors.Muted)
                                             Text(label, style = navLabelStyle.copy(
                                                 fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium),
                                                 modifier = Modifier.weight(1f), maxLines = 1, softWrap = false,
                                                 textAlign = if (showIcons) TextAlign.Start else TextAlign.Center,
-                                                color = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                                color = if (tab == index) RunmoniTrack.OnBoard else RunmoniColors.Muted)
                                         }
                                     }
                                 }
@@ -287,9 +288,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                         verticalArrangement = Arrangement.Center) {
                                         Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
                                             if (tab == index) Box(Modifier.width(56.dp).height(36.dp)
-                                                .clip(RunmoniShapes.Action).background(RunmoniColors.PrimarySoft))
+                                                .clip(RunmoniShapes.Action).background(selectedContainer))
                                             Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
-                                                tint = if (tab == index) RunmoniColors.Primary else RunmoniColors.Muted)
+                                                tint = if (tab == index) RunmoniTrack.Highlight else RunmoniColors.Muted)
                                         }
                                         Spacer(Modifier.height(4.dp))
                                         Text(label, style = MaterialTheme.typography.labelMedium.copy(
@@ -308,7 +309,10 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 when (tab) {
                     0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onWeather = actions::refreshWeather, onWeatherEntry = actions::prepareHomeConditions, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { profileFromSettings = false; signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
-                    2 -> RunningScreen(state, actions, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onFinish = { finishRunId = state.activeRun.id })
+                    2 -> RunningScreen(state, actions,
+                        onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 },
+                        onProfile = { profileFromSettings = false; signIn = true },
+                        onFinish = { finishRunId = state.activeRun.id })
                     3 -> CommunityRoomsScreen(state, actions, crewNavigation, partyNavigation, communityNavigationEpoch,
                         onSubpageChanged = { communitySubpage = it })
                     4 -> ProfileScreen(state, actions, onRun = { tab = 2 }, onRecord = ::openRecord, onSettings = { settings = true }, updates = updates, onAppInformation = { appInformationFromSettings = false; appInformation = true }, onCloset = { closet = true }, onProfile = { profileFromSettings = false; signIn = true }, onMileageHelp = { mileageInformation = true })
@@ -373,7 +377,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
 }
 
 @Composable
-private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit, onFinish: () -> Unit) {
+private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
     val compactLive = run.phase != RunPhase.IDLE && LocalDensity.current.fontScale >= 1.3f
@@ -390,33 +394,38 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
             ScreenContent(spacing = if (compactLive) 16.dp else RunmoniLayout.PageGap, centerWhenFits = run.phase == RunPhase.IDLE) {
                 val statusHeader: @Composable () -> Unit = {
-                Text(if (persistence.finishing) "러닝 마무리 중"
-                    else if (persistence.issue == RunPersistenceIssue.CHECKPOINT) "기록 저장 확인 필요"
-                    else if (run.phase == RunPhase.IDLE) "오늘의 러닝" else when (run.phase) { RunPhase.PAUSED -> if (run.pauseReason == PauseReason.AUTOMATIC) "자동 일시정지 중" else "잠시 쉬는 중"; RunPhase.RECOVERY -> "러닝 이어가기"; else -> "러닝 기록 중" },
-                    style = if (compactLive) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
-                FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
-                    accuracy?.let { Text("정확도 ±${it.toInt()}m", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
-                }
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        val title = when {
+                            persistence.finishing -> "러닝 마무리 중"
+                            persistence.issue == RunPersistenceIssue.CHECKPOINT -> "기록 저장 확인 필요"
+                            run.phase == RunPhase.IDLE -> "러닝 준비"
+                            run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC -> "자동 일시정지 중"
+                            run.phase == RunPhase.PAUSED -> "잠시 쉬는 중"
+                            run.phase == RunPhase.RECOVERY -> "러닝 이어가기"
+                            else -> "러닝 기록 중"
+                        }
+                        Text(title, style = if (compactLive) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.semantics { heading() })
+                        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
+                            accuracy?.let { Text("정확도 ±${it.toInt()}m", modifier = Modifier.align(Alignment.CenterVertically),
+                                style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
+                        }
+                    }
                 }
                 if (!compactLive) statusHeader()
                 if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
-                            val details: @Composable (Modifier) -> Unit = { m ->
-                                Column(m, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    Text("달릴 준비", style = MaterialTheme.typography.headlineSmall)
-                                    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", style = MaterialTheme.typography.bodyLarge)
-                                }
-                            }
                             if (maxWidth < 280.dp || LocalDensity.current.fontScale >= 1.3f) {
                                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    details(Modifier.fillMaxWidth())
+                                    RunRecordingDescription()
                                     StudioAvatarStage(state.profile.avatar, Modifier.width(64.dp).height(96.dp))
                                 }
                             } else Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                                 StudioAvatarStage(state.profile.avatar, Modifier.width(88.dp).height(132.dp))
-                                details(Modifier.weight(1f))
+                                RunRecordingDescription(Modifier.weight(1f))
                             }
                         }
                         HorizontalDivider(color = RunmoniColors.Outline)
@@ -425,36 +434,33 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                             Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
                         }
                     }
-                } else Surface(shape = RunmoniShapes.Surface, color = RunmoniColors.Paper) {
-                    Column(Modifier.fillMaxWidth().padding(if (compactLive) 12.dp else 20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
-                        BoxWithConstraints(Modifier.fillMaxWidth()) {
-                            val showAvatar = maxWidth >= 280.dp && LocalDensity.current.fontScale < 1.3f
-                            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                    if (!compactLive) Text("달린 거리 (km)", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
-                                    DistanceNumber(distance(run.distanceMeters), RunmoniColors.Ink, Modifier.testTag("run_distance"))
-                                    if (compactLive) Text("달린 거리 (km)", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
-                                }
-                                if (showAvatar) AvatarMini(state.profile.avatar, Modifier.width(64.dp).height(96.dp)
-                                    .testTag("run_avatar"), running = run.phase == RunPhase.RUNNING, decorative = true)
+                } else RunningMetricPanel(contentPadding = PaddingValues(if (compactLive) 12.dp else 20.dp), spacing = 16.dp) {
+                    BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        val showAvatar = maxWidth >= 280.dp && LocalDensity.current.fontScale < 1.3f
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                if (!compactLive) Text("달린 거리 (km)", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
+                                DistanceNumber(distance(run.distanceMeters), RunmoniTrack.Highlight, Modifier.testTag("run_distance"))
+                                if (compactLive) Text("달린 거리 (km)", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
                             }
+                            if (showAvatar) AvatarMini(state.profile.avatar, Modifier.width(64.dp).height(96.dp)
+                                .testTag("run_avatar"), running = run.phase == RunPhase.RUNNING, decorative = true)
                         }
-                        HorizontalDivider(color = RunmoniColors.Line)
-                        MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"), UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = false)
-                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text("현재 속도", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodyMedium)
-                            Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
-                                color = RunmoniColors.Ink, style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.testTag("run_speed"))
-                        }
-                        Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km", color = RunmoniColors.Muted, style = MaterialTheme.typography.bodySmall)
                     }
+                    HorizontalDivider(color = RunmoniTrack.Detail.copy(alpha = .4f))
+                    MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"),
+                        UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = true)
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("현재 속도", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
+                        Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
+                            color = RunmoniTrack.OnBoard, style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
+                            modifier = Modifier.testTag("run_speed"))
+                    }
+                    Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km",
+                        color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum"))
                 }
                 if (compactLive) statusHeader()
-                if (run.phase == RunPhase.IDLE) ToggleRow("근처 러너에게 위치 공유",
-                    if (state.signedIn) "출발 전에 설정하세요. 러닝 중에만 약 100m 단위로 보여요."
-                    else "프로필을 연결한 뒤 미리 설정할 수 있어요.",
-                    state.sharingPreferenceEnabled || state.publicLocation, actions::setPublicLocation)
+                if (run.phase == RunPhase.IDLE) RunSharingPreparation(state, actions, onProfile)
                 if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
                 if (run.phase != RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
@@ -529,6 +535,34 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
             }
             }
         }
+}
+
+@Composable
+private fun RunRecordingDescription(modifier: Modifier = Modifier) {
+    Text("화면을 꺼도 거리·시간·GPS 경로 기록을 이어가요.", modifier = modifier,
+        style = MaterialTheme.typography.bodyLarge)
+}
+
+@Composable
+private fun RunSharingPreparation(state: AppState, actions: AppActions, onProfile: () -> Unit) {
+    val sharing = state.sharingPreferenceEnabled || state.publicLocation
+    val supported = state.communityBackend == CommunityBackend.FIREBASE
+    val canPrepare = supported && state.signedIn && state.communityUid.isNotBlank()
+    if (sharing || canPrepare) {
+        val description = if (canPrepare) "출발 전에 설정하세요. 러닝 중에만 약 100m 단위로 보여요."
+            else "이 기기에 저장된 위치 공유 설정을 끌 수 있어요."
+        ToggleRow("근처 러너에게 위치 공유", description,
+            sharing, actions::setPublicLocation, tag = "prepare_run_sharing")
+    } else if (supported) {
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("근처 러너에게 위치 공유", style = MaterialTheme.typography.titleMedium)
+            Text("프로필을 연결하면 출발 전에 공유를 설정할 수 있어요.",
+                style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            TextButton(onClick = onProfile, shape = RunmoniShapes.Action,
+                contentPadding = PaddingValues(vertical = 8.dp),
+                modifier = Modifier.heightIn(min = 48.dp).testTag("prepare_run_sharing_profile")) { Text("프로필 연결") }
+        }
+    }
 }
 
 @Composable

@@ -13,6 +13,29 @@ import org.junit.Test
 
 /** Real Compose inputs with local fake actions. Not a durable wallet or online profile test. */
 class ClosetAtelierUiTest : RunmoniDesignTestBase() {
+    @Test fun aNewShellAndSeparateVestCanBeWornTogether() {
+        val original = Profile(mileage = 876, avatar = AvatarStyle(gender = AvatarGender.FEMALE, shoes = 1, wrist = 1))
+        val state = mutableStateOf(AppState(profile = original))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { RunmoniTheme { ClosetDialog(state.value.profile, actions) {} } }
+        compose.onNodeWithTag("closet_animation").performClick()
+        compose.onNodeWithTag("closet_search").performScrollTo().performTextInput("나이트 방풍")
+        compose.onNodeWithTag("closet_top_11").performScrollTo().performClick().assertIsSelected()
+        compose.onNodeWithTag("closet_fitted_item").assertTextEquals("나이트 방풍 셸")
+        compose.onNodeWithTag("closet_slot_accessories").performScrollTo().performClick()
+        compose.onNodeWithTag("closet_slot_hydration").performScrollTo().performClick()
+        compose.onNodeWithTag("closet_search").performScrollTo().performTextInput("플라스크")
+        compose.onNodeWithTag("closet_hydration_7").performScrollTo().performClick().assertIsSelected()
+        compose.onNodeWithTag("closet_fitted_item").assertTextEquals("듀얼 플라스크 조끼")
+        compose.runOnIdle {
+            val profile = state.value.profile
+            assertEquals(original.avatar.copy(top = 11, hydration = 7), profile.avatar)
+            assertEquals(original.mileage, profile.mileage)
+            assertTrue(profile.ownedItems.containsAll(original.ownedItems + setOf("top:11", "hydration:7")))
+            assertTrue(actions.purchases.isEmpty())
+        }
+    }
+
     @Test fun partSearchFiltersRealNamesAndSelectingKeepsOtherEquipmentAndMileage() {
         val original = Profile(mileage = 876, avatar = AvatarStyle(shoes = 1, eyewear = 1))
         val state = mutableStateOf(AppState(profile = original))

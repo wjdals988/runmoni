@@ -39,17 +39,7 @@ internal object ExpandedAtelierArtwork {
                 hashes = f
             }
         }
-        fun read(name: String): IntArray {
-            val bytes = context.assets.open("$DIRECTORY/$name").use { it.readBytes() }
-            val digest = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
-            require(digest == files.getString(name)) { "Aseprite construction integrity check failed" }
-            val image = requireNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size,
-                BitmapFactory.Options().apply { inScaled = false }))
-            try {
-                require(image.width == 256 && image.height == 384)
-                return IntArray(ExpandedAtelierLayers.SIZE).also { image.getPixels(it,0,256,0,0,256,384) }
-            } finally { image.recycle() }
-        }
+        fun read(name: String) = readAtelierCel(context, DIRECTORY, name, files.getString(name))
         return Cel(read("$stem.png"), if (spec.tinted) read("$stem-tint.png") else null).also { cache.put(stem,it) }
     }
 
@@ -66,5 +56,21 @@ internal object ExpandedAtelierArtwork {
             out = ExpandedAtelierLayers.apply(out,cel.detail,cel.tint,allowance,foundation.runningKitColors)
         }
         return out
+    }
+}
+
+internal fun readAtelierCel(context: Context, directory: String, name: String, sha256: String): IntArray {
+    val bytes = context.assets.open("$directory/$name").use { it.readBytes() }
+    val digest = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
+    require(digest == sha256) { "Aseprite cel integrity check failed for $directory/$name" }
+    val image = requireNotNull(BitmapFactory.decodeByteArray(bytes, 0, bytes.size,
+        BitmapFactory.Options().apply { inScaled = false }))
+    try {
+        val width = ApprovedAvatarRenderer.WIDTH
+        val height = ApprovedAvatarRenderer.HEIGHT
+        require(image.width == width && image.height == height)
+        return IntArray(width * height).also { image.getPixels(it, 0, width, 0, 0, width, height) }
+    } finally {
+        image.recycle()
     }
 }

@@ -1,6 +1,7 @@
 package com.runmoni.app.ui
 
 import android.content.Context
+import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
@@ -13,14 +14,20 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
+import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.data.MapTileResult
 import com.runmoni.app.data.MapTileSource
 import com.runmoni.app.domain.VectorMapFailure
+import com.runmoni.app.domain.RouteMapCenter
 import org.junit.Assert.*
 import org.junit.Test
 import org.maplibre.android.maps.MapView
+import java.io.File
+import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.abs
 
 /** No public map requests. Missing asset style tests actual native SDK failure;
  * initialization injection and inert raster remain separate fixture evidence. */
@@ -61,6 +68,44 @@ class MapLibreMapPaneUiTest : RunmoniDesignTestBase() {
         // Readiness/failure observation budget on software GL, not a load-time SLA.
         compose.waitUntil(30_000) { failure.value != null }
         compose.runOnIdle { assertEquals(VectorMapFailure.STYLE, failure.value) }
+    }
+
+    @Test fun explicitLocationRequestRecentersTheNativeCameraAfterManualBrowsing() {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val style = File.createTempFile("runmoni-local-style", ".json", context.cacheDir).apply {
+            writeText("""{"version":8,"sources":{},"layers":[{"id":"background","type":"background"}]}""")
+        }
+        val center = RouteMapCenter(37.57, 126.98)
+        val request = mutableStateOf<MapRecenterRequest?>(null)
+        val open = mutableStateOf(true)
+        val failure = AtomicReference<VectorMapFailure?>()
+        val camera = AtomicReference<RouteMapCenter?>()
+        fun atFix() = camera.get()?.let { abs(it.latitude - center.latitude) < .0001 &&
+            abs(it.longitude - center.longitude) < .0001 } == true
+        fun awaitCamera(condition: () -> Boolean) {
+            compose.waitUntil(30_000) { assertNull(failure.get()); condition() }
+        }
+        try {
+            compose.setContent { if (open.value) RunmoniTheme {
+                MapLibreMapPane(emptyList(), emptyList(), Modifier.fillMaxWidth().height(320.dp),
+                    interactiveMap = true, followCenter = center, onCameraSaved = { camera.set(it) },
+                    onFailure = { failure.set(it) }, styleUri = Uri.fromFile(style).toString(), recenterRequest = request.value,
+                    onRecenterApplied = { if (request.value === it) request.value = null })
+            } }
+            awaitCamera { atFix() }
+            repeat(2) {
+                val pan = compose.onNodeWithTag("vector_map_viewport").fetchSemanticsNode()
+                    .config[SemanticsActions.CustomActions].single { it.label == "동쪽으로 이동" }
+                compose.runOnIdle { assertTrue(pan.action()) }
+                awaitCamera { !atFix() }
+                compose.runOnIdle { request.value = MapRecenterRequest(center) }
+                awaitCamera { atFix() }
+            }
+        } finally {
+            compose.runOnIdle { open.value = false }
+            compose.waitForIdle()
+            style.delete()
+        }
     }
 
     /** Actual Compose measurement only: intentionally no MapView/GL/provider.

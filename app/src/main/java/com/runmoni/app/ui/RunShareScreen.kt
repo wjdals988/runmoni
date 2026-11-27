@@ -289,7 +289,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
             BoxWithConstraints(Modifier.fillMaxWidth().weight(1f)) {
                 val small = scrollFooter || LocalDensity.current.fontScale >= 1.3f || maxHeight < 500.dp
                 val previewHeight = if (small) 200.dp else minOf(maxHeight * .46f, 330.dp)
-                val previewWidth = minOf(maxWidth - pageGutter() * 2, previewHeight * draft.ratio.aspectRatio)
+                val previewWidth = minOf((maxWidth - pageGutter() * 2).coerceAtLeast(1.dp), previewHeight * draft.ratio.aspectRatio)
                 // Keep one scroll owner when IME/viewport changes. The focused field stays
                 // inside this same viewport instead of transferring its ScrollState to a parent.
                 Column(Modifier.fillMaxSize().verticalScroll(scroll),
@@ -307,24 +307,28 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                             ShareToolTabs(tool, !busy, onTool)
                         }
                         Spacer(Modifier.height(16.dp))
-                        Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
-                            .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Line)
-                            .testTag("run_share_preview")
-                            .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
-                                if (editable && (tool == 0 && photoPresent || tool == 1 || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
-                                    if (size.width > 0 && size.height > 0) latestTransform(
-                                        Offset(centroid.x / size.width, centroid.y / size.height),
-                                        Offset(pan.x / size.width, pan.y / size.height), zoom)
+                        Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RunmoniShapes.Surface)
+                            .padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+                            Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
+                                .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Outline)
+                                .testTag("run_share_preview")
+                                .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
+                                    if (editable && (tool == 0 && photoPresent || tool == 1 || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
+                                        if (size.width > 0 && size.height > 0) latestTransform(
+                                            Offset(centroid.x / size.width, centroid.y / size.height),
+                                            Offset(pan.x / size.width, pan.y / size.height), zoom)
+                                    }
+                                }, contentAlignment = Alignment.Center) {
+                                if (bitmap != null) Image(bitmap.asImageBitmap(),
+                                    "$previewDescription ${draft.ratio.label}, ${if (draft.showAvatar) "미니미 포함" else "미니미 숨김"}",
+                                    Modifier.fillMaxSize())
+                                else CircularProgressIndicator(Modifier.size(32.dp))
+                                if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
+                                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
+                                    Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier.padding(8.dp))
                                 }
-                            }, contentAlignment = Alignment.Center) {
-                            if (bitmap != null) Image(bitmap.asImageBitmap(),
-                                "$previewDescription ${draft.ratio.label}, ${if (draft.showAvatar) "미니미 포함" else "미니미 숨김"}",
-                                Modifier.fillMaxSize())
-                            else CircularProgressIndicator(Modifier.size(32.dp))
-                            if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
-                                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
-                                Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.padding(8.dp))
                             }
                         }
                         Spacer(Modifier.height(12.dp))
@@ -471,13 +475,15 @@ private fun SharePropertyHeading(label: String, value: String) {
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 private fun ShareRatioChoices(selected: RunShareRatio, enabled: Boolean, onSelect: (RunShareRatio) -> Unit) {
-    val ink = RunmoniColors.Muted
     FlowRow(Modifier.fillMaxWidth().selectableGroup().testTag("run_share_ratio_choices"),
         horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         RunShareRatio.entries.forEachIndexed { index, ratio ->
+            val active = selected == ratio
+            val ink = if (active) RunmoniColors.Primary else RunmoniColors.Muted
             Row(Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp)
-                .background(if (selected == ratio) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
-                .selectable(selected == ratio, enabled, Role.RadioButton) { onSelect(ratio) }
+                .background(if (active) RunmoniColors.PrimarySoft else RunmoniColors.Paper, RunmoniShapes.Action)
+                .border(if (active) 2.dp else 1.dp, if (active) RunmoniColors.Primary else RunmoniColors.Line, RunmoniShapes.Action)
+                .selectable(active, enabled, Role.RadioButton) { onSelect(ratio) }
                 .testTag("run_share_ratio_$index").padding(horizontal = 10.dp, vertical = 10.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
                 Canvas(Modifier.size(16.dp).clearAndSetSemantics { }) {
@@ -487,7 +493,8 @@ private fun ShareRatioChoices(selected: RunShareRatio, enabled: Boolean, onSelec
                         size = androidx.compose.ui.geometry.Size(w, h), style = Stroke(1.dp.toPx()))
                 }
                 Text(ratio.label, style = MaterialTheme.typography.bodyMedium)
-                if (selected == ratio) Icon(Icons.Outlined.Check, null, Modifier.size(16.dp), tint = RunmoniColors.Primary)
+                if (active) Icon(Icons.Outlined.Check, null, Modifier.size(16.dp), tint = ink)
+                else Spacer(Modifier.size(16.dp))
             }
         }
     }
