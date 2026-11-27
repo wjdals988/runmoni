@@ -28,7 +28,8 @@ import java.util.Locale
 @Composable
 internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialCrewId: String? = null,
     initialPartyId: String? = null, navigationEpoch: Int = 0, onSubpageChanged: (Boolean) -> Unit = {}) {
-    var section by rememberSaveable { mutableIntStateOf(if (state.crews.any { it.joined }) 0 else 1) }
+    var chosenSection by rememberSaveable { mutableStateOf<Int?>(null) }
+    val section = chosenSection ?: if (state.crews.any { it.joined }) 0 else 1
     var query by rememberSaveable { mutableStateOf("") }
     var selectedCrewId by rememberSaveable { mutableStateOf(initialCrewId) }
     var selectedPartyId by rememberSaveable { mutableStateOf(initialPartyId) }
@@ -75,18 +76,26 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
             handledEpoch = navigationEpoch; handledCrew = initialCrewId; handledParty = initialPartyId
         }
     }
-    fun perform(action: String) { when {
-        action == "create" -> newCrew = true
-        action.startsWith("join:") -> actions.joinCrew(action.substringAfter(':'))
-        action.startsWith("party:") -> actions.joinParty(action.substringAfter(':'))
-    } }
+    fun perform(action: String) {
+        val id = action.substringAfter(':')
+        when {
+            action == "create" -> newCrew = true
+            action.startsWith("join:") && selectedCrewId == id && state.crews.any { it.id == id && !it.joined } ->
+                actions.joinCrew(id)
+            action.startsWith("party:") && selectedPartyId == id -> {
+                val party = state.parties.firstOrNull { it.id == id }
+                if (party != null && party.hasOpenRegistration(System.currentTimeMillis()) && state.crews.any { it.id == party.crewId })
+                    actions.joinParty(id)
+            }
+        }
+    }
     fun connected(action: String) { if (state.signedIn) perform(action) else { pending = action; connecting = true } }
     LaunchedEffect(Unit) {
         if (!initialRefreshRequested) { initialRefreshRequested = true; actions.refreshCommunity() }
     }
     LaunchedEffect(state.signedIn) {
-        if (!navigationChanged && state.signedIn && pending != null) {
-            val action = pending!!
+        val action = pending
+        if (!navigationChanged && state.signedIn && action != null) {
             pending = null; closeConnection(); perform(action)
         }
     }
@@ -189,9 +198,13 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                         val connectionUnavailable = !state.serverConnected && !state.busy
                         DestinationTabs(listOf("파티 일정", "소개 · 멤버"), detailSection, { detailSection = it }, "crew_detail")
                         if (detailSection == 0) {
-                            val events = state.parties.filter { it.crewId == selected.id && !it.cancelled }.sortedBy { it.startsAtMillis }
-                            val now = System.currentTimeMillis()
-                            val nextParty = if (selected.joined) events.firstOrNull { it.startsAtMillis >= now } else null
+                            val events = remember(state.parties, selected.id) {
+                                state.parties.filter { it.crewId == selected.id && !it.cancelled }.sortedBy { it.startsAtMillis }
+                            }
+                            val now = rememberHomeClock()
+                            val (upcoming, past) = events.partition { it.startsAtMillis >= now }
+                            val nextParty = upcoming.firstOrNull().takeIf { selected.joined }
+                            var pastExpanded by rememberSaveable { mutableStateOf(false) }
                             Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                                 if (nextParty != null) Column(Modifier.fillMaxWidth().testTag("crew_next_party"),
                                     verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -223,24 +236,18 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                                     }
                                 }
                                 if (state.busy || state.crewPartiesLoading) LinearProgressIndicator(Modifier.fillMaxWidth())
-                                if (events.isEmpty() && !state.busy && !state.crewPartiesLoading && state.serverConnected && state.crewPartiesError == null) {
-                                    EmptyCard("아직 파티가 없어요", if (selected.joined) "이 크루에서 함께 달릴 일정을 만들어보세요." else "크루에 가입하면 함께 달릴 파티를 만들고 참가할 수 있어요.")
+                                if (upcoming.isEmpty() && !state.busy && !state.crewPartiesLoading && state.serverConnected && state.crewPartiesError == null) {
+                                    EmptyCard(if (past.isEmpty()) "아직 파티가 없어요" else "예정된 파티가 없어요",
+                                        if (selected.joined) "이 크루에서 함께 달릴 일정을 만들어 보세요." else "크루에 가입하면 함께 달릴 파티를 만들고 참가할 수 있어요.")
                                 }
                                 if (events.size >= 50) SmallNote("기본 목록 50개와 참가한 파티를 함께 보여요.")
-                                // Dates group the crew's schedule; parties remain children of this crew.
-                                val days = events.filterNot { it.id == nextParty?.id }
-                                    .groupBy { Instant.ofEpochMilli(it.startsAtMillis).atZone(ZoneId.systemDefault()).toLocalDate() }
-                                Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                                    days.forEach { (day, parties) -> key(day) {
-                                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                            Text(day.format(DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)),
-                                                style = MaterialTheme.typography.titleMedium, color = RunmoniColors.Primary,
-                                                modifier = Modifier.semantics { heading() })
-                                            Column { parties.forEach { party -> key(party.id) {
-                                                CrewScheduleRow(party) { selectedPartyId = party.id }
-                                            } } }
-                                        }
-                                    } }
+                                CrewScheduleDays(upcoming.filterNot { it.id == nextParty?.id }) { selectedPartyId = it }
+                                if (past.isNotEmpty()) {
+                                    TextButton(shape = RunmoniShapes.Action, onClick = { pastExpanded = !pastExpanded },
+                                        modifier = Modifier.heightIn(min = 48.dp).testTag("crew_past_parties")) {
+                                        Text(if (pastExpanded) "지난 파티 접기" else "지난 파티 보기")
+                                    }
+                                    if (pastExpanded) CrewScheduleDays(past.asReversed()) { selectedPartyId = it }
                                 }
                             }
                         } else {
@@ -276,7 +283,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                                 IconButton(onClick = actions::refreshCommunity, enabled = !state.busy,
                                     modifier = Modifier.size(48.dp).testTag("rooms_refresh")) { Icon(Icons.Outlined.Refresh, "크루 새로고침") }
                             }
-                            DestinationTabs(listOf("내 크루", "둘러보기"), section, { section = it }, "crews_section")
+                            DestinationTabs(listOf("내 크루", "둘러보기"), section, { chosenSection = it }, "crews_section")
                         }
                         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
@@ -288,9 +295,11 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                         if (state.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
                         if (!state.serverConnected && !state.busy) RoomConnectionNotice(state, actions)
                         val crews = state.crews.filter { (section == 1 || it.joined) && "${it.name} ${it.description} ${it.region} ${it.paceLabel}".contains(query.trim(), true) }
-                        if (crews.isEmpty() && state.serverConnected && !state.busy) EmptyCard(
-                            if (query.isNotBlank()) "검색한 크루가 없어요" else if (section == 0) "가입한 크루가 없어요" else "등록된 크루가 없어요",
-                            if (query.isNotBlank()) "다른 이름·지역·페이스로 검색해 보세요." else if (section == 0) "둘러보기에서 크루에 가입할 수 있어요." else "크루 만들기로 새 크루를 시작할 수 있어요.")
+                        if (crews.isEmpty() && state.serverConnected && !state.busy) when {
+                            query.isNotBlank() -> EmptyCard("검색한 크루가 없어요", "다른 이름·지역·페이스로 검색해 보세요.")
+                            section == 0 -> EmptyCard("가입한 크루가 없어요", "", action = "크루 둘러보기", onClick = { chosenSection = 1 })
+                            else -> EmptyCard("등록된 크루가 없어요", "크루 만들기로 새 크루를 시작할 수 있어요.")
+                        }
                         if (crews.isNotEmpty()) Column {
                             crews.forEach { crew -> key(crew.id) {
                                 CrewDirectoryRow(crew) { selectedCrewId = crew.id; detailSection = 0 }
@@ -315,6 +324,25 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
 
 private fun Party.hasOpenRegistration(nowMillis: Long) =
     !cancelled && !joined && !isOrganizer && participantCount < capacity && startsAtMillis >= nowMillis
+
+@Composable
+private fun CrewScheduleDays(events: List<Party>, onParty: (String) -> Unit) {
+    if (events.isEmpty()) return
+    val zone = ZoneId.systemDefault()
+    val days = remember(events, zone) { events.groupBy { Instant.ofEpochMilli(it.startsAtMillis).atZone(zone).toLocalDate() } }
+    Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
+        days.forEach { (day, parties) -> key(day) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(day.format(DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN)),
+                    style = MaterialTheme.typography.titleMedium, color = RunmoniColors.Primary,
+                    modifier = Modifier.semantics { heading() })
+                Column { parties.forEach { party -> key(party.id) {
+                    CrewScheduleRow(party) { onParty(party.id) }
+                } } }
+            }
+        } }
+    }
+}
 
 @Composable
 private fun RoomConnectionNotice(state: AppState, actions: AppActions) {

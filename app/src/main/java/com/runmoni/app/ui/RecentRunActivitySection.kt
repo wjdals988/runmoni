@@ -37,7 +37,10 @@ internal fun RecentRunActivitySection(activity: RecentRunActivity, modifier: Mod
                     style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
                     modifier = Modifier.testTag("recent_run_activity_cached"))
                 val days = activity.days
-                if (days.isNotEmpty()) {
+                if (days.none { it.runCount > 0 }) {
+                    Text("최근 7일에 저장된 러닝이 없어요.", style = MaterialTheme.typography.bodyMedium,
+                        color = RunmoniColors.Muted, modifier = Modifier.testTag("recent_run_activity_empty"))
+                } else {
                     val dateFormat = DateTimeFormatter.ofPattern("M월 d일", Locale.KOREAN)
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text("${days.first().date.format(dateFormat)}–${days.last().date.format(dateFormat)}",
@@ -45,8 +48,6 @@ internal fun RecentRunActivitySection(activity: RecentRunActivity, modifier: Mod
                         Text("거리 km", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                     }
                     RecentRunDays(days)
-                    if (days.all { it.runCount == 0 }) Text("이 기간에 저장된 러닝이 없어요.",
-                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                 }
             }
         }

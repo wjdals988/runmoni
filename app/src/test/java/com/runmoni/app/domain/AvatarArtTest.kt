@@ -79,7 +79,8 @@ class AvatarArtTest {
         assertEquals(5, AvatarCatalogue.accessoryKeys.size)
         assertTrue(AvatarCatalogue.valid("top", 6))
         assertTrue(AvatarCatalogue.valid("top", 9))
-        assertFalse(AvatarCatalogue.valid("top", 10))
+        assertTrue(AvatarCatalogue.valid("top", 12))
+        assertFalse(AvatarCatalogue.valid("top", 13))
         assertFalse(AvatarCatalogue.valid("unknown", 0))
     }
 }

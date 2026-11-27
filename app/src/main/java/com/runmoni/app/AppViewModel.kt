@@ -80,6 +80,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private var discoveryVisible = false
     private var discoveryOperation = 0L
     private var discoveryContext: Pair<Long, String>? = null
+    // A bounds change can cancel the job before the requested read reports back.
+    private var discoveryFeedbackPending = false
     private var firebaseMode = preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http"
     private var communityGeneration = 0L
     private val audio = AudioController(app)
@@ -334,7 +336,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             mutableState.update { it.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.PERMISSION_REQUIRED),
                 weather = if (weather) it.weather.copy(phase = WeatherPhase.PERMISSION_REQUIRED,
                     message = "위치를 허용하면 근처 예보를 확인할 수 있어요.") else it.weather,
-                discovery = if (!weather) it.discovery.copy(error = "현재 위치로 이동하려면 위치 권한을 허용해 주세요.") else it.discovery) }
+                exploreLocationFailureSerial = if (weather) it.exploreLocationFailureSerial else it.exploreLocationFailureSerial + 1) }
         }
     }
     private fun loadPreviewLocation(weather: Boolean) {
@@ -369,7 +371,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 if (weather) {
                     val phase = (failure as? WeatherLocationException)?.let { WeatherPhase.valueOf(it.reason.name) } ?: WeatherPhase.UNAVAILABLE
                     mutableState.update { it.copy(weather = it.weather.copy(phase = phase, message = failure.message ?: "예보를 확인하지 못했어요.")) }
-                } else mutableState.update { it.copy(discovery = it.discovery.copy(error = "현재 위치를 확인하지 못했어요. 위치 서비스와 권한을 확인해 주세요.")) }
+                } else mutableState.update { it.copy(exploreLocationFailureSerial = it.exploreLocationFailureSerial + 1) }
             }
         }
     }
@@ -401,6 +403,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         discoveryVisible = visible
         if (visible) startDiscoveryRefresh(userInitiated = false) else {
             discoveryOperation++; discoveryJob?.cancel(); discoveryJob = null
+            discoveryFeedbackPending = false
             mutableState.update { it.copy(discovery = it.discovery.copy(loading = false)) }
         }
     }
@@ -411,39 +414,53 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     override fun refreshRunners() = startDiscoveryRefresh(userInitiated = true)
     private fun startDiscoveryRefresh(userInitiated: Boolean) {
+        if (!discoveryVisible) return
+        if (userInitiated) discoveryFeedbackPending = true
         discoveryJob?.cancel()
         val ticket = ++discoveryOperation
-        mutableState.update { it.copy(discovery = it.discovery.copy(loading = false, error = null)) }
         discoveryJob = viewModelScope.launch {
-            var reportFailure = userInitiated
             while (isActive && discoveryVisible) {
-                val bounds = discoveryBounds
                 val uid = firebaseRooms.uid
                 val generation = communityGeneration
-                if (bounds == null) { delay(500); continue }
-                if (!firebaseMode || !state.value.signedIn || uid.isBlank()) {
+                if (!firebaseMode || !state.value.signedIn || uid.isBlank() || state.value.communityUid != uid) {
                     discoveryContext = null
+                    discoveryFeedbackPending = false
                     mutableState.update { it.copy(discovery = RunnerDiscoveryUi(), liveRunners = emptyList()) }
-                    reportFailure = false
                     delay(15_000); continue
                 }
                 if (discoveryContext != (generation to uid)) {
                     discoveryContext = generation to uid
+                    discoveryFeedbackPending = true
                     mutableState.update { it.copy(discovery = RunnerDiscoveryUi(), liveRunners = emptyList()) }
                 }
-                mutableState.update { it.copy(discovery = it.discovery.copy(loading = reportFailure, error = null)) }
+                val reportFailure = discoveryFeedbackPending
+                mutableState.update {
+                    val discovery = it.discovery
+                    val initialError = if (!reportFailure && discovery.checkedAtMillis == null) discovery.error else null
+                    it.copy(discovery = discovery.copy(loading = reportFailure, error = initialError))
+                }
+                val bounds = discoveryBounds
+                if (bounds == null) { delay(500); continue }
+                fun stillCurrent() = ticket == discoveryOperation && discoveryVisible && firebaseMode &&
+                    generation == communityGeneration && uid == firebaseRooms.uid && discoveryBounds == bounds &&
+                    state.value.signedIn && state.value.communityUid == uid
                 try {
                     val result = app.runnerPresence.discover(bounds)
-                    if (ticket == discoveryOperation && discoveryVisible && firebaseMode && generation == communityGeneration && uid == firebaseRooms.uid && discoveryBounds == bounds)
+                    if (stillCurrent()) {
+                        discoveryFeedbackPending = false
                         mutableState.update { it.copy(liveRunners = result.runners, discovery = RunnerDiscoveryUi(
                             checkedAtMillis = result.checkedAtMillis, partial = result.partial, requiresZoom = result.requiresZoom)) }
+                    }
                 } catch (cancelled: CancellationException) { throw cancelled }
                 catch (_: Exception) {
-                    if (ticket == discoveryOperation && discoveryVisible && firebaseMode && generation == communityGeneration &&
-                        uid == firebaseRooms.uid && discoveryBounds == bounds) mutableState.update { it.copy(
-                        discovery = discoveryReadFailed(it.discovery, reportFailure)) }
+                    if (stillCurrent()) {
+                        discoveryFeedbackPending = false
+                        mutableState.update {
+                            val keepInitialFailure = it.discovery.checkedAtMillis == null && it.discovery.error != null
+                            it.copy(discovery = discoveryReadFailed(it.discovery, reportFailure || keepInitialFailure))
+                        }
+                    }
                 }
-                reportFailure = false
                 delay(15_000)
             }
         }

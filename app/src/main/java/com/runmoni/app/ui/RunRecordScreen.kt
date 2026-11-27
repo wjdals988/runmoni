@@ -161,21 +161,18 @@ private fun RunRecordPageContent(
                     .align(Alignment.TopCenter).verticalScroll(scroll).testTag("record_detail_scroll")
                     .padding(bottom = 24.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)) {
-                    // The result is the opening of the page, rather than one
-                    // more card competing with the route and management tools.
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
-                        .padding(horizontal = pageGutter(), vertical = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    RunningMetricPanel(contentPadding = PaddingValues(20.dp), spacing = 12.dp,
+                        modifier = Modifier.padding(horizontal = pageGutter()).padding(top = 16.dp)) {
                         Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                            color = RunmoniColors.Muted, modifier = Modifier.testTag("record_date"))
+                            color = RunmoniTrack.Detail, modifier = Modifier.testTag("record_date"))
                         val recordedDistance = distance(record.distanceMeters)
                         RecordDistance(recordedDistance)
-                        HorizontalDivider(color = RunmoniColors.Line)
+                        HorizontalDivider(color = RunmoniTrack.Detail.copy(alpha = .4f))
                         val time = duration(record.activeDurationMillis)
                         val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
                         BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_duration_pace")
                             .clearAndSetSemantics { text = AnnotatedString("러닝 시간 $time · 평균 $pace /km") }) {
-                            if (maxWidth < 320.dp || LocalDensity.current.fontScale >= 1.3f) {
+                            if (maxWidth < 272.dp || LocalDensity.current.fontScale >= 1.3f) {
                                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                                     RecordResultMetric("러닝 시간", time, Icons.Outlined.Timer)
                                     RecordResultMetric("평균 페이스", "$pace /km", Icons.Outlined.Speed)
@@ -337,10 +334,10 @@ private fun RecordSectionTitle(title: String, icon: ImageVector) {
 private fun RecordResultMetric(label: String, value: String, icon: ImageVector) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Icon(icon, null, Modifier.size(18.dp), tint = RunmoniColors.Muted)
-            Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
+            Icon(icon, null, Modifier.size(18.dp), tint = RunmoniTrack.Detail)
+            Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniTrack.Detail)
         }
-        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontFeatureSettings = "tnum"), color = RunmoniColors.Ink)
+        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontFeatureSettings = "tnum"), color = RunmoniTrack.OnBoard)
     }
 }
 
@@ -386,7 +383,7 @@ private fun RecordDistance(value: String) {
     val measurer = rememberTextMeasurer()
     val style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold,
         fontFeatureSettings = "tnum")
-    val unit = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = RunmoniColors.Muted)
+    val unit = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Medium, color = RunmoniTrack.Detail)
     val label = buildAnnotatedString {
         append(value)
         withStyle(unit) { append(" km") }
@@ -408,7 +405,7 @@ private fun RecordDistance(value: String) {
                 low
             }
         }
-        Text(label, modifier = Modifier.fillMaxWidth(), color = RunmoniColors.Ink,
+        Text(label, modifier = Modifier.fillMaxWidth(), color = RunmoniTrack.Highlight,
             style = style.copy(fontSize = size.sp, lineHeight = (size * 1.15f).sp), softWrap = true)
     }
 }

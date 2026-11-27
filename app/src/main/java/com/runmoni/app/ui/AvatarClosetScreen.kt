@@ -4,6 +4,7 @@ package com.runmoni.app.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -178,7 +179,7 @@ private fun ClosetFittedItem(avatar: AvatarStyle, slot: AvatarSlot) {
         style = MaterialTheme.typography.titleMedium, modifier = Modifier.testTag("closet_fitted_item"))
 }
 
-/** A static track beneath the approved sprite, never a route or replacement artwork. */
+/** The fitting preview puts the current Minimi in front of a static track. */
 @Composable
 private fun ClosetAvatarStage(avatar: AvatarStyle, playing: Boolean, modifier: Modifier = Modifier,
     onFrameRendered: ((Int) -> Unit)? = null,
@@ -326,11 +327,13 @@ private fun ClosetItemOption(
             .background(if (selected) RunmoniColors.Primary else Color.Transparent, RunmoniShapes.Status))
         if (showThumbnail) ClosetItemThumbnail(profile.avatar.withSelectedItem(slot.key, variant), slot.key,
             secondaryReady, "closet_preview_${slot.key}_$variant", Modifier.size(64.dp)
-                .clip(RunmoniShapes.Action).background(if (selected) RunmoniColors.PrimarySoft else RunmoniColors.Cream))
+                .clip(RunmoniShapes.Action)
+                .background(if (selected) RunmoniTrack.Stage else RunmoniColors.Cream)
+                .border(1.dp, if (selected) RunmoniColors.Outline else RunmoniColors.Line, RunmoniShapes.Action))
         Text(avatarItemDisplayName(slot, variant, profile.avatar.gender), style = MaterialTheme.typography.bodyLarge,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             modifier = Modifier.weight(1f))
-        if (selected) Icon(Icons.Outlined.Check, "선택됨", tint = RunmoniColors.Primary,
+        if (selected) Icon(Icons.Outlined.Check, null, tint = RunmoniColors.Primary,
             modifier = Modifier.size(20.dp))
         else Spacer(Modifier.size(20.dp))
     }

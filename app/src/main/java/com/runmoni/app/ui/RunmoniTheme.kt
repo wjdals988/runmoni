@@ -68,6 +68,15 @@ internal object RunmoniColors {
     val IsDark: Boolean @Composable get() = LocalRunmoniAccents.current.dark
 }
 
+/** Shared finish-line colors for the running display and the Minimi fitting stage. */
+internal object RunmoniTrack {
+    val Board = Color(0xFF103338)
+    val OnBoard = Color(0xFFF2FCF5)
+    val Detail = Color(0xFFBCD9D8)
+    val Highlight = Color(0xFFD4F781)
+    val Stage: Color @Composable get() = if (RunmoniColors.IsDark) Color(0xFF213D3D) else Color(0xFFDCEEE7)
+}
+
 private data class RunmoniAccents(val dark: Boolean, val coral: Color, val good: Color, val goodWash: Color,
     val caution: Color, val cautionWash: Color, val poor: Color, val poorWash: Color)
 private val DayAccents = RunmoniAccents(false, Color(0xFFF16D55), Color(0xFF246447), Color(0xFFE9F3EC),

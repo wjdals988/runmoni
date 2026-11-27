@@ -33,12 +33,12 @@ class ExpandedAtelierLayersTest {
         val legacy = AvatarCatalogue.slots.flatMap { slot -> slot.variants.take(counts.getValue(slot.key)).mapIndexed { index, name -> "${slot.key}:$index:$name" } }.joinToString("\n")
         assertEquals("424ec98526279b2e5442d951958d2ee7d26cd4901234b799729408cade564754",MessageDigest.getInstance("SHA-256").digest(legacy.toByteArray(Charsets.UTF_8)).joinToString(""){"%02x".format(it)})
         assertEquals(39,ExpandedAtelierLayers.specs.size)
-        assertEquals(100,AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(115,AvatarCatalogue.slots.sumOf { it.variants.size })
         assertEquals(9,AvatarCatalogue.tabs.size)
         for (slot in AvatarCatalogue.slots) {
             assertEquals(3,ExpandedAtelierLayers.specs.count { it.slot==slot.key })
             val old = counts.getValue(slot.key)
-            assertEquals(old+3,slot.variants.size)
+            assertEquals(old+3+StudioCollection.inSlot(slot.key).size,slot.variants.size)
             assertEquals((old..old+2).toList(),ExpandedAtelierLayers.specs.filter { it.slot==slot.key }.map { it.variant })
             for (id in old..old+2) {
                 assertTrue(AvatarCatalogue.valid(slot.key,id));assertEquals(0,AvatarCatalogue.price(id))

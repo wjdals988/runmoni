@@ -66,9 +66,14 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = RunmoniColors.Primary, contentColor = RunmoniColors.OnPrimary),
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("home_start_run")) {
-                        Icon(Icons.Outlined.PlayArrow, null, Modifier.size(24.dp))
+                        Icon(Icons.Outlined.DirectionsRun, null, Modifier.size(24.dp))
                         Spacer(Modifier.width(12.dp))
-                        Text(if (state.activeRun.phase == RunPhase.IDLE) if (largeText) "러닝 시작" else "러닝 시작하기" else if (largeText) "러닝 보기" else "진행 중 러닝 보기",
+                        Text(when {
+                            state.runPersistence.finishing -> "러닝 저장 상태 보기"
+                            state.activeRun.phase == RunPhase.RECOVERY -> "중단된 러닝 보기"
+                            state.activeRun.phase == RunPhase.IDLE -> "러닝 준비"
+                            else -> "러닝 보기"
+                        },
                             modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
                     }
                     if (showTodaySummary) HomeTodaySummary(todaysRuns)
@@ -79,11 +84,11 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
                 }
             }
         }
+        RunPersistenceNotice(state.runPersistence, onRetrySave)
         if (state.weather.snapshot != null) {
             HomeWeatherSummary(state.weather, homeClock)
             HomeWeatherDetails(state.weather, homeClock, onWeather, showAssessmentSummary = false)
         }
-        RunPersistenceNotice(state.runPersistence, onRetrySave)
         Box(Modifier.fillMaxWidth().testTag("home_recent_activity")) {
             RecentRunActivitySection(recentActivity)
         }

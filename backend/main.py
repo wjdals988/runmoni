@@ -80,6 +80,25 @@ CATALOGUE = [{"id": f"{slot}:{variant}", "name": f"{label} {variant + 1}", "cost
     {"id": "hydration:4", "name": "메시 라이트 조끼", "cost": 0, "slot": "hydration", "value": 4},
     {"id": "hydration:5", "name": "듀얼 포켓 조끼", "cost": 0, "slot": "hydration", "value": 5},
     {"id": "hydration:6", "name": "레이스 하네스", "cost": 0, "slot": "hydration", "value": 6},
+] + [
+    {"id": f"{slot}:{value}", "name": name, "cost": 0, "slot": slot, "value": value}
+    for slot, value, name in (
+        ("headwear", 7, "레이스 선바이저"),
+        ("headwear", 8, "나이트 패널 캡"),
+        ("headwear", 9, "트레일 헤드밴드"),
+        ("top", 10, "레이스 싱글릿"),
+        ("top", 11, "나이트 방풍 셸"),
+        ("top", 12, "트레일 기능성 티"),
+        ("bottom", 9, "레이스 스플릿 하의"),
+        ("bottom", 10, "나이트 컴프레션 타이츠"),
+        ("bottom", 11, "트레일 카고 하의"),
+        ("shoes", 8, "레이스 폼 러닝화"),
+        ("shoes", 9, "나이트 리플렉트 러닝화"),
+        ("shoes", 10, "트레일 러그 러닝화"),
+        ("hydration", 7, "듀얼 플라스크 조끼"),
+        ("waist", 7, "레이스 젤 벨트"),
+        ("eyewear", 7, "나이트 로우프로파일 실드"),
+    )
 ]
 
 

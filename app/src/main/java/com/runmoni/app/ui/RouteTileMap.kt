@@ -54,6 +54,8 @@ internal fun RouteTileMap(
     points: List<TrackPoint>, runners: List<LiveRunner>, modifier: Modifier, fitRoute: Boolean,
     interactiveMap: Boolean = false, followCenter: RouteMapCenter? = null,
     onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
+    recenterRequest: MapRecenterRequest? = null,
+    onRecenterApplied: (MapRecenterRequest) -> Unit = {},
 ) {
     val context = LocalContext.current
     val source = LocalMapTileSource.current ?: remember(context) { MapTileRepository.get(context) }
@@ -126,8 +128,14 @@ internal fun RouteTileMap(
         CustomAccessibilityAction("남쪽으로 이동") { panMap(0.0, -mapHeight * .35) },
         CustomAccessibilityAction(recenterLabel) { recenter() },
     )
-    LaunchedEffect(route, validRunners, canvasSize, fitRoute, interactiveMap, actualCenter) {
-        if (canvasSize.width > 0 && canvasSize.height > 0 && (!manual || viewport == null)) viewport = reset()
+    LaunchedEffect(route, validRunners, canvasSize, fitRoute, interactiveMap, actualCenter, recenterRequest) {
+        if (canvasSize.width <= 0 || canvasSize.height <= 0) return@LaunchedEffect
+        val requestedViewport = recenterRequest?.center?.viewport()
+        if (recenterRequest != null && requestedViewport != null) {
+            manual = true
+            viewport = requestedViewport
+            onRecenterApplied(recenterRequest)
+        } else if (!manual || viewport == null) viewport = reset()
     }
     LaunchedEffect(viewport, canvasSize, tileSize) {
         val bounds = viewport?.bounds(mapWidth, mapHeight, tileSize) ?: return@LaunchedEffect

@@ -132,7 +132,7 @@ class AvatarAtelierClothingTest {
         old.zip(AvatarCatalogue.slots).forEach { (original, current) ->
             assertEquals("Saved ${current.key} IDs were renumbered", original.second, current.variants.take(original.second.size))
         }
-        assertEquals(100, AvatarCatalogue.slots.sumOf { it.variants.size })
+        assertEquals(115, AvatarCatalogue.slots.sumOf { it.variants.size })
         assertEquals(13, AvatarCatalogue.slots.size)
         assertEquals(9, AvatarCatalogue.tabs.size)
         val owned = setOf("top:4", "socks:3", "accessory:2", "wrist:2")
@@ -140,7 +140,7 @@ class AvatarAtelierClothingTest {
         assertTrue(migrated.containsAll(owned))
         assertFalse("New free items must not fabricate purchase ownership", migrated.contains("top:6"))
         for (gender in AvatarGender.entries) {
-            assertEquals(if (gender == AvatarGender.MALE) 87 else 85, AvatarCatalogue.slots.sumOf { slot ->
+            assertEquals(if (gender == AvatarGender.MALE) 102 else 100, AvatarCatalogue.slots.sumOf { slot ->
                 slot.variants.indices.count { AvatarArtwork.itemReady(slot.key, it, gender) } })
             for ((slot, id) in listOf("top" to 6, "socks" to 4, "shoes" to 4)) {
                 assertTrue(AvatarCatalogue.valid(slot, id))
@@ -157,7 +157,7 @@ class AvatarAtelierClothingTest {
                 assertFalse("Unapproved skin/swimwear accidentally became selectable", AvatarArtwork.itemReady(slot, id, gender))
         }
         assertThrows(IllegalArgumentException::class.java) { AvatarCatalogue.price(-1) }
-        assertThrows(IllegalArgumentException::class.java) { AvatarCatalogue.price(10) }
+        assertThrows(IllegalArgumentException::class.java) { AvatarCatalogue.price(13) }
     }
 
     @Test fun missingIndependentLabelsAreRejectedWithoutWritingTheOriginal() {

@@ -210,8 +210,13 @@ class RunnerPresenceRepository(
         const val CONSENTS = "runnerConsents"
         private val PRESENCE_KEYS = setOf("runSessionToken", "latitudeE3", "longitudeE3", "latBand", "lonBand", "nickname", "avatar", "visibility", "adultConfirmed", "updatedAt", "expiresAt")
         private val SLOT_KEYS = AvatarCatalogue.slots.map { it.key }.toSet()
-        private fun publicAvatar(avatar: AvatarStyle): Map<String, Any> = buildMap {
-            for (slot in AvatarCatalogue.slots) put(slot.key, avatar.variantFor(slot.key).also { require(AvatarCatalogue.valid(slot.key, it)) })
+        internal fun publicAvatar(avatar: AvatarStyle): Map<String, Any> = buildMap {
+            for (slot in AvatarCatalogue.slots) {
+                val selected = avatar.variantFor(slot.key)
+                require(AvatarCatalogue.valid(slot.key, selected))
+                // Older readers reject an entire marker if a variant is unknown.
+                put(slot.key, StudioCollection.item(slot.key, selected)?.sharedVariant ?: selected)
+            }
             put("gender", avatar.gender.wireValue)
             val colors = avatar.runningKitColors.normalized()
             put("colors", mapOf("top" to colors.top, "bottom" to colors.bottom, "shoes" to colors.shoes))

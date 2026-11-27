@@ -33,6 +33,27 @@ class StudioRefreshUiTest : RunmoniDesignTestBase() {
         assertTrue("Whole primary value is visible without scrolling", distance.positionInRoot.y >= safe.top &&
             distance.positionInRoot.y + distance.size.height <= safe.bottom)
         fullyInside("pause_run", "run_control_bar")
+        capture("studio-run-320-font2-fixture")
+    }
+
+    @Test fun runPreparationLinksProfilesAndKeepsSharingBehindConsent() {
+        val state = mutableStateOf(AppState(communityBackend = CommunityBackend.FIREBASE,
+            runPersistence = RunPersistenceState(initialized = true)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport(411, 1f)) { RunmoniApp(state.value, actions) } }
+
+        compose.onNodeWithTag("nav_run").performClick()
+        compose.onNodeWithTag("prepare_run_sharing").assertDoesNotExist()
+        compose.onNodeWithTag("prepare_run_sharing_profile").performScrollTo().performClick()
+        compose.onNodeWithTag("close_profile").assertIsDisplayed().performClick()
+        compose.runOnIdle {
+            assertTrue(actions.locationRequests.isEmpty())
+            state.value = state.value.copy(signedIn = true, communityUid = "linked-runner")
+        }
+
+        compose.onNodeWithTag("prepare_run_sharing").performScrollTo().assertIsOff().performClick()
+        compose.onNodeWithTag("confirm_runner_sharing").assertIsNotEnabled()
+        compose.runOnIdle { assertFalse(state.value.sharingPreferenceEnabled) }
     }
 
     /** Check the full measured hit target, not only the already-clipped semantic rectangle. */
@@ -91,6 +112,7 @@ class StudioRefreshUiTest : RunmoniDesignTestBase() {
             capture("studio-record-share-${case.width}-${case.scale}-fixture")
             share.performClick()
             compose.onNodeWithTag("run_share_page").assertIsDisplayed()
+            if (case.scale == 1f) capture("studio-share-editor-fixture")
             compose.onNodeWithTag("record_detail_page").assertDoesNotExist()
             compose.onNodeWithTag("nav_me").assertDoesNotExist()
             fullyInside("close_run_share", "run_share_safe_content").performClick()

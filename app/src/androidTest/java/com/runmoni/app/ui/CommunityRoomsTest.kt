@@ -56,8 +56,13 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("nav_crew").performClick()
         compose.onNodeWithTag("crew_${crew.id}").performScrollTo().performClick()
         compose.onNodeWithTag("crew_intro").assertDoesNotExist()
+        compose.onNodeWithTag("party_${past.id}").assertDoesNotExist()
+        compose.onNodeWithTag("crew_past_parties").performScrollTo().performClick()
+        compose.onNodeWithTag("party_${past.id}").assertExists()
+        compose.onNodeWithTag("party_${cancelled.id}").assertDoesNotExist()
         val nextParty = compose.onNodeWithTag("crew_next_party")
         val createParty = compose.onNodeWithTag("create_party_${crew.id}")
+        nextParty.performScrollTo()
         assertTrue(nextParty.fetchSemanticsNode().positionInRoot.y < createParty.fetchSemanticsNode().positionInRoot.y)
         compose.onNodeWithTag("join_next_party_${party.id}").performScrollTo().assertIsEnabled().performClick()
         compose.runOnIdle {
@@ -67,6 +72,18 @@ class CommunityRoomsTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("join_next_party_${party.id}").assertDoesNotExist()
         compose.onNodeWithTag("party_${party.id}").performScrollTo().performClick()
         compose.onNodeWithTag("open_party_chat").performScrollTo().assertIsDisplayed()
+    }
+
+    @Test fun lateMembershipSetsTheInitialDirectoryWithoutChangingAnExplicitTabChoice() {
+        val state = mutableStateOf(AppState(serverConnected = true, busy = true))
+        compose.setContent { ViewportBox(Viewport()) { RunmoniApp(state.value, RunmoniUiTest.FakeActions(state)) } }
+        compose.onNodeWithTag("nav_crew").performClick()
+        compose.onNodeWithTag("crews_section_1").assertIsSelected()
+        compose.runOnIdle { state.value = state.value.copy(busy = false, crews = listOf(crew.copy(joined = true))) }
+        compose.onNodeWithTag("crews_section_0").assertIsSelected()
+        compose.onNodeWithTag("crews_section_1").performClick().assertIsSelected()
+        compose.runOnIdle { state.value = state.value.copy(crews = listOf(crew.copy(joined = true, memberCount = 4))) }
+        compose.onNodeWithTag("crews_section_1").assertIsSelected()
     }
 
     @Test fun failedCrewCreationKeepsDraftAndSuccessOpensCreatedCrew() {

@@ -2,11 +2,13 @@ package com.runmoni.app.ui
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
 import org.junit.Test
+import java.util.concurrent.atomic.AtomicReference
 
 /** ComponentActivity contracts with inert map tiles; no Firebase, real GPS or public tiles. */
 class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
@@ -15,12 +17,18 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         val confirmations = mutableListOf<Triple<String, Boolean, Long>>()
         val dismissedNonces = mutableListOf<Long>()
         val visibility = mutableListOf<Boolean>()
+        val bounds = AtomicReference<RouteMapBounds?>()
         var locates = 0
         var refreshes = 0
+        var locationSettings = 0
+        var permissionSettings = 0
         override fun setPublicLocation(enabled: Boolean) { sharingRequests += enabled }
         override fun setDiscoveryVisible(visible: Boolean) { visibility += visible }
+        override fun setDiscoveryBounds(bounds: RouteMapBounds) { this.bounds.set(bounds) }
         override fun locateExplore() { locates++ }
         override fun refreshRunners() { refreshes++ }
+        override fun openLocationSettings() { locationSettings++ }
+        override fun openAppPermissionSettings() { permissionSettings++ }
         override fun confirmPublicLocation(runId: String, adultConfirmed: Boolean, requestNonce: Long) {
             confirmations += Triple(runId, adultConfirmed, requestNonce)
         }
@@ -56,17 +64,98 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("locate_explore").performClick()
         compose.onNodeWithTag("explore_current_area").assertExists()
         compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.runOnIdle { state.value = state.value.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.PERMISSION_REQUIRED)) }
+        compose.onNodeWithTag("explore_location_settings").assertTextContains("앱 권한 설정").performClick()
+        compose.runOnIdle { state.value = state.value.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.LOCATION_DISABLED)) }
+        compose.onNodeWithTag("explore_location_settings").assertTextContains("기기 위치 설정").performClick()
         compose.onNodeWithTag("refresh_runners").assertTextContains("러너 보기").performClick()
         compose.onNodeWithTag("explore_current_area").assertDoesNotExist()
+        compose.onNodeWithTag("explore_location_settings").assertDoesNotExist()
         compose.onNodeWithTag("runner_discovery_status").assertTextContains("프로필을 연결", substring = true)
         compose.onNodeWithTag("toggle_runner_sharing").assertIsEnabled().performClick()
         compose.runOnIdle {
             assertEquals(1, profiles)
             assertEquals(1, actions.locates)
+            assertEquals(1, actions.locationSettings)
+            assertEquals(1, actions.permissionSettings)
             assertTrue(actions.sharingRequests.isEmpty())
             assertTrue(actions.confirmations.isEmpty())
-            assertTrue(actions.visibility.contains(true))
+            assertTrue(actions.visibility.isEmpty())
             assertEquals(0, actions.refreshes)
+        }
+    }
+
+    @Test fun myLocationRecentersAgainAfterBrowsingEvenWhenTheFixCoordinatesStayTheSame() {
+        val now = System.currentTimeMillis()
+        val region = WeatherLocation(3757, 12698)
+        val center = RouteMapCenter(region.latitude, region.longitude)
+        val state = mutableStateOf(AppState(discoveryCenter = center,
+            currentArea = CurrentAreaUi(CurrentAreaPhase.RESOLVING, region, checkedAtMillis = now)))
+        val actions = Actions(state)
+        compose.setContent { ViewportBox(Viewport()) { RunmoniTheme {
+            RunnerDiscoveryScreen(state.value, actions, onProfile = {})
+        } } }
+        fun atFix() = actions.bounds.get()?.contains(center.latitude, center.longitude) == true
+        fun panAway() {
+            val pan = compose.onNodeWithTag("route_map_viewport").fetchSemanticsNode()
+                .config[SemanticsActions.CustomActions].single { it.label == "동쪽으로 이동" }
+            compose.runOnIdle { assertTrue(pan.action()); assertTrue(pan.action()) }
+            compose.waitUntil(30_000) { !atFix() }
+        }
+        fun locate() {
+            val locate = compose.onNodeWithTag("locate_explore")
+            if (!locate.isDisplayed()) locate.performScrollTo()
+            locate.performClick()
+        }
+        compose.waitUntil(30_000) { atFix() }
+        repeat(2) { index ->
+            panAway()
+            locate()
+            compose.runOnIdle {
+                assertFalse(atFix())
+                assertEquals(index + 1, actions.locates)
+                state.value = state.value.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.READY, region,
+                    name = "서울", checkedAtMillis = now + (index + 1) * 1000L))
+            }
+            compose.waitUntil(30_000) { atFix() }
+        }
+        panAway()
+        locate()
+        compose.runOnIdle {
+            state.value = state.value.copy(currentArea = CurrentAreaUi(CurrentAreaPhase.PERMISSION_REQUIRED),
+                exploreLocationFailureSerial = 1)
+        }
+        compose.onNodeWithTag("explore_location_settings").assertTextContains("앱 권한 설정")
+        val cachedArea = CurrentAreaUi(CurrentAreaPhase.READY, region, name = "서울", checkedAtMillis = now + 3000)
+        compose.runOnIdle {
+            state.value = state.value.copy(currentArea = cachedArea, weather = RunningWeatherState(WeatherPhase.LOADING))
+        }
+        compose.onNodeWithTag("explore_current_area").assertTextContains("서울", substring = true)
+        compose.runOnIdle { assertFalse("An unrelated recent fix must not replay a failed request", atFix()) }
+        locate()
+        compose.waitUntil(30_000) { atFix() }
+        compose.runOnIdle {
+            assertEquals("Use the verified fix without starting a second weather/location request", 3, actions.locates)
+            assertEquals(cachedArea.checkedAtMillis, state.value.currentArea.checkedAtMillis)
+            assertTrue(actions.visibility.isEmpty())
+            assertTrue(actions.sharingRequests.isEmpty())
+        }
+    }
+
+    @Test fun signedInConnectionWithoutRunnerIdentityDoesNotRequestAnotherProfile() {
+        val state = mutableStateOf(AppState(signedIn = true))
+        val actions = Actions(state)
+        val profiles = AtomicReference(0)
+        compose.setContent { ViewportBox(Viewport()) { RunmoniTheme {
+            RunnerDiscoveryScreen(state.value, actions) { profiles.set(profiles.get() + 1) }
+        } } }
+        compose.onNodeWithTag("refresh_runners").performClick()
+        compose.onNodeWithTag("runner_discovery_status").assertTextContains("현재 연결", substring = true)
+        compose.onNodeWithTag("toggle_runner_sharing").assertDoesNotExist()
+        compose.runOnIdle {
+            assertEquals(0, profiles.get())
+            assertEquals(0, actions.refreshes)
+            assertTrue(actions.visibility.isEmpty())
         }
     }
 
@@ -93,6 +182,10 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         compose.runOnIdle { state.value = state.value.copy(liveRunners = listOf(self, stale, invalid)) }
         compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("확인된 위치 주변 지도", substring = true)
         compose.onNodeWithTag("runner_discovery_status").assertTextContains("표시할 공유 위치가 없어요", substring = true)
+        compose.runOnIdle { state.value = state.value.copy(communityUid = "new-account", liveRunners = listOf(fresh)) }
+        compose.onNodeWithTag("route_map_viewport").assertContentDescriptionContains("확인된 위치 주변 지도", substring = true)
+        compose.onNodeWithTag("runner_discovery_status").assertTextContains("러너 보기", substring = true)
+        compose.runOnIdle { assertEquals(listOf(true, false), actions.visibility); assertEquals(1, actions.refreshes) }
     }
 
     @Test fun sharingButtonRequestsConsentAndCannotDirectlyConfirmOrMutateSharingState() {
@@ -128,10 +221,12 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         compose.setContent { ViewportBox(Viewport(360, 1f)) { RunmoniTheme {
             RunnerDiscoveryScreen(state.value, actions, onProfile = {})
         } } }
+        compose.runOnIdle { assertTrue(actions.visibility.isEmpty()); assertEquals(0, actions.refreshes) }
         compose.onNodeWithTag("refresh_runners").assertIsDisplayed()
             .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp).assertIsEnabled().performClick()
         compose.runOnIdle {
             assertEquals(1, actions.refreshes)
+            assertEquals(listOf(true), actions.visibility)
             state.value = state.value.copy(discovery = discoveryReadFailed(state.value.discovery, userInitiated = true))
         }
         compose.onNodeWithTag("runner_discovery_status").assertTextContains("다시 시도", substring = true)
@@ -143,6 +238,14 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             assertTrue(actions.sharingRequests.isEmpty())
             assertTrue(actions.confirmations.isEmpty())
         }
+        compose.onNodeWithTag("locate_explore").performClick()
+        compose.onNodeWithTag("explore_current_area").assertExists()
+        val hide = compose.onNodeWithTag("hide_discovered_runners")
+        if (!hide.isDisplayed()) hide.performScrollTo()
+        hide.performClick()
+        compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.onNodeWithTag("explore_current_area").assertExists()
+        compose.runOnIdle { assertEquals(listOf(true, false), actions.visibility) }
     }
 
     @Test fun centralConsentCancelDoesNotConfirmAndANewNonceRequiresFreshAdultConsent() {

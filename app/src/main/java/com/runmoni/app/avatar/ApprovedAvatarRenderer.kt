@@ -8,14 +8,17 @@ import com.runmoni.app.domain.AvatarCatalogue
 import com.runmoni.app.domain.AvatarGender
 import com.runmoni.app.domain.AvatarStyle
 import com.runmoni.app.domain.RunningKitColors
+import com.runmoni.app.domain.RunningKitRegion
+import com.runmoni.app.domain.StudioCollection
 import com.runmoni.app.domain.variantFor
+import com.runmoni.app.domain.withItem
 import java.security.MessageDigest
 
 /** Artwork readiness is separate from inventory validity/ownership and never migrates a profile. */
 object AvatarArtwork {
     fun itemReady(slot: String, variant: Int, gender: AvatarGender = AvatarGender.MALE): Boolean {
         if (!AvatarCatalogue.valid(slot, variant)) return false
-        if (variant == 0 || ExpandedAtelierLayers.supports(slot, variant)) return true
+        if (variant == 0 || ExpandedAtelierLayers.supports(slot, variant) || StudioCollection.item(slot, variant) != null) return true
         return when (slot) {
             "top" -> variant in 1..3 || variant == AvatarAtelierClothing.MESH_TOP
             "bottom" -> variant == 1 || (gender == AvatarGender.MALE && variant in 2..3)
@@ -45,6 +48,7 @@ class ApprovedAvatarRenderer(context: Context) {
         const val SHA256 = "f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65"
         const val COLOR_CACHE_BYTES = 8 * 1024 * 1024
         const val FEMALE_DISPLAY_PADDING = 12
+        private val equipmentOrder = listOf("headwear", "hydration", "waist", "wrist", "ear", "eyewear")
         fun frameAt(elapsedMillis: Long) = ((elapsedMillis.coerceAtLeast(0) / MILLIS) % FRAMES).toInt()
     }
 
@@ -89,11 +93,18 @@ class ApprovedAvatarRenderer(context: Context) {
             ear = ready("ear"), eyewear = ready("eyewear"), wrist = ready("wrist"), waist = ready("waist"),
             hydration = ready("hydration"), socks = ready("socks"), costume = style.costume, runningKitColors = kit)
         val expanded = ExpandedAtelierLayers.selected(requested).isNotEmpty()
-        val effective = ExpandedAtelierLayers.foundation(requested)
+        val studio = StudioCollection.items.filter { requested.variantFor(it.slot) == it.variant }
+        val foundation = studio.fold(requested) { base, item ->
+            val plain = base.withItem(item.slot, 0)
+            val region = RunningKitRegion.entries.firstOrNull { it.wireKey == item.slot }
+            if (region == null) plain else plain.copy(runningKitColors = plain.runningKitColors.withColor(region, 0))
+        }
+        val effective = ExpandedAtelierLayers.foundation(foundation)
         val drawKit = effective.runningKitColors
         val frameCostume = AvatarCostumeLayers.supports(style.costume)
-        val noGear = listOf("headwear", "ear", "eyewear", "wrist", "waist", "hydration").all { effective.variantFor(it) == 0 }
-        if (!expanded && !frameCostume && kit.isOriginal && effective.top == 0 && effective.bottom == 0 && effective.shoes == 0 && effective.socks == 0 && noGear) return original
+        val noGear = equipmentOrder.all { effective.variantFor(it) == 0 }
+        if (studio.isEmpty() && !expanded && !frameCostume && kit.isOriginal && effective.top == 0 &&
+            effective.bottom == 0 && effective.shoes == 0 && effective.socks == 0 && noGear) return original
         val key = "${WardrobeCoverage.VERSION}|${WardrobeClothing.VERSION}|${SockArtwork.VERSION}|${SockClothing.VERSION}|${AvatarEquipmentLayers.VERSION}|${AvatarCostumeLayers.VERSION}|${AvatarHeadwearLayers.VERSION}|${AvatarAtelierClothing.VERSION}|${AsepriteMaterialLayers.VERSION}|${ExpandedAtelierLayers.VERSION}|$selected|$requested|$effective"
         colored.get(key)?.let { return it }
         val mask = RunningKitArtwork.frameMask(applicationContext, row, selected)
@@ -141,20 +152,24 @@ class ApprovedAvatarRenderer(context: Context) {
         } else atelier
         val constructed = if (expanded) ExpandedAtelierArtwork.render(applicationContext, expandedBase, pixels, mask,
             expandedCoverage!!, expandedSocks!!, expandedHands!!, selected, requested, effective, equipment = false) else expandedBase
-        val completed = if (expanded) {
-            // A newly authored vest must remain behind an older belt/watch,
-            // and a new ear device behind older glasses. Interleave generations.
+        for (item in studio) if (item.slot !in equipmentOrder) {
+            StudioArtwork.paint(applicationContext, constructed, item, selected, style.gender, kit)
+        }
+        val completed = if (expanded || studio.isNotEmpty()) {
+            // Compose old and new equipment in the same physical order.
             var out = constructed
-            for (slot in listOf("headwear", "hydration", "waist", "wrist", "ear", "eyewear")) {
+            for (slot in equipmentOrder) {
                 val component = ExpandedAtelierLayers.gearOnly(effective, slot)
                 if (component.variantFor(slot) != 0)
-                    out = AvatarEquipmentLayers.render(out, pixels, mask, selected, style.gender, component, expandedHands)
+                    out = AvatarEquipmentLayers.render(out, pixels, mask, selected, style.gender, component, expandedHands ?: gearHands)
                 val authored = ExpandedAtelierLayers.supports(slot, requested.variantFor(slot))
                 if (slot == "headwear" && !authored)
                     out = AsepriteDetailArtwork.headwear(applicationContext, out, pixels, selected, style.gender, effective.headwear ?: 0)
                 if (authored) out = ExpandedAtelierArtwork.render(applicationContext, out, pixels, mask,
                     expandedCoverage!!, expandedSocks!!, expandedHands!!, selected, requested, effective,
                     equipment = true, onlySlot = slot)
+                val item = studio.firstOrNull { it.slot == slot }
+                if (item != null) StudioArtwork.paint(applicationContext, out, item, selected, style.gender, kit)
             }
             out
         } else {

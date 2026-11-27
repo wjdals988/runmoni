@@ -120,6 +120,8 @@ internal fun MapLibreMapPane(
     onBoundsChanged: ((RouteMapBounds) -> Unit)? = null, savedCamera: RouteMapCenter? = null,
     onCameraSaved: (RouteMapCenter) -> Unit = {}, onFailure: (VectorMapFailure) -> Unit,
     styleUri: String = OPEN_FREE_MAP_STYLE,
+    recenterRequest: MapRecenterRequest? = null,
+    onRecenterApplied: (MapRecenterRequest) -> Unit = {},
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -159,9 +161,13 @@ internal fun MapLibreMapPane(
         validRunners.isNotEmpty() -> validRunners.first().let { RouteMapCenter(it.latitude, it.longitude, 15.0).viewport() }
         else -> null
     }
-    fun position(ready: MapLibreMap, restore: Boolean = false): Boolean {
+    fun position(ready: MapLibreMap, restore: Boolean = false, requestedCenter: RouteMapCenter? = null): Boolean {
         if (mapSize.width == 0 || mapSize.height == 0) return false
-        val next = if (restore) savedCamera?.takeIf { it.valid() }?.viewport() ?: target() else target()
+        val next = when {
+            requestedCenter != null -> requestedCenter.viewport()
+            restore -> savedCamera?.takeIf { it.valid() }?.viewport() ?: target()
+            else -> target()
+        }
         next ?: return false
         ready.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(Mercator.latitude(next.centerY),
             Mercator.longitude(next.centerX)), VectorMapCoordinates.nativeZoom(next.zoom)))
@@ -345,9 +351,12 @@ internal fun MapLibreMapPane(
             }
         } catch (_: Exception) { fail(VectorMapFailure.STYLE) }
     }
-    LaunchedEffect(map, overlays, geometry, actualCenter, mapSize, fitRoute, interactiveMap) {
+    LaunchedEffect(map, overlays, geometry, actualCenter, mapSize, fitRoute, interactiveMap, recenterRequest) {
         val ready = map ?: return@LaunchedEffect
-        if (!positioned) position(ready, restore = beganWithSavedCamera)
+        if (recenterRequest != null && position(ready, requestedCenter = recenterRequest.center)) {
+            manualCamera = true
+            onRecenterApplied(recenterRequest)
+        } else if (!positioned) position(ready, restore = beganWithSavedCamera)
         else if (!manualCamera) position(ready)
     }
     Column(modifier.background(RunmoniColors.Paper).testTag("vector_map")) {

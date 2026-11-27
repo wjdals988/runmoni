@@ -20,7 +20,11 @@ object AvatarCatalogue {
         AvatarSlot("wrist", "워치", listOf("워치 없음", "민트 스포츠 워치", "코랄 스포츠 워치", "블루 스포츠 워치", "링 다이얼 워치", "롱 디스플레이 워치", "세그먼트 트랙 워치")),
         AvatarSlot("waist", "러닝 벨트", listOf("벨트 없음", "민트 러닝 벨트", "코랄 러닝 벨트", "블루 러닝 벨트", "플랫 지퍼 벨트", "트윈 포켓 벨트", "보틀 슬링 벨트")),
         AvatarSlot("hydration", "수분 조끼", listOf("조끼 없음", "민트 수분 보급 조끼", "코랄 수분 보급 조끼", "블루 수분 보급 조끼", "메시 라이트 조끼", "듀얼 포켓 조끼", "레이스 하네스")),
-    )
+    ).map { slot ->
+        val newItems = StudioCollection.inSlot(slot.key)
+        require(newItems.map { it.variant } == (slot.variants.size until slot.variants.size + newItems.size).toList())
+        slot.copy(variants = slot.variants + newItems.map { it.label })
+    }
     val accessoryKeys = setOf("ear", "eyewear", "wrist", "waist", "hydration")
     val tabs = listOf("hair" to "헤어", "headwear" to "모자", "face" to "얼굴", "top" to "상의", "bottom" to "하의",
         "costume" to "세트", "socks" to "양말", "shoes" to "신발", "accessories" to "액세서리")
