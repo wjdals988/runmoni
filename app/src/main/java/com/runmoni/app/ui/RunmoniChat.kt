@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -22,8 +23,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -36,10 +39,18 @@ import kotlinx.coroutines.launch
 /** One Activity window owns the system bars, IME and full-screen chat. */
 @Composable
 internal fun ChatScreen(state: AppState, actions: AppActions) {
-    var input by remember(state.openedRoomId) { mutableStateOf("") }
+    key(state.openedRoomId, state.communityBackend, state.communityUid, state.apiUrl, state.signedIn) {
+        ChatRoomContent(state, actions)
+    }
+}
+
+@Composable
+private fun ChatRoomContent(state: AppState, actions: AppActions) {
+    var input by rememberSaveable { mutableStateOf("") }
     var notice by remember(state.openedRoomId) { mutableStateOf(false) }
     var noticesOnly by remember(state.openedRoomId) { mutableStateOf(false) }
-    var pending by remember(state.openedRoomId) { mutableStateOf<String?>(null) }
+    var sending by remember { mutableStateOf(false) }
+    var sendUnconfirmed by rememberSaveable { mutableStateOf(false) }
     val crewId = if (state.openedRoomId.startsWith("crew:")) state.openedRoomId.removePrefix("crew:") else state.parties.firstOrNull { "party:${it.id}" == state.openedRoomId }?.crewId
     val crew = state.crews.firstOrNull { it.id == crewId }
     val canNotice = if (state.communityBackend == CommunityBackend.FIREBASE) state.chatCanNotice else state.crews.any { it.id == crewId && (it.isOwner || it.isDj) } || state.parties.any { "party:${it.id}" == state.openedRoomId && it.isOrganizer }
@@ -61,7 +72,6 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
             scroll.scrollTo(scroll.maxValue)
         } else hasNewMessages = true
     }
-    LaunchedEffect(state.error) { if (state.error != null && pending != null) { if (input.isEmpty()) input = pending!!; pending = null } }
     var menuExpanded by remember(state.openedRoomId) { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
@@ -157,9 +167,30 @@ internal fun ChatScreen(state: AppState, actions: AppActions) {
                     }
                 }
                 HorizontalDivider(color = RunmoniColors.Line)
+                if (sending || sendUnconfirmed) Text(
+                    if (sending) "보내는 중…" else "전송을 확인하지 못했어요. 대화에 표시되는지 확인한 뒤 다시 보내 주세요.",
+                    color = if (sending) RunmoniColors.Muted else RunmoniColors.CoralInk,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.testTag("chat_send_status").semantics { liveRegion = LiveRegionMode.Polite },
+                )
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(value = input, onValueChange = { if (it.length <= if (state.communityBackend == CommunityBackend.FIREBASE) 1000 else 2000) input = it }, label = { Text(if (notice) "공지 작성" else "메시지 작성") }, modifier = Modifier.weight(1f).testTag("chat_input"), textStyle = MaterialTheme.typography.bodyLarge, maxLines = composerMaxLines, shape = RunmoniShapes.Input)
-                    FilledIconButton(shape = RunmoniShapes.Action, onClick = { followLatest = true; pending = input.trim(); actions.sendMessage(input.trim(), notice && canNotice); input = "" }, enabled = input.isNotBlank() && !state.busy, modifier = Modifier.size(52.dp).testTag("send_message")) { Icon(Icons.Outlined.Send, "메시지 보내기") }
+                    FilledIconButton(shape = RunmoniShapes.Action, onClick = {
+                        if (sending || input.isBlank()) return@FilledIconButton
+                        val draft = input
+                        val sendNotice = notice && canNotice
+                        followLatest = true
+                        sending = true
+                        sendUnconfirmed = true
+                        scope.launch {
+                            val acknowledged = actions.sendMessage(state.openedRoomId, state.communityUid,
+                                state.communityBackend, draft.trim(), sendNotice)
+                            if (acknowledged && input == draft) input = ""
+                            sendUnconfirmed = !acknowledged
+                            sending = false
+                        }
+                    }, enabled = input.isNotBlank() && !state.busy && !sending,
+                        modifier = Modifier.size(52.dp).testTag("send_message")) { Icon(Icons.Outlined.Send, "메시지 보내기") }
                 }
             }
         }

@@ -32,7 +32,7 @@ class ConsumerClosetTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
         capture("closet-color-shortcut-411-fixture")
         compose.onNodeWithTag("closet_back_to_items").assertIsDisplayed().performClick()
-        compose.onNodeWithTag("closet_search").assertIsDisplayed()
+        compose.onNodeWithTag("closet_top_1").assertIsDisplayed().assertIsSelected()
         compose.runOnIdle {
             assertEquals(listOf(RunningKitRegion.TOP to 1), choices)
             assertEquals(1, state.value.profile.avatar.top)

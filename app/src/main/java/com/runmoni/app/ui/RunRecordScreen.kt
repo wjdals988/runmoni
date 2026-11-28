@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
@@ -150,7 +151,11 @@ private fun RunRecordPageContent(
     var selectedKilometer by rememberSaveable { mutableIntStateOf(0) }
     var mapKilometer by rememberSaveable { mutableIntStateOf(0) }
     var mapOpen by rememberSaveable { mutableStateOf(false) }
-    var lapMapOrigin by rememberSaveable { mutableIntStateOf(-1) }
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    var lapMapOrigin by remember(configuration.screenWidthDp, configuration.screenHeightDp, density.density, density.fontScale) {
+        mutableIntStateOf(-1)
+    }
     val scope = rememberCoroutineScope()
     val selectedRoute = remember(geometry, record.lapAnchors, selectedKilometer) {
         geometry.lapRoute(selectedKilometer, record.lapAnchors)
@@ -159,11 +164,14 @@ private fun RunRecordPageContent(
         geometry.lapRoute(mapKilometer, record.lapAnchors)
     }
     val analysisAnchor = remember { BringIntoViewRequester() }
+    val lapAnchor = remember { BringIntoViewRequester() }
     val mapAnchor = remember { BringIntoViewRequester() }
     var analysisRequest by remember { mutableIntStateOf(0) }
     var mapRequest by remember { mutableIntStateOf(0) }
+    var lapRequest by remember { mutableIntStateOf(0) }
     LaunchedEffect(analysisRequest) { if (analysisRequest > 0) analysisAnchor.bringIntoView() }
     LaunchedEffect(mapRequest) { if (mapRequest > 0 && mapOpen) mapAnchor.bringIntoView() }
+    LaunchedEffect(lapRequest) { if (lapRequest > 0) lapAnchor.bringIntoView() }
     val openMap: (Int) -> Unit = { kilometer ->
         lapMapOrigin = if (kilometer > 0) scroll.value else -1
         mapKilometer = kilometer
@@ -260,7 +268,8 @@ private fun RunRecordPageContent(
 
                     RunRecordPaceAnalysis(analysis, selectedKilometer, { selectedKilometer = it },
                         Modifier.padding(horizontal = gutter).bringIntoViewRequester(analysisAnchor),
-                        onOpenSelectedRoute = if (selectedRoute != null) ({ openMap(selectedKilometer) }) else null)
+                        onOpenSelectedRoute = if (selectedRoute != null) ({ openMap(selectedKilometer) }) else null,
+                        selectedLapModifier = Modifier.bringIntoViewRequester(lapAnchor))
 
                     RunRecordComparison(record, comparisonRecords, Modifier.padding(horizontal = gutter))
 
@@ -285,7 +294,7 @@ private fun RunRecordPageContent(
                                         selectedKilometer = mapKilometer
                                         val destination = lapMapOrigin
                                         if (destination >= 0) scope.launch { scroll.scrollTo(destination) }
-                                        else analysisRequest++
+                                        else lapRequest++
                                     }, shape = RunmoniShapes.Action,
                                         modifier = Modifier.heightIn(min = 48.dp).testTag("record_map_return_to_lap")) {
                                         Text("구간 기록 보기")

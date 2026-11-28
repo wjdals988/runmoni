@@ -85,6 +85,8 @@ private data class ShareRenderInput(val content: RunShareContent, val draft: Run
     val photo: Bitmap?, val avatar: Bitmap?, val name: String)
 private data class RenderedShare(val input: ShareRenderInput, val bitmap: Bitmap)
 
+internal enum class ShareExportDestination { Gallery, Chooser }
+
 /** An editor owns only its transient photo/draft. It never changes the record, wallet or avatar. */
 @Composable
 internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: String,
@@ -108,7 +110,7 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
     var renderError by remember { mutableStateOf<String?>(null) }
     var operationError by remember { mutableStateOf<String?>(null) }
     var message by remember { mutableStateOf<String?>(null) }
-    var exporting by remember { mutableStateOf(false) }
+    var exportDestination by remember { mutableStateOf<ShareExportDestination?>(null) }
     var editRevision by remember { mutableLongStateOf(0L) }
     val renderedEditRevision = editRevision
     var alive by remember { mutableStateOf(true) }
@@ -118,12 +120,12 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
     val content = remember(record) { RunShareContent.from(record) }
     val normalized = draft.normalized()
     LaunchedEffect(recordAvailable, content) {
-        if (!recordAvailable || content == null) { operation++; exportJob?.cancel(); exporting = false }
+        if (!recordAvailable || content == null) { operation++; exportJob?.cancel(); exportDestination = null }
     }
     DisposableEffect(lifecycle) {
         alive = true
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) { operation++; exportJob?.cancel(); exporting = false }
+            if (event == Lifecycle.Event.ON_STOP) { operation++; exportJob?.cancel(); exportDestination = null }
         }
         lifecycle.addObserver(observer)
         onDispose { alive = false; operation++; exportJob?.cancel(); lifecycle.removeObserver(observer) }
@@ -146,7 +148,11 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
             photo = SharePhoto(uri, bitmap); savedPhotoUri = uri; photoError = null
         } catch (cancelled: CancellationException) { throw cancelled }
         catch (_: Exception) {
-            photoError = "사진을 불러오지 못했어요. 다른 사진을 선택하거나 다시 시도해 주세요."
+            photoError = when {
+                photo != null -> "새 사진을 불러오지 못해 기존 사진을 보여드려요."
+                savedPhotoUri != null -> "사진을 불러오지 못했어요. 다른 사진을 선택하거나 빼 주세요."
+                else -> "사진을 불러오지 못했어요. 다른 사진을 선택해 주세요."
+            }
             requestedPhotoUri = savedPhotoUri
         } finally { photoLoading = false }
     }
@@ -182,21 +188,23 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
     val readyNow by rememberUpdatedState(ready)
     val latestInput by rememberUpdatedState(input)
     val picker = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null && alive && available && !exporting) {
-            editRevision++; requestedPhotoUri = uri.toString(); photoAttempt++; photoError = null; message = null
+        if (uri != null && alive && available && exportDestination == null) {
+            editRevision++; requestedPhotoUri = uri.toString(); photoAttempt++; photoError = null
+            operationError = null; message = null
         }
     }
     fun edit(next: RunShareDraft) {
-        if (!exporting && alive && available) { editRevision++; draft = next; operationError = null; message = null }
+        if (exportDestination == null && alive && available) { editRevision++; draft = next; operationError = null; message = null }
     }
     fun export(toGallery: Boolean) {
         val snapshot = currentBitmap ?: return
-        if (renderedEditRevision != editRevision || !readyNow || latestInput != input || exporting || !alive || !available || !authorize() ||
+        if (renderedEditRevision != editRevision || !readyNow || latestInput != input || exportDestination != null || !alive || !available || !authorize() ||
             !lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) return
         val ticket = ++operation
         fun stillCurrent() = alive && available && ticket == operation && renderedEditRevision == editRevision &&
             authorize() && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
-        exporting = true; operationError = null; message = null
+        exportDestination = if (toGallery) ShareExportDestination.Gallery else ShareExportDestination.Chooser
+        operationError = null; message = null
         // These immutable values describe the exact preview, not a later selection.
         val summary = content?.let { "runmoni · ${it.distance} km · ${it.duration} · ${it.pace} /km" }.orEmpty()
         exportJob = scope.launch {
@@ -223,25 +231,33 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
                 if (alive && ticket == operation) operationError = if (toGallery)
                     "저장하지 못했어요. 저장 공간을 확인한 뒤 다시 시도해 주세요."
                 else "공유할 앱을 열지 못했어요. 이미지를 저장하거나 다시 시도해 주세요."
-            } finally { if (ticket == operation) exporting = false }
+            } finally { if (ticket == operation) exportDestination = null }
         }
     }
     val problem = when {
         !recordAvailable -> "기록을 확인할 수 없어 공유를 잠시 멈췄어요. 뒤로 돌아가 기록을 확인해 주세요."
         content == null -> "완료된 러닝 기록을 확인할 수 없어요. 뒤로 돌아가 다시 선택해 주세요."
         normalized.showAvatar && avatarError -> "미니미를 불러오지 못했어요. 미니미 표시를 끄거나 편집 화면을 다시 열어 주세요."
-        else -> operationError ?: photoError ?: renderError
+        else -> photoError ?: renderError
     }
-    RunShareEditorUi(draft, tool, currentBitmap ?: rendered?.bitmap, photo?.bitmap != null,
+    val preview = rendered
+    val displayedPhoto = photo?.bitmap?.takeIf { photoReady && preview?.input?.photo === it }
+    val exporting = exportDestination != null
+    RunShareEditorUi(draft, tool, preview?.bitmap, photo?.bitmap != null,
         ready, exporting, !exporting && recordAvailable, problem, message,
-        onDraft = ::edit, onTool = { if (!exporting) tool = it },
-        onPickPhoto = { if (!exporting && available) {
+        onDraft = ::edit, onTool = { if (exportDestination == null) tool = it },
+        onPickPhoto = { if (exportDestination == null && available) {
             try { picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
-            catch (_: Exception) { operationError = "사진 선택 앱을 열지 못했어요. 사진 앱을 확인한 뒤 다시 시도해 주세요." }
+            catch (_: Exception) { photoError = "사진 선택기를 열지 못했어요. 다시 시도해 주세요." }
         } },
-        onRemovePhoto = { if (!exporting) { editRevision++; savedPhotoUri = null; requestedPhotoUri = null; photo = null; photoError = null; message = null } },
+        onRemovePhoto = {
+            if (exportDestination == null && alive && available) {
+                editRevision++; savedPhotoUri = null; requestedPhotoUri = null; photo = null; photoError = null
+                operationError = null; message = null
+            }
+        },
         onTransform = { centroid, pan, zoom ->
-            if (tool == 0) photo?.bitmap?.let { bitmap ->
+            if (tool == 0) displayedPhoto?.let { bitmap ->
                 val moved = RunSharePhotoTransform.gesture(draft, bitmap.width, bitmap.height,
                     centroid.x, centroid.y, pan.x, pan.y, zoom)
                 edit(draft.copy(photoZoom = moved.photoZoom, photoX = moved.photoX, photoY = moved.photoY))
@@ -258,9 +274,18 @@ internal fun RunShareScreen(record: RunRecord, avatar: AvatarStyle, runnerName: 
                 edit(draft.copy(avatarX = fitted.avatarX, avatarY = fitted.avatarY, avatarScale = fitted.avatarScale))
             }
         }, onSave = { export(true) }, onShare = { export(false) }, onBack = onBack,
-        previewDescription = content?.let { "공유 이미지 미리보기. 거리 ${it.distance} km, 러닝 시간 ${it.duration}, 평균 페이스 ${it.pace} /km. " +
-            (if (draft.showDate) it.date else "") + ". " + normalized.caption }.orEmpty(),
-        photoClearable = savedPhotoUri != null || requestedPhotoUri != null || photo != null)
+        previewDescription = preview?.input?.let { frame ->
+            val run = frame.content
+            listOf("공유 이미지 미리보기", "거리 ${run.distance} km, 러닝 시간 ${run.duration}, 평균 페이스 ${run.pace} /km",
+                run.date.takeIf { frame.draft.showDate }, frame.name.takeIf { it.isNotBlank() },
+                frame.draft.caption.takeIf { it.isNotBlank() })
+                .filterNotNull().joinToString(". ")
+        } ?: "공유 이미지 미리보기",
+        photoClearable = savedPhotoUri != null || requestedPhotoUri != null || photo != null,
+        previewDraft = preview?.input?.draft ?: draft,
+        exportError = operationError,
+        exportDestination = exportDestination,
+        photoTransformReady = displayedPhoto != null)
 }
 
 /** Controls and preview share one draft; Native layout tests inject only the already-rendered bitmap. */
@@ -269,7 +294,9 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
     ready: Boolean, busy: Boolean, editable: Boolean, error: String?, message: String?,
     onDraft: (RunShareDraft) -> Unit, onTool: (Int) -> Unit, onPickPhoto: () -> Unit, onRemovePhoto: () -> Unit,
     onTransform: (Offset, Offset, Float) -> Unit, onSave: () -> Unit, onShare: () -> Unit, onBack: () -> Unit,
-    previewDescription: String = "공유 이미지 미리보기", photoClearable: Boolean = photoPresent) {
+    previewDescription: String = "공유 이미지 미리보기", photoClearable: Boolean = photoPresent,
+    previewDraft: RunShareDraft = draft, exportError: String? = null, exportDestination: ShareExportDestination? = null,
+    photoTransformReady: Boolean = photoPresent) {
     BackHandler(onBack = onBack)
     val scroll = rememberScrollState()
     val latestTransform by rememberUpdatedState(onTransform)
@@ -294,7 +321,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                 val gutter = pageGutter()
                 val frameInset = RunmoniLayout.TightGap
                 val previewWidth = minOf((maxWidth - (gutter + frameInset) * 2).coerceAtLeast(1.dp),
-                    previewHeight * draft.ratio.aspectRatio)
+                    previewHeight * previewDraft.ratio.aspectRatio)
                 val matte = MaterialTheme.colorScheme.surfaceContainerHighest
                 val increasedContrast = rememberIncreasedContrast()
                 val solidShelf = compact || !ready || busy || increasedContrast
@@ -308,26 +335,35 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                             else Modifier.background(Brush.horizontalGradient(listOf(matte, RunmoniTrack.Stage))))
                         .padding(frameInset),
                         verticalArrangement = Arrangement.spacedBy(frameInset), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Box(Modifier.fillMaxWidth().height(previewHeight), contentAlignment = Alignment.Center) {
-                            Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
+                        Box(Modifier.fillMaxWidth().heightIn(min = previewHeight), contentAlignment = Alignment.Center) {
+                            if (bitmap != null || error == null) Box(Modifier.width(previewWidth).aspectRatio(previewDraft.ratio.aspectRatio)
                                 .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Outline)
                                 .testTag("run_share_preview")
-                                .pointerInput(tool, editable, photoPresent, draft.showAvatar) {
-                                    if (editable && (tool == 0 && photoPresent || tool == 1 || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
+                                .pointerInput(tool, editable, photoTransformReady, draft.showAvatar, draft.ratio == previewDraft.ratio) {
+                                    if (editable && draft.ratio == previewDraft.ratio &&
+                                        (tool == 0 && photoTransformReady || tool == 1 || tool == 2 && draft.showAvatar)) detectTransformGestures { centroid, pan, zoom, _ ->
                                         if (size.width > 0 && size.height > 0) latestTransform(
                                             Offset(centroid.x / size.width, centroid.y / size.height),
                                             Offset(pan.x / size.width, pan.y / size.height), zoom)
                                     }
                                 }, contentAlignment = Alignment.Center) {
                                 if (bitmap != null) Image(bitmap.asImageBitmap(),
-                                    "$previewDescription ${draft.ratio.label}, ${if (draft.showAvatar) "미니미 포함" else "미니미 숨김"}",
+                                    "$previewDescription. ${previewDraft.ratio.label}, ${if (previewDraft.showAvatar) "미니미 포함" else "미니미 숨김"}",
                                     Modifier.fillMaxSize())
-                                else CircularProgressIndicator(Modifier.size(32.dp))
-                                if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
-                                    modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
-                                    Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
-                                        modifier = Modifier.padding(frameInset))
-                                }
+                                else if (rememberPageAnimationsEnabled()) CircularProgressIndicator(
+                                    Modifier.size(32.dp).testTag("run_share_preview_progress"))
+                            }
+                            if (error != null || !ready && !busy) Surface(
+                                color = if (error != null) RunmoniColors.CoralWash else RunmoniColors.Paper,
+                                contentColor = if (error != null) RunmoniColors.CoralInk else RunmoniColors.Muted,
+                                shape = RunmoniShapes.Action,
+                                modifier = Modifier.align(if (bitmap == null && error != null) Alignment.Center else Alignment.BottomCenter)
+                                    .fillMaxWidth(),
+                            ) {
+                                val status = error ?: if (bitmap == null) "이미지 준비 중…" else "미리보기 갱신 중…"
+                                Text(status, style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier.padding(frameInset).testTag(if (error != null) "run_share_error" else "run_share_loading")
+                                        .semantics { liveRegion = LiveRegionMode.Polite })
                             }
                         }
                         Surface(Modifier.fillMaxWidth().testTag(if (solidShelf) "run_share_shelf_solid" else "run_share_shelf_tint"),
@@ -340,8 +376,6 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                         .padding(start = gutter, end = gutter, top = frameInset, bottom = RunmoniLayout.ContentGap),
                         verticalArrangement = Arrangement.spacedBy(frameInset)) {
-                        if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
                         ShareToolTabs(tool, !busy, onTool)
                         Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
                             modifier = Modifier.semantics { heading() })
@@ -369,7 +403,7 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                         Slider(value = draft.photoZoom.coerceIn(1f, 3f), onValueChange = {
                                             latestTransform(Offset(.5f, .5f), Offset.Zero, it / draft.photoZoom)
                                         },
-                                            valueRange = 1f..3f, enabled = editable,
+                                            valueRange = 1f..3f, enabled = editable && photoTransformReady,
                                             modifier = Modifier.testTag("run_share_photo_zoom").semantics { contentDescription = "사진 확대" })
                                         TextButton(onClick = { photoPositionExpanded = !photoPositionExpanded }, enabled = editable,
                                             modifier = Modifier.heightIn(min = 48.dp).testTag("run_share_photo_position")) {
@@ -437,10 +471,10 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                         }
                         Spacer(Modifier.height(8.dp))
                     }
-                    if (scrollFooter) RunShareExportActions(ready, busy, message, onSave, onShare)
+                    if (scrollFooter) RunShareExportActions(ready, busy, message, exportError, exportDestination, onSave, onShare)
                 }
             }
-            if (!scrollFooter) RunShareExportActions(ready, busy, message, onSave, onShare)
+            if (!scrollFooter) RunShareExportActions(ready, busy, message, exportError, exportDestination, onSave, onShare)
           }
         }
     }
@@ -607,28 +641,36 @@ private fun ShareNudgeControls(label: String, tag: String, enabled: Boolean, onM
 }
 
 @Composable
-private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String?,
+private fun RunShareExportActions(ready: Boolean, busy: Boolean, message: String?, error: String?,
+    destination: ShareExportDestination?,
     onSave: () -> Unit, onShare: () -> Unit) {
     HorizontalDivider(color = RunmoniColors.Line)
     Box(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
         .padding(horizontal = pageGutter(), vertical = 12.dp), contentAlignment = Alignment.Center) {
         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            if (message != null) Text(message, color = RunmoniColors.Primary,
-                modifier = Modifier.testTag("run_share_message").semantics { liveRegion = LiveRegionMode.Polite })
+            val status = error ?: message
+            if (status != null) Text(status,
+                color = if (error != null) RunmoniColors.CoralInk else RunmoniColors.Primary,
+                modifier = Modifier.testTag(if (error != null) "run_share_export_error" else "run_share_message")
+                    .semantics { liveRegion = LiveRegionMode.Polite })
             AdaptiveActions(first = { m ->
+                val saving = destination == ShareExportDestination.Gallery
                 OutlinedButton(onClick = onSave, enabled = ready && !busy, shape = RunmoniShapes.Action,
-                    modifier = m.heightIn(min = 48.dp).testTag("save_run_share").recordActionSnapshot(onSave)) {
+                    modifier = m.heightIn(min = 48.dp).testTag("save_run_share").recordActionSnapshot(onSave)
+                        .semantics { if (saving) liveRegion = LiveRegionMode.Polite }) {
                     Icon(Icons.Outlined.SaveAlt, null, Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text(if (busy) "준비 중…" else "이미지 저장")
+                    Text(if (saving) "저장 중…" else "이미지 저장")
                 }
             }, second = { m ->
+                val preparing = destination == ShareExportDestination.Chooser
                 Button(onClick = onShare, enabled = ready && !busy, shape = RunmoniShapes.Action,
-                    modifier = m.heightIn(min = 48.dp).testTag("send_run_share").recordActionSnapshot(onShare)) {
+                    modifier = m.heightIn(min = 48.dp).testTag("send_run_share").recordActionSnapshot(onShare)
+                        .semantics { if (preparing) liveRegion = LiveRegionMode.Polite }) {
                     Icon(Icons.Outlined.Share, null, Modifier.size(20.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text("공유하기")
+                    Text(if (preparing) "공유 준비 중…" else "공유하기")
                 }
             })
         }

@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
@@ -70,10 +69,10 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
         Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing.union(WindowInsets.ime))) {
             PageTopBar("설정", onDismiss, closeTag = "close_settings")
             HorizontalDivider(color = RunmoniColors.Line)
-            Box(Modifier.weight(1f).fillMaxWidth()) {
-                val gutter = if (LocalConfiguration.current.screenWidthDp >= 600) 32.dp else 20.dp
-                Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().align(Alignment.TopCenter).verticalScroll(scrollState ?: rememberScrollState())
-                    .padding(horizontal = gutter, vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
+            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+                Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth().verticalScroll(scrollState ?: rememberScrollState())
+                    .padding(horizontal = pageGutter(maxWidth), vertical = RunmoniLayout.SectionGap),
+                    verticalArrangement = Arrangement.spacedBy(RunmoniLayout.SectionGap)) {
                     if (updates.updateAvailable) {
                         AppVersionCard(updates, onClick = onAppInformation, tag = "settings_app_update")
                         HorizontalDivider(color = RunmoniColors.Line)
@@ -96,7 +95,9 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                     }
                     SettingsGroup("기록 요약 자동 백업", Icons.Outlined.CloudDone,
                         "Google 계정에 보관한 러닝 요약") {
-                        Text(if (state.cloud.configured) state.cloud.status else "이 앱에서는 Google 백업을 사용할 수 없어요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted, modifier = Modifier.testTag("cloud_status"))
+                        Text(if (state.cloud.configured) state.cloud.status else "이 앱에서는 Google 백업을 사용할 수 없어요",
+                            style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
+                            modifier = Modifier.testTag("cloud_status").semantics { liveRegion = LiveRegionMode.Polite })
                         SmallNote(AUTOMATIC_BACKUP_PRIVACY)
                         if (state.cloud.uid.isNotBlank() && state.cloud.automaticBackup.initialized) {
                             Text("백업 완료 ${state.cloud.automaticBackup.savedCount}개 · 대기 ${state.cloud.automaticBackup.waitingCount}개 · 확인 필요 ${state.cloud.automaticBackup.reviewCount}개",

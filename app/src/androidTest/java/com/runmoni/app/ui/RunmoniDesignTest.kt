@@ -27,6 +27,7 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import com.runmoni.app.domain.*
+import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -253,7 +254,10 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         val sent = mutableListOf<String>()
         var closes = 0
         val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
-            override fun sendMessage(body: String, notice: Boolean) { sent += body }
+            override suspend fun sendMessage(roomId: String, account: String, backend: CommunityBackend, body: String, notice: Boolean): Boolean {
+                sent += body
+                return true
+            }
             override fun closeChat() { closes++ }
         }
         compose.setContent { RunmoniTheme { ChatScreen(state.value, actions) } }
@@ -319,6 +323,51 @@ class RunmoniDialogDesignTest : RunmoniDesignTestBase() {
         compose.runOnIdle { assertEquals(0, closes) }
         device.pressBack()
         compose.runOnIdle { assertEquals(1, closes) }
+    }
+
+    @Test fun chatClearsOnlyAnAcknowledgedDraftAndNeverRestoresItForOtherErrors() {
+        val room = "crew:delivery"
+        val state = mutableStateOf(AppState(openedRoomId = room, openedRoomTitle = "전송 확인 크루",
+            signedIn = true, communityUid = "sender", communityBackend = CommunityBackend.FIREBASE))
+        val attempts = mutableListOf<String>()
+        var reply = CompletableDeferred<Boolean>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override suspend fun sendMessage(roomId: String, account: String, backend: CommunityBackend, body: String, notice: Boolean): Boolean {
+                assertEquals(room, roomId)
+                assertEquals("sender", account)
+                assertEquals(CommunityBackend.FIREBASE, backend)
+                attempts += body
+                return reply.await()
+            }
+        }
+        compose.setContent { ViewportBox(Viewport()) { RunmoniTheme { ChatScreen(state.value, actions) } } }
+        val draft = compose.onNodeWithTag("chat_input")
+        val send = compose.onNodeWithTag("send_message")
+        fun body() = draft.fetchSemanticsNode().config[SemanticsProperties.EditableText].text
+
+        draft.performTextInput("첫 메시지")
+        send.performClick().assertIsNotEnabled()
+        assertEquals("첫 메시지", body())
+        compose.runOnIdle { reply.complete(true) }
+        assertEquals("", body())
+        compose.runOnIdle { state.value = state.value.copy(error = "다른 작업 실패"); reply = CompletableDeferred() }
+        assertEquals("", body())
+
+        draft.performTextInput("확인할 메시지")
+        send.performClick()
+        compose.runOnIdle { reply.complete(false) }
+        compose.onNodeWithTag("chat_send_status").assertTextContains("전송을 확인하지 못했어요", substring = true)
+        assertEquals("확인할 메시지", body())
+        send.assertIsEnabled()
+        compose.runOnIdle {
+            assertEquals(listOf("첫 메시지", "확인할 메시지"), attempts)
+            reply = CompletableDeferred()
+        }
+        send.performClick()
+        draft.performTextReplacement("새로 작성한 문장")
+        compose.runOnIdle { reply.complete(true) }
+        assertEquals("새로 작성한 문장", body())
+        compose.onNodeWithTag("chat_send_status").assertDoesNotExist()
     }
 
     @Test fun largeLocationConsentRemainsScrollableWithoutEnablingSharing() {

@@ -128,6 +128,56 @@ class RunShareUiTest : RunmoniDesignTestBase() {
         }
     }
 
+    @Test fun previewFailureKeepsRecoveryVisibleAndPreviousImageKeepsItsOwnDescription() {
+        val image = preview()
+        val attached = mutableStateOf(true)
+        val hasPreviousFrame = mutableStateOf(false)
+        val error = mutableStateOf<String?>("사진을 불러오지 못했어요. 다른 사진을 선택해 주세요.")
+        val exportDestination = mutableStateOf<ShareExportDestination?>(null)
+        val requested = RunShareDraft(ratio = RunShareRatio.STORY, showAvatar = false)
+        val previous = requested.copy(ratio = RunShareRatio.SQUARE, showAvatar = true)
+        var picks = 0
+        try {
+            compose.setContent {
+                if (attached.value) RunmoniTheme { ViewportBox(Viewport(411, 1f)) {
+                    Box(Modifier.height(520.dp)) {
+                        RunShareEditorUi(requested, 0, image.takeIf { hasPreviousFrame.value },
+                            photoPresent = false, ready = exportDestination.value != null, busy = exportDestination.value != null,
+                            editable = exportDestination.value == null, error = error.value, message = null,
+                            onDraft = {}, onTool = {}, onPickPhoto = { picks++ }, onRemovePhoto = {},
+                            onTransform = { _, _, _ -> }, onSave = {}, onShare = {}, onBack = {},
+                            previewDraft = if (hasPreviousFrame.value && exportDestination.value == null) previous else requested,
+                            exportDestination = exportDestination.value)
+                    }
+                } }
+            }
+            compose.onNodeWithTag("run_share_error").assertIsDisplayed().assertTextEquals(error.value!!)
+            compose.onNodeWithTag("run_share_preview_progress").assertDoesNotExist()
+            compose.onNodeWithTag("run_share_loading").assertDoesNotExist()
+            fullyVisible("run_share_photo").assertIsEnabled().performClick()
+            fullyVisible("send_run_share").assertIsNotEnabled()
+            capture("run-share-preview-failure-411-fixture")
+
+            compose.runOnIdle {
+                hasPreviousFrame.value = true
+                error.value = null
+                assertEquals(1, picks)
+            }
+            compose.onNodeWithTag("run_share_loading").assertIsDisplayed().assertTextEquals("미리보기 갱신 중…")
+            compose.onNodeWithContentDescription("공유 이미지 미리보기. ${previous.ratio.label}, 미니미 포함").assertIsDisplayed()
+            fullyVisible("send_run_share").assertIsNotEnabled()
+
+            compose.runOnIdle { exportDestination.value = ShareExportDestination.Chooser }
+            compose.onNodeWithTag("run_share_loading").assertDoesNotExist()
+            fullyVisible("save_run_share").assertTextContains("이미지 저장").assertIsNotEnabled()
+            fullyVisible("send_run_share").assertTextContains("공유 준비 중…").assertIsNotEnabled()
+        } finally {
+            compose.runOnIdle { attached.value = false }
+            compose.waitForIdle()
+            image.recycle()
+        }
+    }
+
     @Test fun everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases() {
         val viewport = mutableStateOf(Viewport(320, 1f))
         val draft = mutableStateOf(RunShareDraft(caption = "내 페이스로 천천히 달리기 ".repeat(3)))

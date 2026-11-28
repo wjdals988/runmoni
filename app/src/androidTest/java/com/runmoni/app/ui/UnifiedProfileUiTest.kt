@@ -1,6 +1,8 @@
 package com.runmoni.app.ui
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
@@ -23,15 +25,26 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
         }
         compose.setContent { RunmoniTheme { UnifiedProfileDialog(state.value, actions) {} } }
         compose.onNodeWithTag("save_profile").assertIsNotEnabled()
+        compose.onNodeWithTag("profile_nickname_prerequisite").performScrollTo().assertIsDisplayed()
         compose.onNodeWithTag("check_nickname").performScrollTo().performClick()
         compose.runOnIdle {
             assertEquals(listOf("첫 러너"), checks)
             state.value = state.value.copy(unifiedProfile = UnifiedProfileUi(check = check("첫 러너", "profile-a")))
         }
+        compose.onNodeWithTag("nickname_result")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
         compose.onNodeWithTag("save_profile").assertIsEnabled()
+        compose.runOnIdle {
+            state.value = state.value.copy(unifiedProfile = UnifiedProfileUi(error = "이전 닉네임 확인 실패"))
+        }
+        compose.onNodeWithTag("profile_error").assertExists()
         compose.onNodeWithTag("profile_name").performScrollTo().performTextClearance()
         compose.onNodeWithTag("profile_name").performTextInput("둘째 러너")
+        compose.onNodeWithTag("profile_name").performImeAction()
+        compose.runOnIdle { assertEquals(listOf("첫 러너"), checks) }
         compose.onNodeWithTag("save_profile").assertIsNotEnabled()
+        compose.onNodeWithTag("profile_error").assertDoesNotExist()
+        compose.onNodeWithTag("profile_nickname_prerequisite").assertExists()
         compose.onNodeWithTag("nickname_result").assertDoesNotExist()
         compose.runOnIdle {
             state.value = state.value.copy(unifiedProfile = UnifiedProfileUi(check = check("둘째 러너", "profile-b")))
@@ -69,6 +82,8 @@ class UnifiedProfileUiTest : RunmoniDesignTestBase() {
         }
         // Even a matching observation for B cannot authorize the editor opened for A.
         compose.onNodeWithTag("save_profile").assertIsNotEnabled().performTouchInput { click() }
+        compose.onNodeWithTag("profile_name").assertIsNotEnabled()
+        compose.onNodeWithTag("profile_identity_changed").performScrollTo().assertIsDisplayed()
         compose.runOnIdle { assertTrue(saves.isEmpty()); assertTrue(visible.value) }
         compose.onNodeWithTag("close_profile").assertIsDisplayed().performClick()
         compose.onNodeWithTag("profile_name").assertDoesNotExist()

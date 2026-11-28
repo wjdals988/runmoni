@@ -245,8 +245,9 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         }
         compose.onNodeWithTag("locate_explore").performClick()
         compose.onNodeWithTag("explore_current_area").assertExists()
-        val hide = compose.onNodeWithTag("hide_discovered_runners")
-        if (!hide.isDisplayed()) hide.performScrollTo()
+        val hide = compose.onNodeWithTag("hide_discovered_runners").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        val map = compose.onNodeWithTag("route_map_viewport").getUnclippedBoundsInRoot()
+        assertTrue(hide.getUnclippedBoundsInRoot().bottom <= map.top)
         hide.performClick()
         compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
         compose.onNodeWithTag("explore_current_area").assertExists()

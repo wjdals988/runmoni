@@ -23,6 +23,32 @@ class CommunityPageNavigationTest : RunmoniDesignTestBase() {
     private fun scrollPosition(tag: String): Float = compose.onNodeWithTag(tag)
         .fetchSemanticsNode().config[SemanticsProperties.VerticalScrollAxisRange].value()
 
+    @Test fun crewLeaveRequiresConfirmationAndKeepsTheDetailUntilMembershipUpdates() {
+        val state = mutableStateOf(AppState(signedIn = true, serverConnected = true,
+            communityBackend = CommunityBackend.FIREBASE, communityUid = "page-self", crews = listOf(second)))
+        val leaves = mutableListOf<String>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun leaveCrew(id: String) { leaves += id }
+        }
+        compose.setContent { ViewportBox(Viewport()) { RunmoniTheme {
+            CommunityRoomsScreen(state.value, actions, initialCrewId = second.id)
+        } } }
+        compose.onNodeWithTag("crew_detail_1").performClick()
+        val leave = compose.onNodeWithTag("leave_crew_${second.id}")
+        leave.performScrollTo().performClick()
+        compose.onNodeWithTag("cancel_leave_crew").performClick()
+        compose.runOnIdle { assertTrue(leaves.isEmpty()) }
+        leave.performClick()
+        compose.onNodeWithTag("confirm_leave_crew").performClick()
+        compose.runOnIdle { assertEquals(listOf(second.id), leaves) }
+        compose.onNodeWithTag("back_to_rooms").assertIsDisplayed()
+        leave.assertExists()
+
+        compose.runOnIdle { state.value = state.value.copy(crews = listOf(second.copy(joined = false))) }
+        leave.assertDoesNotExist()
+        compose.onNodeWithTag("join_crew_${second.id}").performScrollTo().assertIsDisplayed()
+    }
+
     @Test fun partyChatBackReturnsToTheSamePartyScrollAndCrewTab() {
         val state = mutableStateOf(AppState(signedIn = true, serverConnected = true,
             communityBackend = CommunityBackend.FIREBASE, communityUid = "page-self",

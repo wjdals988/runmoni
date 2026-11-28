@@ -150,8 +150,9 @@ class RunRecordScreenUiTest : RunmoniDesignTestBase() {
             splits = listOf(KmSplit(1, 310_000), KmSplit(2, 400_000)),
             lapAnchors = listOf(RunLapAnchor(0, 0, 0, 0.0), RunLapAnchor(1, 2, 3, .5)))
         val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
+        val viewport = mutableStateOf(Viewport(360, 1f))
         compose.setContent {
-            OfflineRecordPageFixture { ViewportBox(Viewport(360, 1f)) {
+            OfflineRecordPageFixture { ViewportBox(viewport.value) {
                 RunRecordScreen(record, actions, onBack = {})
             } }
         }
@@ -184,6 +185,14 @@ class RunRecordScreenUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("record_map_return_to_lap").assertDoesNotExist()
         compose.onNodeWithTag("record_map_selected_lap").assertDoesNotExist()
         compose.onNodeWithTag("record_split_1").assertIsSelected()
+
+        viewLap.performScrollTo().performClick()
+        returnToLap.assertIsDisplayed()
+        compose.runOnIdle { viewport.value = Viewport(320, 2f) }
+        returnToLap.performScrollTo().performClick()
+        compose.onNodeWithTag("record_selected_split").assertIsDisplayed().assertTextContains("0–1 km · 5:10 /km")
+        viewLap.assertIsDisplayed()
+        capture("run-map-return-to-split-320-font2-fixture")
     }
 
     @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {

@@ -75,7 +75,7 @@ interface AppActions {
     fun deleteParty(id: String) { cancelParty(id) }
     fun openChat(roomId: String, title: String)
     fun closeChat()
-    fun sendMessage(body: String, notice: Boolean)
+    suspend fun sendMessage(roomId: String, account: String, backend: CommunityBackend, body: String, notice: Boolean): Boolean
     fun connectVoice(roomId: String)
     fun disconnectVoice()
     fun setMicrophone(enabled: Boolean)

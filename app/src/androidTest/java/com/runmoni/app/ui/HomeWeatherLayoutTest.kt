@@ -117,7 +117,11 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
                 val action = compose.onNodeWithTag("home_start_run").getUnclippedBoundsInRoot()
                 assertTrue("Departure conditions precede the run action", weather.bottom <= action.top)
                 compose.onNodeWithTag("home_environment_score").assertExists()
+                val temperature = compose.onNodeWithTag("home_weather_temperature").assertIsDisplayed().getUnclippedBoundsInRoot()
+                assertTrue("The current temperature is inside the first fold next to the avatar",
+                    temperature.left >= avatar.right && temperature.bottom <= action.top)
                 if (width == 320) capture("home-weather-beside-320-fixture")
+                if (width == 411) capture("home-departure-fresh-411-fixture")
             } else {
                 compose.onNodeWithTag("home_avatar_conditions_row").assertDoesNotExist()
                 compose.onNodeWithTag("home_avatar_conditions_stacked").assertExists()
@@ -154,19 +158,20 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
         compose.runOnIdle { state.value = state.value.copy(weather = RunningWeatherState(WeatherPhase.LOADING, fresh)) }
         compose.onNodeWithTag("home_attire_guidance").assertDoesNotExist()
         compose.onNodeWithTag("home_running_guidance").assertDoesNotExist()
-        compose.onNodeWithTag("refresh_home_weather").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithTag("refresh_home_weather").assertIsDisplayed().assertIsNotEnabled()
         compose.runOnIdle { state.value = state.value.copy(weather = RunningWeatherState(WeatherPhase.UNAVAILABLE, fresh)) }
         compose.onNodeWithTag("home_weather_temperature").assertTextEquals("7°C")
         compose.onNodeWithTag("home_weather_status").assertExists()
         compose.onNodeWithTag("home_attire_guidance").assertDoesNotExist()
         compose.onNodeWithTag("home_running_guidance").assertDoesNotExist()
-        compose.onNodeWithTag("refresh_home_weather").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithTag("refresh_home_weather").assertIsDisplayed().assertIsEnabled().performClick()
         compose.runOnIdle { assertEquals(1, refreshes) }
         compose.runOnIdle {
             state.value = state.value.copy(weather = RunningWeatherState(WeatherPhase.READY,
                 fresh.copy(forecastAtMillis = fresh.forecastAtMillis - 2 * 60 * 60_000L)))
         }
         compose.onNodeWithTag("home_weather_forecast").assertTextContains("이전 정보", substring = true)
+        compose.onNodeWithTag("refresh_home_weather").assertIsDisplayed().assertIsEnabled()
         compose.onNodeWithTag("home_attire_guidance").assertDoesNotExist()
         compose.onNodeWithTag("home_running_guidance").assertDoesNotExist()
         compose.onNodeWithTag("home_start_run").performScrollTo().assertIsEnabled().performClick()

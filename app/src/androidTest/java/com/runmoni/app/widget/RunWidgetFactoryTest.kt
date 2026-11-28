@@ -149,7 +149,7 @@ class RunWidgetFactoryTest {
         val view = inflate(snapshot(), live = true, minimal = true, fontScale = 2f)
         val direct = view.findViewById<View>(R.id.run_widget_actions)?.visibility == View.VISIBLE
         val button = view.findViewById<View>(if (direct) R.id.run_widget_control else R.id.run_widget_open)
-        assertTrue(button.contentDescription in listOf("러닝 열기", "러닝 일시정지"))
+        assertTrue(button.contentDescription.toString().startsWith(if (direct) "러닝 일시정지" else "러닝 열기"))
         assertTrue(button.isClickable)
         assertTrue(button.measuredHeight >= 48 * context.resources.displayMetrics.density)
         assertTrue(button.measuredWidth >= 48 * context.resources.displayMetrics.density)
@@ -159,8 +159,9 @@ class RunWidgetFactoryTest {
         view.findViewById<View>(R.id.run_widget_footer)?.takeIf { it.visibility == View.VISIBLE }?.let {
             assertTrue(it.bottom <= view.height - view.paddingBottom)
         }
-        assertTrue(view.contentDescription.toString().contains("1.23 km"))
-        assertTrue(view.contentDescription.toString().contains("01:15"))
+        val summary = if (button is ImageButton && !direct) button.contentDescription else view.contentDescription
+        assertTrue(summary.toString().contains("1.23 km"))
+        assertTrue(summary.toString().contains("01:15"))
     }
 
     @Test fun immutableVerbAndRunIdentitiesSeparateOldControlsAndConfirmedFinish() {
@@ -215,7 +216,9 @@ class RunWidgetFactoryTest {
                     View.MeasureSpec.makeMeasureSpec(maximumHeight, View.MeasureSpec.EXACTLY))
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
                 assertFits(root, expectedWidth, maximumHeight, density, label + " exact host")
-                assertTrue(root.contentDescription.toString().contains(RunWidgetContent.from(state, live).title))
+                val summary = if (remote.layoutId == R.layout.run_widget_action_only) root.findViewById<View>(R.id.run_widget_open).contentDescription
+                else root.contentDescription
+                assertTrue(summary.toString().contains(RunWidgetContent.from(state, live).title))
                 if (widthDp == 256 && heightDp == 220 && scale == 1f && state == snapshot())
                     assertEquals("A roomy widget retains direct controls", View.VISIBLE, root.findViewById<View>(R.id.run_widget_actions).visibility)
                 if (widthDp == 128 && heightDp == 140 && scale == 1f && state == snapshot()) {
@@ -252,8 +255,9 @@ class RunWidgetFactoryTest {
                 val action = root.findViewById<View>(if (direct) R.id.run_widget_control else R.id.run_widget_open)
                 assertEquals(View.VISIBLE, action.visibility)
                 assertTrue(action.isClickable)
-                assertEquals(if (direct) "러닝 일시정지" else "러닝 열기", action.contentDescription)
-                assertTrue(root.contentDescription.toString().contains("01:15"))
+                assertTrue(action.contentDescription.toString().startsWith(if (direct) "러닝 일시정지" else "러닝 열기"))
+                val summary = if (remote.layoutId == R.layout.run_widget_action_only) action.contentDescription else root.contentDescription
+                assertTrue(summary.toString().contains("01:15"))
             }
             for ((width, height) in listOf(64 to 48, 0 to 0)) {
                 val remote = RunWidgetViews.forSize(context, state, true, width, height)
@@ -264,10 +268,15 @@ class RunWidgetFactoryTest {
                     View.MeasureSpec.makeMeasureSpec((48 * density).toInt(), View.MeasureSpec.EXACTLY))
                 root.layout(0, 0, root.measuredWidth, root.measuredHeight)
                 assertFits(root, root.width, root.height, density, "icon-only app action")
-                assertTrue(root.findViewById<ImageButton>(R.id.run_widget_open).isClickable)
-                assertEquals("러닝 열기", root.findViewById<View>(R.id.run_widget_open).contentDescription)
-                assertTrue(root.contentDescription.toString().contains("1.23 km"))
+                val action = root.findViewById<ImageButton>(R.id.run_widget_open)
+                assertTrue(action.isClickable)
+                assertFalse(root.isClickable)
+                assertTrue(action.contentDescription.toString().startsWith("러닝 열기"))
+                assertTrue(action.contentDescription.toString().contains("1.23 km"))
             }
+            val needsApp = RunWidgetViews.forSize(context, null, false, 0, 0, RunWidgetActions(needsApp = true))
+                .apply(context, FrameLayout(context))
+            assertTrue(needsApp.findViewById<View>(R.id.run_widget_open).contentDescription.toString().startsWith("앱에서 준비"))
         }
     }
 
@@ -384,7 +393,9 @@ class RunWidgetFactoryTest {
             }
             assertEquals("러닝을 마칠까요?", confirm.findViewById<TextView>(R.id.run_widget_title).text.toString())
             val withMetrics = render(running, true, 320, RunWidgetActions(live = activeToken, confirmation = confirmation))
-            assertEquals("01:15 · 1.23 km", withMetrics.findViewById<TextView>(R.id.run_widget_confirm_metrics).text.toString())
+            val metrics = withMetrics.findViewById<TextView>(R.id.run_widget_confirm_metrics)
+            assertEquals("01:15 · 1.23 km", metrics.text.toString())
+            assertEquals("러닝 시간 01:15, 거리 1.23 km", metrics.contentDescription.toString())
             assertEquals("취소", confirm.findViewById<Button>(R.id.run_widget_control).text.toString())
             assertEquals("마치고 저장", confirm.findViewById<Button>(R.id.run_widget_finish).text.toString())
             assertTrue(confirm.findViewById<View>(R.id.run_widget_control).isClickable)

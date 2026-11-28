@@ -9,6 +9,8 @@ import com.runmoni.app.MainActivity
 import com.runmoni.app.domain.NewCrew
 import com.runmoni.app.domain.NewParty
 import com.runmoni.app.domain.PartyKind
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,11 +45,11 @@ class PilotApiFlowTest {
             assertEquals(2, party.capacity)
             scenario.onActivity { model.openChat("crew:${crew.id}", crew.name) }
             until { !model.state.value.busy }
-            scenario.onActivity { model.sendMessage("크루 실제 HTTP 공지 $suffix", true) }
+            send(model, "크루 실제 HTTP 공지 $suffix", true)
             until { model.state.value.messages.any { it.body == "크루 실제 HTTP 공지 $suffix" && it.notice } && !model.state.value.busy }
             scenario.onActivity { model.openChat("party:${party.id}", party.title) }
             until { !model.state.value.busy }
-            scenario.onActivity { model.sendMessage("파티 실제 HTTP 채팅 $suffix", false) }
+            send(model, "파티 실제 HTTP 채팅 $suffix", false)
             until { model.state.value.messages.any { it.body == "파티 실제 HTTP 채팅 $suffix" && !it.notice } && !model.state.value.busy }
             scenario.onActivity { model.updateProfile("변경러너-$suffix") }
             until { model.state.value.profile.name == "변경러너-$suffix" && !model.state.value.busy }
@@ -62,6 +64,12 @@ class PilotApiFlowTest {
             scenario.close()
         }
     }
+
+    private fun send(model: AppViewModel, body: String, notice: Boolean) = runBlocking(Dispatchers.Main.immediate) {
+        val state = model.state.value
+        assertTrue(model.sendMessage(state.openedRoomId, state.communityUid, state.communityBackend, body, notice))
+    }
+
     private fun until(condition: () -> Boolean) {
         val deadline = SystemClock.elapsedRealtime() + 20000
         while (!condition() && SystemClock.elapsedRealtime() < deadline) Thread.sleep(100)

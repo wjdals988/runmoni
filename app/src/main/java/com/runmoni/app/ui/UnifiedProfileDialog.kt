@@ -2,6 +2,8 @@ package com.runmoni.app.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -11,11 +13,14 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 
@@ -26,14 +31,21 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
     var adultConfirmed by rememberSaveable { mutableStateOf(false) }
     var saveStartSerial by rememberSaveable { mutableStateOf<Long?>(null) }
     var connectionStartSerial by rememberSaveable { mutableStateOf<Long?>(null) }
+    var requestedName by rememberSaveable { mutableStateOf<String?>(null) }
     val openedUid = rememberSaveable { state.communityUid }
     val openedBackend = rememberSaveable { state.communityBackend }
     val identityChanged = openedUid != state.communityUid || openedBackend != state.communityBackend
     val online = state.communityBackend == CommunityBackend.FIREBASE && state.signedIn && state.communityUid.isNotBlank()
-    val valid = NicknamePolicy.validationError(name) == null
+    val normalizedName = NicknamePolicy.normalize(name)
+    val nameError = NicknamePolicy.validationError(name)
+    val valid = nameError == null
     val result = state.unifiedProfile.check?.takeIf { it.matches(name, state.communityUid) }
     val reserved = result?.availability in listOf(NicknameAvailability.AVAILABLE, NicknameAvailability.OWNED)
     val busy = state.busy || state.unifiedProfile.saving || state.unifiedProfile.checking || state.unifiedProfile.connecting
+    val operationError = state.unifiedProfile.error.takeIf { requestedName == null || requestedName == normalizedName }
+    val focus = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    val dismissInput = { keyboard?.hide(); focus.clearFocus() }
     LaunchedEffect(state.unifiedProfile.savedSerial, state.unifiedProfile.connectedSerial,
         state.unifiedProfile.connectionUid, state.unifiedProfile.connectedNickname,
         state.communityUid, state.signedIn, state.communityBackend, saveStartSerial, connectionStartSerial) {
@@ -49,7 +61,13 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
         if (saved || connected) onDismiss()
     }
     FormDialog("프로필", onDismiss, closeTag = "close_profile", dismissLabel = null, confirm = {
-        Button(onClick = { connectionStartSerial = null; saveStartSerial = state.unifiedProfile.savedSerial; actions.saveUnifiedProfile(name, openedUid, openedBackend) }, shape = RunmoniShapes.Action,
+        Button(onClick = {
+            dismissInput()
+            requestedName = normalizedName
+            connectionStartSerial = null
+            saveStartSerial = state.unifiedProfile.savedSerial
+            actions.saveUnifiedProfile(name, openedUid, openedBackend)
+        }, shape = RunmoniShapes.Action,
             enabled = valid && !busy && !identityChanged && (!online || reserved), modifier = Modifier.heightIn(min = 48.dp).testTag("save_profile")) {
             Text(if (state.unifiedProfile.saving) "저장 중…" else "저장")
         }
@@ -73,54 +91,74 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
                     modifier = Modifier.weight(1f).testTag("profile_connection_cached"))
             }
         }
-        OutlinedTextField(name, { name = it; saveStartSerial = null; connectionStartSerial = null }, label = { Text("닉네임") }, singleLine = true,
-            enabled = !state.unifiedProfile.saving && !state.unifiedProfile.connecting && !state.busy, isError = !valid,
-            supportingText = { Text(NicknamePolicy.validationError(name) ?: "한글·영문·숫자 등 2~16자") },
-            shape = RunmoniShapes.Input,
-            colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = RunmoniColors.Paper, focusedContainerColor = RunmoniColors.Paper),
-            modifier = Modifier.fillMaxWidth().testTag("profile_name"))
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (identityChanged && !state.unifiedProfile.connecting) {
+                ProfileInputNotice("연결 상태가 바뀌었어요. 닫고 프로필을 다시 열어 주세요.", "profile_identity_changed")
+            }
+            OutlinedTextField(name, { name = it; saveStartSerial = null; connectionStartSerial = null },
+                label = { Text("닉네임") }, singleLine = true,
+                enabled = !identityChanged && !state.unifiedProfile.saving && !state.unifiedProfile.connecting && !state.busy,
+                isError = !valid,
+                supportingText = { Text(nameError ?: "한글·영문·숫자 등 2~16자") },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { dismissInput() }),
+                shape = RunmoniShapes.Input,
+                colors = OutlinedTextFieldDefaults.colors(unfocusedContainerColor = RunmoniColors.Paper,
+                    focusedContainerColor = RunmoniColors.Paper),
+                modifier = Modifier.fillMaxWidth().testTag("profile_name"))
+            if (!identityChanged) operationError?.let { ProfileInputNotice(it, "profile_error") }
+            if (online && !identityChanged) {
+                if (valid && result == null && !busy && operationError == null) {
+                    Text("저장하려면 닉네임 중복을 확인해 주세요.",
+                        style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                        modifier = Modifier.testTag("profile_nickname_prerequisite"))
+                }
+                TextButton(onClick = {
+                    dismissInput()
+                    requestedName = normalizedName
+                    actions.checkNickname(name)
+                }, enabled = valid && !busy,
+                    shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("check_nickname")) {
+                    Text(if (state.unifiedProfile.checking) "확인 중…" else "중복 확인")
+                }
+                result?.let {
+                    Text(when (it.availability) {
+                        NicknameAvailability.AVAILABLE -> "사용할 수 있는 닉네임이에요."
+                        NicknameAvailability.OWNED -> "이 프로필이 사용 중인 닉네임이에요."
+                        NicknameAvailability.TAKEN -> "이미 사용 중이에요. 다른 닉네임을 골라 주세요."
+                        NicknameAvailability.UNVERIFIED -> "온라인 예약을 확인하지 못했어요."
+                    }, color = if (it.availability == NicknameAvailability.TAKEN) RunmoniColors.CoralInk else RunmoniColors.Muted,
+                        modifier = Modifier.testTag("nickname_result").semantics { liveRegion = LiveRegionMode.Polite })
+                }
+            }
+        }
         state.unifiedProfile.connectedNickname?.takeIf { it != state.profile.name && it != name }?.let { serverName ->
             TextButton(onClick = { name = serverName; saveStartSerial = null; connectionStartSerial = null }, enabled = !busy && !identityChanged, shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp)) {
                 Text("연결된 닉네임 ‘$serverName’ 사용")
             }
         }
         if (online) {
-            TextButton(onClick = { actions.checkNickname(name) }, enabled = valid && !busy && !identityChanged,
-                shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("check_nickname")) {
-                Text(if (state.unifiedProfile.checking) "확인 중…" else "중복 확인")
-            }
-            result?.let {
-                Text(when (it.availability) {
-                    NicknameAvailability.AVAILABLE -> "사용할 수 있는 닉네임이에요."
-                    NicknameAvailability.OWNED -> "이 프로필이 사용 중인 닉네임이에요."
-                    NicknameAvailability.TAKEN -> "이미 사용 중이에요. 다른 닉네임을 골라 주세요."
-                    NicknameAvailability.UNVERIFIED -> "온라인 예약을 확인하지 못했어요."
-                }, color = if (it.availability == NicknameAvailability.TAKEN) RunmoniColors.CoralInk else RunmoniColors.Muted,
-                    modifier = Modifier.testTag("nickname_result"))
-            }
             Text("저장할 때 서버에서 다시 확인해요. 이전 기록과 크루 소속은 유지돼요.", style = MaterialTheme.typography.bodySmall)
         } else {
             Text("기기 이름을 저장하거나, 이 닉네임으로 온라인 프로필을 연결할 수 있어요.", style = MaterialTheme.typography.bodyMedium)
             Text("온라인 연결 시 서버에서 중복을 확인해요. 기존 계정과 기록을 자동으로 합치지 않아요.", style = MaterialTheme.typography.bodySmall)
             Row(Modifier.fillMaxWidth().heightIn(min = 56.dp)
-                .toggleable(adultConfirmed, enabled = !busy, role = Role.Checkbox, onValueChange = { adultConfirmed = it })
+                .toggleable(adultConfirmed, enabled = !busy && !identityChanged, role = Role.Checkbox, onValueChange = { adultConfirmed = it })
                 .testTag("profile_adult"), verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Checkbox(checked = adultConfirmed, onCheckedChange = null, enabled = !busy)
+                Checkbox(checked = adultConfirmed, onCheckedChange = null, enabled = !busy && !identityChanged)
                 Text("성인이며 크루·러너 기능을 이용할게요.", modifier = Modifier.weight(1f).padding(vertical = 12.dp),
                     style = MaterialTheme.typography.bodyMedium)
             }
-            OutlinedButton(onClick = { saveStartSerial = null; connectionStartSerial = state.unifiedProfile.connectedSerial; actions.connectUnifiedProfile(NicknamePolicy.normalize(name), openedUid, openedBackend) },
+            OutlinedButton(onClick = {
+                dismissInput()
+                requestedName = normalizedName
+                saveStartSerial = null
+                connectionStartSerial = state.unifiedProfile.connectedSerial
+                actions.connectUnifiedProfile(normalizedName, openedUid, openedBackend)
+            },
                 enabled = valid && adultConfirmed && !busy && !identityChanged, shape = RunmoniShapes.Action,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("confirm_sign_in")) { Text(if (state.unifiedProfile.connecting) "연결 중…" else "이 닉네임으로 연결") }
-        }
-        if (identityChanged && !state.unifiedProfile.connecting) Text("연결 상태가 바뀌었어요. 닫고 프로필을 다시 열어 주세요.", color = RunmoniColors.CoralInk)
-        state.unifiedProfile.error?.let {
-            Surface(color = RunmoniColors.CoralWash, shape = RunmoniShapes.Action) {
-                Text(it, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.fillMaxWidth().padding(12.dp).testTag("profile_error")
-                        .semantics { liveRegion = LiveRegionMode.Polite })
-            }
         }
         HorizontalDivider(color = RunmoniColors.Line)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Top) {
@@ -128,5 +166,14 @@ internal fun UnifiedProfileDialog(state: AppState, actions: AppActions, onDismis
             Text("미니미와 옷은 ‘나 → 꾸미기’에서 바꿀 수 있어요.", style = MaterialTheme.typography.bodyMedium,
                 color = RunmoniColors.Muted, modifier = Modifier.weight(1f))
         }
+    }
+}
+
+@Composable
+private fun ProfileInputNotice(message: String, tag: String) {
+    Surface(color = RunmoniColors.CoralWash, shape = RunmoniShapes.Action) {
+        Text(message, color = RunmoniColors.CoralInk, style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.fillMaxWidth().padding(12.dp).testTag(tag)
+                .semantics { liveRegion = LiveRegionMode.Polite })
     }
 }

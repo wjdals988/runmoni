@@ -135,7 +135,7 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                     },
                 )
             }
-            if (panel != null) Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+            if (panel != null || lookupActive) Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                 .padding(start = pageGutter(), end = pageGutter(), top = 4.dp, bottom = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 when (panel) {
@@ -153,6 +153,10 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                     }
                     null -> Unit
                 }
+                if (lookupActive) DiscoveryAction("지도에서 러너 숨기기", {
+                    lookupAccount = null
+                    if (panel == DiscoveryPanel.RUNNERS) panel = null
+                }, "hide_discovered_runners")
             }
             MapPane(emptyList(), publicRunners + listOfNotNull(own),
                 modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(mapHeight) else Modifier.weight(1f)),
@@ -161,13 +165,6 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
             if (canLookup || sharingEnabled || state.sharing.error != null) Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                 .padding(horizontal = pageGutter(), vertical = 12.dp).testTag("runner_discovery_details"),
                 verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (lookupActive) TextButton(onClick = {
-                    lookupAccount = null
-                    if (panel == DiscoveryPanel.RUNNERS) panel = null
-                }, shape = RunmoniShapes.Action, contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("hide_discovered_runners")) {
-                    Text("지도에서 러너 숨기기")
-                }
                 if (canLookup || sharingEnabled) DiscoveryAction(when {
                     state.sharing.busy -> "연결 중…"
                     sharingEnabled -> "공유 설정 끄기"

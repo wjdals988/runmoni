@@ -28,7 +28,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -260,11 +262,17 @@ internal fun RouteTileMap(
             "지도 연결 실패".takeIf { failed },
             "내 위치 확인 전".takeIf { interactiveMap && route.isEmpty() && actualCenter == null },
         ).joinToString(" · ").takeIf { it.isNotEmpty() }
-        if (status != null) Text(status, style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp)
-                .then(if (failed) Modifier.testTag("map_tile_error") else Modifier))
+        val retry: (() -> Unit)? = if (failed) ({ source.retry(); attempt++ }) else null
+        if (status != null) Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(status, style = MaterialTheme.typography.labelSmall, color = RunmoniColors.Muted,
+                modifier = Modifier.weight(1f).padding(horizontal = 8.dp, vertical = 4.dp)
+                    .then(if (failed) Modifier.testTag("map_tile_error").semantics { liveRegion = LiveRegionMode.Polite } else Modifier))
+            if (retry != null) IconButton(onClick = retry, modifier = Modifier.size(48.dp).testTag("map_tile_retry_inline")) {
+                Icon(Icons.Outlined.Refresh, "배경 지도 다시 불러오기", tint = RunmoniColors.RouteBlue)
+            }
+        }
         MapControlBar(mapActions, enabled = viewport != null,
-            retry = if (failed) ({ source.retry(); attempt++ }) else null,
+            retry = retry,
             attribution = {
                 TextButton(onClick = { uri.openUri("https://www.openstreetmap.org/copyright") },
                     shape = RunmoniShapes.Action,

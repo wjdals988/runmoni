@@ -475,7 +475,7 @@ class RunmoniUiTest {
         override fun cancelParty(id: String) { cancelledParties += id; state.value = state.value.copy(parties = state.value.parties.map { if (it.id == id) it.copy(cancelled = true) else it }) }
         override fun openChat(roomId: String, title: String) = Unit
         override fun closeChat() = Unit
-        override fun sendMessage(body: String, notice: Boolean) = Unit
+        override suspend fun sendMessage(roomId: String, account: String, backend: CommunityBackend, body: String, notice: Boolean) = true
         override fun connectVoice(roomId: String) = Unit
         override fun disconnectVoice() = Unit
         override fun setMicrophone(enabled: Boolean) = Unit

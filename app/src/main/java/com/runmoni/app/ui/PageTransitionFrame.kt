@@ -11,6 +11,7 @@ import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.runmoni.app.domain.PageMotionPolicy
 
 internal val LocalRunmoniMotionEnabled = compositionLocalOf<Boolean?> { null }
+private val PageEnterEasing = CubicBezierEasing(.23f, 1f, .32f, 1f)
 
 private fun systemMotionEnabled(context: Context): Boolean {
     // The settings observer can run before ValueAnimator receives the new scale.
@@ -76,10 +78,10 @@ internal fun PageTransitionFrame(routeKey: String, modifier: Modifier = Modifier
     val travel = with(LocalDensity.current) { PageMotionPolicy.TRAVEL_DP.dp.toPx() }
     LaunchedEffect(routeKey, enabled) {
         if (!enabled) progress.snapTo(1f)
-        else progress.animateTo(1f, tween(PageMotionPolicy.durationMillis(true)))
+        else progress.animateTo(1f, tween(PageMotionPolicy.durationMillis(true), easing = PageEnterEasing))
     }
     Box(modifier.fillMaxSize().graphicsLayer {
-        alpha = if (enabled) progress.value else 1f
+        alpha = if (enabled) .86f + .14f * progress.value else 1f
         translationY = if (enabled) (1f - progress.value) * travel else 0f
     }) { content() }
 }

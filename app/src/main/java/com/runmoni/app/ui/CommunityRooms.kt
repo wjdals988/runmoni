@@ -271,8 +271,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                                     OutlinedButton(shape = RunmoniShapes.Action, onClick = { manageId = selected.id },
                                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("manage_crew_members")) { Text("멤버 · DJ 관리") }
                                     SmallNote("현재 크루장 권한은 다른 계정으로 이전할 수 없어요.")
-                                } else TextButton(shape = RunmoniShapes.Action, onClick = { actions.leaveCrew(selected.id); selectedCrewId = null },
-                                    modifier = Modifier.heightIn(min = 48.dp).testTag("leave_crew_${selected.id}")) { Text("크루 탈퇴", color = MaterialTheme.colorScheme.error) }
+                                } else LeaveCrewAction(selected, state, actions)
                             } else SmallNote("크루에 가입하면 공지와 채팅에 참여할 수 있어요.")
                         }
                     } else {
@@ -320,6 +319,40 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun LeaveCrewAction(crew: Crew, state: AppState, actions: AppActions) {
+    val context = remember(crew.id, state.communityBackend, state.communityUid) { Any() }
+    val currentContext by rememberUpdatedState(context)
+    val canLeave = state.signedIn && !state.busy && crew.joined && !crew.isOwner
+    val currentlyAllowed by rememberUpdatedState(canLeave)
+    var confirmation by remember(context) { mutableStateOf<Any?>(null) }
+    DisposableEffect(context) { onDispose { confirmation = null } }
+
+    TextButton(shape = RunmoniShapes.Action, onClick = {
+        if (currentContext === context && currentlyAllowed) confirmation = Any()
+    }, enabled = canLeave, modifier = Modifier.heightIn(min = 48.dp).testTag("leave_crew_${crew.id}")) {
+        Text("크루 탈퇴", color = if (canLeave) MaterialTheme.colorScheme.error else LocalContentColor.current)
+    }
+
+    confirmation?.let { request ->
+        val dismiss = { if (confirmation === request) confirmation = null }
+        DismissibleAlertDialog(shape = RunmoniShapes.Dialog, onDismissRequest = dismiss,
+            title = { Text("${crew.name}에서 탈퇴할까요?") },
+            text = { DialogMessage("이 크루의 공지와 채팅을 이용할 수 없어요. 내 러닝 기록은 기기에 남아요.") },
+            dismissButton = { TextButton(onClick = dismiss, shape = RunmoniShapes.Action,
+                modifier = Modifier.heightIn(min = 48.dp).testTag("cancel_leave_crew")) { Text("취소") } },
+            confirmButton = { TextButton(onClick = {
+                if (confirmation === request && currentContext === context && currentlyAllowed) {
+                    confirmation = null
+                    actions.leaveCrew(crew.id)
+                }
+            }, enabled = canLeave, shape = RunmoniShapes.Action,
+                modifier = Modifier.heightIn(min = 48.dp).testTag("confirm_leave_crew")) {
+                Text("탈퇴", color = if (canLeave) MaterialTheme.colorScheme.error else LocalContentColor.current)
+            } })
     }
 }
 

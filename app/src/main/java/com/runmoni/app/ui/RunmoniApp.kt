@@ -133,11 +133,14 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 !state.busy && state.records.none { it.id == deletingRecordId }) closeRecord()
         }
         var finishRunId by rememberSaveable { mutableStateOf<String?>(null) }
+        var outdoorRunId by rememberSaveable { mutableStateOf<String?>(null) }
         var handledRunNavigationToken by rememberSaveable { mutableStateOf<Long?>(null) }
         var lastActiveId by remember { mutableStateOf(state.activeRun.id.takeIf { it.isNotBlank() }) }
         var mileageInformation by rememberSaveable { mutableStateOf(false) }
         var communitySubpage by rememberSaveable { mutableStateOf(false) }
         val communityDeep = tab == 3 && communitySubpage
+        val outdoorFocused = tab == 2 && state.activeRun.phase != RunPhase.IDLE &&
+            state.activeRun.id.isNotBlank() && outdoorRunId == state.activeRun.id
         val chatOpen = state.openedRoomId.isNotBlank()
         // One root page at a time, including asynchronous chat arrivals.
         val rootPage = when {
@@ -154,6 +157,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         LaunchedEffect(state.openedRoomId) { if (chatOpen) focusManager.clearFocus(force = true) }
         var completedId by remember { mutableStateOf<String?>(null) }
         LaunchedEffect(state.activeRun.phase, state.activeRun.id) {
+            if (state.activeRun.phase == RunPhase.IDLE || outdoorRunId != state.activeRun.id) outdoorRunId = null
             if (state.activeRun.phase == RunPhase.IDLE) {
                 lastActiveId?.let { completedId = it }
                 lastActiveId = null
@@ -219,13 +223,17 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp)
         val compactActiveRun = tab == 2 && state.activeRun.phase != RunPhase.IDLE && shortWindow
         val compactExplore = tab == 1 && shortWindow
-        PageTransitionFrame("$rootPage:$tab:${sharingRecordId != null}", animateEntrance = newlySavedRecordId == null) {
+        PageTransitionFrame("$rootPage:${sharingRecordId != null}", animateEntrance = newlySavedRecordId == null) {
         if (rootPage == "main") mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
-            contentWindowInsets = if (communityDeep) WindowInsets(0) else ScaffoldDefaults.contentWindowInsets,
+            contentWindowInsets = when {
+                communityDeep -> WindowInsets(0)
+                outdoorFocused -> WindowInsets.safeDrawing
+                else -> ScaffoldDefaults.contentWindowInsets
+            },
             containerColor = RunmoniColors.Cream,
             topBar = {
-                if (!communityDeep) Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
+                if (!communityDeep && !outdoorFocused) Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
                     if (!compactActiveRun) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
                             val gutter = pageGutter(maxWidth)
@@ -261,7 +269,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 }
             },
             bottomBar = {
-                if (!communityDeep) Surface(color = RunmoniColors.Paper) {
+                if (!communityDeep && !outdoorFocused) Surface(color = RunmoniColors.Paper) {
                     val selectedContainer = RunmoniColors.PrimarySoft
                     val selectedInk = RunmoniColors.OnPrimarySoft
                     val selectedBorder = RunmoniColors.Primary
@@ -366,6 +374,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onWeather = actions::refreshWeather, onWeatherEntry = actions::prepareHomeConditions, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { profileFromSettings = false; signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
                     2 -> RunningScreen(state, actions, useCompactPanel = compactActiveRun,
+                        outdoorFocused = outdoorFocused, onOutdoorFocus = { enabled ->
+                            outdoorRunId = state.activeRun.id.takeIf { enabled }
+                        },
                         onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 },
                         onProfile = { profileFromSettings = false; signIn = true },
                         onFinish = { finishRunId = state.activeRun.id })
@@ -466,14 +477,13 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
 
 @Composable
 private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel: Boolean,
+    outdoorFocused: Boolean, onOutdoorFocus: (Boolean) -> Unit,
     onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     var goalPickerOpen by rememberSaveable { mutableStateOf(false) }
     var intervalPickerOpen by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
-    var outdoorEnabled by rememberSaveable(run.id) { mutableStateOf(false) }
     val supportsOutdoor = run.phase != RunPhase.IDLE && run.id.isNotBlank()
-    val outdoorFocused = supportsOutdoor && outdoorEnabled
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val compactLive = run.phase != RunPhase.IDLE && (largeText || useCompactPanel)
     val persistence = state.runPersistence
@@ -504,17 +514,18 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
         run.phase == RunPhase.RECOVERY -> "러닝 이어가기"
         else -> if (compactLive) "기록 중" else "러닝 기록 중"
     }
-    BackHandler(enabled = outdoorFocused) { outdoorEnabled = false }
+    BackHandler(enabled = outdoorFocused) { onOutdoorFocus(false) }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            if (outdoorFocused) ScreenContent(spacing = RunmoniLayout.ContentGap, topPadding = RunmoniLayout.TightGap) {
+            if (outdoorFocused) ScreenContent(spacing = RunmoniLayout.ContentGap, topPadding = RunmoniLayout.ContentGap,
+                centerWhenFits = !permissionMissing && !gpsDisabled && persistence.issue == null) {
                 val outdoorGps = when {
                     permissionMissing || gpsDisabled -> gpsLabel
                     run.phase == RunPhase.PAUSED -> "GPS 기록 일시정지"
                     run.phase == RunPhase.RECOVERY -> "GPS 확인 대기"
                     else -> gpsLabel.substringBefore(" · ")
                 }
-                OutdoorRunPanel(run, statusTitle, outdoorGps, currentPace, gpsTone, onClose = { outdoorEnabled = false })
+                OutdoorRunPanel(run, statusTitle, outdoorGps, currentPace, gpsTone, onClose = { onOutdoorFocus(false) })
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
                 if (permissionMissing || gpsDisabled) LocationReadinessCard(permissionMissing, actions)
             } else ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.SectionGap,
@@ -525,7 +536,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                         verticalAlignment = Alignment.CenterVertically) {
                         Text(statusTitle, style = MaterialTheme.typography.headlineLarge,
                             modifier = Modifier.weight(1f).testTag("run_status").semantics { heading() })
-                        if (supportsOutdoor) OutdoorFocusButton(onOpen = { outdoorEnabled = true }, compact = false)
+                        if (supportsOutdoor) OutdoorFocusButton(onOpen = { onOutdoorFocus(true) }, compact = false)
                     }
                     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap),
                         verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -588,7 +599,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Text("거리", style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail,
                                 modifier = Modifier.weight(1f))
-                            if (supportsOutdoor) OutdoorFocusButton(onOpen = { outdoorEnabled = true }, compact = true)
+                            if (supportsOutdoor) OutdoorFocusButton(onOpen = { onOutdoorFocus(true) }, compact = true)
                         }
                         DistanceNumber(distance(run.distanceMeters), RunmoniTrack.Highlight,
                             Modifier.testTag("run_distance"), maxSize = 40f, unit = "km")
@@ -645,7 +656,9 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     })
                 if (run.phase == RunPhase.RECOVERY) SmallNote("앱이 중단되기 전 저장한 지점까지만 복구해요. 중단된 구간의 거리를 추정해 더하지 않아요.")
 
-                TextButton(shape = RunmoniShapes.Action, onClick = { optionsExpanded = !optionsExpanded }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")) {
+                TextButton(shape = RunmoniShapes.Action, onClick = { optionsExpanded = !optionsExpanded },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_options")
+                        .semantics { stateDescription = if (optionsExpanded) "펼침" else "접힘" }) {
                     Icon(Icons.Outlined.Tune, null, Modifier.size(18.dp)); Spacer(Modifier.width(8.dp)); Text(if (optionsExpanded) "러닝 옵션 접기" else "러닝 옵션")
                     Icon(if (optionsExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
                 }
