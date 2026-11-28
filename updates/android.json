@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.10.1-dev",
-    "versionCode": 35,
-    "fileName": "runmoni-0.10.1-dev.apk",
-    "sizeBytes": 175930575,
-    "sha256": "ea27f81b4c231786fc9d5352d8075f7dfb4508d7a7599944d643e52c466cf65c",
+    "version": "0.11.0-dev",
+    "versionCode": 36,
+    "fileName": "runmoni-0.11.0-dev.apk",
+    "sizeBytes": 176045263,
+    "sha256": "7e54d2fa2230c0182596416ec7af724f53e61563d81c43757c8e511d93db51c3",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "c5ebc4a87e294e46bc05e2fb7b98973bc9f7ace9",
+    "sourceRevision": "6d4dfd0d2d56e9591b45f85c5c530a88e048a88e",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.10.1-dev/runmoni-0.10.1-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.10.1-dev",
-    "notes": "큰 글씨 화면의 배치, 미니미 모자 피팅, 런모니 R 아이콘을 개선한 개발 프리뷰입니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.11.0-dev/runmoni-0.11.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.11.0-dev",
+    "notes": "1km 페이스 분석, 최근 러닝 요약, 구간 안내, 오늘의 러닝 목표를 추가한 개발 프리뷰입니다."
   },
   "schemaVersion": 1,
   "stable": null
