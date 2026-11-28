@@ -103,6 +103,8 @@ internal object RunmoniLayout {
     val PageGap = 32.dp
     val ContentGap = 16.dp
     val RowGap = 16.dp
+    val TopInset = 24.dp
+    val TightGap = 8.dp
     val ActionHeight = 56.dp
 }
 

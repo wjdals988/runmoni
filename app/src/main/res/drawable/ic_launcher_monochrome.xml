@@ -1,7 +1,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- Alpha silhouette only. Android supplies its themed tint/background. -->
-    <path android:fillColor="#FFFFFF" android:fillType="evenOdd"
-        android:pathData="M32,76L42,32H59C72,32 79,39 76,51C74,58 69,62 62,63L75,76H61L47,61H46L42,76Z M50,43L48,52H59C63,52 66,50 67,47C68,44 65,43 61,43Z" />
+    <group android:pivotX="54" android:pivotY="54" android:scaleX="1.04" android:scaleY="1.04">
+        <path android:fillColor="#FFFFFF" android:fillType="evenOdd"
+            android:pathData="@string/stride_r_path" />
+    </group>
 </vector>

@@ -6,6 +6,7 @@ import android.content.res.Configuration
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.ScrollState
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
@@ -40,6 +41,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -173,10 +175,11 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         // portrait keep their header/navigation; font scaling and recorder
         // callbacks are unchanged. Version/settings remain on the other tabs.
         val configuration = LocalConfiguration.current
-        val compactActiveRun = tab == 2 && state.activeRun.phase != RunPhase.IDLE &&
-            ((configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+        val shortWindow = (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 maxWidth > maxHeight && maxHeight <= 360.dp) ||
-                (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp))
+                (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp)
+        val compactActiveRun = tab == 2 && state.activeRun.phase != RunPhase.IDLE && shortWindow
+        val compactExplore = tab == 1 && shortWindow
         PageTransitionFrame("$rootPage:$tab:${sharingRecordId != null}") {
         if (rootPage == "main") mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
@@ -186,8 +189,8 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 if (!communityDeep) Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
                     if (!compactActiveRun) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
-                            val separateVersion = maxWidth < 360.dp ||
-                                (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp)
+                            val separateVersion = !compactExplore && (maxWidth < 360.dp ||
+                                (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp))
                             Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                                 .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
                                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -195,9 +198,17 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                     Spacer(Modifier.width(8.dp))
                                     Text("runmoni", style = MaterialTheme.typography.titleLarge.copy(letterSpacing = (-0.8).sp),
                                         modifier = Modifier.weight(1f).testTag("app_wordmark"), maxLines = 1, softWrap = false)
-                                    if (!separateVersion) AppVersionShortcut(updates) { appInformationFromSettings = false; appInformation = true }
-                                    IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp).testTag("settings_button")) {
-                                        Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                                    if (!separateVersion && !compactExplore) AppVersionShortcut(updates) { appInformationFromSettings = false; appInformation = true }
+                                    val showSettingsUpdate = compactExplore && updates.updateAvailable
+                                    IconButton(onClick = { settings = true }, modifier = Modifier.size(48.dp)
+                                        .testTag("settings_button").semantics {
+                                            if (showSettingsUpdate) stateDescription = "새 버전 업데이트 가능"
+                                        }) {
+                                        BadgedBox(badge = {
+                                            if (showSettingsUpdate) Badge(Modifier.size(6.dp).testTag("compact_explore_update_dot"))
+                                        }) {
+                                            Icon(Icons.Outlined.Settings, "계정 및 러닝 설정", Modifier.size(22.dp))
+                                        }
                                     }
                                 }
                                 if (separateVersion) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
@@ -214,7 +225,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     val selectedContainer = if (RunmoniColors.IsDark) RunmoniTrack.Stage else RunmoniTrack.Board
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
-                        if (compactActiveRun) {
+                        if (compactActiveRun || compactExplore) {
                             // NavigationBar keeps its80dp default height. Measure
                             // the actual enlarged labels after OS horizontal
                             // insets, then reserve exactly the space they need.
@@ -309,7 +320,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 when (tab) {
                     0 -> HomeScreen(state, onRun = { tab = 2 }, onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onRecord = ::openRecord, onRetrySave = actions::retryRunPersistence, onWeather = actions::refreshWeather, onWeatherEntry = actions::prepareHomeConditions, onParty = { crewNavigation = it.crewId; partyNavigation = it.id; communityNavigationEpoch++; tab = 3 })
                     1 -> ExploreScreen(state, actions, onSignIn = { profileFromSettings = false; signIn = true }, onRooms = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 }, onCrew = { crewNavigation = it; partyNavigation = null; communityNavigationEpoch++; tab = 3 })
-                    2 -> RunningScreen(state, actions,
+                    2 -> RunningScreen(state, actions, useCompactPanel = compactActiveRun,
                         onCrew = { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++; tab = 3 },
                         onProfile = { profileFromSettings = false; signIn = true },
                         onFinish = { finishRunId = state.activeRun.id })
@@ -377,44 +388,48 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
 }
 
 @Composable
-private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
+private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel: Boolean,
+    onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
-    val compactLive = run.phase != RunPhase.IDLE && LocalDensity.current.fontScale >= 1.3f
+    val largeText = LocalDensity.current.fontScale >= 1.3f
+    val compactLive = run.phase != RunPhase.IDLE && (largeText || useCompactPanel)
     val persistence = state.runPersistence
     val permissionMissing = state.locationAccess.precisePermissionGranted == false
     val gpsDisabled = state.locationAccess.gpsEnabled == false
     val accuracy = run.accuracyMeters?.takeIf { !permissionMissing && !gpsDisabled && it.isFinite() && it >= 0f }
+    val gpsReady = accuracy != null && accuracy <= 30f
+    val liveMetrics = run.phase == RunPhase.RUNNING && gpsReady && !persistence.finishing
+    val currentPace = run.currentPaceSecondsPerKm.takeIf { liveMetrics }
     val speedKmh = run.currentSpeedMetersPerSecond?.times(3.6)?.takeIf {
-        run.phase == RunPhase.RUNNING && !permissionMissing && !gpsDisabled && accuracy != null && accuracy <= 30f && it.isFinite() && it >= 0
+        liveMetrics && it.isFinite() && it >= 0
     }
     val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐";
-        accuracy != null && accuracy <= 30f -> "GPS 수신 중"; else -> run.gpsStatus }
+        gpsReady -> "GPS 수신 중"; else -> run.gpsStatus }
+    val statusTitle = when {
+        persistence.finishing -> "러닝 마무리 중"
+        persistence.issue == RunPersistenceIssue.CHECKPOINT -> "기록 저장 확인 필요"
+        run.phase == RunPhase.IDLE -> "러닝 준비"
+        run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC -> "자동 일시정지 중"
+        run.phase == RunPhase.PAUSED -> if (compactLive) "일시정지 중" else "잠시 쉬는 중"
+        run.phase == RunPhase.RECOVERY -> "러닝 이어가기"
+        else -> if (compactLive) "기록 중" else "러닝 기록 중"
+    }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            ScreenContent(spacing = if (compactLive) 16.dp else RunmoniLayout.PageGap, centerWhenFits = run.phase == RunPhase.IDLE) {
-                val statusHeader: @Composable () -> Unit = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        val title = when {
-                            persistence.finishing -> "러닝 마무리 중"
-                            persistence.issue == RunPersistenceIssue.CHECKPOINT -> "기록 저장 확인 필요"
-                            run.phase == RunPhase.IDLE -> "러닝 준비"
-                            run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC -> "자동 일시정지 중"
-                            run.phase == RunPhase.PAUSED -> "잠시 쉬는 중"
-                            run.phase == RunPhase.RECOVERY -> "러닝 이어가기"
-                            else -> "러닝 기록 중"
-                        }
-                        Text(title, style = if (compactLive) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineLarge,
-                            modifier = Modifier.semantics { heading() })
-                        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            StatusPill(gpsLabel, if (accuracy != null && accuracy <= 30f) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
-                            accuracy?.let { Text("정확도 ±${it.toInt()}m", modifier = Modifier.align(Alignment.CenterVertically),
-                                style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
-                        }
+            ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.PageGap,
+                centerWhenFits = run.phase == RunPhase.IDLE,
+                topPadding = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.TopInset) {
+                if (!compactLive) Column(verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
+                    Text(statusTitle, style = MaterialTheme.typography.headlineLarge,
+                        modifier = Modifier.testTag("run_status").semantics { heading() })
+                    FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        StatusPill(gpsLabel, if (gpsReady) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
+                        accuracy?.let { Text("정확도 ±${it.toInt()}m", modifier = Modifier.align(Alignment.CenterVertically),
+                            style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                     }
                 }
-                if (!compactLive) statusHeader()
                 if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
@@ -434,32 +449,35 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
                             Text("러닝 기록은 이 기기에 저장돼요", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Navy)
                         }
                     }
-                } else RunningMetricPanel(contentPadding = PaddingValues(if (compactLive) 12.dp else 20.dp), spacing = 16.dp) {
-                    BoxWithConstraints(Modifier.fillMaxWidth()) {
-                        val showAvatar = maxWidth >= 280.dp && LocalDensity.current.fontScale < 1.3f
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                                if (!compactLive) Text("달린 거리 (km)", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
+                } else RunningMetricPanel(contentPadding = PaddingValues(if (compactLive) 12.dp else 20.dp),
+                    spacing = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.ContentGap) {
+                    if (compactLive) {
+                        CompactRunStatus(statusTitle, gpsLabel.substringBefore(" · "), gpsReady)
+                        Text("거리", style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail)
+                        DistanceNumber(distance(run.distanceMeters), RunmoniTrack.Highlight,
+                            Modifier.testTag("run_distance"), maxSize = 40f, unit = "km")
+                    } else BoxWithConstraints(Modifier.fillMaxWidth()) {
+                        val showAvatar = maxWidth >= 280.dp
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
+                            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
+                                Text("달린 거리 (km)", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
                                 DistanceNumber(distance(run.distanceMeters), RunmoniTrack.Highlight, Modifier.testTag("run_distance"))
-                                if (compactLive) Text("달린 거리 (km)", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
                             }
                             if (showAvatar) AvatarMini(state.profile.avatar, Modifier.width(64.dp).height(96.dp)
                                 .testTag("run_avatar"), running = run.phase == RunPhase.RUNNING, decorative = true)
                         }
                     }
                     HorizontalDivider(color = RunmoniTrack.Detail.copy(alpha = .4f))
-                    MetricGroup(listOf(UiMetric("러닝 시간", duration(run.activeDurationMillis), tag = "run_duration"),
-                        UiMetric("현재 페이스", pace(run.currentPaceSecondsPerKm), "/km", "run_pace")), onDark = true)
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                        Text("현재 속도", color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodyMedium)
-                        Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
-                            color = RunmoniTrack.OnBoard, style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
-                            modifier = Modifier.testTag("run_speed"))
-                    }
-                    Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km",
-                        color = RunmoniTrack.Detail, style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum"))
+                    MetricGroup(listOf(UiMetric(if (compactLive) "시간" else "러닝 시간",
+                        duration(run.activeDurationMillis), tag = "run_duration"),
+                        UiMetric(if (compactLive) "페이스" else "현재 페이스", pace(currentPace), "/km", "run_pace")),
+                        onDark = true, compact = compactLive)
+                    if (!compactLive) RunSecondaryMetrics(run, speedKmh, onTrack = true)
                 }
-                if (compactLive) statusHeader()
+                if (compactLive) {
+                    RunSecondaryMetrics(run, speedKmh, onTrack = false)
+                    accuracy?.let { SmallNote("GPS 정확도 ±${it.toInt()}m") }
+                }
                 if (run.phase == RunPhase.IDLE) RunSharingPreparation(state, actions, onProfile)
                 if (run.phase == RunPhase.IDLE && (permissionMissing || gpsDisabled)) LocationReadinessCard(permissionMissing, actions)
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
@@ -513,7 +531,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalDivider(color = RunmoniColors.Line)
             Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                .padding(horizontal = pageGutter(), vertical = 12.dp)) {
+                .padding(horizontal = pageGutter(), vertical = if (compactLive) RunmoniLayout.TightGap else 12.dp)) {
                 if (persistence.finishing) {
                     Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RunmoniShapes.Action) {
@@ -535,6 +553,37 @@ private fun RunningScreen(state: AppState, actions: AppActions, onCrew: () -> Un
             }
             }
         }
+}
+
+@Composable
+private fun CompactRunStatus(title: String, gpsLabel: String, gpsReady: Boolean) {
+    FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(title, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+            color = RunmoniTrack.OnBoard, modifier = Modifier.testTag("run_status").semantics { heading() })
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Box(Modifier.size(5.dp).clip(CircleShape)
+                .background(if (gpsReady) RunmoniTrack.Highlight else RunmoniTrack.Detail))
+            Text(gpsLabel, style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail,
+                modifier = Modifier.testTag("gps_status").semantics { liveRegion = LiveRegionMode.Polite })
+        }
+    }
+}
+
+@Composable
+private fun RunSecondaryMetrics(run: ActiveRun, speedKmh: Double?, onTrack: Boolean) {
+    val ink = if (onTrack) RunmoniTrack.OnBoard else RunmoniColors.Ink
+    val detail = if (onTrack) RunmoniTrack.Detail else RunmoniColors.Muted
+    Column(verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text("현재 속도", color = detail, style = MaterialTheme.typography.bodyMedium)
+            Text(if (speedKmh == null) "— km/h" else String.format(Locale.KOREA, "%.1f km/h", speedKmh),
+                color = ink, style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"),
+                modifier = Modifier.testTag("run_speed"))
+        }
+        Text("평균 ${averagePace(run.distanceMeters, run.activeDurationMillis)} /km",
+            color = detail, style = MaterialTheme.typography.bodySmall.copy(fontFeatureSettings = "tnum"))
+    }
 }
 
 @Composable
@@ -627,13 +676,14 @@ internal fun AudioPanel(audio: AudioUiState, actions: AppActions, roomId: String
 }
 
 @Composable
-internal fun ScreenContent(spacing: androidx.compose.ui.unit.Dp = RunmoniLayout.PageGap,
-    centerWhenFits: Boolean = false, content: @Composable ColumnScope.() -> Unit) {
+internal fun ScreenContent(spacing: Dp = RunmoniLayout.PageGap, centerWhenFits: Boolean = false,
+    topPadding: Dp = RunmoniLayout.TopInset, scrollState: ScrollState = rememberScrollState(),
+    content: @Composable ColumnScope.() -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-            .verticalScroll(rememberScrollState()).testTag("screen_scroll")
+            .verticalScroll(scrollState).testTag("screen_scroll")
             .heightIn(min = maxHeight)
-            .padding(start = pageGutter(), end = pageGutter(), top = 24.dp, bottom = 32.dp),
+            .padding(start = pageGutter(), end = pageGutter(), top = topPadding, bottom = RunmoniLayout.PageGap),
             verticalArrangement = Arrangement.spacedBy(spacing,
                 if (centerWhenFits) Alignment.CenterVertically else Alignment.Top), content = content)
     }

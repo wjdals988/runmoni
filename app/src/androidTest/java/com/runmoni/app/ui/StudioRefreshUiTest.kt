@@ -19,21 +19,33 @@ import org.junit.Test
  * Firebase authentication, physical-device tests, or signed-release runtime evidence.
  */
 class StudioRefreshUiTest : RunmoniDesignTestBase() {
-    @Test fun runningDistanceIsVisibleBeforeAnyScrollAtLargeTextInAShortWindow() {
+    @Test fun distanceTimePaceAndGpsAreVisibleBeforeAnyScrollAtLargeTextInAShortWindow() {
         val state = mutableStateOf(AppState(activeRun = ActiveRun(id = "reading-fixture", phase = RunPhase.RUNNING,
-            distanceMeters = 5230.0, activeDurationMillis = 1_200_000L),
+            distanceMeters = 5230.0, activeDurationMillis = 1_200_000L, currentPaceSecondsPerKm = 229,
+            accuracyMeters = 7f), locationAccess = LocationAccess(true, true),
             runPersistence = RunPersistenceState(initialized = true)))
         val actions = RunmoniUiTest.FakeActions(state)
         compose.setContent { ViewportBox(Viewport(320, 2f)) {
             Box(Modifier.height(520.dp)) { RunmoniApp(state.value, actions) }
         } }
         compose.onNodeWithTag("nav_run").performClick()
-        val distance = compose.onNodeWithTag("run_distance").assertIsDisplayed().fetchSemanticsNode()
         val safe = compose.onNodeWithTag("running_scroll_viewport").fetchSemanticsNode().boundsInRoot
-        assertTrue("Whole primary value is visible without scrolling", distance.positionInRoot.y >= safe.top &&
-            distance.positionInRoot.y + distance.size.height <= safe.bottom)
+        for ((tag, text) in mapOf("run_distance" to "5.23", "run_duration" to "20:00", "run_pace" to "3′49″",
+            "run_status" to "기록 중", "gps_status" to "GPS 수신 중")) {
+            val node = compose.onNodeWithTag(tag).assertIsDisplayed().assertTextEquals(text).fetchSemanticsNode()
+            assertTrue("All of $tag is visible before scrolling", node.positionInRoot.y >= safe.top &&
+                node.positionInRoot.y + node.size.height <= safe.bottom + 1f)
+        }
         fullyInside("pause_run", "run_control_bar")
+        fullyInside("finish_run", "run_control_bar")
         capture("studio-run-320-font2-fixture")
+
+        compose.runOnIdle { state.value = state.value.copy(locationAccess = LocationAccess(true, false)) }
+        compose.onNodeWithTag("gps_status").assertIsDisplayed().assertTextEquals("GPS 꺼짐")
+        compose.onNodeWithTag("run_pace").assertIsDisplayed().assertTextEquals("—")
+        fullyInside("finish_run", "run_control_bar").performClick()
+        compose.onNodeWithTag("cancel_finish_run").assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(0, actions.finishes) }
     }
 
     @Test fun runPreparationLinksProfilesAndKeepsSharingBehindConsent() {

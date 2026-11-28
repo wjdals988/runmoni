@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -263,7 +265,8 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
 private fun WeatherRefreshButton(state: RunningWeatherState, onRefresh: () -> Unit) {
     val loading = state.phase == WeatherPhase.LOCATING || state.phase == WeatherPhase.LOADING
     TextButton(onClick = onRefresh, enabled = !loading, shape = RunmoniShapes.Action,
-        modifier = Modifier.heightIn(min = 48.dp).testTag("refresh_home_weather")) {
+        contentPadding = PaddingValues(vertical = 8.dp),
+        modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp).testTag("refresh_home_weather")) {
         Text(if (loading) "확인 중…" else if (state.snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인")
     }
 }

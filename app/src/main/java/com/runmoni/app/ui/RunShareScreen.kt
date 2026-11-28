@@ -1,11 +1,14 @@
 package com.runmoni.app.ui
 
+import android.app.UiModeManager
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -18,7 +21,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AddPhotoAlternate
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.DirectionsRun
@@ -36,7 +38,9 @@ import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -278,38 +282,31 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
           // Keep Back fixed and let those actions join the single body scroll.
           val scrollFooter = maxHeight < 280.dp || LocalDensity.current.fontScale >= 1.3f && maxHeight < 420.dp
           Column(Modifier.fillMaxSize()) {
-            Row(Modifier.fillMaxWidth().heightIn(min = 64.dp).padding(horizontal = 8.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("close_run_share")) {
-                    Icon(Icons.AutoMirrored.Outlined.ArrowBack, "러닝 기록으로 돌아가기")
-                }
-                Text("기록 공유", style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f).semantics { heading() })
-            }
+            PageTopBar("기록 공유", onBack, closeLabel = "러닝 기록으로 돌아가기",
+                closeTag = "close_run_share", compact = true)
             HorizontalDivider(color = RunmoniColors.Line)
             BoxWithConstraints(Modifier.fillMaxWidth().weight(1f)) {
-                val small = scrollFooter || LocalDensity.current.fontScale >= 1.3f || maxHeight < 500.dp
-                val previewHeight = if (small) 200.dp else minOf(maxHeight * .46f, 330.dp)
-                val previewWidth = minOf((maxWidth - pageGutter() * 2).coerceAtLeast(1.dp), previewHeight * draft.ratio.aspectRatio)
-                // Keep one scroll owner when IME/viewport changes. The focused field stays
-                // inside this same viewport instead of transferring its ScrollState to a parent.
-                Column(Modifier.fillMaxSize().verticalScroll(scroll),
+                val compact = scrollFooter || LocalDensity.current.fontScale >= 1.3f || maxWidth < 360.dp
+                val previewHeight = if (compact) (maxHeight - 112.dp).coerceIn(88.dp, 200.dp)
+                    else minOf(maxHeight * .54f, 330.dp)
+                val gutter = pageGutter()
+                val frameInset = RunmoniLayout.TightGap
+                val previewWidth = minOf((maxWidth - (gutter + frameInset) * 2).coerceAtLeast(1.dp),
+                    previewHeight * draft.ratio.aspectRatio)
+                val matte = MaterialTheme.colorScheme.surfaceContainerHighest
+                val increasedContrast = rememberIncreasedContrast()
+                val solidShelf = compact || !ready || busy || increasedContrast
+                // Keep the same scroll owner when IME or the available height changes.
+                Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("run_share_editor_scroll"),
                     horizontalAlignment = Alignment.CenterHorizontally) {
-                    Column(Modifier.fillMaxWidth().background(RunmoniColors.Cream)
-                        .padding(vertical = 12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                            .padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier.semantics { heading() })
-                            ShareRatioChoices(draft.ratio, editable) { onDraft(draft.copy(ratio = it)) }
-                            Text("스타일", style = MaterialTheme.typography.titleSmall,
-                                modifier = Modifier.semantics { heading() })
-                            ShareStyleChoices(draft.style, editable) { onDraft(draft.copy(style = it)) }
-                            ShareToolTabs(tool, !busy, onTool)
-                        }
-                        Spacer(Modifier.height(16.dp))
-                        Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surfaceContainerHighest, RunmoniShapes.Surface)
-                            .padding(vertical = 8.dp), contentAlignment = Alignment.Center) {
+                    Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .padding(start = gutter, end = gutter, top = frameInset, bottom = frameInset)
+                        .clip(RunmoniShapes.Surface)
+                        .then(if (solidShelf) Modifier.background(matte)
+                            else Modifier.background(Brush.horizontalGradient(listOf(matte, RunmoniTrack.Stage))))
+                        .padding(frameInset),
+                        verticalArrangement = Arrangement.spacedBy(frameInset), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(Modifier.fillMaxWidth().height(previewHeight), contentAlignment = Alignment.Center) {
                             Box(Modifier.width(previewWidth).aspectRatio(draft.ratio.aspectRatio)
                                 .background(RunmoniColors.Paper).border(1.dp, RunmoniColors.Outline)
                                 .testTag("run_share_preview")
@@ -327,38 +324,43 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
                                 if (!ready && error == null) Surface(color = RunmoniColors.Paper.copy(alpha = .9f),
                                     modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
                                     Text(if (busy) "저장·공유 준비 중…" else "이미지 준비 중…", style = MaterialTheme.typography.bodySmall,
-                                        modifier = Modifier.padding(8.dp))
+                                        modifier = Modifier.padding(frameInset))
                                 }
                             }
                         }
-                        Spacer(Modifier.height(12.dp))
+                        Surface(Modifier.fillMaxWidth().testTag(if (solidShelf) "run_share_shelf_solid" else "run_share_shelf_tint"),
+                            shape = RunmoniShapes.Action,
+                            color = if (solidShelf) RunmoniColors.Paper else RunmoniColors.Paper.copy(alpha = .92f),
+                            border = BorderStroke(1.dp, RunmoniColors.Line)) {
+                            SharePhotoButton(photoPresent, editable, onPickPhoto)
+                        }
+                    }
+                    Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
+                        .padding(start = gutter, end = gutter, top = frameInset, bottom = RunmoniLayout.ContentGap),
+                        verticalArrangement = Arrangement.spacedBy(frameInset)) {
+                        if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
+                        ShareToolTabs(tool, !busy, onTool)
+                        Text("이미지 비율", style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.semantics { heading() })
+                        ShareRatioChoices(draft.ratio, editable) { onDraft(draft.copy(ratio = it)) }
+                        Text("스타일", style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.semantics { heading() })
+                        ShareStyleChoices(draft.style, editable) { onDraft(draft.copy(style = it)) }
                         Text(when (tool) {
                             0 -> if (photoPresent) "사진을 끌거나 두 손가락으로 확대해 보세요." else "사진 위에 나의 기록과 미니미를 담아 보세요."
                             1 -> "기록을 끌어 사진에 어울리는 위치를 찾아보세요."
                             else -> if (draft.showAvatar) "미니미를 끌거나 두 손가락으로 크기를 바꿔 보세요." else "미니미를 켜면 지금의 옷차림을 넣을 수 있어요."
                         }, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
-                            modifier = Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                                .padding(horizontal = pageGutter()).testTag("run_share_canvas_hint"))
-                        if (!photoPresent) {
-                            Spacer(Modifier.height(16.dp))
-                            Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                                .padding(horizontal = pageGutter())) {
-                                SharePhotoButton(false, editable, onPickPhoto)
-                            }
-                        }
+                            modifier = Modifier.testTag("run_share_canvas_hint"))
                     }
                     HorizontalDivider(color = RunmoniColors.Line)
-                    // One flat property area follows the selected tool. Preview,
-                    // navigation and output each have their own visual region.
                     Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                         .background(RunmoniColors.Paper)
-                        .padding(horizontal = pageGutter(), vertical = 24.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        if (error != null) Text(error, color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.testTag("run_share_error").semantics { liveRegion = LiveRegionMode.Polite })
+                        .padding(horizontal = gutter, vertical = RunmoniLayout.TopInset),
+                        verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
                         when (tool) {
                             0 -> {
-                                if (photoPresent) SharePhotoButton(true, editable, onPickPhoto)
                                 if (photoPresent || photoClearable) {
                                     if (photoPresent) {
                                         SharePropertyHeading("확대", "${(draft.photoZoom.coerceIn(1f, 3f) * 100).toInt()}%")
@@ -440,6 +442,21 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
           }
         }
     }
+}
+
+@Composable
+private fun rememberIncreasedContrast(): Boolean {
+    if (Build.VERSION.SDK_INT < 34) return false
+    val context = LocalContext.current
+    val manager = remember(context) { context.getSystemService(UiModeManager::class.java) } ?: return false
+    var increased by remember(manager) { mutableStateOf(manager.contrast > 0f) }
+    DisposableEffect(manager) {
+        val listener = UiModeManager.ContrastChangeListener { increased = it > 0f }
+        manager.addContrastChangeListener(context.mainExecutor, listener)
+        increased = manager.contrast > 0f
+        onDispose { manager.removeContrastChangeListener(listener) }
+    }
+    return increased
 }
 
 @Composable
@@ -546,8 +563,8 @@ private fun ShareToneChoices(selected: RunShareTextTone, enabled: Boolean, onSel
 
 @Composable
 private fun SharePhotoButton(present: Boolean, enabled: Boolean, onClick: () -> Unit) {
-    FilledTonalButton(onClick = onClick, enabled = enabled, shape = RunmoniShapes.Action,
-        modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("run_share_photo")) {
+    TextButton(onClick = onClick, enabled = enabled, shape = RunmoniShapes.Action,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("run_share_photo")) {
         Icon(Icons.Outlined.AddPhotoAlternate, null); Spacer(Modifier.width(8.dp))
         Text(if (present) "사진 바꾸기" else "사진 추가")
     }

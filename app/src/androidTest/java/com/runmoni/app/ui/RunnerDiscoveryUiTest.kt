@@ -1,7 +1,11 @@
 package com.runmoni.app.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
@@ -339,6 +343,55 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
             assertTrue("Layout and capture do not request public sharing", actions.sharingRequests.isEmpty())
             assertTrue(actions.confirmations.isEmpty())
             assertEquals(0, actions.locates)
+        }
+    }
+
+    @Test fun shortLargeTextDestinationShowsBothDiscoveryCommandsAndMapCreditWithoutScrolling() {
+        val state = mutableStateOf(AppState(signedIn = true, communityBackend = CommunityBackend.FIREBASE,
+            communityUid = "first-view-runner"))
+        val actions = Actions(state)
+        compose.setContent { ViewportBox(Viewport(320, 2f)) {
+            Box(Modifier.height(520.dp).testTag("short_discovery_host")) { RunmoniApp(state.value, actions) }
+        } }
+        compose.onNodeWithTag("nav_explore").performClick()
+        val destination = compose.onNodeWithTag("runner_discovery").getUnclippedBoundsInRoot()
+        val map = compose.onNodeWithTag("route_map_viewport").assertIsDisplayed().assertHeightIsAtLeast(96.dp)
+            .getUnclippedBoundsInRoot()
+        val locate = compose.onNodeWithTag("locate_explore").assertIsDisplayed()
+            .assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).getUnclippedBoundsInRoot()
+        val runners = compose.onNodeWithTag("refresh_runners").assertIsDisplayed()
+            .assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).getUnclippedBoundsInRoot()
+        val credit = compose.onNodeWithTag("osm_attribution").assertIsDisplayed().getUnclippedBoundsInRoot()
+        assertEquals(locate.top.value, runners.top.value, 1f)
+        assertTrue(locate.bottom <= map.top && runners.bottom <= map.top)
+        for ((name, node) in mapOf("locate" to locate, "runners" to runners, "map" to map, "credit" to credit)) {
+            assertTrue("Full $name ($node) must fit inside the discovery scroll viewport $destination",
+                node.top >= destination.top && node.bottom <= destination.bottom)
+        }
+        compose.onNodeWithTag("runner_discovery_status").assertDoesNotExist()
+        compose.runOnIdle {
+            assertTrue(actions.visibility.isEmpty())
+            assertEquals(0, actions.refreshes)
+            assertEquals(0, actions.locates)
+        }
+        capture("discovery-first-view-320-font2-fixture")
+
+        compose.runOnIdle { state.value = state.value.copy(signedIn = false, communityUid = "",
+            currentArea = CurrentAreaUi(CurrentAreaPhase.PERMISSION_REQUIRED)) }
+        compose.onNodeWithTag("refresh_runners").performClick()
+        val response = compose.onNodeWithTag("runner_discovery_status").assertIsDisplayed()
+            .assertTextContains("프로필을 연결", substring = true).getUnclippedBoundsInRoot()
+        val profile = compose.onNodeWithTag("toggle_runner_sharing").assertIsDisplayed()
+            .assertHeightIsAtLeast(48.dp).getUnclippedBoundsInRoot()
+        assertTrue("Guest feedback and its next step are fully visible below the command", response.top >= runners.bottom &&
+            response.bottom <= profile.top && profile.bottom <= destination.bottom)
+        compose.onNodeWithTag("locate_explore").performClick()
+        compose.onNodeWithTag("explore_current_area").assertIsDisplayed()
+        compose.onNodeWithTag("explore_location_settings").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        compose.runOnIdle {
+            assertTrue(actions.visibility.isEmpty())
+            assertEquals(0, actions.refreshes)
+            assertEquals(1, actions.locates)
         }
     }
 }

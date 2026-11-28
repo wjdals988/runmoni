@@ -1,0 +1,3 @@
+<resources>
+    <string name="stride_r_path" translatable="false">M32,76L42,32H59C72,32 79,39 76,51C74,58 69,62 62,63L75,76H61L47,61H46L42,76Z M50,43L48,52H59C63,52 66,50 67,47C68,44 65,43 61,43Z</string>
+</resources>

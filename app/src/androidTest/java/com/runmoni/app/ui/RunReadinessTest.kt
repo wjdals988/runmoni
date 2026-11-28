@@ -49,7 +49,7 @@ class RunReadinessTest : RunmoniDesignTestBase() {
         noTextOverflow("automatic pause 320 / 2")
         capture("run-auto-paused-320-200")
         compose.runOnIdle { state.value = state.value.copy(activeRun = state.value.activeRun.copy(pauseReason = PauseReason.MANUAL)) }
-        compose.onNodeWithText("잠시 쉬는 중").assertExists()
+        compose.onNodeWithTag("run_status").assertIsDisplayed().assertTextEquals("일시정지 중")
         compose.onNodeWithText("직접 일시정지했어요. 다시 달릴 때 ‘계속 달리기’를 누르세요.").assertExists()
         compose.onNodeWithTag("resume_run").performClick()
         compose.onNodeWithTag("pause_run").assertIsDisplayed()

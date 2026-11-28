@@ -1,0 +1,8 @@
+<gradient xmlns:android="http://schemas.android.com/apk/res/android"
+    android:type="linear"
+    android:startX="12" android:startY="3"
+    android:endX="100" android:endY="104">
+    <item android:offset="0" android:color="@color/ic_launcher_light" />
+    <item android:offset="0.43" android:color="@color/ic_launcher_background" />
+    <item android:offset="1" android:color="@color/ic_launcher_shadow" />
+</gradient>
