@@ -56,6 +56,7 @@ internal fun RouteTileMap(
     onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
     recenterRequest: MapRecenterRequest? = null,
     onRecenterApplied: (MapRecenterRequest) -> Unit = {},
+    highlightedRoute: RouteGeometry? = null,
 ) {
     val context = LocalContext.current
     val source = LocalMapTileSource.current ?: remember(context) { MapTileRepository.get(context) }
@@ -211,7 +212,7 @@ internal fun RouteTileMap(
                     }
                 }
                 val halfWorld = tileSize * 2.0.pow(view.zoom) / 2
-                geometry.segments.forEach { segment ->
+                fun drawRouteStroke(segment: List<RouteMapPoint>, width: Float, color: Color) {
                     val path = Path()
                     var previous: Offset? = null
                     segment.forEach { node ->
@@ -220,8 +221,13 @@ internal fun RouteTileMap(
                         if (previous == null || abs(p.x - previous!!.x) > halfWorld) path.moveTo(p.x, p.y) else path.lineTo(p.x, p.y)
                         previous = p
                     }
-                    drawPath(path, routeHalo, style = Stroke(7.dp.toPx(), cap = StrokeCap.Round))
-                    drawPath(path, routeColor, style = Stroke(4.dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(path, routeHalo, style = Stroke((width + 3).dp.toPx(), cap = StrokeCap.Round))
+                    drawPath(path, color, style = Stroke(width.dp.toPx(), cap = StrokeCap.Round))
+                }
+                val baseColor = if (highlightedRoute == null) routeColor else routeColor.copy(alpha = .5f)
+                geometry.segments.forEach { drawRouteStroke(it, 4f, baseColor) }
+                highlightedRoute?.segments?.forEach {
+                    drawRouteStroke(it, 7f, routeColor)
                 }
                 route.firstOrNull()?.let { first ->
                     drawCircle(routeHalo, 8.dp.toPx(), at(first.x, first.y))

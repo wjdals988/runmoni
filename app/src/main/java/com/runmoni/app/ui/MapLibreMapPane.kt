@@ -95,7 +95,7 @@ private fun createOpenFreeMapView(context: Context): MapView {
 private class NativeMapLifetime { var active = true }
 private data class RunnerArtworkKey(val id: String, val avatar: AvatarStyle)
 private data class RunnerMapImage(val artwork: RunnerArtworkKey, val bitmap: Bitmap)
-private data class NativeRouteLayers(val route: GeoJsonSource, val endpoints: GeoJsonSource,
+private data class NativeRouteLayers(val route: GeoJsonSource, val highlightedRoute: GeoJsonSource, val endpoints: GeoJsonSource,
     val runners: GeoJsonSource, val imageIds: MutableSet<String> = mutableSetOf(),
     val imageIdsByRunner: MutableMap<String, String> = mutableMapOf())
 
@@ -122,6 +122,7 @@ internal fun MapLibreMapPane(
     styleUri: String = OPEN_FREE_MAP_STYLE,
     recenterRequest: MapRecenterRequest? = null,
     onRecenterApplied: (MapRecenterRequest) -> Unit = {},
+    highlightedRoute: RouteGeometry? = null,
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -309,10 +310,7 @@ internal fun MapLibreMapPane(
         val layers = overlays ?: return@LaunchedEffect
         val style = loadedStyle ?: return@LaunchedEffect
         try {
-            layers.route.setGeoJson(FeatureCollection.fromFeatures(geometry.segments.filter { it.size > 1 }.map { segment ->
-                Feature.fromGeometry(LineString.fromLngLats(segment.map { Point.fromLngLat(it.x * 360.0 - 180.0,
-                    it.point.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE)) }))
-            }))
+            layers.route.setGeoJson(routeFeatures(geometry))
             layers.endpoints.setGeoJson(FeatureCollection.fromFeatures(listOfNotNull(
                 geometry.points.firstOrNull()?.let { endpoint(it, "시작", "start") },
                 geometry.points.lastOrNull()?.let { endpoint(it, "도착", "finish") },
@@ -349,6 +347,14 @@ internal fun MapLibreMapPane(
                 style.removeImage(imageId)
                 layers.imageIds.remove(imageId)
             }
+        } catch (_: Exception) { fail(VectorMapFailure.STYLE) }
+    }
+    LaunchedEffect(overlays, highlightedRoute, loadedStyle) {
+        val layer = overlays?.highlightedRoute ?: return@LaunchedEffect
+        try {
+            layer.setGeoJson(routeFeatures(highlightedRoute))
+            loadedStyle?.getLayerAs<LineLayer>("runmoni-route-line")
+                ?.setProperties(lineOpacity(if (highlightedRoute == null) 1f else .5f))
         } catch (_: Exception) { fail(VectorMapFailure.STYLE) }
     }
     LaunchedEffect(map, overlays, geometry, actualCenter, mapSize, fitRoute, interactiveMap, recenterRequest) {
@@ -413,6 +419,13 @@ private fun endpoint(node: RouteMapPoint, label: String, kind: String) = Feature
     addStringProperty("label", label); addStringProperty("kind", kind)
 }
 
+private fun routeFeatures(geometry: RouteGeometry?): FeatureCollection =
+    FeatureCollection.fromFeatures(geometry?.segments.orEmpty().filter { it.size > 1 }.map { segment ->
+        Feature.fromGeometry(LineString.fromLngLats(segment.map { node ->
+            Point.fromLngLat(node.x * 360.0 - 180.0, node.point.latitude.coerceIn(-Mercator.MAX_LATITUDE, Mercator.MAX_LATITUDE))
+        }))
+    })
+
 private fun installRouteLayers(style: Style, fontScale: Float, palette: RunningMapPalette): NativeRouteLayers {
     applyRunningMapAppearance(style, palette)
     // A flat running map keeps routes and runners clear of 3D building clutter.
@@ -425,13 +438,18 @@ private fun installRouteLayers(style: Style, fontScale: Float, palette: RunningM
             Expression.get("name:ko"), Expression.get("name:nonlatin"), Expression.get("name"), Expression.get("name:latin"), Expression.literal(""))))
     }
     val route = GeoJsonSource("runmoni-route", FeatureCollection.fromFeatures(emptyArray<Feature>()))
+    val highlightedRoute = GeoJsonSource("runmoni-highlighted-route", FeatureCollection.fromFeatures(emptyArray<Feature>()))
     val endpoints = GeoJsonSource("runmoni-endpoints", FeatureCollection.fromFeatures(emptyArray<Feature>()))
     val runners = GeoJsonSource("runmoni-runners", FeatureCollection.fromFeatures(emptyArray<Feature>()))
-    style.addSource(route); style.addSource(endpoints); style.addSource(runners)
+    style.addSource(route); style.addSource(highlightedRoute); style.addSource(endpoints); style.addSource(runners)
     style.addLayer(LineLayer("runmoni-route-outline", route.id).withProperties(
         lineColor(palette.halo), lineWidth(9f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
     style.addLayer(LineLayer("runmoni-route-line", route.id).withProperties(
         lineColor(palette.route), lineWidth(5f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
+    style.addLayer(LineLayer("runmoni-highlighted-route-outline", highlightedRoute.id).withProperties(
+        lineColor(palette.halo), lineWidth(11f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
+    style.addLayer(LineLayer("runmoni-highlighted-route-line", highlightedRoute.id).withProperties(
+        lineColor(palette.route), lineWidth(8f), lineCap(Property.LINE_CAP_ROUND), lineJoin(Property.LINE_JOIN_ROUND)))
     style.addLayer(CircleLayer("runmoni-start", endpoints.id).withFilter(Expression.eq(Expression.get("kind"), Expression.literal("start")))
         .withProperties(circleRadius(6f), circleColor(palette.route), circleStrokeColor(palette.halo), circleStrokeWidth(2f)))
     style.addLayer(CircleLayer("runmoni-finish", endpoints.id).withFilter(Expression.eq(Expression.get("kind"), Expression.literal("finish")))
@@ -449,7 +467,7 @@ private fun installRouteLayers(style: Style, fontScale: Float, palette: RunningM
         iconAllowOverlap(true), iconIgnorePlacement(true), iconOptional(true), textField(Expression.get("label")),
         textFont(arrayOf("Noto Sans Regular")), textSize(12f * fontScale), textAnchor(Property.TEXT_ANCHOR_TOP),
         textOffset(arrayOf(0f, .3f)), textColor(palette.ink), textHaloColor(palette.halo), textHaloWidth(2.5f), textOptional(true)))
-    return NativeRouteLayers(route, endpoints, runners)
+    return NativeRouteLayers(route, highlightedRoute, endpoints, runners)
 }
 
 /** Restyle known cartographic roles, preserving provider geometry, road widths,
@@ -498,6 +516,8 @@ private fun applyRunningMapAppearance(style: Style, palette: RunningMapPalette) 
 private fun applyRoutePalette(style: Style, palette: RunningMapPalette) {
     style.getLayerAs<LineLayer>("runmoni-route-outline")?.setProperties(lineColor(palette.halo))
     style.getLayerAs<LineLayer>("runmoni-route-line")?.setProperties(lineColor(palette.route))
+    style.getLayerAs<LineLayer>("runmoni-highlighted-route-outline")?.setProperties(lineColor(palette.halo))
+    style.getLayerAs<LineLayer>("runmoni-highlighted-route-line")?.setProperties(lineColor(palette.route))
     listOf("runmoni-start", "runmoni-self", "runmoni-runner-location").forEach { id ->
         style.getLayerAs<CircleLayer>(id)?.setProperties(circleColor(palette.route), circleStrokeColor(palette.halo))
     }

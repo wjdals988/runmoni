@@ -31,6 +31,7 @@ interface AppActions {
     fun setLapVibration(enabled: Boolean) {}
     fun setRunGoal(goal: RunGoal?) {}
     fun setRunInterval(interval: RunIntervalPlan?) {}
+    suspend fun prepareTrainingAgain(record: RunRecord, isCurrent: () -> Boolean): Boolean = false
     fun setPublicLocation(enabled: Boolean)
     fun saveUnifiedProfile(name: String, expectedUid: String) { updateProfile(name) }
     fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { saveUnifiedProfile(name, expectedUid) }
@@ -41,6 +42,7 @@ interface AppActions {
     fun equipItem(slot: String, variant: Int)
     fun buyItem(slot: String, variant: Int)
     fun deleteRun(id: String)
+    suspend fun saveRunReflection(id: String, reflection: RunReflection?): Boolean = false
     fun exportRun(id: String)
     fun canShareRun(record: RunRecord): Boolean = false
     fun configureServer(url: String)

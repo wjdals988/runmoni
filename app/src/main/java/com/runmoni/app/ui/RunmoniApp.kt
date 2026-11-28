@@ -55,6 +55,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -77,6 +78,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var appInformationFromSettings by rememberSaveable { mutableStateOf(false) }
         val settingsScroll = rememberScrollState()
         var selectedRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        var recordOpening by remember { mutableStateOf(Any()) }
         var recordSnapshot by remember { mutableStateOf<RunRecord?>(null) }
         var deletingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
         var sharingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
@@ -95,6 +97,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         }
         val recordStateHolder = rememberSaveableStateHolder()
         fun openRecord(record: RunRecord) {
+            recordOpening = Any()
             newlySavedRecordId = null
             recordSnapshot = record
             selectedRecordId = record.id
@@ -106,6 +109,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             signIn = false
         }
         fun closeRecord() {
+            recordOpening = Any()
             newlySavedRecordId = null
             selectedRecordId?.let { id ->
                 recordStateHolder.removeState("record_$id")
@@ -118,6 +122,8 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         }
         val selectedRecord = state.records.firstOrNull { it.id == selectedRecordId }
             ?: recordSnapshot?.takeIf { it.id == selectedRecordId }
+        val latestState by rememberUpdatedState(state)
+        val latestActions by rememberUpdatedState(actions)
         LaunchedEffect(selectedRecordId, deletingRecordId, state.records, state.busy,
             state.runPersistence.initialized, state.runPersistence.historyUnavailable) {
             // Keep failures visible; return only after canonical removal.
@@ -377,6 +383,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 val recordActions = object : AppActions by actions {
                     override fun deleteRun(id: String) {
                         if (id == selectedRecordId && state.records.any { it.id == id } && !state.busy) {
+                            recordOpening = Any()
                             deletingRecordId = id
                             actions.deleteRun(id)
                         }
@@ -389,12 +396,36 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                             authorize = { actions.canShareRun(selectedRecord) }, onBack = { sharingRecordId = null })
                     } }
                 } else recordStateHolder.SaveableStateProvider("record_${selectedRecord.id}") {
+                    val scope = rememberCoroutineScope()
+                    val opening = recordOpening
+                    val account = state.cloud.uid
+                    var preparingTraining by remember(opening) { mutableStateOf(false) }
+                    fun isCurrentRecord() = recordOpening === opening && selectedRecordId == selectedRecord.id &&
+                        sharingRecordId == null && latestState.openedRoomId.isBlank() && latestActions === actions &&
+                        latestState.cloud.uid == account && lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) &&
+                        RunTrainingPreparation.available(latestState, selectedRecord)
+                    val prepareAgain: () -> Unit = {
+                        if (!preparingTraining && isCurrentRecord()) {
+                            preparingTraining = true
+                            scope.launch {
+                                try {
+                                    if (actions.prepareTrainingAgain(selectedRecord, ::isCurrentRecord) && isCurrentRecord()) {
+                                        closeRecord()
+                                        tab = 2
+                                    }
+                                } finally {
+                                    preparingTraining = false
+                                }
+                            }
+                        }
+                    }
                     RunRecordScreen(selectedRecord, recordActions, state.cloud, state.runPersistence,
                         operationBusy = state.busy,
                         onShare = { if (actions.canShareRun(selectedRecord)) sharingRecordId = selectedRecord.id },
                         showNewlySavedMotion = newlySavedRecordId == selectedRecord.id,
                         onNewlySavedMotionShown = { if (newlySavedRecordId == selectedRecord.id) newlySavedRecordId = null },
                         comparisonRecords = state.records,
+                        onPrepareAgain = prepareAgain.takeIf { RunTrainingPreparation.available(state, selectedRecord) },
                         onBack = ::closeRecord)
                 }
             } else {
@@ -434,6 +465,9 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
     var goalPickerOpen by rememberSaveable { mutableStateOf(false) }
     var intervalPickerOpen by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
+    var outdoorEnabled by rememberSaveable(run.id) { mutableStateOf(false) }
+    val supportsOutdoor = run.phase != RunPhase.IDLE && run.id.isNotBlank()
+    val outdoorFocused = supportsOutdoor && outdoorEnabled
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val compactLive = run.phase != RunPhase.IDLE && (largeText || useCompactPanel)
     val persistence = state.runPersistence
@@ -457,14 +491,29 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
         run.phase == RunPhase.RECOVERY -> "러닝 이어가기"
         else -> if (compactLive) "기록 중" else "러닝 기록 중"
     }
+    BackHandler(enabled = outdoorFocused) { outdoorEnabled = false }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.SectionGap,
+            if (outdoorFocused) ScreenContent(spacing = RunmoniLayout.ContentGap, topPadding = RunmoniLayout.TightGap) {
+                val outdoorGps = when {
+                    permissionMissing || gpsDisabled -> gpsLabel
+                    run.phase == RunPhase.PAUSED -> "GPS 기록 일시정지"
+                    run.phase == RunPhase.RECOVERY -> "GPS 확인 대기"
+                    else -> gpsLabel.substringBefore(" · ")
+                }
+                OutdoorRunPanel(run, statusTitle, outdoorGps, currentPace, onClose = { outdoorEnabled = false })
+                RunPersistenceNotice(persistence, actions::retryRunPersistence)
+                if (permissionMissing || gpsDisabled) LocationReadinessCard(permissionMissing, actions)
+            } else ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.SectionGap,
                 centerWhenFits = run.phase == RunPhase.IDLE,
                 topPadding = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.ContentGap) {
                 if (!compactLive) Column(verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
-                    Text(statusTitle, style = MaterialTheme.typography.headlineLarge,
-                        modifier = Modifier.testTag("run_status").semantics { heading() })
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
+                        Text(statusTitle, style = MaterialTheme.typography.headlineLarge,
+                            modifier = Modifier.weight(1f).testTag("run_status").semantics { heading() })
+                        if (supportsOutdoor) OutdoorFocusButton(onOpen = { outdoorEnabled = true }, compact = false)
+                    }
                     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap),
                         verticalArrangement = Arrangement.spacedBy(6.dp)) {
                         StatusPill(gpsLabel, if (gpsReady) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
@@ -518,7 +567,11 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     spacing = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.ContentGap) {
                     if (compactLive) {
                         CompactRunStatus(statusTitle, gpsLabel.substringBefore(" · "), gpsReady)
-                        Text("거리", style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail)
+                        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Text("거리", style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail,
+                                modifier = Modifier.weight(1f))
+                            if (supportsOutdoor) OutdoorFocusButton(onOpen = { outdoorEnabled = true }, compact = true)
+                        }
                         DistanceNumber(distance(run.distanceMeters), RunmoniTrack.Highlight,
                             Modifier.testTag("run_distance"), maxSize = 40f, unit = "km")
                     } else BoxWithConstraints(Modifier.fillMaxWidth()) {

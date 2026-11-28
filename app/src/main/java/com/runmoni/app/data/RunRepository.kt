@@ -134,7 +134,8 @@ class RunRepository internal constructor(
                 System.currentTimeMillis(), goalKind = goal?.kind?.name, goalTarget = goal?.target ?: 0,
                 intervalRunSeconds = interval?.runSeconds ?: 0, intervalRecoverySeconds = interval?.recoverySeconds ?: 0,
                 intervalRepeats = interval?.repeats ?: 0, intervalVibration = interval?.vibration == true)
-            if (previous != null) engine.restore(row.distanceMeters, row.activeDurationMillis, row.segment, parseSplits(row.splitsJson))
+            if (previous != null) engine.restore(row.distanceMeters, row.activeDurationMillis, row.segment,
+                parseSplits(row.splitsJson), parseLapAnchors(row.lapAnchorsJson))
             val restored = try { if (previous != null) dao.points(row.id).map { it.toDomain() } else emptyList() }
             catch (cancelled: CancellationException) {
                 persistenceState.update { it.copy(initialized = false, saving = false, issue = RunPersistenceIssue.RECOVERY) }
@@ -421,12 +422,27 @@ class RunRepository internal constructor(
         runCatching { onRunDeleted(id) }
     }
     suspend fun record(id: String): RunRecord? = dao.get(id)?.let { toRecord(it) }
+    suspend fun updateReflection(id: String, reflection: RunReflection?): Boolean = mutex.withLock {
+        if (id.isBlank()) return@withLock false
+        val value = RunReflection.fromInput(reflection?.effort, reflection?.note)
+        dao.updateReflection(id, value?.effort?.wireValue, value?.note) == 1
+    }
     private fun publish() {
         val row = stored ?: return
         val elapsed = (System.currentTimeMillis() - row.startedAtMillis).coerceAtLeast(0)
         val liveFix = active.value.phase == RunPhase.RUNNING && !gpsSignalStale && lastGpsSignalElapsedMillis != null &&
             !GpsSignalFreshness.isStale(lastGpsSignalElapsedMillis, SystemClock.elapsedRealtime())
-        stored = row.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed, segment = engine.segment, splitsJson = JSONArray().apply { engine.splits.forEach { put(JSONObject().put("km", it.kilometer).put("duration", it.durationMillis)) } }.toString())
+        stored = row.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis,
+            elapsedDurationMillis = elapsed, segment = engine.segment,
+            splitsJson = JSONArray().apply {
+                engine.splits.forEach { put(JSONObject().put("km", it.kilometer).put("duration", it.durationMillis)) }
+            }.toString(),
+            lapAnchorsJson = JSONArray().apply {
+                engine.lapAnchors.forEach { anchor ->
+                    put(JSONObject().put("km", anchor.kilometer).put("from", anchor.beforeSequence)
+                        .put("to", anchor.afterSequence).put("fraction", anchor.fraction))
+                }
+            }.toString())
         active.value = active.value.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed,
             currentPaceSecondsPerKm = if (liveFix) engine.currentPaceSecondsPerKm() else null,
             currentSpeedMetersPerSecond = if (liveFix) engine.currentSpeedMetersPerSecond() else null,
@@ -435,12 +451,23 @@ class RunRepository internal constructor(
     private suspend fun toRecord(row: StoredRun) = recordWithPoints(row, dao.points(row.id).map { it.toDomain() })
     private fun recordWithPoints(row: StoredRun, points: List<TrackPoint>) = RunRecord(row.id, row.startedAtMillis,
         row.finishedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points,
-        parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage, goal = row.runGoal(), interval = row.runInterval())
+        parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage,
+        lapAnchors = parseLapAnchors(row.lapAnchorsJson),
+        goal = row.runGoal(), interval = row.runInterval(),
+        reflection = RunReflection.fromStorage(row.perceivedEffort, row.privateNote))
     private fun StoredRun.runGoal() = RunGoal.fromStorage(goalKind, goalTarget)
     private fun StoredRun.runInterval() =
         RunIntervalPlan.fromStorage(intervalRunSeconds, intervalRecoverySeconds, intervalRepeats, intervalVibration)
     private fun StoredPoint.toDomain() = TrackPoint(sequence, latitude, longitude, accuracyMeters, recordedAtMillis, segment)
     private fun parseSplits(json: String): List<KmSplit> = runCatching { val list = JSONArray(json); (0 until list.length()).map { val item = list.getJSONObject(it); KmSplit(item.getInt("km"), item.getLong("duration")) } }.getOrDefault(emptyList())
+
+    private fun parseLapAnchors(json: String): List<RunLapAnchor> = runCatching {
+        val values = JSONArray(json)
+        List(values.length()) { index ->
+            val anchor = values.getJSONObject(index)
+            RunLapAnchor(anchor.getInt("km"), anchor.getInt("from"), anchor.getInt("to"), anchor.getDouble("fraction"))
+        }
+    }.getOrDefault(emptyList())
 
     internal fun close() { scope.cancel() }
 

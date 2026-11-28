@@ -48,6 +48,7 @@ import com.runmoni.app.domain.RunPersistenceState
 import com.runmoni.app.domain.RunRecord
 import com.runmoni.app.domain.RouteGeometry
 import com.runmoni.app.domain.RunResultAnalysis
+import com.runmoni.app.domain.lapRoute
 
 // A stable product callback for late-event regression checks. Foundation's
 // OnClick SemanticsAction is a live ClickableNode accessor, not a snapshot.
@@ -68,6 +69,7 @@ internal fun RunRecordScreen(
     showNewlySavedMotion: Boolean = false,
     onNewlySavedMotionShown: () -> Unit = {},
     comparisonRecords: List<RunRecord> = emptyList(),
+    onPrepareAgain: (() -> Unit)? = null,
     onBack: () -> Unit,
 ) {
     val scroll = key(record.id) { rememberScrollState() }
@@ -75,7 +77,7 @@ internal fun RunRecordScreen(
     // record scroll across account changes while disposing all old actions.
     key(record.id, cloud.uid) {
         RunRecordPageContent(record, actions, cloud, persistence, operationBusy, scroll, onShare,
-            showNewlySavedMotion, onNewlySavedMotionShown, comparisonRecords, onBack)
+            showNewlySavedMotion, onNewlySavedMotionShown, comparisonRecords, onPrepareAgain, onBack)
     }
 }
 
@@ -92,6 +94,7 @@ private fun RunRecordPageContent(
     showNewlySavedMotion: Boolean,
     onNewlySavedMotionShown: () -> Unit,
     comparisonRecords: List<RunRecord>,
+    onPrepareAgain: (() -> Unit)?,
     onBack: () -> Unit,
 ) {
     // A confirmation never carries over to another record or account. Keep the
@@ -124,6 +127,8 @@ private fun RunRecordPageContent(
     val latestBusy by rememberUpdatedState(operationBusy)
     val latestActions by rememberUpdatedState(actions)
     val latestShare by rememberUpdatedState(onShare)
+    val latestPrepareAgain by rememberUpdatedState(onPrepareAgain)
+    val latestTraining by rememberUpdatedState(record.goal to record.interval)
     val shareAction: () -> Unit = {
         if (pageAlive && latestContext === confirmationContext && record.id == latestRecordId && !latestBusy &&
             latestActions.canShareRun(record)) latestShare?.invoke()
@@ -133,17 +138,31 @@ private fun RunRecordPageContent(
         if (pageAlive && expectedId.isNotBlank() && expectedId == latestRecordId && !latestBusy)
             latestActions.exportRun(expectedId)
     }
+    val prepareAgainAction: () -> Unit = {
+        if (pageAlive && latestContext === confirmationContext && hasRecordId && record.id == latestRecordId && !latestBusy &&
+            latestTraining == (record.goal to record.interval))
+            latestPrepareAgain?.invoke()
+    }
     val analysis = remember(record) { RunResultAnalysis.from(record) }
-    val hasRoute = remember(record.points) { RouteGeometry.from(record.points).segments.any { it.size >= 2 } }
+    val geometry = remember(record.points) { RouteGeometry.from(record.points) }
+    val hasRoute = geometry.segments.any { it.size >= 2 }
     var selectedKilometer by rememberSaveable { mutableIntStateOf(0) }
+    var mapKilometer by rememberSaveable { mutableIntStateOf(0) }
     var mapOpen by rememberSaveable { mutableStateOf(false) }
+    val selectedRoute = remember(geometry, record.lapAnchors, selectedKilometer) {
+        geometry.lapRoute(selectedKilometer, record.lapAnchors)
+    }
+    val highlightedRoute = remember(geometry, record.lapAnchors, mapKilometer) {
+        geometry.lapRoute(mapKilometer, record.lapAnchors)
+    }
     val analysisAnchor = remember { BringIntoViewRequester() }
     val mapAnchor = remember { BringIntoViewRequester() }
     var analysisRequest by remember { mutableIntStateOf(0) }
     var mapRequest by remember { mutableIntStateOf(0) }
     LaunchedEffect(analysisRequest) { if (analysisRequest > 0) analysisAnchor.bringIntoView() }
     LaunchedEffect(mapRequest) { if (mapRequest > 0 && mapOpen) mapAnchor.bringIntoView() }
-    val openMap: () -> Unit = {
+    val openMap: (Int) -> Unit = { kilometer ->
+        mapKilometer = kilometer
         mapOpen = true
         mapRequest++
     }
@@ -191,7 +210,7 @@ private fun RunRecordPageContent(
 
                     val fastest = analysis.fastestSplits.firstOrNull()
                     val firstSplit = analysis.splits.firstOrNull()
-                    if (analysis.elapsedMillis != null || record.goal != null || firstSplit != null || hasRoute) {
+                    if (analysis.elapsedMillis != null || record.goal != null || firstSplit != null || hasRoute || onPrepareAgain != null) {
                         Column(Modifier.fillMaxWidth().padding(horizontal = gutter),
                             verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             record.goal?.let { goal ->
@@ -219,12 +238,16 @@ private fun RunRecordPageContent(
                                     analysisRequest++
                                 }, shape = RunmoniShapes.Action,
                                     modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_splits")) { Text("구간 보기") }
-                                if (hasRoute) OutlinedButton(onClick = openMap, shape = RunmoniShapes.Action,
+                                if (hasRoute) OutlinedButton(onClick = { openMap(0) }, shape = RunmoniShapes.Action,
                                     modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_route")) {
                                     Icon(Icons.Outlined.Route, null, Modifier.size(18.dp))
                                     Spacer(Modifier.width(8.dp))
                                     Text("경로 보기")
                                 }
+                                if (onPrepareAgain != null) OutlinedButton(onClick = prepareAgainAction,
+                                    shape = RunmoniShapes.Action, enabled = !operationBusy,
+                                    modifier = Modifier.heightIn(min = 48.dp).testTag("record_prepare_again")
+                                        .recordActionSnapshot(prepareAgainAction)) { Text("이 훈련 다시 준비") }
                             }
                         }
                     }
@@ -232,7 +255,8 @@ private fun RunRecordPageContent(
                     RunIntervalResult(record.interval, record.activeDurationMillis, Modifier.padding(horizontal = gutter))
 
                     RunRecordPaceAnalysis(analysis, selectedKilometer, { selectedKilometer = it },
-                        Modifier.padding(horizontal = gutter).bringIntoViewRequester(analysisAnchor))
+                        Modifier.padding(horizontal = gutter).bringIntoViewRequester(analysisAnchor),
+                        onOpenSelectedRoute = if (selectedRoute != null) ({ openMap(selectedKilometer) }) else null)
 
                     RunRecordComparison(record, comparisonRecords, Modifier.padding(horizontal = gutter))
 
@@ -240,15 +264,27 @@ private fun RunRecordPageContent(
                         verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
                         RecordSectionTitle("러닝 경로", Icons.Outlined.Route)
                         if (hasRoute) {
-                            OutlinedButton(onClick = { if (mapOpen) mapOpen = false else openMap() }, shape = RunmoniShapes.Action,
+                            OutlinedButton(onClick = { if (mapOpen) mapOpen = false else openMap(0) }, shape = RunmoniShapes.Action,
                                 modifier = Modifier.heightIn(min = 48.dp).testTag("record_toggle_map")) {
                                 Icon(if (mapOpen) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null, Modifier.size(20.dp))
                                 Spacer(Modifier.width(8.dp))
                                 Text(if (mapOpen) "지도 접기" else "지도 펼치기")
                             }
-                            if (mapOpen) Box(Modifier.fillMaxWidth().height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 240.dp)
-                                .clip(RunmoniShapes.Surface).testTag("record_map")) {
-                                MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true)
+                            if (mapOpen) {
+                                if (highlightedRoute != null) FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text("${mapKilometer - 1}–$mapKilometer km 강조 중",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        modifier = Modifier.align(Alignment.CenterVertically).testTag("record_map_selected_lap"))
+                                    TextButton(onClick = { mapKilometer = 0 },
+                                        modifier = Modifier.heightIn(min = 48.dp).testTag("record_map_clear_lap")) {
+                                        Text("전체 경로 보기")
+                                    }
+                                }
+                                Box(Modifier.fillMaxWidth().height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 240.dp)
+                                    .clip(RunmoniShapes.Surface).testTag("record_map")) {
+                                    MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true,
+                                        highlightedRoute = highlightedRoute)
+                                }
                             }
                         } else {
                             Text(if (record.points.isEmpty()) "저장된 GPS 위치가 없어 경로를 표시할 수 없어요."
@@ -260,6 +296,9 @@ private fun RunRecordPageContent(
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
                             modifier = Modifier.testTag("record_interrupted"))
                     }
+
+                    RunReflectionSection(record, actions, Modifier.padding(horizontal = gutter),
+                        enabled = !operationBusy && !persistence.historyUnavailable)
 
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
                         .padding(horizontal = gutter, vertical = RunmoniLayout.SectionGap),

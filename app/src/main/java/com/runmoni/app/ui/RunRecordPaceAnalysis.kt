@@ -47,7 +47,7 @@ internal fun formatResultPace(seconds: Long): String = "${seconds / 60}:${(secon
 
 @Composable
 internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilometer: Int, onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier, onOpenSelectedRoute: (() -> Unit)? = null) {
     Column(modifier.fillMaxWidth().testTag("record_pace_analysis"),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         RecordSectionTitle("페이스와 1km 구간", Icons.Outlined.Speed)
@@ -66,6 +66,10 @@ internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilomete
             if (selected != null) {
                 val averageComparison = analysis.averagePaceSeconds?.let {
                     paceComparison("전체 평균", selected.paceSeconds - it)
+                }
+                if (onOpenSelectedRoute != null) OutlinedButton(onClick = onOpenSelectedRoute,
+                    shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_lap_on_map")) {
+                    Text("지도에서 보기")
                 }
                 val previousComparison = analysis.splits.firstOrNull { it.kilometer == selected.kilometer - 1 }?.let {
                     paceComparison("직전 구간", selected.paceSeconds - it.paceSeconds)
