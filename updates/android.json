@@ -1,19 +1,19 @@
 {
   "preview": {
-    "version": "0.13.0-dev",
-    "versionCode": 38,
-    "fileName": "runmoni-0.13.0-dev.apk",
-    "sizeBytes": 176566624,
-    "sha256": "02fcd332467c00c5ad2bb15958140dfe08b9dac93948fc4dd7c1e8cfc65c490b",
+    "version": "0.14.0-dev",
+    "versionCode": 39,
+    "fileName": "runmoni-0.14.0-dev.apk",
+    "sizeBytes": 176599392,
+    "sha256": "ea286ade698403cc20d97728300d8a9c02d794046d99b6aa9dd804c2d8954a8f",
     "certificateSha256": "a21359c657f6797f5fb8229c3098e48bc72a45f9d25269f8d41ff5122465df4a",
-    "sourceRevision": "23920adc1561102c2c9d3d88dd3ff9a22b7fca2c",
+    "sourceRevision": "71793328f7356fb5701df446301b62e1a21aa00d",
     "signed": true,
     "package": "com.runmoni.app",
     "buildType": "release",
     "physicalDeviceTests": 0,
-    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.13.0-dev/runmoni-0.13.0-dev.apk",
-    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.13.0-dev",
-    "notes": "위젯 러닝과 야외 집중 화면, 훈련 재사용, 1km 경로·기록 비교, 비공개 메모, 라이트·다크 컬러와 헤어 4종을 반영했습니다."
+    "downloadUrl": "https://github.com/wjdals988/runmoni/releases/download/v0.14.0-dev/runmoni-0.14.0-dev.apk",
+    "releaseUrl": "https://github.com/wjdals988/runmoni/releases/tag/v0.14.0-dev",
+    "notes": "홈 날씨와 야외 집중, 구간 지도·공유 복구, 크루·채팅, 프로필·옷장·위젯의 조작을 개선했습니다."
   },
   "schemaVersion": 1,
   "stable": null
