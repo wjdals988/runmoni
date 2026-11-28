@@ -2,6 +2,7 @@ package com.runmoni.app.ui
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import androidx.core.graphics.ColorUtils
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.R
@@ -82,5 +83,21 @@ class RunmoniIconTest {
         val notification = draw(R.drawable.ic_stat_runmoni, 24)
         try { File(directory, "brand-notification-24.png").outputStream().use { notification.compress(Bitmap.CompressFormat.PNG, 100, it) } }
         finally { notification.recycle() }
+    }
+
+    @Test fun liftedAndShadedPlateKeepsTheMarkReadableAtSmallSize() {
+        val plate = draw(R.drawable.ic_launcher_plate, 108)
+        val mark = draw(R.drawable.ic_launcher_foreground, 108)
+        val tile = draw(R.drawable.ic_runmoni, 24)
+        try {
+            assertTrue(ColorUtils.calculateLuminance(plate.getPixel(24, 24)) >
+                ColorUtils.calculateLuminance(plate.getPixel(84, 84)))
+            for (y in 0 until 108) for (x in 0 until 108) {
+                val ink = mark.getPixel(x, y)
+                if (ink ushr 24 == 255) assertTrue(ColorUtils.calculateContrast(ink, plate.getPixel(x, y)) >= 3)
+            }
+            assertEquals(0, tile.getPixel(0, 0) ushr 24)
+            assertTrue((0 until 24).any { x -> (tile.getPixel(x, 12) ushr 24) == 255 })
+        } finally { plate.recycle(); mark.recycle(); tile.recycle() }
     }
 }

@@ -15,6 +15,7 @@ from production import ANCHORS, ITEMS, POSES, ROLES, asset, sprite_source, tint_
 SOURCE_SHA = 'f9035f29ced0c7ba513dfe24cb727410a7204dc482fc457e806c7a9b3cdbfa65'
 GENDERS = ('male', 'female')
 SIZE = (256, 384)
+RUN_TAGS = (('Male fit', 0, 7, (68,147,126)), ('Female fit', 8, 15, (190,123,117)))
 RUN_SETS = (
     (('레이스','Race'), ('top-10', 'bottom-9', 'shoes-8', 'headwear-7', 'waist-7'), '#eddcd0'),
     (('야간 도심','Night'), ('top-11', 'bottom-10', 'shoes-9', 'headwear-8', 'eyewear-7'), '#dce9e7'),
@@ -39,8 +40,9 @@ def ase_string(value):
     return pack('<H', len(text)) + text
 
 
-def ase_layer(name):
-    return pack_chunk(0x2004, pack('<HHHHHHB3x',3,0,0,0,0,0,255) + ase_string(name))
+def ase_layer(name, hidden=False):
+    flags = 2 if hidden else 3
+    return pack_chunk(0x2004, pack('<HHHHHHB3x',flags,0,0,0,0,0,255) + ase_string(name))
 
 
 def ase_cel(index, image):
@@ -52,28 +54,26 @@ def ase_cel(index, image):
     return pack_chunk(0x2005, head + compress(image.crop(box).tobytes(), 9))
 
 
-def ase_tags():
-    record = pack('<H8x', 2)
-    names = ('Male fit', 'Female fit')
-    colors = ((68,147,126),(190,123,117))
-    for gender, name in enumerate(names):
-        record += pack('<HHBH6xBBB1x', gender*8, gender*8+7, 0, 0, *colors[gender]) + ase_string(name)
+def ase_tags(tags):
+    record = pack('<H8x', len(tags))
+    for name, start, stop, color in tags:
+        record += pack('<HHBH6xBBB1x', start, stop, 0, 0, *color) + ase_string(name)
     return pack_chunk(0x2018, record)
 
 
-def ase_project(layers):
+def ase_project(layers, size=SIZE, tags=RUN_TAGS, hidden_layers=()):
     output = []
     used = [i for i in range(len(layers[0])) if any(row[i][1].getbbox() for row in layers)]
     for frame, row in enumerate(layers):
         chunks = []
         if frame == 0:
-            chunks.extend(ase_layer(row[i][0]) for i in used)
-            chunks.append(ase_tags())
+            chunks.extend(ase_layer(row[i][0], row[i][0] in hidden_layers) for i in used)
+            chunks.append(ase_tags(tags))
         chunks.extend(c for index, i in enumerate(used) if (c := ase_cel(index, row[i][1])))
         payload = b''.join(chunks)
         output.append(pack('<IHHH2xI',len(payload)+16,0xF1FA,len(chunks),90,0) + payload)
     data = b''.join(output)
-    header = pack('<IHHHHHIHII4xHBBhhHH84x',len(data)+128,0xA5E0,len(layers),256,384,32,1,90,0,0,0,1,1,0,0,0,0)
+    header = pack('<IHHHHHIHII4xHBBhhHH84x',len(data)+128,0xA5E0,len(layers),*size,32,1,90,0,0,0,1,1,0,0,0,0)
     return header + data
 
 
@@ -82,15 +82,15 @@ def filename(pose, tint=False):
     return f'{GENDERS[gender]}-{frame}{"-tint" if tint else ""}.png'
 
 
-def details_from_sheet(path, metadata):
+def details_from_sheet(path, metadata, size=SIZE, frame_count=len(POSES)):
     image = Image.open(path).convert('RGBA')
     frames = list(json.loads(metadata.read_text())['frames'].values())
-    if len(frames) != len(POSES):
+    if len(frames) != frame_count:
         raise ValueError(f'{path.name} has {len(frames)} frames')
     for frame in frames:
         bounds = frame['frame']
         x, y, w, h = (bounds[key] for key in ('x','y','w','h'))
-        if (w,h) != SIZE or frame['trimmed'] or frame['rotated']:
+        if (w,h) != size or frame['trimmed'] or frame['rotated']:
             raise ValueError(f'Unexpected native sprite dimensions for {path.name}')
         yield image.crop((x,y,x+w,y+h))
 
@@ -177,6 +177,8 @@ def verify(directory, projects=None):
                 minimum_tint = min(minimum_tint or amount, amount)
             face_bound = 120 if pose[0]==0 else 121
             bounds = detail.getbbox()
+            if slot=='headwear' and bounds[2]>=SIZE[0]:
+                raise ValueError(f'Headwear reaches the right canvas edge for {key} {pose}')
             mask = detail.load(); original = source.load(); hands = hand.load()
             for y in range(bounds[1],bounds[3]):
                 for x in range(bounds[0],bounds[2]):

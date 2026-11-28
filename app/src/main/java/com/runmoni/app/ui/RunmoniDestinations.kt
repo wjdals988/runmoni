@@ -3,6 +3,9 @@ package com.runmoni.app.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -20,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -36,27 +40,26 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
     val recentActivity = remember(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable) {
         recentRunActivity(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable)
     }
-    ScreenContent {
-        HomeDateTime(homeClock)
+    ScreenContent(topPadding = 16.dp) {
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val besideAvatar = maxWidth >= 240.dp && !largeText
             val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(if (largeText) 16.dp else 24.dp)) {
-                // The open departure scene and its full-width action are separate areas.
+            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Column(Modifier.fillMaxWidth().testTag("home_run_hero")
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 4.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (besideAvatar) {
-                        HomeHeading(null, compact = false)
+                        HomeHeading(homeClock, compact = false)
                         Row(Modifier.fillMaxWidth().testTag("home_avatar_conditions_row"),
-                            verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+                            verticalAlignment = if (state.weather.snapshot == null) Alignment.CenterVertically else Alignment.Top,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                             HomeRunnerStage(state.profile.avatar, avatarWidth)
                             HomeDepartureWeather(state.weather, homeClock, onWeather, Modifier.weight(1f))
                         }
                     } else {
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            HomeHeading(null, compact = largeText, modifier = Modifier.weight(1f))
+                            HomeHeading(homeClock, compact = largeText, modifier = Modifier.weight(1f))
                             HomeRunnerStage(state.profile.avatar, if (largeText) 48.dp else 80.dp)
                         }
                     }
@@ -109,12 +112,12 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
 }
 
 @Composable
-private fun HomeHeading(todaySummary: String?, compact: Boolean, modifier: Modifier = Modifier) {
+private fun HomeHeading(nowMillis: Long, compact: Boolean, modifier: Modifier = Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        HomeDateTime(nowMillis)
         Text(if (compact) "러닝" else "오늘의 러닝",
             style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold), color = RunmoniColors.Ink,
             modifier = Modifier.semantics { heading() })
-        if (todaySummary != null) Text(todaySummary, style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary)
     }
 }
 
@@ -163,12 +166,15 @@ internal fun CommunityUnavailable(actions: AppActions) {
 }
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Unit, onRecord: (RunRecord) -> Unit, onSettings: () -> Unit, updates: AppUpdateUiState, onAppInformation: () -> Unit, onCloset: () -> Unit, onProfile: () -> Unit = {}, onMileageHelp: () -> Unit = {}) {
     var period by rememberSaveable { mutableIntStateOf(1) }
     var referenceEpoch by rememberSaveable { mutableLongStateOf(LocalDate.now().toEpochDay()) }
     val reference = LocalDate.ofEpochDay(referenceEpoch)
     val records = state.records.filter { val date = localDate(it.startedAtMillis); when (period) { 0 -> date == reference; 1 -> date.year == reference.year && date.month == reference.month; else -> date.year == reference.year } }
-    ScreenContent {
+    val historyControls = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
+    ScreenContent(spacing = 24.dp, topPadding = 16.dp) {
         EditorialHeading("", "프로필")
         // Identity and character editing are one open area, before the record browser.
         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -196,15 +202,24 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     details(Modifier.weight(1f))
                 }
             }
-            FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action,
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).testTag("open_closet")) {
-                Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp))
-                Spacer(Modifier.width(12.dp))
-                Text("미니미 꾸미기", modifier = Modifier.weight(1f))
-                Icon(Icons.Outlined.ChevronRight, null, Modifier.size(20.dp))
-            }
+            AdaptiveActions(first = { modifier ->
+                FilledTonalButton(onClick = onCloset, shape = RunmoniShapes.Action,
+                    colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.MintWash, contentColor = RunmoniColors.Primary),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+                    modifier = modifier.heightIn(min = 56.dp).testTag("open_closet")) {
+                    Icon(Icons.Outlined.Checkroom, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("미니미 꾸미기")
+                }
+            }, second = { modifier ->
+                OutlinedButton(onClick = { scope.launch { historyControls.bringIntoView() } }, shape = RunmoniShapes.Action,
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+                    modifier = modifier.heightIn(min = 56.dp).testTag("profile_history_shortcut")) {
+                    Icon(Icons.Outlined.History, null, Modifier.size(20.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("러닝 기록 보기")
+                }
+            })
         }
         TextButton(shape = RunmoniShapes.Action, onClick = onMileageHelp,
             contentPadding = PaddingValues(vertical = 12.dp),
@@ -214,9 +229,10 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             Spacer(Modifier.width(12.dp))
             Icon(Icons.Outlined.Info, "마일리지 사용 안내", Modifier.size(20.dp), tint = RunmoniColors.Muted)
         }
-        ScreenSection("러닝 기록") {
-            RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
-            Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
+            Column(Modifier.fillMaxWidth().bringIntoViewRequester(historyControls),
+                verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
+                Box(Modifier.fillMaxWidth().testTag("profile_history_heading")) { SectionHeading("러닝 기록") }
                 DestinationTabs(listOf("일별", "월별", "연도별"), period, { period = it }, "history_period")
                 HistoryPeriodNavigation(
                     label = when (period) { 0 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일")); 1 -> reference.format(DateTimeFormatter.ofPattern("yyyy년 M월")); else -> "${reference.year}년" },
@@ -224,6 +240,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
                     onNext = { referenceEpoch = when (period) { 0 -> reference.plusDays(1); 1 -> reference.plusMonths(1); else -> reference.plusYears(1) }.toEpochDay() },
                 )
             }
+            RunPersistenceNotice(state.runPersistence, actions::retryRunPersistence)
             Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper, RunmoniShapes.Surface).padding(20.dp)
                 .testTag("history_period_summary"), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 Text("총 거리", style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
@@ -241,7 +258,7 @@ internal fun ProfileScreen(state: AppState, actions: AppActions, onRun: () -> Un
             }
             HorizontalDivider(color = RunmoniColors.Line)
             if (records.isEmpty() && state.runPersistence.initialized && !state.runPersistence.historyUnavailable)
-                EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 시작", onRun)
+                EmptyCard("이 기간에는 기록이 없어요", "러닝을 마치면 여기에 기록돼요.", "러닝 준비", onRun)
             if (records.isNotEmpty()) Column(Modifier.fillMaxWidth()) {
                 records.sortedByDescending { it.startedAtMillis }.forEach { record -> RecordRow(record) { onRecord(record) } }
             }

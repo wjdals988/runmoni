@@ -1,7 +1,7 @@
 from functools import lru_cache
 from PIL import Image, ImageColor, ImageChops, ImageFilter
 from paint import ASSET
-from atelier import (RACE,NIGHT,TRAIL,TORSO,BOTTOM,SHOES,FOOT_TRIM,HEAD_SHIFT,
+from atelier import (RACE,NIGHT,TRAIL,TORSO,BOTTOM,SHOES,FOOT_TRIM,
     THIGH,SHELL_CUFFS,LEG_SEAMS,PALETTES,Pen,sprite_source,body_layer,body_details,
     head,shoes,tights,trail_side_pocket,empty,merged,use_alpha)
 
@@ -15,10 +15,6 @@ ANCHORS=(
 TORSO.update({
  (0,3):(112,180,184,253),(0,4):(121,180,193,254),(0,5):(107,185,176,257),(0,6):(106,187,178,259),(0,7):(98,181,176,255),
  (1,3):(108,165,186,233),(1,4):(112,166,188,235),(1,5):(122,169,196,236),(1,6):(117,166,188,237),(1,7):(108,165,185,235),
-})
-HEAD_SHIFT.update({
- (0,3):(-2,-1),(0,4):(6,-1),(0,5):(-6,6),(0,6):(-4,6),(0,7):(-8,-1),
- (1,3):(-1,2),(1,4):(0,1),(1,5):(17,2),(1,6):(0,1),(1,7):(-1,1),
 })
 THIGH.update({
  (0,3):(136,266),(0,4):(145,266),(0,5):(133,279),(0,6):(132,279),(0,7):(125,266),
@@ -218,10 +214,15 @@ def shoe_details(pose,style,base):
 
 
 def asset(key,pose):
- style,slot=ITEMS[key];source,coverage,hands,body,parts=fitted_body(pose,style)
- top,bottom,feet,sleeves=body;form,details,cuffs,legs=parts
+ style,slot=ITEMS[key]
  if slot=='headwear':
-  crown,bill=head(pose,style,source); return [('Crown or band',crown),('Brim and underside',bill)]
+  gender,frame=pose
+  eye_x,eye_y,_,_,_,_=ANCHORS[gender][frame]
+  base_x,base_y,_,_,_,_=ANCHORS[gender][0]
+  crown,bill=head(gender,style,(eye_x-base_x,eye_y-base_y))
+  return [('Crown or band',crown),('Brim and underside',bill)]
+ source,coverage,hands,body,parts=fitted_body(pose,style)
+ top,bottom,feet,sleeves=body;form,details,cuffs,legs=parts
  if slot=='top':
   if style==TRAIL:
    short=trail_short_sleeves(pose,source,coverage,hands)

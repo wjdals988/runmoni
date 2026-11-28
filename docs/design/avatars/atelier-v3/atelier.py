@@ -15,7 +15,6 @@ PALETTES.update({
  TRAIL:{'top':('#443a29','#72553b','#a2754a','#c39866','#e5b779'),'short':('#272f27','#3b4e34','#586d48','#7c9060'),'sole':('#77634f','#d2ac6e'),'shoe':('#412e25','#775340','#a1734c','#cda474')},
 })
 
-HEAD_SHIFT={(0,0):(0,0),(0,1):(-1,6),(0,2):(-8,2),(1,0):(0,0),(1,1):(14,3),(1,2):(14,-2)}
 THIGH={(0,0):(137,267),(0,1):(138,279),(0,2):(132,271),(1,0):(138,248),(1,1):(149,257),(1,2):(148,250)}
 
 def sprite_source(pose):
@@ -36,10 +35,30 @@ def sprite_source(pose):
  return im,COVER.crop(xy),hands
 
 
-def head(pose, style, source):
- g,_=pose; dx,dy=HEAD_SHIFT[pose]
+def taper_brim(value, hinge, tip, new_tip):
+ if value <= hinge:
+  return value
+ return hinge + round((value-hinge) * (new_tip-hinge) / (tip-hinge))
+
+
+def head(g, style, eye_offset):
+ dx,dy=eye_offset
  crown,bill=empty(),empty()
- p=Pen(crown,lambda x,y:(x+dx,y+dy)); q=Pen(bill,lambda x,y:(x+dx,y+dy))
+ p=Pen(crown,lambda x,y:(x+dx,y+dy))
+
+ # Shorten only the projecting end, keeping the crown and brim attachment
+ # registered to the eye. Use the same cut on every pose of each model.
+ def brim_fit(x,y):
+  if style==NIGHT and g:
+   x=taper_brim(x,214,242,234)
+   y=taper_brim(y,109,119,117)
+  elif style==NIGHT:
+   x=taper_brim(x,219,249,246)
+  elif style==RACE and g:
+   x=taper_brim(x,214,243,234)
+  return x+dx,y+dy
+
+ q=Pen(bill,brim_fit)
  if style==RACE:
   # A short tinted bill, a sunk sweatband and exposed forward hair.
   skin=(71,83,108,130,151,171,193,223) if not g else (104,113,128,147,167,184,199,220)

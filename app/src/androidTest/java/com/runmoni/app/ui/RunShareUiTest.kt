@@ -93,6 +93,41 @@ class RunShareUiTest : RunmoniDesignTestBase() {
         return fullyVisible(tag).assertIsSelected()
     }
 
+    @Test fun settledPreviewAndPhotoActionAreVisibleBeforeScrollingInARegularAndCompactWindow() {
+        val viewport = mutableStateOf(Viewport(411, 1f))
+        val attached = mutableStateOf(true)
+        val image = preview()
+        var picks = 0
+        try {
+            compose.setContent {
+                if (attached.value) RunmoniTheme(darkTheme = viewport.value.scale >= 1.3f) {
+                    ViewportBox(viewport.value) {
+                        Box(Modifier.height(520.dp)) {
+                            RunShareEditorUi(RunShareDraft(ratio = RunShareRatio.STORY), 0, image,
+                                photoPresent = false, ready = true, busy = false, editable = true,
+                                error = null, message = null, onDraft = {}, onTool = {}, onPickPhoto = { picks++ },
+                                onRemovePhoto = {}, onTransform = { _, _, _ -> }, onSave = {}, onShare = {}, onBack = {})
+                        }
+                    }
+                }
+            }
+            for (case in listOf(Viewport(411, 1f), Viewport(320, 2f))) {
+                compose.runOnIdle { viewport.value = case }
+                val preview = fullyVisible("run_share_preview").fetchSemanticsNode().boundsInRoot
+                val addPhoto = fullyVisible("run_share_photo").assertIsEnabled()
+                assertTrue("The photo action stays outside the image", preview.bottom <= addPhoto.fetchSemanticsNode().boundsInRoot.top)
+                if (case.scale >= 1.3f) compose.onNodeWithTag("run_share_shelf_solid").assertIsDisplayed()
+                addPhoto.performClick()
+                capture("run-share-ready-first-fold-${case.width}-${case.scale}-fixture")
+            }
+            compose.runOnIdle { assertEquals(2, picks) }
+        } finally {
+            compose.runOnIdle { attached.value = false }
+            compose.waitForIdle()
+            image.recycle()
+        }
+    }
+
     @Test fun everyToolKeepsTextAndActionsUsableAcrossNineViewportAndFontCases() {
         val viewport = mutableStateOf(Viewport(320, 1f))
         val draft = mutableStateOf(RunShareDraft(caption = "내 페이스로 천천히 달리기 ".repeat(3)))

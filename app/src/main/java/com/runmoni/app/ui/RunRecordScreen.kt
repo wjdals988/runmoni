@@ -7,7 +7,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -139,14 +138,7 @@ private fun RunRecordPageContent(
                         }
                     }
                     Column {
-                        Row(Modifier.fillMaxWidth().heightIn(min = 64.dp)
-                            .padding(start = 8.dp, end = pageGutter(), top = 4.dp, bottom = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                            IconButton(onClick = onBack, modifier = Modifier.size(48.dp).testTag("close_record")) {
-                                Icon(Icons.AutoMirrored.Outlined.ArrowBack, "뒤로")
-                            }
-                            Text("러닝 기록", style = MaterialTheme.typography.titleLarge,
-                                modifier = Modifier.weight(1f).semantics { heading() })
+                        PageTopBar("러닝 기록", onBack, closeTag = "close_record", compact = true, trailingInset = pageGutter()) {
                             if (onShare != null && !separateShare) shareButton()
                         }
                         if (onShare != null && separateShare) Row(Modifier.fillMaxWidth()

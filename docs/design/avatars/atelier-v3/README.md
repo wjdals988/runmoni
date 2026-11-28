@@ -2,6 +2,18 @@
 
 [남자 8포즈](production-fit-male.png) · [여자 8포즈](production-fit-female.png) · [밝은 화면과 어두운 화면의 옷장 크기 비교](production-wardrobe.png)
 
+## 모자 피팅 보정
+
+나이트 캡과 레이스 바이저의 챙 끝을 다듬고, 세 종류 모자를 눈 기준점에 다시 맞췄다. 같은 기본형에서는 챙이 뻗는 길이를 포즈마다 일정하게 맞췄다. 남녀 48개 모자 셀에서 가장 오른쪽 픽셀이 0부터 센 252열 이내이고 얼굴과 손 보호 영역을 침범하지 않는 것을 확인했다. 바뀐 PNG 35장과 해당 해시만 교체했으며 Aseprite 프로젝트 세 개를 다시 저장했다. 승인 원본과 나머지 착용 셀은 기존 파일을 유지한다.
+
+## 64×96 나이트 시안
+
+[현재 원화와 64×96 시안 비교](compact-night-comparison.png) · [Aseprite 편집 원본](compact-night.aseprite)
+
+남녀 각각 보폭이 넓은 포즈와 팔이 앞으로 교차하는 포즈를 64×96 격자에 직접 맞췄다. 맨눈의 얼굴을 비교하도록 실드는 숨겨 두었으며 Aseprite에서 켤 수 있다. 밝고 어두운 배경에서 모자·상의 목록 64dp, 전신 96dp·144dp를 1dp당 1px로 비교했다. 네 컷 모두 Aseprite 저장 전후 보이는 픽셀이 일치했고 공통으로 RGB 17색을 사용했다. 비교 후 사용자가 선호한 기존 256×384 원화를 앱의 기준으로 삼았다. 64×96은 설계 자료로 보관한다.
+
+## 착용 아이템
+
 | 방향 | 모자 | 상의와 하의 | 신발 | 장비 |
 | --- | --- | --- | --- | --- |
 | 레이스 | [선바이저](projects/headwear-7.aseprite) | [싱글릿](projects/top-10.aseprite), [스플릿 하의](projects/bottom-9.aseprite) | [폼 러닝화](projects/shoes-8.aseprite) | [젤 벨트](projects/waist-7.aseprite) |

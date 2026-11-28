@@ -13,6 +13,33 @@ import org.junit.Test
 
 /** Real Compose inputs with local fake actions. Not a durable wallet or online profile test. */
 class ClosetAtelierUiTest : RunmoniDesignTestBase() {
+    @Test fun narrowClosetShowsTwoWholeRowsAndOffersAllPartsWithoutChangingTheOutfit() {
+        val state = mutableStateOf(AppState())
+        val original = state.value.profile
+        compose.setContent {
+            ViewportBox(Viewport(320, 2f)) {
+                Box(Modifier.height(520.dp)) {
+                    RunmoniTheme { ClosetDialog(state.value.profile, RunmoniUiTest.FakeActions(state)) {} }
+                }
+            }
+        }
+        compose.onNodeWithTag("closet_animation").performClick()
+        val list = compose.onNodeWithTag("closet_item_list").fetchSemanticsNode().boundsInRoot
+        for (tag in listOf("closet_top_0", "closet_top_1")) {
+            val row = compose.onNodeWithTag(tag).assertIsDisplayed().assertHeightIsAtLeast(48.dp).fetchSemanticsNode()
+            assertTrue("$tag must fit before scrolling", row.positionInRoot.y >= list.top &&
+                row.positionInRoot.y + row.size.height <= list.bottom + 1f)
+        }
+        capture("closet-refined-320-font2-fixture")
+        compose.onNodeWithTag("closet_open_parts").assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp).performClick()
+        compose.onNodeWithTag("closet_part_top").assertIsSelected()
+        compose.onNodeWithTag("closet_part_hydration").performScrollTo().performClick()
+        compose.onNodeWithTag("closet_all_parts").assertDoesNotExist()
+        compose.onNodeWithTag("closet_slot_hydration").assertIsSelected()
+        compose.onNodeWithTag("closet_hydration_0").assertIsSelected()
+        compose.runOnIdle { assertEquals(original, state.value.profile) }
+    }
+
     @Test fun aNewShellAndSeparateVestCanBeWornTogether() {
         val original = Profile(mileage = 876, avatar = AvatarStyle(gender = AvatarGender.FEMALE, shoes = 1, wrist = 1))
         val state = mutableStateOf(AppState(profile = original))

@@ -5,21 +5,22 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.MyLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -87,23 +88,33 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
         LiveRunner("local-self", "나", it.latitude, it.longitude, it.recordedAtMillis, state.profile.avatar)
     }
     val center = state.discoveryCenter ?: own?.let { RouteMapCenter(it.latitude, it.longitude) }
+    val sharingEnabled = state.sharingPreferenceEnabled || state.publicLocation
+    val needsProfile = panel == DiscoveryPanel.RUNNERS && !state.signedIn && !sharingEnabled
+    val scroll = rememberScrollState()
     BoxWithConstraints(Modifier.fillMaxSize().testTag("runner_discovery")) {
-        val fontScale = LocalDensity.current.fontScale
+        val density = LocalDensity.current
+        val fontScale = density.fontScale
+        var headerHeightPx by remember { mutableIntStateOf(0) }
         val constrained = maxHeight < 560.dp || fontScale >= 1.3f || (panel != null && maxHeight < 640.dp)
-        val mapHeight = if (fontScale >= 1.8f) 360.dp else 280.dp
-        Column(Modifier.fillMaxSize().then(if (constrained) Modifier.verticalScroll(rememberScrollState()) else Modifier)
-            .padding(vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("탐색", style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(horizontal = pageGutter()).semantics { heading() })
-            MapPane(emptyList(), publicRunners + listOfNotNull(own),
-                modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(mapHeight) else Modifier.weight(1f)),
-                interactiveMap = true, followCenter = center, onBoundsChanged = actions::setDiscoveryBounds,
-                recenterRequest = recenterRequest)
-            Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
-                .padding(horizontal = pageGutter(), vertical = 12.dp).testTag("runner_discovery_details"),
-                verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                AdaptiveActions(first = { m ->
-                    FilledTonalButton(onClick = {
+        val showTitle = maxHeight >= (if (fontScale >= 1.3f) 480.dp else 400.dp)
+        val headerHeight = with(density) { headerHeightPx.toDp() }
+        val preferredMapHeight = when {
+            fontScale >= 1.8f -> 360.dp
+            fontScale >= 1.3f -> 288.dp
+            else -> 256.dp
+        }
+        // Fit the map and its attribution after the measured commands and title.
+        // Extremely short windows can scroll to retain a usable map.
+        val mapHeight = (maxHeight - headerHeight).coerceIn(216.dp, preferredMapHeight)
+        Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxSize().align(Alignment.TopCenter)
+            .then(if (constrained) Modifier.verticalScroll(scroll) else Modifier)) {
+            Column(Modifier.fillMaxWidth().onSizeChanged { headerHeightPx = it.height }) {
+                if (showTitle) Text("탐색", style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(horizontal = pageGutter(), vertical = 8.dp).semantics { heading() })
+                DiscoveryCommands(
+                    viewingRunners = lookupActive && panel == DiscoveryPanel.RUNNERS,
+                    runnersEnabled = panel != DiscoveryPanel.RUNNERS || !canLookup || !state.discovery.loading,
+                    onLocate = {
                         panel = DiscoveryPanel.LOCATION
                         if (state.weather.phase == WeatherPhase.LOADING && verifiedFix != null && state.currentArea.isRecent(clock)) {
                             pendingLocation = null
@@ -113,16 +124,7 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                             actions.locateExplore()
                         }
                     },
-                        shape = RunmoniShapes.Action,
-                        colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash,
-                            contentColor = RunmoniColors.RouteBlue),
-                        modifier = m.heightIn(min = 48.dp).testTag("locate_explore")) {
-                        Icon(Icons.Outlined.MyLocation, null, Modifier.size(20.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("내 위치")
-                    }
-                }, second = { m ->
-                    OutlinedButton(onClick = {
+                    onRunners = {
                         panel = DiscoveryPanel.RUNNERS
                         if (canLookup) {
                             lookupAccount = state.communityUid
@@ -130,26 +132,35 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                                 if (lookupActive) actions.refreshRunners() else explicitLookupPending = true
                             }
                         }
-                    }, enabled = panel != DiscoveryPanel.RUNNERS || !canLookup || !state.discovery.loading,
-                        shape = RunmoniShapes.Action,
-                        modifier = m.heightIn(min = 48.dp).testTag("refresh_runners")) {
-                        Icon(Icons.Outlined.Groups, null, Modifier.size(20.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(if (lookupActive && panel == DiscoveryPanel.RUNNERS) "러너 새로고침" else "러너 보기")
-                    }
-                })
+                    },
+                )
+            }
+            if (panel != null) Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+                .padding(start = pageGutter(), end = pageGutter(), top = 4.dp, bottom = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 when (panel) {
                     DiscoveryPanel.LOCATION -> {
                         CurrentAreaLabel(state.currentArea, clock, Modifier.semantics { liveRegion = LiveRegionMode.Polite })
                         when (state.currentArea.phase) {
-                            CurrentAreaPhase.PERMISSION_REQUIRED -> LocationSettingsAction("앱 권한 설정", actions::openAppPermissionSettings)
-                            CurrentAreaPhase.LOCATION_DISABLED -> LocationSettingsAction("기기 위치 설정", actions::openLocationSettings)
+                            CurrentAreaPhase.PERMISSION_REQUIRED -> DiscoveryAction("앱 권한 설정", actions::openAppPermissionSettings, "explore_location_settings")
+                            CurrentAreaPhase.LOCATION_DISABLED -> DiscoveryAction("기기 위치 설정", actions::openLocationSettings, "explore_location_settings")
                             else -> Unit
                         }
                     }
-                    DiscoveryPanel.RUNNERS -> RunnerDiscoveryStatus(state, lookupActive, publicRunners.size)
+                    DiscoveryPanel.RUNNERS -> {
+                        RunnerDiscoveryStatus(state, lookupActive, publicRunners.size)
+                        if (needsProfile) DiscoveryAction("프로필 연결", onProfile, "toggle_runner_sharing", enabled = !state.sharing.busy)
+                    }
                     null -> Unit
                 }
+            }
+            MapPane(emptyList(), publicRunners + listOfNotNull(own),
+                modifier = Modifier.fillMaxWidth().then(if (constrained) Modifier.height(mapHeight) else Modifier.weight(1f)),
+                interactiveMap = true, followCenter = center, onBoundsChanged = actions::setDiscoveryBounds,
+                recenterRequest = recenterRequest)
+            if (canLookup || sharingEnabled || state.sharing.error != null) Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+                .padding(horizontal = pageGutter(), vertical = 12.dp).testTag("runner_discovery_details"),
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (lookupActive) TextButton(onClick = {
                     lookupAccount = null
                     if (panel == DiscoveryPanel.RUNNERS) panel = null
@@ -157,22 +168,11 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
                     modifier = Modifier.heightIn(min = 48.dp).testTag("hide_discovered_runners")) {
                     Text("지도에서 러너 숨기기")
                 }
-                val sharingEnabled = state.sharingPreferenceEnabled || state.publicLocation
-                val needsProfile = panel == DiscoveryPanel.RUNNERS && !state.signedIn && !sharingEnabled
-                if (canLookup || needsProfile || sharingEnabled) TextButton(
-                    onClick = {
-                        if (needsProfile) onProfile()
-                        else actions.setPublicLocation(!sharingEnabled)
-                    }, enabled = !state.sharing.busy, shape = RunmoniShapes.Action,
-                    contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("toggle_runner_sharing")) {
-                    Text(when {
-                        needsProfile -> "프로필 연결"
-                        state.sharing.busy -> "연결 중…"
-                        sharingEnabled -> "공유 설정 끄기"
-                        else -> "러닝 위치 공유 설정"
-                    })
-                }
+                if (canLookup || sharingEnabled) DiscoveryAction(when {
+                    state.sharing.busy -> "연결 중…"
+                    sharingEnabled -> "공유 설정 끄기"
+                    else -> "러닝 위치 공유 설정"
+                }, { actions.setPublicLocation(!sharingEnabled) }, "toggle_runner_sharing", enabled = !state.sharing.busy)
                 if (state.sharingPreferenceEnabled && !state.publicLocation) Text(
                     "공유 준비됨 · 러닝을 시작하면 약 100m 단위 위치를 공유해요.",
                     style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Primary,
@@ -184,10 +184,48 @@ internal fun RunnerDiscoveryScreen(state: AppState, actions: AppActions, onProfi
 }
 
 @Composable
-private fun LocationSettingsAction(label: String, onClick: () -> Unit) {
-    TextButton(onClick = onClick, shape = RunmoniShapes.Action,
+private fun DiscoveryCommands(viewingRunners: Boolean, runnersEnabled: Boolean, onLocate: () -> Unit, onRunners: () -> Unit) {
+    val locationLabel = "내 위치"
+    val runnersLabel = if (viewingRunners) "새로고침" else "러너 보기"
+    val density = LocalDensity.current
+    val measure = rememberTextMeasurer()
+    val labelStyle = MaterialTheme.typography.labelLarge
+    val labelWidth = with(density) {
+        listOf(locationLabel, "러너 보기", "새로고침").maxOf {
+            measure.measure(AnnotatedString(it), style = labelStyle, maxLines = 1, softWrap = false).size.width
+        }.toDp()
+    }
+    val horizontalPadding = 6.dp
+    val spacing = 8.dp
+    val contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = 8.dp)
+    BoxWithConstraints(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
+        .padding(horizontal = pageGutter(), vertical = 4.dp).testTag("discovery_commands")) {
+        val locate: @Composable (Modifier) -> Unit = { modifier ->
+            FilledTonalButton(onClick = onLocate, shape = RunmoniShapes.Action, contentPadding = contentPadding,
+                colors = ButtonDefaults.filledTonalButtonColors(containerColor = RunmoniColors.BlueWash, contentColor = RunmoniColors.RouteBlue),
+                modifier = modifier.heightIn(min = 48.dp).testTag("locate_explore")) { Text(locationLabel, style = labelStyle) }
+        }
+        val runners: @Composable (Modifier) -> Unit = { modifier ->
+            OutlinedButton(onClick = onRunners, enabled = runnersEnabled, shape = RunmoniShapes.Action,
+                contentPadding = contentPadding, modifier = modifier.heightIn(min = 48.dp).testTag("refresh_runners")
+                    .then(if (viewingRunners) Modifier.semantics { contentDescription = "러너 새로고침" } else Modifier)) {
+                Text(runnersLabel, style = labelStyle)
+            }
+        }
+        val buttonWidth = maxOf(48.dp, labelWidth + horizontalPadding * 2)
+        if (maxWidth >= buttonWidth * 2 + spacing) Row(horizontalArrangement = Arrangement.spacedBy(spacing)) {
+            locate(Modifier.weight(1f)); runners(Modifier.weight(1f))
+        } else Column(verticalArrangement = Arrangement.spacedBy(spacing)) {
+            locate(Modifier.fillMaxWidth()); runners(Modifier.fillMaxWidth())
+        }
+    }
+}
+
+@Composable
+private fun DiscoveryAction(label: String, onClick: () -> Unit, tag: String, enabled: Boolean = true) {
+    TextButton(onClick = onClick, enabled = enabled, shape = RunmoniShapes.Action,
         contentPadding = PaddingValues(horizontal = 0.dp, vertical = 8.dp),
-        modifier = Modifier.heightIn(min = 48.dp).testTag("explore_location_settings")) { Text(label) }
+        modifier = Modifier.heightIn(min = 48.dp).testTag(tag)) { Text(label) }
 }
 
 @Composable

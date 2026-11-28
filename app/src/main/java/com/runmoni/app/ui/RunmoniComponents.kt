@@ -24,6 +24,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -44,12 +47,16 @@ internal fun PageTopBar(
     modifier: Modifier = Modifier,
     closeLabel: String = "뒤로",
     closeTag: String = "",
+    compact: Boolean = false,
+    trailingInset: Dp = RunmoniLayout.TightGap,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Box(modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
+        val verticalPadding = if (compact) 4.dp else 12.dp
         Row(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-            .heightIn(min = 72.dp).padding(horizontal = 8.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            .heightIn(min = if (compact) 64.dp else 72.dp)
+            .padding(start = RunmoniLayout.TightGap, end = trailingInset, top = verticalPadding, bottom = verticalPadding),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
             IconButton(onClick = onClose, modifier = Modifier.size(48.dp).testTag(closeTag)) {
                 Icon(Icons.AutoMirrored.Outlined.ArrowBack, closeLabel, tint = RunmoniColors.Primary)
             }
@@ -103,28 +110,46 @@ internal fun AdaptiveActions(first: @Composable (Modifier) -> Unit, second: @Com
 }
 
 @Composable
-internal fun MetricGroup(metrics: List<UiMetric>, onDark: Boolean = false) {
+internal fun MetricGroup(metrics: List<UiMetric>, onDark: Boolean = false, compact: Boolean = false) {
+    if (metrics.isEmpty()) return
     val fontScale = LocalDensity.current.fontScale
     val ink = if (onDark) RunmoniColors.OnDark else RunmoniColors.Navy
     val muted = if (onDark) RunmoniColors.OnDarkMuted else RunmoniColors.Muted
-    @Composable fun Metric(metric: UiMetric, modifier: Modifier = Modifier) {
+    val labelStyle = if (compact) MaterialTheme.typography.labelSmall else MaterialTheme.typography.labelMedium
+    val valueStyle = (if (compact) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineSmall)
+        .copy(fontFeatureSettings = "tnum")
+    val gap = if (compact) RunmoniLayout.TightGap else 12.dp
+    val labels = metrics.map { if (compact && it.unit.isNotEmpty()) "${it.label} ${it.unit}" else it.label }
+    @Composable fun Metric(index: Int, modifier: Modifier = Modifier) {
+        val metric = metrics[index]
         Column(modifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(metric.label, style = MaterialTheme.typography.labelMedium, color = muted)
+            Text(labels[index], style = labelStyle, color = muted)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(metric.value, style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"), color = ink,
+                Text(metric.value, style = valueStyle, color = ink,
                     modifier = Modifier.testTag(metric.tag).alignByBaseline())
-                if (metric.unit.isNotEmpty()) Text(metric.unit, style = MaterialTheme.typography.bodyMedium, color = muted,
+                if (!compact && metric.unit.isNotEmpty()) Text(metric.unit, style = MaterialTheme.typography.bodyMedium, color = muted,
                     modifier = Modifier.alignByBaseline())
             }
         }
     }
     BoxWithConstraints(Modifier.fillMaxWidth()) {
         val minimumWidth = if (metrics.size >= 3) 100.dp * metrics.size else 112.dp * metrics.size
-        if (maxWidth < minimumWidth || fontScale >= 1.3f) {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) { metrics.forEach { Metric(it) } }
+        val rowFits = if (compact) {
+            val measurer = rememberTextMeasurer()
+            val density = LocalDensity.current
+            val columnWidth = with(density) { ((maxWidth - gap * (metrics.size - 1)) / metrics.size).roundToPx() }
+            metrics.indices.all { index ->
+                measurer.measure(AnnotatedString(labels[index]), labelStyle, softWrap = false).size.width <= columnWidth &&
+                    measurer.measure(AnnotatedString(metrics[index].value), valueStyle, softWrap = false).size.width <= columnWidth
+            }
+        } else maxWidth >= minimumWidth && fontScale < 1.3f
+        if (rowFits) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(gap)) {
+                metrics.indices.forEach { Metric(it, Modifier.weight(1f)) }
+            }
         } else {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                metrics.forEach { Metric(it, Modifier.weight(1f)) }
+            Column(verticalArrangement = Arrangement.spacedBy(if (compact) gap else RunmoniLayout.ContentGap)) {
+                metrics.indices.forEach { Metric(it) }
             }
         }
     }
@@ -139,11 +164,20 @@ internal fun MetricPanel(metrics: List<UiMetric>) {
 
 /** Keep the full number readable even for long distances and large font settings. */
 @Composable
-internal fun DistanceNumber(value: String, color: Color, modifier: Modifier = Modifier, maxSize: Float = 64f) {
+internal fun DistanceNumber(value: String, color: Color, modifier: Modifier = Modifier, maxSize: Float = 64f,
+    unit: String? = null) {
     val fontScale = LocalDensity.current.fontScale
     BoxWithConstraints(Modifier.fillMaxWidth()) {
-        val size = (maxWidth.value / (value.length.coerceAtLeast(1) * 0.68f * fontScale)).coerceIn(20f, maxSize)
-        Text(value, modifier, color = color, fontSize = size.sp, lineHeight = (size * 1.15f).sp,
-            fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.displayLarge.copy(fontFeatureSettings = "tnum"), maxLines = 1)
+        val unitStyle = MaterialTheme.typography.labelMedium
+        val unitWidth = unit?.let {
+            val unitPx = rememberTextMeasurer().measure(AnnotatedString(it), unitStyle, softWrap = false).size.width
+            with(LocalDensity.current) { unitPx.toDp() } + RunmoniLayout.TightGap
+        } ?: 0.dp
+        val size = ((maxWidth - unitWidth).value / (value.length.coerceAtLeast(1) * 0.68f * fontScale)).coerceIn(20f, maxSize)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
+            Text(value, modifier.alignByBaseline(), color = color, fontSize = size.sp, lineHeight = (size * 1.15f).sp,
+                fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.displayLarge.copy(fontFeatureSettings = "tnum"))
+            unit?.let { Text(it, Modifier.alignByBaseline(), style = unitStyle, color = RunmoniTrack.Detail) }
+        }
     }
 }

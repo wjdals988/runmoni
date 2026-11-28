@@ -177,7 +177,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                 HorizontalDivider(color = RunmoniColors.Line)
             }
             Box(Modifier.weight(1f)) {
-                ScreenContent {
+                ScreenContent(spacing = 24.dp, topPadding = 16.dp) {
                     if (selected != null) {
                         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(selected.name, style = MaterialTheme.typography.headlineMedium,
@@ -276,7 +276,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                             } else SmallNote("크루에 가입하면 공지와 채팅에 참여할 수 있어요.")
                         }
                     } else {
-                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                                 Text("크루", style = MaterialTheme.typography.headlineLarge,
                                     modifier = Modifier.weight(1f).semantics { heading() })
@@ -288,6 +288,7 @@ internal fun CommunityRoomsScreen(state: AppState, actions: AppActions, initialC
                         Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             RoomSearch(query, { query = it }, "크루 검색", "rooms_search")
                             TextButton(shape = RunmoniShapes.Action, onClick = { connected("create") }, enabled = !state.busy,
+                                contentPadding = PaddingValues(start = 8.dp, top = 8.dp, bottom = 8.dp),
                                 modifier = Modifier.align(Alignment.End).heightIn(min = 48.dp).testTag("create_crew")) {
                                 Icon(Icons.Outlined.Add, null, Modifier.size(20.dp)); Spacer(Modifier.width(8.dp)); Text("크루 만들기")
                             }

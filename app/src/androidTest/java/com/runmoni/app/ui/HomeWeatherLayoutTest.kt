@@ -14,6 +14,24 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
     private fun snapshot(now: Long = System.currentTimeMillis()) = RunningWeatherSnapshot(
         WeatherLocation(3757, 12698), now, now, now, 7.0, 7.2, 3.6, WeatherCondition.RAIN)
 
+    @Test fun departureCompactsAroundTheUnchangedStandardAvatarAndWeatherAction() {
+        compose.setContent { RunmoniTheme { ViewportBox(Viewport(480, 1f)) {
+            HomeScreen(AppState(), {}, {}, {})
+        } } }
+        val host = compose.onNodeWithTag("audit_viewport").getUnclippedBoundsInRoot()
+        val avatar = compose.onNodeWithTag("home_avatar").assertIsDisplayed()
+            .assertWidthIsEqualTo(96.dp).assertHeightIsEqualTo(144.dp).getUnclippedBoundsInRoot()
+        val runAction = compose.onNodeWithTag("home_start_run").assertIsDisplayed().assertHeightIsAtLeast(64.dp)
+            .getUnclippedBoundsInRoot()
+        val weather = compose.onNodeWithTag("refresh_home_weather").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+            .getUnclippedBoundsInRoot()
+        assertTrue("Primary action fits in the upper half of the usable home with the full-size sprite",
+            runAction.top - host.top <= 288.dp)
+        assertEquals(avatar.left.value, runAction.left.value, 1f)
+        val centerDelta = (weather.top + weather.bottom - avatar.top - avatar.bottom).value / 2
+        assertTrue("Empty weather uses the same vertical center as the full-size sprite", abs(centerDelta) <= 1f)
+    }
+
     @Test fun emptyRecentActivityKeepsTheRunPreparationAndFirstWeekReadable() {
         val state = mutableStateOf(AppState())
         var preparationOpens = 0

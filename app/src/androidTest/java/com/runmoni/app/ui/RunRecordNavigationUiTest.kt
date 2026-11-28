@@ -6,6 +6,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.test.*
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import com.runmoni.app.data.MapTileResult
@@ -33,6 +35,38 @@ private fun RecordNavigationFixture(content: @Composable () -> Unit) {
 
 /** Root Compose navigation with fake callbacks and no online tiles, auth, GPS or DB writes. */
 class RunRecordNavigationUiTest : RunmoniDesignTestBase() {
+    @Test fun profileHistoryShortcutScrollsWithinTheProfileAndPreservesPeriodAndReturnPosition() {
+        val record = navigationRecord()
+        val state = mutableStateOf(AppState(records = listOf(record), runPersistence = RunPersistenceState(initialized = true)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport(320, 2f)) {
+            RecordNavigationFixture { RunmoniApp(state.value, actions) }
+        } }
+        compose.onNodeWithTag("nav_me").performClick()
+        val shortcut = compose.onNodeWithTag("profile_history_shortcut")
+        val heading = compose.onNodeWithTag("profile_history_heading")
+        shortcut.performScrollTo().assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick()
+        heading.assertIsDisplayed()
+        compose.onNodeWithTag("history_period_1").assertIsDisplayed().assertIsSelected()
+        compose.onNodeWithTag("history_previous").assertIsDisplayed()
+        compose.onNodeWithTag("history_period_2").performScrollTo().performClick()
+        compose.onNodeWithTag("history_previous").performScrollTo().performClick()
+        shortcut.performScrollTo().performClick()
+        heading.assertIsDisplayed()
+        compose.onNodeWithTag("history_period_2").assertIsDisplayed().assertIsSelected()
+        compose.onNodeWithText("${LocalDate.now().year - 1}년").assertExists()
+        compose.onNodeWithTag("history_next").performScrollTo().performClick()
+        val recordRow = compose.onNodeWithTag("record_${record.id}").performScrollTo().assertIsDisplayed()
+        fun scrollOffset() = compose.onNodeWithTag("screen_scroll").fetchSemanticsNode()
+            .config[SemanticsProperties.VerticalScrollAxisRange].value()
+        val originalOffset = scrollOffset()
+        recordRow.performClick()
+        compose.onNodeWithTag("close_record").performClick()
+        compose.onNodeWithTag("nav_me").assertIsSelected()
+        compose.onNodeWithTag("history_period_2").assertIsSelected()
+        assertEquals(originalOffset, scrollOffset(), 1f)
+    }
+
     @Test fun detailReplacesMainNavigationAndBothBackActionsPreserveTheProfilePeriod() {
         val record = navigationRecord()
         val profile = Profile(name = "기록 검토", mileage = 777)
