@@ -367,11 +367,26 @@ class RunWidgetFactoryTest {
             val ready = render(idle, false, 256, RunWidgetActions(start = start))
             assertEquals("기본 러닝 시작", ready.findViewById<Button>(R.id.run_widget_open).text.toString())
             val confirm = render(running, true, 320, RunWidgetActions(live = activeToken, confirmation = confirmation), 2f)
+            if (confirm.findViewById<TextView>(R.id.run_widget_title).text.toString() != "러닝을 마칠까요?") {
+                val large = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = 2f })
+                val density = large.resources.displayMetrics.density
+                val width = (320 * density).toInt()
+                val height = (160 * density).toInt()
+                val candidate = android.widget.RemoteViews(context.packageName, R.layout.run_widget_pair).apply {
+                    setTextViewText(R.id.run_widget_title, "러닝을 마칠까요?")
+                    setTextViewText(R.id.run_widget_control, "취소")
+                    setTextViewText(R.id.run_widget_finish, "마치고 저장")
+                }.apply(large, FrameLayout(large)) as ViewGroup
+                candidate.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+                candidate.layout(0, 0, candidate.measuredWidth, candidate.measuredHeight)
+                assertFits(candidate, width, height, density, "natural confirmation at 200%")
+            }
             assertEquals("러닝을 마칠까요?", confirm.findViewById<TextView>(R.id.run_widget_title).text.toString())
             val withMetrics = render(running, true, 320, RunWidgetActions(live = activeToken, confirmation = confirmation))
             assertEquals("01:15 · 1.23 km", withMetrics.findViewById<TextView>(R.id.run_widget_confirm_metrics).text.toString())
             assertEquals("취소", confirm.findViewById<Button>(R.id.run_widget_control).text.toString())
-            assertEquals("저장하고 종료", confirm.findViewById<Button>(R.id.run_widget_finish).text.toString())
+            assertEquals("마치고 저장", confirm.findViewById<Button>(R.id.run_widget_finish).text.toString())
             assertTrue(confirm.findViewById<View>(R.id.run_widget_control).isClickable)
             assertTrue(confirm.findViewById<View>(R.id.run_widget_finish).isClickable)
             val compact = render(running, true, 128, RunWidgetActions(live = activeToken, confirmation = confirmation), 2f)

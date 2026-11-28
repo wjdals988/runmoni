@@ -28,28 +28,35 @@ import com.runmoni.app.domain.PageMotionPolicy
 
 internal val LocalRunmoniMotionEnabled = compositionLocalOf<Boolean?> { null }
 
+private fun systemMotionEnabled(context: Context): Boolean {
+    // The settings observer can run before ValueAnimator receives the new scale.
+    val scale = Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE,
+        if (ValueAnimator.areAnimatorsEnabled()) 1f else 0f)
+    return scale > 0f && context.getSystemService(PowerManager::class.java)?.isPowerSaveMode != true
+}
+
 @Composable
 internal fun rememberPageAnimationsEnabled(): Boolean {
     LocalRunmoniMotionEnabled.current?.let { return it }
     val context = LocalContext.current.applicationContext
     val resolver = context.contentResolver
     val lifecycle = LocalLifecycleOwner.current.lifecycle
-    var enabled by remember { mutableStateOf(ValueAnimator.areAnimatorsEnabled()) }
+    var enabled by remember { mutableStateOf(systemMotionEnabled(context)) }
     DisposableEffect(context, lifecycle) {
         val observer = object : ContentObserver(Handler(Looper.getMainLooper())) {
-            override fun onChange(selfChange: Boolean) { enabled = ValueAnimator.areAnimatorsEnabled() }
+            override fun onChange(selfChange: Boolean) { enabled = systemMotionEnabled(context) }
         }
         val resume = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) enabled = ValueAnimator.areAnimatorsEnabled()
+            if (event == Lifecycle.Event.ON_RESUME) enabled = systemMotionEnabled(context)
         }
         val powerSave = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) { enabled = ValueAnimator.areAnimatorsEnabled() }
+            override fun onReceive(context: Context, intent: Intent) { enabled = systemMotionEnabled(context) }
         }
         resolver.registerContentObserver(Settings.Global.getUriFor(Settings.Global.ANIMATOR_DURATION_SCALE), false, observer)
         ContextCompat.registerReceiver(context, powerSave, IntentFilter(PowerManager.ACTION_POWER_SAVE_MODE_CHANGED),
             ContextCompat.RECEIVER_NOT_EXPORTED)
         lifecycle.addObserver(resume)
-        enabled = ValueAnimator.areAnimatorsEnabled()
+        enabled = systemMotionEnabled(context)
         onDispose {
             resolver.unregisterContentObserver(observer)
             context.unregisterReceiver(powerSave)
