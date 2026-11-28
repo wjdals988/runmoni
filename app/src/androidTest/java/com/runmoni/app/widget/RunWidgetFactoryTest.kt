@@ -335,8 +335,74 @@ class RunWidgetFactoryTest {
         captureFixture("widget-refresh-running-wide-320x128-fixture", running, true, 320, 128)
     }
 
+    @Test fun directActionsFitAndExposeSeparateFinishConfirmationAndSavedResult() {
+        val start = UUID.randomUUID().toString()
+        val activeToken = UUID.randomUUID().toString()
+        val confirmation = UUID.randomUUID().toString()
+        val idle = snapshot(ActiveRun())
+        val running = snapshot()
+        val startTap = RunWidgetTap(RunWidgetOperation.START, "", start)
+        val finishTap = RunWidgetTap(RunWidgetOperation.FINISH, run.id, confirmation)
+        for (tap in listOf(startTap, finishTap, RunWidgetTap(RunWidgetOperation.CANCEL_FINISH, run.id, confirmation),
+            RunWidgetTap(RunWidgetOperation.ASK_FINISH, run.id, activeToken), RunWidgetTap(RunWidgetOperation.PAUSE, run.id, activeToken)))
+            created += RunWidgetIntents.pending(context, tap)
+        created += RunWidgetIntents.result(context, run.id)
+        rememberIntents(running)
+        assertEquals(startTap, RunWidgetIntents.decode(RunWidgetIntents.service(context, startTap)))
+        assertEquals(finishTap, RunWidgetIntents.decode(RunWidgetIntents.service(context, finishTap)))
+
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            fun render(state: RunWidgetSnapshot, running: Boolean, width: Int, actions: RunWidgetActions, fontScale: Float = 1f): ViewGroup {
+                val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { this.fontScale = fontScale })
+                val density = display.resources.displayMetrics.density
+                val widthPx = (width * density).toInt()
+                val heightPx = (160 * density).toInt()
+                val root = RunWidgetViews.forSize(display, state, running, width, 160, actions).apply(display, FrameLayout(display)) as ViewGroup
+                root.measure(View.MeasureSpec.makeMeasureSpec(widthPx, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(heightPx, View.MeasureSpec.EXACTLY))
+                root.layout(0, 0, widthPx, heightPx)
+                assertFits(root, widthPx, heightPx, density, "direct widget host $width/$fontScale")
+                return root
+            }
+            val ready = render(idle, false, 256, RunWidgetActions(start = start))
+            assertEquals("기본 러닝 시작", ready.findViewById<Button>(R.id.run_widget_open).text.toString())
+            val confirm = render(running, true, 320, RunWidgetActions(live = activeToken, confirmation = confirmation), 2f)
+            assertEquals("러닝을 마칠까요?", confirm.findViewById<TextView>(R.id.run_widget_title).text.toString())
+            val withMetrics = render(running, true, 320, RunWidgetActions(live = activeToken, confirmation = confirmation))
+            assertEquals("01:15 · 1.23 km", withMetrics.findViewById<TextView>(R.id.run_widget_confirm_metrics).text.toString())
+            assertEquals("취소", confirm.findViewById<Button>(R.id.run_widget_control).text.toString())
+            assertEquals("저장하고 종료", confirm.findViewById<Button>(R.id.run_widget_finish).text.toString())
+            assertTrue(confirm.findViewById<View>(R.id.run_widget_control).isClickable)
+            assertTrue(confirm.findViewById<View>(R.id.run_widget_finish).isClickable)
+            val compact = render(running, true, 128, RunWidgetActions(live = activeToken, confirmation = confirmation), 2f)
+            assertNull(compact.findViewById<View>(R.id.run_widget_finish))
+            val saved = render(idle, false, 320, RunWidgetActions(start = start, savedRunId = run.id))
+            assertEquals("기기에 저장 완료", saved.findViewById<TextView>(R.id.run_widget_title).text.toString())
+            assertEquals("결과 보기", saved.findViewById<Button>(R.id.run_widget_control).text.toString())
+            assertEquals("기본 러닝 시작", saved.findViewById<Button>(R.id.run_widget_finish).text.toString())
+        }
+        captureFixture("widget-direct-ready-256x160-fixture", idle, false, 256, 160, RunWidgetActions(start = start))
+        captureFixture("widget-direct-confirm-320x160-fixture", running, true, 320, 160,
+            RunWidgetActions(live = activeToken, confirmation = confirmation))
+        captureFixture("widget-direct-saved-320x160-fixture", idle, false, 320, 160,
+            RunWidgetActions(start = start, savedRunId = run.id))
+    }
+
+    @Test fun idleTicketCanOnlyBeConsumedOnceAndReceiptSurvivesNewCacheInstances() {
+        val preferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE)
+        val cache = RunWidgetCache(preferences)
+        val token = UUID.randomUUID().toString()
+        cache.writeStartToken(token)
+        assertFalse(cache.consumeStart(UUID.randomUUID().toString()))
+        assertTrue(cache.consumeStart(token))
+        assertFalse(RunWidgetCache(preferences).consumeStart(token))
+        cache.saveReceipt(run.id)
+        assertEquals(run.id, RunWidgetCache(preferences).savedRunId())
+    }
+
     /** Native RemoteViews draw with synthetic metrics. Not a launcher/MainActivity screenshot. */
-    private fun captureFixture(name: String, state: RunWidgetSnapshot, live: Boolean, widthDp: Int, heightDp: Int) {
+    private fun captureFixture(name: String, state: RunWidgetSnapshot, live: Boolean, widthDp: Int, heightDp: Int,
+                               actions: RunWidgetActions = RunWidgetActions()) {
         val display = context.createConfigurationContext(Configuration(context.resources.configuration).apply { fontScale = 1f })
         var output: Bitmap? = null
         try {
@@ -344,7 +410,7 @@ class RunWidgetFactoryTest {
                 val density = display.resources.displayMetrics.density
                 val width = (widthDp * density).toInt()
                 val height = (heightDp * density).toInt()
-                val root = RunWidgetViews.forSize(display, state, live, widthDp, heightDp)
+                val root = RunWidgetViews.forSize(display, state, live, widthDp, heightDp, actions)
                     .apply(display, FrameLayout(display)) as ViewGroup
                 root.measure(View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                     View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY))

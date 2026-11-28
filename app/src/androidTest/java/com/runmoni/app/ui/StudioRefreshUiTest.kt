@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
@@ -19,6 +20,51 @@ import org.junit.Test
  * Firebase authentication, physical-device tests, or signed-release runtime evidence.
  */
 class StudioRefreshUiTest : RunmoniDesignTestBase() {
+    @Test fun confirmedSaveCueAppearsOnceAndLeavesResultValuesVisible() {
+        val state = mutableStateOf(AppState(activeRun = ActiveRun(id = "newly-saved-cue", phase = RunPhase.RUNNING,
+            startedAtMillis = System.currentTimeMillis(), distanceMeters = 5230.0, activeDurationMillis = 1_200_000L),
+            runPersistence = RunPersistenceState(initialized = true)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent {
+            CompositionLocalProvider(LocalRunmoniMotionEnabled provides true) {
+                ViewportBox(Viewport(411, 1f)) { RunmoniApp(state.value, actions) }
+            }
+        }
+        compose.onNodeWithTag("nav_run").performClick()
+        compose.onNodeWithTag("finish_run").performClick()
+        compose.onNodeWithTag("newly_saved_track_cue").assertDoesNotExist()
+        compose.mainClock.autoAdvance = false
+        try {
+            compose.onNodeWithTag("confirm_finish_run").performClick()
+            compose.mainClock.advanceTimeBy(80)
+            compose.onNodeWithTag("newly_saved_track_cue", useUnmergedTree = true).assertIsDisplayed()
+            compose.onNodeWithTag("record_distance").assertIsDisplayed().assertTextEquals("5.23 km")
+            compose.onNodeWithTag("share_run_record").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+            capture("saved-result-track-cue-fixture")
+            compose.mainClock.advanceTimeBy(240)
+            compose.onNodeWithTag("newly_saved_track_cue", useUnmergedTree = true).assertDoesNotExist()
+        } finally {
+            compose.mainClock.autoAdvance = true
+        }
+        compose.onNodeWithTag("close_record").performClick()
+        compose.onNodeWithTag("nav_me").performClick()
+        compose.onNodeWithTag("record_newly-saved-cue").performScrollTo().performClick()
+        compose.onNodeWithTag("record_distance").assertIsDisplayed().assertTextEquals("5.23 km")
+        compose.onNodeWithTag("newly_saved_track_cue", useUnmergedTree = true).assertDoesNotExist()
+    }
+
+    @Test fun systemMotionOffShowsTheClosetAsStopped() {
+        val state = mutableStateOf(AppState())
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent {
+            CompositionLocalProvider(LocalRunmoniMotionEnabled provides false) {
+                RunmoniTheme { ClosetDialog(state.value.profile, actions, onDismiss = {}) }
+            }
+        }
+        compose.onNodeWithTag("closet_animation").assertIsDisplayed().assertIsNotEnabled()
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "시스템 설정으로 멈춤"))
+    }
+
     @Test fun distanceTimePaceAndGpsAreVisibleBeforeAnyScrollAtLargeTextInAShortWindow() {
         val state = mutableStateOf(AppState(activeRun = ActiveRun(id = "reading-fixture", phase = RunPhase.RUNNING,
             distanceMeters = 5230.0, activeDurationMillis = 1_200_000L, currentPaceSecondsPerKm = 229,

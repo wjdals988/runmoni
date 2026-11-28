@@ -50,6 +50,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.runmoni.app.R
 import com.runmoni.app.domain.*
 import java.time.Instant
@@ -77,8 +80,22 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         var recordSnapshot by remember { mutableStateOf<RunRecord?>(null) }
         var deletingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
         var sharingRecordId by rememberSaveable { mutableStateOf<String?>(null) }
+        var requestedSaveCueId by remember { mutableStateOf<String?>(null) }
+        var newlySavedRecordId by remember { mutableStateOf<String?>(null) }
+        val lifecycle = LocalLifecycleOwner.current.lifecycle
+        DisposableEffect(lifecycle) {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_STOP) {
+                    requestedSaveCueId = null
+                    newlySavedRecordId = null
+                }
+            }
+            lifecycle.addObserver(observer)
+            onDispose { lifecycle.removeObserver(observer) }
+        }
         val recordStateHolder = rememberSaveableStateHolder()
         fun openRecord(record: RunRecord) {
+            newlySavedRecordId = null
             recordSnapshot = record
             selectedRecordId = record.id
             deletingRecordId = null
@@ -89,6 +106,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             signIn = false
         }
         fun closeRecord() {
+            newlySavedRecordId = null
             selectedRecordId?.let { id ->
                 recordStateHolder.removeState("record_$id")
                 recordStateHolder.removeState("share_$id")
@@ -135,13 +153,26 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             } else if (state.activeRun.id.isNotBlank()) lastActiveId = state.activeRun.id
         }
         LaunchedEffect(completedId, state.records) {
-            completedId?.let { id -> state.records.firstOrNull { it.id == id }?.let { openRecord(it); completedId = null } }
+            completedId?.let { id ->
+                state.records.firstOrNull { it.id == id }?.let { confirmed ->
+                    openRecord(confirmed)
+                    if (requestedSaveCueId == id && confirmed.finishedAtMillis > 0 && !chatOpen &&
+                        lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) newlySavedRecordId = id
+                    requestedSaveCueId = null
+                    completedId = null
+                }
+            }
         }
         LaunchedEffect(state.runNavigationRequest, state.runPersistence.initialized, state.activeRun.id, state.activeRun.phase) {
             val request = state.runNavigationRequest ?: return@LaunchedEffect
             if (!state.runPersistence.initialized || request.token == handledRunNavigationToken) return@LaunchedEffect
             handledRunNavigationToken = request.token
-            if (request.runId.isNotBlank() && state.activeRun.id == request.runId && state.activeRun.phase != RunPhase.IDLE) {
+            val openLive = request.target == RunNavigationTarget.ACTIVE && request.runId.isNotBlank() &&
+                state.activeRun.id == request.runId && state.activeRun.phase != RunPhase.IDLE
+            val preparation = request.target == RunNavigationTarget.PREPARE
+            val result = request.record?.takeIf { request.target == RunNavigationTarget.RESULT &&
+                it.id == request.runId && it.finishedAtMillis > 0 }
+            if (openLive || preparation || result != null) {
                 focusManager.clearFocus(force = true)
                 settings = false
                 closet = false
@@ -158,8 +189,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 if (state.openedRoomId.isNotBlank()) actions.closeChat()
                 if (state.error != null) actions.dismissError()
                 tab = 2
-                finishRunId = request.runId.takeIf { request.confirmFinish && !state.runPersistence.finishing &&
+                finishRunId = request.runId.takeIf { openLive && request.confirmFinish && !state.runPersistence.finishing &&
                     !(state.runPersistence.saving && state.runPersistence.issue != null) }
+                if (result != null) openRecord(result)
             }
             actions.consumeRunNavigation(request.token)
         }
@@ -180,7 +212,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 (LocalDensity.current.fontScale >= 1.3f && maxHeight <= 640.dp)
         val compactActiveRun = tab == 2 && state.activeRun.phase != RunPhase.IDLE && shortWindow
         val compactExplore = tab == 1 && shortWindow
-        PageTransitionFrame("$rootPage:$tab:${sharingRecordId != null}") {
+        PageTransitionFrame("$rootPage:$tab:${sharingRecordId != null}", animateEntrance = newlySavedRecordId == null) {
         if (rootPage == "main") mainStateHolder.SaveableStateProvider("main_navigation") {
         Scaffold(
             contentWindowInsets = if (communityDeep) WindowInsets(0) else ScaffoldDefaults.contentWindowInsets,
@@ -189,10 +221,11 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                 if (!communityDeep) Column(Modifier.windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal))) {
                     if (!compactActiveRun) {
                         BoxWithConstraints(Modifier.fillMaxWidth()) {
+                            val gutter = pageGutter(maxWidth)
                             val separateVersion = !compactExplore && (maxWidth < 360.dp ||
                                 (LocalDensity.current.fontScale >= 1.3f && maxWidth < 480.dp))
                             Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                                .align(Alignment.TopCenter).padding(start = pageGutter(), end = 8.dp, top = 4.dp, bottom = 4.dp)) {
+                                .align(Alignment.TopCenter).padding(start = gutter, end = gutter, top = 4.dp, bottom = 4.dp)) {
                                 Row(Modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
                                     IconMark(size = 28.dp)
                                     Spacer(Modifier.width(8.dp))
@@ -359,6 +392,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                     RunRecordScreen(selectedRecord, recordActions, state.cloud, state.runPersistence,
                         operationBusy = state.busy,
                         onShare = { if (actions.canShareRun(selectedRecord)) sharingRecordId = selectedRecord.id },
+                        showNewlySavedMotion = newlySavedRecordId == selectedRecord.id,
+                        onNewlySavedMotionShown = { if (newlySavedRecordId == selectedRecord.id) newlySavedRecordId = null },
+                        comparisonRecords = state.records,
                         onBack = ::closeRecord)
                 }
             } else {
@@ -377,7 +413,11 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             state.runPersistence.initialized && !state.runPersistence.finishing) {
             DismissibleAlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
                 text = { DialogMessage("${distance(state.activeRun.distanceMeters)} km · ${duration(state.activeRun.activeDurationMillis)}\n저장하면 결과를 바로 볼 수 있어요.") },
-                confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null; actions.finishRun(state.activeRun.id) },
+                confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = {
+                    requestedSaveCueId = state.activeRun.id
+                    finishRunId = null
+                    actions.finishRun(state.activeRun.id)
+                },
                     enabled = !(state.runPersistence.saving && state.runPersistence.issue != null),
                     modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } },
                 dismissButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null }, modifier = Modifier.testTag("cancel_finish_run")) { Text("취소") } })
@@ -392,6 +432,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
     onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
     var goalPickerOpen by rememberSaveable { mutableStateOf(false) }
+    var intervalPickerOpen by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val compactLive = run.phase != RunPhase.IDLE && (largeText || useCompactPanel)
@@ -418,9 +459,9 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
     }
     Column(Modifier.fillMaxSize()) {
         Box(Modifier.weight(1f).testTag("running_scroll_viewport")) {
-            ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.PageGap,
+            ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.SectionGap,
                 centerWhenFits = run.phase == RunPhase.IDLE,
-                topPadding = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.TopInset) {
+                topPadding = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.ContentGap) {
                 if (!compactLive) Column(verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
                     Text(statusTitle, style = MaterialTheme.typography.headlineLarge,
                         modifier = Modifier.testTag("run_status").semantics { heading() })
@@ -431,12 +472,28 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                             style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                     }
                 }
-                if (run.phase == RunPhase.IDLE) OutlinedButton(onClick = { goalPickerOpen = true },
-                    shape = RunmoniShapes.Action,
-                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("choose_run_goal")) {
-                    Icon(Icons.Outlined.Flag, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(state.plannedRunGoal?.let { "목표 ${it.label} 변경" } ?: "오늘 목표 설정")
+                if (run.phase == RunPhase.IDLE) {
+                    Column(verticalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap)) {
+                        AdaptiveActions(
+                            first = { modifier ->
+                                OutlinedButton(onClick = { goalPickerOpen = true }, shape = RunmoniShapes.Action,
+                                    modifier = modifier.heightIn(min = 48.dp).testTag("choose_run_goal")) {
+                                    Icon(Icons.Outlined.Flag, null, Modifier.size(18.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(state.plannedRunGoal?.let { "목표 ${it.label} 변경" } ?: "오늘 목표 설정")
+                                }
+                            },
+                            second = { modifier ->
+                                OutlinedButton(onClick = { intervalPickerOpen = true }, shape = RunmoniShapes.Action,
+                                    modifier = modifier.heightIn(min = 48.dp).testTag("choose_run_interval")) {
+                                    Icon(Icons.Outlined.Timer, null, Modifier.size(18.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(if (state.plannedRunInterval == null) "시간 인터벌" else "인터벌 변경")
+                                }
+                            },
+                        )
+                        state.plannedRunInterval?.let { SmallNote(runIntervalDescription(it)) }
+                    }
                 }
                 if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -480,6 +537,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                         duration(run.activeDurationMillis), tag = "run_duration"),
                         UiMetric(if (compactLive) "페이스" else "현재 페이스", pace(currentPace), "/km", "run_pace")),
                         onDark = true, compact = compactLive)
+                    run.interval?.let { RunIntervalLive(it, run.activeDurationMillis) }
                     if (compactLive) run.goal?.let { ActiveRunGoal(it, run.distanceMeters, run.activeDurationMillis, compact = true) }
                     if (!compactLive) RunSecondaryMetrics(run, speedKmh, onTrack = true)
                 }
@@ -529,7 +587,12 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     }
                     Text("러닝을 시작한 뒤 홈 화면에서도 기록을 확인해요.",
                         style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
-                    ToggleRow("자동 일시정지", "정확한 GPS로 10초 동안 멈춤이 확인되면 시간을 멈추고, 움직이면 이어가요", state.autoPause, actions::setAutoPause)
+                    if (run.interval != null || state.plannedRunInterval != null) {
+                        SmallNote("인터벌에서는 회복 시간을 재기 위해 자동 일시정지를 사용하지 않아요.")
+                    } else {
+                        ToggleRow("자동 일시정지", "정확한 GPS로 10초 동안 멈춤이 확인되면 시간을 멈추고, 움직이면 이어가요",
+                            state.autoPause, actions::setAutoPause)
+                    }
                     RunLapSettings(state, actions)
                 }
                 val joined = state.parties.firstOrNull { it.joined && !it.cancelled }
@@ -540,8 +603,9 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
         Surface(color = RunmoniColors.Paper, modifier = Modifier.fillMaxWidth().testTag("run_control_bar")) {
             Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
             HorizontalDivider(color = RunmoniColors.Line)
-            Box(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
-                .padding(horizontal = pageGutter(), vertical = if (compactLive) RunmoniLayout.TightGap else 12.dp)) {
+            BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()) {
+              Box(Modifier.fillMaxWidth()
+                .padding(horizontal = pageGutter(maxWidth), vertical = if (compactLive) RunmoniLayout.TightGap else 12.dp)) {
                 if (persistence.finishing) {
                     Button(onClick = actions::retryRunPersistence, enabled = persistence.canRetry,
                         modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp).testTag("retry_finish_run"), shape = RunmoniShapes.Action) {
@@ -559,6 +623,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     } },
                     second = { modifier -> OutlinedButton(onClick = onFinish, enabled = !persistence.finishing && !(persistence.saving && persistence.issue != null) && persistence.initialized, modifier = modifier.heightIn(min = 56.dp).testTag("finish_run"), shape = RunmoniShapes.Action) { Text("러닝 마치기") } },
                 )
+              }
                 }
             }
             }
@@ -567,6 +632,10 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
         actions.setRunGoal(it)
         goalPickerOpen = false
     }, onDismiss = { goalPickerOpen = false })
+    if (intervalPickerOpen && run.phase == RunPhase.IDLE) RunIntervalPicker(state.plannedRunInterval, onSelect = {
+        actions.setRunInterval(it)
+        intervalPickerOpen = false
+    }, onDismiss = { intervalPickerOpen = false })
 }
 
 @Composable
@@ -694,10 +763,11 @@ internal fun ScreenContent(spacing: Dp = RunmoniLayout.PageGap, centerWhenFits: 
     topPadding: Dp = RunmoniLayout.TopInset, scrollState: ScrollState = rememberScrollState(),
     content: @Composable ColumnScope.() -> Unit) {
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+        val gutter = pageGutter(maxWidth)
         Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
             .verticalScroll(scrollState).testTag("screen_scroll")
             .heightIn(min = maxHeight)
-            .padding(start = pageGutter(), end = pageGutter(), top = topPadding, bottom = RunmoniLayout.PageGap),
+            .padding(start = gutter, end = gutter, top = topPadding, bottom = RunmoniLayout.PageGap),
             verticalArrangement = Arrangement.spacedBy(spacing,
                 if (centerWhenFits) Alignment.CenterVertically else Alignment.Top), content = content)
     }
@@ -756,7 +826,7 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
 
 @Composable
 internal fun RunLapSettings(state: AppState, actions: AppActions) {
-    ToggleRow("음성 기록 안내", "1km마다 거리를 알려줘요", state.voiceGuidance, actions::setVoiceGuidance)
+    ToggleRow("음성 기록 안내", "1km 거리와 인터벌 단계 전환을 음성으로 알려줘요", state.voiceGuidance, actions::setVoiceGuidance)
     ToggleRow("구간 페이스 음성", "거리와 함께 방금 달린 1km 페이스를 들어요", state.lapPaceGuidance,
         actions::setLapPaceGuidance, enabled = state.voiceGuidance, tag = "run_lap_pace_guidance")
     ToggleRow("1km 진동", "1km를 지날 때 진동으로 알려줘요", state.lapVibration,

@@ -1,9 +1,11 @@
 package com.runmoni.app.ui
 
 import android.graphics.Bitmap
+import android.os.SystemClock
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.test.platform.app.InstrumentationRegistry
 import com.runmoni.app.domain.AvatarStyle
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.awaitCancellation
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.IOException
@@ -94,6 +97,59 @@ class MiniMiLoadingTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("minimi_loading").assertDoesNotExist()
         rest.complete(Unit)
         compose.waitUntil(30_000) { drawn.get() == 7 }
+    }
+
+    @Test fun reducedMotionKeepsTheStillAndCancelsAdditionalFrameRequests() {
+        val visible = mutableStateOf(true)
+        val animate = mutableStateOf(false)
+        val still = Bitmap.createBitmap(2, 3, Bitmap.Config.ARGB_8888).apply { eraseColor(0xFF356F78.toInt()) }
+        val firstReads = AtomicInteger()
+        val extraReads = AtomicInteger()
+        val drawn = AtomicInteger(-1)
+        val cancelCount = AtomicInteger()
+        val preparedAt = SystemClock.uptimeMillis()
+        var readAt: Long? = null
+        var drawnAt: Long? = null
+        fun readinessRemaining(): Long = (30_000 - (SystemClock.uptimeMillis() - preparedAt)).also {
+            assertTrue("Avatar readiness exceeded the separate30s budget", it > 0)
+        }
+        val loader: suspend (Int, Boolean) -> Bitmap = { index, _ ->
+            if (index == 0) {
+                firstReads.incrementAndGet()
+                still
+            } else {
+                extraReads.incrementAndGet()
+                try { awaitCancellation() }
+                finally { cancelCount.incrementAndGet() }
+            }
+        }
+        try {
+            compose.setContent {
+                if (visible.value) CompositionLocalProvider(LocalRunmoniMotionEnabled provides animate.value) {
+                    RunmoniTheme {
+                        MiniMi(AvatarStyle(), Modifier.size(96.dp, 144.dp), running = true,
+                            onFrameRendered = { drawn.set(it) }, frameLoader = loader)
+                    }
+                }
+            }
+            compose.waitUntil(readinessRemaining()) { firstReads.get() == 1 }
+            readAt = SystemClock.uptimeMillis() - preparedAt
+            compose.waitUntil(readinessRemaining()) { drawn.get() == 0 }
+            drawnAt = SystemClock.uptimeMillis() - preparedAt
+            assertEquals(0, extraReads.get())
+            compose.runOnIdle { animate.value = true }
+            compose.waitUntil(5_000) { extraReads.get() == 1 }
+            compose.runOnIdle { animate.value = false }
+            compose.waitUntil(5_000) { cancelCount.get() == 1 }
+            assertEquals(1, firstReads.get())
+            assertEquals(0, drawn.get())
+        } finally {
+            android.util.Log.i("RunmoniAvatarClock", "reduced-motion firstReadMs=$readAt firstDrawMs=$drawnAt " +
+                "reads=${firstReads.get()} drawn=${drawn.get()} extraReads=${extraReads.get()} stopped=${cancelCount.get()}")
+            compose.runOnIdle { visible.value = false }
+            compose.waitForIdle()
+            still.recycle()
+        }
     }
 
     @Test fun cancelledSelectionCannotReplaceTheNewSelectionWithAnError() {

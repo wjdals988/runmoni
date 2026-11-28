@@ -18,6 +18,8 @@ import com.runmoni.app.domain.*
 import com.runmoni.app.data.PilotClient
 import com.runmoni.app.data.SecureSession
 import com.runmoni.app.BuildConfig
+import com.runmoni.app.widget.RunWidgetIntents
+import com.runmoni.app.widget.RunWidgetPublisher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import org.json.JSONObject
@@ -30,7 +32,13 @@ class RunTrackingService : Service(), LocationListener {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val repository get() = (application as RunmoniApplication).runs
     private val preferences by lazy { getSharedPreferences("runmoni", MODE_PRIVATE) }
-    private data class Command(val action: String, val expectedRunId: String?, val goal: RunGoal?)
+    private data class Command(
+        val action: String,
+        val expectedRunId: String?,
+        val goal: RunGoal?,
+        val intervalPlan: RunIntervalPlan? = null,
+        val widget: RunWidgetTap? = null,
+    )
     private data class LapSpeech(val utteranceId: String, val focus: AudioFocusRequest)
     private val commands = Channel<Command>(Channel.UNLIMITED)
     private var destroyed = false
@@ -42,6 +50,7 @@ class RunTrackingService : Service(), LocationListener {
     private var lapSpeech: LapSpeech? = null
     private var lapSpeechTimeout: Job? = null
     private var lapVibrationEnd = 0L
+    private var lastIntervalVibrationAt: Long? = null
     private var ticker: Job? = null
     private var presenceJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
@@ -50,6 +59,7 @@ class RunTrackingService : Service(), LocationListener {
     private var lastNotificationAt = 0L
     private val autoPause = AutoPauseController()
     private val lapCueTracker = RunLapCueTracker()
+    private val intervalCueTracker = RunIntervalCueTracker()
     private val audioManager by lazy { getSystemService(AudioManager::class.java) }
     private val lapSpeechAttributes = AudioAttributes.Builder()
         .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
@@ -78,6 +88,11 @@ class RunTrackingService : Service(), LocationListener {
                         repository.gpsStatus("러닝을 시작하지 못했어요. 앱에서 위치 권한과 저장 상태를 확인해 주세요.")
                     syncResources(); updateNotification(true)
                 } finally {
+                    if (command.widget?.operation == RunWidgetOperation.START) {
+                        val active = repository.active.value
+                        RunWidgetPublisher.startSettled(this@RunTrackingService,
+                            foreground && active.id == recordingRunId && active.phase == RunPhase.RUNNING)
+                    }
                     pendingCommands--
                     if (!destroyed && pendingCommands == 0) stopIfFinished()
                 }
@@ -87,8 +102,21 @@ class RunTrackingService : Service(), LocationListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.action
+        val widget = RunWidgetIntents.decode(intent)
+        val widgetStart = widget?.operation == RunWidgetOperation.START
+        if (RunWidgetIntents.marked(intent) && (widget == null || RunWidgetIntents.serviceAction(widget.operation) != action)) {
+            if (!foreground) {
+                if (action == START) settleRejectedWidgetStart(startId) else stopSelfResult(startId)
+            }
+            return START_NOT_STICKY
+        }
         if (action !in setOf(START, RECOVER, PAUSE, RESUME, FINISH, RETRY)) {
             if (!foreground) stopSelfResult(startId)
+            return START_NOT_STICKY
+        }
+        if (widgetStart && !RunWidgetPublisher.claimStart(this, requireNotNull(widget))) {
+            if (!foreground) settleRejectedWidgetStart(startId)
+            RunWidgetPublisher.updateWidgets(this)
             return START_NOT_STICKY
         }
         if (action == START || action == RECOVER) {
@@ -98,11 +126,20 @@ class RunTrackingService : Service(), LocationListener {
                     startForeground(RunNotifications.ID, notification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
                     foreground = true
                 } catch (_: RuntimeException) {
-                    repository.gpsStatus("앱을 열고 정밀 위치 권한을 확인한 뒤 다시 시작해 주세요.")
-                    stopSelfResult(startId)
+                    if (widgetStart) {
+                        settleRejectedWidgetStart(startId)
+                        RunWidgetPublisher.startSettled(this, false)
+                    } else {
+                        stopSelfResult(startId)
+                        repository.gpsStatus("앱을 열고 정밀 위치 권한을 확인한 뒤 다시 시작해 주세요.")
+                    }
                     return START_NOT_STICKY
                 }
             }
+        } else if (widget != null && !foreground) {
+            stopSelfResult(startId)
+            RunWidgetPublisher.updateWidgets(this)
+            return START_NOT_STICKY
         } else if (!foreground && action in setOf(PAUSE, RESUME)) {
             // A delayed old PendingIntent may create a Service, but must not restart GPS.
             // Remove the orphaned notification when there is no active recorder or pending save.
@@ -115,17 +152,41 @@ class RunTrackingService : Service(), LocationListener {
             return START_NOT_STICKY
         }
         pendingCommands++
-        val goal = if (action == START) {
+        val goal = if (action == START && widget == null) {
             RunGoal.fromStorage(intent?.getStringExtra(GOAL_KIND), intent?.getIntExtra(GOAL_TARGET, 0) ?: 0)
         } else null
-        if (commands.trySend(Command(action!!, intent?.getStringExtra(RunNotifications.RUN_ID), goal)).isFailure) pendingCommands--
+        if (commands.trySend(Command(action!!, widget?.runId ?: intent?.getStringExtra(RunNotifications.RUN_ID), goal,
+                intervalPlan = if (action == START && widget == null) readIntervalPlan(intent) else null, widget = widget)).isFailure) {
+            pendingCommands--
+            if (widgetStart) RunWidgetPublisher.startSettled(this, false)
+            if (pendingCommands == 0) stopIfFinished()
+        }
         // System/user process termination needs explicit recovery; it is not continuous tracking.
         return START_NOT_STICKY
     }
 
+    /** A foreground-service PendingIntent may already have armed Android's promotion watchdog. */
+    private fun settleRejectedWidgetStart(startId: Int) {
+        try {
+            val type = if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+                else ServiceInfo.FOREGROUND_SERVICE_TYPE_NONE
+            val notice = android.app.Notification.Builder(this, RunNotifications.CHANNEL)
+                .setSmallIcon(com.runmoni.app.R.drawable.ic_stat_runmoni)
+                .setContentTitle(getString(com.runmoni.app.R.string.run_widget_prepare))
+                .setVisibility(android.app.Notification.VISIBILITY_SECRET)
+                .build()
+            startForeground(RunNotifications.ID, notice, type)
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        } catch (_: RuntimeException) { /* The platform can reject the entire foreground request. */ }
+        finally { stopSelfResult(startId) }
+    }
+
     private suspend fun handle(command: Command) {
+        val widget = command.widget
+        if (widget != null && widget.operation != RunWidgetOperation.START && !acceptWidgetCommand(widget)) return
         when (command.action) {
             START, RECOVER -> {
+                if (widget != null && (!RunWidgetPublisher.locationReady(this) || repository.active.value.phase != RunPhase.IDLE)) return
                 if (!hasPreciseLocation()) {
                     repository.gpsStatus("정밀 위치 권한을 확인한 뒤 다시 시작해 주세요.")
                     if (recordingRunId != null) repository.pause(expectedRunId = recordingRunId)
@@ -134,11 +195,13 @@ class RunTrackingService : Service(), LocationListener {
                 if (recordingRunId == repository.active.value.id && recordingRunId != null) {
                     updateNotification(true); return
                 }
-                repository.begin(command.action == RECOVER, command.goal)
+                repository.begin(command.action == RECOVER, command.goal, command.intervalPlan)
                 val run = repository.active.value
                 recordingRunId = run.id
                 autoPause.reset()
                 lapCueTracker.start(run)
+                intervalCueTracker.start(run)
+                lastIntervalVibrationAt = null
                 syncResources(); startTicker(); startPresence()
             }
             PAUSE, RESUME -> {
@@ -156,17 +219,42 @@ class RunTrackingService : Service(), LocationListener {
                 preferences.edit().putBoolean("publicLocation", false).apply()
                 presenceJob?.cancel(); presenceJob = null
                 stopRecordingResources()
-                recorderOperation(RunPersistenceIssue.FINISH) { repository.finish(expectedRunId = command.expectedRunId) }
+                recorderOperation(RunPersistenceIssue.FINISH) { repository.finish(command.expectedRunId, ::widgetFinishCommitted) }
                 withTimeoutOrNull(5000) { revokePresence() }
             }
             RETRY -> {
                 recorderOperation(repository.persistence.value.issue ?: RunPersistenceIssue.CHECKPOINT) {
-                    repository.retryPersistence(expectedRunId = command.expectedRunId)
+                    repository.retryPersistence(command.expectedRunId, ::widgetFinishCommitted)
                 }
                 syncResources()
             }
         }
         updateNotification(true)
+    }
+
+    private fun acceptWidgetCommand(tap: RunWidgetTap): Boolean {
+        val run = repository.active.value
+        val storage = repository.persistence.value
+        val acceptable = foreground && recordingRunId == tap.runId && run.id == tap.runId && storage.initialized && when (tap.operation) {
+            RunWidgetOperation.FINISH -> !storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT &&
+                run.phase in setOf(RunPhase.RUNNING, RunPhase.PAUSED)
+            RunWidgetOperation.RETRY -> storage.finishing && !storage.saving && storage.issue == RunPersistenceIssue.FINISH
+            RunWidgetOperation.PAUSE -> run.phase == RunPhase.RUNNING
+            RunWidgetOperation.RESUME -> run.phase == RunPhase.PAUSED && RunWidgetPublisher.locationReady(this)
+            else -> false
+        }
+        if (!acceptable || !RunWidgetPublisher.accept(this, tap)) {
+            RunWidgetPublisher.updateWidgets(this)
+            return false
+        }
+        if (tap.operation == RunWidgetOperation.FINISH || tap.operation == RunWidgetOperation.RETRY)
+            RunWidgetPublisher.updateWidgets(this)
+        return true
+    }
+
+    private fun widgetFinishCommitted(id: String) {
+        RunWidgetPublisher.saved(this, id)
+        RunWidgetPublisher.publish(this, repository.active.value, repository.persistence.value, live = false)
     }
 
     private fun hasPreciseLocation() = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -182,7 +270,7 @@ class RunTrackingService : Service(), LocationListener {
         else { stopLocation(); releaseWakeLock() }
         val canAnnounce = canRecord && run.phase == RunPhase.RUNNING && ticker?.isActive == true
         // A newer fix can publish its distance before the Room checkpoint completes.
-        if (!canAnnounce || !storage.saving) updateLapCue(run, canAnnounce)
+        if (!canAnnounce || !storage.saving) updateRunCues(run, canAnnounce)
     }
 
     private fun renewWakeLease() {
@@ -207,7 +295,10 @@ class RunTrackingService : Service(), LocationListener {
                         autoPause.reset()
                         repository.interruptLocation("정밀 위치 권한이 해제됐어요. 앱에서 권한을 확인해 주세요.")
                         repository.pause(expectedRunId = recordingRunId)
-                    } else applyAutoPause(autoPause.onTick(SystemClock.elapsedRealtime(), preferences.getBoolean("autoPause", false), run.phase, run.pauseReason))
+                    } else if (run.interval == null) {
+                        applyAutoPause(autoPause.onTick(SystemClock.elapsedRealtime(),
+                            preferences.getBoolean("autoPause", false), run.phase, run.pauseReason))
+                    }
                     repository.tick()
                 }
                 syncResources(); updateNotification()
@@ -237,25 +328,45 @@ class RunTrackingService : Service(), LocationListener {
         }
     }
 
-    private fun updateLapCue(run: ActiveRun, live: Boolean) {
+    private fun updateRunCues(run: ActiveRun, live: Boolean) {
         val voice = preferences.getBoolean("voiceGuidance", true)
-        val vibration = preferences.getBoolean("lapVibration", false)
+        val lapVibration = preferences.getBoolean("lapVibration", false)
+        val intervalVibration = run.interval?.vibration == true
         if (!live || !voice) stopLapSpeech()
-        if (!live || !vibration) stopLapVibration()
-        val cue = lapCueTracker.observe(run, live, voice, preferences.getBoolean("lapPaceGuidance", false), vibration) ?: return
+        if (!live || (!lapVibration && !intervalVibration)) stopLapVibration()
+        val lap = lapCueTracker.observe(run, live, voice, preferences.getBoolean("lapPaceGuidance", false), lapVibration)
+        val interval = intervalCueTracker.observe(run, live, repository.checkpointedIntervalMillis(run.id))
+        if (lap == null && (interval == null || (!voice && !intervalVibration))) return
         val interruptionFilter = runCatching {
             getSystemService(NotificationManager::class.java)?.currentInterruptionFilter
         }.getOrNull()
         if (interruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE ||
             interruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALARMS) return
-        if (cue.vibrate) deliverLapVibration()
-        cue.speech?.let { deliverLapSpeech(cue.kilometer, it) }
+        val now = SystemClock.elapsedRealtime()
+        if (interval != null && intervalVibration) {
+            deliverLapVibration()
+            lastIntervalVibrationAt = now
+        } else if (lap?.vibrate == true &&
+            lastIntervalVibrationAt?.let { now - it in 0..1_000 } != true) {
+            deliverLapVibration()
+        }
+
+        if (interval != null && voice) {
+            val stageMessage = when (interval.stage) {
+                RunIntervalStage.RUN -> "${interval.repeat}번째 달리기를 시작해요."
+                RunIntervalStage.RECOVERY -> "${interval.repeat}번째 회복을 시작해요."
+                RunIntervalStage.COMPLETE -> "인터벌 훈련을 마쳤어요."
+            }
+            deliverLapSpeech("interval:${interval.index}", listOfNotNull(stageMessage, lap?.speech).joinToString(" "))
+        } else if (lapSpeech?.utteranceId?.startsWith("interval:") != true) {
+            lap?.speech?.let { deliverLapSpeech("lap:${lap.kilometer}", it) }
+        }
     }
 
-    private fun deliverLapSpeech(kilometer: Int, text: String) {
+    private fun deliverLapSpeech(cueKey: String, text: String) {
         val engine = tts?.takeIf { ttsReady } ?: return
         stopLapSpeech()
-        val utteranceId = "lap:$kilometer:${SystemClock.elapsedRealtimeNanos()}"
+        val utteranceId = "$cueKey:${SystemClock.elapsedRealtimeNanos()}"
         try {
             val audio = audioManager ?: return
             if (audio.isStreamMute(AudioManager.STREAM_MUSIC) || audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) return
@@ -365,7 +476,7 @@ class RunTrackingService : Service(), LocationListener {
                 val now = SystemClock.elapsedRealtime()
                 val run = repository.active.value
                 val fresh = now - location.elapsedRealtimeNanos / 1_000_000 in 0..5_000 && location.time >= run.startedAtMillis
-                applyAutoPause(autoPause.onLocation(now, preferences.getBoolean("autoPause", false), run.phase, run.pauseReason,
+                if (run.interval == null) applyAutoPause(autoPause.onLocation(now, preferences.getBoolean("autoPause", false), run.phase, run.pauseReason,
                     location.speed.takeIf { fresh && location.hasSpeed() }, location.accuracy.takeIf { fresh && location.hasAccuracy() }))
                 repository.location(location)
             }
@@ -446,11 +557,11 @@ class RunTrackingService : Service(), LocationListener {
     }
 
     override fun onDestroy() {
-        (application as com.runmoni.app.RunmoniApplication).runnerSharing.observe(repository.active.value, live = false, ownerRunId = recordingRunId)
-        com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
+        val id = recordingRunId
+        if (id != null) (application as RunmoniApplication).runnerSharing.observe(repository.active.value, live = false, ownerRunId = id)
+        RunWidgetPublisher.stopped(this, id)
         destroyed = true
         foreground = false
-        val id = recordingRunId
         stopRecordingResources(); presenceJob?.cancel(); runCatching { tts?.shutdown() }; commands.close(); scope.cancel()
         if (!id.isNullOrBlank()) repository.recorderStopped(id, SystemClock.elapsedRealtime())
         super.onDestroy()
@@ -468,13 +579,25 @@ class RunTrackingService : Service(), LocationListener {
         private const val LAP_VIBRATION_MILLIS = 180L
         private const val GOAL_KIND = "runmoni.goal.kind"
         private const val GOAL_TARGET = "runmoni.goal.target"
+        private const val INTERVAL_RUN = "runmoni.interval.runSeconds"
+        private const val INTERVAL_RECOVERY = "runmoni.interval.recoverySeconds"
+        private const val INTERVAL_REPEATS = "runmoni.interval.repeats"
+        private const val INTERVAL_VIBRATION = "runmoni.interval.vibration"
         const val START = "runmoni.START"; const val RECOVER = "runmoni.RECOVER"
         const val PAUSE = "runmoni.PAUSE"; const val RESUME = "runmoni.RESUME"; const val FINISH = "runmoni.FINISH"
         const val RETRY = "runmoni.RETRY"
-        fun command(context: Context, action: String, expectedRunId: String? = null, goal: RunGoal? = null): Boolean {
+        private fun readIntervalPlan(intent: Intent?): RunIntervalPlan? = intent?.let {
+            RunIntervalPlan.fromStorage(it.getIntExtra(INTERVAL_RUN, 0), it.getIntExtra(INTERVAL_RECOVERY, 0),
+                it.getIntExtra(INTERVAL_REPEATS, 0), it.getBooleanExtra(INTERVAL_VIBRATION, false))
+        }
+        fun command(context: Context, action: String, expectedRunId: String? = null, goal: RunGoal? = null,
+            interval: RunIntervalPlan? = null): Boolean {
             val id = expectedRunId ?: (context.applicationContext as RunmoniApplication).runs.active.value.id
             val intent = Intent(context, RunTrackingService::class.java).setAction(action).putExtra(RunNotifications.RUN_ID, id)
             if (action == START && goal != null) intent.putExtra(GOAL_KIND, goal.kind.name).putExtra(GOAL_TARGET, goal.target)
+            if (action == START && interval != null) intent.putExtra(INTERVAL_RUN, interval.runSeconds)
+                .putExtra(INTERVAL_RECOVERY, interval.recoverySeconds).putExtra(INTERVAL_REPEATS, interval.repeats)
+                .putExtra(INTERVAL_VIBRATION, interval.vibration)
             return try {
                 if (action == START || action == RECOVER) ContextCompat.startForegroundService(context, intent) else context.startService(intent)
                 true

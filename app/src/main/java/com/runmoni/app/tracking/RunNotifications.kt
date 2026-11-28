@@ -24,6 +24,8 @@ internal object RunNotifications {
     const val CHANNEL = "runmoni-tracking"
     const val ID = 1001
     const val OPEN_RUN = "runmoni.OPEN_RUN"
+    const val WIDGET_PREPARE = "runmoni.WIDGET_PREPARE"
+    const val WIDGET_RESULT = "runmoni.WIDGET_RESULT"
     const val RUN_ID = "runmoni.runId"
     const val CONFIRM_FINISH = "runmoni.confirmFinish"
     const val EVENT = "runmoni.notificationEvent"

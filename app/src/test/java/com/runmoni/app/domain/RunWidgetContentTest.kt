@@ -123,4 +123,49 @@ class RunWidgetContentTest {
         assertFalse(session.allows(run.id, paused, RunWidgetControl.PAUSE))
         assertTrue(session.allows(run.id, paused, RunWidgetControl.RESUME))
     }
+
+    @Test fun finishIsConfirmedOnceAndOnlyADurableMatchingCompletionClearsItsPendingState() {
+        val session = RunWidgetSession()
+        val active = snapshot()
+        session.observe(active, live = true, 100)
+        val live = requireNotNull(session.actions(active, 100, false).live)
+        assertFalse(session.accept(RunWidgetTap(RunWidgetOperation.FINISH, run.id, live), active, 100, false))
+        val ask = RunWidgetTap(RunWidgetOperation.ASK_FINISH, run.id, live)
+        assertTrue(session.accept(ask, active, 101, false))
+        val confirm = requireNotNull(session.actions(active, 101, false).confirmation)
+        assertTrue(session.accept(ask, active, 102, false))
+        assertEquals(confirm, session.actions(active, 102, false).confirmation)
+        assertFalse(session.accept(RunWidgetTap(RunWidgetOperation.FINISH, "other", confirm), active, 103, false))
+        val finish = RunWidgetTap(RunWidgetOperation.FINISH, run.id, confirm)
+        assertTrue(session.accept(finish, active, 103, false))
+        assertFalse(session.accept(finish, active, 103, false))
+        assertTrue(session.actions(active, 104, false).saving)
+        assertFalse(session.finishResolved("other"))
+
+        val failed = snapshot(run.copy(phase = RunPhase.PAUSED), healthy.copy(finishing = true, issue = RunPersistenceIssue.FINISH))
+        session.observe(failed, true, 105)
+        val retry = RunWidgetTap(RunWidgetOperation.RETRY, run.id, requireNotNull(session.actions(failed, 105, true).retry))
+        assertTrue(session.accept(retry, failed, 106, true))
+        assertFalse(session.accept(retry, failed, 106, true))
+        assertTrue(session.finishResolved(run.id))
+        assertFalse(session.finishResolved(run.id))
+    }
+
+    @Test fun aPhaseChangeOrExpiryRejectsOldControlAndConfirmTokensForTheSameRun() {
+        val session = RunWidgetSession()
+        val active = snapshot()
+        session.observe(active, true, 100)
+        val live = requireNotNull(session.actions(active, 100, false).live)
+        val ask = RunWidgetTap(RunWidgetOperation.ASK_FINISH, run.id, live)
+        assertTrue(session.accept(ask, active, 100, false))
+        val finish = RunWidgetTap(RunWidgetOperation.FINISH, run.id, requireNotNull(session.actions(active, 100, false).confirmation))
+        assertFalse(session.accept(finish, active, 15_101, false))
+        val paused = snapshot(run.copy(phase = RunPhase.PAUSED))
+        session.observe(paused, true, 15_102)
+        session.observe(active, true, 15_103)
+        assertFalse(session.accept(RunWidgetTap(RunWidgetOperation.PAUSE, run.id, live), active, 15_103, false))
+        assertFalse(session.accept(finish, active, 15_103, false))
+        session.processStarted()
+        assertNull(session.actions(active, 15_104, false).live)
+    }
 }

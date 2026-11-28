@@ -39,7 +39,7 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         recentRunActivity(state.records, today, zone, state.runPersistence.initialized, state.runPersistence.historyUnavailable)
     }
     val todayActivity = recentActivity.days.lastOrNull()?.takeIf { it.runCount > 0 && recentActivity.availability == RecentRunAvailability.READY }
-    ScreenContent(topPadding = 16.dp) {
+    ScreenContent(spacing = RunmoniLayout.SectionGap, topPadding = RunmoniLayout.ContentGap) {
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             val besideAvatar = maxWidth >= 240.dp && !largeText
             val avatarWidth = if (maxWidth < 280.dp) 80.dp else 96.dp

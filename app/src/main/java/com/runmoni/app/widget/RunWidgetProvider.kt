@@ -5,9 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.runmoni.app.domain.RunWidgetControl
-import com.runmoni.app.tracking.RunNotifications
-import com.runmoni.app.tracking.RunTrackingService
+import com.runmoni.app.domain.RunWidgetOperation
 
 /** All cold callbacks read only metrics. No Location, Auth or RunRepository access. */
 class RunWidgetProvider : AppWidgetProvider() {
@@ -20,29 +18,25 @@ class RunWidgetProvider : AppWidgetProvider() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val control = when (intent.action) {
-            ACTION_PAUSE -> RunWidgetControl.PAUSE
-            ACTION_RESUME -> RunWidgetControl.RESUME
-            else -> null
-        }
-        if (control == null) {
-            super.onReceive(context, intent)
+        if (intent.action == RunWidgetIntents.TAP) {
+            val tap = RunWidgetIntents.decode(intent) ?: return
+            when (tap.operation) {
+                RunWidgetOperation.ASK_FINISH, RunWidgetOperation.CANCEL_FINISH -> RunWidgetPublisher.applyConfirmation(context, tap)
+                RunWidgetOperation.START -> Unit
+                else -> if (RunWidgetPublisher.canDispatch(context, tap)) {
+                    try { context.startService(RunWidgetIntents.service(context, tap)) }
+                    catch (_: RuntimeException) { RunWidgetPublisher.requestApp(context, tap.runId) }
+                } else RunWidgetPublisher.updateWidgets(context)
+            }
             return
         }
-        val id = intent.getStringExtra(RunNotifications.RUN_ID)
-        val verb = if (control == RunWidgetControl.PAUSE) "pause" else "resume"
-        val expectedData = RunWidgetViews.identity(id.orEmpty(), verb)
-        if (intent.data != expectedData || !RunWidgetPublisher.allows(context, id, control)) {
+        if (intent.action == ACTION_PAUSE || intent.action == ACTION_RESUME) {
+            // A launcher can retain the previous version's tokenless views. A
+            // recovered session can have the same ID, so refresh without control.
             RunWidgetPublisher.updateWidgets(context)
             return
         }
-        try {
-            RunNotifications.control(context, id!!, if (control == RunWidgetControl.PAUSE) RunTrackingService.PAUSE else RunTrackingService.RESUME).send()
-        } catch (_: android.app.PendingIntent.CanceledException) {
-            // A lost action is retried from the app; it never creates a new run.
-        } catch (_: RuntimeException) {
-            // Background platform restrictions must not trigger a START fallback.
-        }
+        super.onReceive(context, intent)
     }
 
     companion object {

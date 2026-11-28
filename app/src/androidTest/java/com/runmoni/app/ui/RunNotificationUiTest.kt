@@ -10,6 +10,27 @@ import org.junit.Test
 
 /** Compose callback fixtures; no real notification tap, background GPS or storage success is claimed. */
 class RunNotificationUiTest : RunmoniDesignTestBase() {
+    @Test fun widgetPreparationAndCommittedResultOpenTheRightPage() {
+        val result = RunRecord("widget-finished", 1_000, 301_000, 1_100.0, 300_000)
+        val state = mutableStateOf(AppState(runNavigationRequest = RunNavigationRequest(1, "", false,
+            RunNavigationTarget.PREPARE)))
+        val delegate = RunmoniUiTest.FakeActions(state)
+        compose.setContent { RunmoniApp(state.value, delegate) }
+        compose.onNodeWithTag("nav_run").assertIsSelected()
+        compose.onNodeWithTag("confirm_finish_run").assertDoesNotExist()
+        compose.runOnIdle {
+            state.value = state.value.copy(runNavigationRequest = RunNavigationRequest(2, "old-widget-run", false,
+                RunNavigationTarget.RESULT, result))
+        }
+        compose.onNodeWithTag("record_detail_page").assertDoesNotExist()
+        compose.runOnIdle {
+            state.value = state.value.copy(runNavigationRequest = RunNavigationRequest(3, result.id, false,
+                RunNavigationTarget.RESULT, result))
+        }
+        compose.onNodeWithTag("record_detail_page").assertIsDisplayed()
+        compose.onNodeWithTag("record_distance").assertIsDisplayed()
+    }
+
     @Test fun coldNotificationWaitsForRecoveryAndItsFinishRequestIsHandledOnce() {
         val request = RunNavigationRequest(token = 11, runId = "restored-run", confirmFinish = true)
         val state = mutableStateOf(AppState(runPersistence = RunPersistenceState(), runNavigationRequest = request))

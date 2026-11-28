@@ -13,12 +13,14 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.RemoteViews
 import android.widget.TextView
-import com.runmoni.app.MainActivity
 import com.runmoni.app.R
 import com.runmoni.app.domain.RunPhase
+import com.runmoni.app.domain.RunWidgetActions
 import com.runmoni.app.domain.RunWidgetContent
 import com.runmoni.app.domain.RunWidgetControl
+import com.runmoni.app.domain.RunWidgetOperation
 import com.runmoni.app.domain.RunWidgetSnapshot
+import com.runmoni.app.domain.RunWidgetTap
 import com.runmoni.app.tracking.RunNotifications
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -40,44 +42,54 @@ internal object RunWidgetViews {
 
     internal fun open(context: Context, snapshot: RunWidgetSnapshot?): PendingIntent = if (!snapshot?.runId.isNullOrBlank())
         RunNotifications.activity(context, snapshot!!.runId, false)
-    else PendingIntent.getActivity(context, 0, Intent(context, MainActivity::class.java).setData(identity("", "open"))
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP), FLAGS)
+    else RunWidgetIntents.prepare(context)
 
     /** Measure every candidate, including the compact fallback, using the
      * launcher's available bounds and the user's actual font configuration.
      * Never shrink text below that font setting to make a widget fit. */
-    fun forSize(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, widthDp: Int, heightDp: Int): RemoteViews {
+    fun forSize(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, widthDp: Int, heightDp: Int,
+                actions: RunWidgetActions = RunWidgetActions()): RemoteViews {
         // The publisher dispatches to main without blocking its session lock.
         // Unknown bounds/incorrect callers get a labelled icon action, rather
         // than an unmeasured block of potentially clipped Korean text.
         if (widthDp <= 0 || heightDp <= 0 || Looper.myLooper() != Looper.getMainLooper())
-            return iconOnly(context, snapshot, live)
+            return iconOnly(context, snapshot, live, actions)
         val content = RunWidgetContent.from(snapshot, live)
+        val directFinish = widthDp >= 240 && snapshot != null && actions.live != null &&
+            fits(context, confirmation(context, snapshot.runId), widthDp, heightDp)
         val candidates = sequence {
+            if (actions.confirmation != null && directFinish) {
+                yield(confirmation(context, snapshot.runId, actions.confirmation, "${content.duration} · ${content.distance}"))
+                yield(confirmation(context, snapshot.runId, actions.confirmation))
+            }
+            if (widthDp >= 240 && actions.savedRunId != null && actions.start != null)
+                yield(receipt(context, actions.savedRunId, actions.start))
             if (widthDp >= 240 && heightDp <= 180 && content.control != null)
-                yield(populate(context, snapshot, live, R.layout.run_widget_wide, compact = true, iconControls = true))
-            if (widthDp >= 208) yield(create(context, snapshot, live, minimal = false))
-            yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true))
+                yield(populate(context, snapshot, live, R.layout.run_widget_wide, compact = true, iconControls = true, actions = actions, directFinish = directFinish))
+            if (widthDp >= 208) yield(populate(context, snapshot, live, R.layout.run_widget, compact = false, actions = actions, directFinish = directFinish))
+            yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true, actions = actions))
             if (content.control != null) {
                 // Keep the elapsed time and primary action on short hosts.
-                yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true).apply {
+                yield(populate(context, snapshot, live, R.layout.run_widget_compact, compact = true, actions = actions).apply {
                     setViewVisibility(R.id.run_widget_title, View.GONE)
                 })
             }
-            yield(create(context, snapshot, live, minimal = true))
-            yield(create(context, snapshot, live, minimal = true).apply {
+            val minimal = { populate(context, snapshot, live, R.layout.run_widget_minimal, compact = true, minimal = true, actions = actions) }
+            yield(minimal())
+            yield(minimal().apply {
                 setViewVisibility(R.id.run_widget_footer, View.GONE)
             })
-            yield(create(context, snapshot, live, minimal = true).apply {
+            yield(minimal().apply {
                 setViewVisibility(R.id.run_widget_title, View.GONE)
                 setViewVisibility(R.id.run_widget_footer, View.GONE)
                 // Retain the running cue when enlarged text leaves room only
                 // for a short app action, rather than an empty branded panel.
                 setViewVisibility(R.id.run_widget_brand, View.GONE)
-                setTextViewText(R.id.run_widget_open, context.getString(R.string.run_widget_open_short))
+                if (actions.start == null && actions.retry == null && actions.savedRunId == null)
+                    setTextViewText(R.id.run_widget_open, context.getString(R.string.run_widget_open_short))
             })
         }
-        return candidates.firstOrNull { fits(context, it, widthDp, heightDp) } ?: iconOnly(context, snapshot, live)
+        return candidates.firstOrNull { fits(context, it, widthDp, heightDp) } ?: iconOnly(context, snapshot, live, actions)
     }
 
     private fun fits(context: Context, views: RemoteViews, widthDp: Int, heightDp: Int): Boolean = try {
@@ -134,27 +146,65 @@ internal object RunWidgetViews {
         SimpleDateFormat(if (compact) "HH:mm" else "HH:mm:ss", Locale.KOREA).format(Date(it)) + " 기준"
     }.orEmpty()
 
-    private fun iconOnly(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean): RemoteViews =
+    private fun iconOnly(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, actions: RunWidgetActions): RemoteViews =
         RemoteViews(context.packageName, R.layout.run_widget_action_only).apply {
             val content = RunWidgetContent.from(snapshot, live)
-            val action = open(context, snapshot)
-            setContentDescription(R.id.run_widget_root, description(content, footer(snapshot, compact = true), isIdle(snapshot)))
-            setContentDescription(R.id.run_widget_open, context.getString(R.string.run_widget_open))
+            val action = actions.savedRunId?.let { RunWidgetIntents.result(context, it) } ?: open(context, snapshot)
+            val label = context.getString(if (actions.savedRunId != null) R.string.run_widget_result else R.string.run_widget_open)
+            setContentDescription(R.id.run_widget_root, actions.status(context) ?: description(content, footer(snapshot, compact = true), isIdle(snapshot)))
+            setContentDescription(R.id.run_widget_open, label)
             setOnClickPendingIntent(R.id.run_widget_root, action)
             setOnClickPendingIntent(R.id.run_widget_open, action)
         }
 
+    private fun confirmation(context: Context, id: String, token: String? = null, metrics: String? = null) = actionPair(context,
+        R.string.run_widget_confirm_title,
+        R.string.run_widget_cancel, token?.let { RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.CANCEL_FINISH, id, it)) },
+        R.string.run_widget_confirm, token?.let { RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.FINISH, id, it)) },
+        token?.let { RunNotifications.activity(context, id, false) }, metrics)
+
+    private fun receipt(context: Context, id: String, startToken: String) = actionPair(context,
+        R.string.run_widget_saved,
+        R.string.run_widget_result, RunWidgetIntents.result(context, id),
+        R.string.run_widget_start, RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.START, "", startToken)),
+        RunWidgetIntents.result(context, id))
+
+    private fun actionPair(context: Context, title: Int, firstLabel: Int, first: PendingIntent?,
+                           secondLabel: Int, second: PendingIntent?, open: PendingIntent?, metrics: String? = null) =
+        RemoteViews(context.packageName, R.layout.run_widget_pair).apply {
+            setTextViewText(R.id.run_widget_title, context.getString(title))
+            setTextViewText(R.id.run_widget_control, context.getString(firstLabel))
+            setTextViewText(R.id.run_widget_finish, context.getString(secondLabel))
+            if (metrics != null) {
+                setViewVisibility(R.id.run_widget_confirm_metrics, View.VISIBLE)
+                setTextViewText(R.id.run_widget_confirm_metrics, metrics)
+            }
+            if (open != null) setOnClickPendingIntent(R.id.run_widget_root, open)
+            if (first != null) setOnClickPendingIntent(R.id.run_widget_control, first)
+            if (second != null) setOnClickPendingIntent(R.id.run_widget_finish, second)
+        }
+
+    private fun RunWidgetActions.status(context: Context): String? = when {
+        starting -> context.getString(R.string.run_widget_starting)
+        saving -> context.getString(R.string.run_widget_saving)
+        retry != null -> context.getString(R.string.run_widget_save_failed)
+        savedRunId != null -> context.getString(R.string.run_widget_saved)
+        else -> null
+    }
+
     private fun populate(context: Context, snapshot: RunWidgetSnapshot?, live: Boolean, layout: Int,
-                         compact: Boolean, minimal: Boolean = false, iconControls: Boolean = false): RemoteViews {
+                         compact: Boolean, minimal: Boolean = false, iconControls: Boolean = false,
+                         actions: RunWidgetActions = RunWidgetActions(), directFinish: Boolean = false): RemoteViews {
         val content = RunWidgetContent.from(snapshot, live)
         val idle = isIdle(snapshot)
-        val idleReady = idle && snapshot?.blocked != true && snapshot?.finishing != true
+        val actionStatus = actions.status(context)
+        val idleReady = idle && snapshot?.blocked != true && snapshot?.finishing != true && actionStatus == null
         val durationOnly = layout == R.layout.run_widget_compact
         val views = RemoteViews(context.packageName, layout)
         val open = open(context, snapshot)
         views.setViewVisibility(R.id.run_widget_identity, if (idle || minimal) View.VISIBLE else View.GONE)
         views.setViewVisibility(R.id.run_widget_title, if (idleReady) View.GONE else View.VISIBLE)
-        views.setTextViewText(R.id.run_widget_title, if (!compact) content.title else when {
+        views.setTextViewText(R.id.run_widget_title, actionStatus ?: if (!compact) content.title else when {
             snapshot?.phase == RunPhase.RECOVERY -> "중단된 러닝"
             content.stale -> "마지막 러닝 정보"
             snapshot?.blocked == true || snapshot?.finishing == true -> "저장 확인"
@@ -166,11 +216,20 @@ internal object RunWidgetViews {
         views.setTextViewText(R.id.run_widget_footer, footer)
         views.setViewVisibility(R.id.run_widget_footer,
             if (!idle && footer.isNotEmpty() && (!compact || content.control == null)) View.VISIBLE else View.GONE)
-        views.setContentDescription(R.id.run_widget_root, description(content, footer, idle))
+        views.setContentDescription(R.id.run_widget_root, actionStatus ?: description(content, footer, idle))
         views.setOnClickPendingIntent(R.id.run_widget_root, open)
-        views.setOnClickPendingIntent(R.id.run_widget_open, open)
-        views.setContentDescription(R.id.run_widget_open, context.getString(R.string.run_widget_open))
-        views.setTextViewText(R.id.run_widget_open, context.getString(R.string.run_widget_open))
+        val (primaryLabel, primaryAction) = when {
+            actions.retry != null && snapshot != null -> R.string.run_widget_retry to
+                RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.RETRY, snapshot.runId, actions.retry))
+            actions.savedRunId != null -> R.string.run_widget_result to RunWidgetIntents.result(context, actions.savedRunId)
+            actions.start != null -> R.string.run_widget_start to
+                RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.START, "", actions.start))
+            actions.needsApp && idle -> R.string.run_widget_prepare to open
+            else -> R.string.run_widget_open to open
+        }
+        views.setOnClickPendingIntent(R.id.run_widget_open, primaryAction)
+        views.setContentDescription(R.id.run_widget_open, context.getString(primaryLabel))
+        views.setTextViewText(R.id.run_widget_open, context.getString(primaryLabel))
         if (!minimal) {
             // Empty placeholders are not run metrics. Keep idle focused on one app action.
             views.setViewVisibility(R.id.run_widget_metrics, if (idle) View.GONE else View.VISIBLE)
@@ -182,7 +241,8 @@ internal object RunWidgetViews {
                 views.setViewVisibility(R.id.run_widget_speed,
                     if (content.control == RunWidgetControl.PAUSE) View.VISIBLE else View.GONE)
             }
-            val controls = content.control != null && content.canFinish
+            val controls = content.control != null && content.canFinish && !actions.starting && !actions.saving &&
+                !actions.needsApp && actions.retry == null
             views.setViewVisibility(R.id.run_widget_actions, if (controls) View.VISIBLE else View.GONE)
             views.setViewVisibility(R.id.run_widget_open, if (controls) View.GONE else View.VISIBLE)
             if (controls) {
@@ -192,9 +252,18 @@ internal object RunWidgetViews {
                     if (pause) R.drawable.run_widget_pause_icon else R.drawable.run_widget_resume_icon)
                 else views.setTextViewText(R.id.run_widget_control, controlLabel)
                 views.setContentDescription(R.id.run_widget_control, "러닝 $controlLabel")
-                views.setOnClickPendingIntent(R.id.run_widget_control, control(context, snapshot!!.runId, content.control!!))
-                if (!durationOnly) views.setOnClickPendingIntent(R.id.run_widget_finish,
-                    RunNotifications.activity(context, snapshot.runId, true))
+                val runId = requireNotNull(snapshot).runId
+                val operation = if (pause) RunWidgetOperation.PAUSE else RunWidgetOperation.RESUME
+                val control = actions.live?.let { RunWidgetIntents.pending(context, RunWidgetTap(operation, runId, it)) }
+                    ?: control(context, runId, requireNotNull(content.control))
+                views.setOnClickPendingIntent(R.id.run_widget_control, control)
+                if (!durationOnly) {
+                    val finish = if (directFinish && actions.live != null) RunWidgetIntents.pending(context,
+                        RunWidgetTap(RunWidgetOperation.ASK_FINISH, runId, actions.live))
+                    else RunNotifications.activity(context, runId, true)
+                    if (directFinish) views.setContentDescription(R.id.run_widget_finish, context.getString(R.string.run_widget_finish))
+                    views.setOnClickPendingIntent(R.id.run_widget_finish, finish)
+                }
             }
         }
         return views

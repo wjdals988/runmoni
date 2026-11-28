@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Location
 import android.os.SystemClock
 import com.runmoni.app.domain.*
+import com.runmoni.app.widget.RunWidgetPublisher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -20,13 +21,16 @@ class RunRepository internal constructor(
     private val credit: (String, Int) -> Unit,
     private val backupOwner: () -> String = { "" },
     private val completedBackup: () -> Unit = {},
+    private val onRecoveryChecked: (ActiveRun, RunPersistenceState) -> Unit = { _, _ -> },
+    private val onRunDeleted: (String) -> Unit = {},
 ) {
     constructor(context: Context) : this(localDatabase(context), credit = localCredit(context),
         backupOwner = { (context.applicationContext as? com.runmoni.app.RunmoniApplication)?.cloud?.backupSession()?.uid.orEmpty() },
         completedBackup = {
             val uid = (context.applicationContext as? com.runmoni.app.RunmoniApplication)?.cloud?.backupSession()?.uid
             CloudSummaryBackupWorker.enqueue(context, uid)
-        })
+        }, onRecoveryChecked = { run, storage -> RunWidgetPublisher.verified(context.applicationContext, run, storage) },
+        onRunDeleted = { id -> RunWidgetPublisher.discardReceipt(context.applicationContext, id) })
 
     val cloudBackups by lazy { CloudBackupRoomLedger(database.cloudBackups()) }
 
@@ -45,6 +49,7 @@ class RunRepository internal constructor(
     private var stored: StoredRun? = null
     private var pendingFinish: StoredRun? = null
     private var lastWriteAttemptMillis = 0L
+    @Volatile private var intervalCheckpoint: Pair<String, Long>? = null
     private val pendingCredits = linkedMapOf<String, Int>()
     private var creditScanPending = true
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -65,6 +70,9 @@ class RunRepository internal constructor(
     }.stateIn(scope, SharingStarted.Eagerly, emptyList())
     val lastFinished = MutableStateFlow<RunRecord?>(null)
 
+    internal fun checkpointedIntervalMillis(runId: String): Long? =
+        intervalCheckpoint?.takeIf { it.first == runId }?.second
+
     init { scope.launch {
         try {
             mutex.withLock {
@@ -82,8 +90,9 @@ class RunRepository internal constructor(
             if (row != null) active.value = ActiveRun(row.id, RunPhase.RECOVERY, row.startedAtMillis,
                 row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points = points,
                 gpsStatus = "이전 기록 복구 가능 · 공백 구간 제외", goal = row.runGoal(),
-                lastCompletedSplit = parseSplits(row.splitsJson).lastOrNull())
+                lastCompletedSplit = parseSplits(row.splitsJson).lastOrNull(), interval = row.runInterval())
             persistenceState.update { it.copy(initialized = true, saving = false, issue = null) }
+            runCatching { onRecoveryChecked(active.value, persistenceState.value) }
             true
         } catch (cancelled: CancellationException) {
             persistenceState.update { it.copy(saving = false, initialized = false, issue = RunPersistenceIssue.RECOVERY) }
@@ -91,11 +100,12 @@ class RunRepository internal constructor(
         }
         catch (_: Exception) {
             persistenceState.update { it.copy(initialized = false, saving = false, issue = RunPersistenceIssue.RECOVERY) }
+            runCatching { onRecoveryChecked(active.value, persistenceState.value) }
             false
         }
     }
 
-    suspend fun begin(recover: Boolean = false, goal: RunGoal? = null) {
+    suspend fun begin(recover: Boolean = false, goal: RunGoal? = null, interval: RunIntervalPlan? = null) {
         awaitRecorderCleanup()
         initialization.await()
         mutex.withLock {
@@ -121,7 +131,9 @@ class RunRepository internal constructor(
             val previous = unfinished.takeIf { recover }
             engine = RunEngine()
             val row = previous?.copy(interrupted = true) ?: StoredRun(UUID.randomUUID().toString(),
-                System.currentTimeMillis(), goalKind = goal?.kind?.name, goalTarget = goal?.target ?: 0)
+                System.currentTimeMillis(), goalKind = goal?.kind?.name, goalTarget = goal?.target ?: 0,
+                intervalRunSeconds = interval?.runSeconds ?: 0, intervalRecoverySeconds = interval?.recoverySeconds ?: 0,
+                intervalRepeats = interval?.repeats ?: 0, intervalVibration = interval?.vibration == true)
             if (previous != null) engine.restore(row.distanceMeters, row.activeDurationMillis, row.segment, parseSplits(row.splitsJson))
             val restored = try { if (previous != null) dao.points(row.id).map { it.toDomain() } else emptyList() }
             catch (cancelled: CancellationException) {
@@ -152,7 +164,8 @@ class RunRepository internal constructor(
             engine.tick(SystemClock.elapsedRealtime(), true)
             active.value = ActiveRun(row.id, RunPhase.RUNNING, row.startedAtMillis, row.distanceMeters,
                 row.activeDurationMillis, System.currentTimeMillis() - row.startedAtMillis, points = restored,
-                gpsStatus = "GPS 신호 기다리는 중", goal = row.runGoal(), lastCompletedSplit = engine.splits.lastOrNull())
+                gpsStatus = "GPS 신호 기다리는 중", goal = row.runGoal(), lastCompletedSplit = engine.splits.lastOrNull(),
+                interval = row.runInterval())
         }
     }
 
@@ -230,12 +243,12 @@ class RunRepository internal constructor(
             publish()
         }
     }
-    suspend fun finish(expectedRunId: String? = null) {
+    suspend fun finish(expectedRunId: String? = null, onCommitted: ((String) -> Unit)? = null) {
         awaitRecorderCleanup()
         mutex.withLock {
             if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
             if (!persistenceState.value.initialized) return@withLock
-            if (pendingFinish != null) { finishPending(); return@withLock }
+            if (pendingFinish != null) { finishPending(onCommitted); return@withLock }
             val row = stored ?: return@withLock
             if (active.value.phase != RunPhase.RECOVERY) {
                 engine.tick(SystemClock.elapsedRealtime(), active.value.phase == RunPhase.RUNNING)
@@ -247,11 +260,11 @@ class RunRepository internal constructor(
             pendingFinishBackupOwner = runCatching { backupOwner() }.getOrDefault("")
             active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = null, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
             persistenceState.update { it.copy(finishing = true) }
-            finishPending()
+            finishPending(onCommitted)
         }
     }
 
-    private suspend fun finishPending() {
+    private suspend fun finishPending(onCommitted: ((String) -> Unit)?) {
         val final = pendingFinish ?: return
         persistenceState.update { it.copy(saving = true, finishing = true) }
         try {
@@ -272,6 +285,7 @@ class RunRepository internal constructor(
         active.value = ActiveRun()
         savedCheckpoint()
         persistenceState.update { it.copy(finishing = false) }
+        if (onCommitted != null) withContext(NonCancellable + Dispatchers.IO) { runCatching { onCommitted(final.id) } }
         // Room completion is durable before any cloud job is requested. A scheduler
         // failure cannot prevent recording, wallet credit or the periodic repair scan.
         runCatching { completedBackup() }
@@ -280,14 +294,14 @@ class RunRepository internal constructor(
     }
 
     /** Retry only the unfinished local operation; cloud backup has its own durable worker. */
-    suspend fun retryPersistence(expectedRunId: String? = null) {
+    suspend fun retryPersistence(expectedRunId: String? = null, onCommitted: ((String) -> Unit)? = null) {
         awaitRecorderCleanup()
         initialization.await()
         mutex.withLock {
             if (expectedRunId != null && active.value.id != expectedRunId) return@withLock
             if (persistenceState.value.historyUnavailable) historyRetry.trySend(Unit)
             if (!persistenceState.value.initialized && !loadRecovery()) return@withLock
-            if (pendingFinish != null) { finishPending(); return@withLock }
+            if (pendingFinish != null) { finishPending(onCommitted); return@withLock }
             if (stored != null && !checkpoint(force = true)) return@withLock
             retryCredits()
         }
@@ -356,6 +370,7 @@ class RunRepository internal constructor(
     }
 
     private fun savedCheckpoint() {
+        intervalCheckpoint = stored?.takeIf { it.intervalRepeats > 0 }?.let { it.id to it.activeDurationMillis }
         persistenceState.update { it.copy(saving = false, lastSavedAtMillis = System.currentTimeMillis(), unsavedPointCount = checkpoints.unsavedPointCount,
             issue = if (it.creditPending) RunPersistenceIssue.CREDIT else null) }
     }
@@ -403,6 +418,7 @@ class RunRepository internal constructor(
         if (creditScanPending || id in pendingCredits) retryCredits()
         check(!creditScanPending && id !in pendingCredits) { "포인트 적립을 먼저 다시 확인한 뒤 기록을 삭제해 주세요." }
         dao.delete(id)
+        runCatching { onRunDeleted(id) }
     }
     suspend fun record(id: String): RunRecord? = dao.get(id)?.let { toRecord(it) }
     private fun publish() {
@@ -419,8 +435,10 @@ class RunRepository internal constructor(
     private suspend fun toRecord(row: StoredRun) = recordWithPoints(row, dao.points(row.id).map { it.toDomain() })
     private fun recordWithPoints(row: StoredRun, points: List<TrackPoint>) = RunRecord(row.id, row.startedAtMillis,
         row.finishedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points,
-        parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage, goal = row.runGoal())
+        parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage, goal = row.runGoal(), interval = row.runInterval())
     private fun StoredRun.runGoal() = RunGoal.fromStorage(goalKind, goalTarget)
+    private fun StoredRun.runInterval() =
+        RunIntervalPlan.fromStorage(intervalRunSeconds, intervalRecoverySeconds, intervalRepeats, intervalVibration)
     private fun StoredPoint.toDomain() = TrackPoint(sequence, latitude, longitude, accuracyMeters, recordedAtMillis, segment)
     private fun parseSplits(json: String): List<KmSplit> = runCatching { val list = JSONArray(json); (0 until list.length()).map { val item = list.getJSONObject(it); KmSplit(item.getInt("km"), item.getLong("duration")) } }.getOrDefault(emptyList())
 

@@ -59,6 +59,8 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
     var category by rememberSaveable { mutableIntStateOf(3) }
     var accessory by rememberSaveable { mutableIntStateOf(0) }
     var playing by rememberSaveable { mutableStateOf(true) }
+    val motionAllowed = rememberPageAnimationsEnabled()
+    val isPlaying = playing && motionAllowed
     var showParts by rememberSaveable { mutableStateOf(false) }
     val focus = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
@@ -94,11 +96,15 @@ internal fun ClosetDialog(profile: Profile, actions: AppActions, onDismiss: () -
             Column(Modifier.fillMaxSize()) {
                 PageTopBar("옷장", onDismiss, closeTag = "closet_close", compact = compactList,
                     trailingInset = pageGutter(), actions = {
-                    IconButton(onClick = { playing = !playing }, modifier = Modifier.size(48.dp)
-                        .semantics { stateDescription = if (playing) "재생 중" else "멈춤" }
+                    IconButton(onClick = { playing = !playing }, enabled = motionAllowed, modifier = Modifier.size(48.dp)
+                        .semantics { stateDescription = when {
+                            !motionAllowed -> "시스템 설정으로 멈춤"
+                            isPlaying -> "재생 중"
+                            else -> "멈춤"
+                        } }
                         .testTag("closet_animation")) {
-                        Icon(if (playing) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
-                            if (playing) "달리기 멈춤" else "달리기 재생")
+                        Icon(if (isPlaying) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
+                            if (isPlaying) "달리기 멈춤" else "달리기 재생")
                     }
                 })
                 if (sidePreview) {
