@@ -23,6 +23,8 @@
     <string name="run_widget_retry">저장 다시 시도</string>
     <string name="run_widget_saved">기기에 저장 완료</string>
     <string name="run_widget_result">결과 보기</string>
+    <string name="run_widget_action_summary">%1$s, %2$s</string>
+    <string name="run_widget_metrics_summary">러닝 시간 %1$s, 거리 %2$s</string>
     <string name="run_widget_preview_footer"></string>
     <string name="run_widget_duration_label">시간</string>
     <string name="run_widget_brand">runmoni</string>

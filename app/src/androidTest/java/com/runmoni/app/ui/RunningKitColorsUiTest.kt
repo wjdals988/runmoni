@@ -136,7 +136,7 @@ class RunningKitColorsUiTest : RunmoniDesignTestBase(
                 compose.onNodeWithTag("kit_color_top_$color").boundedScrollIntoView(compose).assertIsDisplayed()
                     .assertIsEnabled().assertHeightIsAtLeast(48.dp)
                     .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.RadioButton))
-                    .assertContentDescriptionEquals("상의 색상").assertTextContains(label)
+                    .assertContentDescriptionEquals("상의 색상 $label").assertTextContains(label)
                     .performClick().assertIsSelected()
                 compose.runOnIdle {
                     assertEquals(color, colors.value.top)

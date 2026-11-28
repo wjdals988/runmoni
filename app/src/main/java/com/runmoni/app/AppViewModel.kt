@@ -1177,14 +1177,50 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         if (!firebaseMode) work { val messages = api.chat(roomId); mutableState.update { if (!firebaseMode && it.openedRoomId == roomId) it.copy(messages = messages) else it } }
     }
     override fun closeChat() { mutableState.update { it.copy(openedRoomId = "", openedRoomTitle = "", messages = emptyList()) } }
-    override fun sendMessage(body: String, notice: Boolean) = ignoreJob(work {
-        val roomId = state.value.openedRoomId
-        require(roomId.contains(':')) { "채팅방을 선택해 주세요." }
-        if (firebaseMode) { firebaseRooms.sendMessage(roomId.substringAfter(':'), body, notice); return@work }
-        val (scope, id) = roomId.split(":", limit = 2)
-        api.request("POST", "/v1/${if (scope == "crew") "crews" else "parties"}/$id/messages", JSONObject().put("body", body.trim()).put("kind", if (notice) "announcement" else "chat"))
-        val messages = api.chat(roomId); mutableState.update { it.copy(messages = messages) }
-    })
+    override suspend fun sendMessage(roomId: String, account: String, backend: CommunityBackend, body: String, notice: Boolean): Boolean {
+        val generation = communityGeneration
+        val token = api.token
+        val url = api.baseUrl
+        val firebase = backend == CommunityBackend.FIREBASE
+        fun matches(current: AppState) = generation == communityGeneration && firebase == firebaseMode && current.signedIn &&
+            current.openedRoomId == roomId && current.communityBackend == backend && current.communityUid == account &&
+            (if (firebase) account.isNotBlank() && firebaseRooms.uid == account
+            else token.isNotBlank() && api.token == token && api.baseUrl == url)
+
+        val id = roomId.substringAfter(':', "")
+        val collection = when (roomId.substringBefore(':')) {
+            "crew" -> "crews"
+            "party" -> "parties"
+            else -> return false
+        }
+        if (id.isBlank() || !matches(state.value)) return false
+        try {
+            if (firebase) firebaseRooms.sendMessage(id, body, notice)
+            else {
+                val client = PilotClient(url, token)
+                client.request("POST", "/v1/$collection/$id/messages", JSONObject()
+                    .put("body", body.trim()).put("kind", if (notice) "announcement" else "chat"))
+                // The POST is the delivery acknowledgement. A separate list refresh
+                // must never present a confirmed message as needing a retry.
+                viewModelScope.launch {
+                    if (!matches(state.value)) return@launch
+                    try {
+                        val messages = client.chat(roomId)
+                        mutableState.update { if (matches(it)) it.copy(messages = messages) else it }
+                    } catch (cancelled: CancellationException) {
+                        throw cancelled
+                    } catch (_: Exception) {
+                        // The existing room poll can refresh the list once it reconnects.
+                    }
+                }
+            }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            return false
+        }
+        return matches(state.value)
+    }
     override fun connectVoice(roomId: String) { if (firebaseMode) permissionDenied("현재 크루·파티는 채팅을 지원해요. 음성 통화 서버는 별도 연결이 필요해요.") else requests.tryEmit(UiRequest.MicrophonePermission(roomId)) }
     fun connectVoiceWithPermission(roomId: String) = work {
         check(!firebaseMode) { "현재 크루·파티에서는 채팅을 이용해 주세요. 음성 통화는 준비 중이에요." }

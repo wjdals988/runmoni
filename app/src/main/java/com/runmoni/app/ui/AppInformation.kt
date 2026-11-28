@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -126,7 +128,9 @@ internal fun AppVersionCard(updates: AppUpdateUiState, onClick: () -> Unit, tag:
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text("버전 ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.titleSmall)
-                Text(updates.description, style = MaterialTheme.typography.bodyMedium, color = if (updates.updateAvailable) RunmoniColors.Primary else RunmoniColors.Muted)
+                Text(updates.description, style = MaterialTheme.typography.bodyMedium,
+                    color = if (updates.updateAvailable) RunmoniColors.Primary else RunmoniColors.Muted,
+                    modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
             }
             if (updates.updateAvailable) Badge(Modifier.size(6.dp).testTag("${tag}_red_dot")
                 .semantics { contentDescription = "새 버전 업데이트 가능" }, containerColor = MaterialTheme.colorScheme.error)
@@ -160,9 +164,10 @@ internal fun AppInformationDialog(updates: AppUpdateUiState, onCheck: () -> Unit
         }
         AppVersionCard(updates, onClick = { if (updates.updateAvailable) updatePrompt = true else history = true }, tag = "about_app_version")
         Text("빌드 ${BuildConfig.VERSION_CODE}", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-        if (updates.error != null) Text(updates.error, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodyMedium)
+        if (updates.error != null) Text(updates.error, color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.bodyMedium, modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite })
         AdaptiveActions(
-            first = { modifier -> Button(shape = RunmoniShapes.Action, onClick = { if (updates.updateAvailable) updatePrompt = true else onCheck() }, enabled = !updates.checking, modifier = modifier.heightIn(min = 48.dp).testTag("check_app_update")) { Text(if (updates.checking) "확인 중" else if (updates.updateAvailable) "새 버전 다운로드" else "업데이트 확인") } },
+            first = { modifier -> Button(shape = RunmoniShapes.Action, onClick = { if (updates.updateAvailable) updatePrompt = true else onCheck() }, enabled = !updates.checking, modifier = modifier.heightIn(min = 48.dp).testTag("check_app_update")) { Text(if (updates.checking) "확인 중…" else if (updates.updateAvailable) "새 버전 다운로드" else "업데이트 확인") } },
             second = { modifier -> OutlinedButton(shape = RunmoniShapes.Action, onClick = { history = true }, modifier = modifier.heightIn(min = 48.dp).testTag("open_version_history")) { Text("업데이트 내역") } },
         )
         if (updates.updateAvailable) TextButton(shape = RunmoniShapes.Action, onClick = onCheck, enabled = !updates.checking, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("recheck_app_update")) { Text("버전 정보 다시 확인") }

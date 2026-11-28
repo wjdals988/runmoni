@@ -114,9 +114,14 @@ class RouteTileMapUiTest : RunmoniDesignTestBase() {
         val controls = compose.onNodeWithTag("map_control_bar").fetchSemanticsNode().boundsInRoot
         assertTrue("No map control obscures the geographic viewport", viewport.bottom <= controls.top)
         val before = requests.size
+        compose.onNodeWithTag("map_tile_retry_inline").assertIsDisplayed().assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+            .assertContentDescriptionEquals("배경 지도 다시 불러오기").performClick()
+        compose.waitUntil(30_000) { requests.size > before }
+        compose.waitUntil(30_000) { compose.onAllNodesWithTag("map_tile_retry_inline").fetchSemanticsNodes().isNotEmpty() }
+        val beforeMenuRetry = requests.size
         compose.onNodeWithTag("map_options").performClick()
         compose.onNodeWithTag("map_tile_retry").assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp).performClick()
-        compose.waitUntil(30_000) { requests.size > before }
+        compose.waitUntil(30_000) { requests.size > beforeMenuRetry }
         compose.onNodeWithTag("map_options").performClick()
         compose.onNodeWithText("지도 확대").performClick()
         compose.onNodeWithText("지도 확대").assertDoesNotExist()

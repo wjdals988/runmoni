@@ -89,8 +89,10 @@ internal fun HomeScreen(state: AppState, onRun: () -> Unit, onCrew: () -> Unit, 
         RunPersistenceNotice(state.runPersistence, onRetrySave)
         RecentRunActivitySection(recentActivity, onRecord, Modifier.testTag("home_recent_activity"))
         if (state.weather.snapshot != null) {
-            HomeWeatherSummary(state.weather, homeClock)
-            HomeWeatherDetails(state.weather, homeClock, onWeather, showAssessmentSummary = false)
+            val hasCurrentForecast = state.weather.currentHomeForecast(homeClock) != null
+            HomeWeatherSummary(state.weather, homeClock, showTemperature = !hasCurrentForecast)
+            HomeWeatherDetails(state.weather, homeClock, onWeather, showAssessmentSummary = false,
+                showRefresh = hasCurrentForecast)
         }
 
         val next = state.parties.filter { it.joined && !it.cancelled && it.startsAtMillis >= System.currentTimeMillis() }.minByOrNull { it.startsAtMillis }

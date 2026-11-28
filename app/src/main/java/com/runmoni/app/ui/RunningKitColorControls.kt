@@ -18,9 +18,12 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -61,6 +64,7 @@ internal fun RunningKitColorControls(
     modifier: Modifier = Modifier,
     // Deterministic loading/failure fixtures; production verifies the packaged masks.
     availabilityLoader: (suspend () -> Boolean)? = null,
+    navigationModifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current.applicationContext
     var attempt by remember(context) { mutableIntStateOf(0) }
@@ -80,20 +84,37 @@ internal fun RunningKitColorControls(
     // than creating another bordered card inside the wardrobe's item surface.
     Column(modifier.fillMaxWidth().testTag("kit_colors_${region.wireKey}"),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("${region.label} 색상", style = MaterialTheme.typography.titleMedium)
+        Text("${region.label} 색상", style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.testTag("kit_colors_heading").semantics { heading() })
+        when (available) {
+            null -> Text("색상 준비 중", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                modifier = navigationModifier.testTag("kit_colors_loading").semantics { liveRegion = LiveRegionMode.Polite })
+            false -> Column(navigationModifier, verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("색상을 불러오지 못했어요. 기본 색상으로 보여드려요.",
+                    style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
+                    modifier = Modifier.testTag("kit_colors_unavailable").semantics { liveRegion = LiveRegionMode.Polite })
+                TextButton(onClick = { attempt++ }, modifier = Modifier.heightIn(min = 48.dp).testTag("kit_colors_retry")) {
+                    Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text("색상 다시 불러오기")
+                }
+            }
+            true -> Unit
+        }
         BoxWithConstraints(Modifier.fillMaxWidth().selectableGroup()) {
             // Keep labels and 48dp targets, then wrap rather than shrinking text.
             val columns = (maxWidth.value / maxOf(80f, 56f + 24f * fontScale)).toInt().coerceIn(1, 3)
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                kitColorOptions.chunked(columns).forEach { row ->
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                kitColorOptions.chunked(columns).forEachIndexed { rowIndex, row ->
+                    val rowModifier = Modifier.fillMaxWidth().then(if (available == true && rowIndex == 0) navigationModifier else Modifier)
+                    Row(rowModifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         row.forEach { option ->
                             val isSelected = selected == option.id
                             val choiceModifier = Modifier.weight(1f).heightIn(min = 48.dp)
                                 .background(if (isSelected) RunmoniColors.PrimarySoft else Color.Transparent, RunmoniShapes.Action)
                                 .selectable(selected = isSelected, enabled = available == true, role = Role.RadioButton,
                                     onClick = { onSelect(region, option.id) })
-                                .semantics { contentDescription = "${region.label} 색상" }
+                                .semantics { contentDescription = "${region.label} 색상 ${option.label}" }
                                 .testTag("kit_color_${region.wireKey}_${option.id}")
                                 .padding(horizontal = 6.dp, vertical = 8.dp)
                             if (fontScale >= 1.3f) {
@@ -122,22 +143,8 @@ internal fun RunningKitColorControls(
                 }
             }
         }
-        when (available) {
-            null -> Text("색상 준비 중", style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
-                modifier = Modifier.testTag("kit_colors_loading"))
-            false -> Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("색상을 불러오지 못했어요. 기본 색상으로 보여드려요.",
-                    style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
-                    modifier = Modifier.testTag("kit_colors_unavailable"))
-                TextButton(onClick = { attempt++ }, modifier = Modifier.heightIn(min = 48.dp).testTag("kit_colors_retry")) {
-                    Icon(Icons.Outlined.Refresh, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text("색상 다시 불러오기")
-                }
-            }
-            true -> Text("선택한 ${region.label}에 적용돼요", style = MaterialTheme.typography.bodySmall,
-                color = RunmoniColors.Muted, modifier = Modifier.testTag("kit_colors_scope"))
-        }
+        if (available == true) Text("선택한 ${region.label}에 적용돼요", style = MaterialTheme.typography.bodySmall,
+            color = RunmoniColors.Muted, modifier = Modifier.testTag("kit_colors_scope"))
     }
 }
 

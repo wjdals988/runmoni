@@ -1,7 +1,10 @@
 package com.runmoni.app.ui
 
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -38,6 +41,25 @@ import java.io.File
 
 /** Offline UI contracts; callback fixtures do not authenticate or upload anything. */
 class AppEntryUiTest : RunmoniDesignTestBase() {
+    @Test fun guestChoiceStaysInPlaceAcrossGoogleFeedbackAtDefaultTextSize() {
+        val entry = mutableStateOf(AppEntryState(googleConfigured = true))
+        compose.setContent { ViewportBox(Viewport(320, 1f)) {
+            RunmoniTheme { Box(Modifier.height(520.dp)) { EntryScreen(entry.value, {}, {}) } }
+        } }
+        val guest = compose.onNodeWithTag("entry_guest")
+        val google = compose.onNodeWithTag("entry_google")
+        val guestTop = guest.assertIsDisplayed().assertHeightIsAtLeast(48.dp).fetchSemanticsNode().boundsInRoot.top
+        google.assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+        capture("entry-options-default-320-fixture")
+        compose.runOnIdle { entry.value = entry.value.copy(googleBusy = true) }
+        assertEquals(guestTop, guest.assertIsEnabled().fetchSemanticsNode().boundsInRoot.top, .5f)
+        compose.runOnIdle { entry.value = entry.value.copy(googleBusy = false, issue = "다시 시도해 주세요.") }
+        assertEquals(guestTop, guest.assertIsEnabled().fetchSemanticsNode().boundsInRoot.top, .5f)
+        compose.runOnIdle { entry.value = AppEntryState(googleConfigured = false) }
+        assertTrue(guest.assertIsEnabled().fetchSemanticsNode().boundsInRoot.bottom <
+            google.assertIsNotEnabled().fetchSemanticsNode().boundsInRoot.top)
+    }
+
     @Test fun googleClickDoesNotEnterUntilTheAuthoritativeChoiceCompletes() {
         val original = Profile(name = "시작 검토", mileage = 345,
             avatar = AvatarStyle(gender = AvatarGender.FEMALE),

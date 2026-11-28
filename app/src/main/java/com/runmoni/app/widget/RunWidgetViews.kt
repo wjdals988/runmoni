@@ -59,7 +59,7 @@ internal object RunWidgetViews {
             fits(context, confirmation(context, snapshot.runId), widthDp, heightDp)
         val candidates = sequence {
             if (actions.confirmation != null && directFinish) {
-                yield(confirmation(context, snapshot.runId, actions.confirmation, "${content.duration} · ${content.distance}"))
+                yield(confirmation(context, snapshot.runId, actions.confirmation, content))
                 yield(confirmation(context, snapshot.runId, actions.confirmation))
             }
             if (widthDp >= 240 && actions.savedRunId != null && actions.start != null)
@@ -150,14 +150,18 @@ internal object RunWidgetViews {
         RemoteViews(context.packageName, R.layout.run_widget_action_only).apply {
             val content = RunWidgetContent.from(snapshot, live)
             val action = actions.savedRunId?.let { RunWidgetIntents.result(context, it) } ?: open(context, snapshot)
-            val label = context.getString(if (actions.savedRunId != null) R.string.run_widget_result else R.string.run_widget_open)
-            setContentDescription(R.id.run_widget_root, actions.status(context) ?: description(content, footer(snapshot, compact = true), isIdle(snapshot)))
-            setContentDescription(R.id.run_widget_open, label)
-            setOnClickPendingIntent(R.id.run_widget_root, action)
+            val idle = isIdle(snapshot)
+            val label = context.getString(when {
+                actions.savedRunId != null -> R.string.run_widget_result
+                actions.needsApp && idle -> R.string.run_widget_prepare
+                else -> R.string.run_widget_open
+            })
+            val status = actions.status(context) ?: description(content, footer(snapshot, compact = true), idle)
+            setContentDescription(R.id.run_widget_open, context.getString(R.string.run_widget_action_summary, label, status))
             setOnClickPendingIntent(R.id.run_widget_open, action)
         }
 
-    private fun confirmation(context: Context, id: String, token: String? = null, metrics: String? = null) = actionPair(context,
+    private fun confirmation(context: Context, id: String, token: String? = null, metrics: RunWidgetContent? = null) = actionPair(context,
         R.string.run_widget_confirm_title,
         R.string.run_widget_cancel, token?.let { RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.CANCEL_FINISH, id, it)) },
         R.string.run_widget_confirm, token?.let { RunWidgetIntents.pending(context, RunWidgetTap(RunWidgetOperation.FINISH, id, it)) },
@@ -170,14 +174,16 @@ internal object RunWidgetViews {
         RunWidgetIntents.result(context, id))
 
     private fun actionPair(context: Context, title: Int, firstLabel: Int, first: PendingIntent?,
-                           secondLabel: Int, second: PendingIntent?, open: PendingIntent?, metrics: String? = null) =
+                           secondLabel: Int, second: PendingIntent?, open: PendingIntent?, metrics: RunWidgetContent? = null) =
         RemoteViews(context.packageName, R.layout.run_widget_pair).apply {
             setTextViewText(R.id.run_widget_title, context.getString(title))
             setTextViewText(R.id.run_widget_control, context.getString(firstLabel))
             setTextViewText(R.id.run_widget_finish, context.getString(secondLabel))
             if (metrics != null) {
                 setViewVisibility(R.id.run_widget_confirm_metrics, View.VISIBLE)
-                setTextViewText(R.id.run_widget_confirm_metrics, metrics)
+                setTextViewText(R.id.run_widget_confirm_metrics, "${metrics.duration} · ${metrics.distance}")
+                setContentDescription(R.id.run_widget_confirm_metrics, context.getString(
+                    R.string.run_widget_metrics_summary, metrics.duration, metrics.distance))
             }
             if (open != null) setOnClickPendingIntent(R.id.run_widget_root, open)
             if (first != null) setOnClickPendingIntent(R.id.run_widget_control, first)

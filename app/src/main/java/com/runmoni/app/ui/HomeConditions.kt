@@ -61,6 +61,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.runmoni.app.data.RunningWeatherRepository
 import com.runmoni.app.domain.RunningWeatherAdvice
 import com.runmoni.app.domain.RunningWeatherGuidance
+import com.runmoni.app.domain.RunningWeatherSnapshot
 import com.runmoni.app.domain.RunningWeatherState
 import com.runmoni.app.domain.RunningEnvironmentScore
 import com.runmoni.app.domain.RunningEnvironmentAssessment
@@ -153,9 +154,13 @@ internal fun HomeConditions(state: RunningWeatherState, onRefresh: () -> Unit, m
 
 @Composable
 internal fun HomeDepartureWeather(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier) {
+    val forecast = state.currentHomeForecast(nowMillis)
     val assessment = RunningEnvironmentScore.from(state, nowMillis)
     val advice = weatherAdvice(state, nowMillis)
     Column(modifier.fillMaxWidth().testTag("home_departure_weather"), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        if (forecast != null) {
+            WeatherTemperature(forecast.temperatureC, MaterialTheme.typography.titleMedium)
+        }
         if (assessment != null) {
             Text("러닝 환경", style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted)
             EnvironmentScore(assessment, environmentTint(assessment.band))
@@ -165,31 +170,28 @@ internal fun HomeDepartureWeather(state: RunningWeatherState, nowMillis: Long, o
             Text(advice.headline, style = MaterialTheme.typography.titleSmall,
                 color = if (advice.caution == WeatherCaution.HIGH) RunmoniColors.CoralInk else RunmoniColors.Navy,
                 modifier = Modifier.testTag("home_running_guidance"))
-        } else if (state.snapshot == null) {
-            if (state.phase != WeatherPhase.IDLE) WeatherStatus(state, nowMillis)
+        } else if (forecast == null) {
+            if (state.phase != WeatherPhase.IDLE || state.snapshot != null) WeatherStatus(state, nowMillis)
             WeatherRefreshButton(state, onRefresh)
-        } else {
-            WeatherStatus(state, nowMillis)
         }
     }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, modifier: Modifier = Modifier) {
+internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, modifier: Modifier = Modifier,
+    showTemperature: Boolean = true) {
     val snapshot = state.snapshot
     val advice = weatherAdvice(state, nowMillis)
     Column(modifier.fillMaxWidth().testTag("home_weather_summary"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         if (snapshot != null) {
             val area = state.area
-            val currentForecast = state.phase == WeatherPhase.READY && snapshot.isCurrent(nowMillis)
+            val currentForecast = state.currentHomeForecast(nowMillis) != null
             val areaTitle = if (currentForecast && area?.isRecent(nowMillis) == true) "현재 위치" else "예보 위치"
             Text("$areaTitle · ${area?.name?.let { "$it 부근" } ?: snapshot.location.nearbyCoordinates()}",
                 style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
                 modifier = Modifier.testTag("home_current_area"))
-            Text(String.format(Locale.KOREAN, "%.0f°C", snapshot.temperatureC),
-                style = MaterialTheme.typography.headlineSmall.copy(fontFeatureSettings = "tnum"),
-                color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
+            if (showTemperature) WeatherTemperature(snapshot.temperatureC, MaterialTheme.typography.headlineSmall)
             FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(String.format(Locale.KOREAN, "바람 %.1f m/s", snapshot.windMetersPerSecond),
                     style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted,
@@ -217,6 +219,7 @@ internal fun HomeWeatherSummary(state: RunningWeatherState, nowMillis: Long, mod
 @Composable
 internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onRefresh: () -> Unit, modifier: Modifier = Modifier,
     showAssessmentSummary: Boolean = true,
+    showRefresh: Boolean = true,
 ) {
     val uri = LocalUriHandler.current
     val snapshot = state.snapshot
@@ -247,7 +250,7 @@ internal fun HomeWeatherDetails(state: RunningWeatherState, nowMillis: Long, onR
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            WeatherRefreshButton(state, onRefresh)
+            if (showRefresh) WeatherRefreshButton(state, onRefresh)
             if (snapshot != null) TextButton(onClick = { uri.openUri(RunningWeatherRepository.LICENSE_URL) },
                 shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("home_weather_source")) {
                 Text("예보: ${RunningWeatherRepository.SOURCE_NAME}", style = MaterialTheme.typography.bodySmall)
@@ -269,6 +272,12 @@ private fun WeatherRefreshButton(state: RunningWeatherState, onRefresh: () -> Un
         modifier = Modifier.sizeIn(minWidth = 48.dp, minHeight = 48.dp).testTag("refresh_home_weather")) {
         Text(if (loading) "확인 중…" else if (state.snapshot == null) "현재 위치 날씨 보기" else "날씨 다시 확인")
     }
+}
+
+@Composable
+private fun WeatherTemperature(temperatureC: Double, style: androidx.compose.ui.text.TextStyle) {
+    Text(String.format(Locale.KOREAN, "%.0f°C", temperatureC), style = style.copy(fontFeatureSettings = "tnum"),
+        color = RunmoniColors.Primary, modifier = Modifier.testTag("home_weather_temperature"))
 }
 
 @Composable
@@ -369,11 +378,11 @@ private fun RunningEnvironmentPanel(assessment: RunningEnvironmentAssessment, de
     }
 }
 
-private fun weatherAdvice(state: RunningWeatherState, nowMillis: Long): RunningWeatherAdvice? {
-    val snapshot = state.snapshot ?: return null
-    return if (state.phase == WeatherPhase.READY && snapshot.isCurrent(nowMillis))
-        RunningWeatherGuidance.from(snapshot, nowMillis) else null
-}
+internal fun RunningWeatherState.currentHomeForecast(nowMillis: Long): RunningWeatherSnapshot? =
+    snapshot?.takeIf { phase == WeatherPhase.READY && it.isCurrent(nowMillis) }
+
+private fun weatherAdvice(state: RunningWeatherState, nowMillis: Long): RunningWeatherAdvice? =
+    state.currentHomeForecast(nowMillis)?.let { RunningWeatherGuidance.from(it, nowMillis) }
 
 @Composable
 private fun WeatherStatus(state: RunningWeatherState, nowMillis: Long) {

@@ -47,7 +47,7 @@ internal fun formatResultPace(seconds: Long): String = "${seconds / 60}:${(secon
 
 @Composable
 internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilometer: Int, onSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier, onOpenSelectedRoute: (() -> Unit)? = null) {
+    modifier: Modifier = Modifier, onOpenSelectedRoute: (() -> Unit)? = null, selectedLapModifier: Modifier = Modifier) {
     Column(modifier.fillMaxWidth().testTag("record_pace_analysis"),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         RecordSectionTitle("페이스와 1km 구간", Icons.Outlined.Speed)
@@ -67,22 +67,24 @@ internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilomete
                 val averageComparison = analysis.averagePaceSeconds?.let {
                     paceComparison("전체 평균", selected.paceSeconds - it)
                 }
-                if (onOpenSelectedRoute != null) OutlinedButton(onClick = onOpenSelectedRoute,
-                    shape = RunmoniShapes.Action, colors = ButtonDefaults.outlinedButtonColors(contentColor = RunmoniColors.RouteBlue),
-                    modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_lap_on_map")) {
-                    Text("지도에서 보기")
-                }
                 val previousComparison = analysis.splits.firstOrNull { it.kilometer == selected.kilometer - 1 }?.let {
                     paceComparison("직전 구간", selected.paceSeconds - it.paceSeconds)
                 }
-                Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash, RunmoniShapes.Action)
-                    .padding(12.dp).testTag("record_selected_split")
-                    .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
-                    verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Text("${splitRange(selected)} · ${formatResultPace(selected.paceSeconds)} /km",
-                        style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"), color = RunmoniColors.RouteBlue)
-                    listOfNotNull(averageComparison, previousComparison).forEach { comparison ->
-                        Text(comparison, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                Column(selectedLapModifier.fillMaxWidth()) {
+                    Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash, RunmoniShapes.Action)
+                        .padding(12.dp).testTag("record_selected_split")
+                        .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+                        verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text("${splitRange(selected)} · ${formatResultPace(selected.paceSeconds)} /km",
+                            style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"), color = RunmoniColors.Ink)
+                        listOfNotNull(averageComparison, previousComparison).forEach { comparison ->
+                            Text(comparison, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
+                        }
+                    }
+                    if (onOpenSelectedRoute != null) TextButton(onClick = onOpenSelectedRoute,
+                        shape = RunmoniShapes.Action, colors = ButtonDefaults.textButtonColors(contentColor = RunmoniColors.RouteBlue),
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_lap_on_map")) {
+                        Text("이 구간 지도에서 보기")
                     }
                 }
             }
@@ -191,7 +193,8 @@ private fun RunSplitTable(splits: List<RunResultSplit>, selectedKilometer: Int, 
                 .selectable(selected, role = Role.RadioButton) { onSelect(split.kilometer) }
                 .testTag("record_split_${split.kilometer}").padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(splitRange(split), modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                Text(splitRange(split), modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum"))
                 Text("${formatResultPace(split.paceSeconds)} /km", modifier = Modifier.weight(1f),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum",

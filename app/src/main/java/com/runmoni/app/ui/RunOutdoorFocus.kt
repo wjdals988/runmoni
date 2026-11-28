@@ -119,18 +119,15 @@ internal fun OutdoorRunPanel(
 @Composable
 private fun OutdoorIntervalTiming(run: ActiveRun, plan: RunIntervalPlan, progress: RunIntervalProgress) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            val stageInk = if (progress.stage == RunIntervalStage.RECOVERY) RunmoniTrack.Recovery else RunmoniTrack.OnBoard
-            Text("${progress.stage.label} ${progress.repeat}/${plan.repeats}회", color = stageInk,
-                style = MaterialTheme.typography.labelMedium, modifier = Modifier.alignByBaseline()
-                    .testTag("outdoor_interval_stage").semantics { liveRegion = LiveRegionMode.Polite })
-            val seconds = (progress.stageRemainingMillis + 999) / 1_000
-            Text(duration(seconds * 1_000), color = RunmoniTrack.Highlight,
-                style = MaterialTheme.typography.displaySmall.copy(fontFeatureSettings = "tnum"),
-                modifier = Modifier.alignByBaseline().testTag("outdoor_interval_remaining").clearAndSetSemantics {
-                    contentDescription = "남은 시간 ${seconds / 60}분 ${seconds % 60}초"
-                })
-        }
+        val stageInk = if (progress.stage == RunIntervalStage.RECOVERY) RunmoniTrack.Recovery else RunmoniTrack.OnBoard
+        Text("${progress.stage.label} ${progress.repeat}/${plan.repeats}회", color = stageInk,
+            style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.testTag("outdoor_interval_stage").semantics { liveRegion = LiveRegionMode.Polite })
+        val seconds = (progress.stageRemainingMillis + 999) / 1_000
+        DistanceNumber(duration(seconds * 1_000), RunmoniTrack.Highlight,
+            Modifier.testTag("outdoor_interval_remaining").clearAndSetSemantics {
+                contentDescription = "남은 시간 ${seconds / 60}분 ${seconds % 60}초"
+            }, maxSize = if (LocalDensity.current.fontScale >= 1.3f) 36f else 76f, unit = "남음")
         val next = when {
             progress.stage == RunIntervalStage.RUN -> "다음 회복 ${duration(plan.recoverySeconds * 1_000L)}"
             progress.repeat < plan.repeats -> "다음 달리기 ${duration(plan.runSeconds * 1_000L)}"

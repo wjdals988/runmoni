@@ -262,6 +262,7 @@ private fun ClosetItems(
     }?.takeIf { currentReady && !covered }
     val colorPanel = remember { BringIntoViewRequester() }
     val itemSearch = remember { BringIntoViewRequester() }
+    val wornItem = remember { BringIntoViewRequester() }
     val scope = rememberCoroutineScope()
     Column(modifier.fillMaxWidth()) {
         // Secondary accessory categories share the item scroll region so they
@@ -310,8 +311,10 @@ private fun ClosetItems(
             val showThumbnail = !largeText || maxWidth >= 360.dp
             Column(Modifier.fillMaxWidth().selectableGroup().testTag("closet_compare_list")) {
                 shown.forEachIndexed { index, variant ->
-                    ClosetItemOption(profile, actions, slot, variant, current == variant && !covered,
-                        secondaryReady, showThumbnail, Modifier.fillMaxWidth())
+                    val isWorn = current == variant && !covered
+                    ClosetItemOption(profile, actions, slot, variant, isWorn,
+                        secondaryReady, showThumbnail, Modifier.fillMaxWidth().then(
+                            if (isWorn) Modifier.bringIntoViewRequester(wornItem) else Modifier))
                     if (index < shown.lastIndex) HorizontalDivider(color = RunmoniColors.Line,
                         modifier = Modifier.padding(start = if (showThumbnail) 104.dp else 28.dp, end = 12.dp))
                 }
@@ -331,10 +334,15 @@ private fun ClosetItems(
             Spacer(Modifier.height(24.dp))
             HorizontalDivider(color = RunmoniColors.Line)
             Spacer(Modifier.height(20.dp))
-            Column(Modifier.fillMaxWidth().bringIntoViewRequester(colorPanel)) {
-                RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor)
-                TextButton(onClick = { scope.launch { itemSearch.bringIntoView() } },
+            Column(Modifier.fillMaxWidth()) {
+                TextButton(onClick = {
+                    scope.launch {
+                        if (!covered && current in shown) wornItem.bringIntoView() else itemSearch.bringIntoView()
+                    }
+                },
                     modifier = Modifier.heightIn(min = 48.dp).testTag("closet_back_to_items")) { Text("아이템 목록 보기") }
+                RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor,
+                    navigationModifier = Modifier.bringIntoViewRequester(colorPanel))
             }
         }
         Spacer(Modifier.height(24.dp).fillMaxWidth().testTag("closet_content_end"))
@@ -344,6 +352,7 @@ private fun ClosetItems(
 @Composable
 private fun ClosetSearch(query: String, onQuery: (String) -> Unit, modifier: Modifier = Modifier) {
     val keyboard = LocalSoftwareKeyboardController.current
+    val focus = LocalFocusManager.current
     OutlinedTextField(value = query, onValueChange = { onQuery(it.take(40)) },
         modifier = modifier.fillMaxWidth().testTag("closet_search"),
         label = { Text("이름 검색") }, singleLine = true,
@@ -356,7 +365,7 @@ private fun ClosetSearch(query: String, onQuery: (String) -> Unit, modifier: Mod
             }
         } else null,
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { keyboard?.hide() }),
+        keyboardActions = KeyboardActions(onSearch = { keyboard?.hide(); focus.clearFocus() }),
         shape = RunmoniShapes.Input)
 }
 

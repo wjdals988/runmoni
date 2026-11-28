@@ -50,6 +50,8 @@ class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
                 compose.runOnIdle { state.value = idle.copy(activeRun = acquiring) }
                 compose.onNodeWithTag("nav_run").performClick().assertIsSelected()
                 compose.onNodeWithTag("open_run_outdoor").assertIsDisplayed().performClick()
+                compose.onNodeWithTag("app_wordmark").assertDoesNotExist()
+                compose.onNodeWithTag("nav_run").assertDoesNotExist()
                 fullyVisible("gps_status", "running_scroll_viewport").assertTextEquals("GPS 재수신 중")
                 fullyVisible("outdoor_interval_stage", "running_scroll_viewport").assertTextEquals("회복 1/6회")
                 fullyVisible("outdoor_interval_remaining", "running_scroll_viewport").assertContentDescriptionEquals("남은 시간 0분 58초")
@@ -60,6 +62,7 @@ class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
                 compose.runOnIdle { state.value = idle.copy(activeRun = acquiring.copy(accuracyMeters = 6f)) }
                 fullyVisible("gps_status", "running_scroll_viewport").assertTextEquals("GPS 수신 중")
                 compose.onNodeWithTag("close_run_outdoor").performClick()
+                compose.onNodeWithTag("nav_run").assertIsSelected()
             }
         } finally {
             preference.preferences.edit().apply {
@@ -94,6 +97,7 @@ class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
 
         compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
         compose.onNodeWithTag("run_outdoor_panel").assertDoesNotExist()
+        compose.onNodeWithTag("nav_run").assertIsSelected()
         compose.onNodeWithTag("open_run_outdoor").assertExists()
         compose.runOnIdle {
             assertEquals("outdoor-focus", state.value.activeRun.id)
