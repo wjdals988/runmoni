@@ -5,7 +5,9 @@ package com.runmoni.app.ui
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CenterFocusStrong
 import androidx.compose.material.icons.outlined.Close
@@ -49,8 +51,32 @@ internal fun OutdoorFocusButton(onOpen: () -> Unit, compact: Boolean) {
     }
 }
 
+internal enum class RunGpsTone { Ready, Attention, Neutral }
+
 @Composable
-internal fun OutdoorRunPanel(run: ActiveRun, status: String, gpsStatus: String, currentPace: Int?, onClose: () -> Unit) {
+internal fun TrackGpsStatus(label: String, tone: RunGpsTone) {
+    val indicator = when (tone) {
+        RunGpsTone.Ready -> RunmoniTrack.Recovery
+        RunGpsTone.Attention -> RunmoniTrack.Attention
+        RunGpsTone.Neutral -> RunmoniTrack.Detail
+    }
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Box(Modifier.size(6.dp).background(indicator, CircleShape))
+        Text(label, color = if (tone == RunGpsTone.Attention) indicator else RunmoniTrack.Detail,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier.testTag("gps_status").semantics { liveRegion = LiveRegionMode.Polite })
+    }
+}
+
+@Composable
+internal fun OutdoorRunPanel(
+    run: ActiveRun,
+    status: String,
+    gpsStatus: String,
+    currentPace: Int?,
+    gpsTone: RunGpsTone,
+    onClose: () -> Unit,
+) {
     val compact = LocalDensity.current.fontScale >= 1.3f
     val interval = run.interval
     val progress = interval?.progress(run.activeDurationMillis)
@@ -61,8 +87,7 @@ internal fun OutdoorRunPanel(run: ActiveRun, status: String, gpsStatus: String, 
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(status, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
                     color = RunmoniTrack.OnBoard, modifier = Modifier.testTag("run_status").semantics { heading() })
-                Text(gpsStatus, color = RunmoniTrack.Detail, style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.testTag("gps_status").semantics { liveRegion = LiveRegionMode.Polite })
+                TrackGpsStatus(gpsStatus, gpsTone)
             }
             IconButton(onClick = onClose, modifier = Modifier.size(48.dp).testTag("close_run_outdoor")) {
                 Icon(Icons.Outlined.Close, "야외 집중 화면 닫기", tint = RunmoniTrack.OnBoard)
@@ -95,7 +120,8 @@ internal fun OutdoorRunPanel(run: ActiveRun, status: String, gpsStatus: String, 
 private fun OutdoorIntervalTiming(run: ActiveRun, plan: RunIntervalPlan, progress: RunIntervalProgress) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("${progress.stage.label} ${progress.repeat}/${plan.repeats}회", color = RunmoniTrack.OnBoard,
+            val stageInk = if (progress.stage == RunIntervalStage.RECOVERY) RunmoniTrack.Recovery else RunmoniTrack.OnBoard
+            Text("${progress.stage.label} ${progress.repeat}/${plan.repeats}회", color = stageInk,
                 style = MaterialTheme.typography.labelMedium, modifier = Modifier.alignByBaseline()
                     .testTag("outdoor_interval_stage").semantics { liveRegion = LiveRegionMode.Polite })
             val seconds = (progress.stageRemainingMillis + 999) / 1_000

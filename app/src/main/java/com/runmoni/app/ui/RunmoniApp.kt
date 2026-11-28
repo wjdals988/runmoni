@@ -5,6 +5,7 @@ package com.runmoni.app.ui
 import android.content.res.Configuration
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.ScrollState
 import androidx.activity.compose.BackHandler
@@ -261,7 +262,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
             },
             bottomBar = {
                 if (!communityDeep) Surface(color = RunmoniColors.Paper) {
-                    val selectedContainer = if (RunmoniColors.IsDark) RunmoniTrack.Stage else RunmoniTrack.Board
+                    val selectedContainer = RunmoniColors.PrimarySoft
+                    val selectedInk = RunmoniColors.OnPrimarySoft
+                    val selectedBorder = RunmoniColors.Primary
                     Column {
                         HorizontalDivider(color = RunmoniColors.Line)
                         if (compactActiveRun || compactExplore) {
@@ -299,7 +302,9 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                         val item = if (labelsFit) Modifier.weight(1f) else Modifier.width(labelOnlyWidth)
                                         Row(item.fillMaxHeight()
                                             .clip(RunmoniShapes.Action)
-                                            .background(if (tab == index) selectedContainer else Color.Transparent)
+                                            .then(if (tab == index) Modifier
+                                                .background(selectedContainer)
+                                                .border(1.dp, selectedBorder, RunmoniShapes.Action) else Modifier)
                                             .selectable(selected = tab == index, role = Role.Tab, onClick = {
                                                 if (index == 3) { crewNavigation = null; partyNavigation = null; communityNavigationEpoch++ }
                                                 tab = index
@@ -308,12 +313,12 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                             verticalAlignment = Alignment.CenterVertically,
                                             horizontalArrangement = Arrangement.spacedBy(if (showIcons) 8.dp else 0.dp)) {
                                             if (showIcons) Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
-                                                tint = if (tab == index) RunmoniTrack.Highlight else RunmoniColors.Muted)
+                                                tint = if (tab == index) selectedInk else RunmoniColors.Muted)
                                             Text(label, style = navLabelStyle.copy(
                                                 fontWeight = if (tab == index) FontWeight.Bold else FontWeight.Medium),
                                                 modifier = Modifier.weight(1f), maxLines = 1, softWrap = false,
                                                 textAlign = if (showIcons) TextAlign.Start else TextAlign.Center,
-                                                color = if (tab == index) RunmoniTrack.OnBoard else RunmoniColors.Muted)
+                                                color = if (tab == index) selectedInk else RunmoniColors.Muted)
                                         }
                                     }
                                 }
@@ -338,9 +343,10 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
                                         verticalArrangement = Arrangement.Center) {
                                         Box(Modifier.fillMaxWidth().height(48.dp), contentAlignment = Alignment.Center) {
                                             if (tab == index) Box(Modifier.width(56.dp).height(36.dp)
-                                                .clip(RunmoniShapes.Action).background(selectedContainer))
+                                                .background(selectedContainer, RunmoniShapes.Action)
+                                                .border(1.dp, selectedBorder, RunmoniShapes.Action))
                                             Icon(painterResource(icons[index]), null, Modifier.size(24.dp),
-                                                tint = if (tab == index) RunmoniTrack.Highlight else RunmoniColors.Muted)
+                                                tint = if (tab == index) selectedInk else RunmoniColors.Muted)
                                         }
                                         Spacer(Modifier.height(4.dp))
                                         Text(label, style = MaterialTheme.typography.labelMedium.copy(
@@ -482,6 +488,13 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
     }
     val gpsLabel = when { permissionMissing -> "위치 권한 필요"; gpsDisabled -> "GPS 꺼짐";
         gpsReady -> "GPS 수신 중"; else -> run.gpsStatus }
+    val gpsTone = when {
+        permissionMissing || gpsDisabled -> RunGpsTone.Attention
+        persistence.finishing || run.phase == RunPhase.PAUSED || run.phase == RunPhase.RECOVERY -> RunGpsTone.Neutral
+        gpsReady -> RunGpsTone.Ready
+        run.phase == RunPhase.RUNNING -> RunGpsTone.Attention
+        else -> RunGpsTone.Neutral
+    }
     val statusTitle = when {
         persistence.finishing -> "러닝 마무리 중"
         persistence.issue == RunPersistenceIssue.CHECKPOINT -> "기록 저장 확인 필요"
@@ -501,7 +514,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     run.phase == RunPhase.RECOVERY -> "GPS 확인 대기"
                     else -> gpsLabel.substringBefore(" · ")
                 }
-                OutdoorRunPanel(run, statusTitle, outdoorGps, currentPace, onClose = { outdoorEnabled = false })
+                OutdoorRunPanel(run, statusTitle, outdoorGps, currentPace, gpsTone, onClose = { outdoorEnabled = false })
                 RunPersistenceNotice(persistence, actions::retryRunPersistence)
                 if (permissionMissing || gpsDisabled) LocationReadinessCard(permissionMissing, actions)
             } else ScreenContent(spacing = if (compactLive) RunmoniLayout.ContentGap else RunmoniLayout.SectionGap,
@@ -516,7 +529,12 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     }
                     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(RunmoniLayout.TightGap),
                         verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        StatusPill(gpsLabel, if (gpsReady) RunmoniColors.Green else RunmoniColors.Muted, "gps_status")
+                        val gpsInk = when (gpsTone) {
+                            RunGpsTone.Ready -> RunmoniColors.Green
+                            RunGpsTone.Attention -> RunmoniColors.EnvironmentCaution
+                            RunGpsTone.Neutral -> RunmoniColors.Muted
+                        }
+                        StatusPill(gpsLabel, gpsInk, "gps_status")
                         accuracy?.let { Text("정확도 ±${it.toInt()}m", modifier = Modifier.align(Alignment.CenterVertically),
                             style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                     }
@@ -566,7 +584,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                 } else RunningMetricPanel(contentPadding = PaddingValues(if (compactLive) 12.dp else 20.dp),
                     spacing = if (compactLive) RunmoniLayout.TightGap else RunmoniLayout.ContentGap) {
                     if (compactLive) {
-                        CompactRunStatus(statusTitle, gpsLabel.substringBefore(" · "), gpsReady)
+                        CompactRunStatus(statusTitle, gpsLabel.substringBefore(" · "), gpsTone)
                         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Text("거리", style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail,
                                 modifier = Modifier.weight(1f))
@@ -692,17 +710,12 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
 }
 
 @Composable
-private fun CompactRunStatus(title: String, gpsLabel: String, gpsReady: Boolean) {
+private fun CompactRunStatus(title: String, gpsLabel: String, gpsTone: RunGpsTone) {
     FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(title, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
             color = RunmoniTrack.OnBoard, modifier = Modifier.testTag("run_status").semantics { heading() })
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Box(Modifier.size(5.dp).clip(CircleShape)
-                .background(if (gpsReady) RunmoniTrack.Highlight else RunmoniTrack.Detail))
-            Text(gpsLabel, style = MaterialTheme.typography.labelSmall, color = RunmoniTrack.Detail,
-                modifier = Modifier.testTag("gps_status").semantics { liveRegion = LiveRegionMode.Polite })
-        }
+        TrackGpsStatus(gpsLabel, gpsTone)
     }
 }
 
@@ -752,9 +765,10 @@ private fun RunSharingPreparation(state: AppState, actions: AppActions, onProfil
 
 @Composable
 private fun LocationReadinessCard(permissionMissing: Boolean, actions: AppActions) {
-    Surface(color = RunmoniColors.Mint, shape = RunmoniShapes.Surface) {
+    Surface(color = RunmoniColors.EnvironmentCautionWash, contentColor = RunmoniColors.Ink, shape = RunmoniShapes.Surface) {
         Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(if (permissionMissing) "정확한 위치 권한이 필요해요" else "GPS가 꺼져 있어요", style = MaterialTheme.typography.titleMedium)
+            Text(if (permissionMissing) "정확한 위치 권한이 필요해요" else "GPS가 꺼져 있어요",
+                style = MaterialTheme.typography.titleMedium, color = RunmoniColors.EnvironmentCaution)
             Text(if (permissionMissing) "러닝 시작 시 위치 권한을 허용해 주세요. 권한 요청이 나오지 않으면 앱 설정에서 ‘정확한 위치’를 켜 주세요."
                 else "GPS를 켜면 새 위치부터 경로를 기록해요. 신호가 없는 구간의 거리는 추정해 더하지 않아요.", style = MaterialTheme.typography.bodyMedium)
             OutlinedButton(shape = RunmoniShapes.Action, onClick = if (permissionMissing) actions::openAppPermissionSettings else actions::openLocationSettings,

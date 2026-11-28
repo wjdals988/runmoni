@@ -1,6 +1,10 @@
-# 0.13 야외 집중 화면과 러닝 결과
+# 0.13 컬러, 야외 집중 화면과 러닝 결과
 
-야외 집중 화면은 짙은 청록 `#103338`의 한 화면에 기록 상태와 GPS 문구, 가장 먼저 읽을 수치, 하단 조작을 둔다. 일반 러닝은 거리, 인터벌은 현재 단계·남은 시간·다음 단계를 우선한다. 실제 단계가 바뀌면 `#D4F781` 트랙 선을 약 150ms 움직이며 동작 줄이기에서는 즉시 반영한다. 숫자와 하단 조작의 위치를 고정하고, 기존 20·24·32dp 외곽선과 48dp 조작 영역을 적용한다. 비교 화면은 날짜와 시각을 분리하고 같은 지표의 오른쪽 숫자 기준선을 공유한다. [Android 접근성](https://developer.android.com/guide/topics/ui/accessibility/apps) · [Compose 모션](https://developer.android.com/develop/ui/compose/animation/quick-guide)
+라이트의 바탕과 카드에는 `#F1F4F0`과 `#FDFEFA`, 다크에는 `#141B19`와 `#1D2723`을 쓴다. 시작·재개는 라이트에서 포레스트 `#23533D`, 다크에서 민트 `#A6DAB8`로 강조한다. 선택 탭은 연한 녹색 또는 깊은 녹색 바탕과 아이콘·레이블을 함께 쓴다. 페이스와 지도 구간은 블루 계열, GPS 확인과 신호 저하는 앰버와 상태 문구로 구분한다. 위젯은 시스템 테마에 따라 같은 행동 색을 사용한다. [ui-ux-pro-max 적용 근거](docs/design/ui-ux-pro-max/README.md)
+
+야외 집중 화면은 짙은 트랙 표면 `#172824` 위에 기록 상태와 GPS, 거리 또는 인터벌의 현재 단계·남은 시간·다음 단계를 배치한다. 실제 단계가 바뀌면 `#D4F781` 트랙 선을 약 150ms 움직이며 동작 줄이기에서는 즉시 반영한다. 숫자와 하단 조작의 위치를 고정하고, 20·24·32dp 여백과 48dp 조작 영역을 적용한다. 비교의 날짜와 시각을 분리하고 같은 지표는 오른쪽 숫자 기준선을 공유한다. [Android 접근성](https://developer.android.com/guide/topics/ui/accessibility/apps) · [Compose 모션](https://developer.android.com/develop/ui/compose/animation/quick-guide)
+
+기본 글꼴·일반 전화기 폭에서 조작을 먼저 점검한다. 결과는 강조한 지도의 1km에서 같은 구간 기록으로 돌아간다. 옷장에서는 상의·하의·신발 색상에 바로 이동하고 헤어 목록에서 모자에 가려지기 전 윤곽을 비교한다. 실제로 착용한 미니미에는 모자가 반영된다.
 
 # 0.12 위젯·러닝 결과와 인터벌
 홈·러닝·결과는 안전 여백을 제외한 가용 폭에 20·24·32dp 바깥 여백을 적용한다. 제목·카드·버튼은 공통 왼쪽 선과 오른쪽 선에 맞추고 시스템 Sans, 거리와 단위의 공통 기준선, 고정폭 숫자를 사용한다. 작은 화면에서도 출발과 기록 공유에 48dp 조작 영역을 확보한다. [배치 참고](https://github.com/VoltAgent/awesome-design-md/blob/fcc70284932276d085f01ef9f83edde90b1258cb/design-md/apple/DESIGN.md)

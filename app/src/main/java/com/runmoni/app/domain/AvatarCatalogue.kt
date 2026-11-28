@@ -7,7 +7,7 @@ object AvatarCatalogue {
     /** Temporary user-requested test policy. Ownership and existing mileage are never reset. */
     const val TEST_ITEMS_FREE = true
     val slots = listOf(
-        AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발", "스트림 텍스처", "레이어 하이라이트", "백라이트 텍스처")),
+        AvatarSlot("hair", "헤어", listOf("텍스처 쇼트", "가르마 쇼트", "포니테일", "단발", "슬림 쇼트", "사이드 파트", "로우 번")),
         AvatarSlot("headwear", "모자", listOf("모자 없음", "러닝 캡", "선바이저", "스웨트 헤드밴드", "메시 패널 캡", "리플렉트 바이저", "테크니트 밴드")),
         AvatarSlot("face", "얼굴", listOf("편안한 표정", "활짝 웃음", "집중하는 표정", "윙크", "선스틱 라인", "트랙 페이스 마크", "스포츠 페이스 패치")),
         AvatarSlot("top", "상의", listOf("코랄 싱글렛", "민트 러닝 반팔", "블루 긴팔", "옐로 바람막이", "스포츠 브라탑", "크롭 기능성 티", "메시 러닝 저지", "패널 레이싱 티", "하프집 테크 롱슬리브", "레이스 쉘 재킷")),

@@ -1,7 +1,9 @@
 package com.runmoni.app.ui
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
+import androidx.compose.ui.unit.dp
 import com.runmoni.app.avatar.AvatarArtwork
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
@@ -9,6 +11,66 @@ import org.junit.Test
 
 /** Actual Android dialog, run once at native size and once at native320dp/font2. */
 class ConsumerClosetTest : RunmoniDesignTestBase() {
+    @Test fun normalWidthOpensTheWornGarmentPaletteAndReturnsToTheSameItemList() {
+        val state = mutableStateOf(AppState(profile = Profile(avatar = AvatarStyle(top = 1))))
+        val choices = mutableListOf<Pair<RunningKitRegion, Int>>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override fun setRunningKitColor(region: RunningKitRegion, color: Int) {
+                choices += region to color
+                val profile = state.value.profile
+                val avatar = profile.avatar.copy(runningKitColors = profile.avatar.runningKitColors.withColor(region, color))
+                state.value = state.value.copy(profile = profile.copy(avatar = avatar))
+            }
+        }
+        compose.setContent { ViewportBox(Viewport(411, 1f)) {
+            RunmoniTheme { ClosetDialog(state.value.profile, actions) {} }
+        } }
+        compose.onNodeWithTag("closet_animation").performClick()
+        compose.onNodeWithTag("closet_open_colors").assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick()
+        compose.waitUntil(30_000) { compose.onAllNodes(hasTestTag("kit_color_top_1") and isEnabled()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithTag("kit_color_top_1").assertIsDisplayed().performClick().assertIsSelected()
+        compose.onNodeWithTag("closet_avatar_preview").assertIsDisplayed()
+        capture("closet-color-shortcut-411-fixture")
+        compose.onNodeWithTag("closet_back_to_items").assertIsDisplayed().performClick()
+        compose.onNodeWithTag("closet_search").assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(listOf(RunningKitRegion.TOP to 1), choices)
+            assertEquals(1, state.value.profile.avatar.top)
+            assertEquals(1, state.value.profile.avatar.runningKitColors.top)
+        }
+    }
+
+    @Test fun hairThumbnailsShowDistinctCutsWhileTheFittingKeepsItsHat() {
+        val state = mutableStateOf(AppState(profile = Profile(avatar = AvatarStyle(headwear = 1))))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport(411, 1f)) {
+            RunmoniTheme { ClosetDialog(state.value.profile, actions) {} }
+        } }
+        compose.onNodeWithTag("closet_animation").performClick()
+        compose.onNodeWithTag("closet_slot_hair").performScrollTo().performClick()
+        val thumbnails = listOf(0, 4, 5, 6).map { variant ->
+            val tag = "closet_preview_hair_$variant"
+            val ownChild = hasAnyAncestor(hasTestTag(tag))
+            val thumbnail = compose.onNodeWithTag(tag, useUnmergedTree = true).performScrollTo().assertIsDisplayed()
+            compose.waitUntil(30_000) {
+                compose.onAllNodes(hasTestTag("minimi_loading") and ownChild, useUnmergedTree = true)
+                    .fetchSemanticsNodes().isEmpty()
+            }
+            compose.onNode(hasTestTag("minimi_retry") and ownChild, useUnmergedTree = true).assertDoesNotExist()
+            val bitmap = thumbnail.captureToImage().asAndroidBitmap()
+            IntArray(bitmap.width * bitmap.height).apply {
+                bitmap.getPixels(this, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+            }.contentHashCode()
+        }
+        assertEquals(4, thumbnails.toSet().size)
+        capture("closet-hair-411-fixture")
+        compose.onNodeWithTag("closet_hair_6").performScrollTo().performClick().assertIsSelected()
+        compose.runOnIdle {
+            assertEquals(6, state.value.profile.avatar.hair)
+            assertEquals(1, state.value.profile.avatar.headwear)
+        }
+    }
+
     @Test fun fullScreenClosetKeepsPreviewAndInventoryAcrossEveryCategory() {
         val original = Profile(name = "검토 러너", mileage = 1234)
         val state = mutableStateOf(AppState(profile = original))

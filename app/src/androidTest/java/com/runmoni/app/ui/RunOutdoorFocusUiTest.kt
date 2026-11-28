@@ -8,7 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
+import androidx.test.platform.app.InstrumentationRegistry
+import com.runmoni.app.data.AppearancePreferences
 import com.runmoni.app.domain.ActiveRun
+import com.runmoni.app.domain.AppAppearance
 import com.runmoni.app.domain.AppState
 import com.runmoni.app.domain.LocationAccess
 import com.runmoni.app.domain.RunIntervalPlan
@@ -19,6 +22,52 @@ import org.junit.Test
 
 /** Real Compose geometry and line pixels with injected recorder state, not an outdoor GPS test. */
 class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
+    @Test fun normalTextPaletteSeparatesNavigationAndOutdoorGpsInBothThemes() {
+        val preference = AppearancePreferences(InstrumentationRegistry.getInstrumentation().targetContext)
+        val original = preference.preferences.getString(AppearancePreferences.KEY, null)
+        val idle = AppState(locationAccess = LocationAccess(true, true),
+            runPersistence = RunPersistenceState(initialized = true))
+        val acquiring = ActiveRun(id = "outdoor-palette", phase = RunPhase.RUNNING,
+            distanceMeters = 1_230.0, activeDurationMillis = 62_000, interval = RunIntervalPlan(60, 60, 6),
+            gpsStatus = "GPS 재수신 중")
+        val state = mutableStateOf(idle)
+        val actions = RunmoniUiTest.FakeActions(state)
+        try {
+            preference.write(AppAppearance.LIGHT)
+            compose.setContent { ViewportBox(Viewport(390, 1f)) { RunmoniApp(state.value, actions) } }
+            for (appearance in listOf(AppAppearance.LIGHT, AppAppearance.DARK)) {
+                compose.runOnIdle {
+                    state.value = idle
+                    preference.write(appearance)
+                }
+                compose.onNodeWithTag("nav_home").performClick().assertIsSelected()
+                compose.onNodeWithTag("home_start_run").assertIsDisplayed()
+                compose.waitUntil(30_000) {
+                    compose.onAllNodesWithTag("minimi_loading", useUnmergedTree = true).fetchSemanticsNodes().isEmpty()
+                }
+                capture("palette-home-390-${appearance.wireValue}-fixture")
+
+                compose.runOnIdle { state.value = idle.copy(activeRun = acquiring) }
+                compose.onNodeWithTag("nav_run").performClick().assertIsSelected()
+                compose.onNodeWithTag("open_run_outdoor").assertIsDisplayed().performClick()
+                fullyVisible("gps_status", "running_scroll_viewport").assertTextEquals("GPS 재수신 중")
+                fullyVisible("outdoor_interval_stage", "running_scroll_viewport").assertTextEquals("회복 1/6회")
+                fullyVisible("outdoor_interval_remaining", "running_scroll_viewport").assertContentDescriptionEquals("남은 시간 0분 58초")
+                fullyVisible("pause_run", "run_control_bar", minimumTarget = true)
+                fullyVisible("finish_run", "run_control_bar", minimumTarget = true)
+                capture("palette-outdoor-390-${appearance.wireValue}-fixture")
+
+                compose.runOnIdle { state.value = idle.copy(activeRun = acquiring.copy(accuracyMeters = 6f)) }
+                fullyVisible("gps_status", "running_scroll_viewport").assertTextEquals("GPS 수신 중")
+                compose.onNodeWithTag("close_run_outdoor").performClick()
+            }
+        } finally {
+            preference.preferences.edit().apply {
+                if (original == null) remove(AppearancePreferences.KEY) else putString(AppearancePreferences.KEY, original)
+            }.commit()
+        }
+    }
+
     @Test fun shortLargeTextWindowKeepsDistanceGpsAndRunControlsUsable() {
         val state = mutableStateOf(AppState(activeRun = ActiveRun(id = "outdoor-focus", phase = RunPhase.RUNNING,
             distanceMeters = 5_230.0, activeDurationMillis = 1_200_000, currentPaceSecondsPerKm = 233, accuracyMeters = 6f),
@@ -74,7 +123,7 @@ class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
         compose.setContent { ViewportBox(Viewport(320, 2f)) {
             CompositionLocalProvider(LocalRunmoniMotionEnabled provides motion.value) {
                 RunmoniTheme(darkTheme = true) {
-                    OutdoorRunPanel(run.value, "기록 중", "GPS 재수신 중", null, onClose = {})
+                    OutdoorRunPanel(run.value, "기록 중", "GPS 재수신 중", null, RunGpsTone.Attention, onClose = {})
                 }
             }
         } }
@@ -92,7 +141,7 @@ class RunOutdoorFocusUiTest : RunmoniDesignTestBase() {
                 val red = android.graphics.Color.red(pixel)
                 val green = android.graphics.Color.green(pixel)
                 val blue = android.graphics.Color.blue(pixel)
-                // Count the lime stroke even when a thin edge is composited over teal.
+                // Count the lime stroke even when a thin edge is composited over the board.
                 if (green - blue >= 40 && green >= red && red - blue >= 15) {
                     first = minOf(first, x)
                     last = maxOf(last, x)

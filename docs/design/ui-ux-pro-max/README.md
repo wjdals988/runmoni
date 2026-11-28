@@ -1,5 +1,9 @@
 # ui-ux-pro-max 적용 근거
 
+## 2026-11-29 앱 컬러와 기본 화면 점검
+
+같은 고정판에서 `running fitness sports --domain color`로 Running & Cycling GPS의 어두운 바탕과 서로 다른 행동·페이스 역할을 확인했다. 기존 브랜드 색에 맞춰 포레스트·민트, 라임, 블루, 앰버로 역할을 정했다. `semantic color tokens --stack jetpack-compose`의 Material 3 테마 중앙화와 별도 다크 배색을 적용했다. 지도와 페이스 선택은 색과 함께 구간 수치·체크·선 굵기로 나타낸다. [실제 적용 기준](../../../DESIGN.md)
+
 - 요청 스킬: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
 - 확인 revision: `b7d5353e0130feb8c5574ef1251f8a1db1873ccb` (2026-11-06 한국 시간)
 - [원본 SKILL.md](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/b7d5353e0130feb8c5574ef1251f8a1db1873ccb/.claude/skills/ui-ux-pro-max/SKILL.md), SHA256 `9aa50bd44076db28624ea976056d915905ab9357748f90263a004fa0ef087147`

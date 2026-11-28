@@ -30,12 +30,14 @@ class RunWidgetNightTest {
                     if (night) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
             })
             val surface = display.getColor(R.color.run_widget_surface)
-            assertEquals(if (night) 0xFF1D2E36.toInt() else 0xFFFFFFFF.toInt(), surface)
+            assertEquals(if (night) 0xFF1D2723.toInt() else 0xFFFDFEFA.toInt(), surface)
             for (role in listOf(R.color.run_widget_text, R.color.run_widget_muted, R.color.run_widget_primary))
                 assertTrue("Widget text contrast night=$night role=$role",
                     ColorUtils.calculateContrast(display.getColor(role), surface) >= 4.5)
             assertTrue(ColorUtils.calculateContrast(display.getColor(R.color.run_widget_on_primary),
                 display.getColor(R.color.run_widget_primary)) >= 4.5)
+            assertTrue(ColorUtils.calculateContrast(display.getColor(R.color.run_widget_on_primary),
+                display.getColor(R.color.run_widget_primary_pressed)) >= 4.5)
         }
     }
 

@@ -47,7 +47,9 @@ internal object ExpandedAtelierArtwork {
         coverage: IntArray, socks: IntArray, hands: IntArray, frame: Int, requested: AvatarStyle,
         foundation: AvatarStyle, equipment: Boolean, onlySlot: String? = null): IntArray {
         val gearOrder = listOf("headwear", "hydration", "waist", "wrist", "ear", "eyewear")
-        val selected = ExpandedAtelierLayers.selected(requested).filter { (it.slot in gearOrder) == equipment && (onlySlot == null || it.slot == onlySlot) }
+        val selected = ExpandedAtelierLayers.selected(requested).filter {
+            it.slot != "hair" && (it.slot in gearOrder) == equipment && (onlySlot == null || it.slot == onlySlot)
+        }
             .sortedBy { if (equipment) gearOrder.indexOf(it.slot) else listOf("hair","face","costume","top","bottom","socks","shoes").indexOf(it.slot) }
         var out = pixels
         for (spec in selected) {

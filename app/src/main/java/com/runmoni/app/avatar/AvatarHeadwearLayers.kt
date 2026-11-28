@@ -12,7 +12,7 @@ import kotlin.math.min
  * face, eyes and skin. No source file, face, pose or body part is regenerated.
  */
 object AvatarHeadwearLayers {
-    const val VERSION = "approved-headwear-v3-bounded-brims"
+    const val VERSION = "approved-headwear-v4-haircut-coverage"
     enum class Kind { CAP, VISOR, HEADBAND, SANTA, BEAR, GOLDEN }
 
     private const val W = 256
@@ -79,7 +79,8 @@ object AvatarHeadwearLayers {
         return pixels.clone().also { out ->
             for (i in out.indices) {
                 if (cover[i] != 0) {
-                    val alpha = if ((original[i] ushr 24) < 192) NEW_ALPHA else pixels[i] ushr 24
+                    val wornAlpha = pixels[i] ushr 24
+                    val alpha = if ((original[i] ushr 24) < 192 || wornAlpha < 192) NEW_ALPHA else wornAlpha
                     out[i] = (alpha shl 24) or (shape[i] and 0xffffff)
                 }
                 else if (extension[i] != 0) out[i] = (NEW_ALPHA shl 24) or (shape[i] and 0xffffff)

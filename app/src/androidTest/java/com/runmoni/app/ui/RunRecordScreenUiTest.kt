@@ -151,19 +151,39 @@ class RunRecordScreenUiTest : RunmoniDesignTestBase() {
             lapAnchors = listOf(RunLapAnchor(0, 0, 0, 0.0), RunLapAnchor(1, 2, 3, .5)))
         val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
         compose.setContent {
-            OfflineRecordPageFixture { RunRecordScreen(record, actions, onBack = {}) }
+            OfflineRecordPageFixture { ViewportBox(Viewport(360, 1f)) {
+                RunRecordScreen(record, actions, onBack = {})
+            } }
+        }
+        fun recordScroll(): Float {
+            val range = compose.onNodeWithTag("record_detail_scroll").fetchSemanticsNode()
+                .config[SemanticsProperties.VerticalScrollAxisRange]
+            return compose.runOnIdle { range.value() }
         }
         compose.onNodeWithTag("record_view_splits").performScrollTo().performClick()
         compose.onNodeWithTag("record_split_2").performScrollTo().performClick()
         compose.onNodeWithTag("record_view_lap_on_map").assertDoesNotExist()
         compose.onNodeWithTag("record_map").assertDoesNotExist()
         compose.onNodeWithTag("record_split_1").performScrollTo().performClick()
-        compose.onNodeWithTag("record_view_lap_on_map").performScrollTo().assertHeightIsAtLeast(48.dp).performClick()
+        val viewLap = compose.onNodeWithTag("record_view_lap_on_map").performScrollTo().assertHeightIsAtLeast(48.dp)
+        compose.onNodeWithTag("record_selected_split").performScrollTo().assertIsDisplayed()
+        val origin = recordScroll()
+        viewLap.assertIsDisplayed().performClick()
         compose.onNodeWithTag("record_map_selected_lap").assertTextEquals("0–1 km 강조 중")
-        compose.onNodeWithTag("record_map").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithTag("record_map").assertIsDisplayed()
         capture("run-lap-highlight-fixture")
+        val returnToLap = compose.onNodeWithTag("record_map_return_to_lap")
+        assertTrue("The map moved away from the saved reading position", recordScroll() > origin)
+        returnToLap.assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick()
+        assertEquals(origin, recordScroll(), .5f)
+        compose.onNodeWithTag("record_split_1").assertIsSelected()
+        compose.onNodeWithTag("record_selected_split").assertIsDisplayed().assertTextContains("0–1 km · 5:10 /km")
+        compose.onNodeWithTag("record_map_selected_lap").assertTextEquals("0–1 km 강조 중")
+        compose.onNodeWithTag("record_map").assertExists()
         compose.onNodeWithTag("record_map_clear_lap").performScrollTo().performClick()
+        compose.onNodeWithTag("record_map_return_to_lap").assertDoesNotExist()
         compose.onNodeWithTag("record_map_selected_lap").assertDoesNotExist()
+        compose.onNodeWithTag("record_split_1").assertIsSelected()
     }
 
     @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {
