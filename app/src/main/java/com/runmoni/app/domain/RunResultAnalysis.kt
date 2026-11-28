@@ -18,8 +18,10 @@ internal data class RunResultAnalysis(
     val averagePaceSeconds: Long?,
     val paceScale: RunPaceScale?,
     val elapsedMillis: Long?,
-    val hasMissingSplits: Boolean,
+    val completedKilometers: Int,
 ) {
+    val hasMissingSplits: Boolean get() = completedKilometers > splits.size
+
     companion object {
         fun from(record: RunRecord): RunResultAnalysis {
             val distance = record.distanceMeters.takeIf { it.isFinite() && it > 0.0 } ?: 0.0
@@ -49,7 +51,7 @@ internal data class RunResultAnalysis(
                 else null
             val elapsed = record.elapsedDurationMillis.takeIf { activeMillis > 0 && it / 1_000 > activeMillis / 1_000 }
             val scale = if (splits.size >= 2) scaleFor(splits.map { it.paceSeconds } + listOfNotNull(average)) else null
-            return RunResultAnalysis(splits, fastest, average, scale, elapsed, wholeKilometers > splits.size)
+            return RunResultAnalysis(splits, fastest, average, scale, elapsed, wholeKilometers)
         }
 
         private fun scaleFor(paces: List<Long>): RunPaceScale {

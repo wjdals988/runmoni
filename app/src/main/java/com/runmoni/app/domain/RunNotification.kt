@@ -6,7 +6,15 @@ data class RunNotificationAccess(val checked: Boolean = false, val enabled: Bool
     val isBlocked: Boolean get() = checked && !enabled
 }
 
-data class RunNavigationRequest(val token: Long, val runId: String, val confirmFinish: Boolean)
+enum class RunNavigationTarget { ACTIVE, PREPARE, RESULT }
+
+data class RunNavigationRequest(
+    val token: Long,
+    val runId: String,
+    val confirmFinish: Boolean,
+    val target: RunNavigationTarget = RunNavigationTarget.ACTIVE,
+    val record: RunRecord? = null,
+)
 
 internal enum class RunNotificationControl { PAUSE, RESUME }
 

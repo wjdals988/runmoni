@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
 import com.runmoni.app.domain.RunGoal
+import com.runmoni.app.domain.RunIntervalPlan
 import com.runmoni.app.tracking.RunNotifications
 import com.runmoni.app.ui.RunmoniRoot
 import com.runmoni.app.ui.rememberAppUpdates
@@ -45,7 +46,8 @@ class MainActivity : ComponentActivity() {
             is UiRequest.PreviewLocation -> model.previewPermissionResult(pending.weather,
                 hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) || hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
             is UiRequest.RunPermission -> {
-                if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(pending.recover, pending.goal)
+                if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
+                    model.beginWithPermission(pending.recover, pending.goal, pending.interval)
                 else model.permissionDenied("러닝 코스를 기록하려면 정밀 위치 권한이 필요합니다. 설정에서 허용해 주세요.")
             }
             UiRequest.ResumeRunPermission -> {
@@ -78,7 +80,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         savedInstanceState?.getBundle("pendingRunPermission")?.let { pending ->
             pendingPermission = UiRequest.RunPermission(pending.getBoolean("recover"),
-                RunGoal.fromStorage(pending.getString("goalKind"), pending.getInt("goalTarget")))
+                RunGoal.fromStorage(pending.getString("goalKind"), pending.getInt("goalTarget")),
+                RunIntervalPlan.fromStorage(pending.getInt("intervalRunSeconds"), pending.getInt("intervalRecoverySeconds"),
+                    pending.getInt("intervalRepeats"), pending.getBoolean("intervalVibration")))
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
@@ -160,17 +164,31 @@ class MainActivity : ComponentActivity() {
                 putBoolean("recover", request.recover)
                 putString("goalKind", request.goal?.kind?.name)
                 putInt("goalTarget", request.goal?.target ?: 0)
+                request.interval?.let {
+                    putInt("intervalRunSeconds", it.runSeconds)
+                    putInt("intervalRecoverySeconds", it.recoverySeconds)
+                    putInt("intervalRepeats", it.repeats)
+                    putBoolean("intervalVibration", it.vibration)
+                }
             })
         }
         super.onSaveInstanceState(outState)
     }
     private fun handleRunNotification(source: Intent?, force: Boolean) {
-        if (source?.action != RunNotifications.OPEN_RUN) return
+        if (source == null) return
+        val action = source.action
+        if (action != RunNotifications.OPEN_RUN && action != RunNotifications.WIDGET_PREPARE &&
+            action != RunNotifications.WIDGET_RESULT) return
         val event = source.getStringExtra(RunNotifications.EVENT)
         if (!force && event != null && event == handledRunNotificationEvent) return
         handledRunNotificationEvent = event
-        model.openRunFromNotification(source.getStringExtra(RunNotifications.RUN_ID).orEmpty(),
-            source.getBooleanExtra(RunNotifications.CONFIRM_FINISH, false))
+        val runId = source.getStringExtra(RunNotifications.RUN_ID).orEmpty()
+        when (action) {
+            RunNotifications.OPEN_RUN -> model.openRunFromNotification(runId,
+                source.getBooleanExtra(RunNotifications.CONFIRM_FINISH, false))
+            RunNotifications.WIDGET_PREPARE -> model.openWidgetPreparation()
+            RunNotifications.WIDGET_RESULT -> model.openWidgetResult(runId)
+        }
         source.removeExtra(RunNotifications.RUN_ID)
         source.removeExtra(RunNotifications.CONFIRM_FINISH)
         source.action = Intent.ACTION_MAIN
@@ -186,7 +204,7 @@ class MainActivity : ComponentActivity() {
             missing += Manifest.permission.POST_NOTIFICATIONS
         }
         if (missing.isNotEmpty()) requestPermissions(request, missing)
-        else if (request is UiRequest.RunPermission) model.beginWithPermission(request.recover, request.goal)
+        else if (request is UiRequest.RunPermission) model.beginWithPermission(request.recover, request.goal, request.interval)
         else model.resumeWithPermission()
     }
     override fun onStart() {
@@ -200,6 +218,7 @@ class MainActivity : ComponentActivity() {
         model.updateRunNotificationAccess(RunNotifications.enabled(this))
         model.updateLocationAccess(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION),
             runCatching { manager.isProviderEnabled(LocationManager.GPS_PROVIDER) }.getOrDefault(false))
+        com.runmoni.app.widget.RunWidgetPublisher.activityVisible(this)
     }
     private fun openSettings(intent: Intent) {
         try { startActivity(intent) }

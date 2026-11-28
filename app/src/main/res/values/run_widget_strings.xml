@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="run_widget_label">런모니 러닝</string>
-    <string name="run_widget_description">진행 중인 러닝의 최근 정보와 일시정지·재개. 종료 전에는 앱에서 확인합니다.</string>
+    <string name="run_widget_description">홈 화면에서 기본 러닝 시작, 일시정지·재개, 저장 상태를 확인해요.</string>
     <string name="run_widget_preview_title">런모니</string>
     <string name="run_widget_preview_distance">— km</string>
     <string name="run_widget_preview_duration">—</string>
@@ -12,6 +12,17 @@
     <string name="run_widget_finish_description">러닝 종료 확인창 열기</string>
     <string name="run_widget_open">러닝 열기</string>
     <string name="run_widget_open_short">열기</string>
+    <string name="run_widget_prepare">앱에서 준비</string>
+    <string name="run_widget_start">기본 러닝 시작</string>
+    <string name="run_widget_starting">러닝 시작 중</string>
+    <string name="run_widget_confirm_title">러닝을 마칠까요?</string>
+    <string name="run_widget_cancel">취소</string>
+    <string name="run_widget_confirm">마치고 저장</string>
+    <string name="run_widget_saving">기기에 저장 중</string>
+    <string name="run_widget_save_failed">저장 확인 필요</string>
+    <string name="run_widget_retry">저장 다시 시도</string>
+    <string name="run_widget_saved">기기에 저장 완료</string>
+    <string name="run_widget_result">결과 보기</string>
     <string name="run_widget_preview_footer"></string>
     <string name="run_widget_duration_label">시간</string>
     <string name="run_widget_brand">runmoni</string>

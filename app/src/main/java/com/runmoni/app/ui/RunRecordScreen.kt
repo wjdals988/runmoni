@@ -1,6 +1,9 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,7 +19,9 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
@@ -60,13 +65,17 @@ internal fun RunRecordScreen(
     persistence: RunPersistenceState = RunPersistenceState(initialized = true),
     operationBusy: Boolean = false,
     onShare: (() -> Unit)? = null,
+    showNewlySavedMotion: Boolean = false,
+    onNewlySavedMotionShown: () -> Unit = {},
+    comparisonRecords: List<RunRecord> = emptyList(),
     onBack: () -> Unit,
 ) {
     val scroll = key(record.id) { rememberScrollState() }
     // Each entity/account owns its page and Dialog windows. Preserve the local
     // record scroll across account changes while disposing all old actions.
     key(record.id, cloud.uid) {
-        RunRecordPageContent(record, actions, cloud, persistence, operationBusy, scroll, onShare, onBack)
+        RunRecordPageContent(record, actions, cloud, persistence, operationBusy, scroll, onShare,
+            showNewlySavedMotion, onNewlySavedMotionShown, comparisonRecords, onBack)
     }
 }
 
@@ -80,6 +89,9 @@ private fun RunRecordPageContent(
     operationBusy: Boolean,
     scroll: ScrollState,
     onShare: (() -> Unit)?,
+    showNewlySavedMotion: Boolean,
+    onNewlySavedMotionShown: () -> Unit,
+    comparisonRecords: List<RunRecord>,
     onBack: () -> Unit,
 ) {
     // A confirmation never carries over to another record or account. Keep the
@@ -145,6 +157,7 @@ private fun RunRecordPageContent(
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
                 BoxWithConstraints(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()) {
                     val separateShare = maxWidth < 360.dp || LocalDensity.current.fontScale >= 1.3f
+                    val gutter = pageGutter(maxWidth)
                     val shareButton: @Composable () -> Unit = {
                         FilledTonalButton(onClick = shareAction, shape = RunmoniShapes.Action,
                             enabled = !operationBusy && actions.canShareRun(record),
@@ -157,27 +170,29 @@ private fun RunRecordPageContent(
                         }
                     }
                     Column {
-                        PageTopBar("러닝 기록", onBack, closeTag = "close_record", compact = true, trailingInset = pageGutter()) {
+                        PageTopBar("러닝 기록", onBack, closeTag = "close_record", compact = true, trailingInset = gutter) {
                             if (onShare != null && !separateShare) shareButton()
                         }
                         if (onShare != null && separateShare) Row(Modifier.fillMaxWidth()
-                            .padding(start = pageGutter(), end = pageGutter(), bottom = 12.dp),
+                            .padding(start = gutter, end = gutter, bottom = 12.dp),
                             horizontalArrangement = Arrangement.End) { shareButton() }
                     }
                 }
             }
             HorizontalDivider(color = RunmoniColors.Line)
-            Box(Modifier.fillMaxWidth().weight(1f).testTag("record_scroll_viewport")) {
+            BoxWithConstraints(Modifier.fillMaxWidth().weight(1f).testTag("record_scroll_viewport")) {
+                val gutter = pageGutter(maxWidth)
                 Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                     .align(Alignment.TopCenter).verticalScroll(scroll).testTag("record_detail_scroll")
-                    .padding(bottom = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                    RunRecordSummary(record, Modifier.padding(horizontal = pageGutter()).padding(top = 12.dp))
+                    .padding(bottom = RunmoniLayout.SectionGap),
+                    verticalArrangement = Arrangement.spacedBy(RunmoniLayout.SectionGap)) {
+                    RunRecordSummary(record, showNewlySavedMotion, onNewlySavedMotionShown,
+                        Modifier.padding(horizontal = gutter).padding(top = RunmoniLayout.ContentGap))
 
                     val fastest = analysis.fastestSplits.firstOrNull()
                     val firstSplit = analysis.splits.firstOrNull()
                     if (analysis.elapsedMillis != null || record.goal != null || firstSplit != null || hasRoute) {
-                        Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()),
+                        Column(Modifier.fillMaxWidth().padding(horizontal = gutter),
                             verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             record.goal?.let { goal ->
                                 val outcome = goal.progress(record.distanceMeters, record.activeDurationMillis)
@@ -214,10 +229,14 @@ private fun RunRecordPageContent(
                         }
                     }
 
-                    RunRecordPaceAnalysis(analysis, selectedKilometer, { selectedKilometer = it },
-                        Modifier.padding(horizontal = pageGutter()).bringIntoViewRequester(analysisAnchor))
+                    RunIntervalResult(record.interval, record.activeDurationMillis, Modifier.padding(horizontal = gutter))
 
-                    Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()).bringIntoViewRequester(mapAnchor),
+                    RunRecordPaceAnalysis(analysis, selectedKilometer, { selectedKilometer = it },
+                        Modifier.padding(horizontal = gutter).bringIntoViewRequester(analysisAnchor))
+
+                    RunRecordComparison(record, comparisonRecords, Modifier.padding(horizontal = gutter))
+
+                    Column(Modifier.fillMaxWidth().padding(horizontal = gutter).bringIntoViewRequester(mapAnchor),
                         verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
                         RecordSectionTitle("러닝 경로", Icons.Outlined.Route)
                         if (hasRoute) {
@@ -243,7 +262,7 @@ private fun RunRecordPageContent(
                     }
 
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
-                        .padding(horizontal = pageGutter(), vertical = 24.dp),
+                        .padding(horizontal = gutter, vertical = RunmoniLayout.SectionGap),
                         verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         RecordSectionTitle("기록 관리", Icons.Outlined.FolderOpen)
                         HorizontalDivider(color = RunmoniColors.Line)
@@ -359,10 +378,14 @@ internal fun RecordSectionTitle(title: String, icon: ImageVector) {
 }
 
 @Composable
-private fun RunRecordSummary(record: RunRecord, modifier: Modifier = Modifier) {
+private fun RunRecordSummary(record: RunRecord, showNewlySavedMotion: Boolean, onNewlySavedMotionShown: () -> Unit,
+    modifier: Modifier = Modifier) {
     val largeText = LocalDensity.current.fontScale >= 1.3f
     RunningMetricPanel(contentPadding = PaddingValues(if (largeText) 16.dp else 20.dp),
-        spacing = if (largeText) 8.dp else 12.dp, modifier = modifier) {
+        spacing = if (largeText) 8.dp else 12.dp, modifier = modifier, accent = {
+            NewlySavedTrackCue(record.id, showNewlySavedMotion, onNewlySavedMotionShown,
+                Modifier.align(Alignment.TopEnd).padding(top = 3.dp, end = 5.dp).size(width = 44.dp, height = 10.dp))
+        }) {
         Text(dateTime(record.startedAtMillis),
             style = if (largeText) MaterialTheme.typography.labelSmall else MaterialTheme.typography.bodyMedium,
             color = RunmoniTrack.Detail, modifier = Modifier.testTag("record_date"))
@@ -375,6 +398,41 @@ private fun RunRecordSummary(record: RunRecord, modifier: Modifier = Modifier) {
             MetricGroup(listOf(UiMetric(if (largeText) "활동 시간" else "러닝 시간", time, tag = "record_active_time"),
                 UiMetric(if (largeText) "평균" else "평균 페이스", pace, "/km", "record_average_pace")),
                 onDark = true, compact = largeText)
+        }
+    }
+}
+
+/** One short decorative mark, outside the panel's metric text area. */
+@Composable
+private fun NewlySavedTrackCue(recordId: String, request: Boolean, onShown: () -> Unit, modifier: Modifier) {
+    val motionAllowed = rememberPageAnimationsEnabled()
+    val progress = remember(recordId) { Animatable(0f) }
+    var consumed by remember(recordId) { mutableStateOf(false) }
+    var visible by remember(recordId) { mutableStateOf(false) }
+    val latestOnShown by rememberUpdatedState(onShown)
+    // Consume before the first frame. The route can change while the mark is drawing.
+    LaunchedEffect(recordId, motionAllowed) {
+        if (request && !consumed) {
+            consumed = true
+            latestOnShown()
+            if (motionAllowed) {
+                visible = true
+                progress.animateTo(1f, tween(160))
+            }
+        }
+        visible = false
+    }
+    if (visible) Canvas(modifier.testTag("newly_saved_track_cue").clearAndSetSemantics { }) {
+        val start = Offset(1.dp.toPx(), size.height * .6f)
+        val turn = Offset(size.width * .76f, size.height * .6f)
+        val drop = Offset(size.width * .82f, size.height * .88f)
+        val end = Offset(size.width - 2.dp.toPx(), size.height * .23f)
+        val segments = listOf(start to turn, turn to drop, drop to end)
+        val alpha = (1f - ((progress.value - .65f) / .35f).coerceIn(0f, 1f))
+        for ((index, segment) in segments.withIndex()) {
+            val fraction = (progress.value * segments.size - index).coerceIn(0f, 1f)
+            if (fraction > 0f) drawLine(RunmoniTrack.Highlight.copy(alpha = alpha), segment.first,
+                segment.first + (segment.second - segment.first) * fraction, 1.5.dp.toPx(), StrokeCap.Round)
         }
     }
 }

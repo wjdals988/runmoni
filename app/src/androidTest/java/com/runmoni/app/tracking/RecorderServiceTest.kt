@@ -23,6 +23,8 @@ import com.runmoni.app.data.LocalWallet
 import com.runmoni.app.domain.ActiveRun
 import com.runmoni.app.domain.RunGoal
 import com.runmoni.app.domain.RunGoalKind
+import com.runmoni.app.domain.RunIntervalPlan
+import com.runmoni.app.domain.RunIntervalStage
 import com.runmoni.app.domain.RunPhase
 import com.runmoni.app.domain.PauseReason
 import kotlinx.coroutines.runBlocking
@@ -122,10 +124,12 @@ class RecorderServiceTest {
             manager.addTestProvider(LocationManager.NETWORK_PROVIDER, false, true, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
             manager.setTestProviderEnabled(LocationManager.NETWORK_PROVIDER, false)
             val goal = RunGoal(RunGoalKind.DISTANCE, 1)
-            scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START, goal = goal) }
+            val interval = RunIntervalPlan(10, 60, 3)
+            scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START, goal = goal, interval = interval) }
             until { app.runs.active.value.phase == RunPhase.RUNNING }
             runId = app.runs.active.value.id
             assertEquals(goal, app.runs.active.value.goal)
+            assertEquals(interval, app.runs.active.value.interval)
             Thread.sleep(500) // begin publishes state just before the service registers listeners.
             assertNull("disabled provider must not show old accuracy", app.runs.active.value.accuracyMeters)
             manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true)
@@ -159,13 +163,18 @@ class RecorderServiceTest {
             until { app.runs.active.value.points.size >= 9 }
             assertEquals("GPS-off gap must not bridge distance", beforePause, app.runs.active.value.distanceMeters, .05)
             assertTrue(app.runs.active.value.points[8].segment > app.runs.active.value.points[7].segment)
+            until { app.runs.active.value.activeDurationMillis >= 10_000 }
+            assertEquals("foreground recorder advances training while Home is visible",
+                RunIntervalStage.RECOVERY, interval.progress(app.runs.active.value.activeDurationMillis).stage)
             RunTrackingService.command(app, RunTrackingService.PAUSE)
             until { app.runs.active.value.phase == RunPhase.PAUSED }
             assertEquals(PauseReason.MANUAL, app.runs.active.value.pauseReason)
             val pausedCount = app.runs.active.value.points.size
+            val pausedTime = app.runs.active.value.activeDurationMillis
             Thread.sleep(1100); emit(126.979)
             Thread.sleep(300)
             assertEquals(pausedCount, app.runs.active.value.points.size)
+            assertEquals("manual pause freezes the interval clock", pausedTime, app.runs.active.value.activeDurationMillis)
             RunTrackingService.command(app, RunTrackingService.RESUME)
             until { app.runs.active.value.phase == RunPhase.RUNNING }
             assertNull(app.runs.active.value.pauseReason)
@@ -178,6 +187,9 @@ class RecorderServiceTest {
             until { app.runs.active.value.phase == RunPhase.IDLE }
             val record = runBlocking { app.runs.record(runId) }!!
             assertEquals(goal, record.goal)
+            assertEquals(interval, record.interval)
+            assertTrue(record.activeDurationMillis > pausedTime)
+            assertEquals(1, interval.progress(record.activeDurationMillis).completedRuns)
             assertEquals(11, record.points.size)
             assertTrue(record.points.last().segment > record.points.first().segment)
             assertTrue(record.finishedAtMillis >= record.startedAtMillis)

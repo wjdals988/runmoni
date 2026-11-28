@@ -30,6 +30,7 @@ interface AppActions {
     fun setLapPaceGuidance(enabled: Boolean) {}
     fun setLapVibration(enabled: Boolean) {}
     fun setRunGoal(goal: RunGoal?) {}
+    fun setRunInterval(interval: RunIntervalPlan?) {}
     fun setPublicLocation(enabled: Boolean)
     fun saveUnifiedProfile(name: String, expectedUid: String) { updateProfile(name) }
     fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { saveUnifiedProfile(name, expectedUid) }

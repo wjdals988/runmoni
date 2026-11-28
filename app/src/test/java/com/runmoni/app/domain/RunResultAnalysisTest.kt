@@ -30,6 +30,7 @@ class RunResultAnalysisTest {
         val result = RunResultAnalysis.from(record)
 
         assertEquals(listOf(RunResultSplit(3, 302)), result.splits)
+        assertEquals(4, result.completedKilometers)
         assertTrue(result.fastestSplits.isEmpty())
         assertNull(result.paceScale)
         assertTrue(result.hasMissingSplits)

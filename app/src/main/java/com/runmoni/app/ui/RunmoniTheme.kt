@@ -101,6 +101,7 @@ internal object RunmoniLayout {
     val NarrowGutter = 20.dp
     val WideGutter = 32.dp
     val PageGap = 32.dp
+    val SectionGap = 24.dp
     val ContentGap = 16.dp
     val RowGap = 16.dp
     val TopInset = 24.dp
@@ -170,7 +171,9 @@ internal fun RunmoniTheme(darkTheme: Boolean?, content: @Composable () -> Unit) 
             window.setBackgroundDrawable(ColorDrawable(scheme.background.toArgb()))
         }
     }
-    CompositionLocalProvider(LocalRunmoniAccents provides if (dark) NightAccents else DayAccents) {
+    val motionEnabled = rememberPageAnimationsEnabled()
+    CompositionLocalProvider(LocalRunmoniAccents provides if (dark) NightAccents else DayAccents,
+        LocalRunmoniMotionEnabled provides motionEnabled) {
     MaterialTheme(
         colorScheme = scheme,
         shapes = Shapes(extraSmall = RunmoniShapes.Status, small = RunmoniShapes.Action,

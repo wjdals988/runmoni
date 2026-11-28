@@ -4,10 +4,12 @@ import android.app.UiModeManager
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
+import android.view.accessibility.AccessibilityManager
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.Canvas
@@ -448,7 +450,8 @@ internal fun RunShareEditorUi(draft: RunShareDraft, tool: Int, bitmap: Bitmap?, 
 private fun rememberIncreasedContrast(): Boolean {
     if (Build.VERSION.SDK_INT < 34) return false
     val context = LocalContext.current
-    val manager = remember(context) { context.getSystemService(UiModeManager::class.java) } ?: return false
+    val highContrastText = if (Build.VERSION.SDK_INT >= 36) rememberHighContrastText() else false
+    val manager = remember(context) { context.getSystemService(UiModeManager::class.java) } ?: return highContrastText
     var increased by remember(manager) { mutableStateOf(manager.contrast > 0f) }
     DisposableEffect(manager) {
         val listener = UiModeManager.ContrastChangeListener { increased = it > 0f }
@@ -456,7 +459,22 @@ private fun rememberIncreasedContrast(): Boolean {
         increased = manager.contrast > 0f
         onDispose { manager.removeContrastChangeListener(listener) }
     }
-    return increased
+    return increased || highContrastText
+}
+
+@RequiresApi(36)
+@Composable
+private fun rememberHighContrastText(): Boolean {
+    val context = LocalContext.current
+    val manager = remember(context) { context.getSystemService(AccessibilityManager::class.java) } ?: return false
+    var enabled by remember(manager) { mutableStateOf(manager.isHighContrastTextEnabled) }
+    DisposableEffect(manager) {
+        val listener = AccessibilityManager.HighContrastTextStateChangeListener { enabled = it }
+        manager.addHighContrastTextStateChangeListener(context.mainExecutor, listener)
+        enabled = manager.isHighContrastTextEnabled
+        onDispose { manager.removeHighContrastTextStateChangeListener(listener) }
+    }
+    return enabled
 }
 
 @Composable

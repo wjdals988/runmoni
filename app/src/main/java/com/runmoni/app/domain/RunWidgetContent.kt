@@ -1,8 +1,22 @@
 package com.runmoni.app.domain
 
 import java.util.Locale
+import java.util.UUID
 
 internal enum class RunWidgetControl { PAUSE, RESUME }
+
+internal enum class RunWidgetOperation { START, PAUSE, RESUME, ASK_FINISH, CANCEL_FINISH, FINISH, RETRY }
+internal data class RunWidgetTap(val operation: RunWidgetOperation, val runId: String, val token: String)
+internal data class RunWidgetActions(
+    val start: String? = null,
+    val live: String? = null,
+    val confirmation: String? = null,
+    val retry: String? = null,
+    val savedRunId: String? = null,
+    val starting: Boolean = false,
+    val saving: Boolean = false,
+    val needsApp: Boolean = false,
+)
 
 /** Only the last widget metrics. No locations, route, profile, or credentials. */
 internal data class RunWidgetSnapshot(
@@ -82,8 +96,18 @@ internal data class RunWidgetContent(
 internal class RunWidgetSession(private val runningFreshnessMillis: Long = 20_000) {
     private var liveRunId: String? = null
     private var heartbeatElapsed = 0L
+    private var operationState: List<Any?>? = null
+    private var controlToken = UUID.randomUUID().toString()
+    private var confirmationToken: String? = null
+    private var confirmationAt = 0L
+    private var finishRequestedId: String? = null
 
-    @Synchronized fun processStarted() { liveRunId = null; heartbeatElapsed = 0 }
+    @Synchronized fun processStarted() {
+        liveRunId = null
+        heartbeatElapsed = 0
+        finishRequestedId = null
+        renewControls()
+    }
 
     @Synchronized fun observe(snapshot: RunWidgetSnapshot, live: Boolean, elapsedMillis: Long) {
         if (live && elapsedMillis >= 0 && snapshot.runId.isNotBlank() && snapshot.phase in setOf(RunPhase.RUNNING, RunPhase.PAUSED)) {
@@ -92,10 +116,16 @@ internal class RunWidgetSession(private val runningFreshnessMillis: Long = 20_00
         } else if (snapshot.runId == liveRunId || snapshot.phase == RunPhase.IDLE) {
             liveRunId = null
         }
+        val state = listOf(liveRunId, snapshot.phase, snapshot.automaticPause, snapshot.blocked, snapshot.finishing)
+        if (state != operationState) { operationState = state; renewControls() }
     }
 
     @Synchronized fun stopped(expectedRunId: String? = null) {
-        if (expectedRunId == null || expectedRunId == liveRunId) liveRunId = null
+        if (expectedRunId == null || expectedRunId == liveRunId) {
+            liveRunId = null
+            finishRequestedId = null
+            renewControls()
+        }
     }
 
     @Synchronized fun isLive(snapshot: RunWidgetSnapshot?, elapsedMillis: Long): Boolean {
@@ -111,5 +141,50 @@ internal class RunWidgetSession(private val runningFreshnessMillis: Long = 20_00
         // The Service performs the second check against its actual current run,
         // foreground state and persistence transaction, after delivery.
         return RunWidgetContent.from(snapshot, live = true).control == control
+    }
+
+    @Synchronized fun actions(snapshot: RunWidgetSnapshot?, elapsed: Long, retryable: Boolean): RunWidgetActions {
+        if (!isLive(snapshot, elapsed)) return RunWidgetActions()
+        val canControl = RunWidgetContent.from(snapshot, live = true).canFinish
+        val widgetFinish = finishRequestedId == snapshot?.runId
+        return RunWidgetActions(live = controlToken.takeIf { canControl && !widgetFinish },
+            confirmation = confirmationToken.takeIf { canControl && elapsed - confirmationAt in 0..15_000 },
+            retry = controlToken.takeIf { widgetFinish && retryable }, saving = widgetFinish && !retryable)
+    }
+
+    @Synchronized fun accept(tap: RunWidgetTap, snapshot: RunWidgetSnapshot?, elapsed: Long, retryable: Boolean): Boolean {
+        if (tap.runId.isBlank() || tap.runId != snapshot?.runId) return false
+        val current = actions(snapshot, elapsed, retryable)
+        return when (tap.operation) {
+            RunWidgetOperation.ASK_FINISH -> if (current.live != tap.token) false else {
+                if (current.confirmation == null) {
+                    confirmationToken = UUID.randomUUID().toString()
+                    confirmationAt = elapsed
+                }
+                true
+            }
+            RunWidgetOperation.CANCEL_FINISH, RunWidgetOperation.FINISH -> if (current.confirmation != tap.token) false else {
+                renewControls()
+                if (tap.operation == RunWidgetOperation.FINISH) finishRequestedId = tap.runId
+                true
+            }
+            RunWidgetOperation.PAUSE, RunWidgetOperation.RESUME -> {
+                val control = if (tap.operation == RunWidgetOperation.PAUSE) RunWidgetControl.PAUSE else RunWidgetControl.RESUME
+                current.live == tap.token && allows(tap.runId, snapshot, control)
+            }
+            RunWidgetOperation.RETRY -> if (current.retry != tap.token) false else { renewControls(); true }
+            RunWidgetOperation.START -> false
+        }
+    }
+
+    @Synchronized fun finishResolved(runId: String): Boolean {
+        if (finishRequestedId != runId) return false
+        finishRequestedId = null
+        return true
+    }
+
+    private fun renewControls() {
+        controlToken = UUID.randomUUID().toString()
+        confirmationToken = null
     }
 }

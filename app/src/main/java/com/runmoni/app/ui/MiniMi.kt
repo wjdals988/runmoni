@@ -1,6 +1,5 @@
 package com.runmoni.app.ui
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
@@ -13,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -50,50 +50,54 @@ internal fun MiniMi(
 ) {
     val context = LocalContext.current.applicationContext
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val motionAllowed = rememberPageAnimationsEnabled()
+    val loopEnabled = running && motionAllowed && frameOverride == null
+    val fixedFrame = if (running && frameOverride != null) Math.floorMod(frameOverride, ApprovedAvatarRenderer.FRAMES) else 0
     var attempt by remember(context, avatar, running) { mutableIntStateOf(0) }
-    // Asset decoding/cropping must not block the first home screen on the UI thread.
-    // Publish the genuine first frame, then the complete clip. A changed selection
-    // gets its own state, so an old outfit is never presented as a new one.
-    // Keep loading state AND its subcomposition in the same request lifetime.
-    // Replacing only the State delegate can leave a new loading child unplaced.
-    // Immutable mask loading does not invalidate this request. Its result is
-    // published below after returning to the UI context; worker I/O never emits
-    // a second global generation that cancels/restarts its own composition.
+    // The first pose has its own request lifetime. A change in motion settings
+    // can cancel the additional frames without removing the visible still.
     key(context, avatar, running, attempt, frameLoader) {
-        var frame by remember { mutableIntStateOf(0) }
-        val prepared by produceState(initialValue = MiniMiFrames()) {
-            try {
-                suspend fun load(index: Int) = withContext(Dispatchers.Default) {
+        suspend fun loadFrames(indices: List<Int>): MiniMiFrames = try {
+            withContext(Dispatchers.Default) {
+                MiniMiFrames(indices.associateWith { index ->
                     ensureActive()
                     (frameLoader?.invoke(index, running) ?: avatarBitmap(context, avatar, index, running)).asImageBitmap()
-                }
-                val first = load(0)
-                value = MiniMiFrames(listOf(first))
-                if (running) {
-                    val rest = (1 until ApprovedAvatarRenderer.FRAMES).map { load(it) }
-                    value = MiniMiFrames(listOf(first) + rest)
-                }
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (_: Exception) {
-                // An avatar read failure must not take down recording or the rest of the UI.
-                value = MiniMiFrames(failed = true)
+                })
+            }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            MiniMiFrames(failed = true)
+        }
+
+        val still by produceState(MiniMiFrames()) { value = loadFrames(listOf(0)) }
+        val additionalIndices = remember(loopEnabled, fixedFrame) {
+            when {
+                loopEnabled -> (1 until ApprovedAvatarRenderer.FRAMES).toList()
+                fixedFrame != 0 -> listOf(fixedFrame)
+                else -> emptyList()
             }
         }
-        val frames = prepared.frames
-        val playing = running && frames.size == ApprovedAvatarRenderer.FRAMES
-        LaunchedEffect(playing, lifecycle, frameOverride) {
+        val additional = if (still.frames.isNotEmpty() && additionalIndices.isNotEmpty()) key(additionalIndices) {
+            val prepared by produceState(MiniMiFrames()) { value = loadFrames(additionalIndices) }
+            prepared
+        } else MiniMiFrames()
+        val failed = still.failed || additional.failed
+        var frame by remember { mutableIntStateOf(0) }
+        val playing = loopEnabled && !failed && additional.frames.size == ApprovedAvatarRenderer.FRAMES - 1
+        LaunchedEffect(playing, lifecycle) {
             frame = 0
-            if (playing && frameOverride == null) lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            if (playing) lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val started = android.os.SystemClock.uptimeMillis()
                 while (isActive) {
-                    frame = if (ValueAnimator.areAnimatorsEnabled()) ApprovedAvatarRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started) else 0
+                    frame = ApprovedAvatarRenderer.frameAt(android.os.SystemClock.uptimeMillis() - started)
                     delay(ApprovedAvatarRenderer.MILLIS.toLong())
                 }
             }
         }
-        val renderedFrame = if (frames.isEmpty()) 0 else Math.floorMod(frameOverride ?: frame, frames.size)
-        val image = frames.getOrNull(renderedFrame)
+        val requestedFrame = if (playing) frame else fixedFrame
+        val renderedFrame = requestedFrame.takeIf(additional.frames::containsKey) ?: 0
+        val image = if (failed) null else additional.frames[renderedFrame] ?: still.frames[0]
         val accessible = if (description == null) Modifier.clearAndSetSemantics { } else Modifier.semantics { contentDescription = description }
         BoxWithConstraints(modifier, contentAlignment = Alignment.Center) {
             val showStatusText = maxWidth >= 100.dp && maxHeight >= 112.dp
@@ -106,7 +110,7 @@ internal fun MiniMi(
                         dstSize = IntSize(width, height), filterQuality = FilterQuality.None)
                     onFrameRendered?.invoke(renderedFrame)
                 }
-            } else if (prepared.failed) {
+            } else if (failed) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     if (showStatusText) {
                         Text("불러오기 실패", style = MaterialTheme.typography.labelSmall)
@@ -128,7 +132,7 @@ internal fun MiniMi(
 }
 
 private data class MiniMiFrames(
-    val frames: List<androidx.compose.ui.graphics.ImageBitmap> = emptyList(),
+    val frames: Map<Int, ImageBitmap> = emptyMap(),
     val failed: Boolean = false,
 )
 

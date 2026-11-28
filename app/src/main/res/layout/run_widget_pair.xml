@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/run_widget_root" android:forceDarkAllowed="false"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout android:id="@+id/run_widget_panel" android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" android:orientation="vertical" android:padding="8dp"
+        android:background="@drawable/run_widget_surface">
+        <TextView android:id="@+id/run_widget_title" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textSize="14sp" android:textColor="@color/run_widget_text" android:includeFontPadding="true"
+            android:fallbackLineSpacing="true" />
+        <TextView android:id="@+id/run_widget_confirm_metrics" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" android:textSize="14sp" android:textColor="@color/run_widget_muted"
+            android:includeFontPadding="true" android:fallbackLineSpacing="true" android:visibility="gone" />
+        <LinearLayout android:id="@+id/run_widget_actions" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp">
+            <Button android:id="@+id/run_widget_control" style="@style/RunWidgetAction"
+                android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"
+                android:singleLine="false" android:maxLines="2"
+                android:background="@drawable/run_widget_secondary_action" android:textColor="@color/run_widget_text" />
+            <Button android:id="@+id/run_widget_finish" style="@style/RunWidgetAction"
+                android:layout_width="0dp" android:layout_weight="2" android:layout_height="wrap_content"
+                android:layout_marginStart="8dp" android:singleLine="false" android:maxLines="2" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

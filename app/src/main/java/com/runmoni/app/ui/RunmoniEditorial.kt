@@ -87,6 +87,7 @@ internal fun RunningMetricPanel(
     contentPadding: PaddingValues,
     spacing: Dp,
     modifier: Modifier = Modifier,
+    accent: @Composable BoxScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Box(modifier.fillMaxWidth().clip(RunmoniShapes.Surface).background(RunmoniTrack.Board)) {
@@ -104,6 +105,7 @@ internal fun RunningMetricPanel(
                 drawPath(path, RunmoniTrack.Detail.copy(alpha = .2f), style = stroke)
             }
         }
+        accent()
         CompositionLocalProvider(LocalContentColor provides RunmoniTrack.OnBoard) {
             Column(Modifier.fillMaxWidth().padding(contentPadding),
                 verticalArrangement = Arrangement.spacedBy(spacing), content = content)

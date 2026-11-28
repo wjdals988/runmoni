@@ -33,9 +33,12 @@ import androidx.compose.ui.unit.sp
 internal data class UiMetric(val label: String, val value: String, val unit: String = "", val tag: String = "")
 
 @Composable
-internal fun pageGutter() = when {
-    LocalConfiguration.current.screenWidthDp >= 600 -> RunmoniLayout.WideGutter
-    LocalConfiguration.current.screenWidthDp < 360 -> RunmoniLayout.NarrowGutter
+internal fun pageGutter() = pageGutter(LocalConfiguration.current.screenWidthDp.dp)
+
+/** Use the available window width after insets when a layout owns its constraints. */
+internal fun pageGutter(width: Dp) = when {
+    width >= 600.dp -> RunmoniLayout.WideGutter
+    width < 360.dp -> RunmoniLayout.NarrowGutter
     else -> RunmoniLayout.Gutter
 }
 

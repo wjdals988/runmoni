@@ -21,6 +21,10 @@ data class StoredRun(
     val splitsJson: String = "[]",
     val goalKind: String? = null,
     @ColumnInfo(defaultValue = "0") val goalTarget: Int = 0,
+    @ColumnInfo(defaultValue = "0") val intervalRunSeconds: Int = 0,
+    @ColumnInfo(defaultValue = "0") val intervalRecoverySeconds: Int = 0,
+    @ColumnInfo(defaultValue = "0") val intervalRepeats: Int = 0,
+    @ColumnInfo(defaultValue = "0") val intervalVibration: Boolean = false,
 )
 @Entity(tableName = "track_points", primaryKeys = ["runId", "sequence"], foreignKeys = [ForeignKey(entity = StoredRun::class, parentColumns = ["id"], childColumns = ["runId"], onDelete = ForeignKey.CASCADE)])
 data class StoredPoint(val runId: String, val sequence: Int, val latitude: Double, val longitude: Double, val accuracyMeters: Float, val recordedAtMillis: Long, val segment: Int)
@@ -58,7 +62,7 @@ interface RunDao {
     }
 }
 
-@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 3, exportSchema = false)
+@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 4, exportSchema = false)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runs(): RunDao
     abstract fun cloudBackups(): CloudBackupDao
@@ -82,7 +86,15 @@ abstract class RunDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE runs ADD COLUMN goalTarget INTEGER NOT NULL DEFAULT 0")
             }
         }
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE runs ADD COLUMN intervalRunSeconds INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE runs ADD COLUMN intervalRecoverySeconds INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE runs ADD COLUMN intervalRepeats INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE runs ADD COLUMN intervalVibration INTEGER NOT NULL DEFAULT 0")
+            }
+        }
         fun create(context: Context) = Room.databaseBuilder(context, RunDatabase::class.java, "runmoni-runs.db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3).setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
     }
 }

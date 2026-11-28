@@ -39,6 +39,7 @@ import com.runmoni.app.domain.RunPaceScale
 import com.runmoni.app.domain.RunResultAnalysis
 import com.runmoni.app.domain.RunResultSplit
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 private const val SplitsPerPage = 6
 
@@ -59,7 +60,8 @@ internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilomete
             val selected = analysis.splits.firstOrNull { it.kilometer == selectedKilometer }
             val scale = analysis.paceScale
             if (scale != null) {
-                RunPaceChart(analysis.splits, scale, analysis.averagePaceSeconds, selected?.kilometer ?: 0, onSelect)
+                RunPaceChart(analysis.splits, analysis.completedKilometers, scale, analysis.averagePaceSeconds,
+                    selected?.kilometer ?: 0, onSelect)
             }
             if (selected != null) {
                 val averageComparison = analysis.averagePaceSeconds?.let {
@@ -85,16 +87,14 @@ internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilomete
 }
 
 @Composable
-private fun RunPaceChart(splits: List<RunResultSplit>, scale: RunPaceScale, average: Long?, selectedKilometer: Int,
-    onSelect: (Int) -> Unit) {
+private fun RunPaceChart(splits: List<RunResultSplit>, completedKilometers: Int, scale: RunPaceScale,
+    average: Long?, selectedKilometer: Int, onSelect: (Int) -> Unit) {
     val axisStyle = MaterialTheme.typography.labelSmall.copy(fontFeatureSettings = "tnum")
     val muted = RunmoniColors.Muted
     val ink = RunmoniColors.Ink
     val primary = RunmoniColors.Primary
     val line = RunmoniColors.Line
     val paper = RunmoniColors.Paper
-    val firstKilometer = splits.first().kilometer
-    val lastKilometer = splits.last().kilometer
     val lastSelection by rememberUpdatedState(onSelect)
     val density = LocalDensity.current
     val measure = rememberTextMeasurer()
@@ -119,19 +119,22 @@ private fun RunPaceChart(splits: List<RunResultSplit>, scale: RunPaceScale, aver
                         contentDescription = "1km 구간 페이스 차트. 구간 표에서도 값을 선택할 수 있어요."
                         stateDescription = if (selectedKilometer > 0) "${selectedKilometer}번 구간 선택" else "선택한 구간 없음"
                     }
-                    .pointerInput(splits) {
+                    .pointerInput(splits, completedKilometers) {
                         detectTapGestures { touch ->
                             if (size.width > 0) {
-                                val target = firstKilometer + (touch.x / size.width).coerceIn(0f, 1f).toDouble() *
-                                    (lastKilometer - firstKilometer)
-                                splits.minByOrNull { abs(it.kilometer - target) }?.let { lastSelection(it.kilometer) }
+                                val step = size.width.toDouble() / (completedKilometers - 1)
+                                val kilometer = (touch.x / step).roundToInt() + 1
+                                val offset = abs(touch.x - (kilometer - 1) * step)
+                                if (offset <= 24.dp.toPx() && splits.binarySearchBy(kilometer) { it.kilometer } >= 0) {
+                                    lastSelection(kilometer)
+                                }
                             }
                         }
                     }) {
                     val paceRange = (scale.slowestSeconds - scale.fastestSeconds).toDouble()
                     fun y(seconds: Long): Float = (((seconds - scale.fastestSeconds) / paceRange) * size.height).toFloat()
-                    fun x(kilometer: Int): Float = ((kilometer - firstKilometer).toDouble() /
-                        (lastKilometer - firstKilometer) * size.width).toFloat()
+                    fun x(kilometer: Int): Float = ((kilometer - 1).toDouble() /
+                        (completedKilometers - 1) * size.width).toFloat()
                     scale.ticksSeconds.forEach { seconds ->
                         val y = y(seconds)
                         drawLine(line, Offset(0f, y), Offset(size.width, y), strokeWidth = 1.dp.toPx())
@@ -150,9 +153,10 @@ private fun RunPaceChart(splits: List<RunResultSplit>, scale: RunPaceScale, aver
                     }
                 }
             }
-            Row(Modifier.fillMaxWidth().padding(start = tickWidth + 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(firstKilometer.toString(), style = axisStyle, color = muted)
-                Text(lastKilometer.toString(), style = axisStyle, color = muted)
+            Row(Modifier.fillMaxWidth().padding(start = tickWidth + 13.dp, end = 5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("1", style = axisStyle, color = muted)
+                Text(completedKilometers.toString(), style = axisStyle, color = muted)
             }
             Text("구간 순서 (km)", style = axisStyle, color = muted)
             if (average != null) Text("점선 · 전체 평균 ${formatResultPace(average)} /km", style = axisStyle, color = muted)

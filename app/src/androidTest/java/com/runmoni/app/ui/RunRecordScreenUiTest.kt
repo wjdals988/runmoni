@@ -109,6 +109,36 @@ class RunRecordScreenUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("record_elapsed").performScrollTo().assertTextEquals("전체 경과 21:40")
     }
 
+    @Test fun missingKilometerDoesNotSelectAnotherPointAndOnlyPastRunsCanBeCompared() {
+        val record = recordPageFixture().copy(interrupted = false, distanceMeters = 5_020.0,
+            splits = listOf(KmSplit(1, 361_000), KmSplit(5, 363_000)))
+        val earlier = record.copy(id = "earlier", startedAtMillis = record.startedAtMillis - 86_400_000,
+            finishedAtMillis = record.finishedAtMillis - 86_400_000, distanceMeters = 4_000.0, splits = emptyList())
+        val newer = record.copy(id = "newer", startedAtMillis = record.startedAtMillis + 86_400_000,
+            finishedAtMillis = record.finishedAtMillis + 86_400_000)
+        val records = listOf(newer, record, earlier)
+        val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = records)))
+        compose.setContent {
+            OfflineRecordPageFixture { ViewportBox(Viewport(320, 2f)) {
+                Box(Modifier.height(520.dp)) {
+                    RunRecordScreen(record, actions, comparisonRecords = records, onBack = {})
+                }
+            } }
+        }
+        compose.onNodeWithTag("record_view_splits").performScrollTo().performClick()
+        val chart = compose.onNodeWithTag("record_pace_plot")
+        chart.performScrollTo().performTouchInput { click(Offset(width * 0.75f, center.y)) }
+        compose.onNodeWithTag("record_split_1").assertIsSelected()
+        compose.onNodeWithTag("record_split_5").assertIsNotSelected()
+        compose.onNodeWithTag("record_compare_pick").performScrollTo().performClick()
+        compose.onNodeWithTag("record_compare_newer").assertDoesNotExist()
+        compose.onNodeWithTag("record_compare_earlier").performClick()
+        compose.onNodeWithTag("record_comparison").performScrollTo()
+        compose.onNode(hasText("5.02 km") and hasAnyAncestor(hasTestTag("record_comparison"))).assertExists()
+        compose.onNode(hasText("4.00 km") and hasAnyAncestor(hasTestTag("record_comparison"))).assertExists()
+        capture("past-run-comparison-320-font2-fixture")
+    }
+
     @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {
         val record = recordPageFixture().copy(points = emptyList())
         val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))

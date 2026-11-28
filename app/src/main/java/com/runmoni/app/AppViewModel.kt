@@ -32,7 +32,11 @@ import java.util.Locale
 import java.util.TimeZone
 
 sealed interface UiRequest {
-    data class RunPermission(val recover: Boolean, val goal: RunGoal? = null) : UiRequest
+    data class RunPermission(
+        val recover: Boolean,
+        val goal: RunGoal? = null,
+        val interval: RunIntervalPlan? = null,
+    ) : UiRequest
     data class PreviewLocation(val weather: Boolean) : UiRequest
     data object ResumeRunPermission : UiRequest
     data object RunNotificationSettings : UiRequest
@@ -119,6 +123,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
                 val startedNewRun = previous.activeRun.phase == RunPhase.IDLE && active.phase == RunPhase.RUNNING
                 previous.copy(activeRun = active,
                     plannedRunGoal = previous.plannedRunGoal.takeUnless { startedNewRun && it == active.goal },
+                    plannedRunInterval = previous.plannedRunInterval.takeUnless { startedNewRun && it == active.interval },
                     sharingConsentRunId = previous.sharingConsentRunId?.takeIf { id ->
                         id == RunnerSharingPreferenceStore.NEXT_RUN || id == active.id && active.phase == RunPhase.RUNNING
                     },
@@ -254,21 +259,47 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         val request = RunNavigationRequest(++runNavigationSerial, runId, confirmFinish)
         mutableState.update { it.copy(runNavigationRequest = request) }
     }
+    fun openWidgetPreparation() {
+        val request = RunNavigationRequest(++runNavigationSerial, "", false, RunNavigationTarget.PREPARE)
+        mutableState.update { it.copy(runNavigationRequest = request) }
+    }
+    fun openWidgetResult(runId: String) {
+        if (runId.isBlank()) return
+        val token = ++runNavigationSerial
+        mutableState.update { it.copy(runNavigationRequest = null) }
+        viewModelScope.launch {
+            val record = try {
+                app.runs.record(runId)?.takeIf { it.finishedAtMillis > 0 }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                null
+            }
+            if (token != runNavigationSerial) return@launch
+            if (record != null) {
+                val request = RunNavigationRequest(token, runId, false, RunNavigationTarget.RESULT, record)
+                mutableState.update { it.copy(runNavigationRequest = request) }
+            } else permissionDenied("이 기기에서 저장된 러닝을 찾을 수 없어요.")
+        }
+    }
     override fun consumeRunNavigation(token: Long) {
         mutableState.update { if (it.runNavigationRequest?.token == token) it.copy(runNavigationRequest = null) else it }
     }
     override fun openRunNotificationSettings() { requests.tryEmit(UiRequest.RunNotificationSettings) }
     override fun addRunWidget() { requests.tryEmit(UiRequest.PinRunWidget) }
-    private fun commandRun(action: String, expectedRunId: String? = null, goal: RunGoal? = null) {
-        if (!RunTrackingService.command(app, action, expectedRunId, goal)) permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
+    private fun commandRun(action: String, expectedRunId: String? = null, goal: RunGoal? = null, interval: RunIntervalPlan? = null) {
+        if (!RunTrackingService.command(app, action, expectedRunId, goal, interval))
+            permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
     }
-    fun beginWithPermission(recover: Boolean, goal: RunGoal? = null) {
-        commandRun(if (recover) RunTrackingService.RECOVER else RunTrackingService.START, goal = goal.takeUnless { recover })
+    fun beginWithPermission(recover: Boolean, goal: RunGoal? = null, interval: RunIntervalPlan? = null) {
+        commandRun(if (recover) RunTrackingService.RECOVER else RunTrackingService.START,
+            goal = goal.takeUnless { recover }, interval = interval.takeUnless { recover })
     }
     fun resumeWithPermission() { commandRun(RunTrackingService.RESUME) }
     override fun startRun() {
         val current = state.value
-        if (!current.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(false, current.plannedRunGoal))
+        if (!current.runPersistence.blocksNewRun)
+            requests.tryEmit(UiRequest.RunPermission(false, current.plannedRunGoal, current.plannedRunInterval))
     }
     override fun recoverRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(true)) }
     override fun openLocationSettings() { requests.tryEmit(UiRequest.LocationSettings) }
@@ -303,6 +334,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     override fun setRunGoal(goal: RunGoal?) {
         mutableState.update { if (it.activeRun.phase == RunPhase.IDLE) it.copy(plannedRunGoal = goal) else it }
+    }
+    override fun setRunInterval(interval: RunIntervalPlan?) {
+        mutableState.update { if (it.activeRun.phase == RunPhase.IDLE) it.copy(plannedRunInterval = interval) else it }
     }
     override fun setPublicLocation(enabled: Boolean) {
         if (!enabled) {

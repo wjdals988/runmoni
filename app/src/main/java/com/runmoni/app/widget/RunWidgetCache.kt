@@ -31,8 +31,19 @@ internal class RunWidgetCache(private val preferences: SharedPreferences) {
         preferences.edit().putString(KEY, encode(snapshot)).apply()
     }
 
+    fun startToken(): String? = preferences.getString(START_TOKEN, null)
+    fun writeStartToken(token: String?) { preferences.edit().putString(START_TOKEN, token).apply() }
+    fun consumeStart(token: String): Boolean = startToken() == token && preferences.edit().remove(START_TOKEN).commit()
+    fun savedRunId(): String? = preferences.getString(SAVED_RUN_ID, null)
+    fun saveReceipt(runId: String?) {
+        val edit = preferences.edit().putString(SAVED_RUN_ID, runId)
+        if (runId == null) edit.apply() else edit.commit()
+    }
+
     companion object {
         internal const val KEY = "metricsV1"
+        private const val START_TOKEN = "idleStart"
+        private const val SAVED_RUN_ID = "lastWidgetFinish"
         fun from(context: Context) = RunWidgetCache(context.applicationContext.getSharedPreferences("runmoni_widget", Context.MODE_PRIVATE))
 
         internal fun encode(snapshot: RunWidgetSnapshot): String = JSONObject()

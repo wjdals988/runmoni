@@ -10,6 +10,8 @@ import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPhase
 import com.runmoni.app.domain.RunGoal
 import com.runmoni.app.domain.RunGoalKind
+import com.runmoni.app.domain.RunIntervalPlan
+import com.runmoni.app.domain.RunIntervalStage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -51,6 +53,53 @@ class RunReliabilityTest {
             assertEquals(goal, next.lastFinished.value?.goal)
             next.begin()
             assertNull(next.active.value.goal)
+        } finally { recovered?.close(); first.close(); db.close() }
+    }
+
+    @Test fun timedIntervalsSurvivePauseRecoveryAndFinish() = runBlocking {
+        val db = database()
+        val first = RunRepository(db, credit = { _, _ -> })
+        var recovered: RunRepository? = null
+        try {
+            ready(first)
+            val plan = RunIntervalPlan(10, 60, 3, vibration = true)
+            first.begin(interval = plan)
+            val id = first.active.value.id
+            assertEquals(plan, first.active.value.interval)
+            assertEquals(0L, first.checkpointedIntervalMillis(id))
+            first.close()
+
+            // Seed an already-written active clock at a known position without a 10s wall-clock wait.
+            db.runs().save(db.runs().get(id)!!.copy(activeDurationMillis = 12_500))
+            val next = RunRepository(db, credit = { _, _ -> })
+            recovered = next
+            ready(next)
+            assertEquals(RunPhase.RECOVERY, next.active.value.phase)
+            assertEquals(plan, next.active.value.interval)
+            assertEquals(12_500L, next.active.value.activeDurationMillis)
+            next.begin(recover = true, interval = RunIntervalPlan.Default)
+            assertEquals(plan, next.active.value.interval)
+            assertEquals(12_500L, next.checkpointedIntervalMillis(id))
+            next.pause(expectedRunId = id)
+            val paused = next.active.value.activeDurationMillis
+            delay(30)
+            next.tick()
+            assertEquals(paused, next.active.value.activeDurationMillis)
+            next.resume(expectedRunId = id)
+            delay(30)
+            next.tick()
+            val resumed = next.active.value.activeDurationMillis
+            assertTrue(resumed > paused)
+            assertEquals(resumed, next.checkpointedIntervalMillis(id))
+            assertEquals(RunIntervalStage.RECOVERY, plan.progress(resumed).stage)
+
+            next.finish(id)
+            val record = next.record(id)!!
+            assertEquals(plan, record.interval)
+            assertEquals(1, plan.progress(record.activeDurationMillis).completedRuns)
+            assertNull(next.checkpointedIntervalMillis(id))
+            next.begin()
+            assertNull(next.active.value.interval)
         } finally { recovered?.close(); first.close(); db.close() }
     }
 

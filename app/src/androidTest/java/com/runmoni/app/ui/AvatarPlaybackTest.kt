@@ -166,12 +166,16 @@ class AvatarPlaybackTest {
     @Test fun systemDisabledAnimationsFreezeAndCanResume() = withAnimators {
         val latestRenderedFrame = AtomicInteger(-1)
         compose.setContent { RunmoniTheme { MiniMi(avatar,Modifier.size(144.dp,168.dp).testTag("playback_avatar"),running=true, onFrameRendered = { latestRenderedFrame.set(it) }) } }
+        // Wait for a drawn nonzero frame before opening the four-second pixel window.
+        // Preparation and actual playback remain separately bounded.
+        compose.waitUntil(timeoutMillis = 30_000) { latestRenderedFrame.get() > 0 }
         assertMoving("playback_avatar")
         animatorScale(0f)
         compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5000) { latestRenderedFrame.get() == 0 }
         assertFrozen("playback_avatar")
         animatorScale(1f)
+        compose.waitUntil(timeoutMillis = 30_000) { latestRenderedFrame.get() > 0 }
         assertMoving("playback_avatar")
     }
 }
