@@ -28,6 +28,8 @@ data class RunRecord(
     val mileage: Int = 0,
     val goal: RunGoal? = null,
     val interval: RunIntervalPlan? = null,
+    val lapAnchors: List<RunLapAnchor> = emptyList(),
+    val reflection: RunReflection? = null,
 )
 data class ActiveRun(
     val id: String = "",

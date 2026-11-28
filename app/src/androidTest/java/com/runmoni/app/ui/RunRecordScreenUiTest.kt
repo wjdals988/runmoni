@@ -136,7 +136,34 @@ class RunRecordScreenUiTest : RunmoniDesignTestBase() {
         compose.onNodeWithTag("record_comparison").performScrollTo()
         compose.onNode(hasText("5.02 km") and hasAnyAncestor(hasTestTag("record_comparison"))).assertExists()
         compose.onNode(hasText("4.00 km") and hasAnyAncestor(hasTestTag("record_comparison"))).assertExists()
+        compose.onNodeWithText("1.02 km 더 달림").assertExists()
+        compose.onNodeWithText("러닝 시간 같음").assertExists()
+        compose.onNodeWithText("평균 페이스 1분 1초 빠름").assertExists()
         capture("past-run-comparison-320-font2-fixture")
+    }
+
+    @Test fun onlyARecordedLapBoundaryCanOpenASelectionInTheRoute() {
+        val point = TrackPoint(0, 37.5665, 126.97, 4f, 1_730_000_000_000L)
+        val points = List(5) { index -> point.copy(sequence = index, longitude = point.longitude + index * .002,
+            recordedAtMillis = point.recordedAtMillis + index * 40_000L) }
+        val record = recordPageFixture().copy(interrupted = false, points = points,
+            splits = listOf(KmSplit(1, 310_000), KmSplit(2, 400_000)),
+            lapAnchors = listOf(RunLapAnchor(0, 0, 0, 0.0), RunLapAnchor(1, 2, 3, .5)))
+        val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
+        compose.setContent {
+            OfflineRecordPageFixture { RunRecordScreen(record, actions, onBack = {}) }
+        }
+        compose.onNodeWithTag("record_view_splits").performScrollTo().performClick()
+        compose.onNodeWithTag("record_split_2").performScrollTo().performClick()
+        compose.onNodeWithTag("record_view_lap_on_map").assertDoesNotExist()
+        compose.onNodeWithTag("record_map").assertDoesNotExist()
+        compose.onNodeWithTag("record_split_1").performScrollTo().performClick()
+        compose.onNodeWithTag("record_view_lap_on_map").performScrollTo().assertHeightIsAtLeast(48.dp).performClick()
+        compose.onNodeWithTag("record_map_selected_lap").assertTextEquals("0–1 km 강조 중")
+        compose.onNodeWithTag("record_map").performScrollTo().assertIsDisplayed()
+        capture("run-lap-highlight-fixture")
+        compose.onNodeWithTag("record_map_clear_lap").performScrollTo().performClick()
+        compose.onNodeWithTag("record_map_selected_lap").assertDoesNotExist()
     }
 
     @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {

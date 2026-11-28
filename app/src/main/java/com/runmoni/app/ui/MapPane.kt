@@ -18,6 +18,7 @@ internal fun MapPane(
     fitRoute: Boolean = false, interactiveMap: Boolean = false, followCenter: RouteMapCenter? = null,
     onBoundsChanged: ((RouteMapBounds) -> Unit)? = null,
     recenterRequest: MapRecenterRequest? = null,
+    highlightedRoute: RouteGeometry? = null,
 ) {
     val validRunners = remember(runners) { runners.filter { it.hasValidCoordinates() } }
     val hasRoute = remember(points) { RouteGeometry.from(points).points.isNotEmpty() }
@@ -29,7 +30,7 @@ internal fun MapPane(
     if (LocalMapTileSource.current != null ||
         (!interactiveMap && !hasRoute && validRunners.isEmpty() && followCenter?.valid() != true)) {
         RouteTileMap(points, validRunners, modifier, fitRoute, interactiveMap, followCenter,
-            onBoundsChanged, pendingRecenter, onRecenterApplied)
+            onBoundsChanged, pendingRecenter, onRecenterApplied, highlightedRoute)
         return
     }
     var failure by remember { mutableStateOf<VectorMapFailure?>(null) }
@@ -39,7 +40,7 @@ internal fun MapPane(
         key(attempt) {
             MapLibreMapPane(points, validRunners, modifier, fitRoute, interactiveMap, followCenter,
                 onBoundsChanged, savedCamera, onCameraSaved = { savedCamera = it }, onFailure = { failure = it },
-                recenterRequest = pendingRecenter, onRecenterApplied = onRecenterApplied)
+                recenterRequest = pendingRecenter, onRecenterApplied = onRecenterApplied, highlightedRoute = highlightedRoute)
         }
     } else {
         Column(modifier) {
@@ -51,7 +52,7 @@ internal fun MapPane(
             // This is the actual raster fallback, with its own loading/error and
             // attribution. It is never reported as a rendered vector basemap.
             RouteTileMap(points, validRunners, Modifier.fillMaxWidth().weight(1f), fitRoute, interactiveMap,
-                savedCamera ?: followCenter, onBoundsChanged, pendingRecenter, onRecenterApplied)
+                savedCamera ?: followCenter, onBoundsChanged, pendingRecenter, onRecenterApplied, highlightedRoute)
         }
     }
 }

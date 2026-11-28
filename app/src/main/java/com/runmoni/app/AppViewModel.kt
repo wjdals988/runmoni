@@ -338,6 +338,22 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun setRunInterval(interval: RunIntervalPlan?) {
         mutableState.update { if (it.activeRun.phase == RunPhase.IDLE) it.copy(plannedRunInterval = interval) else it }
     }
+    override suspend fun prepareTrainingAgain(record: RunRecord, isCurrent: () -> Boolean): Boolean {
+        if (!isCurrent() || !RunTrainingPreparation.available(state.value, record)) return false
+        val saved = try {
+            app.runs.record(record.id)
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (_: Exception) {
+            null
+        } ?: return false
+        currentCoroutineContext().ensureActive()
+        val current = mutableState.value
+        if (!isCurrent() || !RunTrainingPreparation.matches(record, saved) ||
+            !RunTrainingPreparation.available(current, record) ||
+            !RunTrainingPreparation.recorderReady(app.runs.active.value, app.runs.persistence.value)) return false
+        return mutableState.compareAndSet(current, RunTrainingPreparation.applyTo(current, saved))
+    }
     override fun setPublicLocation(enabled: Boolean) {
         if (!enabled) {
             app.sharingPreference.suppressAutomaticSharing()
@@ -684,6 +700,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
         if (!firebaseMode && api.token.isNotBlank()) try { api.request("DELETE", "/v1/runs/$id") } catch (failure: PilotException) { if (failure.status != 404 || record?.synced == true) throw failure }
         app.runs.delete(id)
     })
+    override suspend fun saveRunReflection(id: String, reflection: RunReflection?): Boolean =
+        app.runs.updateReflection(id, reflection)
     override fun canShareRun(record: RunRecord): Boolean = RunShareAccess.allowed(state.value, record)
     override fun exportRun(id: String) = ignoreJob(work {
         val record = app.runs.record(id) ?: error("기록이 없습니다.")

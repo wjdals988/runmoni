@@ -11,13 +11,16 @@ class RunEngine {
     private var lastClockMillis: Long? = null
     private val recent = ArrayDeque<Pair<Double, Long>>()
     val splits = mutableListOf<KmSplit>()
+    internal val lapAnchors = mutableListOf<RunLapAnchor>()
     private var previousSplitTime = 0L
 
-    fun restore(distance: Double, active: Long, lastSegment: Int, restoredSplits: List<KmSplit>) {
+    fun restore(distance: Double, active: Long, lastSegment: Int, restoredSplits: List<KmSplit>,
+        restoredAnchors: List<RunLapAnchor> = emptyList()) {
         distanceMeters = distance
         activeDurationMillis = active
         segment = lastSegment + 1
         splits.clear(); splits.addAll(restoredSplits)
+        lapAnchors.clear(); lapAnchors.addAll(restoredAnchors)
         previousSplitTime = splits.sumOf { it.durationMillis }
         lastPoint = null; lastClockMillis = null; recent.clear()
     }
@@ -41,6 +44,8 @@ class RunEngine {
             point.latitude.isFinite() && point.longitude.isFinite() &&
             point.latitude in -90.0..90.0 && point.longitude in -180.0..180.0
         if (!accurate) { breakSegment(); return point }
+        if (lapAnchors.isEmpty() && distanceMeters == 0.0 && splits.isEmpty())
+            lapAnchors += RunLapAnchor(0, point.sequence, point.sequence, 0.0)
         if (before != null) {
             val deltaMillis = point.recordedAtMillis - before.recordedAtMillis
             if (deltaMillis <= 0 || deltaMillis > 60_000) {
@@ -60,6 +65,8 @@ class RunEngine {
                 val fraction = if (delta > 0) ((boundary - beforeDistance) / delta).coerceIn(0.0, 1.0) else 1.0
                 val atTime = (activeDurationMillis - deltaMillis * (1.0 - fraction)).toLong().coerceAtLeast(previousSplitTime)
                 splits += KmSplit(splits.size + 1, atTime - previousSplitTime)
+                val anchor = RunLapAnchor(splits.size, before.sequence, point.sequence, fraction)
+                if (anchor.valid()) lapAnchors += anchor
                 previousSplitTime = atTime
             }
         }

@@ -13,10 +13,12 @@ import androidx.test.uiautomator.UiDevice
 import com.runmoni.app.data.MapTileResult
 import com.runmoni.app.data.MapTileSource
 import com.runmoni.app.domain.*
+import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.*
 import org.junit.Test
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.concurrent.atomic.AtomicInteger
 
 /** Synthetic current-day data for navigation only, never GPS or a DB write. */
 private fun navigationRecord(): RunRecord {
@@ -35,6 +37,77 @@ private fun RecordNavigationFixture(content: @Composable () -> Unit) {
 
 /** Root Compose navigation with fake callbacks and no online tiles, auth, GPS or DB writes. */
 class RunRecordNavigationUiTest : RunmoniDesignTestBase() {
+    @Test fun savedTrainingOpensPreparationWithOnlyItsTrainingAndDoesNotStartTheRecorder() {
+        val goal = RunGoal(RunGoalKind.DISTANCE, 5)
+        val interval = RunIntervalPlan(45, 60, 4, vibration = true)
+        val record = navigationRecord().copy(goal = goal, interval = interval)
+        val original = AppState(records = listOf(record), voiceGuidance = false, autoPause = true)
+        val state = mutableStateOf(original)
+        val delegate = RunmoniUiTest.FakeActions(state)
+        val actions = object : AppActions by delegate {
+            override suspend fun prepareTrainingAgain(record: RunRecord, isCurrent: () -> Boolean): Boolean {
+                if (!isCurrent() || !RunTrainingPreparation.available(state.value, record)) return false
+                state.value = RunTrainingPreparation.applyTo(state.value, record)
+                return true
+            }
+        }
+        compose.setContent { ViewportBox(Viewport(320, 2f)) {
+            RecordNavigationFixture { RunmoniApp(state.value, actions) }
+        } }
+        compose.onNodeWithTag("record_${record.id}").performScrollTo().performClick()
+        compose.onNodeWithTag("record_prepare_again").performScrollTo().assertIsDisplayed()
+            .assertHeightIsAtLeast(48.dp).performClick()
+        compose.onNodeWithTag("record_detail_page").assertDoesNotExist()
+        compose.onNodeWithTag("nav_run").assertIsSelected()
+        compose.onNodeWithTag("choose_run_goal").performScrollTo().assertTextContains("목표 5 km 변경")
+        compose.onNodeWithTag("choose_run_interval").performScrollTo().assertTextContains("인터벌 변경")
+        compose.onNodeWithText("달리기 00:45 · 회복 01:00 · 4회").assertExists()
+        compose.onNodeWithTag("start_run").assertIsDisplayed().assertIsEnabled()
+        compose.runOnIdle {
+            assertEquals(0, delegate.starts)
+            assertEquals(original.copy(plannedRunGoal = goal, plannedRunInterval = interval.copy(vibration = false)), state.value)
+        }
+    }
+
+    @Test fun closedAndReopenedSameRecordRejectsOldClickAndPendingPreparation() {
+        val record = navigationRecord().copy(goal = RunGoal(RunGoalKind.DURATION, 20))
+        val original = AppState(records = listOf(record))
+        val state = mutableStateOf(original)
+        val reached = AtomicInteger()
+        val verify = CompletableDeferred<Unit>()
+        val actions = object : AppActions by RunmoniUiTest.FakeActions(state) {
+            override suspend fun prepareTrainingAgain(record: RunRecord, isCurrent: () -> Boolean): Boolean {
+                reached.incrementAndGet()
+                verify.await()
+                if (!isCurrent() || !RunTrainingPreparation.available(state.value, record)) return false
+                state.value = RunTrainingPreparation.applyTo(state.value, record)
+                return true
+            }
+        }
+        compose.setContent { RecordNavigationFixture { RunmoniApp(state.value, actions) } }
+        val savedRow = compose.onNodeWithTag("record_${record.id}")
+        savedRow.performScrollTo().performClick()
+        val shortcut = compose.onNodeWithTag("record_prepare_again").performScrollTo()
+        val oldPlanClick = shortcut.fetchSemanticsNode().config[RecordActionSnapshot]
+        compose.runOnIdle { state.value = original.copy(records = listOf(record.copy(goal = RunGoal(RunGoalKind.DURATION, 30)))) }
+        shortcut.assertIsDisplayed()
+        compose.runOnIdle { oldPlanClick(); assertEquals(0, reached.get()) }
+        compose.runOnIdle { state.value = original }
+        val delayedClick = shortcut.fetchSemanticsNode().config[RecordActionSnapshot]
+        shortcut.performClick()
+        compose.waitUntil(5_000) { reached.get() == 1 }
+        compose.onNodeWithTag("close_record").performClick()
+        savedRow.performScrollTo().performClick()
+        compose.onNodeWithTag("record_detail_page").assertIsDisplayed()
+        compose.runOnIdle { delayedClick(); verify.complete(Unit) }
+        compose.onNodeWithTag("record_detail_page").assertIsDisplayed()
+        compose.runOnIdle { assertEquals(1, reached.get()); assertEquals(original, state.value) }
+
+        compose.runOnIdle { state.value = original.copy(activeRun = ActiveRun("unfinished", RunPhase.RECOVERY)) }
+        compose.onNodeWithTag("record_prepare_again").assertDoesNotExist()
+        compose.onNodeWithTag("record_detail_page").assertIsDisplayed()
+    }
+
     @Test fun profileHistoryShortcutScrollsWithinTheProfileAndPreservesPeriodAndReturnPosition() {
         val record = navigationRecord()
         val state = mutableStateOf(AppState(records = listOf(record), runPersistence = RunPersistenceState(initialized = true)))

@@ -1,3 +1,7 @@
+# 0.13 야외 집중 화면과 러닝 결과
+
+야외 집중 화면은 짙은 청록 `#103338`의 한 화면에 기록 상태와 GPS 문구, 가장 먼저 읽을 수치, 하단 조작을 둔다. 일반 러닝은 거리, 인터벌은 현재 단계·남은 시간·다음 단계를 우선한다. 실제 단계가 바뀌면 `#D4F781` 트랙 선을 약 150ms 움직이며 동작 줄이기에서는 즉시 반영한다. 숫자와 하단 조작의 위치를 고정하고, 기존 20·24·32dp 외곽선과 48dp 조작 영역을 적용한다. 비교 화면은 날짜와 시각을 분리하고 같은 지표의 오른쪽 숫자 기준선을 공유한다. [Android 접근성](https://developer.android.com/guide/topics/ui/accessibility/apps) · [Compose 모션](https://developer.android.com/develop/ui/compose/animation/quick-guide)
+
 # 0.12 위젯·러닝 결과와 인터벌
 홈·러닝·결과는 안전 여백을 제외한 가용 폭에 20·24·32dp 바깥 여백을 적용한다. 제목·카드·버튼은 공통 왼쪽 선과 오른쪽 선에 맞추고 시스템 Sans, 거리와 단위의 공통 기준선, 고정폭 숫자를 사용한다. 작은 화면에서도 출발과 기록 공유에 48dp 조작 영역을 확보한다. [배치 참고](https://github.com/VoltAgent/awesome-design-md/blob/fcc70284932276d085f01ef9f83edde90b1258cb/design-md/apple/DESIGN.md)
 

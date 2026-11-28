@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.13.0-dev", "2026-11-29", "야외 집중 화면과 러닝 결과 · 개발 프리뷰", listOf(
+        "야외 집중 화면에서 거리와 인터벌의 현재·다음 단계를 빠르게 읽어요.",
+        "지난 기록의 목표와 인터벌을 러닝 준비에 다시 불러와요.",
+        "두 기록의 거리·시간·페이스 차이를 보고 위치가 확인된 1km를 지도에서 강조해요.",
+        "러닝 결과에 체감 강도와 기기에 저장되는 비공개 메모를 남겨요.",
+    )),
     AppVersionEntry("0.12.0-dev", "2026-11-28", "위젯과 시간 인터벌 · 개발 후보", listOf(
         "위치가 준비되면 위젯에서 바로 러닝을 시작해요. 넓은 위젯에서 종료를 확인하고 저장해요.",
         "페이스 차트에서 측정한 구간을 고르고 지난 러닝과 비교해요.",

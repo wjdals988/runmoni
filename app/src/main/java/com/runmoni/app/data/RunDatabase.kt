@@ -25,6 +25,9 @@ data class StoredRun(
     @ColumnInfo(defaultValue = "0") val intervalRecoverySeconds: Int = 0,
     @ColumnInfo(defaultValue = "0") val intervalRepeats: Int = 0,
     @ColumnInfo(defaultValue = "0") val intervalVibration: Boolean = false,
+    @ColumnInfo(defaultValue = "'[]'") val lapAnchorsJson: String = "[]",
+    val perceivedEffort: String? = null,
+    val privateNote: String? = null,
 )
 @Entity(tableName = "track_points", primaryKeys = ["runId", "sequence"], foreignKeys = [ForeignKey(entity = StoredRun::class, parentColumns = ["id"], childColumns = ["runId"], onDelete = ForeignKey.CASCADE)])
 data class StoredPoint(val runId: String, val sequence: Int, val latitude: Double, val longitude: Double, val accuracyMeters: Float, val recordedAtMillis: Long, val segment: Int)
@@ -41,6 +44,8 @@ interface RunDao {
     @Insert(onConflict = OnConflictStrategy.ABORT) suspend fun addPoint(point: StoredPoint)
     @Insert(onConflict = OnConflictStrategy.IGNORE) suspend fun registerCloudOrigin(origin: StoredCloudBackupOrigin)
     @Query("DELETE FROM runs WHERE id = :id") suspend fun delete(id: String)
+    @Query("UPDATE runs SET perceivedEffort = :effort, privateNote = :note WHERE id = :id AND finishedAtMillis > 0")
+    suspend fun updateReflection(id: String, effort: String?, note: String?): Int
     @Query("UPDATE runs SET synced = 1, mileage = :mileage WHERE id = :id") suspend fun markSynced(id: String, mileage: Int)
     @Query("UPDATE cloud_backup_origins SET ownerUid = :uid WHERE runId = :id AND ownerUid = '' AND suppressed = 0")
     suspend fun bindCloudOwnerIfUnowned(id: String, uid: String)
@@ -62,7 +67,7 @@ interface RunDao {
     }
 }
 
-@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 4, exportSchema = false)
+@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 5, exportSchema = false)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runs(): RunDao
     abstract fun cloudBackups(): CloudBackupDao
@@ -94,7 +99,15 @@ abstract class RunDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE runs ADD COLUMN intervalVibration INTEGER NOT NULL DEFAULT 0")
             }
         }
+        val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE runs ADD COLUMN lapAnchorsJson TEXT NOT NULL DEFAULT '[]'")
+                db.execSQL("ALTER TABLE runs ADD COLUMN perceivedEffort TEXT")
+                db.execSQL("ALTER TABLE runs ADD COLUMN privateNote TEXT")
+            }
+        }
         fun create(context: Context) = Room.databaseBuilder(context, RunDatabase::class.java, "runmoni-runs.db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+            .setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
     }
 }
