@@ -3,6 +3,7 @@ package com.runmoni.app.ui
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
@@ -20,34 +21,50 @@ class AppearanceUiTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test fun oppositeThemeRootsKeepTheirOwnSemanticColoursAndReadableContrast() {
-        var light: List<Color>? = null
-        var dark: List<Color>? = null
+        var light: Map<String, Pair<Color, Color>> = emptyMap()
+        var dark: Map<String, Pair<Color, Color>> = emptyMap()
         compose.setContent {
             Column {
                 RunmoniTheme(darkTheme = false) {
-                    val values = listOf(RunmoniColors.Navy, RunmoniColors.Cream, RunmoniColors.Muted,
-                        RunmoniColors.Paper, RunmoniColors.Primary, RunmoniColors.OnPrimary,
-                        RunmoniColors.EnvironmentGood, RunmoniColors.EnvironmentGoodWash,
-                        RunmoniColors.EnvironmentCaution, RunmoniColors.EnvironmentCautionWash,
-                        RunmoniColors.EnvironmentPoor, RunmoniColors.EnvironmentPoorWash)
+                    val values = textColorPairs()
                     SideEffect { light = values }
                 }
                 RunmoniTheme(darkTheme = true) {
-                    val values = listOf(RunmoniColors.Navy, RunmoniColors.Cream, RunmoniColors.Muted,
-                        RunmoniColors.Paper, RunmoniColors.Primary, RunmoniColors.OnPrimary,
-                        RunmoniColors.EnvironmentGood, RunmoniColors.EnvironmentGoodWash,
-                        RunmoniColors.EnvironmentCaution, RunmoniColors.EnvironmentCautionWash,
-                        RunmoniColors.EnvironmentPoor, RunmoniColors.EnvironmentPoorWash)
+                    val values = textColorPairs()
                     SideEffect { dark = values }
                 }
             }
         }
         compose.waitForIdle()
-        assertNotEquals(light!![1], dark!![1])
-        for (values in listOf(light!!, dark!!)) {
-            for ((foreground, background) in listOf(0 to 1, 2 to 1, 0 to 3, 2 to 3, 4 to 5, 6 to 7, 8 to 9, 10 to 11))
-                assertTrue("semantic contrast $foreground/$background", contrast(values[foreground], values[background]) >= 4.5)
+        assertNotEquals(light.getValue("body on canvas").second, dark.getValue("body on canvas").second)
+        for ((theme, pairs) in listOf("light" to light, "dark" to dark)) {
+            for ((role, colors) in pairs) {
+                val ratio = contrast(colors.first, colors.second)
+                assertTrue("$theme $role contrast is $ratio", ratio >= 4.5)
+            }
         }
+    }
+
+    @Composable
+    private fun textColorPairs(): Map<String, Pair<Color, Color>> = with(RunmoniColors) {
+        mapOf(
+            "body on canvas" to (Ink to Chalk),
+            "muted on canvas" to (Muted to Chalk),
+            "body on paper" to (Ink to Paper),
+            "muted on paper" to (Muted to Paper),
+            "primary button" to (OnPrimary to Primary),
+            "selected navigation" to (OnPrimarySoft to PrimarySoft),
+            "selected navigation border" to (Primary to PrimarySoft),
+            "route" to (RouteBlue to BlueWash),
+            "information" to (Muted to MintWash),
+            "positive" to (EnvironmentGood to EnvironmentGoodWash),
+            "caution" to (EnvironmentCaution to EnvironmentCautionWash),
+            "error" to (EnvironmentPoor to EnvironmentPoorWash),
+            "outdoor number" to (RunmoniTrack.Highlight to RunmoniTrack.Board),
+            "outdoor detail" to (RunmoniTrack.Detail to RunmoniTrack.Board),
+            "outdoor phase" to (RunmoniTrack.Recovery to RunmoniTrack.Board),
+            "outdoor warning" to (RunmoniTrack.Attention to RunmoniTrack.Board),
+        )
     }
 
     @Test fun choosingThemePersistsAcrossFreshReaderAndRecomposesCurrentContent() {

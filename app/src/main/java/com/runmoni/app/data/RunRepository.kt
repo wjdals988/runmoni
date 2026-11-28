@@ -226,8 +226,8 @@ class RunRepository internal constructor(
             if (active.value.phase != RunPhase.RUNNING) return@withLock
             engine.tick(SystemClock.elapsedRealtime(), true)
             engine.breakSegment()
-            active.value = active.value.copy(phase = RunPhase.PAUSED, pauseReason = reason, currentPaceSecondsPerKm = null, currentSpeedMetersPerSecond = null)
-            publish(); checkpoint()
+            publish(active.value.copy(phase = RunPhase.PAUSED, pauseReason = reason))
+            checkpoint()
         }
     }
     suspend fun resume(expectedRunId: String? = null) {
@@ -427,10 +427,10 @@ class RunRepository internal constructor(
         val value = RunReflection.fromInput(reflection?.effort, reflection?.note)
         dao.updateReflection(id, value?.effort?.wireValue, value?.note) == 1
     }
-    private fun publish() {
+    private fun publish(run: ActiveRun = active.value) {
         val row = stored ?: return
         val elapsed = (System.currentTimeMillis() - row.startedAtMillis).coerceAtLeast(0)
-        val liveFix = active.value.phase == RunPhase.RUNNING && !gpsSignalStale && lastGpsSignalElapsedMillis != null &&
+        val liveFix = run.phase == RunPhase.RUNNING && !gpsSignalStale && lastGpsSignalElapsedMillis != null &&
             !GpsSignalFreshness.isStale(lastGpsSignalElapsedMillis, SystemClock.elapsedRealtime())
         stored = row.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis,
             elapsedDurationMillis = elapsed, segment = engine.segment,
@@ -443,7 +443,7 @@ class RunRepository internal constructor(
                         .put("to", anchor.afterSequence).put("fraction", anchor.fraction))
                 }
             }.toString())
-        active.value = active.value.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed,
+        active.value = run.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed,
             currentPaceSecondsPerKm = if (liveFix) engine.currentPaceSecondsPerKm() else null,
             currentSpeedMetersPerSecond = if (liveFix) engine.currentSpeedMetersPerSecond() else null,
             lastCompletedSplit = engine.splits.lastOrNull())

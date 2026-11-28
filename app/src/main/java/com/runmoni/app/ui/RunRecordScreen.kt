@@ -49,6 +49,7 @@ import com.runmoni.app.domain.RunRecord
 import com.runmoni.app.domain.RouteGeometry
 import com.runmoni.app.domain.RunResultAnalysis
 import com.runmoni.app.domain.lapRoute
+import kotlinx.coroutines.launch
 
 // A stable product callback for late-event regression checks. Foundation's
 // OnClick SemanticsAction is a live ClickableNode accessor, not a snapshot.
@@ -149,6 +150,8 @@ private fun RunRecordPageContent(
     var selectedKilometer by rememberSaveable { mutableIntStateOf(0) }
     var mapKilometer by rememberSaveable { mutableIntStateOf(0) }
     var mapOpen by rememberSaveable { mutableStateOf(false) }
+    var lapMapOrigin by rememberSaveable { mutableIntStateOf(-1) }
+    val scope = rememberCoroutineScope()
     val selectedRoute = remember(geometry, record.lapAnchors, selectedKilometer) {
         geometry.lapRoute(selectedKilometer, record.lapAnchors)
     }
@@ -162,6 +165,7 @@ private fun RunRecordPageContent(
     LaunchedEffect(analysisRequest) { if (analysisRequest > 0) analysisAnchor.bringIntoView() }
     LaunchedEffect(mapRequest) { if (mapRequest > 0 && mapOpen) mapAnchor.bringIntoView() }
     val openMap: (Int) -> Unit = { kilometer ->
+        lapMapOrigin = if (kilometer > 0) scroll.value else -1
         mapKilometer = kilometer
         mapOpen = true
         mapRequest++
@@ -273,8 +277,19 @@ private fun RunRecordPageContent(
                             if (mapOpen) {
                                 if (highlightedRoute != null) FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text("${mapKilometer - 1}–$mapKilometer km 강조 중",
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        modifier = Modifier.align(Alignment.CenterVertically).testTag("record_map_selected_lap"))
+                                        style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.RouteBlue,
+                                        modifier = Modifier.align(Alignment.CenterVertically).testTag("record_map_selected_lap")
+                                            .background(RunmoniColors.BlueWash, RunmoniShapes.Action)
+                                            .padding(horizontal = 10.dp, vertical = 6.dp))
+                                    TextButton(onClick = {
+                                        selectedKilometer = mapKilometer
+                                        val destination = lapMapOrigin
+                                        if (destination >= 0) scope.launch { scroll.scrollTo(destination) }
+                                        else analysisRequest++
+                                    }, shape = RunmoniShapes.Action,
+                                        modifier = Modifier.heightIn(min = 48.dp).testTag("record_map_return_to_lap")) {
+                                        Text("구간 기록 보기")
+                                    }
                                     TextButton(onClick = { mapKilometer = 0 },
                                         modifier = Modifier.heightIn(min = 48.dp).testTag("record_map_clear_lap")) {
                                         Text("전체 경로 보기")

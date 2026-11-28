@@ -3,9 +3,12 @@ package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -50,6 +53,7 @@ import com.runmoni.app.avatar.AvatarArtwork
 import com.runmoni.app.domain.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
@@ -229,6 +233,7 @@ private fun ClosetPicker(
 }
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 private fun ClosetItems(
     profile: Profile, actions: AppActions, slot: AvatarSlot, categoryKey: String,
     accessorySlots: List<AvatarSlot>, accessory: Int, onAccessory: (Int) -> Unit,
@@ -254,7 +259,10 @@ private fun ClosetItems(
         "bottom" -> RunningKitRegion.BOTTOM
         "shoes" -> RunningKitRegion.SHOES
         else -> null
-    }
+    }?.takeIf { currentReady && !covered }
+    val colorPanel = remember { BringIntoViewRequester() }
+    val itemSearch = remember { BringIntoViewRequester() }
+    val scope = rememberCoroutineScope()
     Column(modifier.fillMaxWidth()) {
         // Secondary accessory categories share the item scroll region so they
         // cannot consume the remaining landscape/large-text list height.
@@ -287,7 +295,14 @@ private fun ClosetItems(
                 color = RunmoniColors.Muted, modifier = Modifier.testTag("closet_artwork_status"))
             Spacer(Modifier.height(gap))
         }
-        ClosetSearch(query, onQuery)
+        if (fabricRegion != null) TextButton(onClick = {
+            keyboard?.hide()
+            focus.clearFocus()
+            scope.launch { colorPanel.bringIntoView() }
+        }, modifier = Modifier.heightIn(min = 48.dp).testTag("closet_open_colors")) {
+            Text("${fabricRegion.label} 색상 바꾸기")
+        }
+        ClosetSearch(query, onQuery, Modifier.bringIntoViewRequester(itemSearch))
         Spacer(Modifier.height(gap))
         BoxWithConstraints(Modifier.fillMaxWidth()) {
             // One fitting scene, then small actual garment details. At narrow
@@ -312,21 +327,25 @@ private fun ClosetItems(
                 }
             }
         }
-        if (fabricRegion != null && currentReady && !covered) {
+        if (fabricRegion != null) {
             Spacer(Modifier.height(24.dp))
             HorizontalDivider(color = RunmoniColors.Line)
             Spacer(Modifier.height(20.dp))
-            RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor)
+            Column(Modifier.fillMaxWidth().bringIntoViewRequester(colorPanel)) {
+                RunningKitColorControls(profile.avatar.runningKitColors, fabricRegion, actions::setRunningKitColor)
+                TextButton(onClick = { scope.launch { itemSearch.bringIntoView() } },
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("closet_back_to_items")) { Text("아이템 목록 보기") }
+            }
         }
         Spacer(Modifier.height(24.dp).fillMaxWidth().testTag("closet_content_end"))
     }
 }
 
 @Composable
-private fun ClosetSearch(query: String, onQuery: (String) -> Unit) {
+private fun ClosetSearch(query: String, onQuery: (String) -> Unit, modifier: Modifier = Modifier) {
     val keyboard = LocalSoftwareKeyboardController.current
     OutlinedTextField(value = query, onValueChange = { onQuery(it.take(40)) },
-        modifier = Modifier.fillMaxWidth().testTag("closet_search"),
+        modifier = modifier.fillMaxWidth().testTag("closet_search"),
         label = { Text("이름 검색") }, singleLine = true,
         leadingIcon = { Icon(Icons.Outlined.Search, null, tint = RunmoniColors.Muted) },
         trailingIcon = if (query.isNotEmpty()) {
@@ -354,11 +373,16 @@ private fun ClosetItemOption(
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Box(Modifier.width(4.dp).height(32.dp)
             .background(if (selected) RunmoniColors.Primary else Color.Transparent, RunmoniShapes.Status))
-        if (showThumbnail) ClosetItemThumbnail(profile.avatar.withSelectedItem(slot.key, variant), slot.key,
-            secondaryReady, "closet_preview_${slot.key}_$variant", Modifier.size(64.dp)
-                .clip(RunmoniShapes.Action)
-                .background(if (selected) RunmoniTrack.Stage else RunmoniColors.Cream)
-                .border(1.dp, if (selected) RunmoniColors.Outline else RunmoniColors.Line, RunmoniShapes.Action))
+        if (showThumbnail) {
+            val equipped = profile.avatar.withSelectedItem(slot.key, variant)
+            val thumbnail = if (slot.key == "hair") equipped.copy(headwear = 0,
+                costume = if ("headwear" in AvatarCatalogue.coveredSlots(equipped.costume)) 0 else equipped.costume) else equipped
+            ClosetItemThumbnail(thumbnail, slot.key,
+                secondaryReady, "closet_preview_${slot.key}_$variant", Modifier.size(64.dp)
+                    .clip(RunmoniShapes.Action)
+                    .background(if (selected) RunmoniTrack.Stage else RunmoniColors.Cream)
+                    .border(1.dp, if (selected) RunmoniColors.Outline else RunmoniColors.Line, RunmoniShapes.Action))
+        }
         Text(avatarItemDisplayName(slot, variant, profile.avatar.gender), style = MaterialTheme.typography.bodyLarge,
             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             modifier = Modifier.weight(1f))
@@ -385,7 +409,8 @@ private fun closetCrop(slot: String, avatar: AvatarStyle): ClosetCrop {
         }
     }
     return when (slot) {
-        "hair", "headwear", "face" -> ClosetCrop(0, 0, 256, 208)
+        "hair" -> ClosetCrop(12, 14, 232, 174)
+        "headwear", "face" -> ClosetCrop(0, 0, 256, 208)
         "ear", "eyewear" -> ClosetCrop(60, 64, 184, 132)
         "top", "hydration" -> ClosetCrop(40, if (female) 156 else 168, 200, 112)
         "bottom" -> ClosetCrop(64, if (female) 224 else 236, 160, 112)

@@ -68,18 +68,19 @@ internal fun RunRecordPaceAnalysis(analysis: RunResultAnalysis, selectedKilomete
                     paceComparison("전체 평균", selected.paceSeconds - it)
                 }
                 if (onOpenSelectedRoute != null) OutlinedButton(onClick = onOpenSelectedRoute,
-                    shape = RunmoniShapes.Action, modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_lap_on_map")) {
+                    shape = RunmoniShapes.Action, colors = ButtonDefaults.outlinedButtonColors(contentColor = RunmoniColors.RouteBlue),
+                    modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_lap_on_map")) {
                     Text("지도에서 보기")
                 }
                 val previousComparison = analysis.splits.firstOrNull { it.kilometer == selected.kilometer - 1 }?.let {
                     paceComparison("직전 구간", selected.paceSeconds - it.paceSeconds)
                 }
-                Column(Modifier.fillMaxWidth().background(RunmoniColors.PrimarySoft, RunmoniShapes.Action)
+                Column(Modifier.fillMaxWidth().background(RunmoniColors.BlueWash, RunmoniShapes.Action)
                     .padding(12.dp).testTag("record_selected_split")
                     .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
                     verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text("${splitRange(selected)} · ${formatResultPace(selected.paceSeconds)} /km",
-                        style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"))
+                        style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"), color = RunmoniColors.RouteBlue)
                     listOfNotNull(averageComparison, previousComparison).forEach { comparison ->
                         Text(comparison, style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
                     }
@@ -96,7 +97,7 @@ private fun RunPaceChart(splits: List<RunResultSplit>, completedKilometers: Int,
     val axisStyle = MaterialTheme.typography.labelSmall.copy(fontFeatureSettings = "tnum")
     val muted = RunmoniColors.Muted
     val ink = RunmoniColors.Ink
-    val primary = RunmoniColors.Primary
+    val dataColor = RunmoniColors.RouteBlue
     val line = RunmoniColors.Line
     val paper = RunmoniColors.Paper
     val lastSelection by rememberUpdatedState(onSelect)
@@ -150,7 +151,7 @@ private fun RunPaceChart(splits: List<RunResultSplit>, completedKilometers: Int,
                     }
                     splits.forEach { split ->
                         val center = Offset(x(split.kilometer), y(split.paceSeconds))
-                        drawCircle(primary, radius = 3.dp.toPx(), center = center)
+                        drawCircle(dataColor, radius = 3.dp.toPx(), center = center)
                         if (split.kilometer == selectedKilometer) {
                             drawCircle(ink, radius = 6.dp.toPx(), center = center, style = Stroke(1.5.dp.toPx()))
                         }
@@ -184,7 +185,7 @@ private fun RunSplitTable(splits: List<RunResultSplit>, selectedKilometer: Int, 
         for (index in firstIndex until lastIndex) key(splits[index].kilometer) {
             val split = splits[index]
             val selected = split.kilometer == selectedKilometer
-            val fill by animateColorAsState(if (selected) RunmoniColors.PrimarySoft else RunmoniColors.Paper,
+            val fill by animateColorAsState(if (selected) RunmoniColors.BlueWash else RunmoniColors.Paper,
                 animationSpec = if (animate) tween(150) else snap(), label = "선택 구간")
             Row(Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RunmoniShapes.Action).background(fill)
                 .selectable(selected, role = Role.RadioButton) { onSelect(split.kilometer) }
@@ -195,7 +196,7 @@ private fun RunSplitTable(splits: List<RunResultSplit>, selectedKilometer: Int, 
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum",
                         fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal))
-                if (selected) Icon(Icons.Outlined.Check, null, Modifier.size(16.dp), tint = RunmoniColors.Primary)
+                if (selected) Icon(Icons.Outlined.Check, null, Modifier.size(16.dp), tint = RunmoniColors.RouteBlue)
                 else Spacer(Modifier.size(16.dp))
             }
         }
