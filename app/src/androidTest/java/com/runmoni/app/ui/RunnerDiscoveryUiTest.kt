@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
 import org.junit.Assert.*
@@ -362,6 +363,17 @@ class RunnerDiscoveryUiTest : RunmoniDesignTestBase() {
         val runners = compose.onNodeWithTag("refresh_runners").assertIsDisplayed()
             .assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).getUnclippedBoundsInRoot()
         val credit = compose.onNodeWithTag("osm_attribution").assertIsDisplayed().getUnclippedBoundsInRoot()
+        compose.onNodeWithTag("map_options").assertContentDescriptionEquals("지도 조작")
+            .assertWidthIsAtLeast(48.dp).assertHeightIsAtLeast(48.dp)
+        val creditLayouts = mutableListOf<TextLayoutResult>()
+        compose.onNodeWithText("© OpenStreetMap contributors", useUnmergedTree = true)
+            .performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(creditLayouts) }
+        val creditLayout = creditLayouts.single()
+        assertFalse("Attribution must be fully readable", creditLayout.hasVisualOverflow)
+        assertTrue("The provider name stays on a single line", (0 until creditLayout.lineCount).any { line ->
+            creditLayout.layoutInput.text.text.substring(creditLayout.getLineStart(line), creditLayout.getLineEnd(line))
+                .contains("OpenStreetMap")
+        })
         assertEquals(locate.top.value, runners.top.value, 1f)
         assertTrue(locate.bottom <= map.top && runners.bottom <= map.top)
         for ((name, node) in mapOf("locate" to locate, "runners" to runners, "map" to map, "credit" to credit)) {

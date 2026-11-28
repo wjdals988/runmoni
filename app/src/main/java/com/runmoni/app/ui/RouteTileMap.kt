@@ -261,6 +261,7 @@ internal fun RouteTileMap(
             retry = if (failed) ({ source.retry(); attempt++ }) else null,
             attribution = {
                 TextButton(onClick = { uri.openUri("https://www.openstreetmap.org/copyright") },
+                    shape = RunmoniShapes.Action,
                     modifier = Modifier.weight(1f).heightIn(min = 48.dp).testTag("osm_attribution"),
                     contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
                     Text("© OpenStreetMap contributors", style = MaterialTheme.typography.labelSmall)
@@ -285,18 +286,22 @@ internal fun MapControlBar(
     actions: List<CustomAccessibilityAction>, enabled: Boolean,
     retry: (() -> Unit)? = null, attribution: (@Composable RowScope.() -> Unit)? = null,
 ) {
-    Row(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
-        .testTag("map_control_bar"), verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.End) {
-        attribution?.invoke(this)
-        MapOptionsMenu(actions, enabled, retry)
+    BoxWithConstraints(Modifier.fillMaxWidth().background(RunmoniColors.Paper).testTag("map_control_bar")) {
+        val compactOptions = attribution != null && maxWidth < 360.dp && LocalDensity.current.fontScale >= 1.3f
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End) {
+            attribution?.invoke(this)
+            MapOptionsMenu(actions, enabled, retry, iconOnly = compactOptions)
+        }
     }
 }
 
 /** Pointer alternative to pinch/drag without permanent +/- buttons. A delayed
  * item/dismiss callback cannot act on a reopened menu or a disposed map. */
 @Composable
-internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: Boolean = true, retry: (() -> Unit)? = null) {
+internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: Boolean = true, retry: (() -> Unit)? = null,
+    iconOnly: Boolean = false,
+) {
     var expanded by remember { mutableStateOf(false) }
     var request by remember { mutableIntStateOf(0) }
     val latestActions by rememberUpdatedState(actions)
@@ -306,8 +311,13 @@ internal fun MapOptionsMenu(actions: List<CustomAccessibilityAction>, enabled: B
     DisposableEffect(lifetime) { onDispose { lifetime.active = false } }
     val currentRequest = request
     Box {
-        TextButton(enabled = enabled, shape = RunmoniShapes.Action,
-            onClick = { request++; expanded = true }, modifier = Modifier.heightIn(min = 48.dp).widthIn(min = 48.dp).testTag("map_options")) {
+        val openMenu = { request++; expanded = true }
+        val target = Modifier.heightIn(min = 48.dp).widthIn(min = 48.dp).testTag("map_options")
+        if (iconOnly) {
+            IconButton(enabled = enabled, onClick = openMenu, modifier = target.size(48.dp)) {
+                Icon(Icons.Outlined.Tune, "지도 조작")
+            }
+        } else TextButton(enabled = enabled, shape = RunmoniShapes.Action, onClick = openMenu, modifier = target) {
             Text("지도 조작", style = MaterialTheme.typography.labelLarge)
             Icon(Icons.Outlined.KeyboardArrowDown, null, Modifier.size(18.dp))
         }
