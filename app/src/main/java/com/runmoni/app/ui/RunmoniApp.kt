@@ -376,7 +376,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
         if (finishRunId != null && finishRunId == state.activeRun.id && state.activeRun.phase != RunPhase.IDLE &&
             state.runPersistence.initialized && !state.runPersistence.finishing) {
             DismissibleAlertDialog(onDismissRequest = { finishRunId = null }, title = { Text("오늘의 러닝을 마칠까요?") },
-                text = { DialogMessage("${distance(state.activeRun.distanceMeters)} km · ${duration(state.activeRun.activeDurationMillis)}\n저장한 기록은 ‘나’에서 다시 볼 수 있어요.") },
+                text = { DialogMessage("${distance(state.activeRun.distanceMeters)} km · ${duration(state.activeRun.activeDurationMillis)}\n저장하면 결과를 바로 볼 수 있어요.") },
                 confirmButton = { TextButton(shape = RunmoniShapes.Action, onClick = { finishRunId = null; actions.finishRun(state.activeRun.id) },
                     enabled = !(state.runPersistence.saving && state.runPersistence.issue != null),
                     modifier = Modifier.testTag("confirm_finish_run")) { Text("저장하고 마치기") } },
@@ -391,6 +391,7 @@ fun RunmoniApp(state: AppState, actions: AppActions, updates: AppUpdateUiState =
 private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel: Boolean,
     onCrew: () -> Unit, onProfile: () -> Unit, onFinish: () -> Unit) {
     var optionsExpanded by rememberSaveable { mutableStateOf(false) }
+    var goalPickerOpen by rememberSaveable { mutableStateOf(false) }
     val run = state.activeRun
     val largeText = LocalDensity.current.fontScale >= 1.3f
     val compactLive = run.phase != RunPhase.IDLE && (largeText || useCompactPanel)
@@ -429,6 +430,13 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                         accuracy?.let { Text("정확도 ±${it.toInt()}m", modifier = Modifier.align(Alignment.CenterVertically),
                             style = MaterialTheme.typography.labelMedium, color = RunmoniColors.Muted) }
                     }
+                }
+                if (run.phase == RunPhase.IDLE) OutlinedButton(onClick = { goalPickerOpen = true },
+                    shape = RunmoniShapes.Action,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).testTag("choose_run_goal")) {
+                    Icon(Icons.Outlined.Flag, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(state.plannedRunGoal?.let { "목표 ${it.label} 변경" } ?: "오늘 목표 설정")
                 }
                 if (run.phase == RunPhase.IDLE) Surface(color = RunmoniColors.Paper, shape = RunmoniShapes.Surface) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -472,8 +480,10 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                         duration(run.activeDurationMillis), tag = "run_duration"),
                         UiMetric(if (compactLive) "페이스" else "현재 페이스", pace(currentPace), "/km", "run_pace")),
                         onDark = true, compact = compactLive)
+                    if (compactLive) run.goal?.let { ActiveRunGoal(it, run.distanceMeters, run.activeDurationMillis, compact = true) }
                     if (!compactLive) RunSecondaryMetrics(run, speedKmh, onTrack = true)
                 }
+                if (!compactLive) run.goal?.let { ActiveRunGoal(it, run.distanceMeters, run.activeDurationMillis) }
                 if (compactLive) {
                     RunSecondaryMetrics(run, speedKmh, onTrack = false)
                     accuracy?.let { SmallNote("GPS 정확도 ±${it.toInt()}m") }
@@ -520,7 +530,7 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
                     Text("러닝을 시작한 뒤 홈 화면에서도 기록을 확인해요.",
                         style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted)
                     ToggleRow("자동 일시정지", "정확한 GPS로 10초 동안 멈춤이 확인되면 시간을 멈추고, 움직이면 이어가요", state.autoPause, actions::setAutoPause)
-                    ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
+                    RunLapSettings(state, actions)
                 }
                 val joined = state.parties.firstOrNull { it.joined && !it.cancelled }
                 if (state.communityBackend == CommunityBackend.HTTP && (joined != null || state.audio.roomId.isNotBlank())) AudioPanel(state.audio, actions, state.audio.roomId.ifBlank { "party:${joined!!.id}" })
@@ -553,6 +563,10 @@ private fun RunningScreen(state: AppState, actions: AppActions, useCompactPanel:
             }
             }
         }
+    if (goalPickerOpen && run.phase == RunPhase.IDLE) RunGoalPicker(state.plannedRunGoal, onSelect = {
+        actions.setRunGoal(it)
+        goalPickerOpen = false
+    }, onDismiss = { goalPickerOpen = false })
 }
 
 @Composable
@@ -738,6 +752,15 @@ internal fun ToggleRow(title: String, subtitle: String, checked: Boolean, onChec
         Spacer(Modifier.width(12.dp))
         Switch(checked = checked, onCheckedChange = null, enabled = enabled)
     }
+}
+
+@Composable
+internal fun RunLapSettings(state: AppState, actions: AppActions) {
+    ToggleRow("음성 기록 안내", "1km마다 거리를 알려줘요", state.voiceGuidance, actions::setVoiceGuidance)
+    ToggleRow("구간 페이스 음성", "거리와 함께 방금 달린 1km 페이스를 들어요", state.lapPaceGuidance,
+        actions::setLapPaceGuidance, enabled = state.voiceGuidance, tag = "run_lap_pace_guidance")
+    ToggleRow("1km 진동", "1km를 지날 때 진동으로 알려줘요", state.lapVibration,
+        actions::setLapVibration, tag = "run_lap_vibration")
 }
 
 @Composable

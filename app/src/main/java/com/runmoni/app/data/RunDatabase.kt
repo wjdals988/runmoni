@@ -19,6 +19,8 @@ data class StoredRun(
     val interrupted: Boolean = false,
     val mileage: Int = 0,
     val splitsJson: String = "[]",
+    val goalKind: String? = null,
+    @ColumnInfo(defaultValue = "0") val goalTarget: Int = 0,
 )
 @Entity(tableName = "track_points", primaryKeys = ["runId", "sequence"], foreignKeys = [ForeignKey(entity = StoredRun::class, parentColumns = ["id"], childColumns = ["runId"], onDelete = ForeignKey.CASCADE)])
 data class StoredPoint(val runId: String, val sequence: Int, val latitude: Double, val longitude: Double, val accuracyMeters: Float, val recordedAtMillis: Long, val segment: Int)
@@ -56,7 +58,7 @@ interface RunDao {
     }
 }
 
-@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 2, exportSchema = false)
+@Database(entities = [StoredRun::class, StoredPoint::class, StoredCloudBackupOrigin::class], version = 3, exportSchema = false)
 abstract class RunDatabase : RoomDatabase() {
     abstract fun runs(): RunDao
     abstract fun cloudBackups(): CloudBackupDao
@@ -74,7 +76,13 @@ abstract class RunDatabase : RoomDatabase() {
                     SELECT r.id, (SELECT COUNT(*) FROM track_points p WHERE p.runId = r.id) FROM runs r""")
             }
         }
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE runs ADD COLUMN goalKind TEXT")
+                db.execSQL("ALTER TABLE runs ADD COLUMN goalTarget INTEGER NOT NULL DEFAULT 0")
+            }
+        }
         fun create(context: Context) = Room.databaseBuilder(context, RunDatabase::class.java, "runmoni-runs.db")
-            .addMigrations(MIGRATION_1_2).setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3).setJournalMode(JournalMode.WRITE_AHEAD_LOGGING).build()
     }
 }

@@ -86,7 +86,7 @@ internal fun SettingsScreen(state: AppState, actions: AppActions, onDismiss: () 
                     }
                     SettingsGroup("러닝과 위치", Icons.Outlined.DirectionsRun) {
                         ToggleRow("자동 일시정지", "정지한 동안 러닝 시간을 잠시 멈춰요", state.autoPause, actions::setAutoPause)
-                        ToggleRow("음성 기록 안내", "거리별 기록을 음성으로 들어요", state.voiceGuidance, actions::setVoiceGuidance)
+                        RunLapSettings(state, actions)
                         DestinationRow("러닝 알림", when {
                             !state.runNotificationAccess.checked -> "알림 설정"
                             state.runNotificationAccess.enabled -> "켜짐"

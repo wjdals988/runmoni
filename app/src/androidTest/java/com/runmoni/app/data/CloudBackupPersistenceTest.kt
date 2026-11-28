@@ -19,7 +19,7 @@ class CloudBackupPersistenceTest {
         distanceMeters = 25.5, activeDurationMillis = 4000, elapsedDurationMillis = 5000,
         interrupted = true, mileage = 17, splitsJson = "[{\"km\":1,\"duration\":4000}]")
     private fun open(name: String) = Room.databaseBuilder(context, RunDatabase::class.java, name)
-        .addMigrations(RunDatabase.MIGRATION_1_2).build()
+        .addMigrations(RunDatabase.MIGRATION_1_2, RunDatabase.MIGRATION_2_3).build()
 
     @Test fun v1MigrationPreservesCompletedUnfinishedPointsAndPendingLocalFields() = runBlocking {
         val name = "owned-cloud-migration-${UUID.randomUUID()}.db"

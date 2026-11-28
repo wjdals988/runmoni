@@ -32,7 +32,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 sealed interface UiRequest {
-    data class RunPermission(val recover: Boolean) : UiRequest
+    data class RunPermission(val recover: Boolean, val goal: RunGoal? = null) : UiRequest
     data class PreviewLocation(val weather: Boolean) : UiRequest
     data object ResumeRunPermission : UiRequest
     data object RunNotificationSettings : UiRequest
@@ -95,7 +95,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     private val wardrobeChanges = Mutex()
     private var focusedCrewForParties: String? = null
     private var connectionCheckGeneration = 0L
-    private val mutableState = MutableStateFlow(AppState(entry = entry.state.value, profile = readLocalProfile(), runPersistence = app.runs.persistence.value, apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP))
+    private val mutableState = MutableStateFlow(AppState(entry = entry.state.value, profile = readLocalProfile(), runPersistence = app.runs.persistence.value, apiUrl = api.baseUrl, signedIn = !firebaseMode && api.token.isNotBlank(), publicLocation = !firebaseMode && preferences.getBoolean("publicLocation", false), autoPause = preferences.getBoolean("autoPause", false), voiceGuidance = preferences.getBoolean("voiceGuidance", true), communityGuest = firebaseMode || preferences.getBoolean("communityGuest", false), communityBackend = if (firebaseMode) CommunityBackend.FIREBASE else CommunityBackend.HTTP,
+        lapPaceGuidance = preferences.getBoolean("lapPaceGuidance", false),
+        lapVibration = preferences.getBoolean("lapVibration", false)))
     val state: StateFlow<AppState> = mutableState.asStateFlow()
     val requests = MutableSharedFlow<UiRequest>(extraBufferCapacity = 8)
 
@@ -113,7 +115,15 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
             viewModelScope.launch { runCatching { oldClient.request("DELETE", "/v1/music/lease/$oldLeaseId") } }
         }
         viewModelScope.launch { app.runs.active.collect { active ->
-            mutableState.update { it.copy(activeRun = active, sharingConsentRunId = it.sharingConsentRunId?.takeIf { id -> id == RunnerSharingPreferenceStore.NEXT_RUN || id == active.id && active.phase == RunPhase.RUNNING }, publicLocation = if (firebaseMode) app.runnerSharing.state.value.enabled else preferences.getBoolean("publicLocation", false)) }
+            mutableState.update { previous ->
+                val startedNewRun = previous.activeRun.phase == RunPhase.IDLE && active.phase == RunPhase.RUNNING
+                previous.copy(activeRun = active,
+                    plannedRunGoal = previous.plannedRunGoal.takeUnless { startedNewRun && it == active.goal },
+                    sharingConsentRunId = previous.sharingConsentRunId?.takeIf { id ->
+                        id == RunnerSharingPreferenceStore.NEXT_RUN || id == active.id && active.phase == RunPhase.RUNNING
+                    },
+                    publicLocation = if (firebaseMode) app.runnerSharing.state.value.enabled else preferences.getBoolean("publicLocation", false))
+            }
             if (active.phase != RunPhase.IDLE) preserveEntryForExistingUse()
         } }
         viewModelScope.launch { app.runs.persistence.collect { persistence ->
@@ -249,12 +259,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     }
     override fun openRunNotificationSettings() { requests.tryEmit(UiRequest.RunNotificationSettings) }
     override fun addRunWidget() { requests.tryEmit(UiRequest.PinRunWidget) }
-    private fun commandRun(action: String, expectedRunId: String? = null) {
-        if (!RunTrackingService.command(app, action, expectedRunId)) permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
+    private fun commandRun(action: String, expectedRunId: String? = null, goal: RunGoal? = null) {
+        if (!RunTrackingService.command(app, action, expectedRunId, goal)) permissionDenied("러닝 화면을 열고 위치 권한을 확인한 뒤 다시 시도해 주세요.")
     }
-    fun beginWithPermission(recover: Boolean) { commandRun(if (recover) RunTrackingService.RECOVER else RunTrackingService.START) }
+    fun beginWithPermission(recover: Boolean, goal: RunGoal? = null) {
+        commandRun(if (recover) RunTrackingService.RECOVER else RunTrackingService.START, goal = goal.takeUnless { recover })
+    }
     fun resumeWithPermission() { commandRun(RunTrackingService.RESUME) }
-    override fun startRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(false)) }
+    override fun startRun() {
+        val current = state.value
+        if (!current.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(false, current.plannedRunGoal))
+    }
     override fun recoverRun() { if (!state.value.runPersistence.blocksNewRun) requests.tryEmit(UiRequest.RunPermission(true)) }
     override fun openLocationSettings() { requests.tryEmit(UiRequest.LocationSettings) }
     override fun openAppPermissionSettings() { requests.tryEmit(UiRequest.AppPermissionSettings) }
@@ -278,6 +293,17 @@ class AppViewModel(application: Application) : AndroidViewModel(application), Ap
     override fun dismissError() { mutableState.update { it.copy(error = null) } }
     override fun setAutoPause(enabled: Boolean) { preferences.edit().putBoolean("autoPause", enabled).apply(); mutableState.update { it.copy(autoPause = enabled) } }
     override fun setVoiceGuidance(enabled: Boolean) { preferences.edit().putBoolean("voiceGuidance", enabled).apply(); mutableState.update { it.copy(voiceGuidance = enabled) } }
+    override fun setLapPaceGuidance(enabled: Boolean) {
+        preferences.edit().putBoolean("lapPaceGuidance", enabled).apply()
+        mutableState.update { it.copy(lapPaceGuidance = enabled) }
+    }
+    override fun setLapVibration(enabled: Boolean) {
+        preferences.edit().putBoolean("lapVibration", enabled).apply()
+        mutableState.update { it.copy(lapVibration = enabled) }
+    }
+    override fun setRunGoal(goal: RunGoal?) {
+        mutableState.update { if (it.activeRun.phase == RunPhase.IDLE) it.copy(plannedRunGoal = goal) else it }
+    }
     override fun setPublicLocation(enabled: Boolean) {
         if (!enabled) {
             app.sharingPreference.suppressAutomaticSharing()

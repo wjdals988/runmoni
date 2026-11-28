@@ -4,6 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
 import com.runmoni.app.domain.*
+import java.time.LocalDate
+import java.time.ZoneId
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -49,6 +51,44 @@ class HomeWeatherLayoutTest : RunmoniDesignTestBase() {
         }
         compose.onNodeWithTag("recent_run_activity_empty").assertDoesNotExist()
         compose.onNodeWithTag("recent_run_activity_rows").assertExists()
+    }
+
+    @Test fun oneHomeActionOpensTheLatestSavedResultAndSevenDayTotalsStayHonestWithCachedHistory() {
+        val zone = ZoneId.systemDefault()
+        val today = LocalDate.now(zone)
+        fun savedRun(id: String, daysAgo: Long, meters: Double, activeMillis: Long): RunRecord {
+            val start = today.minusDays(daysAgo).atStartOfDay(zone).toInstant().toEpochMilli()
+            return RunRecord(id, start, start + activeMillis, meters, activeMillis)
+        }
+        val latest = savedRun("home-latest-restored", 1L, 3750.0, 1_200_000L)
+        val previous = savedRun("home-previous", 4L, 2250.0, 2_400_000L)
+        val outside = savedRun("home-outside-week", 8L, 9000.0, 4_500_000L)
+        val state = mutableStateOf(AppState(records = listOf(previous, outside, latest)))
+        val actions = RunmoniUiTest.FakeActions(state)
+        compose.setContent { ViewportBox(Viewport(320, 2f)) { RunmoniApp(state.value, actions) } }
+
+        compose.onNodeWithTag("home_start_run").assertIsDisplayed().assertHeightIsAtLeast(64.dp)
+        val shortcut = compose.onNodeWithTag("record_${latest.id}")
+        shortcut.performScrollTo().assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp)
+            .assertTextContains("최근 러닝 보기").performClick()
+        compose.onNodeWithTag("record_detail_page").assertIsDisplayed()
+        compose.onNodeWithTag("record_distance").assertTextEquals("3.75 km")
+        compose.onNodeWithTag("close_record").performClick()
+        compose.onNodeWithTag("nav_home").assertIsSelected()
+
+        compose.onNodeWithTag("recent_run_total_distance").performScrollTo().assertTextContains("6.00 km")
+        compose.onNodeWithTag("recent_run_total_count").performScrollTo().assertTextContains("2회")
+        compose.onNodeWithTag("recent_run_total_time").performScrollTo().assertTextContains("1:00:00")
+        noTextOverflow("Home history at 320dp and 200% text")
+
+        compose.runOnIdle { state.value = state.value.copy(runPersistence = RunPersistenceState(initialized = true, historyUnavailable = true)) }
+        compose.onNodeWithTag("recent_run_activity_cached").performScrollTo().assertIsDisplayed()
+        shortcut.assertIsEnabled()
+        compose.onNodeWithTag("recent_run_total_count").assertTextContains("2회")
+        compose.runOnIdle { state.value = state.value.copy(records = emptyList()) }
+        compose.onNodeWithTag("recent_run_activity_unavailable").performScrollTo().assertIsDisplayed()
+        shortcut.assertDoesNotExist()
+        compose.onNodeWithTag("recent_run_totals").assertDoesNotExist()
     }
 
     @Test fun valuesStayBesideTheAvatarAtPhoneWidthsAndReflowWithLargeText() {

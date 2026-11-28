@@ -8,6 +8,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPhase
+import com.runmoni.app.domain.RunGoal
+import com.runmoni.app.domain.RunGoalKind
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -23,6 +25,33 @@ class RunReliabilityTest {
     private fun database() = Room.inMemoryDatabaseBuilder(context, RunDatabase::class.java).build()
     private suspend fun ready(repository: RunRepository) {
         withTimeout(5000) { repository.persistence.first { it.initialized && !it.saving } }
+    }
+
+    @Test fun localGoalSurvivesRecoveryAndCompletionWithoutFallingIntoTheNextRun() = runBlocking {
+        val db = database()
+        val first = RunRepository(db, credit = { _, _ -> })
+        var recovered: RunRepository? = null
+        try {
+            ready(first)
+            val goal = RunGoal(RunGoalKind.DISTANCE, 5)
+            first.begin(goal = goal)
+            val id = first.active.value.id
+            assertEquals(goal, first.active.value.goal)
+            first.close()
+
+            val next = RunRepository(db, credit = { _, _ -> })
+            recovered = next
+            ready(next)
+            assertEquals(RunPhase.RECOVERY, next.active.value.phase)
+            assertEquals(goal, next.active.value.goal)
+            next.begin(recover = true, goal = RunGoal(RunGoalKind.DURATION, 30))
+            assertEquals(goal, next.active.value.goal)
+            next.finish(id)
+            assertEquals(goal, next.record(id)?.goal)
+            assertEquals(goal, next.lastFinished.value?.goal)
+            next.begin()
+            assertNull(next.active.value.goal)
+        } finally { recovered?.close(); first.close(); db.close() }
     }
 
     @Test fun failedPointWritePausesThenRetriesTheSamePointAndKeepsTheNextSequence() = runBlocking {

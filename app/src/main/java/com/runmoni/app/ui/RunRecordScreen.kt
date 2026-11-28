@@ -1,15 +1,19 @@
 package com.runmoni.app.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +42,7 @@ import com.runmoni.app.domain.RunPersistenceIssue
 import com.runmoni.app.domain.RunPersistenceState
 import com.runmoni.app.domain.RunRecord
 import com.runmoni.app.domain.RouteGeometry
-import com.runmoni.app.domain.KmSplit
+import com.runmoni.app.domain.RunResultAnalysis
 
 // A stable product callback for late-event regression checks. Foundation's
 // OnClick SemanticsAction is a live ClickableNode accessor, not a snapshot.
@@ -67,6 +71,7 @@ internal fun RunRecordScreen(
 }
 
 @Composable
+@OptIn(ExperimentalFoundationApi::class, ExperimentalLayoutApi::class)
 private fun RunRecordPageContent(
     record: RunRecord,
     actions: AppActions,
@@ -116,6 +121,20 @@ private fun RunRecordPageContent(
         if (pageAlive && expectedId.isNotBlank() && expectedId == latestRecordId && !latestBusy)
             latestActions.exportRun(expectedId)
     }
+    val analysis = remember(record) { RunResultAnalysis.from(record) }
+    val hasRoute = remember(record.points) { RouteGeometry.from(record.points).segments.any { it.size >= 2 } }
+    var selectedKilometer by rememberSaveable { mutableIntStateOf(0) }
+    var mapOpen by rememberSaveable { mutableStateOf(false) }
+    val analysisAnchor = remember { BringIntoViewRequester() }
+    val mapAnchor = remember { BringIntoViewRequester() }
+    var analysisRequest by remember { mutableIntStateOf(0) }
+    var mapRequest by remember { mutableIntStateOf(0) }
+    LaunchedEffect(analysisRequest) { if (analysisRequest > 0) analysisAnchor.bringIntoView() }
+    LaunchedEffect(mapRequest) { if (mapRequest > 0 && mapOpen) mapAnchor.bringIntoView() }
+    val openMap: () -> Unit = {
+        mapOpen = true
+        mapRequest++
+    }
     BackHandler(enabled = backupFor == null && deleteFor == null, onBack = onBack)
 
     Surface(Modifier.fillMaxSize().testTag("record_detail_page"), color = RunmoniColors.Cream) {
@@ -152,37 +171,63 @@ private fun RunRecordPageContent(
                 Column(Modifier.widthIn(max = RunmoniLayout.ContentWidth).fillMaxWidth()
                     .align(Alignment.TopCenter).verticalScroll(scroll).testTag("record_detail_scroll")
                     .padding(bottom = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)) {
-                    RunningMetricPanel(contentPadding = PaddingValues(20.dp), spacing = 12.dp,
-                        modifier = Modifier.padding(horizontal = pageGutter()).padding(top = 16.dp)) {
-                        Text(dateTime(record.startedAtMillis), style = MaterialTheme.typography.bodyMedium,
-                            color = RunmoniTrack.Detail, modifier = Modifier.testTag("record_date"))
-                        val recordedDistance = distance(record.distanceMeters)
-                        RecordDistance(recordedDistance)
-                        HorizontalDivider(color = RunmoniTrack.Detail.copy(alpha = .4f))
-                        val time = duration(record.activeDurationMillis)
-                        val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
-                        BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_duration_pace")
-                            .clearAndSetSemantics { text = AnnotatedString("러닝 시간 $time · 평균 $pace /km") }) {
-                            if (maxWidth < 272.dp || LocalDensity.current.fontScale >= 1.3f) {
-                                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                                    RecordResultMetric("러닝 시간", time, Icons.Outlined.Timer)
-                                    RecordResultMetric("평균 페이스", "$pace /km", Icons.Outlined.Speed)
+                    verticalArrangement = Arrangement.spacedBy(24.dp)) {
+                    RunRecordSummary(record, Modifier.padding(horizontal = pageGutter()).padding(top = 12.dp))
+
+                    val fastest = analysis.fastestSplits.firstOrNull()
+                    val firstSplit = analysis.splits.firstOrNull()
+                    if (analysis.elapsedMillis != null || record.goal != null || firstSplit != null || hasRoute) {
+                        Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            record.goal?.let { goal ->
+                                val outcome = goal.progress(record.distanceMeters, record.activeDurationMillis)
+                                Text("목표 ${goal.label} · ${if (outcome.reached) "달성" else "미달성"}",
+                                    style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Ink,
+                                    modifier = Modifier.testTag("record_goal_outcome"))
+                            }
+                            analysis.elapsedMillis?.let {
+                                Text("전체 경과 ${duration(it)}", style = MaterialTheme.typography.bodyMedium,
+                                    color = RunmoniColors.Muted, modifier = Modifier.testTag("record_elapsed"))
+                            }
+                            fastest?.let {
+                                val quickest = formatResultPace(it.paceSeconds)
+                                val label = if (analysis.fastestSplits.size > 1) "공동 ${analysis.fastestSplits.size}개"
+                                else "${it.kilometer - 1}–${it.kilometer} km"
+                                val title = if (analysis.hasMissingSplits) "저장된 구간 중 가장 빠른 1km" else "가장 빠른 1km"
+                                Text("$title · $label · $quickest /km",
+                                    style = MaterialTheme.typography.titleMedium.copy(fontFeatureSettings = "tnum"),
+                                    modifier = Modifier.testTag("record_fastest_split"))
+                            }
+                            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                if (firstSplit != null) FilledTonalButton(onClick = {
+                                    selectedKilometer = (fastest ?: firstSplit).kilometer
+                                    analysisRequest++
+                                }, shape = RunmoniShapes.Action,
+                                    modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_splits")) { Text("구간 보기") }
+                                if (hasRoute) OutlinedButton(onClick = openMap, shape = RunmoniShapes.Action,
+                                    modifier = Modifier.heightIn(min = 48.dp).testTag("record_view_route")) {
+                                    Icon(Icons.Outlined.Route, null, Modifier.size(18.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text("경로 보기")
                                 }
-                            } else Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                                Box(Modifier.weight(1f)) { RecordResultMetric("러닝 시간", time, Icons.Outlined.Timer) }
-                                Box(Modifier.weight(1f)) { RecordResultMetric("평균 페이스", "$pace /km", Icons.Outlined.Speed) }
                             }
                         }
                     }
 
-                    Column(Modifier.padding(horizontal = pageGutter()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    RunRecordPaceAnalysis(analysis, selectedKilometer, { selectedKilometer = it },
+                        Modifier.padding(horizontal = pageGutter()).bringIntoViewRequester(analysisAnchor))
+
+                    Column(Modifier.fillMaxWidth().padding(horizontal = pageGutter()).bringIntoViewRequester(mapAnchor),
+                        verticalArrangement = Arrangement.spacedBy(RunmoniLayout.ContentGap)) {
                         RecordSectionTitle("러닝 경로", Icons.Outlined.Route)
-                        val hasRoute = remember(record.points) {
-                            RouteGeometry.from(record.points).segments.any { it.size >= 2 }
-                        }
                         if (hasRoute) {
-                            Box(Modifier.fillMaxWidth().height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 240.dp)
+                            OutlinedButton(onClick = { if (mapOpen) mapOpen = false else openMap() }, shape = RunmoniShapes.Action,
+                                modifier = Modifier.heightIn(min = 48.dp).testTag("record_toggle_map")) {
+                                Icon(if (mapOpen) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null, Modifier.size(20.dp))
+                                Spacer(Modifier.width(8.dp))
+                                Text(if (mapOpen) "지도 접기" else "지도 펼치기")
+                            }
+                            if (mapOpen) Box(Modifier.fillMaxWidth().height(if (LocalDensity.current.fontScale >= 1.3f) 360.dp else 240.dp)
                                 .clip(RunmoniShapes.Surface).testTag("record_map")) {
                                 MapPane(record.points, modifier = Modifier.fillMaxSize(), fitRoute = true)
                             }
@@ -195,15 +240,6 @@ private fun RunRecordPageContent(
                         if (record.interrupted) Text("중단된 구간이 있어요. 확인되지 않은 거리는 더하지 않았어요.",
                             style = MaterialTheme.typography.bodyMedium, color = RunmoniColors.Muted,
                             modifier = Modifier.testTag("record_interrupted"))
-                    }
-
-                    if (record.splits.isNotEmpty()) Column(Modifier.padding(horizontal = pageGutter()),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        RecordSectionTitle("킬로미터별 기록", Icons.Outlined.Timer)
-                        Text("막대는 구간 시간의 비율이에요. 짧을수록 빨라요.",
-                            style = MaterialTheme.typography.bodySmall, color = RunmoniColors.Muted)
-                        val longestSplit = record.splits.maxOf { it.durationMillis }.coerceAtLeast(0)
-                        record.splits.forEach { split -> RecordSplitRow(split, longestSplit) }
                     }
 
                     Column(Modifier.fillMaxWidth().background(RunmoniColors.Paper)
@@ -315,7 +351,7 @@ private fun RunRecordPageContent(
 }
 
 @Composable
-private fun RecordSectionTitle(title: String, icon: ImageVector) {
+internal fun RecordSectionTitle(title: String, icon: ImageVector) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Icon(icon, null, Modifier.size(22.dp), tint = RunmoniColors.Primary)
         Text(title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
@@ -323,13 +359,23 @@ private fun RecordSectionTitle(title: String, icon: ImageVector) {
 }
 
 @Composable
-private fun RecordResultMetric(label: String, value: String, icon: ImageVector) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Icon(icon, null, Modifier.size(18.dp), tint = RunmoniTrack.Detail)
-            Text(label, style = MaterialTheme.typography.bodyMedium, color = RunmoniTrack.Detail)
+private fun RunRecordSummary(record: RunRecord, modifier: Modifier = Modifier) {
+    val largeText = LocalDensity.current.fontScale >= 1.3f
+    RunningMetricPanel(contentPadding = PaddingValues(if (largeText) 16.dp else 20.dp),
+        spacing = if (largeText) 8.dp else 12.dp, modifier = modifier) {
+        Text(dateTime(record.startedAtMillis),
+            style = if (largeText) MaterialTheme.typography.labelSmall else MaterialTheme.typography.bodyMedium,
+            color = RunmoniTrack.Detail, modifier = Modifier.testTag("record_date"))
+        RecordDistance(distance(record.distanceMeters), maxSize = if (largeText) 44f else 56f)
+        HorizontalDivider(color = RunmoniTrack.Detail.copy(alpha = .4f))
+        val time = duration(record.activeDurationMillis)
+        val pace = averagePace(record.distanceMeters, record.activeDurationMillis)
+        Box(Modifier.fillMaxWidth().testTag("record_duration_pace")
+            .clearAndSetSemantics { text = AnnotatedString("러닝 시간 $time · 평균 $pace /km") }) {
+            MetricGroup(listOf(UiMetric(if (largeText) "활동 시간" else "러닝 시간", time, tag = "record_active_time"),
+                UiMetric(if (largeText) "평균" else "평균 페이스", pace, "/km", "record_average_pace")),
+                onDark = true, compact = largeText)
         }
-        Text(value, style = MaterialTheme.typography.titleLarge.copy(fontFeatureSettings = "tnum"), color = RunmoniTrack.OnBoard)
     }
 }
 
@@ -343,35 +389,12 @@ private fun RecordStatusLine(icon: ImageVector, message: String, modifier: Modif
     }
 }
 
-/** Equal one-kilometre intervals compare elapsed split duration, never an invented pace target.
- * The full range starts at zero: no minimum bar length or truncated axis exaggerates a difference.
- */
-@Composable
-private fun RecordSplitRow(split: KmSplit, longestMillis: Long) {
-    val known = split.durationMillis > 0 && longestMillis > 0
-    val time = if (known) duration(split.durationMillis) else "시간 미확인"
-    Column(Modifier.fillMaxWidth().testTag("record_split_${split.kilometer}")
-        .clearAndSetSemantics { text = AnnotatedString("${split.kilometer} km, $time") }
-        .padding(vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp), verticalAlignment = Alignment.Top) {
-            Text("${split.kilometer} km", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-            Text(time, style = MaterialTheme.typography.bodyLarge.copy(fontFeatureSettings = "tnum"))
-        }
-        if (known) {
-            val ratio = (split.durationMillis.toDouble() / longestMillis.toDouble()).toFloat().coerceIn(0f, 1f)
-            Box(Modifier.fillMaxWidth().height(6.dp).clip(RunmoniShapes.Status).background(RunmoniColors.Mist)) {
-                Box(Modifier.fillMaxWidth(ratio).fillMaxHeight().clip(RunmoniShapes.Status).background(RunmoniColors.Primary))
-            }
-        }
-    }
-}
-
 /** Number and unit share a baseline and a text block, rather than opposite ends
  * of a weighted row. Respect font scaling; at the readable minimum a genuinely
  * long value wraps naturally instead of clipping the final digits or its unit.
  */
 @Composable
-private fun RecordDistance(value: String) {
+private fun RecordDistance(value: String, maxSize: Float) {
     val measurer = rememberTextMeasurer()
     val style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold,
         fontFeatureSettings = "tnum")
@@ -383,13 +406,13 @@ private fun RecordDistance(value: String) {
     BoxWithConstraints(Modifier.fillMaxWidth().testTag("record_distance")
         .clearAndSetSemantics { text = AnnotatedString("$value km") }) {
         val widthPx = with(LocalDensity.current) { maxWidth.roundToPx() }
-        val size = remember(value, widthPx, measurer, style, unit) {
+        val size = remember(value, widthPx, measurer, style, unit, maxSize) {
             fun fits(candidate: Float) = measurer.measure(label,
                 style.copy(fontSize = candidate.sp, lineHeight = (candidate * 1.15f).sp),
                 softWrap = false, maxLines = 1).size.width <= widthPx
-            if (fits(56f)) 56f else {
+            if (fits(maxSize)) maxSize else {
                 var low = 20f
-                var high = 56f
+                var high = maxSize
                 repeat(8) {
                     val middle = (low + high) / 2
                     if (fits(middle)) low = middle else high = middle
