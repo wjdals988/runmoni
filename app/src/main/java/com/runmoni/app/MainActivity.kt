@@ -24,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import com.runmoni.app.domain.RunGoal
 import com.runmoni.app.tracking.RunNotifications
 import com.runmoni.app.ui.RunmoniRoot
 import com.runmoni.app.ui.rememberAppUpdates
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
             is UiRequest.PreviewLocation -> model.previewPermissionResult(pending.weather,
                 hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) || hasPermission(Manifest.permission.ACCESS_FINE_LOCATION))
             is UiRequest.RunPermission -> {
-                if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(pending.recover)
+                if (hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)) model.beginWithPermission(pending.recover, pending.goal)
                 else model.permissionDenied("러닝 코스를 기록하려면 정밀 위치 권한이 필요합니다. 설정에서 허용해 주세요.")
             }
             UiRequest.ResumeRunPermission -> {
@@ -75,6 +76,10 @@ class MainActivity : ComponentActivity() {
         // Activity theme for both fresh creation and saved-state recreation.
         setTheme(R.style.Theme_Runmoni)
         super.onCreate(savedInstanceState)
+        savedInstanceState?.getBundle("pendingRunPermission")?.let { pending ->
+            pendingPermission = UiRequest.RunPermission(pending.getBoolean("recover"),
+                RunGoal.fromStorage(pending.getString("goalKind"), pending.getInt("goalTarget")))
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) configurePlatformSplash()
         refreshLocationAccess()
         // The initial system appearance is corrected to the local preference by RunmoniTheme.
@@ -150,6 +155,13 @@ class MainActivity : ComponentActivity() {
     }
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("handledRunNotificationEvent", handledRunNotificationEvent)
+        (pendingPermission as? UiRequest.RunPermission)?.let { request ->
+            outState.putBundle("pendingRunPermission", Bundle().apply {
+                putBoolean("recover", request.recover)
+                putString("goalKind", request.goal?.kind?.name)
+                putInt("goalTarget", request.goal?.target ?: 0)
+            })
+        }
         super.onSaveInstanceState(outState)
     }
     private fun handleRunNotification(source: Intent?, force: Boolean) {
@@ -174,7 +186,7 @@ class MainActivity : ComponentActivity() {
             missing += Manifest.permission.POST_NOTIFICATIONS
         }
         if (missing.isNotEmpty()) requestPermissions(request, missing)
-        else if (request is UiRequest.RunPermission) model.beginWithPermission(request.recover)
+        else if (request is UiRequest.RunPermission) model.beginWithPermission(request.recover, request.goal)
         else model.resumeWithPermission()
     }
     override fun onStart() {

@@ -1,9 +1,16 @@
 package com.runmoni.app.ui
 
 import android.view.KeyEvent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
@@ -16,6 +23,7 @@ import com.runmoni.app.domain.*
 import org.junit.Assert.*
 import org.junit.Test
 import java.io.File
+import java.util.concurrent.atomic.AtomicInteger
 
 private fun recordPageFixture(id: String = "record-page-a") = RunRecord(
     id = id, startedAtMillis = 1_730_000_000_000, finishedAtMillis = 1_730_001_300_000,
@@ -37,6 +45,70 @@ private fun OfflineRecordPageFixture(content: @Composable () -> Unit) {
 }
 
 class RunRecordScreenUiTest : RunmoniDesignTestBase() {
+    @Test fun resultPaceChartAndRowsUseTheSameSelectionAndRequestTheMapOnlyOnTap() {
+        val record = recordPageFixture().copy(interrupted = false, elapsedDurationMillis = 1_200_000,
+            splits = listOf(KmSplit(1, 361_000), KmSplit(2, 301_000), KmSplit(3, 363_000)))
+        val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
+        val tileOperations = AtomicInteger()
+        val tiles = MapTileSource { tileOperations.incrementAndGet(); MapTileResult() }
+        compose.setContent {
+            CompositionLocalProvider(LocalMapTileSource provides tiles) {
+                RunmoniTheme(darkTheme = false) {
+                    Box(Modifier.width(411.dp).height(760.dp).testTag("audit_viewport")) {
+                        RunRecordScreen(record, actions, onBack = {}, onShare = {})
+                    }
+                }
+            }
+        }
+        compose.onNodeWithTag("record_map").assertDoesNotExist()
+        compose.onNodeWithTag("record_fastest_split").assertTextContains("1–2 km · 5:01 /km", substring = true)
+        capture("run-result-overview-411-fixture")
+
+        compose.onNodeWithTag("record_view_splits").performScrollTo().performClick()
+        compose.onNodeWithTag("record_split_2").assertIsSelected()
+        val chart = compose.onNodeWithTag("record_pace_plot")
+        chart.assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "2번 구간 선택"))
+        chart.performScrollTo().performTouchInput { click(Offset(2f, center.y)) }
+        compose.onNodeWithTag("record_split_1").assertIsSelected()
+        compose.onNodeWithTag("record_selected_split").assertTextContains("0–1 km · 6:01 /km")
+        compose.onNodeWithTag("record_split_3").performScrollTo().assertHeightIsAtLeast(48.dp).performClick()
+        chart.assert(SemanticsMatcher.expectValue(SemanticsProperties.StateDescription, "3번 구간 선택"))
+        compose.onNodeWithTag("record_selected_split").assertTextContains("직전 구간보다 1분 2초 느려요.")
+        chart.performScrollTo()
+        capture("run-result-pace-and-laps-411-fixture")
+
+        assertEquals(0, tileOperations.get())
+        compose.onNodeWithTag("record_view_route").performScrollTo().assertHeightIsAtLeast(48.dp).performClick()
+        compose.onNodeWithTag("record_map").assertExists()
+        compose.waitUntil(10_000) { tileOperations.get() > 0 }
+        compose.onNodeWithTag("record_toggle_map").performScrollTo().performClick()
+        compose.onNodeWithTag("record_map").assertDoesNotExist()
+    }
+
+    @Test fun compactResultKeepsSummaryAndShareFullyVisibleBeforeScroll() {
+        val record = recordPageFixture().copy(interrupted = false, goal = RunGoal(RunGoalKind.DISTANCE, 3))
+        val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))
+        compose.setContent {
+            OfflineRecordPageFixture { ViewportBox(Viewport(320, 2f)) {
+                Box(Modifier.height(520.dp).testTag("compact_record_fixture")) {
+                    RunRecordScreen(record, actions, onBack = {}, onShare = {})
+                }
+            } }
+        }
+        val body = compose.onNodeWithTag("record_scroll_viewport").fetchSemanticsNode().boundsInRoot
+        for (tag in listOf("record_distance", "record_duration_pace")) {
+            val metric = compose.onNodeWithTag(tag).assertIsDisplayed().fetchSemanticsNode()
+            assertTrue("Full $tag is visible before scrolling", metric.positionInRoot.y >= body.top - 1f &&
+                metric.positionInRoot.y + metric.size.height <= body.bottom + 1f)
+        }
+        val share = compose.onNodeWithTag("share_run_record").assertIsDisplayed().assertIsEnabled()
+            .assertHeightIsAtLeast(48.dp).assertWidthIsAtLeast(48.dp).fetchSemanticsNode()
+        assertTrue(share.positionInRoot.y + share.size.height <= body.top + 1f)
+        capture("run-result-320-font2-fixture")
+        compose.onNodeWithTag("record_goal_outcome").performScrollTo().assertTextEquals("목표 3 km · 달성")
+        compose.onNodeWithTag("record_elapsed").performScrollTo().assertTextEquals("전체 경과 21:40")
+    }
+
     @Test fun recordsWithoutGpsPositionsShowAnExplanationAndKeepSharingAvailable() {
         val record = recordPageFixture().copy(points = emptyList())
         val actions = RunmoniUiTest.FakeActions(mutableStateOf(AppState(records = listOf(record))))

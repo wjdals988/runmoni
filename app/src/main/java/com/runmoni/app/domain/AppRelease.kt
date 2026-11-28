@@ -42,6 +42,12 @@ fun latestPublishedRelease(stable: AppRelease?, preview: AppRelease?, includeDev
 data class AppVersionEntry(val version: String, val date: String, val status: String, val changes: List<String>)
 
 val bundledAppHistory = listOf(
+    AppVersionEntry("0.11.0-dev", "2026-11-28", "러닝 구간 분석과 오늘 목표 · 개발 프리뷰", listOf(
+        "러닝 결과의 1km 페이스 차트와 표에서 평균 및 직전 구간과 비교해요.",
+        "홈에서 최근 7일 거리, 횟수, 시간을 보고 마지막 러닝 결과를 열어요.",
+        "1km마다 구간 페이스 음성과 진동을 설정에서 선택할 수 있어요.",
+        "달리기 전에 거리 또는 시간 목표 하나를 고르고 남은 양과 결과를 확인해요.",
+    )),
     AppVersionEntry("0.10.1-dev", "2026-11-28", "여백·정렬, 미니미 피팅과 아이콘 개선 · 개발 프리뷰", listOf(
         "큰 글씨에서도 러닝의 거리·시간·페이스와 GPS 상태를 함께 봐요.",
         "홈에서 러닝을 준비하고, 탐색에서 내 위치와 주변 러너 보기를 바로 열어요.",

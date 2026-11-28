@@ -27,6 +27,9 @@ interface AppActions {
     fun dismissError()
     fun setAutoPause(enabled: Boolean)
     fun setVoiceGuidance(enabled: Boolean)
+    fun setLapPaceGuidance(enabled: Boolean) {}
+    fun setLapVibration(enabled: Boolean) {}
+    fun setRunGoal(goal: RunGoal?) {}
     fun setPublicLocation(enabled: Boolean)
     fun saveUnifiedProfile(name: String, expectedUid: String) { updateProfile(name) }
     fun saveUnifiedProfile(name: String, expectedUid: String, expectedBackend: CommunityBackend) { saveUnifiedProfile(name, expectedUid) }

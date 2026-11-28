@@ -26,6 +26,7 @@ data class RunRecord(
     val synced: Boolean = false,
     val interrupted: Boolean = false,
     val mileage: Int = 0,
+    val goal: RunGoal? = null,
 )
 data class ActiveRun(
     val id: String = "",
@@ -40,6 +41,8 @@ data class ActiveRun(
     val accuracyMeters: Float? = null,
     val pauseReason: PauseReason? = null,
     val currentSpeedMetersPerSecond: Double? = null,
+    val goal: RunGoal? = null,
+    val lastCompletedSplit: KmSplit? = null,
 )
 data class LocationAccess(val precisePermissionGranted: Boolean? = null, val gpsEnabled: Boolean? = null)
 /** Explicit artwork base, independent of hair, clothing and the saved equipment slots. */
@@ -158,6 +161,9 @@ data class AppState(
     val sharingConsentRunId: String? = null,
     val sharingConsentNonce: Long = 0,
     val exploreLocationFailureSerial: Long = 0,
+    val plannedRunGoal: RunGoal? = null,
+    val lapPaceGuidance: Boolean = false,
+    val lapVibration: Boolean = false,
 )
 data class NewCrew(val name: String, val description: String, val region: String, val paceLabel: String)
 data class NewParty(val crewId: String?, val title: String, val kind: PartyKind, val startsAtMillis: Long, val meetingLabel: String, val distanceKm: Double, val paceLabel: String, val capacity: Int, val latitude: Double? = null, val longitude: Double? = null)

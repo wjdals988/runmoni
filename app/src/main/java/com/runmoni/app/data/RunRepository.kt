@@ -79,7 +79,10 @@ class RunRepository internal constructor(
             val row = dao.unfinished()
             val points = row?.let { dao.points(it.id).map { point -> point.toDomain() } }.orEmpty()
             stored = row?.copy(interrupted = true)
-            if (row != null) active.value = ActiveRun(row.id, RunPhase.RECOVERY, row.startedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points = points, gpsStatus = "이전 기록 복구 가능 · 공백 구간 제외")
+            if (row != null) active.value = ActiveRun(row.id, RunPhase.RECOVERY, row.startedAtMillis,
+                row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points = points,
+                gpsStatus = "이전 기록 복구 가능 · 공백 구간 제외", goal = row.runGoal(),
+                lastCompletedSplit = parseSplits(row.splitsJson).lastOrNull())
             persistenceState.update { it.copy(initialized = true, saving = false, issue = null) }
             true
         } catch (cancelled: CancellationException) {
@@ -92,7 +95,7 @@ class RunRepository internal constructor(
         }
     }
 
-    suspend fun begin(recover: Boolean = false) {
+    suspend fun begin(recover: Boolean = false, goal: RunGoal? = null) {
         awaitRecorderCleanup()
         initialization.await()
         mutex.withLock {
@@ -117,7 +120,8 @@ class RunRepository internal constructor(
             if (recover && unfinished == null) throw IllegalStateException("복구할 러닝 기록이 없어요. 새 러닝을 시작해 주세요.")
             val previous = unfinished.takeIf { recover }
             engine = RunEngine()
-            val row = previous?.copy(interrupted = true) ?: StoredRun(UUID.randomUUID().toString(), System.currentTimeMillis())
+            val row = previous?.copy(interrupted = true) ?: StoredRun(UUID.randomUUID().toString(),
+                System.currentTimeMillis(), goalKind = goal?.kind?.name, goalTarget = goal?.target ?: 0)
             if (previous != null) engine.restore(row.distanceMeters, row.activeDurationMillis, row.segment, parseSplits(row.splitsJson))
             val restored = try { if (previous != null) dao.points(row.id).map { it.toDomain() } else emptyList() }
             catch (cancelled: CancellationException) {
@@ -146,7 +150,9 @@ class RunRepository internal constructor(
             gpsSignalStale = true
             savedCheckpoint()
             engine.tick(SystemClock.elapsedRealtime(), true)
-            active.value = ActiveRun(row.id, RunPhase.RUNNING, row.startedAtMillis, row.distanceMeters, row.activeDurationMillis, System.currentTimeMillis() - row.startedAtMillis, points = restored, gpsStatus = "GPS 신호 기다리는 중")
+            active.value = ActiveRun(row.id, RunPhase.RUNNING, row.startedAtMillis, row.distanceMeters,
+                row.activeDurationMillis, System.currentTimeMillis() - row.startedAtMillis, points = restored,
+                gpsStatus = "GPS 신호 기다리는 중", goal = row.runGoal(), lastCompletedSplit = engine.splits.lastOrNull())
         }
     }
 
@@ -407,10 +413,14 @@ class RunRepository internal constructor(
         stored = row.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed, segment = engine.segment, splitsJson = JSONArray().apply { engine.splits.forEach { put(JSONObject().put("km", it.kilometer).put("duration", it.durationMillis)) } }.toString())
         active.value = active.value.copy(distanceMeters = engine.distanceMeters, activeDurationMillis = engine.activeDurationMillis, elapsedDurationMillis = elapsed,
             currentPaceSecondsPerKm = if (liveFix) engine.currentPaceSecondsPerKm() else null,
-            currentSpeedMetersPerSecond = if (liveFix) engine.currentSpeedMetersPerSecond() else null)
+            currentSpeedMetersPerSecond = if (liveFix) engine.currentSpeedMetersPerSecond() else null,
+            lastCompletedSplit = engine.splits.lastOrNull())
     }
     private suspend fun toRecord(row: StoredRun) = recordWithPoints(row, dao.points(row.id).map { it.toDomain() })
-    private fun recordWithPoints(row: StoredRun, points: List<TrackPoint>) = RunRecord(row.id, row.startedAtMillis, row.finishedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points, parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage)
+    private fun recordWithPoints(row: StoredRun, points: List<TrackPoint>) = RunRecord(row.id, row.startedAtMillis,
+        row.finishedAtMillis, row.distanceMeters, row.activeDurationMillis, row.elapsedDurationMillis, points,
+        parseSplits(row.splitsJson), row.synced, row.interrupted, row.mileage, goal = row.runGoal())
+    private fun StoredRun.runGoal() = RunGoal.fromStorage(goalKind, goalTarget)
     private fun StoredPoint.toDomain() = TrackPoint(sequence, latitude, longitude, accuracyMeters, recordedAtMillis, segment)
     private fun parseSplits(json: String): List<KmSplit> = runCatching { val list = JSONArray(json); (0 until list.length()).map { val item = list.getJSONObject(it); KmSplit(item.getInt("km"), item.getLong("duration")) } }.getOrDefault(emptyList())
 

@@ -21,6 +21,8 @@ import com.runmoni.app.R
 import com.runmoni.app.RunmoniApplication
 import com.runmoni.app.data.LocalWallet
 import com.runmoni.app.domain.ActiveRun
+import com.runmoni.app.domain.RunGoal
+import com.runmoni.app.domain.RunGoalKind
 import com.runmoni.app.domain.RunPhase
 import com.runmoni.app.domain.PauseReason
 import kotlinx.coroutines.runBlocking
@@ -119,9 +121,11 @@ class RecorderServiceTest {
             manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, false)
             manager.addTestProvider(LocationManager.NETWORK_PROVIDER, false, true, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE)
             manager.setTestProviderEnabled(LocationManager.NETWORK_PROVIDER, false)
-            scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START) }
+            val goal = RunGoal(RunGoalKind.DISTANCE, 1)
+            scenario.onActivity { RunTrackingService.command(it, RunTrackingService.START, goal = goal) }
             until { app.runs.active.value.phase == RunPhase.RUNNING }
             runId = app.runs.active.value.id
+            assertEquals(goal, app.runs.active.value.goal)
             Thread.sleep(500) // begin publishes state just before the service registers listeners.
             assertNull("disabled provider must not show old accuracy", app.runs.active.value.accuracyMeters)
             manager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true)
@@ -173,6 +177,7 @@ class RecorderServiceTest {
             RunTrackingService.command(app, RunTrackingService.FINISH)
             until { app.runs.active.value.phase == RunPhase.IDLE }
             val record = runBlocking { app.runs.record(runId) }!!
+            assertEquals(goal, record.goal)
             assertEquals(11, record.points.size)
             assertTrue(record.points.last().segment > record.points.first().segment)
             assertTrue(record.finishedAtMillis >= record.startedAtMillis)

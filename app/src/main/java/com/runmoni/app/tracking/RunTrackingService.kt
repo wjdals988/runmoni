@@ -6,8 +6,12 @@ import android.content.*
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.location.*
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.os.*
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import androidx.core.content.ContextCompat
 import com.runmoni.app.RunmoniApplication
 import com.runmoni.app.domain.*
@@ -26,28 +30,45 @@ class RunTrackingService : Service(), LocationListener {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val repository get() = (application as RunmoniApplication).runs
     private val preferences by lazy { getSharedPreferences("runmoni", MODE_PRIVATE) }
-    private data class Command(val action: String, val expectedRunId: String?, val startId: Int)
+    private data class Command(val action: String, val expectedRunId: String?, val goal: RunGoal?)
+    private data class LapSpeech(val utteranceId: String, val focus: AudioFocusRequest)
     private val commands = Channel<Command>(Channel.UNLIMITED)
     private var destroyed = false
     private var foreground = false
     private var pendingCommands = 0
     private var recordingRunId: String? = null
     private var tts: TextToSpeech? = null
+    private var ttsReady = false
+    private var lapSpeech: LapSpeech? = null
+    private var lapSpeechTimeout: Job? = null
+    private var lapVibrationEnd = 0L
     private var ticker: Job? = null
     private var presenceJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
     private var renewWakeAt = 0L
     private var locationSubscribed = false
-    private var timerKilometer = 0
     private var lastNotificationAt = 0L
     private val autoPause = AutoPauseController()
+    private val lapCueTracker = RunLapCueTracker()
+    private val audioManager by lazy { getSystemService(AudioManager::class.java) }
+    private val lapSpeechAttributes = AudioAttributes.Builder()
+        .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+        .build()
+    private val mainHandler by lazy { Handler(Looper.getMainLooper()) }
+    private val lapVibrator by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getSystemService(VibratorManager::class.java)?.defaultVibrator
+        else getSystemService(Vibrator::class.java)
+    }
     private val manager by lazy { getSystemService(LOCATION_SERVICE) as LocationManager }
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
         super.onCreate()
         RunNotifications.createChannel(this)
-        tts = TextToSpeech(this) { status -> if (status == TextToSpeech.SUCCESS) tts?.language = Locale.KOREAN }
+        tts = runCatching {
+            TextToSpeech(this) { status -> scope.launch(Dispatchers.Main) { initializeLapSpeech(status) } }
+        }.getOrNull()
         scope.launch {
             for (command in commands) {
                 try { handle(command) }
@@ -94,7 +115,10 @@ class RunTrackingService : Service(), LocationListener {
             return START_NOT_STICKY
         }
         pendingCommands++
-        if (commands.trySend(Command(action!!, intent?.getStringExtra(RunNotifications.RUN_ID), startId)).isFailure) pendingCommands--
+        val goal = if (action == START) {
+            RunGoal.fromStorage(intent?.getStringExtra(GOAL_KIND), intent?.getIntExtra(GOAL_TARGET, 0) ?: 0)
+        } else null
+        if (commands.trySend(Command(action!!, intent?.getStringExtra(RunNotifications.RUN_ID), goal)).isFailure) pendingCommands--
         // System/user process termination needs explicit recovery; it is not continuous tracking.
         return START_NOT_STICKY
     }
@@ -110,10 +134,11 @@ class RunTrackingService : Service(), LocationListener {
                 if (recordingRunId == repository.active.value.id && recordingRunId != null) {
                     updateNotification(true); return
                 }
-                repository.begin(command.action == RECOVER)
-                recordingRunId = repository.active.value.id
+                repository.begin(command.action == RECOVER, command.goal)
+                val run = repository.active.value
+                recordingRunId = run.id
                 autoPause.reset()
-                timerKilometer = (repository.active.value.distanceMeters / 1000).toInt()
+                lapCueTracker.start(run)
                 syncResources(); startTicker(); startPresence()
             }
             PAUSE, RESUME -> {
@@ -149,10 +174,15 @@ class RunTrackingService : Service(), LocationListener {
     private fun syncResources() {
         val run = repository.active.value
         val storage = repository.persistence.value
-        val wantsFixes = !destroyed && foreground && recordingRunId == run.id && !storage.finishing && storage.issue != RunPersistenceIssue.CHECKPOINT &&
-            (run.phase == RunPhase.RUNNING || run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC) && hasPreciseLocation()
+        val canRecord = !destroyed && foreground && recordingRunId == run.id && !storage.finishing &&
+            storage.issue != RunPersistenceIssue.CHECKPOINT && hasPreciseLocation()
+        val wantsFixes = canRecord &&
+            (run.phase == RunPhase.RUNNING || run.phase == RunPhase.PAUSED && run.pauseReason == PauseReason.AUTOMATIC)
         if (wantsFixes) { if (!locationSubscribed) startLocation(); renewWakeLease() }
         else { stopLocation(); releaseWakeLock() }
+        val canAnnounce = canRecord && run.phase == RunPhase.RUNNING && ticker?.isActive == true
+        // A newer fix can publish its distance before the Room checkpoint completes.
+        if (!canAnnounce || !storage.saving) updateLapCue(run, canAnnounce)
     }
 
     private fun renewWakeLease() {
@@ -181,14 +211,105 @@ class RunTrackingService : Service(), LocationListener {
                     repository.tick()
                 }
                 syncResources(); updateNotification()
-                val km = (repository.active.value.distanceMeters / 1000).toInt()
-                if (km > timerKilometer && preferences.getBoolean("voiceGuidance", true)) {
-                    timerKilometer = km
-                    tts?.speak("${km}킬로미터 달렸어요", TextToSpeech.QUEUE_FLUSH, null, "km:$km")
-                }
             }
         }
     }
+
+    private fun initializeLapSpeech(status: Int) {
+        val engine = tts ?: return
+        if (destroyed || status != TextToSpeech.SUCCESS) return
+        ttsReady = runCatching {
+            engine.setLanguage(Locale.KOREAN) >= TextToSpeech.LANG_AVAILABLE &&
+                engine.setAudioAttributes(lapSpeechAttributes) == TextToSpeech.SUCCESS &&
+                engine.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    override fun onStart(utteranceId: String) = Unit
+                    override fun onDone(utteranceId: String) = releaseFinishedLapSpeech(utteranceId)
+                    @Suppress("OVERRIDE_DEPRECATION")
+                    override fun onError(utteranceId: String) = releaseFinishedLapSpeech(utteranceId)
+                    override fun onStop(utteranceId: String, interrupted: Boolean) = releaseFinishedLapSpeech(utteranceId)
+                }) == TextToSpeech.SUCCESS
+        }.getOrDefault(false)
+    }
+
+    private fun releaseFinishedLapSpeech(utteranceId: String) {
+        scope.launch {
+            if (lapSpeech?.utteranceId == utteranceId) stopLapSpeech(stopEngine = false)
+        }
+    }
+
+    private fun updateLapCue(run: ActiveRun, live: Boolean) {
+        val voice = preferences.getBoolean("voiceGuidance", true)
+        val vibration = preferences.getBoolean("lapVibration", false)
+        if (!live || !voice) stopLapSpeech()
+        if (!live || !vibration) stopLapVibration()
+        val cue = lapCueTracker.observe(run, live, voice, preferences.getBoolean("lapPaceGuidance", false), vibration) ?: return
+        val interruptionFilter = runCatching {
+            getSystemService(NotificationManager::class.java)?.currentInterruptionFilter
+        }.getOrNull()
+        if (interruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE ||
+            interruptionFilter == NotificationManager.INTERRUPTION_FILTER_ALARMS) return
+        if (cue.vibrate) deliverLapVibration()
+        cue.speech?.let { deliverLapSpeech(cue.kilometer, it) }
+    }
+
+    private fun deliverLapSpeech(kilometer: Int, text: String) {
+        val engine = tts?.takeIf { ttsReady } ?: return
+        stopLapSpeech()
+        val utteranceId = "lap:$kilometer:${SystemClock.elapsedRealtimeNanos()}"
+        try {
+            val audio = audioManager ?: return
+            if (audio.isStreamMute(AudioManager.STREAM_MUSIC) || audio.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) return
+            val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+                .setAudioAttributes(lapSpeechAttributes)
+                .setOnAudioFocusChangeListener({ change ->
+                    if (change < 0 && lapSpeech?.utteranceId == utteranceId) stopLapSpeech()
+                }, mainHandler)
+                .build()
+            if (audio.requestAudioFocus(request) != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) return
+            lapSpeech = LapSpeech(utteranceId, request)
+            if (engine.speak(text, TextToSpeech.QUEUE_FLUSH, null, utteranceId) != TextToSpeech.SUCCESS) {
+                stopLapSpeech(stopEngine = false)
+                return
+            }
+            lapSpeechTimeout = scope.launch {
+                delay(LAP_SPEECH_TIMEOUT_MILLIS)
+                if (lapSpeech?.utteranceId == utteranceId) stopLapSpeech()
+            }
+        } catch (_: RuntimeException) { stopLapSpeech() }
+    }
+
+    private fun stopLapSpeech(stopEngine: Boolean = true) {
+        val speech = lapSpeech ?: return
+        lapSpeech = null
+        lapSpeechTimeout?.cancel()
+        lapSpeechTimeout = null
+        if (stopEngine) runCatching { tts?.stop() }
+        runCatching { audioManager?.abandonAudioFocusRequest(speech.focus) }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun deliverLapVibration() {
+        runCatching {
+            val audio = audioManager ?: return
+            if (audio.ringerMode == AudioManager.RINGER_MODE_SILENT) return
+            val vibrator = lapVibrator?.takeIf { it.hasVibrator() } ?: return
+            val effect = VibrationEffect.createOneShot(LAP_VIBRATION_MILLIS, VibrationEffect.DEFAULT_AMPLITUDE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                vibrator.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_NOTIFICATION))
+            } else {
+                val attributes = AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
+                vibrator.vibrate(effect, attributes)
+            }
+            lapVibrationEnd = SystemClock.elapsedRealtime() + LAP_VIBRATION_MILLIS
+        }
+    }
+
+    private fun stopLapVibration() {
+        val end = lapVibrationEnd
+        lapVibrationEnd = 0L
+        if (end > SystemClock.elapsedRealtime()) runCatching { lapVibrator?.cancel() }
+    }
+
     private fun pilotClient(): PilotClient? {
         if (preferences.getString("communityBackend", BuildConfig.COMMUNITY_BACKEND) != "http") return null
         val token = SecureSession(this).read()
@@ -303,7 +424,11 @@ class RunTrackingService : Service(), LocationListener {
         try { if (wakeLock?.isHeld == true) wakeLock?.release() } catch (_: RuntimeException) { }
         renewWakeAt = 0L
     }
-    private fun stopRecordingResources() { ticker?.cancel(); ticker = null; stopLocation(); releaseWakeLock() }
+    private fun stopRecordingResources() {
+        ticker?.cancel(); ticker = null
+        stopLapSpeech(); stopLapVibration()
+        stopLocation(); releaseWakeLock()
+    }
     private fun stopIdleService() {
         (application as com.runmoni.app.RunmoniApplication).runnerSharing.stopForRun(recordingRunId)
         com.runmoni.app.widget.RunWidgetPublisher.stopped(this, recordingRunId)
@@ -326,7 +451,7 @@ class RunTrackingService : Service(), LocationListener {
         destroyed = true
         foreground = false
         val id = recordingRunId
-        stopRecordingResources(); presenceJob?.cancel(); tts?.shutdown(); commands.close(); scope.cancel()
+        stopRecordingResources(); presenceJob?.cancel(); runCatching { tts?.shutdown() }; commands.close(); scope.cancel()
         if (!id.isNullOrBlank()) repository.recorderStopped(id, SystemClock.elapsedRealtime())
         super.onDestroy()
     }
@@ -339,12 +464,17 @@ class RunTrackingService : Service(), LocationListener {
     }
 
     companion object {
+        private const val LAP_SPEECH_TIMEOUT_MILLIS = 10_000L
+        private const val LAP_VIBRATION_MILLIS = 180L
+        private const val GOAL_KIND = "runmoni.goal.kind"
+        private const val GOAL_TARGET = "runmoni.goal.target"
         const val START = "runmoni.START"; const val RECOVER = "runmoni.RECOVER"
         const val PAUSE = "runmoni.PAUSE"; const val RESUME = "runmoni.RESUME"; const val FINISH = "runmoni.FINISH"
         const val RETRY = "runmoni.RETRY"
-        fun command(context: Context, action: String, expectedRunId: String? = null): Boolean {
+        fun command(context: Context, action: String, expectedRunId: String? = null, goal: RunGoal? = null): Boolean {
             val id = expectedRunId ?: (context.applicationContext as RunmoniApplication).runs.active.value.id
             val intent = Intent(context, RunTrackingService::class.java).setAction(action).putExtra(RunNotifications.RUN_ID, id)
+            if (action == START && goal != null) intent.putExtra(GOAL_KIND, goal.kind.name).putExtra(GOAL_TARGET, goal.target)
             return try {
                 if (action == START || action == RECOVER) ContextCompat.startForegroundService(context, intent) else context.startService(intent)
                 true
